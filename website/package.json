@@ -1,0 +1,21 @@
+{
+    "name": "jitar-website",
+    "version": "0.1.0",
+    "author": "Masking Technology",
+    "license": "MIT",
+    "scripts": {
+        "build": "npm-run-all clean copy minify",
+        "clean": "rimraf dist",
+        "copy": "cpx -u 'src/**/*.{svg,png}' dist",
+        "minify": "npm-run-all minify-html minify-css minify-js",
+        "minify-html": "minify src/index.html > dist/index.html",
+        "minify-css": "minify src/css/layout.css src/css/syntax.css src/fonts/poppins/font.css src/fonts/social-icons/font.css > dist/site.css",
+        "minify-js": "minify src/script/tab-component.js > dist/site.js"
+    },
+    "devDependencies": {
+        "cpx": "^1.5.0",
+        "minify": "^9.1.0",
+        "npm-run-all": "^4.1.5",
+        "rimraf": "^3.0.2"
+    }
+}
