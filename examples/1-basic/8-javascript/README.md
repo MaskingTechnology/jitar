@@ -1,0 +1,26 @@
+
+# Jitar | Hello World example
+
+This example demonstrates how to create a simple procedure and call it using the RPC API.
+
+The application contains a simple "Hello World" procedure that returns a string.
+It can be found in the ``src/greetings`` directory. Also the application contains
+the ``src/default.segment.json`` segment file.
+
+For fireing up Jitar its configuration is specified in the ``jitar.json`` file.
+
+## Running the example
+
+Install Jitar by running the following command from the root directory of the example.
+
+```
+npm install
+```
+
+Then start Jitar with the following command from the same directory.
+
+```
+npm run start
+```
+
+The ``requests.http`` file contains example requests to call the procedure.

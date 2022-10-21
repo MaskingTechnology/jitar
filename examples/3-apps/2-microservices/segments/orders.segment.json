@@ -1,0 +1,7 @@
+{
+    "orders/getOrders_v0_0_0.js": {
+        "default": {
+            "access": "public"
+        }
+    }
+}

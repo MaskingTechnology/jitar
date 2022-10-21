@@ -1,0 +1,9 @@
+{
+    "url": "http://127.0.0.1:2999",
+    "repository":
+    {
+        "source": "./dist",
+        "cache": "./cache",
+        "index": "index.html"
+    }
+}

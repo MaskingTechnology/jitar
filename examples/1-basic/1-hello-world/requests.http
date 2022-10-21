@@ -1,0 +1,21 @@
+
+// Say hello without the name parameter
+
+GET http://localhost:3000/rpc/greetings/sayHello HTTP/1.1
+
+###
+
+// Say hello with the name parameter using a GET request
+
+GET http://localhost:3000/rpc/greetings/sayHello?name=John HTTP/1.1
+
+###
+
+// Say hello with the name parameter using a POST request
+
+POST http://localhost:3000/rpc/greetings/sayHello HTTP/1.1
+content-type: application/json
+
+{
+    "name": "Jane"
+}

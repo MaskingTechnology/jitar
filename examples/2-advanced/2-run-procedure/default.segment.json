@@ -1,0 +1,20 @@
+{
+    "./greetings/sayBoth.js": {
+        "default": {
+            "access": "public",
+            "version": "0.0.0"
+        }
+    },
+    "./greetings/sayHi.js": {
+        "default": {
+            "access": "private",
+            "version": "0.0.0"
+        }
+    },
+    "./greetings/sayHello.js": {
+        "default": {
+            "access": "private",
+            "version": "0.0.0"
+        }
+    }
+}

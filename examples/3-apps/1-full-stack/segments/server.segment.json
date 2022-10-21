@@ -1,0 +1,7 @@
+{
+    "./app/contact/actions/createContact.js": { "default": { "access": "public" } },
+    "./app/contact/actions/deleteContact.js": { "default": { "access": "public" } },
+    "./app/contact/actions/getContact.js": { "default": { "access": "public" } },
+    "./app/contact/actions/getContacts.js": { "default": { "access": "public" } },
+    "./app/contact/actions/updateContact.js": { "default": { "access": "public" } }
+}

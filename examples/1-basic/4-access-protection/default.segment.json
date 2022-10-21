@@ -1,0 +1,12 @@
+{
+    "./greetings/sayHelloPublic.js": {
+        "default": {
+            "access": "public"
+        }
+    },
+    "./greetings/sayHello.js": {
+        "default": {
+            "access": "private"
+        }
+    }
+}

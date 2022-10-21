@@ -1,0 +1,11 @@
+{
+    "name": "jitar-access-protection-example",
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "start": "node --experimental-network-imports --experimental-fetch dist/start.js --config=jitar.json"
+    },
+    "dependencies": {
+        "jitar": "^0.1.0"
+    }
+}

@@ -1,0 +1,10 @@
+
+// Get the total health status
+
+GET http://localhost:3000/health/status HTTP/1.1
+
+###
+
+// Get the detailed health
+
+GET http://localhost:3000/health HTTP/1.1

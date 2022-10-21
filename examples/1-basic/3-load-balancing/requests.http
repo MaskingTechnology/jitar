@@ -1,0 +1,4 @@
+
+// Say hello
+
+GET http://localhost:3000/rpc/greetings/sayHello?firstName=John HTTP/1.1

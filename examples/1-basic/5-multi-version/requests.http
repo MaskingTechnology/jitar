@@ -1,0 +1,16 @@
+
+// Say hello without specifying a version (uses the default version)
+
+GET http://localhost:3000/rpc/greetings/sayHello?name=John HTTP/1.1
+
+###
+
+// Say hello with the first version 0.0.0
+
+GET http://localhost:3000/rpc/greetings/sayHello?version=0.0.0&name=Jane HTTP/1.1
+
+###
+
+// Say hello with the second version 1.0.0
+
+GET http://localhost:3000/rpc/greetings/sayHello?version=1.0.0&firstName=Jim&lastName=Doe HTTP/1.1

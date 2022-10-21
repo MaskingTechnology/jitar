@@ -1,0 +1,4 @@
+
+// Say hi and hello (should return an error message)
+
+GET http://localhost:3000/rpc/greetings/sayBoth?firstName=Jim&lastName=Doe HTTP/1.1
