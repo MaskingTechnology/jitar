@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta http-equiv="Content-Language" content="en" />
+        <meta name="description" content="Distributed runtime for JavaScript and TypeScript to chop monolithic applications into micros without touching a single line of code." />
+        <meta name="keywords" content="runtime,javascript,typescript,web applications,full stack,microservices" />
+        <meta name="author" content="Masking Technology" />
+        <meta name="copyright" content="2022 Masking Technology" />
+        <meta name="application-name" content="Jitar Website" />
+        <meta name="format-detection" content="telephone=no">
+
+        <meta property="og:site_name" content="Jitar">
+        <meta property="og:title" content="A distributed runtime for JavaScript and TypeScript.">
+        <meta property="og:description" content="Distributed runtime for JavaScript and TypeScript to chop monolithic applications into micros without touching a single line of code.">
+        <meta property="og:image" content="https://jitar.dev/images/jitar-og.png">
+        <meta property="og:url" content="https://jitar.dev">
+        <meta name="twitter:card" content="summary_large_image">
+
+        <title>Jitar - A distributed runtime for JavaScript and TypeScript</title>
+
+        <link rel="icon" type="image/png" href="images/icon.png" />
+        <link rel="stylesheet" href="site.css">
+
+        <script type="module" src="site.js"></script>
+
+    </head>
+
+    <body>
+
+        <div class="container">
+
+            <header>
+
+                <nav>
+                    <a href="/" class="logo">Jitar</a>
+                    <ul class="menu">
+                        <li><a href="#introduction">Introduction</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="https://docs.jitar.dev">Docs</a></li>
+                    </ul>
+                    <ul class="social">
+                        <li><a href="https://github.com/MaskingTechnology/jitar" target="_blank" aria-label="Visit our GitHub page">
+                            <span class="icon-github"></span>
+                        </a></li>
+                    </ul>
+                </nav>
+
+                <section id="hero">
+                    <div class="definition">
+                        <div class="line line1">
+                            <h1 class="distributed">Distributed</h1>
+                        </div>
+                        <div class="line line2">
+                            <h1 class="runtime">Runtime</h1>
+                            <p class="for">for</p>
+                            <p class="languages">
+                                <span class="language javascript">JS</span>
+                                <span class="language typescript">TS</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="slogan">
+                        Chop <span class="monolithic">monolithic</span> applications into <span class="micros">micros</span><br />
+                        without touching a single line of code.
+                    </div>
+                    <div class="actions">
+                        <a href="https://docs.jitar.dev/02_get_started.html" class="action action-primary">Get started</a>
+                        <a href="https://github.com/MaskingTechnology/jitar" class="action action-secondary"><span class="gsicon-github"></span>Source code</a>
+                    </div>
+                </section>
+
+            </header>
+
+            <main>
+                
+                <section id="introduction">
+                    <article>
+                        <h1>Introduction</h1>
+                        <p>
+                            Jitar is a full-stack JavaScript runtime for small to large web applications.
+                            It lets you to build monolithic applications and run them spread out over multiple servers and web browsers.
+                            Jitar takes care of the inner communication, so you don't have to build any API.
+                        </p>
+                        <p>
+                            Jitar runs on top of Node.js and in any modern web browser.
+                            It has strong support for <a href="https://www.typescriptlang.org/" target="_blank">TypeScript</a>. Because it's only a runtime, you can use the frameworks you already love at the front- and back-end.
+                        </p>
+                        <p>
+                            More detailed information about <a href="https://docs.jitar.dev/01_introduction.html#how-it-works">how it works</a>
+                            and the <a href="https://docs.jitar.dev/01_introduction.html#philosophy">philosophy</a> behind it can be found
+                            in the <a href="https://docs.jitar.dev">docs</a>.
+                        </p>
+                    </article>
+                    <article tab-component>
+                        <div class="files">
+                            <div class="filename selected" tab-handle="file1">client.ts</div>
+                            <div class="filename" tab-handle="file2">server.ts</div>
+                            <div class="filename" tab-handle="file3">server.segment.json</div>
+                        </div>
+                        <div class="content">
+                            <code class="language-ts highlighter-rouge highlight selected" tab-content="file1">
+                                <span class="c1">// Import components like it's a monolith</span><br>
+                                <span class="k">import</span> <span class="p">{</span> <span class="nx">storePerson</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./server</span><span class="dl">'</span><span class="p">;</span><br>
+                                <span class="k">import</span> <span class="p">{</span> <span class="nx">Person</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./Person</span><span class="dl">'</span><span class="p">;</span><br>
+                                <br>
+                                <span class="k">async</span> <span class="kd">function</span> <span class="nx">createPerson</span><span class="p">(</span><span class="nx">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">age</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span><br>
+                                <span class="p">{</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="c1">// Use components typesafe with Intellisense support</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="c1">// and exchange (complex) data objects between them</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="kd">const</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">);</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="k">await</span> <span class="nx">storePerson</span><span class="p">(</span><span class="nx">person</span><span class="p">);</span><br>
+                                <span class="p">}</span><br>
+                                <br>
+                                <span class="k">export</span> <span class="p">{</span> <span class="nx">createPerson</span> <span class="p">}</span>
+                            </code>
+                            <code class="language-ts highlighter-rouge highlight" tab-content="file2">
+                                <span class="c1">// Use any library or framework you want</span><br>
+                                <span class="k">import</span> <span class="p">{</span> <span class="nx">MongoClient</span> <span class="k">as</span> <span class="nx">MC</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">mongodb</span><span class="dl">'</span><span class="p">;</span><br>
+                                <span class="k">import</span> <span class="p">{</span> <span class="nx">Person</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./Person</span><span class="dl">'</span><span class="p">;</span><br>
+                                <br>
+                                <span class="k">async</span> <span class="kd">function</span> <span class="nx">storePerson</span><span class="p">(</span><span class="nx">person</span><span class="p">:</span> <span class="nx">Person</span><span class="p">)</span><br>
+                                <span class="p">{</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="kd">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">MC</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DB_STRING</span><span class="p">);</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="k">await</span> <span class="nx">client</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="dl">'</span><span class="s1">my_app</span><span class="dl">'</span><span class="p">)</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="dl">'</span><span class="s1">people</span><span class="dl">'</span><span class="p">)</span><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span> <span class="na">name</span><span class="p">:</span> <span class="nx">person</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="nx">person</span><span class="p">.</span><span class="nx">age</span> <span class="p">});</span><br>
+                                <span class="p">}</span><br>
+                                <br>
+                                <span class="k">export</span> <span class="p">{</span> <span class="nx">storePerson</span> <span class="p">}</span>
+                            </code>
+                            <code class="language-ts highlighter-rouge highlight" tab-content="file3">
+                                <span class="c1">/* Split applications with configuration */</span><br>
+                                <span class="p">{</span><span class="w"><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"server.js"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"storePerson"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"access"</span><span class="p">:</span><span class="w"> </span><span class="s2">"public"</span><span class="p">,</span><span class="w"> </span><span class="c1">/* Control access */</span><span class="w"><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="w"> </span><span class="c1">/* Control versions */</span><span class="w"><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="p">},</span><span class="w"><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"deletePerson"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"access"</span><span class="p">:</span><span class="w"> </span><span class="s2">"public"</span><span class="p">,</span><span class="w"><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="w"><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="p">}</span><span class="w"><br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="p">}</span><span class="w"><br>
+                                </span><span class="p">}</span><span class="w"><br>
+                                </span>
+                            </code>
+                        </div>
+                    </article>
+                </section>
+
+                <hr>
+
+                <section id="features">
+                    <h1>Features</h1>
+                    <p>
+                        The main feature is writing monolithic applications that scale in any form and closes the gap between front- and back-end.
+                        It doesn't matter if a component is placed on of the servers or the web browser. Jitar will make it work using its powerful runtime features.
+                    </p>
+                    <div class="cards">
+                        <div class="card">
+                            <img src="images/features/segmentation.svg" alt="Segmentation">
+                            <h2>Segmentation</h2>
+                            <p>Applications are broken down into servable segment packages.</p>
+                            <a href="https://docs.jitar.dev/04_basic_features.html#segmentation">Learn more</a>
+                        </div>
+                        <div class="card">
+                            <img src="images/features/orchestration.svg" alt="Orchestration">
+                            <h2>Orchestration</h2>
+                            <p>Procedures always run, no matter the segment they're placed in.</p>
+                            <a href="https://docs.jitar.dev/04_basic_features.html#orchestration">Learn more</a>
+                        </div>
+                        <div class="card">
+                            <img src="images/features/load-balancing.svg" alt="Load balancing">
+                            <h2>Load balancing</h2>
+                            <p>Segments that are served by multiple servers are balanced automatically.</p>
+                            <a href="https://docs.jitar.dev/04_basic_features.html#load-balancing">Learn more</a>
+                        </div>
+                        <div class="card">
+                            <img src="images/features/access-protection.svg" alt="Access protection">
+                            <h2>Access protection</h2>
+                            <p>Private procedures are only available within its own segment.</p>
+                            <a href="https://docs.jitar.dev/04_basic_features.html#access-protection">Learn more</a>
+                        </div>
+                        <div class="card">
+                            <img src="images/features/multi-version.svg" alt="Multi-version">
+                            <h2>Multi-version</h2>
+                            <p>Procedures are versioned to support backwards compatibility.</p>
+                            <a href="https://docs.jitar.dev/04_basic_features.html#multi-version">Learn more</a>
+                        </div>
+                        <div class="card">
+                            <img src="images/features/transportation.svg" alt="Transportation">
+                            <h2>Transportation</h2>
+                            <p>Data gets (de)serialized automatically when shared between segments.</p>
+                            <a href="https://docs.jitar.dev/04_basic_features.html#data-transportation">Learn more</a>
+                        </div>
+                        <div class="card">
+                            <img src="images/features/rpc-calls.svg" alt="RPC calls">
+                            <h2>RPC calls</h2>
+                            <p>Public procedures can be called from any external system.</p>
+                            <a href="https://docs.jitar.dev/05_advanced_features.html#apis">Learn more</a>
+                        </div>
+                        <div class="card inactive">
+                            <img src="images/features/and-more.svg" alt="And more ...">
+                            <h2>And more ...</h2>
+                            <p>There's also support for health checks, assets, hooks and more.</p>
+                            <a href="https://docs.jitar.dev">Read the docs</a>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+
+        </body>
+
+    </div>
+
+    <footer>
+        <p>Released under the MIT License.</p>
+        <p>Copyright &copy; 2022 - <a href="https://masking.tech" target="_blank">Masking Technology</a></p>
+    </footer>
+
+</html>
