@@ -1,0 +1,8 @@
+{% for item in include.items %}
+    <section>
+        <h1><a href="{{ item.link }}"{% if page.title == item.name %} class="active"{% endif %}>{{ item.name }}</a></h1>
+        {% if item.children %}
+            {% include tableofcontents.html items=item.children %}
+        {% endif %}
+    </section>
+{% endfor %}

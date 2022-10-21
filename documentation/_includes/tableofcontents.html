@@ -1,0 +1,8 @@
+<ul>
+    {% for item in include.items %}
+        <li><a href="{{ item.link }}"{% if page.url == item.link %} class="active"{% endif %}>{{ item.name }}</a></li>
+        {% if item.children %}
+            {% include tableofcontents.html items=item.children %}
+        {% endif %}
+    {% endfor %}
+</ul>

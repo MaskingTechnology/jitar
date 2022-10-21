@@ -1,0 +1,482 @@
+
+:root
+{
+    --swatch-color-1: #f3f3f3;
+    --swatch-color-2: #1c4587;
+    --swatch-color-3: #d9d9d9;
+    --swatch-color-4: #434343;
+    --swatch-color-5: #a61c00;
+    --swatch-color-6: #cccccc;
+    --swatch-color-7: #ffffff;
+    --swatch-color-8: #666666;
+    --swatch-color-9: #f4cccc;
+    --swatch-color-10: #660000;
+    --swatch-color-11: #cfe2f3;
+    --swatch-color-12: #073763;
+    --swatch-color-13: #d9ead3;
+    --swatch-color-14: #274e13;
+    --swatch-color-15: #fff2cc;
+    --swatch-color-16: #7f6000;
+    --swatch-color-17: #b7b7b7;
+
+    --layout-background-color: var(--swatch-color-1);
+    --layout-border-color: var(--swatch-color-6);
+    --layout-border-width: 1px;
+    --layout-border-margin: 0;
+    --layout-color: var(--swatch-color-4);
+    --layout-font-family: 'Poppins', sans-serif;
+    --layout-font-size: 16px;
+    --layout-font-weight: 200;
+    --layout-header-height: 130px;
+    --layout-padding-vertical: 50px;
+    --layout-nav-width: 300px;
+    --layout-padding-horizontal: 40px;
+
+    --header-background-color: var(--swatch-color-2);
+    --header-logo-color: var(--swatch-color-7);
+    --header-logo-name-font-size: 2.1em;
+    --header-logo-name-font-weight: 600;
+    --header-logo-title-color: var(--swatch-color-7);
+    --header-logo-title-font-size: 1.4em;
+    --header-logo-title-font-weight: 300;
+    --header-logo-title-margin: 0 0 4px 10px;
+    --header-margin: 0 0 50px 0;
+    --header-padding: 15px var(--layout-padding-horizontal);
+    --header-socials-color: var(--swatch-color-7);
+    --header-socials-font-size: 1.5em;
+    --header-socials-item-margin: 0 0 0 10px;
+
+    --nav-page-margin: 0 0 25px 0;
+    --nav-padding: 0 var(--layout-padding-horizontal);
+    --nav-page-subject-color: VAR(--swatch-color-8);
+    --nav-page-subject-color-active: var(--swatch-color-4);
+    --nav-page-subject-font-size: 1.1em;
+    --nav-page-subject-font-weight: 300;
+    --nav-page-subject-prefix-color: var(--swatch-color-6);
+    --nav-page-subject-prefix-color-active: var(--swatch-color-2);
+    --nav-page-subject-prefix-margin: 0 5px 0 0;
+    --nav-page-title-color: var(--swatch-color-4);
+    --nav-page-title-color-active: var(--swatch-color-5);
+    --nav-page-title-font-size: 1.2em;
+    --nav-page-title-font-weight: 400;
+    --nav-page-title-margin: 0 0 10px 0;
+
+    --main-alert-padding: 20px;
+    --main-alert-title-margin: 0 0 5px 0;
+    --main-alert-title-font-weight: 400;
+    --main-alert-danger-background-color: var(--swatch-color-9);
+    --main-alert-danger-color: var(--swatch-color-10);
+    --main-alert-danger-title-content: "Danger";
+    --main-alert-info-background-color: var(--swatch-color-11);
+    --main-alert-info-color: var(--swatch-color-12);
+    --main-alert-info-title-content: "Info";
+    --main-alert-success-background-color: var(--swatch-color-13);
+    --main-alert-success-color: var(--swatch-color-14);
+    --main-alert-success-title-content: "Success";
+    --main-alert-warning-background-color: var(--swatch-color-15);
+    --main-alert-warning-color: var(--swatch-color-16);
+    --main-alert-warning-title-content: "Warning";
+    --main-code-filename-background-color: var(--swatch-color-4);
+    --main-code-filename-color: var(--swatch-color-3);
+    --main-code-filename-font-size: 0.9em;
+    --main-code-filename-font-weight: 300;
+    --main-code-filename-margin: 0 0 -16px 0;
+    --main-code-filename-padding: 8px 16px;
+    --main-heading-color: var(--swatch-color-12);
+    --main-heading-font-weight: 400;
+    --main-heading-margin: 30px 0 20px 0;
+    --main-heading-prefix-color: var(--swatch-color-17);
+    --main-heading-prefix-margin: 0 5px 0 0;
+    --main-heading-primary-font-size: 1.4em;
+    --main-heading-secondary-font-size: 1.2em;
+    --main-link-color: var(--swatch-color-5);
+    --main-navigation-title-color: var(--swatch-color-8);
+    --main-navigation-title-font-size: 0.8em;
+    --main-navigation-next-title-content: "Next";
+    --main-navigation-next-postfix-content: " »";
+    --main-navigation-previous-title-content: "Previous";
+    --main-navigation-previous-postfix-content: "« ";
+    --main-padding: 0 80px 30px 80px;
+    --main-paragraph-margin: 0 0 20px 0;
+    --main-separator-color: var(--swatch-color-3);
+    --main-separator-height: 1px;
+    --main-separator-margin: var(--layout-padding-horizontal) 0;
+    --main-strong-font-weight: 400;
+    --main-title-color: var(--swatch-color-4);
+    --main-title-font-size: 2.0em;
+    --main-title-font-weight: 400;
+    --main-title-margin: 0 0 30px 0;
+    --main-ul-padding: 0 0 0 25px;
+}
+
+/*** LAYOUT ****************************************************/
+
+html
+{
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+body
+{
+    background-color: var(--layout-background-color);
+    color: var(--layout-color);
+
+    font-family: var(--layout-font-family);
+    font-weight: var(--layout-font-weight);
+    font-size: var(--layout-font-size);
+
+    padding: 0;
+    margin: 0;
+
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+
+    display: grid;
+    grid-gap: 0;
+    grid-template-rows: var(--layout-header-height) auto;
+    grid-template-columns: var(--layout-nav-width) var(--layout-border-width) auto;
+    grid-template-areas:
+        "header header header"
+        "nav separator main";
+}
+
+/*** HEADER ****************************************************/
+
+header
+{
+    background-color: var(--header-background-color);
+    color: var(--header-foreground-color);
+    display: flex;
+    flex-direction: row;
+    grid-area: header;
+    margin: var(--header-margin);
+    padding: var(--header-padding);
+}
+
+header .logo
+{
+    align-items: flex-end;
+    display: flex;
+    flex-grow: 0;
+    flex-direction: row;
+}
+
+header .logo a
+{
+    color: var(--header-logo-color);
+    text-decoration: none;
+}
+
+header .logo .name
+{
+    font-size: var(--header-logo-name-font-size);
+    font-weight: var(--header-logo-name-font-weight);
+}
+
+header .logo .title
+{
+    color: var(--header-logo-title-color);
+    display: inline-block;
+    font-size: var(--header-logo-title-font-size);
+    font-weight: var(--header-logo-title-font-weight);
+    margin: var(--header-logo-title-margin);
+}
+
+header .socials
+{
+    align-items: center;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+    font-size: var(--header-socials-font-size);
+    justify-content: flex-end;
+}
+
+header .socials a
+{
+    color: var(--header-socials-color);
+    display: inline-block;
+    margin: var(--header-socials-item-margin);
+    opacity: 0.8;
+    text-decoration: none;
+}
+
+header .socials a:hover
+{
+    opacity: 1.0;
+    text-decoration: none;
+}
+
+/*** NAVIGATION ************************************************/
+
+nav
+{
+    padding: var(--nav-padding);
+    grid-area: nav;
+    overflow-y: auto;
+}
+
+nav section
+{
+    margin: var(--nav-page-margin);
+}
+
+nav h1
+{
+    font-size: var(--nav-page-title-font-size);
+    font-weight: var(--nav-page-title-font-weight);
+    margin: var(--nav-page-title-margin);
+}
+
+nav h1 a
+{
+    color: var(--nav-page-title-color);
+    text-decoration: none;
+}
+
+nav h1 a.active
+{
+    color: var(--nav-page-title-color-active);
+}
+
+nav ul
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav li
+{
+    font-size: var(--nav-page-subject-font-size);
+    font-weight: var(--nav-page-subject-font-weight);
+    padding: 0;
+}
+
+nav li a
+{
+    color: var(--nav-page-subject-color);
+    text-decoration: none;
+}
+
+nav li a::before
+{
+    color: var(--nav-page-subject-prefix-color);
+    content: "•";
+    display: inline-block;
+    margin: var(--nav-page-subject-prefix-margin);
+}
+
+nav li a.active
+{
+    color: var(--nav-page-subject-color-active);
+}
+
+nav li a.active::before
+{
+    color: var(--nav-page-subject-prefix-color-active);
+}
+
+section.separator
+{
+    background-color: var(--layout-border-color);
+    grid-area: separator;
+    margin: var(--layout-border-margin);
+}
+
+/*** MAIN ******************************************************/
+
+main
+{
+    grid-area: main;
+    overflow-y: auto;
+    padding: var(--main-padding);
+}
+
+main h1
+{
+    color: var(--main-title-color);
+    font-size: var(--main-title-font-size);
+    font-weight: var(--main-title-font-weight);
+    margin: var(--main-title-margin);
+}
+
+main h2, main h3
+{
+    color: var(--main-heading-color);
+    font-weight: var(--main-heading-font-weight);
+    margin: var(--main-heading-margin);
+}
+
+main h2::before, main h3::before
+{
+    color: var(--main-heading-prefix-color);
+    content: "#";
+    display: inline-block;
+    margin: var(--main-heading-prefix-margin);
+}
+
+main h2
+{
+    font-size: var(--main-heading-primary-font-size);
+}
+
+main h3
+{
+    font-size: var(--main-heading-secondary-font-size);
+}
+
+main p
+{
+    margin: var(--main-paragraph-margin);
+}
+
+main a
+{
+    color: var(--main-link-color);
+    text-decoration: none;
+}
+
+main a:hover
+{
+    text-decoration: underline;
+}
+
+main strong
+{
+    font-weight: var(--main-strong-font-weight);
+}
+
+main ul
+{
+    padding: var(--main-ul-padding);
+}
+
+main hr
+{
+    border: 0;
+    border-top: var(--main-separator-height) solid var(--main-separator-color);
+    margin: var(--main-separator-margin);
+}
+
+main pre
+{
+    padding: 20px;
+}
+
+main .alert-info
+{
+    background-color: var(--main-alert-info-background-color);
+    color: var(--main-alert-info-color);
+    padding: var(--main-alert-padding);
+}
+
+main .alert-info::before
+{
+    content: var(--main-alert-info-title-content);
+    display: block;
+    font-weight: var(--main-alert-title-font-weight);
+    margin: var(--main-alert-title-margin);
+}
+
+main .alert-success
+{
+    background-color: var(--main-success-info-background-color);
+    color: var(--main-alert-success-color);
+    padding: var(--main-alert-padding);
+}
+
+main .alert-success::before
+{
+    content: var(--main-alert-success-title-content);
+    display: block;
+    font-weight: var(--main-alert-title-font-weight);
+    margin: var(--main-alert-title-margin);
+}
+
+main .alert-warning
+{
+    background-color: var(--main-alert-warning-background-color);
+    color: var(--main-alert-warning-color);
+    padding: var(--main-alert-padding);
+}
+
+main .alert-warning::before
+{
+    content: var(--main-alert-warning-title-content);
+    display: block;
+    font-weight: var(--main-alert-title-font-weight);
+    margin: var(--main-alert-title-margin);
+}
+
+main .alert-danger
+{
+    background-color: var(--main-alert-danger-background-color);
+    color: var(--main-alert-danger-color);
+    padding: var(--main-alert-padding);
+}
+
+main .alert-danger::before
+{
+    content: var(--main-alert-danger-title-content);
+    display: block;
+    font-weight: var(--main-alert-title-font-weight);
+    margin: var(--main-alert-title-margin);
+}
+
+main .previous-chapter
+{
+    display: inline-block;
+    width: fit-content;
+}
+
+main .previous-chapter::before
+{
+    color: var(--main-navigation-title-color);
+    content: var(--main-navigation-previous-title-content);
+    display: block;
+    font-size: var(--main-navigation-title-font-size);
+    text-align: right;
+}
+
+main .previous-chapter a::before
+{
+    content: var(--main-navigation-previous-postfix-content);
+}
+
+main .next-chapter
+{
+    display: inline-block;
+    float: right;
+    width: fit-content;
+}
+
+main .next-chapter::before
+{
+    color: var(--main-navigation-title-color);
+    content: var(--main-navigation-next-title-content);
+    display: block;
+    font-size: var(--main-navigation-title-font-size);
+    text-align: left;
+}
+
+main .next-chapter a::after
+{
+    content: var(--main-navigation-next-postfix-content);
+}
+
+main .filename
+{
+    background-color: var(--main-code-filename-background-color);
+    color: var(--main-code-filename-color);
+    font-size: var(--main-code-filename-font-size);
+    font-weight: var(--main-code-filename-font-weight);
+    margin: var(--main-code-filename-margin);
+    padding: var(--main-code-filename-padding);
+    width: fit-content;
+}
