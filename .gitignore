@@ -1,0 +1,4 @@
+coverage
+dist
+cache
+node_modules
