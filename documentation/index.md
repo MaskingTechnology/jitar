@@ -11,7 +11,7 @@ Welcome to the Jitar documentation! We are excited to have you here. Our goal is
 
 ## Table of contents
 
-* [Introduction](01_introduction) - Introducuces Jitar and its concepts.
+* [Introduction](01_introduction) - Introduces Jitar and its concepts.
 * [Getting started](02_getting_started) - Gets you up and running quickly.
 * [Runtime services](03_runtime_services) - Explains the services to run and scale applications.
 * [Basic features](04_basic_features) - Explains the basic features of Jitar.

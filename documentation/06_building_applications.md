@@ -5,7 +5,7 @@ title: Building applications
 
 # Building applications
 
-In this section we will take a look at the basics of building an application that effectivly leverages the bennefits of Jitar. All application examples are available on [GitHub](https://github.com/MaskingTechnology/jitar){:target="_blank"} as separate projects.
+In this section we will take a look at the basics of building an application that effectively leverages the benefits of Jitar. All application examples are available on [GitHub](https://github.com/MaskingTechnology/jitar){:target="_blank"} as separate projects.
 
 ---
 
@@ -46,11 +46,11 @@ export default async function sayBoth(firstName: string, lastName: string): Prom
 
 One of the application types that suits Jitar very well are full stack applications. These applications span the whole stack from the client to the server and back. This means that the application can be used as a web application, desktop application or mobile application.
 
-Because Jitar is framework agnostic, it can be used with any framework or library. For our example application we will use [React](https://reactjs.org/){:target="_blank"} as a client framework and [MongoDB](https://www.mongodb.com/){:target="_blank"} as a database. Jitar will handle the communication between the client and the server, so we don't need an API framework like [Express](https://expressjs.com/){:target="_blank"}. We call this the the **ReMoJi** stack :-)
+Because Jitar is framework agnostic, it can be used with any framework or library. For our example application we will use [React](https://reactjs.org/){:target="_blank"} as a client framework and [MongoDB](https://www.mongodb.com/){:target="_blank"} as a database. Jitar will handle the communication between the client and the server, so we don't need an API framework like [Express](https://expressjs.com/){:target="_blank"}. We call this the **ReMoJi** stack :-)
 
 Time to dive in! The example is a simple contact list. We've excluded some files for brevity, but the full code can be found on [GitHub](https://github.com/MaskingTechnology/jitar){:target="_blank"}.
 
-Let's start with setting up the client. For the example we want to keep things simple, so we use a CDN for importing React.
+Let's start with setting up the client. To keep things simple, we use a CDN for importing React.
 
 {:.filename}
 src/index.html
@@ -87,7 +87,7 @@ const root = ReactDOM.createRoot(rootElement);
 root.render(<App />);
 ```
 
-The ``App`` component loads the contacts from the server and display them in the list. 
+The ``App`` component loads the contacts from the server and displays them in the list. 
 
 {:.filename}
 src/app/App.tsx
@@ -158,7 +158,7 @@ The full example has a bit more body than this. It also has configurations for r
 
 ## Microservices
 
-An architecture type that suits jitar very well is the microservices architecture. Splitting applications into smaller pieces makes them easier to maintain and scale. To make this work we need to split the application into multiple segments. Each segment can be deployed independently and can be scaled independently.
+An architecture type that suits Jitar very well is the microservices architecture. Splitting applications into smaller pieces makes them easier to maintain and scale. To make this work we need to split the application into multiple segments. Each segment can be deployed independently and can be scaled independently.
 
 Jitar allows flexible segmentation, so an application can be decomposed in any way. The decomposition strategy can be changed at any time because it only lives at the configuration level. We will use a [subdomain based decomposition](https://microservices.io/patterns/decomposition/decompose-by-subdomain.html){:target="_blank"} for this example. This means that each segment represents a separate subdomain.
 
@@ -236,7 +236,7 @@ function getRevenue(orders: Order[]): number
 }
 ```
 
-The statistics are formatted by the DTP segment. For the example it is just a simple string, but it could be a PDF or any other format.
+The statistics are formatted by the DTP segment. The example outputs a simple string, but it could be a PDF or any other format.
 
 {:.filename}
 src/dtp/formatReport.ts

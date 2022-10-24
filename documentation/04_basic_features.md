@@ -25,7 +25,7 @@ export default async function sayHi(name: string): Promise<string>
 }
 ```
 
-The second procedure runs both the ``sayHello`` and ``sayHi`` procedures and combines the results. Procedures (and classes) can be staticly imported using the ES module syntax, even if they will be placed on another segment.
+The second procedure runs both the ``sayHello`` and ``sayHi`` procedures and combines the results. Procedures (and classes) can be statically imported using the ES module syntax, even if they will be placed on another segment.
 
 {:.filename}
 src/greetings/sayBoth.ts
@@ -41,7 +41,7 @@ export default async function sayBoth(firstName: string, lastName: string): Prom
     const hiMessage = await sayHi(firstName);
 
     // This procedure will be called remotely in production mode
-    // because its placed in antoher segment.
+    // because its placed in another segment.
     const helloMessage = await sayHello(firstName, lastName);
 
     return `${hiMessage}\n${helloMessage}`;
@@ -53,7 +53,7 @@ All components are imported from the repository, so there is control over the re
 {:.alert-info}
 Procedure functions **need to be async** in order to be able to split applications.
 
-Segment files are used for bundling procedures into servable packages. A procedure must be registered in a segment file in order to be remotely accessable. Procedures can also be registered in multiple segments for optimization reasons (e.g. avoid unnecessary network traffic).
+Segment files are used for bundling procedures into servable packages. A procedure must be registered in a segment file in order to be remotely accessible. Procedures can also be registered in multiple segments for optimization reasons (e.g. avoid unnecessary network traffic).
 
 {:.alert-warning}
 Unsegmented procedures should only be used locally to avoid import issues.
@@ -96,7 +96,7 @@ segments/hi.segment.json
 Now we can setup a cluster and load the two segments in separated nodes and use a gateway for the orchestration.
 
 {:.alert-warning}
-The name of the segment file is important and must always end with ``.segement.json`` in order to be found and loaded.
+The name of the segment file is important and must always end with ``.segment.json`` in order to be found and loaded.
 
 When the cluster is started, the ``sayHello`` procedure will run on the ``hello`` node and the ``sayHi`` and ``sayBoth`` procedures run on the ``hi`` node. When running the ``sayBoth`` procedure, the ``sayHello`` procedure will be called remote from the ``hello`` node.
 
@@ -116,7 +116,7 @@ GET http://app.example.com:3000/rpc/greetings/sayBoth?firstName=Jim&lastName=Doe
 
 ## Orchestration
 
-Orchestration is the proces of finding and running segmented procedures that are spread over multiple nodes. The [gateway](03_runtime_services#gateway) is responsible for this task and keeps track of all nodes and the procedures they contain.
+Orchestration is the process of finding and running segmented procedures that are spread over multiple nodes. The [gateway](03_runtime_services#gateway) is responsible for this task and keeps track of all nodes and the procedures they contain.
 
 Besides configuring the segmentation, no extra configuration is needed. When a node is started, it will register itself at the gateway. When a procedure is called, the gateway will find the node that contains the procedure and forward the request to that node.
 
@@ -124,7 +124,7 @@ Besides configuring the segmentation, no extra configuration is needed. When a n
 
 ## Load balancing
 
-Procedures are automatically load balanced when registered at the gateway by multiple nodes. The gateway uses the [round robin](https://en.wikipedia.org/wiki/Round-robin_scheduling){:target="_blank"} algorithm to equaly devide the load over the available nodes. When a node goes down it will automatically be unregistered. This means that it’s possible to scale up and down nodes without any downtime.
+Procedures are automatically load balanced when registered at the gateway by multiple nodes. The gateway uses the [round robin](https://en.wikipedia.org/wiki/Round-robin_scheduling){:target="_blank"} algorithm to equally divide the load over the available nodes. When a node goes down it will automatically be unregistered. This means that it’s possible to scale up and down nodes without any downtime.
 
 {:.alert-warning}
 The gateway is version unaware and will load balance based on procedure name.
@@ -144,7 +144,7 @@ conf/node.json
 }
 ```
 
-By running the ``sayHello`` procedure multiple times we can see how the load is devided.
+By running the ``sayHello`` procedure multiple times we can see how the load is divided.
 
 ```http
 GET http://app.example.com:3000/rpc/greetings/sayHello?firstName=John HTTP/1.1
@@ -157,9 +157,9 @@ If a procedure is placed in multiple segments, the procedure will be load balanc
 
 ## Access protection
 
-Procedures are not accessable by default. This means that they cannot be called from the outside world using the [RPC API](05_advanced_features#apis). To enable the access of a procedure, it has to be made public. We have done this throughout the examples by setting the **access** to **public** in the segment files.
+Procedures are not accessible by default. This means that they cannot be called from the outside world using the [RPC API](05_advanced_features#apis). To enable the access of a procedure, it has to be made public. We have done this throughout the examples by setting the **access** to **public** in the segment files.
 
-For the example we've used the *Hello World* application from the [getting started page](02_getting_started). You can also use the example from the [GitHub repository](https://github.com/MaskingTechnology/jitar){:target="_blank"}.
+We've used the *Hello World* application from the [getting started page](02_getting_started) for the example. You can also use the example from the [GitHub repository](https://github.com/MaskingTechnology/jitar){:target="_blank"}.
 
 We will need to add a new procedure that will call a private procedure.
 
@@ -194,7 +194,7 @@ default.segment.json
 }
 ```
 
-Trying to run a private procedure will result into a ``404 - procedure not found`` response.
+Trying to run a private procedure will result in a ``404 - procedure not found`` response.
 
 ```http
 GET http://app.example.com:3000/rpc/greetings/sayHello?name=John HTTP/1.1
@@ -210,9 +210,9 @@ GET http://app.example.com:3000/rpc/greetings/sayHelloPublic?firstName=John HTTP
 
 ## Multi-version
 
-During their lifetime procedures can change for many reasons. To avoid impact on depending procedures (or external systems), procedures can be versioned and run per version.
+During their lifetime procedures can change for many reasons. To avoid impact on dependent procedures (or external systems), procedures can be versioned and run per version.
 
-The version system works with a three number system: major, minor and patch. By default all procedures have the version ``0.0.0``. This version can be overriden by setting the version in the segment file.
+The version system works with a three number system: major, minor and patch. By default all procedures have the version ``0.0.0``. This version can be overridden by setting the version in the segment file.
 
 The following example shows how to create a new version of the ``sayHello`` procedure.
 
@@ -252,7 +252,7 @@ Version numbers should be set as a string containing one to three numbers separa
 {:.alert-warning}
 An ``Invalid version number`` error will be thrown when the version number does not have to correct format.
 
-Procedures are identified by the function name by default. That's why we've created a new file for the new version. It's also possible the bundle multiple versions into a single file like this.
+Procedures are identified by the function name by default. That's why we've created a new file for the new version. It's also possible to bundle multiple versions into a single file like this.
 
 {:.filename}
 src/greetings/sayHello.ts
@@ -294,7 +294,7 @@ default.segment.json
 {:.alert-info}
 All procedure versions should stick together in the same segment(s).
 
-Both versions can be run individualy. The following RPC call can be used to run the default version (v0.0.0).
+Both versions can be run individually. The following RPC call can be used to run the default version (v0.0.0).
 
 ```http
 GET http://app.example.com:3000/rpc/greetings/sayHello?version=0.0.0&name=Jane HTTP/1.1
@@ -345,7 +345,7 @@ export default class Person
 
 If a class object is transported between nodes, it's class definition doesn't have to be added to a segment file. All unsegmented components are considered sharable and can be requested at the repository. This means that they can be imported and used in any procedure.
 
-As example we'll use the ``Person`` class in the the ``sayHello`` procedure to transfer the persons name.
+We’ll use the ``Person`` class in the ``sayHello`` procedure as an example to transfer the person's name.
 
 {:.filename}
 src/greetings/sayHello.ts
@@ -359,7 +359,7 @@ export default async function sayHello(person: Person): Promise<string>
 }
 ```
 
-The same can de done for the ``sayHi`` procedure. In the ``sayBoth`` procedure we simply create a new ``Person`` object and pass it to the other procedures. When running this example segmented on a cluster, the ``Person`` object will be transported between the nodes.
+The same can be done for the ``sayHi`` procedure. In the ``sayBoth`` procedure we simply create a new ``Person`` object and pass it to the other procedures. When running this example segmented on a cluster, the ``Person`` object will be transported between the nodes.
 
 {:.filename}
 src/greetings/sayBoth.ts
@@ -385,7 +385,7 @@ export default async function sayBoth(firstName: string, lastName: string): Prom
 
 ## Error handling
 
-For handling errors the default JavaScript error system can be used for throwing and caching errors. If an error occurs it will be passed to the calling procedure until it's catched like any normal JavaScript application. If the error is thrown by a remote procedure the error will be (de)serialized en rethrown on the calling node.
+For handling errors the default JavaScript error system can be used for throwing and catching errors. If an error occurs it will be passed to the calling procedure until it's catched like any normal JavaScript application. If the error is thrown by a remote procedure the error will be (de)serialized and rethrown on the calling node.
 
 Errors will be supplemented with remote tracing information to make sure its origin is known, even in a distributed setup. If we for example throw an error in the ``sayHello`` procedure from the data transportation example, it looks like this.
 

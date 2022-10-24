@@ -51,7 +51,7 @@ The gateway service provides a single point of access for running application pr
 
 * **url** - The url of the gateway. This is the url that clients and nodes will use to access the application (optional, default ``http://localhost:3000``).
 * **gateway** - All gateway specific options:
-  * **monitor** - The interval in milliseconds that the gateway will use to monitor its nodes for availability (optiona, default 5000).
+  * **monitor** - The interval in milliseconds that the gateway will use to monitor its nodes for availability (optional, default 5000).
 
 The url must have the following format: ``{protocol}://{address}:{port}``
 
@@ -83,7 +83,7 @@ The node service loads application segments and runs its procedures on request. 
 
 All urls must have the following format: ``{protocol}://{address}:{port}``
 
-The segment names are derived from the segment configuration files. The name segment1 points for example to the segement1.segment.json file.
+The segment names are derived from the segment configuration files. The name segment1 points for example to the segment1.segment.json file.
 
 An example of a node configuration:
 
@@ -111,7 +111,7 @@ The proxy service acts as a single point of access to the cluster. Its responsib
 It can be added to the cluster to:
 
 1. Protect the access to the other services (in a DMZ).
-2. Act as an web server for full-stack applications.
+2. Act as a web server for full-stack applications.
 
 Its configuration has the following options:
 
@@ -140,7 +140,7 @@ An example of a proxy configuration:
 
 ## Standalone
 
-The standalone service combines all services into single Jitar instance. It can be used for running simple client-server applications that do not require the setup of a cluster. Its configuration has the following options:
+The standalone service combines all services into a single Jitar instance. It can be used for running simple client-server applications that do not require the setup of a cluster. Its configuration has the following options:
 
 * **url** - The url of the standalone. This is the url that clients will use to access the application (optional, default ``http://localhost:3000``).
 * **standalone** - All standalone specific options:
@@ -172,7 +172,7 @@ An example of a standalone configuration:
 
 ## Server options
 
-Additionally thare are some general options that can be used to configure the server.
+Additionally there are some general options that can be used to configure the server.
 
 * **loglevel** - The log level of the server. This can be one of the following: ``debug``, ``info``, ``warn``, ``error`` (optional, default ``info``).
 * **config** - The path to the service configuration file (optional, default ``./config.json``).

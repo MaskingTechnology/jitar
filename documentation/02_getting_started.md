@@ -23,7 +23,7 @@ When working with TypeScript version 4.4.2 or higher is required.
 
 ## Installation
 
-Jitar needs to be added as NPM dependency to your application.
+Jitar needs to be added as a NPM dependency to your application.
 
 ```bash
 npm install jitar
