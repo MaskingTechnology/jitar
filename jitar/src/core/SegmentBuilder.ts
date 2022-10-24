@@ -21,7 +21,7 @@ export default class SegmentBuilder
             const procedure = this.#buildProcedure(definition);
 
             segment.addProcedure(procedure);
-        };
+        }
 
         return segment;
     }
