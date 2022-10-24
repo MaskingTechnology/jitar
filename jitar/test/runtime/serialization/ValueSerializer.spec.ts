@@ -81,7 +81,7 @@ describe('serialization/ValueSerializer', () =>
 
         it('should serialize error', () =>
         {
-            const error = ValueSerializer.serialize(errorClass) as any;
+            const error = ValueSerializer.serialize(errorClass) as unknown;
 
             expect(error).toEqual(serializedError);
         });

@@ -297,7 +297,7 @@ export default class CacheBuilder
 
     #createSegmentImportCode(segment: Segment): string
     {
-        let codes: string[] = [];
+        const codes: string[] = [];
 
         for (const module of segment.modules)
         {
@@ -306,7 +306,7 @@ export default class CacheBuilder
 
             for (const [importKey, implementation] of module.implementations)
             {
-                imports.push(`${importKey} as \$${implementation.id}`);
+                imports.push(`${importKey} as $${implementation.id}`);
             }
 
             codes.push(`import { ${imports.join(',')} } from "./${relativeLocation}";`);
@@ -325,7 +325,7 @@ export default class CacheBuilder
 
             for (const implementation of procedure.implementations)
             {
-                implementationCode.push(`{ access: "${implementation.access}", version: "${implementation.version}", executable: \$${implementation.id} }`);
+                implementationCode.push(`{ access: "${implementation.access}", version: "${implementation.version}", executable: $${implementation.id} }`);
             }
 
             procedureCode.push(`{ module: "${procedure.module}", name: "${procedure.name}", implementations: [\n\t\t${implementationCode.join(',\n\t\t')}\n\t]}`);
