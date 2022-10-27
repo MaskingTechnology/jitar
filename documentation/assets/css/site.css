@@ -31,8 +31,13 @@
     --layout-padding-vertical: 50px;
     --layout-nav-width: 300px;
     --layout-padding-horizontal: 40px;
+    --layout-padding-horizontal-mobile: 30px;
 
     --header-background-color: var(--swatch-color-2);
+    --header-button-color: var(--swatch-color-7);
+    --header-button-font-size: 2.2em;
+    --header-button-line-height: 45px;
+    --header-button-margin: 0 15px 0 0;
     --header-logo-color: var(--swatch-color-7);
     --header-logo-name-font-size: 2.1em;
     --header-logo-name-font-weight: 600;
@@ -42,13 +47,15 @@
     --header-logo-title-margin: 0 0 4px 10px;
     --header-margin: 0 0 50px 0;
     --header-padding: 15px var(--layout-padding-horizontal);
+    --header-padding-mobile: 15px var(--layout-padding-horizontal-mobile);
     --header-socials-color: var(--swatch-color-7);
     --header-socials-font-size: 1.5em;
     --header-socials-item-margin: 0 0 0 10px;
 
-    --nav-page-margin: 0 0 25px 0;
     --nav-padding: 0 var(--layout-padding-horizontal);
-    --nav-page-subject-color: VAR(--swatch-color-8);
+    --nav-padding-mobile: 30px var(--layout-padding-horizontal-mobile) 0 var(--layout-padding-horizontal-mobile);
+    --nav-page-margin: 0 0 25px 0;
+    --nav-page-subject-color: var(--swatch-color-8);
     --nav-page-subject-color-active: var(--swatch-color-4);
     --nav-page-subject-font-size: 1.1em;
     --nav-page-subject-font-weight: 300;
@@ -60,6 +67,7 @@
     --nav-page-title-font-size: 1.2em;
     --nav-page-title-font-weight: 400;
     --nav-page-title-margin: 0 0 10px 0;
+    --nav-top-mobile: 80px;
 
     --main-alert-padding: 20px;
     --main-alert-title-margin: 0 0 5px 0;
@@ -97,6 +105,7 @@
     --main-navigation-previous-title-content: "Previous";
     --main-navigation-previous-postfix-content: "« ";
     --main-padding: 0 80px 30px 80px;
+    --main-padding-mobile: 0 30px 30px 30px;
     --main-paragraph-margin: 0 0 20px 0;
     --main-separator-color: var(--swatch-color-3);
     --main-separator-height: 1px;
@@ -156,6 +165,17 @@ header
     grid-area: header;
     margin: var(--header-margin);
     padding: var(--header-padding);
+}
+
+header .button
+{
+    color: var(--header-button-color);
+    display: none;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: var(--header-button-font-size);
+    line-height: var(--header-button-line-height);
+    margin: var(--header-button-margin);
 }
 
 header .logo
@@ -480,4 +500,54 @@ main .filename
     margin: var(--main-code-filename-margin);
     padding: var(--main-code-filename-padding);
     width: fit-content;
+}
+
+/*** RESPONSIVE ************************************************/
+
+/*
+ *  Mobile layout
+ */
+@media (max-width: 950px)
+{
+    body
+    {
+        grid-template-columns: auto;
+        grid-template-areas:
+            "header"
+            "main";
+    }
+
+    header
+    {
+        padding: var(--header-padding-mobile);
+    }
+
+    header .button
+    {
+        display: block;
+    }
+
+    nav
+    {
+        background-color: var(--layout-background-color);
+        border-right: 2px solid var(--layout-border-color);
+        bottom: 0;
+        display: none;
+        left: 0;
+        overflow: auto;
+        padding: var(--nav-padding-mobile);
+        position: absolute;
+        top: var(--nav-top-mobile);
+        width: auto;
+    }
+
+    section.separator
+    {
+        display: none;
+    }
+
+    main
+    {
+        padding: var(--main-padding-mobile);
+    }
 }
