@@ -3,6 +3,7 @@ import { Controller, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
+import ClientId from '../../runtime/ClientId.js';
 import LocalRepository from '../../runtime/LocalRepository.js';
 import Proxy from '../../runtime/Proxy.js';
 import ValueSerializer from '../../runtime/serialization/ValueSerializer.js';
@@ -22,6 +23,11 @@ export default class ModulesController
     @Post()
     async registerClient(request: Request, response: Response): Promise<Response>
     {
+        if ((request.body instanceof Array) === false)
+        {
+            // TODO: Throw error.
+        }
+
         const segmentFiles = request.body as string[];
 
         const clientId = await this.#repository.registerClient(segmentFiles);
@@ -35,6 +41,11 @@ export default class ModulesController
     async getModule(request: Request, response: Response): Promise<Response>
     {
         const clientId = request.params.clientId;
+
+        if (typeof clientId !== 'string' || ClientId.validate(clientId) === false)
+        {
+            return response.status(400).send('Invalid client id.');
+        }
 
         const pathKey = `/${clientId}/`;
         const pathIndex = request.path.indexOf(pathKey) + pathKey.length;
