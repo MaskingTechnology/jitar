@@ -1,7 +1,8 @@
 
+import InvalidPropertyType from './errors/InvalidPropertyType.js';
 import Serializer from './interfaces/Serializer.js';
-
 import SerializedMap from './types/SerializedMap.js';
+
 import ValueSerializer from './ValueSerializer.js';
 
 class MapSerializer implements Serializer
@@ -22,6 +23,8 @@ class MapSerializer implements Serializer
 
     async deserialize(object: SerializedMap): Promise<Map<unknown, unknown>>
     {
+        this.#validateSerializedMap(object);
+
         const keys = object.entries.keys;
         const values = object.entries.values;
 
@@ -36,6 +39,19 @@ class MapSerializer implements Serializer
         }
 
         return result;
+    }
+
+    #validateSerializedMap(object: SerializedMap): void
+    {
+        if ((object.entries?.keys instanceof Array) === false)
+        {
+            throw new InvalidPropertyType('map', 'entries.keys', 'Array');
+        }
+
+        if ((object.entries?.values instanceof Array) === false)
+        {
+            throw new InvalidPropertyType('map', 'entries.values', 'Array');
+        }
     }
 }
 
