@@ -1,10 +1,11 @@
 
 import Module from '../core/types/Module.js';
 
-import FileManager from './interfaces/FileManager.js';
+import ClientId from './ClientId.js';
 import LocalNode from './LocalNode.js';
-import File from './models/File.js';
 import Repository from './Repository.js';
+import FileManager from './interfaces/FileManager.js';
+import File from './models/File.js';
 import ModuleLoader from './utils/ModuleLoader.js';
 
 import ClientNotFound from './errors/ClientNotFound.js';
@@ -12,10 +13,6 @@ import InvalidClientId from './errors/InvalidClientId.js';
 import InvalidSegmentFile from './errors/InvalidSegmentFile.js';
 
 import { setRuntime } from '../hooks.js';
-
-let lastClientId = 0;
-
-const CLIENT_ID_PREFIX = 'CLIENT_';
 
 export default class LocalRepository extends Repository
 {
@@ -52,7 +49,7 @@ export default class LocalRepository extends Repository
 
     async registerClient(segmentFilenames: string[]): Promise<string>
     {
-        const clientId = `${CLIENT_ID_PREFIX}${lastClientId++}`;
+        const clientId = ClientId.generate();
 
         this.#clients.set(clientId, segmentFilenames);
 
@@ -105,7 +102,7 @@ export default class LocalRepository extends Repository
 
     #validateClientId(clientId: string): void
     {
-        if (clientId.startsWith(CLIENT_ID_PREFIX) === false)
+        if (ClientId.validate(clientId) === false)
         {
             throw new InvalidClientId(clientId);
         }
