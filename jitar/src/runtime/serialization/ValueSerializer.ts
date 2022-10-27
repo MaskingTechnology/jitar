@@ -35,7 +35,7 @@ class ValueSerializer implements Serializer
         {
             // The error class is like Array, Map and Set in that it's a native class.
             // Native classes cannot be defined as a class object by the reflection helper.
-            // Unlike Array, Map and Set, the error class can be serialzed by the class serializer.
+            // Unlike Array, Map and Set, the error class can be serialized by the class serializer.
 
             // The type casting below isn't pretty, but works for now...
             return ClassSerializer.serialize(value as unknown as SerializableObject);

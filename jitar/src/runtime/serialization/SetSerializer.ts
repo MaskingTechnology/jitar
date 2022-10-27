@@ -1,4 +1,5 @@
 
+import InvalidPropertyType from './errors/InvalidPropertyType.js';
 import Serializer from './interfaces/Serializer.js';
 import SerializedSet from './types/SerializedSet.js';
 
@@ -20,9 +21,19 @@ class SetSerializer implements Serializer
 
     async deserialize(object: SerializedSet): Promise<Set<unknown>>
     {
+        this.#validateSerializedSet(object);
+
         const values = await Promise.all(object.values.map(async (value: unknown) => await ValueSerializer.deserialize(value)));
 
         return new Set([...values]);
+    }
+
+    #validateSerializedSet(object: SerializedSet): void
+    {
+        if ((object.values instanceof Array) === false)
+        {
+            throw new InvalidPropertyType('set', 'values', 'Array');
+        }
     }
 }
 
