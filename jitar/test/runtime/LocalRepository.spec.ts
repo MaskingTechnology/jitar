@@ -21,9 +21,9 @@ describe('runtime/LocalRepository', () =>
 
         it('should not accept an unknown client id', () =>
         {
-            const run = async () => await repository.loadModule('CLIENT_X', '/some/file');
+            const run = async () => await repository.loadModule('CLIENT_9999', '/some/file');
 
-            expect(run).rejects.toEqual(new ClientNotFound('CLIENT_X'));
+            expect(run).rejects.toEqual(new ClientNotFound('CLIENT_9999'));
         });
 
         it('should return an unsegmented module file', async () =>
