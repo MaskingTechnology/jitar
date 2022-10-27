@@ -54,11 +54,11 @@ Setting up Jitar is easy. It simply needs to be added as a NPM dependency to you
 npm install jitar
 ```
 
-Now you're ready to chop applications! Follow our [Getting started](https://jitar.dev/docs/02_getting_started) guide to create your first application.
+Now you're ready to chop applications! Follow our [Getting started](https://docs.jitar.dev/02_getting_started) guide to create your first application.
 
 ## Example
 
-The following example shows how a client imports and call a procedure from a server as if its locally available (like a monolith).
+The following example shows how a client imports and calls a procedure from a server as if its locally available (like a monolith).
 
 Components can be used typesafe because of the full Intellisense support. Also (complex) data objects can be exchanged between the procedures.
 
