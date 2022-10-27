@@ -46,7 +46,7 @@ GET http://repository.example.com:3000/images/logo.png HTTP/1.1
 This request will return the logo.png file from the application images directory. Files can also be requested from the root directory. If no filename is provided the index file will be returned that is configured for the repository.
 
 {:.alert-warning}
-The access to assets can not be restricted yet, meaning that files containing sensitive information are accessable for any client. This will be soved before the release of version 1.0.
+The access to assets can not be restricted yet, meaning that files containing sensitive information are accessible for any client. This will be solved before the release of version 1.0.
 
 ### Jitar
 
@@ -62,7 +62,7 @@ This request will return the content of the ``hooks.js`` file. Other Jitar files
 
 To check the health of a node the health API can be used. This API is internally used by the gateway to check the health of its nodes, but can also be used for external monitoring.
 
-The are two types of health checks available. The first is a simple status check that returns a boolean value indicating if the node is OK.
+There are two types of health checks available. The first is a simple status check that returns a boolean value indicating if the node is OK.
 
 ```http
 GET http://node.example.com:3000/health/status HTTP/1.1
@@ -100,13 +100,13 @@ const moduleImporter = async(specifier: string) => import(specifier);
 startServer(moduleImporter);
 ```
 
-We need to pass a module loader to this function to make sure that Node.js modules are loaded from the application context. This is needed because the application runs in the Jitar context, that doesn't have access to the application dependencies.
+We need to pass a module loader to this function to make sure that Node.js modules are loaded from the application context. This is needed because the application runs in the Jitar context, and doesn't have access to the application dependencies.
 
 The module loader is a simple async function that takes a module specifier and returns a module and is called by Jitar when a module is imported by one of the application modules.
 
 ### startClient
 
-When building full-stack applications, Jitar needs to start on the client side as well. This is done using the ``startClient`` hook. The client will create a local node as runtime that uses its origin as repository.
+When building full-stack applications, Jitar needs to start on the client side as well. This is done using the ``startClient`` hook. The client will create a local node as runtime that uses its origin as a repository.
 
 {:.filename}
 src/client.ts
@@ -128,7 +128,7 @@ To enable the segmentation of the application, we need to import the components 
 
 ### runProcedure
 
-For importing and running procedures Jitar fully supports the ES module system. But it also provides a hook do this dynamicaly. This hook is mainly internally used for running procedures on another node, but can also be used in applications.
+For importing and running procedures Jitar fully supports the ES module system. But it also provides a hook to do this dynamically. This hook is mainly internally used for running procedures on another node, but can also be used in applications.
 
 {:.filename}
 src/greetings/sayBoth.ts
@@ -145,7 +145,7 @@ export default async function sayBoth(firstName: string, lastName: string): Prom
 }
 ```
 
-We need to pass the ``module/name`` of the procedure, the version and the arguments. The arguments must be an JavaScript object containing the argument values by name. The value can be any [transferable type](04_basic_features#data-transportation).
+We need to pass the ``module/name`` of the procedure, the version and the arguments. The arguments must be a JavaScript object containing the argument values by name. The value can be any [transferable type](04_basic_features#data-transportation).
 
 {:.alert-info}
 Only procedures that are added to a segment file can be called.
@@ -159,7 +159,7 @@ Using this hook breaks the IntelliSense support and will make your application d
 
 ## Health checks
 
-Health checks are used to determine if a [nodes](03_runtime_services#node) is healthy or not. They are used by the [gateway](03_runtime_services#gateway) to determine if a node still can be used. If for example a node can not reach the database anymore, it will be removed from the gateway. For checking the database connection a health check has to be created.
+Health checks are used to determine if a [node](03_runtime_services#node) is healthy or not. They are used by the [gateway](03_runtime_services#gateway) to determine if a node still can be used. If for example a node can not reach the database anymore, it will be removed from the gateway. For checking the database connection a health check has to be created.
 
 A health check is a class that implements the HealthCheck interface. The interface has a single function called isHealthy() that returns a boolean.
 
