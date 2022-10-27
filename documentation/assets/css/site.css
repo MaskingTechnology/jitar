@@ -19,6 +19,13 @@
     --swatch-color-16: #7f6000;
     --swatch-color-17: #b7b7b7;
 
+    --font-weight-extra-light: 200;
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semi-bold: 600;
+    --font-weight-bold: 700;
+
     --layout-background-color: var(--swatch-color-1);
     --layout-border-color: var(--swatch-color-6);
     --layout-border-width: 1px;
@@ -26,7 +33,7 @@
     --layout-color: var(--swatch-color-4);
     --layout-font-family: 'Poppins', sans-serif;
     --layout-font-size: 16px;
-    --layout-font-weight: 200;
+    --layout-font-weight: var(--font-weight-light);
     --layout-header-height: 130px;
     --layout-padding-vertical: 50px;
     --layout-nav-width: 300px;
@@ -40,10 +47,10 @@
     --header-button-margin: 0 15px 0 0;
     --header-logo-color: var(--swatch-color-7);
     --header-logo-name-font-size: 2.1em;
-    --header-logo-name-font-weight: 600;
+    --header-logo-name-font-weight: var(--font-weight-semi-bold);
     --header-logo-title-color: var(--swatch-color-7);
     --header-logo-title-font-size: 1.4em;
-    --header-logo-title-font-weight: 300;
+    --header-logo-title-font-weight: var(--font-weight-light);
     --header-logo-title-margin: 0 0 4px 10px;
     --header-margin: 0 0 50px 0;
     --header-padding: 15px var(--layout-padding-horizontal);
@@ -58,20 +65,20 @@
     --nav-page-subject-color: var(--swatch-color-8);
     --nav-page-subject-color-active: var(--swatch-color-4);
     --nav-page-subject-font-size: 1.1em;
-    --nav-page-subject-font-weight: 300;
+    --nav-page-subject-font-weight: var(--font-weight-light);
     --nav-page-subject-prefix-color: var(--swatch-color-6);
     --nav-page-subject-prefix-color-active: var(--swatch-color-2);
     --nav-page-subject-prefix-margin: 0 5px 0 0;
     --nav-page-title-color: var(--swatch-color-4);
     --nav-page-title-color-active: var(--swatch-color-5);
     --nav-page-title-font-size: 1.2em;
-    --nav-page-title-font-weight: 400;
+    --nav-page-title-font-weight: var(--font-weight-normal);
     --nav-page-title-margin: 0 0 10px 0;
     --nav-top-mobile: 80px;
 
     --main-alert-padding: 20px;
     --main-alert-title-margin: 0 0 5px 0;
-    --main-alert-title-font-weight: 400;
+    --main-alert-title-font-weight: var(--font-weight-normal);
     --main-alert-danger-background-color: var(--swatch-color-9);
     --main-alert-danger-color: var(--swatch-color-10);
     --main-alert-danger-title-content: "Danger";
@@ -87,11 +94,11 @@
     --main-code-filename-background-color: var(--swatch-color-4);
     --main-code-filename-color: var(--swatch-color-3);
     --main-code-filename-font-size: 0.9em;
-    --main-code-filename-font-weight: 300;
+    --main-code-filename-font-weight: var(--font-weight-light);
     --main-code-filename-margin: 0 0 -16px 0;
     --main-code-filename-padding: 8px 16px;
     --main-heading-color: var(--swatch-color-12);
-    --main-heading-font-weight: 400;
+    --main-heading-font-weight: var(--font-weight-normal);
     --main-heading-margin: 30px 0 20px 0;
     --main-heading-prefix-color: var(--swatch-color-17);
     --main-heading-prefix-margin: 0 5px 0 0;
@@ -110,10 +117,10 @@
     --main-separator-color: var(--swatch-color-3);
     --main-separator-height: 1px;
     --main-separator-margin: var(--layout-padding-horizontal) 0;
-    --main-strong-font-weight: 400;
+    --main-strong-font-weight: var(--font-weight-normal);
     --main-title-color: var(--swatch-color-4);
     --main-title-font-size: 2.0em;
-    --main-title-font-weight: 400;
+    --main-title-font-weight: var(--font-weight-normal);
     --main-title-margin: 0 0 30px 0;
     --main-ul-padding: 0 0 0 25px;
 }
