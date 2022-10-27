@@ -8,6 +8,8 @@ import LocalRepository from '../../runtime/LocalRepository.js';
 import Proxy from '../../runtime/Proxy.js';
 import ValueSerializer from '../../runtime/serialization/ValueSerializer.js';
 
+const CLIENT_ID_REGEX = /^CLIENT_\d+$/;
+
 @Controller('modules')
 export default class ModulesController
 {
@@ -42,7 +44,7 @@ export default class ModulesController
     {
         const clientId = request.params.clientId;
 
-        if (typeof clientId !== 'string' || ClientId.validate(clientId) === false)
+        if (typeof clientId !== 'string' || CLIENT_ID_REGEX.test(clientId) === false)
         {
             return response.status(400).send('Invalid client id.');
         }
