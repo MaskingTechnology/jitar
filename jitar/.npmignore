@@ -1,0 +1,9 @@
+coverage
+src
+test
+cache
+node_modules
+.eslintignore
+.eslintrc
+jest.config.js
+*.tgz
