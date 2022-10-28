@@ -63,11 +63,11 @@
     --nav-padding-mobile: 30px var(--layout-padding-horizontal-mobile) 0 var(--layout-padding-horizontal-mobile);
     --nav-page-margin: 0 0 25px 0;
     --nav-page-subject-color: var(--swatch-color-8);
-    --nav-page-subject-color-active: var(--swatch-color-4);
+    --nav-page-subject-color-active: var(--swatch-color-2);
     --nav-page-subject-font-size: 1.1em;
     --nav-page-subject-font-weight: var(--font-weight-light);
     --nav-page-subject-prefix-color: var(--swatch-color-6);
-    --nav-page-subject-prefix-color-active: var(--swatch-color-2);
+    --nav-page-subject-prefix-color-active: var(--swatch-color-12);
     --nav-page-subject-prefix-margin: 0 5px 0 0;
     --nav-page-title-color: var(--swatch-color-4);
     --nav-page-title-color-active: var(--swatch-color-5);
@@ -306,6 +306,7 @@ nav li a.active
 
 nav li a.active::before
 {
+    content: "»";
     color: var(--nav-page-subject-prefix-color-active);
 }
 
