@@ -16,6 +16,7 @@ Please join our [Discord community](https://discord.gg/Bqwy8azp5R) for feature r
 * Data type validation on RPC calls
 * Fail on unexpected parameters on RPC calls
 * Monitoring (metrics)
+* Integrations ([Next.js](https://nextjs.org/), etc.)
 
 ## Roadmap beyond v1.0
 
