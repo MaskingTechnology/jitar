@@ -1,6 +1,6 @@
 
 import MissingParameterValue from './errors/MissingParameterValue.js';
-import UnknownParameter from './errors/UnknownParameter'
+import UnknownParameter from './errors/UnknownParameter.js'
 import ReflectionParameter from './reflection/models/ReflectionParameter.js';
 import * as AccessLevel from './definitions/AccessLevel.js';
 import Version from './Version.js';
@@ -37,13 +37,13 @@ export default class Implementation
     {
         const values: unknown[] = [];
 
-        const parametersKeys = Array.from(parameters.keys());
-        const flattenedParameters = this.#parameters.map(parameter => parameter.name);
-        const additionalParameters = parametersKeys.filter(parameter => !flattenedParameters.includes(parameter));
+        const incommingKeys = Array.from(parameters.keys());
+        const knownKeys = this.#parameters.map(parameter => parameter.name);
+        const additionalKeys = incommingKeys.filter(key => knownKeys.includes(key) === false);
         
-        if(additionalParameters.length !== 0)
+        if(additionalKeys.length !== 0)
         {
-            throw new UnknownParameter(additionalParameters[0]);
+            throw new UnknownParameter(additionalKeys[0]);
         }
 
         for (const parameter of this.#parameters)
