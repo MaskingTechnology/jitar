@@ -1,5 +1,6 @@
 
 import MissingParameterValue from './errors/MissingParameterValue.js';
+import UnknownParameter from './errors/UnknownParameter'
 import ReflectionParameter from './reflection/models/ReflectionParameter.js';
 import * as AccessLevel from './definitions/AccessLevel.js';
 import Version from './Version.js';
@@ -35,6 +36,15 @@ export default class Implementation
     #extractParameterValues(parameters: Map<string, unknown>): unknown[]
     {
         const values: unknown[] = [];
+
+        const parametersKeys = Array.from(parameters.keys());
+        const flattenedParameters = this.#parameters.map(parameter => parameter.name);
+        const additionalParameters = parametersKeys.filter(parameter => !flattenedParameters.includes(parameter));
+        
+        if(additionalParameters.length !== 0)
+        {
+            throw new UnknownParameter(additionalParameters[0]);
+        }
 
         for (const parameter of this.#parameters)
         {
