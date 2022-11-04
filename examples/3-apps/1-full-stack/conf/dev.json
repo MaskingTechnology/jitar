@@ -4,6 +4,7 @@
     {
         "source": "./dist",
         "cache": "./cache",
-        "index": "index.html"
+        "index": "index.html",
+        "assets": [ "*.html", "*.js" ]
     }
 }

@@ -90,33 +90,45 @@ export default class LocalFileManager implements FileManager
 
     async getModuleFileNames(): Promise<string[]>
     {
-        const location = this.getAbsoluteLocation('./');
-        const filenames = await glob(`${location}/**/*.js`);
-
-        return filenames;
+        return this.filterFiles('**/*.js');
     }
 
     async getSegmentFiles(): Promise<string[]>
     {
-        const location = this.getAbsoluteLocation('./');
-        const filenames = await glob(`${location}/**/*.segment.json`);
-
-        return filenames;
+        return this.filterFiles('**/*.segment.json');
     }
 
     async getNodeSegmentFiles(): Promise<string[]>
     {
-        const location = this.getAbsoluteLocation('./');
-        const filenames = await glob(`${location}/**/*.segment.local.js`);
-
-        return filenames;
+        return this.filterFiles('**/*.segment.local.js');
     }
 
     async getRepositorySegmentFiles(): Promise<string[]>
     {
-        const location = this.getAbsoluteLocation('./');
-        const filenames = await glob(`${location}/**/*.segment.repository.js`);
+        return this.filterFiles('**/*.segment.repository.js');
+    }
 
-        return filenames;
+    async getAssetFiles(patterns: string[]): Promise<string[]>
+    {
+        const promises = patterns.map(pattern => this.filterFiles(pattern));
+        const assetFiles = (await Promise.all(promises)).flat();
+
+        return assetFiles
+            .map(filename => this.getRelativeLocation(filename))
+            .filter(filename => this.#isGeneratedFile(filename) === false);
+    }
+
+    async filterFiles(pattern: string): Promise<string[]>
+    {
+        const location = this.getAbsoluteLocation('./');
+
+        return await glob(`${location}/${pattern}`);
+    }
+
+    #isGeneratedFile(filename: string): boolean
+    {
+        return filename.endsWith('.local.js')
+            || filename.endsWith('.repository.js')
+            || filename.endsWith('.remote.js');
     }
 }

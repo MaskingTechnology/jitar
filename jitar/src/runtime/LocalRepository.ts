@@ -9,6 +9,7 @@ import File from './models/File.js';
 import ModuleLoader from './utils/ModuleLoader.js';
 
 import ClientNotFound from './errors/ClientNotFound.js';
+import FileNotFound from './errors/FileNotFound.js';
 import InvalidClientId from './errors/InvalidClientId.js';
 import InvalidSegmentFile from './errors/InvalidSegmentFile.js';
 
@@ -19,12 +20,14 @@ export default class LocalRepository extends Repository
     #fileManager: FileManager;
     #segments: Map<string, string> = new Map();
     #clients: Map<string, string[]> = new Map();
+    #assets: string[];
 
-    constructor(fileManager: FileManager, url?: string)
+    constructor(fileManager: FileManager, assets: string[], url?: string)
     {
         super(url);
 
         this.#fileManager = fileManager;
+        this.#assets = assets;
     }
 
     async loadSegment(name: string): Promise<void>
@@ -63,6 +66,11 @@ export default class LocalRepository extends Repository
 
     async loadAsset(filename: string): Promise<File>
     {
+        if (this.#assets.includes(filename) === false)
+        {
+            throw new FileNotFound(filename);
+        }
+
         return this.#fileManager.load(filename);
     }
 
@@ -136,7 +144,7 @@ export default class LocalRepository extends Repository
             filename = filename.replace('.js', '.local.js');
         }
 
-        const file = await this.loadAsset(filename);
+        const file = await this.#loadFile(filename);
         const code = file.content.toString();
 
         return new File(filename, 'application/javascript', code);
@@ -149,6 +157,11 @@ export default class LocalRepository extends Repository
 
         const remoteFilename = filename.replace('.js', '.remote.js');
 
-        return this.loadAsset(remoteFilename);
+        return this.#loadFile(remoteFilename);
+    }
+
+    async #loadFile(filename: string): Promise<File>
+    {
+        return this.#fileManager.load(filename);
     }
 }
