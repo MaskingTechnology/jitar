@@ -18,4 +18,8 @@ export default class StandaloneConfiguration
     @IsArray()
     @IsOptional()
     segments?: string[];
+
+    @IsArray()
+    @IsOptional()
+    assets?: string[];
 }
