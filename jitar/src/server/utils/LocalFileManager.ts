@@ -90,27 +90,27 @@ export default class LocalFileManager implements FileManager
 
     async getModuleFileNames(): Promise<string[]>
     {
-        return this.filterFiles('**/*.js');
+        return this.#filterFiles('**/*.js');
     }
 
     async getSegmentFiles(): Promise<string[]>
     {
-        return this.filterFiles('**/*.segment.json');
+        return this.#filterFiles('**/*.segment.json');
     }
 
     async getNodeSegmentFiles(): Promise<string[]>
     {
-        return this.filterFiles('**/*.segment.local.js');
+        return this.#filterFiles('**/*.segment.local.js');
     }
 
     async getRepositorySegmentFiles(): Promise<string[]>
     {
-        return this.filterFiles('**/*.segment.repository.js');
+        return this.#filterFiles('**/*.segment.repository.js');
     }
 
     async getAssetFiles(patterns: string[]): Promise<string[]>
     {
-        const promises = patterns.map(pattern => this.filterFiles(pattern));
+        const promises = patterns.map(pattern => this.#filterFiles(pattern));
         const assetFiles = (await Promise.all(promises)).flat();
 
         return assetFiles
@@ -118,7 +118,7 @@ export default class LocalFileManager implements FileManager
             .filter(filename => this.#isGeneratedFile(filename) === false);
     }
 
-    async filterFiles(pattern: string): Promise<string[]>
+    async #filterFiles(pattern: string): Promise<string[]>
     {
         const location = this.getAbsoluteLocation('./');
 

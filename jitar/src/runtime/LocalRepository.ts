@@ -71,7 +71,7 @@ export default class LocalRepository extends Repository
             throw new FileNotFound(filename);
         }
 
-        return this.#fileManager.load(filename);
+        return this.#loadFile(filename);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

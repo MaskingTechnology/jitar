@@ -46,7 +46,7 @@ export default class RuntimeConfigurator
     {
         const sourceLocation = configuration.source ?? RuntimeDefaults.SOURCE;
         const cacheLocation = configuration.cache ?? RuntimeDefaults.CACHE;
-        const assets = configuration.assets;
+        const assetFilePatterns = configuration.assets;
 
         await this.#buildCache(sourceLocation, cacheLocation);
 
@@ -54,7 +54,7 @@ export default class RuntimeConfigurator
             ? await this.#getSegmentNames(cacheLocation)
             : configuration.segments;
 
-        const repository = await this.#buildRepository(url, cacheLocation, assets);
+        const repository = await this.#buildRepository(url, cacheLocation, assetFilePatterns);
         const node = await this.#buildNode(url, segmentNames, repository);
 
         return this.#buildProxy(url, repository, node);
@@ -64,10 +64,10 @@ export default class RuntimeConfigurator
     {
         const sourceLocation = configuration.source ?? RuntimeDefaults.SOURCE;
         const cacheLocation = configuration.cache ?? RuntimeDefaults.CACHE;
-        const assets = configuration.assets ?? [];
+        const assetFilePatterns = configuration.assets ?? [];
 
         await this.#buildCache(sourceLocation, cacheLocation);
-        return this.#buildRepository(url, cacheLocation, assets);
+        return this.#buildRepository(url, cacheLocation, assetFilePatterns);
     }
 
     static async #configureGateway(url: string, configuration: GatewayConfiguration): Promise<LocalGateway>
@@ -151,12 +151,12 @@ export default class RuntimeConfigurator
         return name.substring(0, endIndex);
     }
 
-    static async #buildRepository(url: string | undefined, cacheLocation: string, assets?: string[]): Promise<LocalRepository>
+    static async #buildRepository(url: string | undefined, cacheLocation: string, assetFilePatterns?: string[]): Promise<LocalRepository>
     {
         const fileManager = new LocalFileManager(cacheLocation);
 
-        const assetFiles = assets !== undefined
-            ? await fileManager.getAssetFiles(assets)
+        const assetFiles = assetFilePatterns !== undefined
+            ? await fileManager.getAssetFiles(assetFilePatterns)
             : [];
 
         const repository = new LocalRepository(fileManager, assetFiles, url);
