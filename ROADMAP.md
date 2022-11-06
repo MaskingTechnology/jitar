@@ -11,10 +11,10 @@ Please join our [Discord community](https://discord.gg/Bqwy8azp5R) for feature r
 * Real development mode (auto-reload on save)
 * Build system (combine and minify segment files)
 * Authentication / authorization support
-* Asset protection (public private assets)
+* Asset protection (public private assets) [done]
 * Add support for (de)serializing binary data
 * Data type validation on RPC calls
-* Fail on unexpected parameters on RPC calls
+* Fail on unexpected parameters on RPC calls [done]
 * Monitoring (metrics)
 * Integrations ([Next.js](https://nextjs.org/), etc.)
 

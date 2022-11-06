@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 0.1.2 (November 11, 2022)
+
+New features:
+- \[[`a842fb0`](https://github.com/MaskingTechnology/jitar/commit/a842fb0)] Data type validation on RPC calls [Yusuf-YENICERI](https://github.com/MaskingTechnology/jitar/pull/44)
+- \[[`265a5f5`](https://github.com/MaskingTechnology/jitar/commit/265a5f5)] Asset protection (public private assets) [basmasking](https://github.com/MaskingTechnology/jitar/pull/48)
+
 ## 0.1.1 (October 28, 2022)
 
 Fixes:

@@ -45,8 +45,8 @@ GET http://repository.example.com:3000/images/logo.png HTTP/1.1
 
 This request will return the logo.png file from the application images directory. Files can also be requested from the root directory. If no filename is provided the index file will be returned that is configured for the repository.
 
-{:.alert-warning}
-The access to assets can not be restricted yet, meaning that files containing sensitive information are accessible for any client. This will be solved before the release of version 1.0.
+{:.alert-info}
+All assets are private by default. They can be made public using [glob patterns](https://en.wikipedia.org/wiki/Glob_(programming)), i.e. ``assets/**/*`` to make all files public in the *assets* folder and it child folders. See the [repository](03_runtime_services#repository) description for the configuration.
 
 ### Jitar
 
