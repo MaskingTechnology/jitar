@@ -35,6 +35,9 @@ content-type: application/json
 }
 ```
 
+{:.alert-info}
+When required parameters are missing the RPC call will fail with a MissingParameterValue error. When additional parameters are send, the RPC call will also fail with an UnknownParameter error.
+
 ### Assets
 
 For building full-stack applications it is important to be able to retrieve any type of application file. The assets API allows you to do this. Asset requests are handled by the repository. The repository acts like a web server by serving all files from the application directory.

@@ -3,7 +3,8 @@ import Component from '../types/Component.js'
 
 export default class UnknownParameter extends Error
 {
-    constructor(parameterName: string){
+    constructor(parameterName: string)
+    {
         super(`Unknown parameter ${parameterName}`)
     }
 }
