@@ -1,8 +1,25 @@
 
 import path from 'path';
-import { PluginOption } from 'vite';
+import { PluginOption, normalizePath } from 'vite';
 
-const IMPORT_REGEX = /import\s+([a-zA-Z0-9_]+)\s+from\s+['"]([a-zA-Z0-9_\-\/\.]+)['"]/g;
+const IMPORT_PATTERN = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g;
+
+function formatPath(path: string)
+{
+    path = normalizePath(path);
+
+    if (path.startsWith('/'))
+    {
+        path = path.substring(1);
+    }
+
+    if (path.endsWith('/'))
+    {
+        path = path.substring(0, path.length - 1);
+    }
+
+    return path;
+}
 
 function createServerConfig(jitarUrl: string)
 {
@@ -21,9 +38,11 @@ function createServerConfig(jitarUrl: string)
     }
 }
 
-function createBootstrapCode(): string
+function createBootstrapCode(segments: string[]): string
 {
-    return `<script type="module">const jitar = await import('/jitar/client.js'); await jitar.startClient();</script>`;
+    const segmentString = segments.map(segment => `'${segment}'`).join(', ');
+
+    return `<script type="module">const jitar = await import('/jitar/client.js'); await jitar.startClient(${segmentString});</script>`;
 }
 
 async function createImportCode(code: string, id: string, jitarFullPath: string, jitarPath: string): Promise<string>
@@ -34,13 +53,13 @@ async function createImportCode(code: string, id: string, jitarFullPath: string,
         .replace('.ts', '.js');
 
     // Remove all imports from the code
-    code = code.replace(IMPORT_REGEX, (match, p1, p2) =>
+    code = code.replace(IMPORT_PATTERN, () =>
     {
         return '';
     });
 
-    // TODO: Strip a whole bunch of other stuff from the code
-    // (we can use the same code for the Jitar cache builder)
+    // Later on, we need to strip the code further into an interface to make sure it can be imported
+    // (we can than share and reuse this code for the Jitar cache builder)
 
     // Load the code as data url into a module
     const importData = Buffer.from(code).toString('base64');
@@ -73,13 +92,16 @@ async function createImportCode(code: string, id: string, jitarFullPath: string,
         + exportCode;
 }
 
-export default function viteJitar(sourcePath: string, jitarPath: string, jitarUrl: string): PluginOption
+export default function viteJitar(sourcePath: string, jitarPath: string, jitarUrl: string, segments: string[] = []): PluginOption
 {
+    sourcePath = formatPath(sourcePath);
+    jitarPath = formatPath(jitarPath);
+
     let jitarFullPath: string | undefined = undefined;
 
     return {
 
-        name: 'jitar-vite-serve',
+        name: 'jitar-vite-plugin',
         enforce: 'post', // After Vite converted the code to JS
         //apply: '...', // Apply in serve and build mode
 
@@ -115,7 +137,7 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
 
         transformIndexHtml(html)
         {
-            return html.replace('<head>', `<head>${createBootstrapCode()}`);
+            return html.replace('<head>', `<head>${createBootstrapCode(segments)}`);
         }
 
     } as PluginOption;
