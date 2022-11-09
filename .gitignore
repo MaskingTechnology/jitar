@@ -2,3 +2,4 @@ coverage
 dist
 cache
 node_modules
+examples/**/package-lock.json
