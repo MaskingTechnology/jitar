@@ -15,7 +15,7 @@ New features:
 Fixes:
 - Linting issues (typing, code improvements, etc.)
 - \[[`e85db81`](https://github.com/MaskingTechnology/jitar/commit/e85db81)] Extended deserialization data validation [petermasking](https://github.com/MaskingTechnology/jitar/pull/24)
-- \[[`e85db81`](https://github.com/MaskingTechnology/jitar/commit/e85db81)] Improved the client id generation and validation [petermasking](https://github.com/MaskingTechnology/jitar/pull/22)
+- \[[`468d92c`](https://github.com/MaskingTechnology/jitar/commit/468d92c)] Improved the client id generation and validation [petermasking](https://github.com/MaskingTechnology/jitar/pull/22)
 
 ## 0.1.0 (October 21, 2022)
 
