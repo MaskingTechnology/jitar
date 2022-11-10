@@ -3,3 +3,4 @@ dist
 cache
 node_modules
 examples/**/package-lock.json
+plugins/**/package-lock.json
