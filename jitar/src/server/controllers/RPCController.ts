@@ -4,11 +4,18 @@ import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
 import Version from '../../core/Version.js';
+import ImplementationNotFound from '../../core/errors/ImplementationNotFound.js';
+import InvalidVersionNumber from '../../core/errors/InvalidVersionNumber.js';
+import MissingParameterValue from '../../core/errors/MissingParameterValue.js';
+import ProcedureNotFound from '../../core/errors/ProcedureNotFound.js';
+import UnknownParameter from '../../core/errors/UnknownParameter.js';
 
 import ProcedureContainer from '../../runtime/interfaces/ProcedureContainer.js';
 import ValueSerializer from '../../runtime/serialization/ValueSerializer.js';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
+const INVALID_REQUEST_ERRORS = [InvalidVersionNumber, MissingParameterValue, UnknownParameter];
+const NOT_FOUND_ERRORS = [ImplementationNotFound, ProcedureNotFound];
 
 @Controller('rpc')
 export default class RPCController
@@ -133,7 +140,7 @@ export default class RPCController
 
             this.#logger.error(`Failed to run procedure -> ${fqn} (${version.toString()}) | ${message}`);
 
-            return this.#createErrorResponse(errorData, response, serialize);
+            return this.#createErrorResponse(error, errorData, response, serialize);
         }
     }
 
@@ -147,14 +154,15 @@ export default class RPCController
         return response.status(200).send(content);
     }
 
-    #createErrorResponse(errorData: unknown, response: Response, serialize: boolean): Response
+    #createErrorResponse(error: unknown, errorData: unknown, response: Response, serialize: boolean): Response
     {
         const content = this.#createResponseContent(errorData, serialize);
         const contentType = this.#createResponseContentType(content);
+        const statusCode = this.#createResponseStatusCode(error);
 
         response.setHeader('Content-Type', contentType);
 
-        return response.status(500).send(content);
+        return response.status(statusCode).send(content);
     }
 
     #createResponseContent(data: unknown, serialize: boolean): unknown
@@ -169,5 +177,20 @@ export default class RPCController
         return typeof content === 'object'
             ? 'application/json'
             : 'text/plain';
+    }
+
+    #createResponseStatusCode(error: unknown): number
+    {
+        if (INVALID_REQUEST_ERRORS.some(invalidError => error instanceof invalidError))
+        {
+            return 400;
+        }
+
+        if (NOT_FOUND_ERRORS.some(notFoundError => error instanceof notFoundError))
+        {
+            return 404;
+        }
+
+        return 500;
     }
 }

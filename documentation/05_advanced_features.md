@@ -118,7 +118,7 @@ src/client.ts
 // @ts-ignore (the import will be valid at runtime)
 import { startClient } from '/jitar/client.js';
 
-const client = await startClient('client.segment.js');
+const client = await startClient('client');
 const { default: sayBoth } = await client.import('./greetings/sayBoth.js');
 const message = await sayBoth('John', 'Doe');
 
