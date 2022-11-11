@@ -127,6 +127,8 @@ const jitarViewBigInt64 = createViewBigInt64('jitar');
 const serializedJitarViewUint16 = { serialized: true, name: 'ArrayBuffer', type: 'Uint16Array', bytes: [106, 0, 105, 0, 116, 0, 97, 0, 114, 0] };
 const SerializedJitarViewInt8 = { serialized: true, name: 'ArrayBuffer', type: 'Int8Array', bytes: [106, 105, 116, 97, 114] };
 const SerializedJitarViewBigInt64 = { serialized: true, name: 'ArrayBuffer', type: 'BigInt64Array', bytes: [106, 0, 0, 0, 0, 0, 0, 0, 105, 0, 0, 0, 0, 0, 0, 0, 116, 0, 0, 0, 0, 0, 0, 0, 97, 0, 0, 0, 0, 0, 0, 0, 114, 0, 0, 0, 0, 0, 0, 0] };
+const SerializedJitarViewInt7 = { serialized: true, name: 'ArrayBuffer', type: 'Int7Array', bytes: [106, 105, 116, 97, 114] };
+const SerializedJitarViewString8 = { serialized: true, name: 'ArrayBuffer', type: 'Int8Array', bytes: '[106, 105, 116, 97, 114]' };
 
 function createViewUint16(string: string)
 {
@@ -178,5 +180,6 @@ export
     serializedInvalidClass, serializedUnserializableClass,
     privateClass, serializedPrivateClass,
     errorClass, serializedError,
-    jitarViewUint16, serializedJitarViewUint16, jitarViewInt8, SerializedJitarViewInt8, jitarViewBigInt64, SerializedJitarViewBigInt64
+    jitarViewUint16, serializedJitarViewUint16, jitarViewInt8, SerializedJitarViewInt8, jitarViewBigInt64, SerializedJitarViewBigInt64,
+    SerializedJitarViewInt7, SerializedJitarViewString8
 }

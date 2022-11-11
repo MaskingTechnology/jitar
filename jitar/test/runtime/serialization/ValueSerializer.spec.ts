@@ -10,12 +10,14 @@ import
     serializedInvalidClass, serializedUnserializableClass,
     privateClass, serializedPrivateClass,
     errorClass, serializedError,
-    jitarViewUint16, serializedJitarViewUint16, jitarViewInt8, SerializedJitarViewInt8, jitarViewBigInt64, SerializedJitarViewBigInt64
+    jitarViewUint16, serializedJitarViewUint16, jitarViewInt8, SerializedJitarViewInt8, jitarViewBigInt64, SerializedJitarViewBigInt64,
+    SerializedJitarViewInt7, SerializedJitarViewString8
 } from '../../_fixtures/runtime/serialization/ValueSerializer.fixture';
 
 import ValueSerializer from '../../../src/runtime/serialization/ValueSerializer';
 import ClassNotFound from '../../../src/runtime/serialization/errors/ClassNotFound';
 import InvalidClass from '../../../src/runtime/serialization/errors/InvalidClass';
+import InvalidPropertyType from '../../../src/runtime/serialization/errors/InvalidPropertyType';
 
 describe('serialization/ValueSerializer', () =>
 {
@@ -221,6 +223,15 @@ describe('serialization/ValueSerializer', () =>
             expect(viewUint16).toEqual(jitarViewUint16);
             expect(viewInt8).toEqual(jitarViewInt8);
             expect(viewBigInt64).toEqual(jitarViewBigInt64);
+        });
+
+        it('should not deserialize invalid array buffer instances', async () =>
+        {
+            const viewInt7 = async () => await ValueSerializer.deserialize(SerializedJitarViewInt7);
+            const viewString8 = async () => await ValueSerializer.deserialize(SerializedJitarViewString8);
+
+            expect(viewInt7).rejects.toEqual(new InvalidPropertyType('ArrayBuffer', 'type', 'TypedArray'));
+            expect(viewString8).rejects.toEqual(new InvalidPropertyType('ArrayBuffer', 'bytes', 'Array'));
         });
     });
 });
