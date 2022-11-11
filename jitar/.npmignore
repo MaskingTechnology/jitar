@@ -6,4 +6,5 @@ node_modules
 .eslintignore
 .eslintrc
 jest.config.js
+tsconfig.json
 *.tgz

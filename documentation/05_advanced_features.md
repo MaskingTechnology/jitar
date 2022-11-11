@@ -35,6 +35,9 @@ content-type: application/json
 }
 ```
 
+{:.alert-info}
+When required parameters are missing the RPC call will fail with a MissingParameterValue error. When additional parameters are send, the RPC call will also fail with an UnknownParameter error.
+
 ### Assets
 
 For building full-stack applications it is important to be able to retrieve any type of application file. The assets API allows you to do this. Asset requests are handled by the repository. The repository acts like a web server by serving all files from the application directory.
@@ -45,8 +48,8 @@ GET http://repository.example.com:3000/images/logo.png HTTP/1.1
 
 This request will return the logo.png file from the application images directory. Files can also be requested from the root directory. If no filename is provided the index file will be returned that is configured for the repository.
 
-{:.alert-warning}
-The access to assets can not be restricted yet, meaning that files containing sensitive information are accessible for any client. This will be solved before the release of version 1.0.
+{:.alert-info}
+All assets are private by default. They can be made public using [glob patterns](https://en.wikipedia.org/wiki/Glob_(programming)), i.e. ``assets/**/*`` to make all files public in the *assets* folder and it child folders. See the [repository](03_runtime_services#repository) description for the configuration.
 
 ### Jitar
 
@@ -115,7 +118,7 @@ src/client.ts
 // @ts-ignore (the import will be valid at runtime)
 import { startClient } from '/jitar/client.js';
 
-const client = await startClient('client.segment.js');
+const client = await startClient('client');
 const { default: sayBoth } = await client.import('./greetings/sayBoth.js');
 const message = await sayBoth('John', 'Doe');
 

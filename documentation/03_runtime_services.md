@@ -24,6 +24,7 @@ Its configuration has the following options:
   * **source** - The directory where the application code is stored (optional, default ``./src``).
   * **cache** - The directory where the repository will store its application cache (optional, default ``./cache``).
   * **index** - The file that will be served when accessed by a web browser (optional, default ``index.html``).
+  * **assets** - A list of of assets that can be requested publicly (optional, default ``undefined``).
 
 The url must have the following format: ``{protocol}://{address}:{port}``
 
@@ -38,7 +39,8 @@ An example of a repository configuration:
     {
         "source": "./src",
         "cache": "./cache",
-        "index": "index.html"
+        "index": "index.html",
+        "assets": ["*.html", "*.js", "*.css", "assets/**/*"]
     }
 }
 ```
@@ -148,6 +150,7 @@ The standalone service combines all services into a single Jitar instance. It ca
   * **cache** - The directory where the repository will store its application cache (optional, default ``./cache``).
   * **index** - The file that will be served when accessed by a web browser (optional, default ``index.html``).
   * **segments** - The segment names to load and run their procedures (optional, default loads all segments).
+  * **assets** - A list of of assets that can be requested publicly (optional, default ``undefined``).
 
 All urls must have the following format: ``{protocol}://{address}:{port}``
 
@@ -163,7 +166,8 @@ An example of a standalone configuration:
         "source": "./src",
         "cache": "./cache",
         "index": "index.html",
-        "segments": ["segment1", "segment2"]
+        "segments": ["segment1", "segment2"],
+        "assets": ["*.html", "*.js", "*.css", "assets/**/*"]
     }
 }
 ```

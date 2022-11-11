@@ -50,6 +50,9 @@ Because Jitar is framework agnostic, it can be used with any framework or librar
 
 Time to dive in! The example is a simple contact list. We've excluded some files for brevity, but the full code can be found on [GitHub](https://github.com/MaskingTechnology/jitar){:target="_blank"}.
 
+{:.alert-info}
+We also provide a plugin for [Vite](https://vitejs.dev/){:target="_blank"} that makes it easy to add Jitar to any React, Angular, Vue, etc. application. See it's [Readme](https://github.com/MaskingTechnology/jitar/tree/main/plugins/vite) for more information. The example below does not use the plugin to fully demonstrate how the startClient hook works.
+
 Let's start with setting up the client. To keep things simple, we use a CDN for importing React.
 
 {:.filename}

@@ -2,9 +2,10 @@
     "name": "jitar-helloworld-example",
     "type": "module",
     "scripts": {
+        "build": "",
         "start": "node --experimental-network-imports --experimental-fetch src/start.js --config=jitar.json"
     },
     "dependencies": {
-        "jitar": "^0.1.1"
+        "jitar": "^0.1.2"
     }
 }

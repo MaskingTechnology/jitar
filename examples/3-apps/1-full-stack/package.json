@@ -15,7 +15,7 @@
     },
     "dependencies": {
         "mongodb": "^4.9.1",
-        "jitar": "^0.1.1"
+        "jitar": "^0.1.2"
     },
     "devDependencies": {
         "@types/react": "^18.0.17",

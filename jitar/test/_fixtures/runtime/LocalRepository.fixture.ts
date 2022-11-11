@@ -38,6 +38,8 @@ class TestFileManager implements FileLoader
 
             case 'secondPublicTask.remote.js':
                 return Buffer.from('runProcedure()');
+            case 'index.html':
+                return Buffer.from('<html><body><p>Hello world</p></script></body></html>');
         }
 
         return Buffer.from('');
@@ -59,7 +61,8 @@ class TestFileManager implements FileLoader
 }
 
 const fileManager = new TestFileManager();
-const repository = new LocalRepository(fileManager);
+const assetList = ['index.html'];
+const repository = new LocalRepository(fileManager, assetList);
 const client = { id: '' };
 
 repository.registerSegment('first', ['firstPrivateTask.js', 'firstPublicTask.js', 'thirdPublicTask.js']);

@@ -5,6 +5,7 @@
         "source": "./dist",
         "cache": "./cache",
         "index": "index.html",
-        "segments": [ "server" ]
+        "segments": [ "server" ],
+        "assets": [ "*.html", "*.js" ]
     }
 }

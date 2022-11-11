@@ -1,5 +1,6 @@
 
 import MissingParameterValue from '../../src/core/errors/MissingParameterValue';
+import UnknownParameter from '../../src/core/errors/UnknownParameter';
 
 import
 {
@@ -85,5 +86,13 @@ describe('core/Implementation', () =>
 
             expect(run).rejects.toEqual(new MissingParameterValue('mandatory'));
         });
+
+        it('should not run a procedure with an additional parameter', async () => 
+        {
+            const args = new Map().set('mandatory', 'mandatory').set('optional','optional').set('additional','additional');
+            const run = async () => await parameterImplementation.run(args)
+
+            expect(run).rejects.toEqual(new UnknownParameter('additional'));
+        })
     });
 });
