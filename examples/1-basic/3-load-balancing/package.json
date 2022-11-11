@@ -9,6 +9,6 @@
         "node2": "node --experimental-network-imports --experimental-fetch dist/start.js --config=conf/node2.json"
     },
     "dependencies": {
-        "jitar": "^0.1.1"
+        "jitar": "^0.1.2"
     }
 }

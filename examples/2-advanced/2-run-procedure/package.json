@@ -8,7 +8,7 @@
         "start": "node --experimental-network-imports --experimental-fetch dist/start.js --config=jitar.json"
     },
     "dependencies": {
-        "jitar": "^0.1.1"
+        "jitar": "^0.1.2"
     },
     "devDependencies": {
         "cpx2": "^4.2.0",
