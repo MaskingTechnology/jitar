@@ -1,6 +1,6 @@
 {
     "name": "jitar",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "Distributed runtime for JavaScript and TypeScript to chop monolithic applications into micros.",
     "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
     "license": "MIT",
@@ -18,7 +18,8 @@
         "test-coverage": "jest --coverage",
         "lint": "eslint . --ext .ts",
         "build": "tsc -p tsconfig.json",
-        "clean": "rm -rf dist build"
+        "clean": "rm -rf dist build",
+        "release": "npm run clean && npm run build && npm publish"
     },
     "dependencies": {
         "@overnightjs/core": "^1.7.6",
