@@ -1,4 +1,5 @@
 
+import InvalidPropertyType from './errors/InvalidPropertyType.js';
 import Serializer from './interfaces/Serializer.js';
 import SerializedArrayBuffer from './types/SerializedArrayBuffer.js';
 import TypedArray from './types/TypedArray.js';
@@ -25,6 +26,8 @@ class ArrayBufferSerializer implements Serializer
 
     async deserialize(object: SerializedArrayBuffer): Promise<TypedArray>
     {
+        this.#validateSerializedArrayBuffer(object);
+
         const type = object.type;
         const bytes = object.bytes;
         const buffer = new ArrayBuffer(bytes.length);
@@ -38,6 +41,41 @@ class ArrayBufferSerializer implements Serializer
         const clazz = (globalThis as Module)[type] as Function;
 
         return ReflectionHelper.createInstance(clazz, [buffer]) as TypedArray;
+    }
+
+    #validateSerializedArrayBuffer(object: SerializedArrayBuffer): void
+    {
+        if ((object.bytes instanceof Array) === false)
+        {
+            throw new InvalidPropertyType('ArrayBuffer', 'bytes', 'Array');
+        }
+
+        if (this.#isValidType(object.type) === false)
+        {
+            throw new InvalidPropertyType('ArrayBuffer', 'type', 'TypedArray');
+        }
+    }
+
+    #isValidType(type: string): boolean
+    {
+        switch (type)
+        {
+            case 'Int8Array':
+            case 'Uint8Array':
+            case 'Uint8ClampedArray':
+            case 'Int16Array':
+            case 'Uint16Array':
+            case 'Int32Array':
+            case 'Uint32Array':
+            case 'Float32Array':
+            case 'Float64Array':
+            case 'BigInt64Array':
+            case 'BigUint64Array':
+                return true;
+
+            default:
+                return false;
+        }
     }
 }
 
