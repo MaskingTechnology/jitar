@@ -1,6 +1,14 @@
 
 # Changelog
 
+## 0.2.0
+
+New features:
+- \[[`0c115e1`](https://github.com/MaskingTechnology/jitar/commit/0c115e1)] Added binary data serialization [basmasking](https://github.com/MaskingTechnology/jitar/pull/56)
+- \[[`38b90da`](https://github.com/MaskingTechnology/jitar/commit/38b90da)] Added date serialization [basmasking](https://github.com/MaskingTechnology/jitar/pull/58)
+- \[[`b27f571`](https://github.com/MaskingTechnology/jitar/commit/b27f571)] Split jitar into multiple packages [basmasking](https://github.com/MaskingTechnology/jitar/pull/60)
+
+
 ## 0.1.3 (November 11, 2022)
 
 Fixes:
