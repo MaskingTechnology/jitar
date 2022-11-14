@@ -120,6 +120,55 @@ const serializedPrivateClass = { serialized: true, name: 'PrivateFieldClass', so
 const serializedInvalidClass = { serialized: true, name: 'Invalid', source: null, args: [], fields: {} };
 const serializedUnserializableClass = { serialized: true, name: 'Infinity', source: null, args: [], fields: {} };
 
+const jitarViewUint16 = createViewUint16('jitar');
+const jitarViewInt8 = createViewInt8('jitar');
+const jitarViewBigInt64 = createViewBigInt64('jitar');
+
+const serializedJitarViewUint16 = { serialized: true, name: 'ArrayBuffer', type: 'Uint16Array', bytes: [106, 0, 105, 0, 116, 0, 97, 0, 114, 0] };
+const SerializedJitarViewInt8 = { serialized: true, name: 'ArrayBuffer', type: 'Int8Array', bytes: [106, 105, 116, 97, 114] };
+const SerializedJitarViewBigInt64 = { serialized: true, name: 'ArrayBuffer', type: 'BigInt64Array', bytes: [106, 0, 0, 0, 0, 0, 0, 0, 105, 0, 0, 0, 0, 0, 0, 0, 116, 0, 0, 0, 0, 0, 0, 0, 97, 0, 0, 0, 0, 0, 0, 0, 114, 0, 0, 0, 0, 0, 0, 0] };
+const SerializedJitarViewInt7 = { serialized: true, name: 'ArrayBuffer', type: 'Int7Array', bytes: [106, 105, 116, 97, 114] };
+const SerializedJitarViewString8 = { serialized: true, name: 'ArrayBuffer', type: 'Int8Array', bytes: '[106, 105, 116, 97, 114]' };
+
+function createViewUint16(string: string)
+{
+    const buffer = new ArrayBuffer(string.length * 2);
+    const view = new Uint16Array(buffer);
+
+    for (let index = 0; index < string.length; index++)
+    {
+        view[index] = string.charCodeAt(index);
+    }
+
+    return view;
+}
+
+function createViewInt8(string: string)
+{
+    const buffer = new ArrayBuffer(string.length);
+    const view = new Int8Array(buffer);
+
+    for (let index = 0; index < string.length; index++)
+    {
+        view[index] = string.charCodeAt(index);
+    }
+
+    return view;
+}
+
+function createViewBigInt64(string: string)
+{
+    const buffer = new ArrayBuffer(string.length * 8);
+    const view = new BigInt64Array(buffer);
+
+    for (let index = 0; index < string.length; index++)
+    {
+        view[index] = BigInt(string.charCodeAt(index));
+    }
+
+    return view;
+}
+
 export
 {
     numberValue, boolValue, stringValue, nullValue, undefinedValue,
@@ -130,5 +179,7 @@ export
     dataClass, constructedClass, nestedClass, serializedDataClass, serializedConstructedClass, serializedNestedClass,
     serializedInvalidClass, serializedUnserializableClass,
     privateClass, serializedPrivateClass,
-    errorClass, serializedError
+    errorClass, serializedError,
+    jitarViewUint16, serializedJitarViewUint16, jitarViewInt8, SerializedJitarViewInt8, jitarViewBigInt64, SerializedJitarViewBigInt64,
+    SerializedJitarViewInt7, SerializedJitarViewString8
 }
