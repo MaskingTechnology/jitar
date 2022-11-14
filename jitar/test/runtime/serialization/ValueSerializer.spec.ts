@@ -4,6 +4,7 @@ import
     numberValue, boolValue, stringValue, nullValue, undefinedValue,
     emptyArray, mixedArray, nestedArray,
     emptyObject, mixedObject, nestedObject,
+    fixedDate, serializedFixedDate, serializedInvalidDateValue, serializedInvalidDateString,
     emptyMap, mixedMap, nestedMap, serializedEmptyMap, serializedMixedMap, serializedNestedMap,
     emptySet, mixedSet, nestedSet, serializedEmptySet, serializedMixedSet, serializedNestedSet,
     dataClass, constructedClass, nestedClass, serializedDataClass, serializedConstructedClass, serializedNestedClass,
@@ -36,6 +37,13 @@ describe('serialization/ValueSerializer', () =>
             expect(string).toBe(stringValue);
             expect(none).toBe(nullValue);
             expect(notset).toBe(undefinedValue);
+        });
+
+        it('should serialize date values', () =>
+        {
+            const date = ValueSerializer.serialize(fixedDate);
+
+            expect(date).toEqual(serializedFixedDate);
         });
 
         it('should serialize arrays', () =>
@@ -138,6 +146,13 @@ describe('serialization/ValueSerializer', () =>
             expect(notset).toBe(undefinedValue);
         });
 
+        it('should deserialize date values', async () =>
+        {
+            const date = await ValueSerializer.deserialize(serializedFixedDate);
+
+            expect(date).toEqual(fixedDate);
+        });
+
         it('should deserialize arrays', async () =>
         {
             const empty = await ValueSerializer.deserialize(emptyArray);
@@ -214,6 +229,13 @@ describe('serialization/ValueSerializer', () =>
             expect(deserialize).rejects.toEqual(new InvalidClass('Infinity'));
         });
 
+        it('should not deserialize invalid date objects', async () =>
+        {
+            const invalidDateValue = async () => await ValueSerializer.deserialize(serializedInvalidDateValue);
+            const invalidDateString = async () => await ValueSerializer.deserialize(serializedInvalidDateString);
+
+            expect(invalidDateValue).rejects.toEqual(new InvalidPropertyType('date', 'value', 'string'));
+            expect(invalidDateString).rejects.toEqual(new InvalidPropertyType('date', 'value', 'date'));
         it('should deserialize array buffer', async () =>
         {
             const viewUint16 = await ValueSerializer.deserialize(serializedJitarViewUint16);
