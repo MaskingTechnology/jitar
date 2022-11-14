@@ -7,6 +7,7 @@ import Serializer from './interfaces/Serializer.js';
 import MapSerializer from './MapSerializer.js';
 import ObjectSerializer from './ObjectSerializer.js';
 import SetSerializer from './SetSerializer.js';
+import DateSerializer from './DateSerializer.js';
 
 import SerializableObject from './types/SerializableObject.js';
 import Serialized from './types/Serialized.js';
@@ -14,6 +15,7 @@ import SerializedClass from './types/SerializedClass.js';
 import SerializedMap from './types/SerializedMap.js';
 import SerializedObject from './types/SerializedObject.js';
 import SerializedSet from './types/SerializedSet.js';
+import SerializedDate from './types/SerializedDate.js';
 
 class ValueSerializer implements Serializer
 {
@@ -30,6 +32,10 @@ class ValueSerializer implements Serializer
         else if (value instanceof Set)
         {
             return SetSerializer.serialize(value);
+        }
+        if (value instanceof Date)
+        {
+            return DateSerializer.serialize(value);
         }
         else if (value instanceof Error)
         {
@@ -71,6 +77,7 @@ class ValueSerializer implements Serializer
         {
             case 'Map': return await MapSerializer.deserialize(value as SerializedMap);
             case 'Set': return await SetSerializer.deserialize(value as SerializedSet);
+            case 'Date': return await DateSerializer.deserialize(value as SerializedDate);
             default: return await ClassSerializer.deserialize(value as SerializedClass);
         }
     }

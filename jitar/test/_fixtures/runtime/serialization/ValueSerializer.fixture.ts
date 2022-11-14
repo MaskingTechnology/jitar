@@ -84,6 +84,11 @@ const emptyObject: unknown = {};
 const mixedObject: unknown = { a: 1, b: true, c: 'hello' };
 const nestedObject: unknown = { a: 1, b: true, c: { d: false, e: true } };
 
+const fixedDate = new Date('2021-01-01T00:00:00.000Z');
+const serializedFixedDate = { serialized: true, name: 'Date', value: '2021-01-01T00:00:00.000Z' };
+const serializedInvalidDateValue = { serialized: true, name: 'Date', value: true };
+const serializedInvalidDateString = { serialized: true, name: 'Date', value: 'hello' };
+
 const emptyMap: Map<unknown, unknown> = new Map();
 const mixedMap: Map<unknown, unknown> = new Map().set('a', 1).set('b', true);
 const nestedMap: Map<unknown, unknown> = new Map().set('b', 'hello').set('c', new Map().set('d', false));
@@ -125,6 +130,7 @@ export
     numberValue, boolValue, stringValue, nullValue, undefinedValue,
     emptyArray, mixedArray, nestedArray,
     emptyObject, mixedObject, nestedObject,
+    fixedDate, serializedFixedDate, serializedInvalidDateValue, serializedInvalidDateString,
     emptyMap, mixedMap, nestedMap, serializedEmptyMap, serializedMixedMap, serializedNestedMap,
     emptySet, mixedSet, nestedSet, serializedEmptySet, serializedMixedSet, serializedNestedSet,
     dataClass, constructedClass, nestedClass, serializedDataClass, serializedConstructedClass, serializedNestedClass,
