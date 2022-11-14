@@ -314,7 +314,8 @@ Procedures can make use of a broad variety of data types. When sharing data betw
 
 * Primary types (string, number, boolean, null, undefined)
 * Collection types (array, set, map)
-* Object types (plain objects, class objects, dates)
+* Object types (plain objects, class objects)
+* [Binary data](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray){:target="_blank"}
 
 Any class object can be transported as long as it can be reconstructed. Private fields are supported, but need access through the constructor or getter / setter. Otherwise, their value will get lost in the transportation process.
 

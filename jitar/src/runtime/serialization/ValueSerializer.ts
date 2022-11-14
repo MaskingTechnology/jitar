@@ -1,6 +1,7 @@
 
 import ReflectionHelper from '../../core/reflection/ReflectionHelper.js';
 
+import ArrayBufferSerializer from './ArrayBufferSerializer.js';
 import ArraySerializer from './ArraySerializer.js';
 import ClassSerializer from './ClassSerializer.js';
 import Serializer from './interfaces/Serializer.js';
@@ -11,17 +12,23 @@ import DateSerializer from './DateSerializer.js';
 
 import SerializableObject from './types/SerializableObject.js';
 import Serialized from './types/Serialized.js';
+import SerializedArrayBuffer from './types/SerializedArrayBuffer.js';
 import SerializedClass from './types/SerializedClass.js';
 import SerializedMap from './types/SerializedMap.js';
 import SerializedObject from './types/SerializedObject.js';
 import SerializedSet from './types/SerializedSet.js';
 import SerializedDate from './types/SerializedDate.js';
+import TypedArray from './types/TypedArray.js';
 
 class ValueSerializer implements Serializer
 {
     serialize(value: unknown): unknown
     {
-        if (value instanceof Array)
+        if (this.#isTypedArray(value))
+        {
+            return ArrayBufferSerializer.serialize(value as TypedArray);
+        }
+        else if (value instanceof Array)
         {
             return ArraySerializer.serialize(value);
         }
@@ -78,8 +85,24 @@ class ValueSerializer implements Serializer
             case 'Map': return await MapSerializer.deserialize(value as SerializedMap);
             case 'Set': return await SetSerializer.deserialize(value as SerializedSet);
             case 'Date': return await DateSerializer.deserialize(value as SerializedDate);
+            case 'ArrayBuffer': return await ArrayBufferSerializer.deserialize(value as SerializedArrayBuffer);
             default: return await ClassSerializer.deserialize(value as SerializedClass);
         }
+    }
+
+    #isTypedArray(value: unknown): boolean
+    {
+        return (value instanceof Int8Array)
+            || (value instanceof Uint8Array)
+            || (value instanceof Uint8ClampedArray)
+            || (value instanceof Int16Array)
+            || (value instanceof Uint16Array)
+            || (value instanceof Int32Array)
+            || (value instanceof Uint32Array)
+            || (value instanceof Float32Array)
+            || (value instanceof Float64Array)
+            || (value instanceof BigInt64Array)
+            || (value instanceof BigUint64Array);
     }
 }
 
