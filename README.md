@@ -51,7 +51,7 @@ After a node starts successfully it will register itself to the gateway with all
 Setting up Jitar is easy. It simply needs to be added as a NPM dependency to your application. Node.js version 18.7 or higher are required.
 
 ```bash
-npm install jitar
+npm install jitar-nodejs-server
 ```
 
 Now you're ready to chop applications! Follow our [Getting started](https://docs.jitar.dev/02_getting_started) guide to create your first application.
