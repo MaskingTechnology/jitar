@@ -10,7 +10,8 @@
     "exports": {
         ".": "./dist/lib.js",
         "./server.js": "./dist/server.js"
-    },    "scripts": {
+    },
+    "scripts": {
         "test": "jest",
         "test-coverage": "jest --coverage",
         "lint": "eslint . --ext .ts",
