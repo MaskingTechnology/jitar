@@ -26,7 +26,7 @@ When working with TypeScript version 4.4.2 or higher is required.
 Jitar needs to be added as a NPM dependency to your application.
 
 ```bash
-npm install jitar
+npm install jitar-nodejs-server
 ```
 
 Both JavaScript and TypeScript are supported by default.
@@ -99,7 +99,7 @@ For bootstrapping Jitar we need to create an application starting point. This is
 src/start.ts
 
 ```ts
-import { startServer } from 'jitar';
+import { startServer } from 'jitar-nodejs-server';
 
 const moduleImporter = async(specifier: string) => import(specifier);
 

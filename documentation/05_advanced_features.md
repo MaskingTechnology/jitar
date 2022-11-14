@@ -96,7 +96,7 @@ To bootstrap any Jitar service in Node.js we need to start the server using the 
 src/server.ts
 
 ```ts
-import { startServer } from 'jitar';
+import { startServer } from 'jitar-nodejs-server';
 
 const moduleImporter = async(specifier: string) => import(specifier);
 
@@ -190,7 +190,7 @@ When the Jitar server has started using the [startServer](#startserver) hook we 
 src/start.ts
 
 ```ts
-import { startServer } from 'jitar';
+import { startServer } from 'jitar-nodejs-server';
 
 import DatabaseHealthCheck from './DatabaseHealthCheck.js';
 

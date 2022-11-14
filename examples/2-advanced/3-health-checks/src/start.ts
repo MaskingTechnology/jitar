@@ -1,9 +1,9 @@
 
-import { startServer } from 'jitar';
+import { startServer } from 'jitar-nodejs-server';
 
 import DatabaseHealthCheck from './DatabaseHealthCheck.js';
 
-const moduleImporter = async(specifier: string) => import(specifier);
+const moduleImporter = async (specifier: string) => import(specifier);
 
 // Top level await is not supported in Node.js yet,
 // so we use the classic promise syntax for this case.
