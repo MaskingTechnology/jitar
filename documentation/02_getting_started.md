@@ -44,13 +44,16 @@ In this section we will setup a simple app that runs on Jitar. We use TypeScript
 tsconfig.json
 
 ```json
-"compilerOptions":
 {
-  "target": "es2022",
-  "module": "es2022",
-  "moduleResolution": "node",
-  "rootDir": "./src/",
-  "outDir": "./dist"
+    "compilerOptions":
+    {
+        "target": "es2022",
+        "module": "es2022",
+        "moduleResolution": "node",
+        "rootDir": "./src/",
+        "outDir": "./dist",
+        "skipLibCheck": true
+    }
 }
 ```
 
