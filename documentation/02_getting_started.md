@@ -120,9 +120,10 @@ jitar.json
 
 ```json
 {
-    "mode": "standalone",
     "url": "http://127.0.0.1:3000",
-    "source": "./dist"
+    "standalone": {
+        "source": "./dist"
+    }
 }
 ```
 
