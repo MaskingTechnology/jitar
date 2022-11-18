@@ -8,6 +8,7 @@ export { default as InvalidVersionNumber } from './core/errors/InvalidVersionNum
 export { default as MissingParameterValue } from './core/errors/MissingParameterValue.js';
 export { default as ProcedureNotFound } from './core/errors/ProcedureNotFound.js';
 export { default as UnknownParameter } from './core/errors/UnknownParameter.js';
+export { default as InvalidPropertyType } from './runtime/serialization/errors/InvalidPropertyType.js';
 
 // Runtime
 export { default as FileNotFound } from './runtime/errors/FileNotFound.js';

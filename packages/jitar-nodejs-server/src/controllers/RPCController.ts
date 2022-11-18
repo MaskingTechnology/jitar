@@ -3,11 +3,11 @@ import { Controller, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { Version, ImplementationNotFound, InvalidVersionNumber, MissingParameterValue, ProcedureNotFound, UnknownParameter } from 'jitar';
+import { Version, ImplementationNotFound, InvalidVersionNumber, MissingParameterValue, ProcedureNotFound, UnknownParameter, InvalidPropertyType } from 'jitar';
 import { ProcedureContainer, ValueSerializer } from 'jitar';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
-const INVALID_REQUEST_ERRORS = [InvalidVersionNumber, MissingParameterValue, UnknownParameter];
+const INVALID_REQUEST_ERRORS = [InvalidVersionNumber, MissingParameterValue, UnknownParameter, InvalidPropertyType];
 const NOT_FOUND_ERRORS = [ImplementationNotFound, ProcedureNotFound];
 
 @Controller('rpc')
