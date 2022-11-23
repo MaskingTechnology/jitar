@@ -4,7 +4,6 @@ import { Logger } from 'npm:tslog@^3.3.3';
 
 import { LocalNode, Proxy } from 'npm:jitar@^0.2.0';
 
-//@Controller('health')
 export default class HealthController
 {
     #node: LocalNode | Proxy;
@@ -19,7 +18,6 @@ export default class HealthController
         app.get('/health/status', (request: Request, response: Response) => { this.#isHealthy(request, response) });
     }
 
-    //@Get()
     async #getHealth(request: Request, response: Response): Promise<Response>
     {
         const health = await this.#node.getHealth();
@@ -30,7 +28,6 @@ export default class HealthController
         return response.status(200).send(data);
     }
 
-    //@Get('status')
     async #isHealthy(request: Request, response: Response): Promise<Response>
     {
         const healthy = await this.#node.isHealthy();

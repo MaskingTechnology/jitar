@@ -1,10 +1,8 @@
 
 import fs from 'npm:fs-extra@^10.1.0';
-//import fs from 'https://deno.land/std@0.113.0/node/fs.ts'
 import glob from 'npm:glob-promise@^5.0.0';
 import mime from 'npm:mime-types@^2.1.35';
 import path from 'https://deno.land/std@0.113.0/node/path.ts';
-//import { Buffer } from 'https://deno.land/std@0.113.0/node/buffer.ts'
 
 import { FileNotFound, FileManager, File } from 'npm:jitar@^0.2.0';
 

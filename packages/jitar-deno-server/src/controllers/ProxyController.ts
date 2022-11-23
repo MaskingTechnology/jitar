@@ -1,5 +1,4 @@
 
-//import { Controller } from 'npm:@overnightjs/core@^1.7.6';
 import { Application } from 'npm:@types/express@^4.17.13';
 import expressProxy from 'npm:express-http-proxy@^1.6.3';
 import { IncomingMessage } from 'https://deno.land/std@0.113.0/node/http.ts';
@@ -7,7 +6,6 @@ import { Logger } from 'npm:tslog@^3.3.3';
 
 import { Proxy } from 'npm:jitar@^0.2.0';
 
-//@Controller('')
 export default class ProxyController
 {
     #logger: Logger;

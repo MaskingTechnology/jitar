@@ -1,11 +1,9 @@
 
-//import { Controller, Get, Post } from 'npm:@overnightjs/core@^1.7.6';
 import { Application, Request, Response } from 'npm:@types/express@^4.17.13';
 import { Logger } from 'npm:tslog@^3.3.3';
 
 import { ClientId, LocalRepository, Proxy, ValueSerializer } from 'npm:jitar@^0.2.0';
 
-//@Controller('modules')
 export default class ModulesController
 {
     #repository: LocalRepository | Proxy;
@@ -20,7 +18,6 @@ export default class ModulesController
         app.get('/modules/:clientId/*', (request: Request, response: Response) => { this.#getModule(request, response) });
     }
 
-    //@Post()
     async #registerClient(request: Request, response: Response): Promise<Response>
     {
         if ((request.body instanceof Array) === false)
@@ -37,7 +34,6 @@ export default class ModulesController
         return response.status(200).send(clientId);
     }
 
-    //@Get(':clientId/*')
     async #getModule(request: Request, response: Response): Promise<Response>
     {
         const clientId = request.params.clientId;

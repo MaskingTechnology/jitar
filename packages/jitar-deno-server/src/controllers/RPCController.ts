@@ -1,5 +1,4 @@
 
-//import { Controller, Get, Post } from 'npm:@overnightjs/core@^1.7.6';
 import { Application, Request, Response } from 'npm:@types/express@^4.17.13';
 import { Logger } from 'npm:tslog@^3.3.3';
 
@@ -10,7 +9,6 @@ const RPC_PARAMETERS = ['version', 'serialize'];
 const INVALID_REQUEST_ERRORS = [InvalidVersionNumber, MissingParameterValue, UnknownParameter, /*InvalidPropertyType*/];
 const NOT_FOUND_ERRORS = [ImplementationNotFound, ProcedureNotFound];
 
-//@Controller('rpc')
 export default class RPCController
 {
     #runtime: ProcedureContainer;
@@ -43,7 +41,6 @@ export default class RPCController
         this.#logger.info('Registered RPC entries', procedureNames);
     }
 
-    //@Get('*')
     async #runGet(request: Request, response: Response): Promise<Response>
     {
         const fqn = this.#extractFqn(request);
@@ -54,7 +51,6 @@ export default class RPCController
         return this.#run(fqn, version, args, response, serialize);
     }
 
-    //@Post('*')
     async #runPost(request: Request, response: Response): Promise<Response>
     {
         const fqn = this.#extractFqn(request);

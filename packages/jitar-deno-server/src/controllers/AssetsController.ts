@@ -1,11 +1,9 @@
 
-//import { Controller } from 'npm:@overnightjs/core@^1.7.6';
 import { Application, Request, Response } from 'npm:@types/express@^4.17.13';
 import { Logger } from 'npm:tslog@^3.3.3';
 
 import { FileNotFound, LocalRepository, Proxy } from 'npm:jitar@^0.2.0';
 
-//@Controller('')
 export default class AssetsController
 {
     #repository: LocalRepository | Proxy;
