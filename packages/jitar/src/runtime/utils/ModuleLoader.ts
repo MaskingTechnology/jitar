@@ -24,7 +24,7 @@ export default class ModuleLoader
     {
         if (url.startsWith('/jitar'))
         {
-            url = `../../${url}`;
+            url = `../..${url}`;
         }
 
         if (_baseUrl !== undefined && url.startsWith(_baseUrl) === false)

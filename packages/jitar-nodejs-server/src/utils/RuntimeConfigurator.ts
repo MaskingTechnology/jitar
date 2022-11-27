@@ -60,7 +60,11 @@ export default class RuntimeConfigurator
 
     static async #configureGateway(url: string, configuration: GatewayConfiguration): Promise<LocalGateway>
     {
-        return this.#buildGateway(url, configuration.monitor);
+        const repository = configuration.repository !== undefined
+            ? new RemoteRepository(configuration.repository)
+            : undefined;
+
+        return this.#buildGateway(url, configuration.monitor, repository);
     }
 
     static async #configureNode(url: string, configuration: NodeConfiguration): Promise<LocalNode>
@@ -160,9 +164,17 @@ export default class RuntimeConfigurator
         return repository;
     }
 
-    static async #buildGateway(url?: string, monitorInterval?: number): Promise<LocalGateway>
+    static async #buildGateway(url?: string, monitorInterval?: number, repository?: Repository): Promise<LocalGateway>
     {
         const gateway = new LocalGateway(url);
+
+        if (repository !== undefined)
+        {
+            const moduleLocation = await repository.getModuleLocation('CLIENT_0');
+
+            gateway.setBaseUrl(moduleLocation);
+        }
+
         const monitor = new NodeMonitor(gateway, monitorInterval);
 
         monitor.start();

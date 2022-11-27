@@ -5,11 +5,14 @@ import Version from '../core/Version.js';
 import Gateway from './Gateway.js';
 import Node from './Node.js';
 import NodeBalancer from './NodeBalancer.js';
+import Repository from './Repository.js';
+import ModuleLoader from './utils/ModuleLoader.js';
 
 export default class LocalGateway extends Gateway
 {
     #nodes: Set<Node> = new Set();
     #balancers: Map<string, NodeBalancer> = new Map();
+    #repository?: Repository
 
     get nodes()
     {
@@ -58,6 +61,11 @@ export default class LocalGateway extends Gateway
 
             balancer.removeNode(node);
         }
+    }
+
+    setBaseUrl(moduleLocation: string): void
+    {
+        ModuleLoader.setBaseUrl(moduleLocation);
     }
 
     #getBalancer(fqn: string): NodeBalancer | undefined
