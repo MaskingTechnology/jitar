@@ -8,11 +8,12 @@ import NodeBalancer from './NodeBalancer.js';
 import Repository from './Repository.js';
 import ModuleLoader from './utils/ModuleLoader.js';
 
+const NO_SEGMENTS: string[] = [];
+
 export default class LocalGateway extends Gateway
 {
     #nodes: Set<Node> = new Set();
     #balancers: Map<string, NodeBalancer> = new Map();
-    #repository?: Repository
 
     get nodes()
     {
@@ -63,8 +64,11 @@ export default class LocalGateway extends Gateway
         }
     }
 
-    setBaseUrl(moduleLocation: string): void
+    async setBaseUrl(repository: Repository): Promise<void>
     {
+        const clientId = await repository.registerClient(NO_SEGMENTS);
+        const moduleLocation = await repository.getModuleLocation(clientId);
+
         ModuleLoader.setBaseUrl(moduleLocation);
     }
 
