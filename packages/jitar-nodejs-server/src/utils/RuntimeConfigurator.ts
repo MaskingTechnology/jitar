@@ -60,9 +60,7 @@ export default class RuntimeConfigurator
 
     static async #configureGateway(url: string, configuration: GatewayConfiguration): Promise<LocalGateway>
     {
-        const repository = configuration.repository !== undefined
-            ? new RemoteRepository(configuration.repository)
-            : undefined;
+        const repository = this.#getRemoteRepository(configuration.repository);
 
         return this.#buildGateway(url, configuration.monitor, repository);
     }
@@ -71,29 +69,22 @@ export default class RuntimeConfigurator
     {
         const segmentNames = configuration.segments ?? [];
 
-        const repository = configuration.repository !== undefined
-            ? new RemoteRepository(configuration.repository)
-            : undefined;
-
-        const gateway = configuration.gateway !== undefined
-            ? new RemoteGateway(configuration.gateway)
-            : undefined;
+        const repository = this.#getRemoteRepository(configuration.repository);
+        const gateway = this.#getRemoteGateway(configuration.gateway);
 
         return this.#buildNode(url, segmentNames, repository, gateway);
     }
 
     static async #configureProxy(url: string, configuration: ProxyConfiguration): Promise<Proxy>
     {
-        if (configuration.repository === undefined)
+        const repository = this.#getRemoteRepository(configuration.repository);
+
+        if (repository === undefined)
         {
             throw new MissingConfigurationValue('proxy.repository');
         }
 
-        const repository = new RemoteRepository(configuration.repository);
-
-        const gateway = configuration.gateway !== undefined
-            ? new RemoteGateway(configuration.gateway)
-            : undefined;
+        const gateway = this.#getRemoteGateway(configuration.gateway);
 
         const node = configuration.node !== undefined
             ? new RemoteNode(configuration.node, [])
@@ -170,9 +161,7 @@ export default class RuntimeConfigurator
 
         if (repository !== undefined)
         {
-            const moduleLocation = await repository.getModuleLocation('CLIENT_0');
-
-            gateway.setBaseUrl(moduleLocation);
+            await gateway.setBaseUrl(repository);
         }
 
         const monitor = new NodeMonitor(gateway, monitorInterval);
@@ -210,5 +199,19 @@ export default class RuntimeConfigurator
     static async #buildProxy(url: string | undefined, repository: Repository, runner: Gateway | Node): Promise<Proxy>
     {
         return new Proxy(repository, runner, url);
+    }
+
+    static #getRemoteRepository(url?: string): RemoteRepository | undefined
+    {
+        return url !== undefined
+            ? new RemoteRepository(url)
+            : undefined;
+    }
+
+    static #getRemoteGateway(url?: string): RemoteGateway | undefined
+    {
+        return url !== undefined
+            ? new RemoteGateway(url)
+            : undefined;
     }
 }
