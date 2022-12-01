@@ -1,7 +1,7 @@
 
 // Run version 1.0.0
 
-GET http://localhost:3000/rpc/sales/getMonthReport?version=1.0.0&year=2020&month=3 HTTP/1.1
+GET http://localhost:3000/rpc/sales/getMonthReport?version=1.0.0 HTTP/1.1
 
 ###
 
