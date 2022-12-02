@@ -1,9 +1,10 @@
 
 # Changelog
 
-## 0.1.2 (December 02, 2022)
+## 0.2.1 (December 02, 2022)
 
 Changes:
+- Use same version number for all packages
 - \[[`b27f571`](https://github.com/MaskingTechnology/jitar/commit/b27f571)] Split jitar into multiple packages [basmasking](https://github.com/MaskingTechnology/jitar/pull/60)
 
 ## 0.1.1 (November 14, 2022)
