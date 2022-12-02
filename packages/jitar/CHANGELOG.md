@@ -1,7 +1,13 @@
 
 # Changelog
 
-## 0.2.0
+## 0.2.1 (December 02, 2022)
+
+Fixes:
+- \[[`fb04f99`](https://github.com/MaskingTechnology/jitar/commit/fb04f99)] Fixed error deserialization at gateway [basmasking](https://github.com/MaskingTechnology/jitar/pull/69)
+
+
+## 0.2.0 (November 18, 2022)
 
 New features:
 - \[[`0c115e1`](https://github.com/MaskingTechnology/jitar/commit/0c115e1)] Added binary data serialization [basmasking](https://github.com/MaskingTechnology/jitar/pull/56)
@@ -19,7 +25,6 @@ Fixes:
 New features:
 - \[[`a842fb0`](https://github.com/MaskingTechnology/jitar/commit/a842fb0)] Data type validation on RPC calls [Yusuf-YENICERI](https://github.com/MaskingTechnology/jitar/pull/44)
 - \[[`265a5f5`](https://github.com/MaskingTechnology/jitar/commit/265a5f5)] Asset protection (public/private assets) [basmasking](https://github.com/MaskingTechnology/jitar/pull/48)
-- \[[`b1af72e`](https://github.com/MaskingTechnology/jitar/commit/b1af72e)] Vite plugin added [petermasking](https://github.com/MaskingTechnology/jitar/pull/50)
 - \[[`0b0cf57`](https://github.com/MaskingTechnology/jitar/commit/0b0cf57)] Extended error handling [basmeeuwissen](https://github.com/MaskingTechnology/jitar/pull/53)
 - \[[`ec63abd`](https://github.com/MaskingTechnology/jitar/commit/ec63abd)] Fixed segment in startClient documentation [pvvliet](https://github.com/MaskingTechnology/jitar/pull/54)
 
