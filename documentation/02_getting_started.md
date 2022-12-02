@@ -47,7 +47,7 @@ tsconfig.json
 {
     "compilerOptions":
     {
-        "target": "es2022",
+        "target": "esnext",
         "module": "es2022",
         "moduleResolution": "node",
         "rootDir": "./src/",
@@ -129,7 +129,7 @@ jitar.json
 
 In the [runtime services page](03_runtime_services) we will look at all the configuration options.
 
-### Step 5 - Run and test
+### Step 5 - Build, Run and test
 
 First we need to add a run script to the ``package.json`` file.
 
@@ -141,14 +141,17 @@ package.json
     "name": "jitar-helloworld-example",
     "type": "module",
     "scripts": {
+        "build": "tsc",
         "start": "node --experimental-network-imports --experimental-fetch dist/start.js --config=jitar.json"
     }
 }
 ```
 
-The start script will run the application starting point and pass the configuration file to Jitar. The ``--experimental-network-imports`` and ``--experimental-fetch`` flags are required for Jitar to work. More options can be found in the [server options section](03_runtime_services#server-options) of the runtime services.
+Then we run `npm run build` to let the TypeScript compiler generate the JavaScript code.
 
 Next we can fire up Jitar.
+
+The start script will run the application starting point and pass the configuration file to Jitar. The ``--experimental-network-imports`` and ``--experimental-fetch`` flags are required for Jitar to work. More options can be found in the [server options section](03_runtime_services#server-options) of the runtime services.
 
 ```bash
 npm run start
