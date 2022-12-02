@@ -1,0 +1,19 @@
+
+# Changelog
+
+## 0.1.2 (December 02, 2022)
+
+Changes:
+- \[[`b27f571`](https://github.com/MaskingTechnology/jitar/commit/b27f571)] Split jitar into multiple packages [basmasking](https://github.com/MaskingTechnology/jitar/pull/60)
+
+## 0.1.1 (November 14, 2022)
+
+Fixes:
+- \[[`4b7a8d0`](https://github.com/MaskingTechnology/jitar/commit/4b7a8d0)] Added release script and released to npm [basmasking](https://github.com/BasMasking)
+
+## 0.1.0 (November 11, 2022)
+
+New feature:
+- \[[`b1af72e`](https://github.com/MaskingTechnology/jitar/commit/b1af72e)] Vite plugin added [petermasking](https://github.com/MaskingTechnology/jitar/pull/50)
+
+
