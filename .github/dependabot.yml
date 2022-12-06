@@ -11,7 +11,37 @@ updates:
 
   # Maintain dependencies for jitar
   - package-ecosystem: "npm"
-    directory: "/jitar"
+    directory: "/packages/jitar"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      # Prefix all commit messages with "npm"
+      prefix: "npm"
+    pull-request-branch-name:
+      # Separate sections of the branch name with a hyphen
+      separator: "-"
+    reviewers:
+      - "basmasking"
+      - "petermasking"
+
+  # Maintain dependencies for jitar-nodejs-server
+  - package-ecosystem: "npm"
+    directory: "/packages/jitar-nodejs-server"
+    schedule:
+      interval: "monthly"
+    commit-message:
+      # Prefix all commit messages with "npm"
+      prefix: "npm"
+    pull-request-branch-name:
+      # Separate sections of the branch name with a hyphen
+      separator: "-"
+    reviewers:
+      - "basmasking"
+      - "petermasking"
+
+  # Maintain dependencies for jitar-vite-plugin
+  - package-ecosystem: "npm"
+    directory: "/packages/jitar-vite-plugin"
     schedule:
       interval: "monthly"
     commit-message:
