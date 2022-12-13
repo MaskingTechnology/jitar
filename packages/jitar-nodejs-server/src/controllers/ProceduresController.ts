@@ -9,9 +9,9 @@ import { LocalGateway, LocalNode, Proxy } from 'jitar';
 export default class ProceduresController
 {
     #runtime: LocalGateway | LocalNode | Proxy;
-    #logger: Logger;
+    #logger: Logger<unknown>;
 
-    constructor(runtime: LocalGateway | LocalNode | Proxy, logger: Logger)
+    constructor(runtime: LocalGateway | LocalNode | Proxy, logger: Logger<unknown>)
     {
         this.#runtime = runtime;
         this.#logger = logger;

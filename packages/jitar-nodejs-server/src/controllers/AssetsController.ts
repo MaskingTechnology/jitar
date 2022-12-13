@@ -10,9 +10,9 @@ export default class AssetsController
 {
     #repository: LocalRepository | Proxy;
     #indexFile: string;
-    #logger: Logger;
+    #logger: Logger<unknown>;
 
-    constructor(app: express.Application, repository: LocalRepository | Proxy, indexFile: string, logger: Logger)
+    constructor(app: express.Application, repository: LocalRepository | Proxy, indexFile: string, logger: Logger<unknown>)
     {
         this.#repository = repository;
         this.#indexFile = indexFile;
