@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 0.2.2 (December 16, 2022)
+
+Changes:
+- \[[`67a4ec5`](https://github.com/MaskingTechnology/jitar/commit/67a4ec5)] Bumped vite dependency to vite 4 [basmasking](https://github.com/MaskingTechnology/jitar/pull/95)
+
 ## 0.2.1 (December 02, 2022)
 
 Changes:
