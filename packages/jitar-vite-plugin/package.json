@@ -1,6 +1,6 @@
 {
   "name": "jitar-vite-plugin",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Vite plugin for Jitar.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
@@ -18,11 +18,11 @@
     "release": "npm run clean && npm run build && npm publish"
   },
   "peerDependencies": {
-    "vite": "^3.0.0"
+    "vite": "^4.0.0"
   },
   "devDependencies": {
-    "@types/node": "^18.11.9",
-    "vite": "^3.2.2"
+    "@types/node": "^18.11.15",
+    "vite": "^4.0.0"
   },
   "repository": {
     "type": "git",
