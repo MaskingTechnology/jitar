@@ -10,12 +10,12 @@ import { Proxy } from 'jitar';
 @Controller('')
 export default class ProxyController
 {
-    #logger: Logger;
+    #logger: Logger<unknown>;
 
     #repositoryUrl: string;
     #runnerUrl: string;
 
-    constructor(app: express.Application, proxy: Proxy, logger: Logger)
+    constructor(app: express.Application, proxy: Proxy, logger: Logger<unknown>)
     {
         this.#logger = logger;
 

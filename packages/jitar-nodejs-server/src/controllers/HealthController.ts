@@ -9,9 +9,9 @@ import { LocalNode, Proxy } from 'jitar';
 export default class HealthController
 {
     #node: LocalNode | Proxy;
-    #logger: Logger;
+    #logger: Logger<unknown>;
 
-    constructor(node: LocalNode | Proxy, logger: Logger)
+    constructor(node: LocalNode | Proxy, logger: Logger<unknown>)
     {
         this.#node = node;
         this.#logger = logger;

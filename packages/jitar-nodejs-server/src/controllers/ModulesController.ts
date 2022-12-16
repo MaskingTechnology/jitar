@@ -9,9 +9,9 @@ import { ClientId, LocalRepository, Proxy, ValueSerializer } from 'jitar';
 export default class ModulesController
 {
     #repository: LocalRepository | Proxy;
-    #logger: Logger;
+    #logger: Logger<unknown>;
 
-    constructor(repository: LocalRepository | Proxy, logger: Logger)
+    constructor(repository: LocalRepository | Proxy, logger: Logger<unknown>)
     {
         this.#repository = repository;
         this.#logger = logger;

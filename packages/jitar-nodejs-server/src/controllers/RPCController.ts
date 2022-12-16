@@ -14,10 +14,10 @@ const NOT_FOUND_ERRORS = [ImplementationNotFound, ProcedureNotFound];
 export default class RPCController
 {
     #runtime: ProcedureContainer;
-    #logger: Logger;
+    #logger: Logger<unknown>;
     #useSerializer: boolean;
 
-    constructor(runtime: ProcedureContainer, logger: Logger, useSerializer: boolean)
+    constructor(runtime: ProcedureContainer, logger: Logger<unknown>, useSerializer: boolean)
     {
         this.#runtime = runtime;
         this.#logger = logger;

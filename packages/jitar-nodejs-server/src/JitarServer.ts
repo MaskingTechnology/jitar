@@ -1,7 +1,7 @@
 
 import { Server as OvernightServer } from '@overnightjs/core';
 import bodyParser from 'body-parser';
-import { Logger, TLogLevelName } from 'tslog';
+import { Logger } from 'tslog';
 
 import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Proxy, Runtime } from 'jitar';
 
@@ -22,6 +22,7 @@ import RuntimeConfiguration from './configuration/RuntimeConfiguration.js';
 import RuntimeDefaults from './definitions/RuntimeDefaults.js';
 
 import RuntimeNotAvaiable from './errors/RuntimeNotAvaiable.js';
+import LogBuilder from './utils/LogBuilder.js';
 
 const STARTUP_MESSAGE = `
        ██ ██ ████████  █████  ██████  
@@ -53,7 +54,7 @@ export default class JitarServer extends OvernightServer
         const configuration = await RuntimeConfigurationLoader.load(options.config);
         const runtime = await RuntimeConfigurator.configure(configuration);
 
-        const logger = this.#createLogger(options.loglevel);
+        const logger = LogBuilder.build(options.loglevel);
 
         this.#addControllers(configuration, runtime, logger);
 
@@ -76,16 +77,7 @@ export default class JitarServer extends OvernightServer
         this.#runtime.addHealthCheck(name, healthCheck);
     }
 
-    #createLogger(level: string): Logger
-    {
-        return new Logger(
-            {
-                displayFilePath: 'hidden',
-                minLevel: level as TLogLevelName
-            });
-    }
-
-    #addControllers(configuration: RuntimeConfiguration, runtime: Runtime, logger: Logger): void
+    #addControllers(configuration: RuntimeConfiguration, runtime: Runtime, logger: Logger<unknown>): void
     {
         if (configuration.standalone !== undefined && runtime instanceof Proxy)
         {
@@ -113,7 +105,7 @@ export default class JitarServer extends OvernightServer
         }
     }
 
-    #addStandAloneControllers(proxy: Proxy, logger: Logger, index: string): void
+    #addStandAloneControllers(proxy: Proxy, logger: Logger<unknown>, index: string): void
     {
         super.addControllers(new HealthController(proxy, logger));
         super.addControllers(new JitarController(this.app));
@@ -123,28 +115,28 @@ export default class JitarServer extends OvernightServer
         super.addControllers(new AssetsController(this.app, proxy, index, logger));
     }
 
-    #addRepositoryControllers(repository: LocalRepository, logger: Logger, index: string): void
+    #addRepositoryControllers(repository: LocalRepository, logger: Logger<unknown>, index: string): void
     {
         super.addControllers(new JitarController(this.app));
         super.addControllers(new ModulesController(repository, logger));
         super.addControllers(new AssetsController(this.app, repository, index, logger));
     }
 
-    #addGatewayControllers(gateway: LocalGateway, logger: Logger): void
+    #addGatewayControllers(gateway: LocalGateway, logger: Logger<unknown>): void
     {
         super.addControllers(new NodesController(gateway, logger));
         super.addControllers(new ProceduresController(gateway, logger));
         super.addControllers(new RPCController(gateway, logger, false));
     }
 
-    #addNodeControllers(node: LocalNode, logger: Logger): void
+    #addNodeControllers(node: LocalNode, logger: Logger<unknown>): void
     {
         super.addControllers(new HealthController(node, logger));
         super.addControllers(new ProceduresController(node, logger));
         super.addControllers(new RPCController(node, logger, true));
     }
 
-    #addProxyControllers(proxy: Proxy, logger: Logger): void
+    #addProxyControllers(proxy: Proxy, logger: Logger<unknown>): void
     {
         super.addControllers(new ProxyController(this.app, proxy, logger));
     }

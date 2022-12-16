@@ -12,9 +12,9 @@ import DataConverter from '../utils/DataConverter.js';
 export default class NodesController
 {
     #gateway: LocalGateway;
-    #logger: Logger;
+    #logger: Logger<unknown>;
 
-    constructor(gateway: LocalGateway, logger: Logger)
+    constructor(gateway: LocalGateway, logger: Logger<unknown>)
     {
         this.#gateway = gateway;
         this.#logger = logger;
