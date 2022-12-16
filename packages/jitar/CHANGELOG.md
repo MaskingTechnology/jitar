@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 0.2.2 (December 16, 2022)
+
+Changes:
+- \[[`4891db6`](https://github.com/MaskingTechnology/jitar/commit/4891db6)] Bumped dev dependencies [basmasking](https://github.com/MaskingTechnology/jitar/pull/89)
+
 ## 0.2.1 (December 02, 2022)
 
 Fixes:

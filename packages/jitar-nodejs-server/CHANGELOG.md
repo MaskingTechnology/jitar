@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 0.2.2 (December 16, 2022)
+
+Changes:
+- \[[`38acbb7`](https://github.com/MaskingTechnology/jitar/commit/38acbb7)] Implemented tslog v4 [basmasking](https://github.com/MaskingTechnology/jitar/pull/93)
+
 ## 0.2.1 (December 02, 2022)
 
 Changes:
