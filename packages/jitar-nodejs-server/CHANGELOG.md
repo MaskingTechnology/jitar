@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 0.2.3 (December 22, 2022)
+
+Fixes:
+- \[[`f8dff73`](https://github.com/MaskingTechnology/jitar/commit/f8dff73)] Bumped glob-promise dependency [basmasking](https://github.com/MaskingTechnology/jitar/pull/99)
+
 ## 0.2.2 (December 16, 2022)
 
 Changes:
