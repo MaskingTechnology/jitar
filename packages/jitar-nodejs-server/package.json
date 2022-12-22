@@ -1,6 +1,6 @@
 {
     "name": "jitar-nodejs-server",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "description": "NodeJS server implementation for Jitar.",
     "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
     "license": "MIT",
@@ -23,14 +23,14 @@
         "@overnightjs/core": "^1.7.6",
         "class-transformer": "^0.5.1",
         "class-validator": "^0.14.0",
-        "express": "^4.18.1",
+        "express": "^4.18.2",
         "express-http-proxy": "^1.6.3",
         "fs-extra": "^11.1.0",
         "glob": "^8.0.3",
-        "glob-promise": "^5.0.0",
+        "glob-promise": "6.0.0",
         "mime-types": "^2.1.35",
-        "tslog": "^4.4.4",
-        "yargs": "^17.6.0",
+        "tslog": "^4.6.0",
+        "yargs": "^17.6.2",
         "jitar": "^0.2.2"
     },
     "devDependencies": {
