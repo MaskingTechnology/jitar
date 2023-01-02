@@ -9,7 +9,7 @@
         "start": "node --experimental-network-imports --experimental-fetch dist/server.js --config=jitar.json"
     },
     "dependencies": {
-        "jitar-nodejs-server": "^0.1.0"
+        "jitar-nodejs-server": "^0.2.3"
     },
     "devDependencies": {
         "cpx2": "^4.2.0",
