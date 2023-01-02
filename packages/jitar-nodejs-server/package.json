@@ -1,6 +1,6 @@
 {
     "name": "jitar-nodejs-server",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "NodeJS server implementation for Jitar.",
     "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
     "license": "MIT",
