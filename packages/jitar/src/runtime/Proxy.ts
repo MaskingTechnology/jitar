@@ -8,6 +8,7 @@ import File from './models/File.js';
 import Node from './Node.js';
 import Repository from './Repository.js';
 import Runtime from './Runtime.js';
+import ProcedureRunner from './ProcedureRunner.js';
 
 export default class Proxy extends Runtime implements ProcedureContainer
 {
@@ -20,6 +21,8 @@ export default class Proxy extends Runtime implements ProcedureContainer
 
         this.#repository = repository;
         this.#runner = runner;
+
+        this.addMiddleware(new ProcedureRunner(this));
     }
 
     get repository() { return this.#repository; }

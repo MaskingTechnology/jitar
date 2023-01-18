@@ -11,6 +11,7 @@ import Gateway from './Gateway.js';
 import LocalGateway from './LocalGateway.js';
 import Node from './Node.js';
 import Repository from './Repository.js';
+import ProcedureRunner from './ProcedureRunner.js';
 import ModuleLoader from './utils/ModuleLoader.js';
 import UrlRewriter from './utils/UrlRewriter.js';
 
@@ -20,6 +21,13 @@ export default class LocalNode extends Node
     #gateway?: Gateway;
     #repository?: Repository;
     #clientId = '';
+
+    constructor(url?: string)
+    {
+        super(url);
+
+        this.addMiddleware(new ProcedureRunner(this));
+    }
 
     getProcedureNames(): string[]
     {

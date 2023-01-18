@@ -4,6 +4,7 @@ import Version from '../core/Version.js';
 
 import Gateway from './Gateway.js';
 import Node from './Node.js';
+import ProcedureRunner from './ProcedureRunner.js';
 import Remote from './Remote.js';
 
 export default class RemoteGateway extends Gateway
@@ -15,6 +16,8 @@ export default class RemoteGateway extends Gateway
         super(url);
 
         this.#remote = new Remote(url, true);
+
+        this.addMiddleware(new ProcedureRunner(this));
     }
 
     getProcedureNames(): string[]
