@@ -66,6 +66,8 @@
       link: /05_advanced_features#hooks
     - name: Health checks
       link: /05_advanced_features#health-checks
+    - name: Middleware
+      link: /05_advanced_features#middleware
 
 - name: Building applications
   type: header
