@@ -133,7 +133,7 @@ export default class RPCController
 
         try
         {
-            const result = await this.#runtime.handle(fqn, version, args, new Map());
+            const result = await this.#runtime.handle(fqn, version, args, headers);
 
             this.#logger.info(`Ran procedure -> ${fqn} (${version.toString()})`);
 
