@@ -172,7 +172,7 @@ export default class RPCController
 
     #createResponseStatusCode(error: unknown): number
     {
-        if (error instanceof BadRequest)    return 400;
+        if (error instanceof BadRequest)        return 400;
         if (error instanceof Unauthorized)      return 401;
         if (error instanceof PaymentRequired)   return 402;
         if (error instanceof Forbidden)         return 403;
