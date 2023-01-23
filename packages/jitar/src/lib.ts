@@ -1,5 +1,9 @@
 // Interfaces
 export { default as HealthCheck } from './runtime/interfaces/HealthCheck.js';
+export { default as Middleware } from './runtime/interfaces/Middleware.js';
+
+// Types
+export { default as NextHandler } from './runtime/types/NextHandler.js';
 
 // Core
 export { default as Version } from './core/Version.js';
