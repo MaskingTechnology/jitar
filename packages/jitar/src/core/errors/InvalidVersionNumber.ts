@@ -1,7 +1,8 @@
 
 import Component from '../types/Component.js';
+import InvalidRequest from './InvalidRequest.js';
 
-export default class InvalidVersionNumber extends Error
+export default class InvalidVersionNumber extends InvalidRequest
 {
     constructor(number: string)
     {

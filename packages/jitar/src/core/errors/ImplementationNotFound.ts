@@ -1,7 +1,8 @@
 
 import Component from '../types/Component.js';
+import NotFound from './NotFound.js';
 
-export default class ImplementationNotFound extends Error
+export default class ImplementationNotFound extends NotFound
 {
     constructor(fqn: string, version: string)
     {
