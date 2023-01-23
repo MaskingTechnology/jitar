@@ -1,7 +1,8 @@
 
 import Component from '../types/Component.js';
+import BadRequest from './BadRequest.js';
 
-export default class MissingParameterValue extends Error
+export default class MissingParameterValue extends BadRequest
 {
     constructor(parameterName: string)
     {

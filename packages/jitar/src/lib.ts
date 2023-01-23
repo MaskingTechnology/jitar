@@ -3,12 +3,13 @@ export { default as HealthCheck } from './runtime/interfaces/HealthCheck.js';
 
 // Core
 export { default as Version } from './core/Version.js';
-export { default as ImplementationNotFound } from './core/errors/ImplementationNotFound.js';
-export { default as InvalidVersionNumber } from './core/errors/InvalidVersionNumber.js';
-export { default as MissingParameterValue } from './core/errors/MissingParameterValue.js';
-export { default as ProcedureNotFound } from './core/errors/ProcedureNotFound.js';
-export { default as UnknownParameter } from './core/errors/UnknownParameter.js';
-export { default as InvalidPropertyType } from './runtime/serialization/errors/InvalidPropertyType.js';
+export { default as Forbidden } from './core/errors/Forbidden.js';
+export { default as BadRequest } from './core/errors/BadRequest.js';
+export { default as NotFound } from './core/errors/NotFound.js';
+export { default as NotImplemented } from './core/errors/NotImplemented.js';
+export { default as PaymentRequired } from './core/errors/PaymentRequired.js';
+export { default as Teapot } from './core/errors/Teapot.js';
+export { default as Unauthorized } from './core/errors/Unauthorized.js';
 
 // Runtime
 export { default as FileNotFound } from './runtime/errors/FileNotFound.js';

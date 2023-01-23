@@ -3,9 +3,9 @@ import Component from '../types/Component.js';
 
 export default class NotImplemented extends Error
 {
-    constructor()
+    constructor(message = 'Not implemented')
     {
-        super('Not implemented');
+        super(message);
     }
 }
 

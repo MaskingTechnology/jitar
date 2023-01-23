@@ -3,12 +3,10 @@ import { Controller, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { Version, ImplementationNotFound, InvalidVersionNumber, MissingParameterValue, ProcedureNotFound, UnknownParameter, InvalidPropertyType } from 'jitar';
+import { Version, Forbidden, BadRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized } from 'jitar';
 import { ProcedureContainer, ValueSerializer } from 'jitar';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
-const INVALID_REQUEST_ERRORS = [InvalidVersionNumber, MissingParameterValue, UnknownParameter, InvalidPropertyType];
-const NOT_FOUND_ERRORS = [ImplementationNotFound, ProcedureNotFound];
 
 @Controller('rpc')
 export default class RPCController
@@ -174,15 +172,13 @@ export default class RPCController
 
     #createResponseStatusCode(error: unknown): number
     {
-        if (INVALID_REQUEST_ERRORS.some(invalidError => error instanceof invalidError))
-        {
-            return 400;
-        }
-
-        if (NOT_FOUND_ERRORS.some(notFoundError => error instanceof notFoundError))
-        {
-            return 404;
-        }
+        if (error instanceof BadRequest)        return 400;
+        if (error instanceof Unauthorized)      return 401;
+        if (error instanceof PaymentRequired)   return 402;
+        if (error instanceof Forbidden)         return 403;
+        if (error instanceof NotFound)          return 404;
+        if (error instanceof Teapot)            return 418;
+        if (error instanceof NotImplemented)    return 501;
 
         return 500;
     }

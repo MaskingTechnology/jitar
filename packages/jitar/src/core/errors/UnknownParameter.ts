@@ -1,7 +1,8 @@
 
 import Component from '../types/Component.js'
+import BadRequest from './BadRequest.js'
 
-export default class UnknownParameter extends Error
+export default class UnknownParameter extends BadRequest
 {
     constructor(parameterName: string)
     {
