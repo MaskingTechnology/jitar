@@ -1,11 +1,10 @@
 
-import Runner from '../core/interfaces/Runner.js';
 import Version from '../core/Version.js';
 
 import NoNodeAvailable from './errors/NoNodeAvailable.js';
 import Node from './Node.js';
 
-export default class NodeBalancer implements Runner
+export default class NodeBalancer
 {
     #nodes: Node[] = [];
     #currentIndex = 0;
@@ -47,7 +46,7 @@ export default class NodeBalancer implements Runner
         return this.#nodes[this.#currentIndex++];
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>): Promise<unknown>
+    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         const node = this.getNextNode();
 
@@ -56,6 +55,6 @@ export default class NodeBalancer implements Runner
             throw new NoNodeAvailable(fqn);
         }
 
-        return node.run(fqn, version, args);
+        return node.run(fqn, version, args, headers);
     }
 }

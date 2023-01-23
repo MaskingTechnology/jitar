@@ -16,8 +16,6 @@ export default class RemoteGateway extends Gateway
         super(url);
 
         this.#remote = new Remote(url, true);
-
-        this.addMiddleware(new ProcedureRunner(this));
     }
 
     getProcedureNames(): string[]
@@ -36,8 +34,8 @@ export default class RemoteGateway extends Gateway
         return this.#remote.addNode(node);
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>): Promise<unknown>
+    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
-        return this.#remote.run(fqn, version, args);
+        return this.#remote.run(fqn, version, args, headers);
     }
 }

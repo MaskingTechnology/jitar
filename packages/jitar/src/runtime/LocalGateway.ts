@@ -16,13 +16,6 @@ export default class LocalGateway extends Gateway
     #nodes: Set<Node> = new Set();
     #balancers: Map<string, NodeBalancer> = new Map();
 
-    constructor(url?: string)
-    {
-        super(url);
-
-        this.addMiddleware(new ProcedureRunner(this));
-    }
-
     get nodes()
     {
         return [...this.#nodes.values()];
@@ -99,7 +92,7 @@ export default class LocalGateway extends Gateway
         return balancer;
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>): Promise<unknown>
+    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         const balancer = this.#getBalancer(fqn);
 
@@ -108,6 +101,6 @@ export default class LocalGateway extends Gateway
             throw new ProcedureNotFound(fqn);
         }
 
-        return balancer.run(fqn, version, args);
+        return balancer.run(fqn, version, args, headers);
     }
 }

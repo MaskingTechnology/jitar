@@ -21,5 +21,5 @@ export async function runProcedure(fqn: string, versionNumber: string, args: obj
     const version = Version.parse(versionNumber);
     const argsMap = new Map<string, unknown>(Object.entries(args));
 
-    return _runtime.run(fqn, version, argsMap);
+    return _runtime.run(fqn, version, argsMap, new Map());
 }

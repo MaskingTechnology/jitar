@@ -16,7 +16,6 @@ export default class RemoteNode extends Node
 
         this.#remote = new Remote(url, false);
 
-        this.addMiddleware(new ProcedureRunner(this));
         this.registerProcedures(procedureNames);
     }
 
@@ -45,8 +44,8 @@ export default class RemoteNode extends Node
         return this.#remote.getHealth();
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>): Promise<unknown>
+    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
-        return this.#remote.run(fqn, version, args);
+        return this.#remote.run(fqn, version, args, headers);
     }
 }

@@ -1,16 +1,14 @@
 
 import Version from '../core/Version.js';
 
-import ProcedureContainer from './interfaces/ProcedureContainer.js';
-
 import Gateway from './Gateway.js';
 import File from './models/File.js';
 import Node from './Node.js';
 import Repository from './Repository.js';
-import Runtime from './Runtime.js';
 import ProcedureRunner from './ProcedureRunner.js';
+import ProcedureRuntime from './ProcedureRuntime.js';
 
-export default class Proxy extends Runtime implements ProcedureContainer
+export default class Proxy extends ProcedureRuntime
 {
     #repository: Repository;
     #runner: Gateway | Node;
@@ -56,8 +54,8 @@ export default class Proxy extends Runtime implements ProcedureContainer
         return this.#repository.loadModule(clientId, filename);
     }
 
-    async run(name: string, version: Version, args: Map<string, unknown>): Promise<unknown>
+    async run(name: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
-        return this.#runner.run(name, version, args);
+        return this.#runner.run(name, version, args, headers);
     }
 }

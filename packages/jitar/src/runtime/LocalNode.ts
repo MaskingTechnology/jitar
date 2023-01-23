@@ -22,11 +22,9 @@ export default class LocalNode extends Node
     #repository?: Repository;
     #clientId = '';
 
-    constructor(url?: string)
+    get gateway(): Gateway | undefined
     {
-        super(url);
-
-        this.addMiddleware(new ProcedureRunner(this));
+        return this.#gateway;
     }
 
     getProcedureNames(): string[]
@@ -123,16 +121,20 @@ export default class LocalNode extends Node
         return this.#repository.importModule(this.#clientId, url);
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>): Promise<unknown>
+    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         const segment = this.#getProcedureSegment(fqn);
-        const runner = segment ?? this.#gateway;
 
-        if (runner === undefined)
+        if (segment !== undefined)
+        {
+            return segment.run(fqn, version, args);
+        }
+
+        if (this.#gateway === undefined)
         {
             throw new ProcedureNotFound(fqn);
         }
 
-        return runner.run(fqn, version, args);
+        return this.#gateway.run(fqn, version, args, headers);
     }
 }

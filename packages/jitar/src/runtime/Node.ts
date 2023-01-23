@@ -1,15 +1,8 @@
 
-import Version from '../core/Version.js';
 
-import ProcedureContainer from './interfaces/ProcedureContainer.js';
+import ProcedureRuntime from './ProcedureRuntime.js';
 
-import Runtime from './Runtime.js';
-
-export default abstract class Node extends Runtime implements ProcedureContainer
+export default abstract class Node extends ProcedureRuntime
 {
-    abstract getProcedureNames(): string[];
-
-    abstract hasProcedure(name: string): boolean;
-
-    abstract run(name: string, version: Version, args: Map<string, unknown>): Promise<unknown>;
+    
 }
