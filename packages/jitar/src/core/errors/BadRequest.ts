@@ -1,7 +1,7 @@
 
 import Component from '../types/Component.js';
 
-export default class InvalidRequest extends Error
+export default class BadRequest extends Error
 {
     constructor(message = 'Invalid request')
     {
@@ -9,4 +9,4 @@ export default class InvalidRequest extends Error
     }
 }
 
-(InvalidRequest as Component).source = '/jitar/core/errors/InvalidRequest.js';
+(BadRequest as Component).source = '/jitar/core/errors/BadRequest.js';

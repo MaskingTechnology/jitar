@@ -3,7 +3,7 @@ import { Controller, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { Version, Forbidden, InvalidRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized } from 'jitar';
+import { Version, Forbidden, BadRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized } from 'jitar';
 import { ProcedureContainer, ValueSerializer } from 'jitar';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
@@ -172,7 +172,7 @@ export default class RPCController
 
     #createResponseStatusCode(error: unknown): number
     {
-        if (error instanceof InvalidRequest)    return 400;
+        if (error instanceof BadRequest)    return 400;
         if (error instanceof Unauthorized)      return 401;
         if (error instanceof PaymentRequired)   return 402;
         if (error instanceof Forbidden)         return 403;

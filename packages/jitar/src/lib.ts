@@ -4,7 +4,7 @@ export { default as HealthCheck } from './runtime/interfaces/HealthCheck.js';
 // Core
 export { default as Version } from './core/Version.js';
 export { default as Forbidden } from './core/errors/Forbidden.js';
-export { default as InvalidRequest } from './core/errors/InvalidRequest.js';
+export { default as BadRequest } from './core/errors/BadRequest.js';
 export { default as NotFound } from './core/errors/NotFound.js';
 export { default as NotImplemented } from './core/errors/NotImplemented.js';
 export { default as PaymentRequired } from './core/errors/PaymentRequired.js';
