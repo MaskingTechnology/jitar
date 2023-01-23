@@ -41,7 +41,7 @@ export default class Segment implements Runner
         return procedures.filter(procedure => procedure.public);
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>): Promise<unknown>
+    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         const procedure = this.getProcedure(fqn);
 
@@ -52,7 +52,7 @@ export default class Segment implements Runner
 
         try
         {
-            return await procedure.run(version, args);
+            return await procedure.run(version, args, headers);
         }
         catch (error: unknown)
         {

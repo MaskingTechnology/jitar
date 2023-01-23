@@ -11,7 +11,6 @@ import Gateway from './Gateway.js';
 import LocalGateway from './LocalGateway.js';
 import Node from './Node.js';
 import Repository from './Repository.js';
-import ProcedureRunner from './ProcedureRunner.js';
 import ModuleLoader from './utils/ModuleLoader.js';
 import UrlRewriter from './utils/UrlRewriter.js';
 
@@ -124,17 +123,13 @@ export default class LocalNode extends Node
     async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         const segment = this.#getProcedureSegment(fqn);
+        const runner = segment ?? this.#gateway;
 
-        if (segment !== undefined)
-        {
-            return segment.run(fqn, version, args);
-        }
-
-        if (this.#gateway === undefined)
+        if (runner === undefined)
         {
             throw new ProcedureNotFound(fqn);
         }
 
-        return this.#gateway.run(fqn, version, args, headers);
+        return runner.run(fqn, version, args, headers);
     }
 }

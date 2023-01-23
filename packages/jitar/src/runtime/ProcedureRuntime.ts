@@ -5,8 +5,9 @@ import Runtime from './Runtime.js';
 import Middleware from './interfaces/Middleware.js';
 import NextHandler from './types/NextHandler.js';
 import ProcedureRunner from './ProcedureRunner.js';
+import Runner from '../core/interfaces/Runner.js';
 
-export default abstract class ProcedureRuntime extends Runtime
+export default abstract class ProcedureRuntime extends Runtime implements Runner
 {
     #middlewares: Middleware[] = [];
 
