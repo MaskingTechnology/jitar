@@ -19,15 +19,27 @@ function getParameters(mandatory: string, optional = 'default')
     return `${mandatory} ${optional}`;
 }
 
+function getContext(): unknown
+{
+    // A function does not have a 'this' by default.
+    // TypeScript is (luckaly) very strict about it.
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return this;
+}
+
 const parameters = ReflectionHelper.getFunctionParameters(getParameters);
 
 const privateImplementation = new Implementation(Version.DEFAULT, AccessLevel.PRIVATE, [], getPrivate);
 const publicImplementation = new Implementation(Version.DEFAULT, AccessLevel.PUBLIC, [], getPublic);
 const parameterImplementation = new Implementation(Version.DEFAULT, AccessLevel.PUBLIC, parameters, getParameters);
+const contextImplementation = new Implementation(Version.DEFAULT, AccessLevel.PUBLIC, [], getContext);
 
 export
 {
     privateImplementation,
     publicImplementation,
-    parameterImplementation
+    parameterImplementation,
+    contextImplementation
 }

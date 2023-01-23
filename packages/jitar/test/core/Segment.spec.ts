@@ -41,7 +41,7 @@ describe('core/Segment', () =>
         });
     });
 
-    describe('.run(name, version, args)', () =>
+    describe('.run(name, version, args, headers)', () =>
     {
         it('should run a public procedure', async () =>
         {

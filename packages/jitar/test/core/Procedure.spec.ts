@@ -85,7 +85,7 @@ describe('core/Procedure', () =>
         });
     });
 
-    describe('.run(name, version)', () =>
+    describe('.run(name, version, headers)', () =>
     {
         it('should run a procedure', async () =>
         {
