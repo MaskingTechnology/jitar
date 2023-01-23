@@ -44,6 +44,7 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
         if (next === undefined)
         {
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
             return async () => {};
         }
 

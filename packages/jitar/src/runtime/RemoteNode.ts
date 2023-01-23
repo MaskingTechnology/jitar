@@ -2,7 +2,6 @@
 import Version from '../core/Version.js';
 
 import Node from './Node.js';
-import ProcedureRunner from './ProcedureRunner.js';
 import Remote from './Remote.js';
 
 export default class RemoteNode extends Node

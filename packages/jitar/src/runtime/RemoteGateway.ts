@@ -4,7 +4,6 @@ import Version from '../core/Version.js';
 
 import Gateway from './Gateway.js';
 import Node from './Node.js';
-import ProcedureRunner from './ProcedureRunner.js';
 import Remote from './Remote.js';
 
 export default class RemoteGateway extends Gateway

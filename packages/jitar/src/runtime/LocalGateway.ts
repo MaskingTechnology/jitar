@@ -5,7 +5,6 @@ import Version from '../core/Version.js';
 import Gateway from './Gateway.js';
 import Node from './Node.js';
 import NodeBalancer from './NodeBalancer.js';
-import ProcedureRunner from './ProcedureRunner.js';
 import Repository from './Repository.js';
 import ModuleLoader from './utils/ModuleLoader.js';
 
