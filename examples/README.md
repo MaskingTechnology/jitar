@@ -39,6 +39,7 @@ The following examples are more advanced examples to get started with Jitar. The
 1. [Start hooks](2-advanced/1-start-hooks/README.md) - Demonstrates how to start a Jitar server and client.
 1. [Run procedure](2-advanced/2-run-procedure/README.md) - Demonstrates how to run a procedure dynamically.
 1. [Health checks](2-advanced/3-health-checks/README.md) - Demonstrates how to use health checks.
+1. [Middleware](2-advanced/4-middleware/README.md) - Demonstrates how to use middleware.
 
 ## Application examples
 
