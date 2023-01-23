@@ -3,7 +3,7 @@ import { Server as OvernightServer } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import { Logger } from 'tslog';
 
-import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, Proxy, Runtime } from 'jitar';
+import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime } from 'jitar';
 
 import RuntimeConfigurationLoader from './utils/RuntimeConfigurationLoader.js';
 import RuntimeConfigurator from './utils/RuntimeConfigurator.js';
@@ -22,6 +22,7 @@ import RuntimeConfiguration from './configuration/RuntimeConfiguration.js';
 import RuntimeDefaults from './definitions/RuntimeDefaults.js';
 
 import RuntimeNotAvaiable from './errors/RuntimeNotAvaiable.js';
+import MiddlewareNotSupported from './errors/MiddlewareNotSupported.js';
 import LogBuilder from './utils/LogBuilder.js';
 
 const STARTUP_MESSAGE = `
@@ -46,11 +47,6 @@ export default class JitarServer extends OvernightServer
         this.app.use(bodyParser.urlencoded({ extended: true }));
     }
 
-    get runtime(): Runtime | undefined
-    {
-        return this.#runtime;
-    }
-
     async start(): Promise<void>
     {
         console.log(STARTUP_MESSAGE);
@@ -70,6 +66,31 @@ export default class JitarServer extends OvernightServer
         this.#runtime = runtime;
 
         logger.info(`Server started and listening at port ${url.port}`);
+    }
+
+    addHealthCheck(name: string, healthCheck: HealthCheck): void
+    {
+        if (this.#runtime === undefined)
+        {
+            throw new RuntimeNotAvaiable();
+        }
+
+        this.#runtime.addHealthCheck(name, healthCheck);
+    }
+
+    addMiddleware(middleware: Middleware): void
+    {
+        if (this.#runtime === undefined)
+        {
+            throw new RuntimeNotAvaiable();
+        }
+        
+        if ( ! (this.#runtime instanceof ProcedureRuntime))
+        {
+            throw new MiddlewareNotSupported();
+        }
+
+        this.#runtime.addMiddleware(middleware);
     }
 
     #addControllers(configuration: RuntimeConfiguration, runtime: Runtime, logger: Logger<unknown>): void
