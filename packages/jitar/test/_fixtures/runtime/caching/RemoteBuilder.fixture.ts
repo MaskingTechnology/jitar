@@ -35,11 +35,11 @@ const codeResult =
     `import { runProcedure } from "/jitar/hooks.js";
 
 export default async function defaultFunction() {
-\treturn runProcedure('defaultFunction', '0.0.0', {  })
+\treturn runProcedure('defaultFunction', '0.0.0', {  }, this)
 }
 
 export async function anotherFunction(a, b) {
-\treturn runProcedure('anotherFunction', '1.0.0', { 'a': a, 'b': b })
+\treturn runProcedure('anotherFunction', '1.0.0', { 'a': a, 'b': b }, this)
 }
 `;
 

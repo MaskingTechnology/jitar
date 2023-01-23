@@ -59,7 +59,7 @@ describe('core/Implementation', () =>
     {
         it('should run a procedure without parameters', async () =>
         {
-            const result = await publicImplementation.run(new Map());
+            const result = await publicImplementation.run(new Map(), new Map());
 
             expect(result).toBe('public');
         });
@@ -67,7 +67,7 @@ describe('core/Implementation', () =>
         it('should run a procedure with parameter values', async () =>
         {
             const args = new Map().set('mandatory', 'mandatory').set('optional', 'optional');
-            const result = await parameterImplementation.run(args);
+            const result = await parameterImplementation.run(args, new Map());
 
             expect(result).toBe('mandatory optional');
         });
@@ -75,14 +75,14 @@ describe('core/Implementation', () =>
         it('should run a procedure without an optional parameter value', async () =>
         {
             const args = new Map().set('mandatory', 'mandatory');
-            const result = await parameterImplementation.run(args);
+            const result = await parameterImplementation.run(args, new Map());
 
             expect(result).toBe('mandatory default');
         });
 
         it('should not run a procedure without a mandatory parameter value', async () =>
         {
-            const run = async () => await parameterImplementation.run(new Map());
+            const run = async () => await parameterImplementation.run(new Map(), new Map());
 
             expect(run).rejects.toEqual(new MissingParameterValue('mandatory'));
         });
@@ -90,7 +90,7 @@ describe('core/Implementation', () =>
         it('should not run a procedure with an additional parameter', async () => 
         {
             const args = new Map().set('mandatory', 'mandatory').set('optional','optional').set('additional','additional');
-            const run = async () => await parameterImplementation.run(args)
+            const run = async () => await parameterImplementation.run(args, new Map())
 
             expect(run).rejects.toEqual(new UnknownParameter('additional'));
         })

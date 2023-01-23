@@ -31,7 +31,7 @@ describe('runtime/LocalGateway', () =>
     {
         it('throw a node not available error', async () =>
         {
-            const run = async() => await emptyBalancer.run('NoProcedure', Version.DEFAULT, new Map());
+            const run = async() => await emptyBalancer.run('NoProcedure', Version.DEFAULT, new Map(), new Map());
 
             expect(run).rejects.toEqual(new NoNodeAvailable('NoProcedure'));
         });
