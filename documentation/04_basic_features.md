@@ -390,6 +390,9 @@ For handling errors the default JavaScript error system can be used for throwing
 
 Errors will be supplemented with remote tracing information to make sure its origin is known, even in a distributed setup. If we for example throw an error in the ``sayHello`` procedure from the data transportation example, it looks like this.
 
+{:.filename}
+src/greetings/sayHello.ts
+
 ```ts
 import Person from './Person.js';
 
@@ -449,6 +452,47 @@ export default class CustomError extends Error
         super(message);
         
         this.name = 'CustomError';
+    }
+}
+```
+
+These errors will result into a ``500 Internal Server Error`` response by RPC API.
+Jitar also provides the following generic error types:
+
+* **BadRequest** - results in a ``400 Bad Request``
+* **Unauthorized** - results in a ``401 Unauthorized``
+* **PaymentRequired** - results in a ``402 Payment Required``
+* **Forbidden** - results in a ``403 Forbidden``
+* **NotFound** - results in a ``404 Not found``
+* **Teapot** - results in a ``418 I'm a teapot``
+* **NotImplemented** - results in a ``501 Not Implemented``
+
+A generic error can be imported from the Jitar package and used directly.
+
+```ts
+import Person from './Person.js';
+
+import { Teapot } from 'jitar';
+
+export default async function sayHello(person: Person): Promise<string>
+{
+    throw new Teapot();
+}
+```
+
+All generic errors accept a custom message, except for the teapot. This makes it easy to create more specific custom errors.
+
+{:.filename}
+src/greetings/BrainNotFound.ts
+
+```ts
+import { NotFound } from 'jitar';
+
+export default class BrainNotFound extends NotFound
+{
+    constructor()
+    {
+        super('Brain not found');
     }
 }
 ```
