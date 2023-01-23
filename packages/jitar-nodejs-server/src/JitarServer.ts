@@ -3,7 +3,7 @@ import { Server as OvernightServer } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import { Logger } from 'tslog';
 
-import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Proxy, Runtime } from 'jitar';
+import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, Proxy, Runtime } from 'jitar';
 
 import RuntimeConfigurationLoader from './utils/RuntimeConfigurationLoader.js';
 import RuntimeConfigurator from './utils/RuntimeConfigurator.js';
@@ -46,6 +46,11 @@ export default class JitarServer extends OvernightServer
         this.app.use(bodyParser.urlencoded({ extended: true }));
     }
 
+    get runtime(): Runtime | undefined
+    {
+        return this.#runtime;
+    }
+
     async start(): Promise<void>
     {
         console.log(STARTUP_MESSAGE);
@@ -65,16 +70,6 @@ export default class JitarServer extends OvernightServer
         this.#runtime = runtime;
 
         logger.info(`Server started and listening at port ${url.port}`);
-    }
-
-    addHealthCheck(name: string, healthCheck: HealthCheck): void
-    {
-        if (this.#runtime === undefined)
-        {
-            throw new RuntimeNotAvaiable();
-        }
-
-        this.#runtime.addHealthCheck(name, healthCheck);
     }
 
     #addControllers(configuration: RuntimeConfiguration, runtime: Runtime, logger: Logger<unknown>): void

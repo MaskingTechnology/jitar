@@ -3,8 +3,8 @@ import { Controller, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { Version, ImplementationNotFound, InvalidVersionNumber, MissingParameterValue, ProcedureNotFound, UnknownParameter, InvalidPropertyType } from 'jitar';
-import { ProcedureContainer, ValueSerializer } from 'jitar';
+import { Version, ImplementationNotFound, InvalidVersionNumber, MissingParameterValue, ProcedureNotFound, UnknownParameter, InvalidPropertyType, LocalGateway, LocalNode, Proxy } from 'jitar';
+import { ValueSerializer } from 'jitar';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
 const INVALID_REQUEST_ERRORS = [InvalidVersionNumber, MissingParameterValue, UnknownParameter, InvalidPropertyType];
@@ -13,11 +13,11 @@ const NOT_FOUND_ERRORS = [ImplementationNotFound, ProcedureNotFound];
 @Controller('rpc')
 export default class RPCController
 {
-    #runtime: ProcedureContainer;
+    #runtime: LocalGateway | LocalNode | Proxy;
     #logger: Logger<unknown>;
     #useSerializer: boolean;
 
-    constructor(runtime: ProcedureContainer, logger: Logger<unknown>, useSerializer: boolean)
+    constructor(runtime: LocalGateway | LocalNode | Proxy, logger: Logger<unknown>, useSerializer: boolean)
     {
         this.#runtime = runtime;
         this.#logger = logger;
@@ -46,9 +46,10 @@ export default class RPCController
         const fqn = this.#extractFqn(request);
         const version = this.#extractVersion(request);
         const args = this.#extractQueryArguments(request);
+        const headers = this.#extractHeaders(request);
         const serialize = this.#extractSerialize(request);
 
-        return this.#run(fqn, version, args, response, serialize);
+        return this.#run(fqn, version, args, headers, response, serialize);
     }
 
     @Post('*')
@@ -57,9 +58,10 @@ export default class RPCController
         const fqn = this.#extractFqn(request);
         const version = this.#extractVersion(request);
         const args = await this.#extractBodyArguments(request);
+        const headers = this.#extractHeaders(request);
         const serialize = this.#extractSerialize(request);
 
-        return this.#run(fqn, version, args, response, serialize);
+        return this.#run(fqn, version, args, headers, response, serialize);
     }
 
     #extractFqn(request: Request): string
@@ -108,7 +110,21 @@ export default class RPCController
         return new Map<string, unknown>(Object.entries(args));
     }
 
-    async #run(fqn: string, version: Version, args: Map<string, unknown>, response: Response, serialize: boolean): Promise<Response>
+    #extractHeaders(request: Request): Map<string, string>
+    {
+        const headers = new Map<string, string>();
+
+        for (const [key, value] of Object.entries(request.headers))
+        {
+            const stringValue = value?.toString() ?? '';
+
+            headers.set(key, stringValue);
+        }
+
+        return headers;
+    }
+
+    async #run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, response: Response, serialize: boolean): Promise<Response>
     {
         if (this.#runtime.hasProcedure(fqn) === false)
         {
@@ -117,7 +133,7 @@ export default class RPCController
 
         try
         {
-            const result = await this.#runtime.run(fqn, version, args);
+            const result = await this.#runtime.handle(fqn, version, args, new Map());
 
             this.#logger.info(`Ran procedure -> ${fqn} (${version.toString()})`);
 
