@@ -95,6 +95,8 @@ export default class Remote
 
     async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
+        headers.set('content-type', 'application/json');
+        
         const versionString = version.toString();
         const argsObject = Object.fromEntries(args);
         const headersObject = Object.fromEntries(headers);
