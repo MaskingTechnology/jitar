@@ -7,6 +7,8 @@ import { Version, ImplementationNotFound, InvalidVersionNumber, MissingParameter
 import { ValueSerializer } from 'jitar';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
+const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
+
 const INVALID_REQUEST_ERRORS = [InvalidVersionNumber, MissingParameterValue, UnknownParameter, InvalidPropertyType];
 const NOT_FOUND_ERRORS = [ImplementationNotFound, ProcedureNotFound];
 
@@ -116,9 +118,20 @@ export default class RPCController
 
         for (const [key, value] of Object.entries(request.headers))
         {
-            const stringValue = value?.toString() ?? '';
+            if (value === undefined)
+            {
+                continue;
+            }
 
-            headers.set(key, stringValue);
+            const lowerKey = key.toLowerCase();
+            const stringValue = value.toString();
+
+            if (value === undefined || IGNORED_HEADER_KEYS.includes(lowerKey))
+            {
+                continue;
+            }
+
+            headers.set(lowerKey, stringValue);
         }
 
         return headers;
