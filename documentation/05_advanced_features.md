@@ -24,7 +24,7 @@ The RPC API is used to call procedures (functions) on a node.
 GET http://node.example.com:3000/rpc/greetings/sayHello?firstName=John HTTP/1.1
 ```
 
-The PRC API also supports the POST method. This is useful when passing complex or large amounts of data.
+The RPC API also supports the POST method. This is useful when passing complex or large amounts of data.
 
 ```http
 GET http://node.example.com:3000/rpc/greetings/sayHello HTTP/1.1
@@ -141,14 +141,17 @@ import { runProcedure } from 'jitar';
 
 export default async function sayBoth(firstName: string, lastName: string): Promise<string>
 {
-    const hiMessage = await runProcedure('greetings/sayHi', '0.0.0', { 'firstName': firstName });
-    const helloMessage = await runProcedure('greetings/sayHello', '0.0.0', { 'firstName': firstName, 'lastName': lastName });
+    const hiMessage = await runProcedure('greetings/sayHi', '0.0.0', { 'firstName': firstName }, this);
+    const helloMessage = await runProcedure('greetings/sayHello', '0.0.0', { 'firstName': firstName, 'lastName': lastName }, this);
 
     return `${hiMessage}\n${helloMessage}`;
 }
 ```
 
 We need to pass the ``module/name`` of the procedure, the version and the arguments. The arguments must be a JavaScript object containing the argument values by name. The value can be any [transferable type](04_basic_features#data-transportation).
+
+Optionally you can pass the ``this`` value containing the runtime context of the procedure. This context contains the headers - like the authorization header - that need to be used in a remote call in case the procedure is not locally available.
+Therefore it is highly recommended to pass this value.
 
 {:.alert-info}
 Only procedures that are added to a segment file can be called.
@@ -209,6 +212,65 @@ The name must be unique, so if you add a health check with the same name as an e
 
 {:.alert-info}
 Top level await is not supported in Node.js yet, so we use the classic promise syntax for this case.
+
+---
+
+## Middleware
+
+Middleware provides a way to intercept and modify the request and response of a RPC call. It can be used to implement logging, authentication, and other cross-cutting concerns.
+
+A middleware is a class that implements the Middleware interface that has a single function to handle the request.
+
+{:.filename}
+src/ExampleMiddleware.ts
+
+```ts
+import { Middleware, Version, NextHandler } from 'jitar';
+
+export default class ExampleMiddleware implements Middleware
+{
+    async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: NextHandler): Promise<unknown>
+    {
+        // Modify the request (arg and headers) here
+
+        const result = await next();
+
+        // Modify the response (result) here
+
+        return result;
+    }
+}
+```
+
+The ``fqn``, ``version`` and ``next`` parameters are immutable, so only the ``args`` and ``headers`` can be modified. The ``args`` provide the procedure arguments.
+The ``headers`` contain the HTTP-headers that provide meta-information like authentication.
+
+Because all middleware is chained, the ``next`` parameter must always be called. This function does not take any arguments, all the arguments will be provided automatically.
+Note that the handle function is async so it can return a promise.
+
+When the Jitar server is started using the startServer hook we can register one or more middleware.
+
+{:.filename}
+src/start.ts
+
+```ts
+import { startServer } from 'jitar-nodejs-server';
+
+import ExampleMiddleware from './ExampleMiddleware.js';
+
+const moduleImporter = async (specifier: string) => import(specifier);
+
+startServer(moduleImporter).then(server =>
+{
+    server.addMiddleware(new ExampleMiddleware());
+});
+```
+
+Middleware can be added to the [node](03_runtime_services#node), [gateway](03_runtime_services#gateway),
+[proxy](03_runtime_services#proxy) and [standalone](03_runtime_services#standalone) services support middleware.
+
+{:.alert-warning}
+The execution order of the middleware is reversed. This means that the middleware that is added last is called first.
 
 ---
 

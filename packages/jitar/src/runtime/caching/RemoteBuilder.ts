@@ -44,7 +44,7 @@ export default class RemoteBuilder
         const procedureArguments = parameterNames.map(name => `'${name}': ${name}`).join(', ');
 
         const functionName = `\nexport ${asDefault ? `${Keywords.DEFAULT} ` : ''}async function ${procedureName}(${procedueParameters})`;
-        const functionBody = `return runProcedure('${procedureFqn}', '${procedureVersion}', { ${procedureArguments} })`;
+        const functionBody = `return runProcedure('${procedureFqn}', '${procedureVersion}', { ${procedureArguments} }, this)`;
 
         return `${functionName} {\n\t${functionBody}\n}\n`;
     }

@@ -5,7 +5,7 @@ export default abstract class Runtime
 {
     #url?: string;
     #healthChecks: Map<string, HealthCheck> = new Map();
-
+    
     constructor(url?: string)
     {
         this.#url = url;

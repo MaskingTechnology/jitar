@@ -3,19 +3,20 @@ import { Controller, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { Version, Forbidden, BadRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized } from 'jitar';
-import { ProcedureContainer, ValueSerializer } from 'jitar';
+import { Version, Forbidden, BadRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized, LocalGateway, LocalNode, Proxy } from 'jitar';
+import { ValueSerializer } from 'jitar';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
+const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
 
 @Controller('rpc')
 export default class RPCController
 {
-    #runtime: ProcedureContainer;
+    #runtime: LocalGateway | LocalNode | Proxy;
     #logger: Logger<unknown>;
     #useSerializer: boolean;
 
-    constructor(runtime: ProcedureContainer, logger: Logger<unknown>, useSerializer: boolean)
+    constructor(runtime: LocalGateway | LocalNode | Proxy, logger: Logger<unknown>, useSerializer: boolean)
     {
         this.#runtime = runtime;
         this.#logger = logger;
@@ -44,9 +45,10 @@ export default class RPCController
         const fqn = this.#extractFqn(request);
         const version = this.#extractVersion(request);
         const args = this.#extractQueryArguments(request);
+        const headers = this.#extractHeaders(request);
         const serialize = this.#extractSerialize(request);
 
-        return this.#run(fqn, version, args, response, serialize);
+        return this.#run(fqn, version, args, headers, response, serialize);
     }
 
     @Post('*')
@@ -55,9 +57,10 @@ export default class RPCController
         const fqn = this.#extractFqn(request);
         const version = this.#extractVersion(request);
         const args = await this.#extractBodyArguments(request);
+        const headers = this.#extractHeaders(request);
         const serialize = this.#extractSerialize(request);
 
-        return this.#run(fqn, version, args, response, serialize);
+        return this.#run(fqn, version, args, headers, response, serialize);
     }
 
     #extractFqn(request: Request): string
@@ -85,8 +88,8 @@ export default class RPCController
         {
             if (RPC_PARAMETERS.includes(key))
             {
-                // We need to filter out the PRC parameters,
-                // because they are not a proceure argument.
+                // We need to filter out the RPC parameters,
+                // because they are not a procedure argument.
 
                 continue;
             }
@@ -106,7 +109,32 @@ export default class RPCController
         return new Map<string, unknown>(Object.entries(args));
     }
 
-    async #run(fqn: string, version: Version, args: Map<string, unknown>, response: Response, serialize: boolean): Promise<Response>
+    #extractHeaders(request: Request): Map<string, string>
+    {
+        const headers = new Map<string, string>();
+
+        for (const [key, value] of Object.entries(request.headers))
+        {
+            if (value === undefined)
+            {
+                continue;
+            }
+
+            const lowerKey = key.toLowerCase();
+            const stringValue = value.toString();
+
+            if (IGNORED_HEADER_KEYS.includes(lowerKey))
+            {
+                continue;
+            }
+
+            headers.set(lowerKey, stringValue);
+        }
+
+        return headers;
+    }
+
+    async #run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, response: Response, serialize: boolean): Promise<Response>
     {
         if (this.#runtime.hasProcedure(fqn) === false)
         {
@@ -115,7 +143,7 @@ export default class RPCController
 
         try
         {
-            const result = await this.#runtime.run(fqn, version, args);
+            const result = await this.#runtime.handle(fqn, version, args, headers);
 
             this.#logger.info(`Ran procedure -> ${fqn} (${version.toString()})`);
 
@@ -172,13 +200,13 @@ export default class RPCController
 
     #createResponseStatusCode(error: unknown): number
     {
-        if (error instanceof BadRequest)        return 400;
-        if (error instanceof Unauthorized)      return 401;
-        if (error instanceof PaymentRequired)   return 402;
-        if (error instanceof Forbidden)         return 403;
-        if (error instanceof NotFound)          return 404;
-        if (error instanceof Teapot)            return 418;
-        if (error instanceof NotImplemented)    return 501;
+        if (error instanceof BadRequest) return 400;
+        if (error instanceof Unauthorized) return 401;
+        if (error instanceof PaymentRequired) return 402;
+        if (error instanceof Forbidden) return 403;
+        if (error instanceof NotFound) return 404;
+        if (error instanceof Teapot) return 418;
+        if (error instanceof NotImplemented) return 501;
 
         return 500;
     }

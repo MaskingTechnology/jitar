@@ -1,5 +1,9 @@
 // Interfaces
 export { default as HealthCheck } from './runtime/interfaces/HealthCheck.js';
+export { default as Middleware } from './runtime/interfaces/Middleware.js';
+
+// Types
+export { default as NextHandler } from './runtime/types/NextHandler.js';
 
 // Core
 export { default as Version } from './core/Version.js';
@@ -20,7 +24,7 @@ export { default as ValueSerializer } from './runtime/serialization/ValueSeriali
 export { default as ClientId } from './runtime/ClientId.js';
 export { default as RemoteNode } from './runtime/RemoteNode.js';
 export { default as LocalGateway } from './runtime/LocalGateway.js';
-export { default as ProcedureContainer } from './runtime/interfaces/ProcedureContainer.js';
+export { default as ProcedureRuntime } from './runtime/ProcedureRuntime.js';
 export { default as FileManager } from './runtime/interfaces/FileManager.js';
 export { default as File } from './runtime/models/File.js';
 export { default as CacheBuilder } from './runtime/caching/CacheBuilder.js';

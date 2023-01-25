@@ -85,13 +85,13 @@ describe('core/Procedure', () =>
         });
     });
 
-    describe('.run(name, version)', () =>
+    describe('.run(name, version, headers)', () =>
     {
         it('should run a procedure', async () =>
         {
-            const v1_0_0 = await rootProcedure.run(new Version(1, 0, 0), new Map());
-            const v1_0_5 = await rootProcedure.run(new Version(1, 0, 5), new Map());
-            const v1_1_0 = await rootProcedure.run(new Version(1, 1, 0), new Map());
+            const v1_0_0 = await rootProcedure.run(new Version(1, 0, 0), new Map(), new Map());
+            const v1_0_5 = await rootProcedure.run(new Version(1, 0, 5), new Map(), new Map());
+            const v1_1_0 = await rootProcedure.run(new Version(1, 1, 0), new Map(), new Map());
 
             expect(v1_0_0).toBe('1.0.0');
             expect(v1_0_5).toBe('1.0.5');
@@ -100,7 +100,7 @@ describe('core/Procedure', () =>
 
         it('throw a implementation not found error', async () =>
         {
-            const run = async () => await rootProcedure.run(new Version(0, 0, 1), new Map());
+            const run = async () => await rootProcedure.run(new Version(0, 0, 1), new Map(), new Map());
 
             expect(run).rejects.toEqual(new ImplementationNotFound('myRootProcedure', '0.0.1'));
         });

@@ -115,7 +115,7 @@ export default class LocalNode extends Node
         return this.#repository.importModule(this.#clientId, url);
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>): Promise<unknown>
+    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         const segment = this.#getProcedureSegment(fqn);
         const runner = segment ?? this.#gateway;
@@ -125,6 +125,6 @@ export default class LocalNode extends Node
             throw new ProcedureNotFound(fqn);
         }
 
-        return runner.run(fqn, version, args);
+        return runner.run(fqn, version, args, headers);
     }
 }

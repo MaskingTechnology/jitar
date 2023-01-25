@@ -58,28 +58,28 @@ describe('runtime/LocalNode', () =>
     {
         it('should run a public procedure that calls a private procedure on the same segment', async () =>
         {
-            const result = await node.run('my/module/firstPublicTask', Version.DEFAULT, new Map());
+            const result = await node.run('my/module/firstPublicTask', Version.DEFAULT, new Map(), new Map());
 
             expect(result).toBe('first');
         });
 
         it('should run a public procedure that calls a private procedure on another segment', async () =>
         {
-            const result = await node.run('my/module/secondPublicTask', Version.DEFAULT, new Map());
+            const result = await node.run('my/module/secondPublicTask', Version.DEFAULT, new Map(), new Map());
 
             expect(result).toBe('first');
         });
 
         it('should run a public procedure that calls a public procedure on another segment', async () =>
         {
-            const result = await node.run('my/module/thirdPublicTask', Version.DEFAULT, new Map());
+            const result = await node.run('my/module/thirdPublicTask', Version.DEFAULT, new Map(), new Map());
 
             expect(result).toBe('fourth');
         });
 
         it('should not run a non-existing procedure', async () =>
         {
-            const run = async() => await node.run('my/module/nonExistingTask', Version.DEFAULT, new Map());
+            const run = async() => await node.run('my/module/nonExistingTask', Version.DEFAULT, new Map(), new Map());
 
             expect(run).rejects.toEqual(new ProcedureNotFound('my/module/nonExistingTask'));
         });

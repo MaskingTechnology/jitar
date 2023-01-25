@@ -4,6 +4,7 @@ import UnknownParameter from './errors/UnknownParameter.js'
 import ReflectionParameter from './reflection/models/ReflectionParameter.js';
 import * as AccessLevel from './definitions/AccessLevel.js';
 import Version from './Version.js';
+import Context from './Context.js';
 
 export default class Implementation
 {
@@ -26,11 +27,17 @@ export default class Implementation
 
     get parameters() { return this.#parameters; }
 
-    async run(args: Map<string, unknown>): Promise<unknown>
+    async run(args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
+        const context = this.#createContext(headers);
         const values = this.#extractParameterValues(args);
 
-        return await this.#executable.call(this.#executable, ...values);
+        return await this.#executable.call(context, ...values);
+    }
+
+    #createContext(headers: Map<string, string>)
+    {
+        return new Context(headers);
     }
 
     #extractParameterValues(parameters: Map<string, unknown>): unknown[]

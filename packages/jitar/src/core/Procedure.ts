@@ -84,7 +84,7 @@ export default class Procedure
         return selectedVersion;
     }
 
-    async run(version: Version, args: Map<string, unknown>): Promise<unknown>
+    async run(version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         const implementation = this.getImplementation(version);
 
@@ -93,6 +93,6 @@ export default class Procedure
             throw new ImplementationNotFound(this.fqn, version.toString());
         }
 
-        return implementation.run(args);
+        return implementation.run(args, headers);
     }
 }

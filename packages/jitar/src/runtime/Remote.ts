@@ -93,16 +93,19 @@ export default class Remote
         await this.#callRemote(url, options, 201);
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>): Promise<unknown>
+    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
+        headers.set('content-type', 'application/json');
+        
         const versionString = version.toString();
         const argsObject = Object.fromEntries(args);
+        const headersObject = Object.fromEntries(headers);
 
         const url = `${this.#url}/rpc/${fqn}?version=${versionString}&serialize=true`;
         const options =
         {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headersObject,
             body: this.#createRequestBody(argsObject, this.#useSerializer)
         };
 

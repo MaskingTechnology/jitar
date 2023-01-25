@@ -41,32 +41,32 @@ describe('core/Segment', () =>
         });
     });
 
-    describe('.run(name, version, args)', () =>
+    describe('.run(name, version, args, headers)', () =>
     {
         it('should run a public procedure', async () =>
         {
-            const result = await segment.run('getPublic', Version.DEFAULT, new Map());
+            const result = await segment.run('getPublic', Version.DEFAULT, new Map(), new Map());
 
             expect(result).toBe('public');
         });
 
         it('should run a private procedure', async () =>
         {
-            const result = await segment.run('getPrivate', Version.DEFAULT, new Map());
+            const result = await segment.run('getPrivate', Version.DEFAULT, new Map(), new Map());
 
             expect(result).toBe('private');
         });
 
         it('should not run a non-existing procedure', async () =>
         {
-            const run = async () => await segment.run('noImplementation', Version.DEFAULT, new Map());
+            const run = async () => await segment.run('noImplementation', Version.DEFAULT, new Map(), new Map());
 
             expect(run).rejects.toEqual(new ProcedureNotFound('noImplementation'));
         });
 
         it('should not run a broken procedure', async () =>
         {
-            const run = async () => await segment.run('throwError', Version.DEFAULT, new Map());
+            const run = async () => await segment.run('throwError', Version.DEFAULT, new Map(), new Map());
 
             expect(run).rejects.toEqual(new Error('broken\n[throwError | v0.0.0]'));
         });
