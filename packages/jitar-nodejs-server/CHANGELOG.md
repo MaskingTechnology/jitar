@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 0.3.0 (January 25, 2023)
+
+New features:
+- \[[`e842d81`](https://github.com/MaskingTechnology/jitar/commit/e842d81)] Implemented middleware support [petermasking](https://github.com/MaskingTechnology/jitar/pull/117)
+- \[[`9d29d31`](https://github.com/MaskingTechnology/jitar/commit/9d29d31)] Extended exceptions to status codes mappings [petermasking](https://github.com/MaskingTechnology/jitar/pull/118)
+
 ## 0.2.3 (December 22, 2022)
 
 Fixes:

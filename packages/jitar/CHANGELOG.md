@@ -1,6 +1,12 @@
 
 # Changelog
 
+## 0.3.0 (January 25, 2023)
+
+New features:
+- \[[`e842d81`](https://github.com/MaskingTechnology/jitar/commit/e842d81)] Implemented middleware support [petermasking](https://github.com/MaskingTechnology/jitar/pull/117)
+- \[[`9d29d31`](https://github.com/MaskingTechnology/jitar/commit/9d29d31)] Extended exceptions to status codes mappings [petermasking](https://github.com/MaskingTechnology/jitar/pull/118)
+
 ## 0.2.2 (December 16, 2022)
 
 Changes:
@@ -11,14 +17,12 @@ Changes:
 Fixes:
 - \[[`fb04f99`](https://github.com/MaskingTechnology/jitar/commit/fb04f99)] Fixed error deserialization at gateway [basmasking](https://github.com/MaskingTechnology/jitar/pull/69)
 
-
 ## 0.2.0 (November 18, 2022)
 
 New features:
 - \[[`0c115e1`](https://github.com/MaskingTechnology/jitar/commit/0c115e1)] Added binary data serialization [basmasking](https://github.com/MaskingTechnology/jitar/pull/56)
 - \[[`38b90da`](https://github.com/MaskingTechnology/jitar/commit/38b90da)] Added date serialization [basmasking](https://github.com/MaskingTechnology/jitar/pull/58)
 - \[[`b27f571`](https://github.com/MaskingTechnology/jitar/commit/b27f571)] Split jitar into multiple packages [basmasking](https://github.com/MaskingTechnology/jitar/pull/60)
-
 
 ## 0.1.3 (November 11, 2022)
 
