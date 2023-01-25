@@ -3,8 +3,8 @@ import { Controller, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { Version, Forbidden, BadRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized } from 'jitar';
-import { ProcedureContainer, ValueSerializer } from 'jitar';
+import { Version, Forbidden, BadRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized, LocalGateway, LocalNode, Proxy } from 'jitar';
+import { ValueSerializer } from 'jitar';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
 const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
@@ -200,13 +200,13 @@ export default class RPCController
 
     #createResponseStatusCode(error: unknown): number
     {
-        if (error instanceof BadRequest)        return 400;
-        if (error instanceof Unauthorized)      return 401;
-        if (error instanceof PaymentRequired)   return 402;
-        if (error instanceof Forbidden)         return 403;
-        if (error instanceof NotFound)          return 404;
-        if (error instanceof Teapot)            return 418;
-        if (error instanceof NotImplemented)    return 501;
+        if (error instanceof BadRequest) return 400;
+        if (error instanceof Unauthorized) return 401;
+        if (error instanceof PaymentRequired) return 402;
+        if (error instanceof Forbidden) return 403;
+        if (error instanceof NotFound) return 404;
+        if (error instanceof Teapot) return 418;
+        if (error instanceof NotImplemented) return 501;
 
         return 500;
     }
