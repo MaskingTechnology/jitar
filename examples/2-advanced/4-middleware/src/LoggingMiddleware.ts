@@ -1,6 +1,6 @@
 
 /*
- * Middleware provides a way to intercept and modify the request and response of a PRC call.
+ * Middleware provides a way to intercept and modify the request and response of a RPC call.
  * It can be used to implement logging, authentication, and other cross-cutting concerns.
  * 
  * Middleware is executed in the reversed order it is registered.

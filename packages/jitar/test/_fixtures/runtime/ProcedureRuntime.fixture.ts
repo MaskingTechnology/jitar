@@ -1,6 +1,6 @@
 
-import Version from "../../../src/core/Version";
-import ProcedureRuntime from "../../../src/runtime/ProcedureRuntime";
+import Version from '../../../src/core/Version';
+import ProcedureRuntime from '../../../src/runtime/ProcedureRuntime';
 
 class FirstMiddleware
 {

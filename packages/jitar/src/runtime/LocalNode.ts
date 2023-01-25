@@ -21,11 +21,6 @@ export default class LocalNode extends Node
     #repository?: Repository;
     #clientId = '';
 
-    get gateway(): Gateway | undefined
-    {
-        return this.#gateway;
-    }
-
     getProcedureNames(): string[]
     {
         const names: Set<string> = new Set();

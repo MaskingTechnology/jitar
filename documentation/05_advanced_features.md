@@ -24,7 +24,7 @@ The RPC API is used to call procedures (functions) on a node.
 GET http://node.example.com:3000/rpc/greetings/sayHello?firstName=John HTTP/1.1
 ```
 
-The PRC API also supports the POST method. This is useful when passing complex or large amounts of data.
+The RPC API also supports the POST method. This is useful when passing complex or large amounts of data.
 
 ```http
 GET http://node.example.com:3000/rpc/greetings/sayHello HTTP/1.1
@@ -217,7 +217,7 @@ Top level await is not supported in Node.js yet, so we use the classic promise s
 
 ## Middleware
 
-Middleware provides a way to intercept and modify the request and response of a PRC call. It can be used to implement logging, authentication, and other cross-cutting concerns.
+Middleware provides a way to intercept and modify the request and response of a RPC call. It can be used to implement logging, authentication, and other cross-cutting concerns.
 
 A middleware is a class that implements the Middleware interface that has a single function to handle the request.
 
@@ -248,7 +248,7 @@ The ``headers`` contain the HTTP-headers that provide meta-information like auth
 Because all middleware is chained, the ``next`` parameter must always be called. This function does not take any arguments, all the arguments will be provided automatically.
 Note that the handle function is async so it can return a promise.
 
-When the Jitar server has started using the startServer hook we can register one or more middleware.
+When the Jitar server is started using the startServer hook we can register one or more middleware.
 
 {:.filename}
 src/start.ts
@@ -270,7 +270,7 @@ Middleware can be added to the [node](03_runtime_services#node), [gateway](03_ru
 [proxy](03_runtime_services#proxy) and [standalone](03_runtime_services#standalone) services support middleware.
 
 {:.alert-warning}
-The execution order of the middleware is reversed. This means that the middleware added last is called first.
+The execution order of the middleware is reversed. This means that the middleware that is added last is called first.
 
 ---
 

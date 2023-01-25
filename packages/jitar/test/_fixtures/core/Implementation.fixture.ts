@@ -22,7 +22,7 @@ function getParameters(mandatory: string, optional = 'default')
 function getContext(): unknown
 {
     // A function does not have a 'this' by default.
-    // TypeScript is (luckaly) very strict about it.
+    // TypeScript is (luckily) very strict about it.
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore

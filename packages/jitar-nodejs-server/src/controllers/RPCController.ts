@@ -91,8 +91,8 @@ export default class RPCController
         {
             if (RPC_PARAMETERS.includes(key))
             {
-                // We need to filter out the PRC parameters,
-                // because they are not a proceure argument.
+                // We need to filter out the RPC parameters,
+                // because they are not a procedure argument.
 
                 continue;
             }
@@ -126,7 +126,7 @@ export default class RPCController
             const lowerKey = key.toLowerCase();
             const stringValue = value.toString();
 
-            if (value === undefined || IGNORED_HEADER_KEYS.includes(lowerKey))
+            if (IGNORED_HEADER_KEYS.includes(lowerKey))
             {
                 continue;
             }
