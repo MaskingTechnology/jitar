@@ -1,0 +1,36 @@
+{
+  "name": "jitar-reflection",
+  "version": "0.1.0",
+  "description": "JavaScript reflection library for the Jitar runtime.",
+  "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
+  "license": "MIT",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist build",
+    "release": "npm run clean && npm run build && npm publish"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.15"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaskingTechnology/jitar"
+  },
+  "bugs": {
+    "url": "https://github.com/MaskingTechnology/jitar/issues"
+  },
+  "homepage": "https://jitar.dev",
+  "keywords": [
+    "javascript",
+    "reflection",
+    "jitar"
+  ]
+}
