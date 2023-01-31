@@ -1,17 +1,18 @@
 
-import Keyword from './Keyword.js';
-import Punctuation from './Punctuation.js';
+import Keyword from './definitions/Keyword.js';
+import Punctuation from './definitions/Punctuation.js';
 import Lexer from './Lexer.js';
 import TokenList from './TokenList.js';
-import TokenType from './TokenType.js';
-import Operator from './Operator.js';
+import TokenType from './definitions/TokenType.js';
+import Operator from './definitions/Operator.js';
 
+type Item = { type: 'field' | 'function' | 'class', name: string };
+type Field = Item & { value?: string };
+type Function = Item & { parameters: Field[] };
+type Class = Item & { parent?: string, members: Member[] };
+type Member = Field | Function | Class;
 type Export = { name: string, as: string };
-type Field = { name: string, value?: string };
-type Parameter = Field;
-type Function = { name: string, parameters: Parameter[] };
-type Class = { name: string, parent?: string, members: Member[] };
-type Member = Function | Field;
+type Module = { exports: Export[], members: Member[] };
 
 export default class Parser
 {
@@ -25,6 +26,7 @@ export default class Parser
     parse(code: string)
     {
         const tokenList = this.#lexer.tokenize(code);
+        const module = { exports: [], members: [] }
 
         while (tokenList.eof === false)
         {
@@ -33,7 +35,7 @@ export default class Parser
             switch (token.type)
             {
                 case TokenType.IDENTIFIER:
-                    this.#parseIdentifier(tokenList);
+                    this.#parseIdentifier(tokenList, module);
                     break;
 
                 default:
@@ -41,9 +43,11 @@ export default class Parser
                     tokenList.step();
             }
         }
+
+        return module;
     }
 
-    #parseIdentifier(tokenList: TokenList)
+    #parseIdentifier(tokenList: TokenList, module: Module): void
     {
         const token = tokenList.current;
 
@@ -52,19 +56,19 @@ export default class Parser
             case Keyword.EXPORT:
                 tokenList.step(); // Read away the export keyword
                 const exported = this.#parseExport(tokenList);
-                console.log('Exported', exported);
+                module.exports.push(...exported);
                 break;
             
             case Keyword.CLASS:
                 tokenList.step(); // Read away the class keyword
                 const clazz = this.#parseClass(tokenList);
-                console.log('Class', clazz);
+                module.members.push(clazz);
                 break;
 
             case Keyword.FUNCTION:
                 tokenList.step(); // Read away the function keyword
                 const funktion = this.#parseFunction(tokenList);
-                console.log('Function', funktion);
+                module.members.push(funktion);
                 break;
 
             case Keyword.VAR:
@@ -72,7 +76,7 @@ export default class Parser
             case Keyword.CONST:
                 tokenList.step(); // Read away the var/let/const keyword
                 const field = this.#parseField(tokenList);
-                console.log('Field', field);
+                module.members.push(field);
                 break;
 
             default:
@@ -178,10 +182,10 @@ export default class Parser
         
         const members = this.#parseMembers(tokenList);
 
-        return { name, parent, members };
+        return { type: 'class', name, parent, members };
     }
 
-    #parseMembers(tokenList: TokenList)
+    #parseMembers(tokenList: TokenList): Member[]
     {
         const members = [];
 
@@ -225,12 +229,12 @@ export default class Parser
         
         this.#skipScope(tokenList); // Read away the function body
 
-        return { name, parameters };
+        return { type: 'function', name, parameters };
     }
 
-    #parseParameters(tokenList: TokenList): Parameter[]
+    #parseParameters(tokenList: TokenList): Field[]
     {
-        const parameters: Parameter[] = [];
+        const parameters = [];
 
         tokenList.step(); // Read away the left parenthesis
 
@@ -278,7 +282,7 @@ export default class Parser
                 : token.value;
         }
 
-        return { name, value };
+        return { type: 'field', name, value };
     }
 
     #skipScope(tokenList: TokenList): void

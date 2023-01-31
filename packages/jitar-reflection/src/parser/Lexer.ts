@@ -1,21 +1,27 @@
 
+import Comment from './definitions/Comment.js';
+import Operator from './definitions/Operator.js';
+import Punctuation from './definitions/Punctuation.js';
 import Reader from './Reader.js';
 import Token from './Token.js';
 import TokenList from './TokenList.js';
-import TokenType from './TokenType.js';
+import TokenType from './definitions/TokenType.js';
+import Whitespace from './definitions/Whitespace.js';
+import Literal from './definitions/Literal.js';
 
 const EMPTY = [undefined, null, ''];
-const COMMENT_SINGLE = '//';
-const COMMENT_MULTI_START = '/*';
-const COMMENT_MULTI_END = '*/';
-const WHITESPACE = [' ', '\t', '\n', '\r'];
-const OPERATOR = ['+', '-', '/', '*', '=', '<', '>', '|', '&'];
-const LITERAL = ["'", '"', '`'];
-const SEPARATOR = ',';
-const TERMINATOR = ';';
-const NEWLINE = '\n';
-const SCOPE = ['{', '}'];
-const GROUP = ['(', ')'];
+const COMMENT_SINGLE = Comment.SINGLE;
+const COMMENT_MULTI_START = Comment.MULTI_START;
+const COMMENT_MULTI_END = Comment.MULTI_END;
+const WHITESPACE = Object.values(Whitespace);
+const OPERATORS = Object.values(Operator);
+const LITERALS = Object.values(Literal);
+const SEPARATOR = Punctuation.COMMA;
+const TERMINATOR = Punctuation.SEMICOLON;
+const NEWLINE = Whitespace.NEWLINE;
+const SCOPE = [Punctuation.LEFT_BRACE, Punctuation.RIGHT_BRACE];
+const GROUP = [Punctuation.LEFT_PARENTHESIS, Punctuation.RIGHT_PARENTHESIS];
+const ARRAY = [Punctuation.LEFT_BRACKET, Punctuation.RIGHT_BRACKET];
 
 export default class Lexer
 {
@@ -93,6 +99,12 @@ export default class Lexer
 
             return new Token(TokenType.SCOPE, char, start, end);
         }
+        else if (this.#isArray(char))
+        {
+            const end = reader.position;
+
+            return new Token(TokenType.SCOPE, char, start, end);
+        }
         else if (this.#isEmpty(char))
         {
             return undefined;
@@ -111,12 +123,12 @@ export default class Lexer
 
     #isLiteral(char: string): boolean
     {
-        return LITERAL.includes(char);
+        return LITERALS.includes(char);
     }
 
     #isOperator(char: string): boolean
     {
-        return OPERATOR.includes(char);
+        return OPERATORS.includes(char);
     }
 
     #isSeparator(char: string): boolean
@@ -137,6 +149,11 @@ export default class Lexer
     #isScope(char: string): boolean
     {
         return SCOPE.includes(char);
+    }
+
+    #isArray(char: string): boolean
+    {
+        return ARRAY.includes(char);
     }
 
     #isEmpty(char: string): boolean
