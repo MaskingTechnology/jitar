@@ -66,7 +66,7 @@ export default class Lexer
         {
             const end = reader.position;
 
-            return new Token(TokenType.SEPARATOR, '', start, end);
+            return new Token(TokenType.SEPARATOR, char, start, end);
         }
         else if (this.#isOperator(char))
         {
@@ -79,7 +79,7 @@ export default class Lexer
         {
             const end = reader.position;
 
-            return new Token(TokenType.TERMINATOR, '', start, end);
+            return new Token(TokenType.TERMINATOR, char, start, end);
         }
         else if (this.#isGroup(char))
         {
