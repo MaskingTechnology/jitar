@@ -1,6 +1,7 @@
 
 import Reader from './Reader.js';
 import Token from './Token.js';
+import TokenList from './TokenList.js';
 import TokenType from './TokenType.js';
 
 const EMPTY = [undefined, null, ''];
@@ -18,7 +19,7 @@ const GROUP = ['(', ')'];
 
 export default class Lexer
 {
-    tokenize(code: string): Token[]
+    tokenize(code: string): TokenList
     {
         const reader = new Reader(code);
         const tokens: Token[] = [];
@@ -37,7 +38,7 @@ export default class Lexer
             reader.step();
         }
 
-        return tokens;
+        return new TokenList(tokens);
     }
 
     #getNextToken(reader: Reader): Token | undefined
@@ -215,7 +216,7 @@ export default class Lexer
             reader.step();
         }
 
-        return value;
+        return value.trim();
     }
 
     #readLiteral(reader: Reader): string
@@ -254,7 +255,7 @@ export default class Lexer
             if (this.#isIdentifier(char) === false)
             {
                 reader.stepBack();
-                
+
                 break;
             }
 
