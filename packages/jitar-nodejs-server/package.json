@@ -27,7 +27,7 @@
         "express-http-proxy": "^1.6.3",
         "fs-extra": "^11.1.0",
         "glob": "^8.0.3",
-        "glob-promise": "6.0.0",
+        "glob-promise": "6.0.2",
         "mime-types": "^2.1.35",
         "tslog": "^4.6.0",
         "yargs": "^17.6.2",
