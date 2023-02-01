@@ -1,28 +1,20 @@
 
-import Comment from './definitions/Comment.js';
-import Operator from './definitions/Operator.js';
-import Punctuation from './definitions/Punctuation.js';
-import TokenType from './definitions/TokenType.js';
-import Whitespace from './definitions/Whitespace.js';
-import Literal from './definitions/Literal.js';
+import { isArray } from './definitions/Array.js';
+import { Comment, isComment } from './definitions/Comment.js';
+import { isSeparator, isTerminator } from './definitions/Division.js';
+import { isGroup } from './definitions/Group.js';
+import { isKeyword } from './definitions/Keyword.js';
+import { isLiteral } from './definitions/Literal.js';
+import { isOperator } from './definitions/Operator.js';
+import { isScope } from './definitions/Scope.js';
+import { TokenType } from './definitions/TokenType.js';
+import { Whitespace, isWhitespace } from './definitions/Whitespace.js';
 
 import CharList from './CharList.js';
 import Token from './Token.js';
 import TokenList from './TokenList.js';
 
 const EMPTY = [undefined, null, ''];
-const COMMENT_SINGLE = Comment.SINGLE;
-const COMMENT_MULTI_START = Comment.MULTI_START;
-const COMMENT_MULTI_END = Comment.MULTI_END;
-const WHITESPACE = Object.values(Whitespace);
-const OPERATORS = Object.values(Operator);
-const LITERALS = Object.values(Literal);
-const SEPARATOR = Punctuation.COMMA;
-const TERMINATOR = Punctuation.SEMICOLON;
-const NEWLINE = Whitespace.NEWLINE;
-const SCOPE = [Punctuation.LEFT_BRACE, Punctuation.RIGHT_BRACE];
-const GROUP = [Punctuation.LEFT_PARENTHESIS, Punctuation.RIGHT_PARENTHESIS];
-const ARRAY = [Punctuation.LEFT_BRACKET, Punctuation.RIGHT_BRACKET];
 
 export default class Lexer
 {
@@ -55,52 +47,52 @@ export default class Lexer
         const char = charList.current;
         const start = charList.position;
 
-        if (this.#isComment(char + charList.next))
+        if (isComment(char + charList.next))
         {
             const value = this.#readComment(charList);
             const end = charList.position;
 
             return new Token(TokenType.COMMENT, value, start, end);
         }
-        else if (this.#isLiteral(char))
+        else if (isLiteral(char))
         {
             const value = this.#readLiteral(charList);
             const end = charList.position;
 
             return new Token(TokenType.LITERAL, value, start, end);
         }
-        else if (this.#isSeparator(char))
+        else if (isSeparator(char))
         {
             const end = charList.position;
 
             return new Token(TokenType.SEPARATOR, char, start, end);
         }
-        else if (this.#isOperator(char))
+        else if (isOperator(char))
         {
             const value = this.#readOperation(charList);
             const end = charList.position;
 
             return new Token(TokenType.OPERATOR, value, start, end);
         }
-        else if (this.#isTerminator(char))
+        else if (isTerminator(char))
         {
             const end = charList.position;
 
             return new Token(TokenType.TERMINATOR, char, start, end);
         }
-        else if (this.#isGroup(char))
+        else if (isGroup(char))
         {
             const end = charList.position;
 
             return new Token(TokenType.GROUP, char, start, end);
         }
-        else if (this.#isScope(char))
+        else if (isScope(char))
         {
             const end = charList.position;
 
             return new Token(TokenType.SCOPE, char, start, end);
         }
-        else if (this.#isArray(char))
+        else if (isArray(char))
         {
             const end = charList.position;
 
@@ -112,49 +104,10 @@ export default class Lexer
         }
 
         const value = this.#readIdentifier(charList);
+        const type = isKeyword(value) ? TokenType.KEYWORD : TokenType.IDENTIFIER;
         const end = charList.position;
 
-        return new Token(TokenType.IDENTIFIER, value, start, end);
-    }
-
-    #isWhiteSpace(char: string): boolean
-    {
-        return WHITESPACE.includes(char);
-    }
-
-    #isLiteral(char: string): boolean
-    {
-        return LITERALS.includes(char);
-    }
-
-    #isOperator(char: string): boolean
-    {
-        return OPERATORS.includes(char);
-    }
-
-    #isSeparator(char: string): boolean
-    {
-        return char === SEPARATOR;
-    }
-
-    #isTerminator(char: string): boolean
-    {
-        return char === TERMINATOR;
-    }
-
-    #isGroup(char: string): boolean
-    {
-        return GROUP.includes(char);
-    }
-
-    #isScope(char: string): boolean
-    {
-        return SCOPE.includes(char);
-    }
-
-    #isArray(char: string): boolean
-    {
-        return ARRAY.includes(char);
+        return new Token(type, value, start, end);
     }
 
     #isEmpty(char: string): boolean
@@ -162,21 +115,15 @@ export default class Lexer
         return EMPTY.includes(char);
     }
 
-    #isComment(chars: string): boolean
-    {
-        return chars === COMMENT_SINGLE
-            || chars === COMMENT_MULTI_START;
-    }
-
     #isIdentifier(char: string): boolean
     {
         const isOther =
                this.#isEmpty(char)
-            || this.#isWhiteSpace(char)
-            || this.#isOperator(char)
-            || this.#isSeparator(char)
-            || this.#isTerminator(char)
-            || this.#isGroup(char);
+            || isWhitespace(char)
+            || isOperator(char)
+            || isSeparator(char)
+            || isTerminator(char)
+            || isGroup(char);
 
         return isOther === false;
     }
@@ -189,14 +136,14 @@ export default class Lexer
         {
             const char = charList.current;
 
-            if (this.#isComment(char))
+            if (isComment(char))
             {
                 inComment = !inComment;
                 
                 continue;
             }
 
-            const skip = inComment || this.#isWhiteSpace(char);
+            const skip = inComment || isWhitespace(char);
 
             if (skip === false)
             {
@@ -210,8 +157,8 @@ export default class Lexer
     #readComment(charList: CharList): string
     {
         const identifier = charList.current + charList.next;
-        const isMulti = identifier === COMMENT_MULTI_START;
-        const terminator = isMulti ? COMMENT_MULTI_END : NEWLINE;
+        const isMulti = identifier === Comment.MULTI_START;
+        const terminator = isMulti ? Comment.MULTI_END : Whitespace.NEWLINE;
 
         charList.step(2);
 
@@ -249,7 +196,7 @@ export default class Lexer
         {
             const char = charList.current;
 
-            if (this.#isLiteral(char) && char === identifier)
+            if (isLiteral(char) && char === identifier)
             {
                 break;
             }
@@ -295,7 +242,7 @@ export default class Lexer
         {
             const char = charList.current;
 
-            if (!this.#isOperator(char))
+            if (!isOperator(char))
             {
                 break;
             }

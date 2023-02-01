@@ -3,6 +3,7 @@ const TokenType =
 {
     COMMENT: 'comment',
     IDENTIFIER: 'identifier',
+    KEYWORD: 'keyword',
     LITERAL: 'literal',
     OPERATOR: 'operator',
     SEPARATOR: 'separator',
@@ -11,4 +12,4 @@ const TokenType =
     GROUP: 'group'
 };
 
-export default TokenType;
+export { TokenType };

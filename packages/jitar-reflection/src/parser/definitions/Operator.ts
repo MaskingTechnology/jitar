@@ -14,4 +14,11 @@ const Operator =
     ASSIGN: '='
 };
 
-export default Operator;
+const Operators = Object.values(Operator);
+
+function isOperator(value: string): boolean
+{
+    return Operators.includes(value);
+}
+
+export { Operator, Operators, isOperator };

@@ -2,10 +2,9 @@
 import Lexer from './Lexer.js';
 import TokenList from './TokenList.js';
 
-import Keyword from './definitions/Keyword.js';
-import Punctuation from './definitions/Punctuation.js';
-import TokenType from './definitions/TokenType.js';
-import Operator from './definitions/Operator.js';
+import { Keyword, isKeyword } from './definitions/Keyword.js';
+import { TokenType } from './definitions/TokenType.js';
+import { Operator } from './definitions/Operator.js';
 
 import ReflectionModule from '../models/ReflectionModule.js';
 import ReflectionMember from '../models/ReflectionMember.js';
@@ -13,6 +12,16 @@ import ReflectionExport from '../models/ReflectionExport.js';
 import ReflectionClass from '../models/ReflectionClass.js';
 import ReflectionFunction from '../models/ReflectionFunction.js';
 import ReflectionField from '../models/ReflectionField.js';
+import { Scope } from './definitions/Scope.js';
+import { Division } from './definitions/Division.js';
+import { Group } from './definitions/Group.js';
+import { Array } from './definitions/Array.js';
+
+// TODO: Add support for parsing expressions
+// TODO: Add support for parsing getters and setters
+// TODO: Add support for parsing anonymous functions
+// TODO: Add support for parsing arrow functions
+// TODO: Add support for parsing imports
 
 export default class Parser
 {
@@ -35,8 +44,8 @@ export default class Parser
 
             switch (token.type)
             {
-                case TokenType.IDENTIFIER:
-                    const parsed = this.#parseIdentifier(tokenList);
+                case TokenType.KEYWORD:
+                    const parsed = this.#parseKeyword(tokenList);
 
                     if (parsed === undefined)
                     {
@@ -51,6 +60,7 @@ export default class Parser
 
                 default:
                     // We have no interest in parsing other tokens
+                    // because they are not part of the module
                     tokenList.step();
             }
         }
@@ -58,7 +68,7 @@ export default class Parser
         return new ReflectionModule(members, exports);
     }
 
-    #parseIdentifier(tokenList: TokenList, isAsync = false): ReflectionExport[] | ReflectionMember | undefined
+    #parseKeyword(tokenList: TokenList, isAsync = false): ReflectionExport[] | ReflectionMember | undefined
     {
         const token = tokenList.current;
 
@@ -84,11 +94,10 @@ export default class Parser
 
             case Keyword.ASYNC:
                 tokenList.step(); // Read away the async keyword
-                return this.#parseIdentifier(tokenList, true);
+                return this.#parseKeyword(tokenList, true);
 
             default:
-                // We have no interest in parsing other literals
-                tokenList.step();
+                throw new Error(`Unexpected keyword: ${token.value}`);
         }
     }
 
@@ -102,7 +111,7 @@ export default class Parser
                 tokenList.step(); // Read away the default keyword
                 return this.#parseSingleExport(tokenList, true);
 
-            case Punctuation.LEFT_BRACE:
+            case Scope.OPEN:
                 return this.#parseMultiExport(tokenList);
 
             default:
@@ -143,12 +152,12 @@ export default class Parser
         {
             let token = tokenList.step();
             
-            if (token.value === Punctuation.RIGHT_BRACE)
+            if (token.value === Scope.CLOSE)
             {
                 break;
             }
 
-            if (token.value === Punctuation.COMMA)
+            if (token.value === Division.SEPARATOR)
             {
                 continue;
             }
@@ -201,7 +210,7 @@ export default class Parser
         {
             const token = tokenList.step();
 
-            if (token.value === Punctuation.RIGHT_BRACE)
+            if (token.value === Scope.CLOSE)
             {
                 break;
             }
@@ -220,7 +229,7 @@ export default class Parser
 
             const nextToken = tokenList.next;
 
-            const member = nextToken.value === Punctuation.LEFT_PARENTHESIS
+            const member = nextToken.value === Group.OPEN
                 ? this.#parseFunction(tokenList, isStatic, isAsync)
                 : this.#parseField(tokenList, isStatic);
             
@@ -243,7 +252,7 @@ export default class Parser
 
         const parameters = this.#parseParameters(tokenList);
 
-        tokenList.step(); // Read away the right parenthesis
+        tokenList.step(); // Read away the group close
         
         const body = this.#parseBody(tokenList);
 
@@ -254,20 +263,20 @@ export default class Parser
     {
         const parameters = [];
 
-        tokenList.step(); // Read away the left parenthesis
+        tokenList.step(); // Read away the group open
 
         while (tokenList.eof === false)
         {
             const token = tokenList.current;
 
-            if (token.value === Punctuation.RIGHT_PARENTHESIS)
+            if (token.value === Group.CLOSE)
             {
                 break;
             }
 
-            if (token.value === Punctuation.COMMA)
+            if (token.value === Division.SEPARATOR)
             {
-                tokenList.step(); // Read away the comma
+                tokenList.step(); // Read away the separator
 
                 continue;
             }
@@ -293,7 +302,6 @@ export default class Parser
 
         if (token.value === Operator.ASSIGN)
         {
-            token = tokenList.step(); // Read away the assign operator
             value = this.#parseExpression(tokenList);
         }
 
@@ -302,9 +310,42 @@ export default class Parser
 
     #parseExpression(tokenList: TokenList): string
     {
-        const token = tokenList.step(); // Read away the value
+        let code = '';
 
-        return token.value;
+        while (tokenList.eof === false)
+        {
+            const token = tokenList.step();
+
+            if (token.value === Division.TERMINATOR)
+            {
+                return code;
+            }
+
+            if (isKeyword(token.value))
+            {
+                tokenList.stepBack();
+
+                return code;
+            }
+
+            code += token.value + ' ';
+
+            switch (token.value)
+            {
+                case Array.OPEN:
+                case Group.OPEN:
+                case Scope.OPEN:
+                    code += this.#parseExpression(tokenList);
+                    break;
+
+                case Array.CLOSE:
+                case Group.CLOSE:
+                case Scope.CLOSE:
+                    return code;
+            }
+        }
+        
+        return code;
     }
 
     #parseBody(tokenList: TokenList): string
@@ -319,11 +360,11 @@ export default class Parser
 
             switch (token.value)
             {
-                case Punctuation.LEFT_BRACE:
+                case Scope.OPEN:
                     code += this.#parseBody(tokenList);
                     break;
 
-                case Punctuation.RIGHT_BRACE:
+                case Scope.CLOSE:
                     return code;
             }
         }

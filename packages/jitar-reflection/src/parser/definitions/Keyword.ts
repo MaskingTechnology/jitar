@@ -9,8 +9,8 @@ const Keyword =
     LET: 'let',
     VAR: 'var',
     AS: 'as',
-    FROM: 'from',
-    IMPORT: 'import',
+    //FROM: 'from',
+    //IMPORT: 'import',
     GET: 'get',
     SET: 'set',
     CONSTRUCTOR: 'constructor',
@@ -19,4 +19,11 @@ const Keyword =
     ASYNC: 'async'
 };
 
-export default Keyword;
+const Keywords = Object.values(Keyword);
+
+function isKeyword(value: string): boolean
+{
+    return Keywords.includes(value);
+}
+
+export { Keyword, Keywords, isKeyword };

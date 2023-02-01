@@ -18,4 +18,11 @@ const Punctuation =
     BACKTICK: '`'
 };
 
-export default Punctuation;
+const Punctuations = Object.values(Punctuation);
+
+function isPunctuation(value: string): boolean
+{
+    return Punctuations.includes(value);
+}
+
+export { Punctuation, Punctuations, isPunctuation };

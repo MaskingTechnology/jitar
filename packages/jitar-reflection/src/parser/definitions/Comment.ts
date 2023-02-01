@@ -6,4 +6,11 @@ const Comment =
     MULTI_END: "*/"
 };
 
-export default Comment;
+const Comments = Object.values(Comment);
+
+function isComment(value: string): boolean
+{
+    return Comments.includes(value);
+}
+
+export { Comment, Comments, isComment };

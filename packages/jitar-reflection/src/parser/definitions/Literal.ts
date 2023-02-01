@@ -6,4 +6,11 @@ const Literal =
     BACKTICK: "`"
 };
 
-export default Literal;
+const Literals = Object.values(Literal);
+
+function isLiteral(value: string): boolean
+{
+    return Literals.includes(value);
+}
+
+export { Literal, Literals, isLiteral };
