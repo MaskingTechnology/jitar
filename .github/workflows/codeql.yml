@@ -18,8 +18,8 @@ on:
     # The branches below must be a subset of the branches above
     branches: [ "main" ]
     paths-ignore:
-      - 'examples'
-      - '**/test/**/*.ts'
+      - 'examples/**'
+      - '**/test/**'
   schedule:
     - cron: '39 10 * * 1'
 
