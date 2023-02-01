@@ -15,11 +15,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - packages
+      - 'packages/**/'
   pull_request:
     branches: [ "main" ]
     paths:
-      - packages
+      - 'packages/**/'
   schedule:
     - cron: '39 10 * * 1'
 
