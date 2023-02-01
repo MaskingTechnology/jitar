@@ -7,52 +7,32 @@ import ReflectionMember from './models/ReflectionMember.js';
 import ReflectionSetter from './models/ReflectionSetter.js';
 import Parser from './parser/Parser.js';
 
-const code = `
-import express from 'express';
+import fs from 'fs';
+import ReflectionImport from './models/ReflectionImport.js';
+import ReflectionExport from './models/ReflectionExport.js';
 
-const api = express();
-api.use(express.json());
-
-export class Person
-{
-    #name;
-    #age = 42;
-
-    static count = Math.round(10 * Math.random());
-
-    constructor(name, age)
-    {
-        this.#name = name;
-        this.#age = age;
-    }
-
-    get name() { return this.#name; }
-
-    set name(value) { this.#name = value; }
-
-    toString() { return this.#name + ' is ' + this.#age + ' years old'; }
-}
-
-const PI = 3.14;
-const E = 2.71;
-
-export { PI, E as Euler };
-
-class Peter extends Person {}
-
-export default async function createPerson(name, age = 42)
-{
-    return new Person(name, age);
-}
-
-function buildPeter() { return new Peter('Peter', 42); }
-`;
+const code = fs.readFileSync('testcontent.js', 'utf8');
 
 const parser = new Parser();
 const module = parser.parse(code);
-const members = module.exported;
 
+const imports = module.imports;
+const members = module.members;
+const exports = module.exports;
+
+//imports.forEach(imp => printImport(imp));
 members.forEach(member => printMember(member));
+//exports.forEach(exp => printExport(exp));
+
+function printImport(model: ReflectionImport)
+{
+    console.log(`import ${model.name} as ${model.as} from ${model.from}`);
+}
+
+function printExport(model: ReflectionExport)
+{
+    console.log(`export ${model.name} as ${model.as}`);
+}
 
 function printMember(member: ReflectionMember, level = 0)
 {
