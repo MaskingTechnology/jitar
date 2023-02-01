@@ -2,10 +2,10 @@
 import Lexer from './Lexer.js';
 import TokenList from './TokenList.js';
 
-import { Array } from './definitions/Array.js';
 import { Division } from './definitions/Division.js';
 import { Group } from './definitions/Group.js';
 import { Keyword, isKeyword } from './definitions/Keyword.js';
+import { List } from './definitions/List.js';
 import { Operator } from './definitions/Operator.js';
 import { Scope } from './definitions/Scope.js';
 import { TokenType } from './definitions/TokenType.js';
@@ -18,10 +18,11 @@ import ReflectionFunction from '../models/ReflectionFunction.js';
 import ReflectionField from '../models/ReflectionField.js';
 import ReflectionGetter from '../models/ReflectionGetter.js';
 import ReflectionSetter from '../models/ReflectionSetter.js';
+import ReflectionImport from '../models/ReflectionImport.js';
+import ReflectionModel from '../models/ReflectionModel.js';
 
 // TODO: Add support for parsing anonymous functions
 // TODO: Add support for parsing arrow functions
-// TODO: Add support for parsing imports
 
 export default class Parser
 {
@@ -35,8 +36,34 @@ export default class Parser
     parse(code: string): ReflectionModule
     {
         const tokenList = this.#lexer.tokenize(code);
+        const models = this.#parseTokens(tokenList);
+
+        const imports: ReflectionImport[] = [];
         const members: ReflectionMember[] = [];
         const exports: ReflectionExport[] = [];
+
+        for (const model of models)
+        {
+            if (model instanceof ReflectionImport)
+            {
+                imports.push(model);
+            }
+            else if (model instanceof ReflectionMember)
+            {
+                members.push(model);
+            }
+            else if (model instanceof ReflectionExport)
+            {
+                exports.push(model);
+            }
+        }
+
+        return new ReflectionModule(imports, members, exports);
+    }
+
+    #parseTokens(tokenList: TokenList): ReflectionModel[]
+    {
+        const models: ReflectionModel[] = [];
 
         while (tokenList.eof === false)
         {
@@ -45,16 +72,16 @@ export default class Parser
             switch (token.type)
             {
                 case TokenType.KEYWORD:
-                    const parsed = this.#parseKeyword(tokenList);
+                    const model = this.#parseKeyword(tokenList);
 
-                    if (parsed === undefined)
+                    if (model === undefined)
                     {
                         break;
                     }
 
-                    parsed instanceof ReflectionMember
-                        ? members.push(parsed)
-                        : exports.push(...parsed);
+                    model instanceof Array
+                        ? models.push(...model)
+                        : models.push(model);
                     
                     break;
 
@@ -65,15 +92,19 @@ export default class Parser
             }
         }
 
-        return new ReflectionModule(members, exports);
+        return models;
     }
 
-    #parseKeyword(tokenList: TokenList, isAsync = false): ReflectionExport[] | ReflectionMember | undefined
+    #parseKeyword(tokenList: TokenList, isAsync = false): ReflectionModel[] | ReflectionModel | undefined
     {
         const token = tokenList.current;
 
         switch (token.value)
         {
+            case Keyword.IMPORT:
+                tokenList.step(); // Read away the import keyword
+                return this.#parseImport(tokenList);
+            
             case Keyword.EXPORT:
                 tokenList.step(); // Read away the export keyword
                 return this.#parseExport(tokenList);
@@ -101,7 +132,80 @@ export default class Parser
         }
     }
 
-    #parseExport(tokenList: TokenList): ReflectionExport[]
+    #parseImport(tokenList: TokenList): ReflectionImport[] | ReflectionImport
+    {
+        const token = tokenList.current;
+
+        if (token.value === Scope.OPEN)
+        {
+            return this.#parseMultiImport(tokenList);
+        }
+
+        return this.#parseSingleImport(tokenList);
+    }
+
+    #parseSingleImport(tokenList: TokenList): ReflectionImport
+    {
+        let token = tokenList.current;
+
+        const name = token.value;
+        let as = name;
+
+        if (tokenList.next.value === Keyword.AS)
+        {
+            token = tokenList.step(2); // Read away the AS keyword
+            as = token.value;
+        }
+
+        if (tokenList.next.value === Keyword.FROM)
+        {
+            token = tokenList.step(2); // Read away the FROM keyword
+            const from = token.value;
+
+            return new ReflectionImport(name, as, from);
+        }
+
+        // Direct import without grabbing a specific name
+        return new ReflectionImport('', '', name);
+    }
+
+    #parseMultiImport(tokenList: TokenList): ReflectionImport[]
+    {
+        const identifiers = [];
+
+        while (tokenList.eof === false)
+        {
+            let token = tokenList.step();
+            
+            if (token.value === Scope.CLOSE)
+            {
+                break;
+            }
+
+            if (token.value === Division.SEPARATOR)
+            {
+                continue;
+            }
+
+            const name = token.value;
+            let as = name;
+
+            if (tokenList.next.value === Keyword.AS)
+            {
+                token = tokenList.step(2); // Read away the AS keyword
+                as = token.value;
+            }
+
+            identifiers.push({ name, as });
+        }
+
+        const token = tokenList.step(2); // Read away the FROM keyword
+        const from = token.value;
+
+        return identifiers.map(identifier => new ReflectionImport(identifier.name, identifier.as, from));
+    }
+
+    #parseExport(tokenList: TokenList): ReflectionExport[] | ReflectionExport
     {
         const token = tokenList.current;
 
@@ -119,7 +223,7 @@ export default class Parser
         }
     }
 
-    #parseSingleExport(tokenList: TokenList, isDefault: boolean): ReflectionExport[]
+    #parseSingleExport(tokenList: TokenList, isDefault: boolean): ReflectionExport
     {
         let token = tokenList.current;
         let stepSize = 0;
@@ -141,7 +245,7 @@ export default class Parser
 
         tokenList.stepBack(stepSize); // Step back to the original position
 
-        return [new ReflectionExport(name, as)];
+        return new ReflectionExport(name, as);
     }
 
     #parseMultiExport(tokenList: TokenList): ReflectionExport[]
@@ -167,7 +271,7 @@ export default class Parser
 
             if (tokenList.next.value === Keyword.AS)
             {
-                token = tokenList.step(2); // Read away the AS keyword and use the alternative name
+                token = tokenList.step(2); // Read away the AS keyword
                 as = token.value;
             }
 
@@ -358,13 +462,13 @@ export default class Parser
 
             switch (token.value)
             {
-                case Array.OPEN:
+                case List.OPEN:
                 case Group.OPEN:
                 case Scope.OPEN:
                     code += this.#parseExpression(tokenList);
                     break;
 
-                case Array.CLOSE:
+                case List.CLOSE:
                 case Group.CLOSE:
                 case Scope.CLOSE:
                     return code;

@@ -3,11 +3,11 @@ import CharList from './CharList.js';
 import Token from './Token.js';
 import TokenList from './TokenList.js';
 
-import { isArray } from './definitions/Array.js';
 import { Comment, isComment } from './definitions/Comment.js';
 import { isSeparator, isTerminator } from './definitions/Division.js';
 import { isGroup } from './definitions/Group.js';
 import { isKeyword } from './definitions/Keyword.js';
+import { isList } from './definitions/List.js';
 import { isLiteral } from './definitions/Literal.js';
 import { isOperator } from './definitions/Operator.js';
 import { isScope } from './definitions/Scope.js';
@@ -92,7 +92,7 @@ export default class Lexer
 
             return new Token(TokenType.SCOPE, char, start, end);
         }
-        else if (isArray(char))
+        else if (isList(char))
         {
             const end = charList.position;
 

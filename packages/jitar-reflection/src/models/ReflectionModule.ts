@@ -1,20 +1,29 @@
 
+import ReflectionModel from './ReflectionModel.js';
+
 import ReflectionClass from './ReflectionClass.js';
 import ReflectionExport from './ReflectionExport.js';
 import ReflectionField from './ReflectionField.js';
 import ReflectionFunction from './ReflectionFunction.js';
+import ReflectionImport from './ReflectionImport.js';
 import ReflectionMember from './ReflectionMember.js';
 
-export default class ReflectionModule
+export default class ReflectionModule extends ReflectionModel
 {
+    #imports: ReflectionImport[];
     #members: ReflectionMember[];
     #exports: ReflectionExport[];
 
-    constructor(member: ReflectionMember[], exports: ReflectionExport[] = [])
+    constructor(imports: ReflectionImport[], member: ReflectionMember[], exports: ReflectionExport[] = [])
     {
+        super();
+        
+        this.#imports = imports;
         this.#members = member;
         this.#exports = exports;
     }
+
+    get imports(): ReflectionImport[] { return this.#imports; }
 
     get members(): ReflectionMember[] { return this.#members; }
 
