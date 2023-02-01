@@ -16,9 +16,9 @@ import { Scope } from './definitions/Scope.js';
 import { Division } from './definitions/Division.js';
 import { Group } from './definitions/Group.js';
 import { Array } from './definitions/Array.js';
+import ReflectionGetter from '../models/ReflectionGetter.js';
+import ReflectionSetter from '../models/ReflectionSetter.js';
 
-// TODO: Add support for parsing expressions
-// TODO: Add support for parsing getters and setters
 // TODO: Add support for parsing anonymous functions
 // TODO: Add support for parsing arrow functions
 // TODO: Add support for parsing imports
@@ -84,7 +84,7 @@ export default class Parser
 
             case Keyword.FUNCTION:
                 tokenList.step(); // Read away the function keyword
-                return this.#parseFunction(tokenList, false, isAsync);
+                return this.#parseFunction(tokenList, isAsync);
 
             case Keyword.VAR:
             case Keyword.LET:
@@ -205,6 +205,8 @@ export default class Parser
 
         let isAsync = false;
         let isStatic = false;
+        let isGetter = false;
+        let isSetter = false;
 
         while (tokenList.eof === false)
         {
@@ -227,14 +229,28 @@ export default class Parser
                 continue;
             }
 
+            if (token.value === Keyword.GET)
+            {
+                isGetter = true;
+                continue;
+            }
+
+            if (token.value === Keyword.SET)
+            {
+                isSetter = true;
+                continue;
+            }
+
             const nextToken = tokenList.next;
 
             const member = nextToken.value === Group.OPEN
-                ? this.#parseFunction(tokenList, isStatic, isAsync)
+                ? this.#parseFunction(tokenList, isAsync, isStatic, isGetter, isSetter)
                 : this.#parseField(tokenList, isStatic);
             
             isStatic = false;
             isAsync = false;
+            isGetter = false;
+            isSetter = false;
 
             members.push(member);
         }
@@ -242,7 +258,7 @@ export default class Parser
         return members;
     }
 
-    #parseFunction(tokenList: TokenList, isStatic: boolean, isAsync: boolean): ReflectionFunction
+    #parseFunction(tokenList: TokenList, isAsync: boolean, isStatic = false, isGetter = false, isSetter = false): ReflectionFunction
     {
         const token = tokenList.current;
         const isPrivate = token.value.startsWith('#');
@@ -255,6 +271,16 @@ export default class Parser
         tokenList.step(); // Read away the group close
         
         const body = this.#parseBody(tokenList);
+
+        if (isGetter)
+        {
+            return new ReflectionGetter(name, parameters, body, isStatic, isAsync, isPrivate);
+        }
+
+        if (isSetter)
+        {
+            return new ReflectionSetter(name, parameters, body, isStatic, isAsync, isPrivate);
+        }
 
         return new ReflectionFunction(name, parameters, body, isStatic, isAsync, isPrivate);
     }
@@ -356,16 +382,16 @@ export default class Parser
         {
             const token = tokenList.step();
 
+            if (token.value === Scope.CLOSE)
+            {
+                return code;
+            }
+
             code += token.value + ' ';
 
-            switch (token.value)
+            if (token.value === Scope.OPEN)
             {
-                case Scope.OPEN:
-                    code += this.#parseBody(tokenList);
-                    break;
-
-                case Scope.CLOSE:
-                    return code;
+                code += this.#parseBody(tokenList);
             }
         }
 

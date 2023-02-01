@@ -13,7 +13,6 @@ const Keyword =
     //IMPORT: 'import',
     GET: 'get',
     SET: 'set',
-    CONSTRUCTOR: 'constructor',
     EXTENDS: 'extends',
     STATIC: 'static',
     ASYNC: 'async'
