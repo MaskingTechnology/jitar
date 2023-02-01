@@ -14,10 +14,12 @@ name: "CodeQL"
 on:
   push:
     branches: [ "main" ]
-  pull_request:
     paths:
-        - 'packages/**'
+      - packages
+  pull_request:
     branches: [ "main" ]
+    paths:
+      - packages
   schedule:
     - cron: '39 10 * * 1'
 
