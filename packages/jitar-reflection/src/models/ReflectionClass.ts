@@ -17,10 +17,15 @@ export default class ReflectionClass extends ReflectionMember
     }
 
     get parentName(): string | undefined { return this.#parentName; }
-    
+
     get members(): ReflectionMember[] { return this.#members; }
 
     get fields(): ReflectionMember[] { return this.#members.filter(member => member instanceof ReflectionField); }
 
     get functions(): ReflectionMember[] { return this.#members.filter(member => member instanceof ReflectionFunction); }
+
+    getMember(name: string): ReflectionMember | undefined
+    {
+        return this.#members.find(member => member.name === name);
+    }
 }

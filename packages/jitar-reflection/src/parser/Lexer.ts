@@ -2,12 +2,13 @@
 import Comment from './definitions/Comment.js';
 import Operator from './definitions/Operator.js';
 import Punctuation from './definitions/Punctuation.js';
-import Reader from './Reader.js';
-import Token from './Token.js';
-import TokenList from './TokenList.js';
 import TokenType from './definitions/TokenType.js';
 import Whitespace from './definitions/Whitespace.js';
 import Literal from './definitions/Literal.js';
+
+import CharList from './CharList.js';
+import Token from './Token.js';
+import TokenList from './TokenList.js';
 
 const EMPTY = [undefined, null, ''];
 const COMMENT_SINGLE = Comment.SINGLE;
@@ -27,12 +28,12 @@ export default class Lexer
 {
     tokenize(code: string): TokenList
     {
-        const reader = new Reader(code);
+        const charList = new CharList(code);
         const tokens: Token[] = [];
 
-        while (reader.eof === false)
+        while (charList.eof === false)
         {
-            const token = this.#getNextToken(reader);
+            const token = this.#getNextToken(charList);
 
             if (token === undefined)
             {
@@ -41,67 +42,67 @@ export default class Lexer
 
             tokens.push(token);
             
-            reader.step();
+            charList.step();
         }
 
         return new TokenList(tokens);
     }
 
-    #getNextToken(reader: Reader): Token | undefined
+    #getNextToken(charList: CharList): Token | undefined
     {
-        this.#skipIgnored(reader);
+        this.#skipIgnored(charList);
 
-        const char = reader.current;
-        const start = reader.position;
+        const char = charList.current;
+        const start = charList.position;
 
-        if (this.#isComment(char + reader.next))
+        if (this.#isComment(char + charList.next))
         {
-            const value = this.#readComment(reader);
-            const end = reader.position;
+            const value = this.#readComment(charList);
+            const end = charList.position;
 
             return new Token(TokenType.COMMENT, value, start, end);
         }
         else if (this.#isLiteral(char))
         {
-            const value = this.#readLiteral(reader);
-            const end = reader.position;
+            const value = this.#readLiteral(charList);
+            const end = charList.position;
 
             return new Token(TokenType.LITERAL, value, start, end);
         }
         else if (this.#isSeparator(char))
         {
-            const end = reader.position;
+            const end = charList.position;
 
             return new Token(TokenType.SEPARATOR, char, start, end);
         }
         else if (this.#isOperator(char))
         {
-            const value = this.#readOperation(reader);
-            const end = reader.position;
+            const value = this.#readOperation(charList);
+            const end = charList.position;
 
             return new Token(TokenType.OPERATOR, value, start, end);
         }
         else if (this.#isTerminator(char))
         {
-            const end = reader.position;
+            const end = charList.position;
 
             return new Token(TokenType.TERMINATOR, char, start, end);
         }
         else if (this.#isGroup(char))
         {
-            const end = reader.position;
+            const end = charList.position;
 
             return new Token(TokenType.GROUP, char, start, end);
         }
         else if (this.#isScope(char))
         {
-            const end = reader.position;
+            const end = charList.position;
 
             return new Token(TokenType.SCOPE, char, start, end);
         }
         else if (this.#isArray(char))
         {
-            const end = reader.position;
+            const end = charList.position;
 
             return new Token(TokenType.SCOPE, char, start, end);
         }
@@ -110,8 +111,8 @@ export default class Lexer
             return undefined;
         }
 
-        const value = this.#readIdentifier(reader);
-        const end = reader.position;
+        const value = this.#readIdentifier(charList);
+        const end = charList.position;
 
         return new Token(TokenType.IDENTIFIER, value, start, end);
     }
@@ -180,13 +181,13 @@ export default class Lexer
         return isOther === false;
     }
 
-    #skipIgnored(reader: Reader): void
+    #skipIgnored(charList: CharList): void
     {
         let inComment = false;
 
-        while (reader.eof === false)
+        while (charList.eof === false)
         {
-            const char = reader.current;
+            const char = charList.current;
 
             if (this.#isComment(char))
             {
@@ -202,51 +203,51 @@ export default class Lexer
                 break;
             }
 
-            reader.step();
+            charList.step();
         }
     }
 
-    #readComment(reader: Reader): string
+    #readComment(charList: CharList): string
     {
-        const identifier = reader.current + reader.next;
+        const identifier = charList.current + charList.next;
         const isMulti = identifier === COMMENT_MULTI_START;
         const terminator = isMulti ? COMMENT_MULTI_END : NEWLINE;
 
-        reader.step(2);
+        charList.step(2);
 
         let value = '';
 
-        while (reader.eof === false)
+        while (charList.eof === false)
         {
-            const char = reader.current;
-            const check = isMulti ? char + reader.next : char;
+            const char = charList.current;
+            const check = isMulti ? char + charList.next : char;
 
             if (check === terminator)
             {
-                reader.step(terminator.length - 1);
+                charList.step(terminator.length - 1);
 
                 break;
             }
 
             value += char;
 
-            reader.step();
+            charList.step();
         }
 
         return value.trim();
     }
 
-    #readLiteral(reader: Reader): string
+    #readLiteral(charList: CharList): string
     {
-        const identifier = reader.current;
+        const identifier = charList.current;
 
         let value = '';
 
-        reader.step();
+        charList.step();
 
-        while (reader.eof === false)
+        while (charList.eof === false)
         {
-            const char = reader.current;
+            const char = charList.current;
 
             if (this.#isLiteral(char) && char === identifier)
             {
@@ -255,44 +256,44 @@ export default class Lexer
 
             value += char;
 
-            reader.step();
+            charList.step();
         }
 
         return value;
     }
 
-    #readIdentifier(reader: Reader): string
+    #readIdentifier(charList: CharList): string
     {
         let value = '';
 
-        while (reader.eof === false)
+        while (charList.eof === false)
         {
-            const char = reader.current;
+            const char = charList.current;
 
             if (this.#isIdentifier(char) === false)
             {
-                reader.stepBack();
+                charList.stepBack();
 
                 break;
             }
 
             value += char;
 
-            reader.step();
+            charList.step();
         }
 
         return value;
     }
 
-    #readOperation(reader: Reader): string
+    #readOperation(charList: CharList): string
     {
-        let value = reader.current;
+        let value = charList.current;
 
-        reader.step();
+        charList.step();
 
-        while (reader.eof === false)
+        while (charList.eof === false)
         {
-            const char = reader.current;
+            const char = charList.current;
 
             if (!this.#isOperator(char))
             {
@@ -301,7 +302,7 @@ export default class Lexer
 
             value += char;
 
-            reader.step();
+            charList.step();
         }
 
         return value;

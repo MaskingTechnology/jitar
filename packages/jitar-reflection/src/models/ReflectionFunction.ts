@@ -5,21 +5,21 @@ import ReflectionMember from './ReflectionMember.js';
 export default class ReflectionFunction extends ReflectionMember
 {
     #parameters: ReflectionField[];
+    #body: string;
     #isAsync: boolean;
-    #isStatic: boolean;
 
-    constructor(name: string, parameters: ReflectionField[], isAsync: boolean = false, isStatic: boolean = false)
+    constructor(name: string, parameters: ReflectionField[], body: string, isStatic = false, isAsync = false, isPrivate = false)
     {
-        super(name);
+        super(name, isStatic, isPrivate);
 
         this.#parameters = parameters;
+        this.#body = body;
         this.#isAsync = isAsync;
-        this.#isStatic = isStatic;
     }
 
     get parameters() { return this.#parameters; }
 
-    get isAsync() { return this.#isAsync; }
+    get body() { return this.#body; }
 
-    get isStatic() { return this.#isStatic; }
+    get isAsync() { return this.#isAsync; }
 }

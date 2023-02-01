@@ -2,15 +2,19 @@
 export default class ReflectionMember
 {
     #name: string;
+    #isStatic: boolean;
+    #isPrivate: boolean;
 
-    constructor(name: string)
+    constructor(name: string, isStatic = false, isPrivate = false)
     {
         this.#name = name;
+        this.#isStatic = isStatic;
+        this.#isPrivate = isPrivate;
     }
 
-    get name(): string { return this.#name; }
+    get name() { return this.#name; }
 
-    get isPublic(): boolean { return this.isPrivate === false; }
+    get isStatic() { return this.#isStatic; }
 
-    get isPrivate(): boolean { return this.#name.startsWith('#'); }
+    get isPrivate() { return this.#isPrivate; }
 }

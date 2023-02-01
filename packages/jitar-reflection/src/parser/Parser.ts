@@ -58,7 +58,7 @@ export default class Parser
         return new ReflectionModule(members, exports);
     }
 
-    #parseIdentifier(tokenList: TokenList): ReflectionExport[] | ReflectionMember | undefined
+    #parseIdentifier(tokenList: TokenList, isAsync = false): ReflectionExport[] | ReflectionMember | undefined
     {
         const token = tokenList.current;
 
@@ -74,13 +74,17 @@ export default class Parser
 
             case Keyword.FUNCTION:
                 tokenList.step(); // Read away the function keyword
-                return this.#parseFunction(tokenList);
+                return this.#parseFunction(tokenList, false, isAsync);
 
             case Keyword.VAR:
             case Keyword.LET:
             case Keyword.CONST:
                 tokenList.step(); // Read away the var/let/const keyword
-                return this.#parseField(tokenList);
+                return this.#parseField(tokenList, false);
+
+            case Keyword.ASYNC:
+                tokenList.step(); // Read away the async keyword
+                return this.#parseIdentifier(tokenList, true);
 
             default:
                 // We have no interest in parsing other literals
@@ -109,21 +113,24 @@ export default class Parser
     #parseSingleExport(tokenList: TokenList, isDefault: boolean): ReflectionExport[]
     {
         let token = tokenList.current;
+        let stepSize = 0;
 
         if (token.value === Keyword.ASYNC)
         {
-            tokenList.step(); // Read away the async keyword
-
-            token = tokenList.current;
+            token = tokenList.step(); // Read away the async keyword
+            stepSize++;
         }
 
         if (token.value === Keyword.CLASS || token.value === Keyword.FUNCTION)
         {
-            token = tokenList.next;
+            token = tokenList.step(); // Read away the class/function keyword
+            stepSize++;
         }
 
         const name = token.value;
         const as = isDefault ? 'default' : name;
+
+        tokenList.stepBack(stepSize); // Step back to the original position
 
         return [new ReflectionExport(name, as)];
     }
@@ -134,9 +141,7 @@ export default class Parser
 
         while (tokenList.eof === false)
         {
-            tokenList.step();
-
-            const token = tokenList.current;
+            let token = tokenList.step();
             
             if (token.value === Punctuation.RIGHT_BRACE)
             {
@@ -153,11 +158,8 @@ export default class Parser
 
             if (tokenList.next.value === Keyword.AS)
             {
-                // Read away the AS keyword and use the alternative name
-
-                tokenList.step(2);
-
-                as = tokenList.current.value;
+                token = tokenList.step(2); // Read away the AS keyword and use the alternative name
+                as = token.value;
             }
 
             exports.push(new ReflectionExport(name, as));
@@ -168,7 +170,8 @@ export default class Parser
 
     #parseClass(tokenList: TokenList): ReflectionClass
     {
-        const name = tokenList.current.value;
+        let token = tokenList.current;
+        const name = token.value;
 
         tokenList.step(); // Read away the class name
 
@@ -176,9 +179,8 @@ export default class Parser
 
         if (tokenList.current.value === Keyword.EXTENDS)
         {
-            tokenList.step(); // Read away the extends keyword
-
-            parent = tokenList.current.value;
+            token = tokenList.step(); // Read away the extends keyword
+            parent = token.value;
 
             tokenList.step(); // Read away the extends name
         }
@@ -192,37 +194,50 @@ export default class Parser
     {
         const members = [];
 
+        let isAsync = false;
+        let isStatic = false;
+
         while (tokenList.eof === false)
         {
-            tokenList.step();
-
-            const token = tokenList.current;
+            const token = tokenList.step();
 
             if (token.value === Punctuation.RIGHT_BRACE)
             {
                 break;
             }
 
-            if (token.value === Keyword.STATIC || token.value === Keyword.ASYNC)
+            if (token.value === Keyword.STATIC)
             {
+                isStatic = true;
+                continue;
+            }
+
+            if (token.value === Keyword.ASYNC)
+            {
+                isAsync = true;
                 continue;
             }
 
             const nextToken = tokenList.next;
 
             const member = nextToken.value === Punctuation.LEFT_PARENTHESIS
-                ? this.#parseFunction(tokenList)
-                : this.#parseField(tokenList);
+                ? this.#parseFunction(tokenList, isStatic, isAsync)
+                : this.#parseField(tokenList, isStatic);
             
+            isStatic = false;
+            isAsync = false;
+
             members.push(member);
         }
         
         return members;
     }
 
-    #parseFunction(tokenList: TokenList): ReflectionFunction
+    #parseFunction(tokenList: TokenList, isStatic: boolean, isAsync: boolean): ReflectionFunction
     {
-        const name = tokenList.current.value;
+        const token = tokenList.current;
+        const isPrivate = token.value.startsWith('#');
+        const name = isPrivate ? token.value.substring(1) : token.value;
 
         tokenList.step(); // Read away the function name
 
@@ -230,9 +245,9 @@ export default class Parser
 
         tokenList.step(); // Read away the right parenthesis
         
-        this.#skipScope(tokenList); // Read away the function body
+        const body = this.#parseBody(tokenList);
 
-        return new ReflectionFunction(name, parameters);
+        return new ReflectionFunction(name, parameters, body, isStatic, isAsync, isPrivate);
     }
 
     #parseParameters(tokenList: TokenList): ReflectionField[]
@@ -243,7 +258,7 @@ export default class Parser
 
         while (tokenList.eof === false)
         {
-            let token = tokenList.current;
+            const token = tokenList.current;
 
             if (token.value === Punctuation.RIGHT_PARENTHESIS)
             {
@@ -257,7 +272,7 @@ export default class Parser
                 continue;
             }
 
-            const field = this.#parseField(tokenList);
+            const field = this.#parseField(tokenList, false);
 
             parameters.push(field);
         }
@@ -265,46 +280,54 @@ export default class Parser
         return parameters;
     }
 
-    #parseField(tokenList: TokenList): ReflectionField
+    #parseField(tokenList: TokenList, isStatic: boolean): ReflectionField
     {
         let token = tokenList.current;
 
-        const name = token.value;
+        const isPrivate = token.value.startsWith('#');
+        const name = isPrivate ? token.value.substring(1) : token.value;
 
-        tokenList.step(); // Read away the field name
+        token = tokenList.step(); // Read away the field name
 
         let value = undefined;
 
-        if (tokenList.current.value === Operator.ASSIGN)
+        if (token.value === Operator.ASSIGN)
         {
-            tokenList.step(); // Read away the default value
-
-            token = tokenList.current;
-            value = token.type === TokenType.LITERAL
-                ? `"${token.value}"`
-                : token.value;
+            token = tokenList.step(); // Read away the assign operator
+            value = this.#parseExpression(tokenList);
         }
 
-        return new ReflectionField(name, value);
+        return new ReflectionField(name, value, isStatic, isPrivate);
     }
 
-    #skipScope(tokenList: TokenList): void
+    #parseExpression(tokenList: TokenList): string
     {
+        const token = tokenList.step(); // Read away the value
+
+        return token.value;
+    }
+
+    #parseBody(tokenList: TokenList): string
+    {
+        let code = '';
+
         while (tokenList.eof === false)
         {
-            tokenList.step();
+            const token = tokenList.step();
 
-            const token = tokenList.current;
+            code += token.value + ' ';
 
             switch (token.value)
             {
                 case Punctuation.LEFT_BRACE:
-                    this.#skipScope(tokenList);
+                    code += this.#parseBody(tokenList);
                     break;
 
                 case Punctuation.RIGHT_BRACE:
-                    return;
+                    return code;
             }
         }
+
+        return code;
     }
 }

@@ -23,4 +23,9 @@ export default class ReflectionModule
     get functions(): ReflectionMember[] { return this.#members.filter(member => member instanceof ReflectionFunction); }
 
     get fields(): ReflectionMember[] { return this.#members.filter(member => member instanceof ReflectionField); }
+
+    getMember(name: string): ReflectionMember | undefined
+    {
+        return this.#members.find(member => member.name === name);
+    }
 }
