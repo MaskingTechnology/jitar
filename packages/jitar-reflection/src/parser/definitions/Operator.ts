@@ -11,7 +11,10 @@ const Operator =
     OR: '|',
     AND: '&',
     NOT: '!',
-    ASSIGN: '='
+    ASSIGN: '=',
+    MODULO: '%',
+    TERNARY: '?',
+    COLON: ':',
 };
 
 const Operators = Object.values(Operator);

@@ -18,7 +18,7 @@ const EMPTY = [undefined, null, ''];
 
 export default class Lexer
 {
-    tokenize(code: string): TokenList
+    tokenize(code: string, ignoreComments = true): TokenList
     {
         const charList = new CharList(code);
         const tokens: Token[] = [];
@@ -30,6 +30,13 @@ export default class Lexer
             if (token === undefined)
             {
                 break;
+            }
+
+            if (ignoreComments && token.type === TokenType.COMMENT)
+            {
+                charList.step();
+
+                continue;
             }
 
             tokens.push(token);
@@ -123,7 +130,9 @@ export default class Lexer
             || isOperator(char)
             || isSeparator(char)
             || isTerminator(char)
-            || isGroup(char);
+            || isGroup(char)
+            || isScope(char)
+            || isList(char);
 
         return isOther === false;
     }

@@ -440,12 +440,11 @@ export default class Parser
 
     #parseExpression(tokenList: TokenList): string
     {
+        let token = tokenList.step();
         let code = '';
 
         while (tokenList.eof === false)
         {
-            const token = tokenList.step();
-
             if (token.value === Division.TERMINATOR)
             {
                 return code;
@@ -473,6 +472,8 @@ export default class Parser
                 case Scope.CLOSE:
                     return code;
             }
+
+            token = tokenList.step();
         }
         
         return code;
@@ -480,11 +481,15 @@ export default class Parser
 
     #parseBody(tokenList: TokenList): string
     {
+        let token = tokenList.step();
         let code = '';
 
         while (tokenList.eof === false)
         {
-            const token = tokenList.step();
+            if (token === undefined)
+            {
+                return code;
+            }
 
             if (token.value === Scope.CLOSE)
             {
@@ -497,6 +502,8 @@ export default class Parser
             {
                 code += this.#parseBody(tokenList);
             }
+
+            token = tokenList.step();
         }
 
         return code;
