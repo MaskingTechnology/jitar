@@ -2,9 +2,13 @@
 import Lexer from './Lexer.js';
 import TokenList from './TokenList.js';
 
+import { Array } from './definitions/Array.js';
+import { Division } from './definitions/Division.js';
+import { Group } from './definitions/Group.js';
 import { Keyword, isKeyword } from './definitions/Keyword.js';
-import { TokenType } from './definitions/TokenType.js';
 import { Operator } from './definitions/Operator.js';
+import { Scope } from './definitions/Scope.js';
+import { TokenType } from './definitions/TokenType.js';
 
 import ReflectionModule from '../models/ReflectionModule.js';
 import ReflectionMember from '../models/ReflectionMember.js';
@@ -12,10 +16,6 @@ import ReflectionExport from '../models/ReflectionExport.js';
 import ReflectionClass from '../models/ReflectionClass.js';
 import ReflectionFunction from '../models/ReflectionFunction.js';
 import ReflectionField from '../models/ReflectionField.js';
-import { Scope } from './definitions/Scope.js';
-import { Division } from './definitions/Division.js';
-import { Group } from './definitions/Group.js';
-import { Array } from './definitions/Array.js';
 import ReflectionGetter from '../models/ReflectionGetter.js';
 import ReflectionSetter from '../models/ReflectionSetter.js';
 

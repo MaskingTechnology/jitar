@@ -1,4 +1,8 @@
 
+import CharList from './CharList.js';
+import Token from './Token.js';
+import TokenList from './TokenList.js';
+
 import { isArray } from './definitions/Array.js';
 import { Comment, isComment } from './definitions/Comment.js';
 import { isSeparator, isTerminator } from './definitions/Division.js';
@@ -9,10 +13,6 @@ import { isOperator } from './definitions/Operator.js';
 import { isScope } from './definitions/Scope.js';
 import { TokenType } from './definitions/TokenType.js';
 import { Whitespace, isWhitespace } from './definitions/Whitespace.js';
-
-import CharList from './CharList.js';
-import Token from './Token.js';
-import TokenList from './TokenList.js';
 
 const EMPTY = [undefined, null, ''];
 
