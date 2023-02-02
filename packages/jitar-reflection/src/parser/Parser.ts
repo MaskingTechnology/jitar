@@ -34,7 +34,7 @@ export default class Parser
         this.#lexer = new Lexer();
     }
 
-    parse(code: string): ReflectionModule
+    parseModule(code: string): ReflectionModule
     {
         const tokenList = this.#lexer.tokenize(code);
         const models = this.#parseTokens(tokenList);
@@ -60,6 +60,32 @@ export default class Parser
         }
 
         return new ReflectionModule(imports, members, exports);
+    }
+
+    parseClass(code: string): ReflectionClass
+    {
+        const tokenList = this.#lexer.tokenize(code);
+        const model = this.#parseKeyword(tokenList);
+
+        if ((model instanceof ReflectionClass) === false)
+        {
+            throw new Error('The given code does not contain a class definition');
+        }
+
+        return model as ReflectionClass;
+    }
+
+    parseFunction(code: string): ReflectionFunction
+    {
+        const tokenList = this.#lexer.tokenize(code);
+        const model = this.#parseKeyword(tokenList);
+
+        if ((model instanceof ReflectionFunction) === false)
+        {
+            throw new Error('The given code does not contain a function definition');
+        }
+
+        return model as ReflectionFunction;
     }
 
     #parseTokens(tokenList: TokenList): ReflectionModel[]
@@ -287,8 +313,6 @@ export default class Parser
     }
 
     /*
-     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/class
-     *
      * Supported syntax:
      * - class Person { members }
      * - class Person extends Human { members }
