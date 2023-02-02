@@ -6,6 +6,14 @@
     "workspaces": [
         "packages/jitar",
         "packages/jitar-nodejs-server",
-        "packages/jitar-vite-plugin"
+        "packages/jitar-vite-plugin",
+        "examples/1-basic/1-hello-world",
+        "examples/1-basic/2-segmentation",
+        "examples/1-basic/3-load-balancing",
+        "examples/1-basic/4-access-protection",
+        "examples/1-basic/5-multi-version",
+        "examples/1-basic/6-data-transportation",
+        "examples/1-basic/7-error-handling",
+        "examples/1-basic/8-javascript"
     ]
 }

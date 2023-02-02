@@ -1,5 +1,5 @@
 {
-    "name": "jitar-access-protection-example",
+    "name": "jitar-error-handling-example",
     "type": "module",
     "scripts": {
         "build": "tsc",

@@ -1,5 +1,5 @@
 {
-    "name": "jitar-helloworld-example",
+    "name": "jitar-javascript-example",
     "type": "module",
     "scripts": {
         "build": "",
