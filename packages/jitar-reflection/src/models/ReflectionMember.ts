@@ -21,4 +21,6 @@ export default class ReflectionMember extends ReflectionModel
     get isStatic() { return this.#isStatic; }
 
     get isPrivate() { return this.#isPrivate; }
+
+    get isPublic() { return !this.#isPrivate; }
 }
