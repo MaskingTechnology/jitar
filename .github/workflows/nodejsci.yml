@@ -30,6 +30,6 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
         
       - run: npm ci
-      - run: npm run build --workspaces --if-present
-      - run: npm run lint --workspaces --if-present
-      - run: npm run test --workspaces --if-present
+      - run: npm run build --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present
+      - run: npm run lint --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present
+      - run: npm run test --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present
