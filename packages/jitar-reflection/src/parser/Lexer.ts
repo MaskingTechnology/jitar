@@ -215,7 +215,7 @@ export default class Lexer
             charList.step();
         }
 
-        return value;
+        return `${identifier}${value}${identifier}`;
     }
 
     #readIdentifier(charList: CharList): string

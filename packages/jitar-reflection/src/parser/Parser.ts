@@ -21,9 +21,6 @@ import ReflectionSetter from '../models/ReflectionSetter.js';
 import ReflectionImport from '../models/ReflectionImport.js';
 import ReflectionModel from '../models/ReflectionModel.js';
 
-// TODO: Add support for parsing anonymous functions
-// TODO: Add support for parsing arrow functions
-
 export default class Parser
 {
     #lexer: Lexer;
@@ -136,7 +133,7 @@ export default class Parser
     {
         const token = tokenList.current;
 
-        if (token.value === Scope.OPEN)
+        if (token.hasValue(Scope.OPEN))
         {
             return this.#parseMultiImport(tokenList);
         }
@@ -144,6 +141,12 @@ export default class Parser
         return this.#parseSingleImport(tokenList);
     }
 
+    /*
+     * Supported syntax:
+     * - import './somefile.js';
+     * - import foo from './somefile.js';
+     * - import foo as bar from './somefile.js';
+     */
     #parseSingleImport(tokenList: TokenList): ReflectionImport
     {
         let token = tokenList.current;
@@ -151,13 +154,13 @@ export default class Parser
         const name = token.value;
         let as = name;
 
-        if (tokenList.next.value === Keyword.AS)
+        if (tokenList.next.hasValue(Keyword.AS))
         {
             token = tokenList.step(2); // Read away the AS keyword
             as = token.value;
         }
 
-        if (tokenList.next.value === Keyword.FROM)
+        if (tokenList.next.hasValue(Keyword.FROM))
         {
             token = tokenList.step(2); // Read away the FROM keyword
             const from = token.value;
@@ -169,6 +172,11 @@ export default class Parser
         return new ReflectionImport('', '', name);
     }
 
+    /*
+     * Supported syntax:
+     * - import { foo, bar } from './somefile.js';
+     * - import { foo, bar as baz } from './somefile.js';
+     */
     #parseMultiImport(tokenList: TokenList): ReflectionImport[]
     {
         const identifiers = [];
@@ -177,12 +185,12 @@ export default class Parser
         {
             let token = tokenList.step();
             
-            if (token.value === Scope.CLOSE)
+            if (token.hasValue(Scope.CLOSE))
             {
                 break;
             }
 
-            if (token.value === Division.SEPARATOR)
+            if (token.hasValue(Division.SEPARATOR))
             {
                 continue;
             }
@@ -190,7 +198,7 @@ export default class Parser
             const name = token.value;
             let as = name;
 
-            if (tokenList.next.value === Keyword.AS)
+            if (tokenList.next.hasValue(Keyword.AS))
             {
                 token = tokenList.step(2); // Read away the AS keyword
                 as = token.value;
@@ -223,18 +231,23 @@ export default class Parser
         }
     }
 
+    /*
+     * Supported syntax:
+     * - export const PI = 3.14;
+     * - export default function foo() {}
+     */
     #parseSingleExport(tokenList: TokenList, isDefault: boolean): ReflectionExport
     {
         let token = tokenList.current;
         let stepSize = 0;
 
-        if (token.value === Keyword.ASYNC)
+        if (token.hasValue(Keyword.ASYNC))
         {
             token = tokenList.step(); // Read away the async keyword
             stepSize++;
         }
 
-        if (token.value === Keyword.CLASS || token.value === Keyword.FUNCTION)
+        if (token.hasValue(Keyword.CLASS) || token.hasValue(Keyword.FUNCTION))
         {
             token = tokenList.step(); // Read away the class/function keyword
             stepSize++;
@@ -248,6 +261,11 @@ export default class Parser
         return new ReflectionExport(name, as);
     }
 
+    /*
+     * Supported syntax:
+     * - export { foo, bar };
+     * - export { foo, bar as baz };
+     */
     #parseMultiExport(tokenList: TokenList): ReflectionExport[]
     {
         const exports = [];
@@ -256,12 +274,12 @@ export default class Parser
         {
             let token = tokenList.step();
             
-            if (token.value === Scope.CLOSE)
+            if (token.hasValue(Scope.CLOSE))
             {
                 break;
             }
 
-            if (token.value === Division.SEPARATOR)
+            if (token.hasValue(Division.SEPARATOR))
             {
                 continue;
             }
@@ -269,7 +287,7 @@ export default class Parser
             const name = token.value;
             let as = name;
 
-            if (tokenList.next.value === Keyword.AS)
+            if (tokenList.next.hasValue(Keyword.AS))
             {
                 token = tokenList.step(2); // Read away the AS keyword
                 as = token.value;
@@ -281,6 +299,13 @@ export default class Parser
         return exports;
     }
 
+    /*
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/class
+     *
+     * Supported syntax:
+     * - class Person { members }
+     * - class Person extends Human { members }
+     */
     #parseClass(tokenList: TokenList): ReflectionClass
     {
         let token = tokenList.current;
@@ -290,7 +315,7 @@ export default class Parser
 
         let parent: string | undefined = undefined;
 
-        if (tokenList.current.value === Keyword.EXTENDS)
+        if (tokenList.current.hasValue(Keyword.EXTENDS))
         {
             token = tokenList.step(); // Read away the extends keyword
             parent = token.value;
@@ -303,6 +328,21 @@ export default class Parser
         return new ReflectionClass(name, parent, members);
     }
 
+    /*
+     * Supported syntax:
+     * - publicField;
+     * - #privateField;
+     * - static staticField;
+     * - constructor() { body }
+     * - publicFunction() { body }
+     * - #privateFunction() { body }
+     * - static staticFunction() { body }
+     * - async asyncFunction() { body }
+     * - get getter() { body }
+     * - set setter(value) { body }
+     * - static get staticGetter() { body }
+     * - static set staticSetter(value) { body }
+     */
     #parseMembers(tokenList: TokenList): ReflectionMember[]
     {
         const members = [];
@@ -316,30 +356,30 @@ export default class Parser
         {
             const token = tokenList.step();
 
-            if (token.value === Scope.CLOSE)
+            if (token.hasValue(Scope.CLOSE))
             {
                 break;
             }
 
-            if (token.value === Keyword.STATIC)
+            if (token.hasValue(Keyword.STATIC))
             {
                 isStatic = true;
                 continue;
             }
 
-            if (token.value === Keyword.ASYNC)
+            if (token.hasValue(Keyword.ASYNC))
             {
                 isAsync = true;
                 continue;
             }
 
-            if (token.value === Keyword.GET)
+            if (token.hasValue(Keyword.GET))
             {
                 isGetter = true;
                 continue;
             }
 
-            if (token.value === Keyword.SET)
+            if (token.hasValue(Keyword.SET))
             {
                 isSetter = true;
                 continue;
@@ -347,7 +387,7 @@ export default class Parser
 
             const nextToken = tokenList.next;
 
-            const member = nextToken.value === Group.OPEN
+            const member = nextToken.hasValue(Group.OPEN)
                 ? this.#parseFunction(tokenList, isAsync, isStatic, isGetter, isSetter)
                 : this.#parseField(tokenList, isStatic);
             
@@ -399,19 +439,19 @@ export default class Parser
         {
             const token = tokenList.current;
 
-            if (token.value === Group.CLOSE)
+            if (token.hasValue(Group.CLOSE))
             {
                 break;
             }
 
-            if (token.value === Division.SEPARATOR)
+            if (token.hasValue(Division.SEPARATOR))
             {
                 tokenList.step(); // Read away the separator
 
                 continue;
             }
 
-            const field = this.#parseField(tokenList, false);
+            const field = this.#parseField(tokenList, false, Division.SEPARATOR);
 
             parameters.push(field);
         }
@@ -419,7 +459,7 @@ export default class Parser
         return parameters;
     }
 
-    #parseField(tokenList: TokenList, isStatic: boolean): ReflectionField
+    #parseField(tokenList: TokenList, isStatic: boolean, terminator = Division.TERMINATOR): ReflectionField
     {
         let token = tokenList.current;
 
@@ -430,22 +470,22 @@ export default class Parser
 
         let value = undefined;
 
-        if (token.value === Operator.ASSIGN)
+        if (token.hasValue(Operator.ASSIGN))
         {
-            value = this.#parseExpression(tokenList);
+            value = this.#parseExpression(tokenList, terminator);
         }
 
         return new ReflectionField(name, value, isStatic, isPrivate);
     }
 
-    #parseExpression(tokenList: TokenList): string
+    #parseExpression(tokenList: TokenList, terminator: string): string
     {
         let token = tokenList.step();
         let code = '';
 
         while (tokenList.eof === false)
         {
-            if (token.value === Division.TERMINATOR)
+            if (token.value === terminator)
             {
                 return code;
             }
@@ -457,14 +497,14 @@ export default class Parser
                 return code;
             }
 
-            code += token.value + ' ';
+            code += token.toString();
 
             switch (token.value)
             {
                 case List.OPEN:
                 case Group.OPEN:
                 case Scope.OPEN:
-                    code += this.#parseExpression(tokenList);
+                    code += this.#parseExpression(tokenList, Division.TERMINATOR);
                     break;
 
                 case List.CLOSE:
@@ -491,14 +531,14 @@ export default class Parser
                 return code;
             }
 
-            if (token.value === Scope.CLOSE)
+            if (token.hasValue(Scope.CLOSE))
             {
                 return code;
             }
 
-            code += token.value + ' ';
+            code += token.toString();
 
-            if (token.value === Scope.OPEN)
+            if (token.hasValue(Scope.OPEN))
             {
                 code += this.#parseBody(tokenList);
             }

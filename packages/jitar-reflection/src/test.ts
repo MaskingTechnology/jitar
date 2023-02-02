@@ -17,12 +17,15 @@ const parser = new Parser();
 const module = parser.parse(code);
 
 const imports = module.imports;
-const members = module.members;
+const members = module.exported;
 const exports = module.exports;
 
-//imports.forEach(imp => printImport(imp));
+console.log('------------ Imports ------------');
+imports.forEach(imp => printImport(imp));
+console.log('------------ Members ------------');
 members.forEach(member => printMember(member));
-//exports.forEach(exp => printExport(exp));
+console.log('------------ Exports ------------');
+exports.forEach(exp => printExport(exp));
 
 function printImport(model: ReflectionImport)
 {
@@ -70,17 +73,17 @@ function printClass(member: ReflectionClass, level:number)
 
 function printGetter(member: ReflectionFunction, level:number)
 {
-    console.log(makeLevel(level), `${member.isStatic ? 'static ' : ''}get ${member.isPrivate ? '#' : ''}${member.name}() { ${member.body} }`);
+    console.log(makeLevel(level), `${member.isStatic ? 'static ' : ''}get ${member.isPrivate ? '#' : ''}${member.name}() { code }`);
 }
 
 function printSetter(member: ReflectionFunction, level:number)
 {
-    console.log(makeLevel(level), `${member.isStatic ? 'static ' : ''}set ${member.isPrivate ? '#' : ''}${member.name}(${member.parameters.map(parameter => parameter.name)}) { ${member.body} }`);
+    console.log(makeLevel(level), `${member.isStatic ? 'static ' : ''}set ${member.isPrivate ? '#' : ''}${member.name}(${member.parameters.map(parameter => makeParameter(parameter))}) { code }`);
 }
 
 function printFunction(member: ReflectionFunction, level:number)
 {
-    console.log(makeLevel(level), `${member.isStatic ? 'static ' : ''}${member.isAsync ? 'async ' : ''}${level === 0 ? 'function ' : ''}${member.isPrivate ? '#' : ''}${member.name}(${member.parameters.map(parameter => parameter.name)}) { ${member.body} }`);
+    console.log(makeLevel(level), `${member.isStatic ? 'static ' : ''}${member.isAsync ? 'async ' : ''}${level === 0 ? 'function ' : ''}${member.isPrivate ? '#' : ''}${member.name}(${member.parameters.map(parameter => makeParameter(parameter))}) { code }`);
 }
 
 function printField(member: ReflectionField, level:number)
@@ -88,6 +91,11 @@ function printField(member: ReflectionField, level:number)
     level === 0
         ? console.log(makeLevel(level), `let ${member.name}${member.value ? ' = ' + member.value : ''};`)
         : console.log(makeLevel(level), `${member.isStatic ? 'static ' : ''}${member.isPrivate ? '#' : ''}${member.name}${member.value ? ' = ' + member.value : ''};`);
+}
+
+function makeParameter(parameter: ReflectionField): string
+{
+    return `${parameter.name}${parameter.value ? ' = ' + parameter.value : ''}`;
 }
 
 function makeLevel(level:number)

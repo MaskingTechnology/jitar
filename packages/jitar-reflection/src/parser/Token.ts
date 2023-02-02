@@ -26,4 +26,14 @@ export default class Token
     {
         return this.#type === type;
     }
+
+    hasValue(value: string): boolean
+    {
+        return this.#value === value;
+    }
+
+    toString(): string
+    {
+        return `${this.#value} `;
+    }
 }
