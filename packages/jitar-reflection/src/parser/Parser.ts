@@ -296,7 +296,9 @@ export default class Parser
     #parseClass(tokenList: TokenList): ReflectionClass
     {
         let token = tokenList.current;
+
         let name = ANONYMOUS;
+        let parent: string | undefined = undefined;
 
         if (token.isType(TokenType.IDENTIFIER))
         {
@@ -304,13 +306,6 @@ export default class Parser
 
             tokenList.step(); // Read away the class name
         }
-
-        // let token = tokenList.current;
-        // const name = token.value;
-
-        //tokenList.step(); // Read away the class name
-
-        let parent: string | undefined = undefined;
 
         if (tokenList.current.hasValue(Keyword.EXTENDS))
         {
