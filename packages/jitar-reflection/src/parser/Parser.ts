@@ -23,6 +23,8 @@ import ReflectionModel from '../models/ReflectionModel.js';
 
 type Alias = { name: string, as: string };
 
+const ANONYMOUS = '(anonymous)';
+
 export default class Parser
 {
     #lexer: Lexer;
@@ -222,7 +224,7 @@ export default class Parser
             stepSize++;
         }
 
-        const name = token.value;
+        const name = token.isType(TokenType.IDENTIFIER) ? token.value : ANONYMOUS;
         const as = isDefault ? 'default' : name;
 
         tokenList.stepBack(stepSize); // Step back to the original position
@@ -294,9 +296,19 @@ export default class Parser
     #parseClass(tokenList: TokenList): ReflectionClass
     {
         let token = tokenList.current;
-        const name = token.value;
+        let name = ANONYMOUS;
 
-        tokenList.step(); // Read away the class name
+        if (token.isType(TokenType.IDENTIFIER))
+        {
+            name = token.value;
+
+            tokenList.step(); // Read away the class name
+        }
+
+        // let token = tokenList.current;
+        // const name = token.value;
+
+        //tokenList.step(); // Read away the class name
 
         let parent: string | undefined = undefined;
 
@@ -390,11 +402,18 @@ export default class Parser
     #parseFunction(tokenList: TokenList, isAsync: boolean, isStatic = false, isGetter = false, isSetter = false): ReflectionFunction
     {
         const token = tokenList.current;
-        const isPrivate = token.value.startsWith('#');
-        const name = isPrivate ? token.value.substring(1) : token.value;
 
-        tokenList.step(); // Read away the function name
+        let name = ANONYMOUS;
+        let isPrivate = false;
 
+        if (token.isType(TokenType.IDENTIFIER))
+        {
+            isPrivate = token.value.startsWith('#');
+            name = isPrivate ? token.value.substring(1) : token.value;
+
+            tokenList.step(); // Read away the function name
+        }
+        
         const parameters = this.#parseParameters(tokenList);
 
         tokenList.step(); // Read away the group close
