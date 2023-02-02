@@ -21,6 +21,8 @@ import ReflectionSetter from '../models/ReflectionSetter.js';
 import ReflectionImport from '../models/ReflectionImport.js';
 import ReflectionModel from '../models/ReflectionModel.js';
 
+type Alias = { name: string, as: string };
+
 export default class Parser
 {
     #lexer: Lexer;
@@ -129,74 +131,29 @@ export default class Parser
         }
     }
 
-    #parseImport(tokenList: TokenList): ReflectionImport[] | ReflectionImport
-    {
-        const token = tokenList.current;
-
-        if (token.hasValue(Scope.OPEN))
-        {
-            return this.#parseMultiImport(tokenList);
-        }
-
-        return this.#parseSingleImport(tokenList);
-    }
-
     /*
      * Supported syntax:
      * - import './somefile.js';
      * - import foo from './somefile.js';
-     * - import foo as bar from './somefile.js';
-     */
-    #parseSingleImport(tokenList: TokenList): ReflectionImport
-    {
-        let token = tokenList.current;
-
-        const name = token.value;
-        let as = name;
-
-        if (tokenList.next.hasValue(Keyword.AS))
-        {
-            token = tokenList.step(2); // Read away the AS keyword
-            as = token.value;
-        }
-
-        if (tokenList.next.hasValue(Keyword.FROM))
-        {
-            token = tokenList.step(2); // Read away the FROM keyword
-            const from = token.value;
-
-            return new ReflectionImport(name, as, from);
-        }
-
-        // Direct import without grabbing a specific name
-        return new ReflectionImport('', '', name);
-    }
-
-    /*
-     * Supported syntax:
-     * - import { foo, bar } from './somefile.js';
+     * - import * as foo from './somefile.js';
      * - import { foo, bar as baz } from './somefile.js';
+     * - import foo, { bar } from './somefile.js';
      */
-    #parseMultiImport(tokenList: TokenList): ReflectionImport[]
+    #parseImport(tokenList: TokenList): ReflectionImport[]
     {
-        const identifiers = [];
+        const identifiers: Alias[] = [];
 
-        while (tokenList.eof === false)
+        let token = tokenList.current;
+        
+        if (token.isType(TokenType.LITERAL))
         {
-            let token = tokenList.step();
-            
-            if (token.hasValue(Scope.CLOSE))
-            {
-                break;
-            }
+            return [new ReflectionImport('', '', token.value)];
+        }
 
-            if (token.hasValue(Division.SEPARATOR))
-            {
-                continue;
-            }
-
-            const name = token.value;
-            let as = name;
+        if (token.hasValue(Scope.OPEN) === false)
+        {
+            const name = 'default';
+            let as = token.value;
 
             if (tokenList.next.hasValue(Keyword.AS))
             {
@@ -207,7 +164,19 @@ export default class Parser
             identifiers.push({ name, as });
         }
 
-        const token = tokenList.step(2); // Read away the FROM keyword
+        if (tokenList.next.hasValue(Division.SEPARATOR))
+        {
+            token = tokenList.step(2); // Read away the separator and the opening scope
+        }
+
+        if (token.hasValue(Scope.OPEN))
+        {
+            const aliases = this.#parseAliasList(tokenList);
+
+            identifiers.push(...aliases);
+        }
+
+        token = tokenList.step(2); // Read away the FROM keyword
         const from = token.value;
 
         return identifiers.map(identifier => new ReflectionImport(identifier.name, identifier.as, from));
@@ -268,7 +237,14 @@ export default class Parser
      */
     #parseMultiExport(tokenList: TokenList): ReflectionExport[]
     {
-        const exports = [];
+        const identifiers = this.#parseAliasList(tokenList);
+
+        return identifiers.map(identifier => new ReflectionExport(identifier.name, identifier.as));
+    }
+
+    #parseAliasList(tokenList: TokenList): Alias[]
+    {
+        const identifiers = [];
 
         while (tokenList.eof === false)
         {
@@ -284,19 +260,28 @@ export default class Parser
                 continue;
             }
 
-            const name = token.value;
-            let as = name;
+            const identifier = this.#parseAlias(tokenList);
 
-            if (tokenList.next.hasValue(Keyword.AS))
-            {
-                token = tokenList.step(2); // Read away the AS keyword
-                as = token.value;
-            }
-
-            exports.push(new ReflectionExport(name, as));
+            identifiers.push(identifier);
         }
 
-        return exports;
+        return identifiers;
+    }
+
+    #parseAlias(tokenList: TokenList): Alias
+    {
+        let token = tokenList.current;
+
+        const name = token.value;
+        let as = name;
+
+        if (tokenList.next.hasValue(Keyword.AS))
+        {
+            token = tokenList.step(2); // Read away the AS keyword
+            as = token.value;
+        }
+
+        return { name, as };
     }
 
     /*
