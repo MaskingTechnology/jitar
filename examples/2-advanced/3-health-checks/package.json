@@ -1,11 +1,11 @@
 {
-    "name": "jitar-helloworld-example",
+    "name": "jitar-health-checks-example",
     "type": "module",
     "scripts": {
         "build": "tsc",
         "start": "node --experimental-network-imports --experimental-fetch dist/start.js --config=jitar.json"
     },
     "dependencies": {
-        "jitar-nodejs-server": "^0.2.3"
+        "jitar-nodejs-server": "^0.3.0"
     }
 }
