@@ -1,6 +1,6 @@
 
 import path from 'path';
-import { PluginOption, normalizePath } from 'vite';
+import { PluginOption, normalizePath, ResolvedConfig } from 'vite';
 
 const IMPORT_PATTERN = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g;
 
@@ -110,12 +110,12 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
             return createServerConfig(jitarUrl);
         },
 
-        configResolved(resolvedConfig)
+        configResolved(resolvedConfig: ResolvedConfig)
         {
             jitarFullPath = path.join(resolvedConfig.root, sourcePath, jitarPath);
         },
 
-        resolveId(source)
+        resolveId(source: string)
         {
             if (source === '/jitar/client.js')
             {
@@ -125,7 +125,7 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
             return null;
         },
 
-        async transform(code, id)
+        async transform(code: string, id: string)
         {
             if (jitarFullPath === undefined || id.includes(jitarFullPath) === false)
             {
