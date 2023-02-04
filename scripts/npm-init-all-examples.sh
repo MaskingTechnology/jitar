@@ -35,5 +35,5 @@ update_examples()
 
 for dir in $EXAMPLES_DIRS
 do
-    update_examples $dir
+    update_examples "../examples/$dir"
 done
