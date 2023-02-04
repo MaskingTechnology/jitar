@@ -26,6 +26,7 @@
         "build": "npm run build --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present",
         "lint": "npm run lint --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present",
         "test": "npm run test --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present",
+        "release": "npm run release --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present",
         "example-1": "npm run build --workspace=examples/1-basic/1-hello-world && npm run start --workspace=examples/1-basic/1-hello-world"
     }
 }
