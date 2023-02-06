@@ -1,0 +1,32 @@
+{
+    "name": "jitar-monorepo",
+    "version": "0.0.1",
+    "private": true,
+    "license": "MIT",
+    "workspaces": [
+        "packages/jitar",
+        "packages/jitar-nodejs-server",
+        "packages/jitar-vite-plugin",
+        "examples/1-basic/1-hello-world",
+        "examples/1-basic/2-segmentation",
+        "examples/1-basic/3-load-balancing",
+        "examples/1-basic/4-access-protection",
+        "examples/1-basic/5-multi-version",
+        "examples/1-basic/6-data-transportation",
+        "examples/1-basic/7-error-handling",
+        "examples/1-basic/8-javascript",
+        "examples/2-advanced/1-start-hooks",
+        "examples/2-advanced/2-run-procedure",
+        "examples/2-advanced/3-health-checks",
+        "examples/2-advanced/4-middleware",
+        "examples/3-apps/1-full-stack",
+        "examples/3-apps/2-microservices"
+    ],
+    "scripts": {
+        "reversion": "./scripts/npm-update-all-verions.sh",
+        "build": "npm run build --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present",
+        "lint": "npm run lint --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present",
+        "test": "npm run test --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present",
+        "release": "npm run release --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present"
+    }
+}

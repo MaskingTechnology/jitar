@@ -12,7 +12,7 @@
         "./server.js": "./dist/server.js"
     },
     "scripts": {
-        "test": "jest",
+        "test": "jest --passWithNoTests",
         "test-coverage": "jest --coverage",
         "lint": "eslint . --ext .ts",
         "build": "tsc -p tsconfig.json",
