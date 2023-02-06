@@ -3,6 +3,7 @@
 
 # This script updates all versions of jitar related packages.
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 EXAMPLES_DIRS="1-basic 2-advanced 3-apps"
 PACKAGE_DIRS="jitar jitar-nodejs-server jitar-vite-plugin"
 
@@ -84,6 +85,8 @@ echo "What is the new version?"
 read NEW_VERSION
 
 echo "Updating all versions from $CURRENT_VERSION to $NEW_VERSION"
+
+cd $SCRIPT_DIR
 
 update_examples
 update_packages

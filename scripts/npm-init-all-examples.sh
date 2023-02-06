@@ -3,6 +3,7 @@
 
 # This script installs and builds all the examples.
 
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 EXAMPLES_DIRS="1-basic 2-advanced 3-apps"
 
 echo "#"
@@ -32,6 +33,8 @@ update_examples()
 
     cd ..
 }
+
+cd $SCRIPT_DIR
 
 for dir in $EXAMPLES_DIRS
 do
