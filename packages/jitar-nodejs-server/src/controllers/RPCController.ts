@@ -147,6 +147,8 @@ export default class RPCController
 
             this.#logger.info(`Ran procedure -> ${fqn} (${version.toString()})`);
 
+            this.#setResponseHeaders(response, headers);
+
             return this.#createResultResponse(result, response, this.#useSerializer && serialize);
         }
         catch (error: unknown)
@@ -196,6 +198,11 @@ export default class RPCController
         return typeof content === 'object'
             ? 'application/json'
             : 'text/plain';
+    }
+
+    #setResponseHeaders(response: Response, headers: Map<string, string>): void
+    {
+        headers.forEach((value, key) => response.setHeader(key, value));
     }
 
     #createResponseStatusCode(error: unknown): number
