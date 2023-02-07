@@ -8,12 +8,11 @@ export default class CorsMiddleware implements Middleware
     #origin: string;
     #methods = ['GET', 'POST'];
 
-    constructor(origin: string = '*')
+    constructor(origin = '*')
     {
         this.#origin = origin;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: NextHandler): Promise<unknown>
     {
         const result = await next();
