@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 0.3.1 (February 08, 2023)
+
+New features:
+- \[[`56164ee`](https://github.com/MaskingTechnology/jitar/commit/56164ee)] Implemented CORS middleware [basmasking](https://github.com/MaskingTechnology/jitar/pull/131)
+
 ## 0.3.0 (January 25, 2023)
 
 New features:
