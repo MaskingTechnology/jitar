@@ -274,6 +274,32 @@ The execution order of the middleware is reversed. This means that the middlewar
 
 ---
 
+## CORS
+
+CORS headers can be added to the response of a RPC call. This is useful when you want to allow cross-origin requests.
+
+When the Jitar server is started using the startServer hook we can add CORS headers.
+
+{:.filename}
+src/start.ts
+
+```ts
+import { CorsMiddleware } from 'jitar';
+import { startServer } from 'jitar-nodejs-server';
+
+const moduleImporter = async (specifier: string) => import(specifier);
+
+startServer(moduleImporter).then(server =>
+{
+    server.addMiddleware(new CorsMiddleware('https://jitar.dev'));
+});
+```
+
+{:.alert-info}
+The CORS middleware only supports a single origin or a wildcard. The latter is the default when no origin is provided.
+
+---
+
 {:.previous-chapter}
 [Basic features](04_basic_features)
 

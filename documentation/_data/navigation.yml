@@ -68,6 +68,8 @@
       link: /05_advanced_features#health-checks
     - name: Middleware
       link: /05_advanced_features#middleware
+    - name: CORS
+      link: /05_advanced_features#cors
 
 - name: Building applications
   type: header
