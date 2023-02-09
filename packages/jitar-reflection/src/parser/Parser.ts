@@ -4,7 +4,7 @@ import TokenList from './TokenList.js';
 
 import { Division } from './definitions/Division.js';
 import { Group } from './definitions/Group.js';
-import { Keyword, isKeyword } from './definitions/Keyword.js';
+import { Keyword, isKeyword, isDeclaration } from './definitions/Keyword.js';
 import { List } from './definitions/List.js';
 import { Operator } from './definitions/Operator.js';
 import { Scope } from './definitions/Scope.js';
@@ -96,27 +96,22 @@ export default class Parser
         {
             const token = tokenList.current;
 
-            switch (token.type)
+            if (token.isType(TokenType.KEYWORD) === false)
             {
-                case TokenType.KEYWORD:
-                    const model = this.#parseKeyword(tokenList);
-
-                    if (model === undefined)
-                    {
-                        break;
-                    }
-
-                    model instanceof Array
-                        ? models.push(...model)
-                        : models.push(model);
-                    
-                    break;
-
-                default:
-                    // We have no interest in parsing other tokens
-                    // because they are not part of the module
-                    tokenList.step();
+                tokenList.step();
+                continue;
             }
+
+            const model = this.#parseKeyword(tokenList);
+
+            if (model === undefined)
+            {
+                continue;
+            }
+
+            model instanceof Array
+                ? models.push(...model)
+                : models.push(model);
         }
 
         return models;
@@ -244,9 +239,9 @@ export default class Parser
             stepSize++;
         }
 
-        if (token.hasValue(Keyword.CLASS) || token.hasValue(Keyword.FUNCTION))
+        if (isDeclaration(token.value))
         {
-            token = tokenList.step(); // Read away the class/function keyword
+            token = tokenList.step(); // Read away the declaration keyword
             stepSize++;
         }
 
@@ -276,7 +271,7 @@ export default class Parser
 
         while (tokenList.eof === false)
         {
-            let token = tokenList.step();
+            const token = tokenList.step();
             
             if (token.hasValue(Scope.CLOSE))
             {

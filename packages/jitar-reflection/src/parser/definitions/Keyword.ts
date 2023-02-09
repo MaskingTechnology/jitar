@@ -25,4 +25,13 @@ function isKeyword(value: string): boolean
     return Keywords.includes(value);
 }
 
-export { Keyword, Keywords, isKeyword };
+function isDeclaration(value: string): boolean
+{
+    return value === Keyword.CLASS
+        || value === Keyword.FUNCTION
+        || value === Keyword.CONST
+        || value === Keyword.LET
+        || value === Keyword.VAR;
+}
+
+export { Keyword, Keywords, isKeyword, isDeclaration };
