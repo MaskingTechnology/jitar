@@ -10,7 +10,7 @@ describe('parser/Parser', () =>
 {
     describe('.parseModule(code)', () =>
     {
-        it('should parse imports for loading a module', () =>
+        it('should parse loading a module', () =>
         {
             const module = parser.parseModule(IMPORTS.LOAD);
 
@@ -23,7 +23,7 @@ describe('parser/Parser', () =>
             expect(imported.from).toBe("'module'");
         });
 
-        it('should parse imports for importing a single member', () =>
+        it('should parse importing a single member', () =>
         {
             const module = parser.parseModule(IMPORTS.IMPORT);
 
@@ -36,7 +36,7 @@ describe('parser/Parser', () =>
             expect(imported.from).toBe("'module'");
         });
 
-        it('should parse imports for importing a single member with alias', () =>
+        it('should parse importing a single member with alias', () =>
         {
             const module = parser.parseModule(IMPORTS.IMPORT_AS);
 
@@ -49,7 +49,7 @@ describe('parser/Parser', () =>
             expect(imported.from).toBe("'module'");
         });
 
-        it('should parse imports for importing all members', () =>
+        it('should parse importing all members', () =>
         {
             const module = parser.parseModule(IMPORTS.IMPORT_ALL);
 
@@ -62,7 +62,7 @@ describe('parser/Parser', () =>
             expect(imported.from).toBe("'module'");
         });
 
-        it('should parse imports for importing the default member', () =>
+        it('should parse importing the default member', () =>
         {
             const module = parser.parseModule(IMPORTS.IMPORT_DEFAULT);
 
@@ -75,7 +75,7 @@ describe('parser/Parser', () =>
             expect(imported.from).toBe("'module'");
         });
 
-        it('should parse imports for importing the default with another member', () =>
+        it('should parse importing the default with another member', () =>
         {
             const module = parser.parseModule(IMPORTS.IMPORT_DEFAULT_MEMBER);
 
@@ -94,7 +94,7 @@ describe('parser/Parser', () =>
             expect(second.from).toBe("'module'");
         });
 
-        it('should parse imports for importing the default with another member with alias', () =>
+        it('should parse importing the default with another member with alias', () =>
         {
             const module = parser.parseModule(IMPORTS.IMPORT_DEFAULT_MEMBER_AS);
 
@@ -113,7 +113,7 @@ describe('parser/Parser', () =>
             expect(second.from).toBe("'module'");
         });
 
-        it('should parse imports for importing the default with other members and aliases', () =>
+        it('should parse importing the default with other members and aliases', () =>
         {
             const module = parser.parseModule(IMPORTS.IMPORT_MULTIPLE_MEMBERS_AS);
 
@@ -130,6 +130,112 @@ describe('parser/Parser', () =>
             expect(second.name).toBe('member');
             expect(second.as).toBe('alias');
             expect(second.from).toBe("'module'");
+        });
+
+        it('should parse exporting a single member', () =>
+        {
+            const module = parser.parseModule(EXPORTS.EXPORT);
+
+            expect(module.exports.length).toBe(1);
+
+            const exported = module.exports[0];
+
+            expect(exported.name).toBe('member');
+            expect(exported.as).toBe('member');
+        });
+
+        it('should parse exporting a single member with alias', () =>
+        {
+            const module = parser.parseModule(EXPORTS.EXPORT_AS);
+
+            expect(module.exports.length).toBe(1);
+
+            const exported = module.exports[0];
+
+            expect(exported.name).toBe('member');
+            expect(exported.as).toBe('alias');
+        });
+
+        it('should parse exporting a default', () =>
+        {
+            const module = parser.parseModule(EXPORTS.EXPORT_DEFAULT);
+
+            expect(module.exports.length).toBe(1);
+
+            const exported = module.exports[0];
+
+            expect(exported.name).toBe('name');
+            expect(exported.as).toBe('default');
+        });
+
+        it('should parse exporting multiple members', () =>
+        {
+            const module = parser.parseModule(EXPORTS.EXPORT_MULTIPLE);
+
+            expect(module.exports.length).toBe(2);
+
+            const first = module.exports[0];
+
+            expect(first.name).toBe('name');
+            expect(first.as).toBe('name');
+
+            const second = module.exports[1];
+
+            expect(second.name).toBe('member');
+            expect(second.as).toBe('member');
+        });
+
+        it('should parse exporting multiple members with alias', () =>
+        {
+            const module = parser.parseModule(EXPORTS.EXPORT_MULTIPLE_AS);
+
+            expect(module.exports.length).toBe(2);
+
+            const first = module.exports[0];
+
+            expect(first.name).toBe('name');
+            expect(first.as).toBe('name');
+
+            const second = module.exports[1];
+
+            expect(second.name).toBe('member');
+            expect(second.as).toBe('alias');
+        });
+
+        it('should parse exporting a class declaration', () =>
+        {
+            const module = parser.parseModule(EXPORTS.EXPORT_CLASS_DECLARATION);
+
+            expect(module.exports.length).toBe(1);
+
+            const exported = module.exports[0];
+
+            expect(exported.name).toBe('name');
+            expect(exported.as).toBe('name');
+        });
+
+        it('should parse exporting a function declaration', () =>
+        {
+            const module = parser.parseModule(EXPORTS.EXPORT_FUNCTION_DECLARATION);
+
+            expect(module.exports.length).toBe(1);
+
+            const exported = module.exports[0];
+
+            expect(exported.name).toBe('name');
+            expect(exported.as).toBe('name');
+        });
+
+        it('should parse exporting a async function declaration', () =>
+        {
+            const module = parser.parseModule(EXPORTS.EXPORT_ASYNC_FUNCTION_DECLARATION);
+
+            expect(module.exports.length).toBe(1);
+
+            const exported = module.exports[0];
+
+            expect(exported.name).toBe('name');
+            expect(exported.as).toBe('name');
         });
     });
 
