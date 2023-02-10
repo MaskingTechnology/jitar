@@ -142,6 +142,7 @@ describe('parser/Parser', () =>
 
             expect(exported.name).toBe('member');
             expect(exported.as).toBe('member');
+            expect(exported.from).toBe(undefined);
         });
 
         it('should parse exporting a single member with alias', () =>
@@ -154,6 +155,7 @@ describe('parser/Parser', () =>
 
             expect(exported.name).toBe('member');
             expect(exported.as).toBe('alias');
+            expect(exported.from).toBe(undefined);
         });
 
         it('should parse exporting a default', () =>
@@ -166,6 +168,7 @@ describe('parser/Parser', () =>
 
             expect(exported.name).toBe('name');
             expect(exported.as).toBe('default');
+            expect(exported.from).toBe(undefined);
         });
 
         it('should parse exporting multiple members', () =>
@@ -178,11 +181,13 @@ describe('parser/Parser', () =>
 
             expect(first.name).toBe('name');
             expect(first.as).toBe('name');
+            expect(first.from).toBe(undefined);
 
             const second = module.exports[1];
 
             expect(second.name).toBe('member');
             expect(second.as).toBe('member');
+            expect(second.from).toBe(undefined);
         });
 
         it('should parse exporting multiple members with alias', () =>
@@ -195,11 +200,13 @@ describe('parser/Parser', () =>
 
             expect(first.name).toBe('name');
             expect(first.as).toBe('name');
+            expect(first.from).toBe(undefined);
 
             const second = module.exports[1];
 
             expect(second.name).toBe('member');
             expect(second.as).toBe('alias');
+            expect(second.from).toBe(undefined);
         });
 
         it('should parse exporting a class declaration', () =>
@@ -212,6 +219,7 @@ describe('parser/Parser', () =>
 
             expect(exported.name).toBe('name');
             expect(exported.as).toBe('name');
+            expect(exported.from).toBe(undefined);
         });
 
         it('should parse exporting a function declaration', () =>
@@ -224,6 +232,7 @@ describe('parser/Parser', () =>
 
             expect(exported.name).toBe('name');
             expect(exported.as).toBe('name');
+            expect(exported.from).toBe(undefined);
         });
 
         it('should parse exporting a async function declaration', () =>
@@ -236,6 +245,33 @@ describe('parser/Parser', () =>
 
             expect(exported.name).toBe('name');
             expect(exported.as).toBe('name');
+            expect(exported.from).toBe(undefined);
+        });
+
+        it('should parse reexporting a module', () =>
+        {
+            const module = parser.parseModule(EXPORTS.REEXPORT_ALL);
+
+            expect(module.exports.length).toBe(1);
+
+            const exported = module.exports[0];
+
+            expect(exported.name).toBe('(anonymous)');
+            expect(exported.as).toBe('(anonymous)');
+            expect(exported.from).toBe("'module'");
+        });
+
+        it('should parse reexporting a member', () =>
+        {
+            const module = parser.parseModule(EXPORTS.REEXPORT_MEMBER);
+
+            expect(module.exports.length).toBe(1);
+
+            const exported = module.exports[0];
+
+            expect(exported.name).toBe('member');
+            expect(exported.as).toBe('member');
+            expect(exported.from).toBe("'module'");
         });
     });
 

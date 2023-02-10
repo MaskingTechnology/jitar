@@ -37,4 +37,9 @@ export default class ItemList<T>
 
         return this.current;
     }
+
+    hasNext(): boolean
+    {
+        return this.#position + 1 < this.#items.length;
+    }
 }

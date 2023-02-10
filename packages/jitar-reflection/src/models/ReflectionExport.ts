@@ -5,16 +5,20 @@ export default class ReflectionExport extends ReflectionModel
 {
     #name: string;
     #as: string;
+    #from?: string;
 
-    constructor(name: string, as: string)
+    constructor(name: string, as: string, from: string | undefined = undefined)
     {
         super();
         
         this.#name = name;
         this.#as = as;
+        this.#from = from;
     }
 
-    get name(): string { return this.#name; }
+    get name() { return this.#name; }
 
-    get as(): string { return this.#as; }
+    get as() { return this.#as; }
+
+    get from() { return this.#from; }
 }

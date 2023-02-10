@@ -154,14 +154,6 @@ export default class Parser
         }
     }
 
-    /*
-     * Supported syntax:
-     * - import './somefile.js';
-     * - import foo from './somefile.js';
-     * - import * as foo from './somefile.js';
-     * - import { foo, bar as baz } from './somefile.js';
-     * - import foo, { bar } from './somefile.js';
-     */
     #parseImport(tokenList: TokenList): ReflectionImport[]
     {
         const identifiers: Alias[] = [];
@@ -223,11 +215,6 @@ export default class Parser
         }
     }
 
-    /*
-     * Supported syntax:
-     * - export const PI = 3.14;
-     * - export default function foo() {}
-     */
     #parseSingleExport(tokenList: TokenList, isDefault: boolean): ReflectionExport
     {
         let token = tokenList.current;
@@ -247,22 +234,33 @@ export default class Parser
 
         const name = token.isType(TokenType.IDENTIFIER) ? token.value : ANONYMOUS;
         const as = isDefault ? 'default' : name;
+        let from: string | undefined = undefined;
+
+        if (tokenList.hasNext() && tokenList.next.hasValue(Keyword.FROM))
+        {
+            tokenList.step(2); // Read away the FROM keyword
+            
+            from = tokenList.current.value;
+        }
 
         tokenList.stepBack(stepSize); // Step back to the original position
 
-        return new ReflectionExport(name, as);
+        return new ReflectionExport(name, as, from);
     }
 
-    /*
-     * Supported syntax:
-     * - export { foo, bar };
-     * - export { foo, bar as baz };
-     */
     #parseMultiExport(tokenList: TokenList): ReflectionExport[]
     {
         const identifiers = this.#parseAliasList(tokenList);
+        let from: string | undefined = undefined;
 
-        return identifiers.map(identifier => new ReflectionExport(identifier.name, identifier.as));
+        if (tokenList.hasNext() && tokenList.next.hasValue(Keyword.FROM))
+        {
+            tokenList.step(2); // Read away the FROM keyword
+
+            from = tokenList.current.value;
+        }
+
+        return identifiers.map(identifier => new ReflectionExport(identifier.name, identifier.as, from));
     }
 
     #parseAliasList(tokenList: TokenList): Alias[]
