@@ -22,13 +22,13 @@ export default class ReflectionClass extends ReflectionMember
 
     get members(): ReflectionMember[] { return this.#members; }
 
-    get fields(): ReflectionField[] { return this.#members.filter(member => member instanceof ReflectionField) as ReflectionField[]; }
+    get fields(): ReflectionField[] { return this.#members.filter(member => member.constructor.name === 'ReflectionField') as ReflectionField[]; }
 
-    get functions(): ReflectionFunction[] { return this.#members.filter(member => member instanceof ReflectionFunction) as ReflectionFunction[]; }
+    get functions(): ReflectionFunction[] { return this.#members.filter(member => member.constructor.name === 'ReflectionFunction') as ReflectionFunction[]; }
 
-    get getters(): ReflectionGetter[] { return this.#members.filter(member => member instanceof ReflectionGetter) as ReflectionGetter[]; }
+    get getters(): ReflectionGetter[] { return this.#members.filter(member => member.constructor.name === 'ReflectionGetter') as ReflectionGetter[]; }
 
-    get setters(): ReflectionSetter[] { return this.#members.filter(member => member instanceof ReflectionSetter) as ReflectionSetter[]; }
+    get setters(): ReflectionSetter[] { return this.#members.filter(member => member.constructor.name === 'ReflectionSetter') as ReflectionSetter[]; }
 
     getField(name: string): ReflectionField | undefined
     {

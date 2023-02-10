@@ -29,11 +29,11 @@ export default class ReflectionModule extends ReflectionModel
 
     get exports(): ReflectionExport[] { return this.#exports; }
 
-    get classes(): ReflectionMember[] { return this.#members.filter(member => member instanceof ReflectionClass); }
+    get classes(): ReflectionMember[] { return this.#members.filter(member => member.constructor.name === 'ReflectionClass'); }
 
-    get functions(): ReflectionMember[] { return this.#members.filter(member => member instanceof ReflectionFunction); }
+    get functions(): ReflectionMember[] { return this.#members.filter(member => member.constructor.name === 'ReflectionFunction'); }
 
-    get fields(): ReflectionMember[] { return this.#members.filter(member => member instanceof ReflectionField); }
+    get fields(): ReflectionMember[] { return this.#members.filter(member => member.constructor.name === 'ReflectionField'); }
 
     get exported(): ReflectionMember[]
     {
