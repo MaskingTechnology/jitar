@@ -88,6 +88,19 @@ export default class Parser
         return model as ReflectionFunction;
     }
 
+    parseField(code: string): ReflectionField
+    {
+        const tokenList = this.#lexer.tokenize(code);
+        const model = this.#parseKeyword(tokenList);
+
+        if ((model instanceof ReflectionField) === false)
+        {
+            throw new Error('The given code does not contain a field definition');
+        }
+
+        return model as ReflectionField;
+    }
+
     #parseTokens(tokenList: TokenList): ReflectionModel[]
     {
         const models: ReflectionModel[] = [];
@@ -468,13 +481,13 @@ export default class Parser
 
         if (token.hasValue(Operator.ASSIGN))
         {
-            value = this.#parseExpression(tokenList, terminators);
+            value = this.#parseStatement(tokenList, terminators);
         }
 
         return new ReflectionField(name, value, isStatic, isPrivate);
     }
 
-    #parseExpression(tokenList: TokenList, terminators: string[]): string
+    #parseStatement(tokenList: TokenList, terminators: string[]): string
     {
         let token = tokenList.step();
         let code = '';
@@ -483,30 +496,37 @@ export default class Parser
         {
             if (terminators.includes(token.value))
             {
+                // Terminator found, we're done here.
+
                 return code.trim();
             }
-
-            if (isKeyword(token.value))
+            else if (isKeyword(token.value) && token.hasValue(Keyword.NEW) === false)
             {
+                // We've just read a keyword, but we're expecting a value.
+                // This means we've reached the end of the statement.
+
                 tokenList.stepBack();
 
                 return code.trim();
             }
-
-            code += token.toString() + ' ';
-
-            switch (token.value)
+            else if ([List.OPEN, Group.OPEN, Scope.OPEN].includes(token.value))
             {
-                case List.OPEN:
-                case Group.OPEN:
-                case Scope.OPEN:
-                    code += this.#parseExpression(tokenList, [ Division.TERMINATOR ]);
-                    break;
+                // We've just opened a new scope, so we need to parse the contents of that scope.
 
-                case List.CLOSE:
-                case Group.CLOSE:
-                case Scope.CLOSE:
-                    return code.trim();
+                code += token.toString() + ' ';
+                code += this.#parseStatement(tokenList, []);
+            }
+            else if ([List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value))
+            {
+                // We've just closed a scope, so we need to return the code we've parsed so far.
+
+                code += token.toString() + ' ';
+
+                return code;
+            }
+            else
+            {
+                code += token.toString() + ' ';
             }
 
             token = tokenList.step();

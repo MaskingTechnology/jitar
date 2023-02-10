@@ -487,4 +487,55 @@ describe('parser/Parser', () =>
             expect(funktion.body).toBe("{ if ( true ) { return 'value' ; } }");
         });
     });
+
+    describe('.parseField(code)', () =>
+    {
+        it('should parse an empty field', () =>
+        {
+            const field = parser.parseField(FIELDS.EMPTY);
+
+            expect(field.name).toBe('name');
+            expect(field.value).toBe(undefined);
+        });
+
+        it('should parse a const field', () =>
+        {
+            const field = parser.parseField(FIELDS.CONST);
+
+            expect(field.name).toBe('name');
+            expect(field.value).toBe("'const'");
+        });
+
+        it('should parse a let field with value', () =>
+        {
+            const field = parser.parseField(FIELDS.LET);
+
+            expect(field.name).toBe('name');
+            expect(field.value).toBe("'let'");
+        });
+
+        it('should parse a var field with value', () =>
+        {
+            const field = parser.parseField(FIELDS.VAR);
+
+            expect(field.name).toBe('name');
+            expect(field.value).toBe("'var'");
+        });
+
+        it('should parse a field with a statement value', () =>
+        {
+            const field = parser.parseField(FIELDS.SIMPLE_STATEMENT);
+
+            expect(field.name).toBe('sum');
+            expect(field.value).toBe("a + b");
+        });
+
+        it('should parse a field with a complex statement value', () =>
+        {
+            const field = parser.parseField(FIELDS.COMPLEX_STATEMENT);
+
+            expect(field.name).toBe('sum');
+            expect(field.value).toBe("new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )");
+        });
+    });
 });

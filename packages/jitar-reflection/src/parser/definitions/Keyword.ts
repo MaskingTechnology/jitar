@@ -15,7 +15,8 @@ const Keyword =
     SET: 'set',
     EXTENDS: 'extends',
     STATIC: 'static',
-    ASYNC: 'async'
+    ASYNC: 'async',
+    NEW: 'new',
 };
 
 const Keywords = Object.values(Keyword);

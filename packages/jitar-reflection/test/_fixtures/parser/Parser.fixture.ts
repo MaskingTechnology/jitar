@@ -99,9 +99,15 @@ const FUNCTIONS =
 const FIELDS =
 {
     EMPTY: "let name;",
-    CONST: "const name = 'value';",
-    LET: "let name = 'value';",
-    VAR: "var name = 'value';",
+    CONST: "const name = 'const';",
+    LET: "let name = 'let';",
+    VAR: "var name = 'var';",
+    SIMPLE_STATEMENT: "const sum = a + b;",
+    COMPLEX_STATEMENT: `const sum = new Number(Math.ceil(Math.random()) + 10).toString();`,
 }
+
+const sum = new Number(Math.ceil(Math.random()) + 10)
+.toString()
+sum.split('');
 
 export { IMPORTS, EXPORTS, CLASSES, FUNCTIONS, FIELDS }
