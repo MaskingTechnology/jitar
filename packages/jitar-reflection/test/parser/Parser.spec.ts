@@ -396,9 +396,95 @@ describe('parser/Parser', () =>
 
     describe('.parseFunction(code)', () =>
     {
-        it('should ...', () =>
+        it('should parse a simple function declaration', () =>
         {
+            const funktion = parser.parseFunction(FUNCTIONS.DECLARATION);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(false);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse an async function declaration', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.ASYNC_DECLARATION);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(true);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse simple function parameters', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.PARAMETERS);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(false);
+
+            expect(funktion.parameters.length).toBe(2);
+
+            expect(funktion.parameters[0].name).toBe('param1');
+            expect(funktion.parameters[0].value).toBe(undefined);
+
+            expect(funktion.parameters[1].name).toBe('param2');
+            expect(funktion.parameters[1].value).toBe(undefined);
+
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse default function parameters', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.DEFAULT_PARAMETERS);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(false);
             
+            expect(funktion.parameters.length).toBe(2);
+
+            expect(funktion.parameters[0].name).toBe('param1');
+            expect(funktion.parameters[0].value).toBe("'value1'");
+
+            expect(funktion.parameters[1].name).toBe('param2');
+            expect(funktion.parameters[1].value).toBe('true');
+
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse a function rest parameter', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.REST_PARAMETERS);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(false);
+            
+            expect(funktion.parameters.length).toBe(1);
+
+            expect(funktion.parameters[0].name).toBe('...param1');
+            expect(funktion.parameters[0].value).toBe(undefined);
+
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse a simple function body', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.SIMPLE_BODY);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(false);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe("{ return 'value' ; }");
+        });
+
+        it('should parse a block function body', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.BLOCK_BODY);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(false);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe("{ if ( true ) { return 'value' ; } }");
         });
     });
 });

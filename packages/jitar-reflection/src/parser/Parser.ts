@@ -447,7 +447,7 @@ export default class Parser
                 continue;
             }
 
-            const field = this.#parseField(tokenList, false, Division.SEPARATOR);
+            const field = this.#parseField(tokenList, false, [ Division.SEPARATOR, Group.CLOSE ]);
 
             parameters.push(field);
         }
@@ -455,7 +455,7 @@ export default class Parser
         return parameters;
     }
 
-    #parseField(tokenList: TokenList, isStatic: boolean, terminator = Division.TERMINATOR): ReflectionField
+    #parseField(tokenList: TokenList, isStatic: boolean, terminators = [ Division.TERMINATOR ]): ReflectionField
     {
         let token = tokenList.current;
 
@@ -468,20 +468,20 @@ export default class Parser
 
         if (token.hasValue(Operator.ASSIGN))
         {
-            value = this.#parseExpression(tokenList, terminator);
+            value = this.#parseExpression(tokenList, terminators);
         }
 
         return new ReflectionField(name, value, isStatic, isPrivate);
     }
 
-    #parseExpression(tokenList: TokenList, terminator: string): string
+    #parseExpression(tokenList: TokenList, terminators: string[]): string
     {
         let token = tokenList.step();
         let code = '';
 
         while (tokenList.eof === false)
         {
-            if (token.value === terminator)
+            if (terminators.includes(token.value))
             {
                 return code.trim();
             }
@@ -500,7 +500,7 @@ export default class Parser
                 case List.OPEN:
                 case Group.OPEN:
                 case Scope.OPEN:
-                    code += this.#parseExpression(tokenList, Division.TERMINATOR);
+                    code += this.#parseExpression(tokenList, [ Division.TERMINATOR ]);
                     break;
 
                 case List.CLOSE:
@@ -518,7 +518,7 @@ export default class Parser
     #parseBody(tokenList: TokenList): string
     {
         let token = tokenList.step();
-        let code = '';
+        let code = Scope.OPEN + ' ';
 
         while (tokenList.eof === false)
         {
@@ -527,16 +527,13 @@ export default class Parser
                 return code.trim();
             }
 
+            code += token.hasValue(Scope.OPEN)
+                ? this.#parseBody(tokenList) + ' '
+                : token.toString() + ' ';
+            
             if (token.hasValue(Scope.CLOSE))
             {
                 return code.trim();
-            }
-
-            code += token.toString() + ' ';
-
-            if (token.hasValue(Scope.OPEN))
-            {
-                code += this.#parseBody(tokenList);
             }
 
             token = tokenList.step();
