@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 0.3.2 (February 10, 2023)
+
+Fixes:
+- \[[`f9c43a2`](https://github.com/MaskingTechnology/jitar/commit/f9c43a2)] Fixed 0.3.1 releases (did not contain code) [basmasking](https://github.com/MaskingTechnology/jitar/commit/f9c43a2)
+
 ## 0.3.1 (February 08, 2023)
 
 New features:
