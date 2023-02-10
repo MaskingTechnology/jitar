@@ -277,9 +277,120 @@ describe('parser/Parser', () =>
 
     describe('.parseClass(code)', () =>
     {
-        it('should ...', () =>
+        it('should parse a simple class declaration', () =>
         {
-            
+            const clazz = parser.parseClass(CLASSES.DECLARATION);
+
+            expect(clazz.name).toBe('Name');
+            expect(clazz.parentName).toBe(undefined);
+            expect(clazz.members.length).toBe(0);
+        });
+
+        it('should parse a simple class declaration with parent class', () =>
+        {
+            const clazz = parser.parseClass(CLASSES.EXTENDS);
+
+            expect(clazz.name).toBe('Name');
+            expect(clazz.parentName).toBe('Parent');
+            expect(clazz.members.length).toBe(0);
+        });
+
+        it('should parse class members', () =>
+        {
+            const clazz = parser.parseClass(CLASSES.MEMBERS);
+
+            expect(clazz.name).toBe('Name');
+            expect(clazz.parentName).toBe(undefined);
+
+            expect(clazz.fields.length).toBe(4);
+
+            expect(clazz.fields[0].name).toBe('field1');
+            expect(clazz.fields[0].isPrivate).toBe(true);
+            expect(clazz.fields[0].isStatic).toBe(false);
+            expect(clazz.fields[0].value).toBe("'value1'");
+
+            expect(clazz.fields[1].name).toBe('field2');
+            expect(clazz.fields[1].isPrivate).toBe(false);
+            expect(clazz.fields[1].isStatic).toBe(false);
+            expect(clazz.fields[1].value).toBe(undefined);
+
+            expect(clazz.fields[2].name).toBe('field3');
+            expect(clazz.fields[2].isPrivate).toBe(true);
+            expect(clazz.fields[2].isStatic).toBe(true);
+            expect(clazz.fields[2].value).toBe('"value3"');
+
+            expect(clazz.fields[3].name).toBe('field4');
+            expect(clazz.fields[3].isPrivate).toBe(false);
+            expect(clazz.fields[3].isStatic).toBe(true);
+            expect(clazz.fields[3].value).toBe(undefined);
+
+            expect(clazz.getters.length).toBe(4);
+
+            expect(clazz.getters[0].name).toBe('getter1');
+            expect(clazz.getters[0].isPrivate).toBe(true);
+            expect(clazz.getters[0].isStatic).toBe(false);
+
+            expect(clazz.getters[1].name).toBe('getter2');
+            expect(clazz.getters[1].isPrivate).toBe(false);
+            expect(clazz.getters[1].isStatic).toBe(false);
+
+            expect(clazz.getters[2].name).toBe('getter3');
+            expect(clazz.getters[2].isPrivate).toBe(true);
+            expect(clazz.getters[2].isStatic).toBe(true);
+
+            expect(clazz.getters[3].name).toBe('getter4');
+            expect(clazz.getters[3].isPrivate).toBe(false);
+            expect(clazz.getters[3].isStatic).toBe(true);
+
+            expect(clazz.setters.length).toBe(4);
+
+            expect(clazz.setters[0].name).toBe('setter1');
+            expect(clazz.setters[0].isPrivate).toBe(true);
+            expect(clazz.setters[0].isStatic).toBe(false);
+
+            expect(clazz.setters[1].name).toBe('setter2');
+            expect(clazz.setters[1].isPrivate).toBe(false);
+            expect(clazz.setters[1].isStatic).toBe(false);
+
+            expect(clazz.setters[2].name).toBe('setter3');
+            expect(clazz.setters[2].isPrivate).toBe(true);
+            expect(clazz.setters[2].isStatic).toBe(true);
+
+            expect(clazz.setters[3].name).toBe('setter4');
+            expect(clazz.setters[3].isPrivate).toBe(false);
+            expect(clazz.setters[3].isStatic).toBe(true);
+
+            expect(clazz.functions.length).toBe(6);
+
+            expect(clazz.functions[0].name).toBe('constructor');
+            expect(clazz.functions[0].isPrivate).toBe(false);
+            expect(clazz.functions[0].isStatic).toBe(false);
+            expect(clazz.functions[0].isAsync).toBe(false);
+
+            expect(clazz.functions[1].name).toBe('method1');
+            expect(clazz.functions[1].isPrivate).toBe(false);
+            expect(clazz.functions[1].isStatic).toBe(false);
+            expect(clazz.functions[1].isAsync).toBe(false);
+
+            expect(clazz.functions[2].name).toBe('method2');
+            expect(clazz.functions[2].isPrivate).toBe(false);
+            expect(clazz.functions[2].isStatic).toBe(false);
+            expect(clazz.functions[2].isAsync).toBe(true);
+
+            expect(clazz.functions[3].name).toBe('method3');
+            expect(clazz.functions[3].isPrivate).toBe(false);
+            expect(clazz.functions[3].isStatic).toBe(true);
+            expect(clazz.functions[3].isAsync).toBe(false);
+
+            expect(clazz.functions[4].name).toBe('method4');
+            expect(clazz.functions[4].isPrivate).toBe(false);
+            expect(clazz.functions[4].isStatic).toBe(true);
+            expect(clazz.functions[4].isAsync).toBe(true);
+
+            expect(clazz.functions[5].name).toBe('method5');
+            expect(clazz.functions[5].isPrivate).toBe(true);
+            expect(clazz.functions[5].isStatic).toBe(false);
+            expect(clazz.functions[5].isAsync).toBe(false);
         });
     });
 
