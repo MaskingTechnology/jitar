@@ -305,11 +305,6 @@ export default class Parser
         return { name, as };
     }
 
-    /*
-     * Supported syntax:
-     * - class Person { members }
-     * - class Person extends Human { members }
-     */
     #parseClass(tokenList: TokenList): ReflectionClass
     {
         let token = tokenList.current;
@@ -337,21 +332,6 @@ export default class Parser
         return new ReflectionClass(name, parent, members);
     }
 
-    /*
-     * Supported syntax:
-     * - publicField;
-     * - #privateField;
-     * - static staticField;
-     * - constructor() { body }
-     * - publicFunction() { body }
-     * - #privateFunction() { body }
-     * - static staticFunction() { body }
-     * - async asyncFunction() { body }
-     * - get getter() { body }
-     * - set setter(value) { body }
-     * - static get staticGetter() { body }
-     * - static set staticSetter(value) { body }
-     */
     #parseMembers(tokenList: TokenList): ReflectionMember[]
     {
         const members = [];
@@ -503,17 +483,17 @@ export default class Parser
         {
             if (token.value === terminator)
             {
-                return code;
+                return code.trim();
             }
 
             if (isKeyword(token.value))
             {
                 tokenList.stepBack();
 
-                return code;
+                return code.trim();
             }
 
-            code += token.toString();
+            code += token.toString() + ' ';
 
             switch (token.value)
             {
@@ -526,13 +506,13 @@ export default class Parser
                 case List.CLOSE:
                 case Group.CLOSE:
                 case Scope.CLOSE:
-                    return code;
+                    return code.trim();
             }
 
             token = tokenList.step();
         }
-        
-        return code;
+
+        return code.trim();
     }
 
     #parseBody(tokenList: TokenList): string
@@ -544,15 +524,15 @@ export default class Parser
         {
             if (token === undefined)
             {
-                return code;
+                return code.trim();
             }
 
             if (token.hasValue(Scope.CLOSE))
             {
-                return code;
+                return code.trim();
             }
 
-            code += token.toString();
+            code += token.toString() + ' ';
 
             if (token.hasValue(Scope.OPEN))
             {
@@ -562,6 +542,6 @@ export default class Parser
             token = tokenList.step();
         }
 
-        return code;
+        return code.trim();
     }
 }

@@ -34,6 +34,6 @@ export default class Token
 
     toString(): string
     {
-        return `${this.#value} `;
+        return `${this.#value}`;
     }
 }
