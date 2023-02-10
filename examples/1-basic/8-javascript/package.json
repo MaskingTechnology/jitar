@@ -6,6 +6,6 @@
         "start": "node --experimental-network-imports --experimental-fetch src/start.js --config=jitar.json"
     },
     "dependencies": {
-        "jitar-nodejs-server": "^0.3.1"
+        "jitar-nodejs-server": "^0.3.2"
     }
 }
