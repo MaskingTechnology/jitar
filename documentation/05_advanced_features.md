@@ -291,12 +291,18 @@ const moduleImporter = async (specifier: string) => import(specifier);
 
 startServer(moduleImporter).then(server =>
 {
-    server.addMiddleware(new CorsMiddleware('https://jitar.dev'));
+    //server.addMiddleware(new CorsMiddleware()); // allow all origins and headers
+    //server.addMiddleware(new CorsMiddleware('https://jitar.dev')); // allow specific origin and all headers
+    server.addMiddleware(new CorsMiddleware('https://jitar.dev', 'Content-Type, Authorization')); // allow specific origin and headers
 });
 ```
 
+The first argument sets the [Access-Control-Allow-Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) header. This header only supports a single origin or a wildcard. The latter is the default when no origin is provided.
+
+The second argument sets the [Access-Control-Allow-Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers) header. This header supports a comma separated list of headers or a wildcard. The latter is the default when no headers are provided.
+
 {:.alert-info}
-The CORS middleware only supports a single origin or a wildcard. The latter is the default when no origin is provided.
+The [Access-Control-Allow-Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods) header is always set to GET and POST because these are by default supported by the [RPC API](#rpc).
 
 ---
 
