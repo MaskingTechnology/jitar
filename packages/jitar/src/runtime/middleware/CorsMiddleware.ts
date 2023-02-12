@@ -5,12 +5,14 @@ import NextHandler from '../types/NextHandler.js';
 
 export default class CorsMiddleware implements Middleware
 {
-    #origin: string;
-    #methods = ['GET', 'POST'];
+    #allowOrigin: string;
+    #allowMethods = 'GET, POST';
+    #allowHeaders: string;
 
-    constructor(origin = '*')
+    constructor(origin = '*', headers = '*')
     {
-        this.#origin = origin;
+        this.#allowOrigin = origin;
+        this.#allowHeaders = headers;
     }
 
     async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: NextHandler): Promise<unknown>
@@ -24,7 +26,8 @@ export default class CorsMiddleware implements Middleware
 
     #setHeaders(headers: Map<string, string>): void
     {
-        headers.set('Access-Control-Allow-Origin', this.#origin);
-        headers.set('Access-Control-Allow-Methods', this.#methods.join(', '));
+        headers.set('Access-Control-Allow-Origin', this.#allowOrigin);
+        headers.set('Access-Control-Allow-Methods', this.#allowMethods);
+        headers.set('Access-Control-Allow-Headers', this.#allowHeaders);
     }
 }
