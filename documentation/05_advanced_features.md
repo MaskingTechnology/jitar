@@ -304,6 +304,9 @@ The second argument sets the [Access-Control-Allow-Headers](https://developer.mo
 {:.alert-info}
 The [Access-Control-Allow-Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods) header is always set to GET and POST because these are by default supported by the [RPC API](#rpc).
 
+{:.alert-warning}
+The [RPC API](#rpc) does not provide custom headers set by middleware in OPTIONS requests. This means that CORS preflight requests are not supported yet. Don't hesitate to create a [feature request](https://github.com/MaskingTechnology/jitar/issues/new/choose) if you need it. This helps up prioritize our time.
+
 ---
 
 {:.previous-chapter}
