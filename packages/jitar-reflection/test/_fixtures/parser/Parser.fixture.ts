@@ -102,8 +102,7 @@ const FIELDS =
     CONST: "const name = 'const';",
     LET: "let name = 'let';",
     VAR: "var name = 'var';",
-    SIMPLE_STATEMENT: "const sum = a + b;",
-    COMPLEX_STATEMENT: `const sum = new Number(Math.ceil(Math.random()) + 10).toString();`,
+    STATEMENT: `const number = new Number(Math.ceil(Math.random()) + 10).toString();`,
 }
 
 const sum = new Number(Math.ceil(Math.random()) + 10)

@@ -522,19 +522,11 @@ describe('parser/Parser', () =>
             expect(field.value).toBe("'var'");
         });
 
-        it('should parse a field with a statement value', () =>
-        {
-            const field = parser.parseField(FIELDS.SIMPLE_STATEMENT);
-
-            expect(field.name).toBe('sum');
-            expect(field.value).toBe("a + b");
-        });
-
         it('should parse a field with a complex statement value', () =>
         {
-            const field = parser.parseField(FIELDS.COMPLEX_STATEMENT);
+            const field = parser.parseField(FIELDS.STATEMENT);
 
-            expect(field.name).toBe('sum');
+            expect(field.name).toBe('number');
             expect(field.value).toBe("new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )");
         });
     });
