@@ -30,4 +30,4 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
         
       - run: npm ci
-      - run: npx lerna run lint --since=origin/main & npx lerna run test --since=origin/main & npx lerna run build --since=origin/main
+      - run: npx lerna run lint --since=main & npx lerna run test --since=main & npx lerna run build --since=main
