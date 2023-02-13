@@ -274,6 +274,41 @@ The execution order of the middleware is reversed. This means that the middlewar
 
 ---
 
+## CORS
+
+CORS headers can be added to the response of a RPC call. This is useful when you want to allow cross-origin requests.
+
+When the Jitar server is started using the startServer hook we can add CORS headers.
+
+{:.filename}
+src/start.ts
+
+```ts
+import { CorsMiddleware } from 'jitar';
+import { startServer } from 'jitar-nodejs-server';
+
+const moduleImporter = async (specifier: string) => import(specifier);
+
+startServer(moduleImporter).then(server =>
+{
+    //server.addMiddleware(new CorsMiddleware()); // allow all origins and headers
+    //server.addMiddleware(new CorsMiddleware('https://jitar.dev')); // allow specific origin and all headers
+    server.addMiddleware(new CorsMiddleware('https://jitar.dev', 'Content-Type, Authorization')); // allow specific origin and headers
+});
+```
+
+The first argument sets the [Access-Control-Allow-Origin](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Origin) header. This header only supports a single origin or a wildcard. The latter is the default when no origin is provided.
+
+The second argument sets the [Access-Control-Allow-Headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Headers) header. This header supports a comma separated list of headers or a wildcard. The latter is the default when no headers are provided.
+
+{:.alert-info}
+The [Access-Control-Allow-Methods](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Methods) header is always set to GET and POST because these are by default supported by the [RPC API](#rpc).
+
+{:.alert-warning}
+The [RPC API](#rpc) does not provide custom headers set by middleware in OPTIONS requests. This means that CORS preflight requests are not supported yet. Don't hesitate to create a [feature request](https://github.com/MaskingTechnology/jitar/issues/new/choose) if you need it. This helps up prioritize our time.
+
+---
+
 {:.previous-chapter}
 [Basic features](04_basic_features)
 

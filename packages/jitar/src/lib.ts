@@ -35,6 +35,7 @@ export { default as RemoteGateway } from './runtime/RemoteGateway.js';
 export { default as Repository } from './runtime/Repository.js';
 export { default as Runtime } from './runtime/Runtime.js';
 export { default as RemoteRepository } from './runtime/RemoteRepository.js';
+export { default as CorsMiddleware } from './runtime/middleware/CorsMiddleware.js';
 export { default as ModuleImporter } from './runtime/types/ModuleImporter.js';
 export { default as ModuleLoader } from './runtime/utils/ModuleLoader.js';
 
