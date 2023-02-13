@@ -4,10 +4,9 @@ export default {
   testEnvironment: 'node',
   coverageProvider: 'v8',
   extensionsToTreatAsEsm: ['.ts'],
-  globals: {
-    'ts-jest': {
-      useESM: true
-    }
+  globals: { },
+  transform: {
+    '^.+\\.tsx?$': [ 'ts-jest', { useESM: true } ]
   },
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
