@@ -30,6 +30,6 @@
         "release": "npm run release --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present"
     },
     "devDependencies": {
-        "lerna": "^6.4.1"
+        "lerna": "^6.5.1"
     }
 }
