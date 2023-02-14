@@ -35,9 +35,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
         
       - run: npm ci
-      - run: npm run build
-      - run: npm run lint
-      - run: npm run test
+      - run: npx lerna run lint,test --scope=jitar --scope=jitar-nodejs-server --scope=jitar-vite-plugin
 
       - name: Cache node modules
         id: cache-npm
