@@ -9,13 +9,36 @@ Jitar runs on top of Node.js and in any modern web browser. It has strong suppor
 
 ## Table of contents
 
+* [When to use](#when-to-use)
+* [Key benefits](#key-benefits)
 * [Features](#features)
 * [How it works](#how-it-works)
 * [Getting started](#getting-started)
 * [Example](#example)
 * [Documentation](#documentation)
+* [Publications](#publications)
 * [Contributing](#contributing)
 * [Roadmap](#roadmap)
+
+## When to use
+
+Jitar is a great tool for building applications that are expected to grow and change over time. It can be used for building small to large API driven (web) applications, like:
+
+* Full-stack applications
+* Microservices
+
+For existing applications, Jitar can be of great assistance for load balancing (parts) of the application, or adding multi-version support.
+
+## Key benefits
+
+Developers are at the heart of every application. Jitar is designed to make their lives easier and more productive.
+
+* **API automation** - Automates all client-server communication.
+* **Configuration only** - No code changes required to split applications, keeping the code clean, simple and focussed.
+* **Platform agnostic** - Runs in modern web browsers, servers and the cloud.
+* **Framework agnostic** - Works with every frontend and backend framework.
+* **E2E type-safety** - Reduces programming and refactoring errors.
+* **E2E Intellisense** - Speeds up developing highly scalable apps.
 
 ## Features
 
@@ -29,7 +52,7 @@ It doesn't matter if a component is placed on one of the servers or the web brow
 * **Multi-version** - Procedures are versioned to support backwards compatibility.
 * **Transportation** - Data gets (de)serialized automatically when shared between segments.
 * **RPC calls** - Public procedures can be called from any external system.
-* **And more** - There's also support for health checks, assets, hooks and more.
+* **And more** - There's also support for health checks, middleware, hooks and more.
 
 ## How it works
 
@@ -113,11 +136,27 @@ For splitting (segmenting) applications configuration files are used. For each p
 }
 ```
 
+There are more practical [examples](examples/README.md) in the repository. Practical guides are provided in the [publications](#publications) section.
+
 ## Documentation
 
 Full documentation is online available at [docs.jitar.dev](https://docs.jitar.dev).
 
 Please join our [Discord community](https://discord.gg/Bqwy8azp5R) for questions and discussions.
+
+## Publications
+
+The publications are a great way to learn more about jitar. They provide a lot of background information and practical guides.
+
+### Background stories
+
+* [How I Speed Up Full-stack Development by Not Building APIs](https://medium.com/better-programming/how-i-speed-up-full-stack-development-by-not-building-apis-7f768335bec6)
+* [How I Split a Monolith Into Microservices Without Refactoring](https://medium.com/better-programming/how-i-split-a-monolith-into-microservices-without-refactoring-5d76924c34c2)
+
+### Pratical guides
+
+* [How To Create an API-Less Full Stack App With React and Jitar](https://medium.com/better-programming/how-to-create-an-api-less-full-stack-application-with-react-and-jitar-602bcbabc66b)
+* [How I Split a Monolith Into Microservices Without Refactoring](https://medium.com/better-programming/how-i-split-a-monolith-into-microservices-without-refactoring-5d76924c34c2)
 
 ## Contributing
 
