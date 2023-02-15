@@ -55,8 +55,8 @@ Procedure functions **need to be async** in order to be able to split applicatio
 
 Segment files are used for bundling procedures into servable packages. A procedure must be registered in a segment file in order to be remotely accessible. Procedures can also be registered in multiple segments for optimization reasons (e.g. avoid unnecessary network traffic).
 
-{:.alert-warning}
-Unsegmented procedures should only be used locally to avoid import issues.
+{:.alert-info}
+Unsegmented procedures are available in every segment. To make a procedure only available for a single segment, add the procedure to that segment and set its access to ``private``.
 
 For this example we can create two segment files. The first segment file will only contain the ``sayHello`` procedure.
 
