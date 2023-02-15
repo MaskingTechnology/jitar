@@ -456,9 +456,9 @@ main hr
     display: block;
 }
 
-/*** FEATURES **************************************************/
+/*** CARDS **************************************************/
 
-#features .cards
+.cards
 {
     display: grid;
     /* Grid gap, cols and rows are responsive */
@@ -466,7 +466,7 @@ main hr
     width: 100%;
 }
 
-#features .card
+.card
 {
     align-items: center;
     background-color: var(--swatch-color-white);
@@ -475,18 +475,18 @@ main hr
     flex-direction: column;
     gap: 2em;
     margin: 0;
-    padding: 2.5em 1.5em;
+    padding: 2.5em 0.8em;
     text-align: center;
 }
 
-#features .card img
+.card img
 {
     flex-grow: 0;
     flex-shrink: 0;
     width: 50%;
 }
 
-#features .card h2
+.card h2
 {
     flex-grow: 0;
     flex-shrink: 0;
@@ -495,16 +495,17 @@ main hr
     margin: 0;
 }
 
-#features .card p
+.card p
 {
     flex-grow: 1;
     flex-shrink: 1;
     font-size: 0.9em;
     font-weight: var(--font-weight-light);
     margin: 0;
+    padding: 0 0.7em;
 }
 
-#features .card a
+.card a
 {
     background-color: transparent;
     border: 1px solid var(--swatch-color-gray-3);
@@ -520,27 +521,27 @@ main hr
     width: 12em;
 }
 
-#features .card a:hover
+.card a:hover
 {
     background-color: var(--swatch-color-gray-1);
     border: 1px solid var(--swatch-color-gray-3);
     color: var(--swatch-color-red-2);
 }
 
-#features .card.inactive
+.card.inactive
 {
     background-color: transparent;
     border: 1px dashed var(--swatch-color-gray-3);
 }
 
-#features .card.inactive a
+.card.inactive a
 {
     background-color: var(--swatch-color-red-2);
     border: 1px solid var(--swatch-color-red-2);
     color: var(--swatch-color-white);
 }
 
-#features .card.inactive a:hover
+.card.inactive a:hover
 {
     background-color: var(--swatch-color-red-1);
     border: 1px solid var(--swatch-color-red-1);
@@ -614,11 +615,11 @@ footer a:hover
         flex-direction: row;
     }
 
-    #features .cards
+    .cards
     {
         /* Place feature cards in four columns */
         gap: 2em;
-        grid-template-columns: auto auto auto auto;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
         grid-template-rows: auto auto;
     }
 
@@ -673,11 +674,11 @@ footer a:hover
         flex-direction: column;
     }
 
-    #features .cards
+    .cards
     {
         /* Place feature cards in three columns */
         gap: 2vw;
-        grid-template-columns: auto auto auto;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
         grid-template-rows: auto auto auto;
     }
 }
@@ -696,10 +697,10 @@ footer a:hover
         background-size: auto 90px, auto 200px;
     }
 
-    #features .cards
+    .cards
     {
         /* Place feature cards in two columns */
-        grid-template-columns: auto auto;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
         grid-template-rows: auto auto auto auto;
     }
 
@@ -771,7 +772,7 @@ footer a:hover
         margin: 0 -1.2em;
     }
 
-    #features .cards
+    .cards
     {
         /* Improve the readability */
         font-size: 1.1em;
@@ -782,7 +783,7 @@ footer a:hover
         grid-template-rows: auto auto auto auto auto auto auto auto;
     }
 
-    #features .card
+    .card
     {
         /* Improve the spacing and readability */
         gap: 2.0em;
