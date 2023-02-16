@@ -269,14 +269,14 @@ describe('parser/Parser', () =>
             expect(field.value?.definition).toBe("'var'");
         });
 
-        // it('should parse a field with an expression', () =>
-        // {
-        //     const field = parser.parseField(FIELDS.EXPRESSION);
+        it('should parse a field with an expression', () =>
+        {
+            const field = parser.parseField(FIELDS.EXPRESSION);
 
-        //     expect(field.name).toBe('number');
-        //     expect(field.value).toBeInstanceOf(ReflectionExpression);
-        //     expect(field.value?.definition).toBe("new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )");
-        // });
+            expect(field.name).toBe('number');
+            expect(field.value).toBeInstanceOf(ReflectionExpression);
+            expect(field.value?.definition).toBe("new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )");
+        });
 
         it('should parse a field with an array value', () =>
         {

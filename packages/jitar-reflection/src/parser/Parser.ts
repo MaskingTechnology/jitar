@@ -691,6 +691,9 @@ export default class Parser
                 const expression = this.#parseExpression(tokenList);
 
                 code += expression.definition + ' ';
+                token = tokenList.current;
+                
+                continue;
             }
             else if (this.#atEndOfStatement(token))
             {
@@ -700,7 +703,7 @@ export default class Parser
                 }
 
                 tokenList.step(); // Read away the end of statement
-                
+
                 break;
             }
             else
