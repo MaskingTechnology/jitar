@@ -4,7 +4,7 @@ import TokenList from './TokenList.js';
 
 import { Division } from './definitions/Division.js';
 import { Group } from './definitions/Group.js';
-import { Keyword, isKeyword, isDeclaration } from './definitions/Keyword.js';
+import { Keyword, isDeclaration } from './definitions/Keyword.js';
 import { List } from './definitions/List.js';
 import { Operator } from './definitions/Operator.js';
 import { Scope } from './definitions/Scope.js';
@@ -24,10 +24,11 @@ import ReflectionExpression from '../models/ReflectionExpression.js';
 import ReflectionArray from '../models/ReflectionArray.js';
 import ReflectionObject from '../models/ReflectionObject.js';
 import ReflectionAlias from '../models/ReflectionAlias.js';
-import Token from './Token.js';
 import ReflectionScope from '../models/ReflectionScope.js';
 import ReflectionValue from '../models/ReflectionValue.js';
 import ReflectionParameter from '../models/ReflectionParameter.js';
+
+import Token from './Token.js';
 
 const ANONYMOUS = '(anonymous)';
 
@@ -40,38 +41,30 @@ export default class Parser
         this.#lexer = new Lexer();
     }
 
-    parseModule(code: string): ReflectionModule
-    {
-        const tokenList = this.#lexer.tokenize(code);
-        const scope = this.#parseScope(tokenList);
-
-        return new ReflectionModule(scope);
-    }
-
-    parseClass(code: string): ReflectionClass
+    parseImport(code: string): ReflectionImport
     {
         const tokenList = this.#lexer.tokenize(code);
         const model = this.#parseKeyword(tokenList);
 
-        if ((model instanceof ReflectionClass) === false)
+        if ((model instanceof ReflectionImport) === false)
         {
-            throw new Error('The given code does not contain a class definition');
+            throw new Error('The given code does not contain a import definition');
         }
 
-        return model as ReflectionClass;
+        return model as ReflectionImport;
     }
 
-    parseFunction(code: string): ReflectionFunction
+    parseExport(code: string): ReflectionExport
     {
         const tokenList = this.#lexer.tokenize(code);
         const model = this.#parseKeyword(tokenList);
 
-        if ((model instanceof ReflectionFunction) === false)
+        if ((model instanceof ReflectionExport) === false)
         {
-            throw new Error('The given code does not contain a function definition');
+            throw new Error('The given code does not contain a export definition');
         }
 
-        return model as ReflectionFunction;
+        return model as ReflectionExport;
     }
 
     parseField(code: string): ReflectionField
@@ -87,6 +80,40 @@ export default class Parser
         return model as ReflectionField;
     }
 
+    parseFunction(code: string): ReflectionFunction
+    {
+        const tokenList = this.#lexer.tokenize(code);
+        const model = this.#parseKeyword(tokenList);
+
+        if ((model instanceof ReflectionFunction) === false)
+        {
+            throw new Error('The given code does not contain a function definition');
+        }
+
+        return model as ReflectionFunction;
+    }
+
+    parseClass(code: string): ReflectionClass
+    {
+        const tokenList = this.#lexer.tokenize(code);
+        const model = this.#parseKeyword(tokenList);
+
+        if ((model instanceof ReflectionClass) === false)
+        {
+            throw new Error('The given code does not contain a class definition');
+        }
+
+        return model as ReflectionClass;
+    }
+
+    parseModule(code: string): ReflectionModule
+    {
+        const tokenList = this.#lexer.tokenize(code);
+        const scope = this.#parseScope(tokenList);
+
+        return new ReflectionModule(scope);
+    }
+
     #parseScope(tokenList: TokenList): ReflectionScope
     {
         const members: ReflectionMember[] = [];
@@ -97,6 +124,9 @@ export default class Parser
 
             if (member instanceof ReflectionMember)
             {
+                // Only reflection members are of interest
+                // because they can be exported
+
                 members.push(member);
             }
         }
