@@ -450,6 +450,26 @@ describe('parser/Parser', () =>
             expect(funktion.body).toBe('{ }');
         });
 
+        it('should parse an function expression declaration', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.EXPRESSION);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(false);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse an function expression declaration', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.ASYNC_EXPRESSION);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(true);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe('{ }');
+        });
+
         it('should parse simple function parameters', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.PARAMETERS);

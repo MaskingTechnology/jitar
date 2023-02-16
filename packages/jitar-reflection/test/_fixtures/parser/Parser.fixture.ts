@@ -26,6 +26,41 @@ const EXPORTS =
     REEXPORT_MEMBER: "export { member } from 'module'",
 }
 
+const FIELDS =
+{
+    EMPTY: "let name;",
+    CONST: "const name = 'const';",
+    LET: "let name = 'let';",
+    VAR: "var name = 'var';",
+    EXPRESSION: `const number = new Number(Math.ceil(Math.random()) + 10).toString();`,
+    ARRAY: "const array = [ 'value1', 'value2' ];",
+    OBJECT: "const object = { key1: 'value1', key2: 'value2' };",
+}
+
+const FUNCTIONS =
+{
+    DECLARATION: "function name() {}",
+    ASYNC_DECLARATION: "async function name() {}",
+    EXPRESSION: "const name = function() {}",
+    ASYNC_EXPRESSION: "const name = async function() {}",
+    // ARROW: "const name = () => {}",
+    // ASYNC_ARROW: "const name = async () => {}",
+    // GENERATOR: "function* name() {}",
+    // ASYNC_GENERATOR: "async function* name() {}",
+    // EXPRESSION_GENERATOR: "const name = function*() {}",
+    // ASYNC_EXPRESSION_GENERATOR: "const name = async function*() {}",
+    // ARROW_GENERATOR: "const name = function*() {}",
+    // ASYNC_ARROW_GENERATOR: "const name = async function*() {}",
+    PARAMETERS: "function name(param1, param2) {}",
+    DEFAULT_PARAMETERS: "function name(param1 = 'value1', param2 = true) {}",
+    REST_PARAMETERS: "function name(...param1) {}",
+    // DESTRUCTURING_PARAMETERS: "function name({ param1, param2 }, [ param3, param4 ]) {}",
+    // DESTRUCTURING_DEFAULT_PARAMETERS: "function name({ param1 = 'value1', param2 = true }, [ param3 = 'value3', param4 = true ]) {}",
+    // DESTRUCTURING_REST_PARAMETERS: "function name({ param1, param2 }, [ param3, ...param4 ]) {}",
+    SIMPLE_BODY: "function name() { return 'value'; }",
+    BLOCK_BODY: "function name() { if (true) { return 'value'; } }",
+}
+
 const CLASSES =
 {
     DECLARATION: "class Name {}",
@@ -72,43 +107,4 @@ const CLASSES =
 }`,
 }
 
-const FUNCTIONS =
-{
-    DECLARATION: "function name() {}",
-    ASYNC_DECLARATION: "async function name() {}",
-    // EXPRESSION: "const name = function() {}",
-    // ASYNC_EXPRESSION: "const name = async function() {}",
-    // ARROW: "const name = () => {}",
-    // ASYNC_ARROW: "const name = async () => {}",
-    // GENERATOR: "function* name() {}",
-    // ASYNC_GENERATOR: "async function* name() {}",
-    // EXPRESSION_GENERATOR: "const name = function*() {}",
-    // ASYNC_EXPRESSION_GENERATOR: "const name = async function*() {}",
-    // ARROW_GENERATOR: "const name = function*() {}",
-    // ASYNC_ARROW_GENERATOR: "const name = async function*() {}",
-    PARAMETERS: "function name(param1, param2) {}",
-    DEFAULT_PARAMETERS: "function name(param1 = 'value1', param2 = true) {}",
-    REST_PARAMETERS: "function name(...param1) {}",
-    // DESTRUCTURING_PARAMETERS: "function name({ param1, param2 }, [ param3, param4 ]) {}",
-    // DESTRUCTURING_DEFAULT_PARAMETERS: "function name({ param1 = 'value1', param2 = true }, [ param3 = 'value3', param4 = true ]) {}",
-    // DESTRUCTURING_REST_PARAMETERS: "function name({ param1, param2 }, [ param3, ...param4 ]) {}",
-    SIMPLE_BODY: "function name() { return 'value'; }",
-    BLOCK_BODY: "function name() { if (true) { return 'value'; } }",
-}
-
-const FIELDS =
-{
-    EMPTY: "let name;",
-    CONST: "const name = 'const';",
-    LET: "let name = 'let';",
-    VAR: "var name = 'var';",
-    EXPRESSION: `const number = new Number(Math.ceil(Math.random()) + 10).toString();`,
-    ARRAY: "const array = [ 'value1', 'value2' ];",
-    OBJECT: "const object = { key1: 'value1', key2: 'value2' };",
-}
-
-const sum = new Number(Math.ceil(Math.random()) + 10)
-.toString()
-sum.split('');
-
-export { IMPORTS, EXPORTS, CLASSES, FUNCTIONS, FIELDS }
+export { IMPORTS, EXPORTS, FIELDS, FUNCTIONS, CLASSES  }

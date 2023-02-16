@@ -154,7 +154,7 @@ export default class Parser
             case Keyword.VAR:
             case Keyword.LET:
             case Keyword.CONST:
-                return this.#parseField(tokenList, false);
+                return this.#parseDeclaration(tokenList, false);
 
             case Keyword.ASYNC:
                 return this.#parseKeyword(tokenList, true);
@@ -431,7 +431,7 @@ export default class Parser
 
         return nextToken.hasValue(Group.OPEN)
             ? this.#parseFunction(tokenList, isAsync, isStatic, isGetter, isSetter)
-            : this.#parseField(tokenList, isStatic);
+            : this.#parseDeclaration(tokenList, isStatic);
     }
 
     #parseFunction(tokenList: TokenList, isAsync: boolean, isStatic = false, isGetter = false, isSetter = false): ReflectionFunction
@@ -538,15 +538,20 @@ export default class Parser
                 continue;
             }
 
-            const parameter = this.#parseField(tokenList, false);
+            const parameter = this.#parseDeclaration(tokenList, false);
 
-            parameters.push(parameter);
+            if (parameter instanceof ReflectionField)
+            {
+                // Only allow fields as parameters
+
+                parameters.push(parameter);
+            }
         }
 
         return parameters;
     }
 
-    #parseField(tokenList: TokenList, isStatic: boolean): ReflectionField
+    #parseDeclaration(tokenList: TokenList, isStatic: boolean): ReflectionMember
     {
         let token = tokenList.current;
 
@@ -564,10 +569,20 @@ export default class Parser
         else if (token.hasValue(Operator.ASSIGN))
         {
             token = tokenList.step(); // Read away the assignment operator
-            value = this.#parseNext(tokenList, name) as ReflectionValue;
+            value = this.#parseNext(tokenList, name)
         }
 
-        return new ReflectionField(name, value, isStatic, isPrivate);
+        if (value instanceof ReflectionFunction)
+        {
+            return new ReflectionFunction(name, value.parameters, value.body, isStatic, value.isAsync, isPrivate);
+        }
+
+        if (value instanceof ReflectionClass)
+        {
+            return new ReflectionClass(name, value.parentName, value.scope);
+        }
+        
+        return new ReflectionField(name, value as ReflectionValue, isStatic, isPrivate);
     }
 
     #parseArray(tokenList: TokenList): ReflectionArray
