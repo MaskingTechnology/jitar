@@ -1,14 +1,14 @@
 
-import ReflectionField from './ReflectionField.js';
 import ReflectionMember from './ReflectionMember.js';
+import ReflectionParameter from './ReflectionParameter.js';
 
 export default class ReflectionFunction extends ReflectionMember
 {
-    #parameters: ReflectionField[];
+    #parameters: ReflectionParameter[];
     #body: string;
     #isAsync: boolean;
 
-    constructor(name: string, parameters: ReflectionField[], body: string, isStatic = false, isAsync = false, isPrivate = false)
+    constructor(name: string, parameters: ReflectionParameter[], body: string, isStatic = false, isAsync = false, isPrivate = false)
     {
         super(name, isStatic, isPrivate);
 

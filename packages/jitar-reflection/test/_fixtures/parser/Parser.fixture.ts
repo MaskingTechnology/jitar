@@ -52,9 +52,9 @@ const FUNCTIONS =
     PARAMETERS: "function name(param1, param2) {}",
     DEFAULT_PARAMETERS: "function name(param1 = 'value1', param2 = true) {}",
     REST_PARAMETERS: "function name(...param1) {}",
-    // DESTRUCTURING_PARAMETERS: "function name({ param1, param2 }, [ param3, param4 ]) {}",
-    // DESTRUCTURING_DEFAULT_PARAMETERS: "function name({ param1 = 'value1', param2 = true }, [ param3 = 'value3', param4 = true ]) {}",
-    // DESTRUCTURING_REST_PARAMETERS: "function name({ param1, param2 }, [ param3, ...param4 ]) {}",
+    DESTRUCTURING_PARAMETERS: "function name({ param1, param2 }, [ param3, param4 ]) {}",
+    DESTRUCTURING_DEFAULT_PARAMETERS: "function name({ param1 = 'value1', param2 = true }, [ param3 = 'value3', param4 = true ]) {}",
+    DESTRUCTURING_REST_PARAMETERS: "function name({ param1, param2 }, [ param3, ...param4 ]) {}",
     SIMPLE_BODY: "function name() { return 'value'; }",
     BLOCK_BODY: "function name() { if (true) { return 'value'; } }",
 }

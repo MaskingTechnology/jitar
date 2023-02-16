@@ -27,6 +27,7 @@ import ReflectionAlias from '../models/ReflectionAlias.js';
 import Token from './Token.js';
 import ReflectionScope from '../models/ReflectionScope.js';
 import ReflectionValue from '../models/ReflectionValue.js';
+import ReflectionParameter from '../models/ReflectionParameter.js';
 
 const ANONYMOUS = '(anonymous)';
 
@@ -513,7 +514,7 @@ export default class Parser
     }
 
     // ( ... )
-    #parseParameters(tokenList: TokenList): ReflectionField[]
+    #parseParameters(tokenList: TokenList): ReflectionParameter[]
     {
         const parameters = [];
 
@@ -545,14 +546,22 @@ export default class Parser
                 continue;
             }
 
-            const parameter = this.#parseDeclaration(tokenList, false);
+            let parameter;
 
-            if (parameter instanceof ReflectionField)
+            if (token.hasValue(Scope.OPEN))
             {
-                // Only allow fields as parameters
-
-                parameters.push(parameter);
+                parameter = this.#parseObject(tokenList);
             }
+            else if (token.hasValue(List.OPEN))
+            {
+                parameter = this.#parseArray(tokenList);
+            }
+            else
+            {
+                parameter = this.#parseDeclaration(tokenList, false) as ReflectionField;
+            }
+
+            parameters.push(parameter);
         }
 
         return parameters;
