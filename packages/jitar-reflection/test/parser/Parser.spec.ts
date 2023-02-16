@@ -6,6 +6,7 @@ import Parser from '../../src/parser/Parser';
 
 import { IMPORTS, EXPORTS, FIELDS, FUNCTIONS, CLASSES } from '../_fixtures/parser/Parser.fixture';
 import ReflectionField from '../../src/models/ReflectionField';
+import ReflectionGenerator from '../../src/models/ReflectionGenerator';
 
 const parser = new Parser();
 
@@ -352,6 +353,50 @@ describe('parser/Parser', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.ASYNC_ARROW);
 
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(true);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse a generator function declaration', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.GENERATOR);
+
+            expect(funktion).toBeInstanceOf(ReflectionGenerator);
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(false);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse an async generator function declaration', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.ASYNC_GENERATOR);
+
+            expect(funktion).toBeInstanceOf(ReflectionGenerator);
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(true);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse an expression generator function declaration', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.EXPRESSION_GENERATOR);
+
+            expect(funktion).toBeInstanceOf(ReflectionGenerator);
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(false);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse an async expression generator function declaration', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.ASYNC_EXPRESSION_GENERATOR);
+
+            expect(funktion).toBeInstanceOf(ReflectionGenerator);
             expect(funktion.name).toBe('name');
             expect(funktion.isAsync).toBe(true);
             expect(funktion.parameters.length).toBe(0);

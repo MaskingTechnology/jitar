@@ -401,6 +401,14 @@ export default class Parser
             value = this.#parseNext(tokenList, false)
         }
 
+        // Now we have the value we need to check if we need to recreate it
+        // with the correct name, static and private properties.
+
+        if (value instanceof ReflectionGenerator)
+        {
+            return new ReflectionGenerator(name, value.parameters, value.body, isStatic, value.isAsync, isPrivate);
+        }
+
         if (value instanceof ReflectionFunction)
         {
             return new ReflectionFunction(name, value.parameters, value.body, isStatic, value.isAsync, isPrivate);
