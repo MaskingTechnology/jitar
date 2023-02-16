@@ -134,7 +134,7 @@ export default class Parser
         return new ReflectionScope(members);
     }
 
-    #parseNext(tokenList: TokenList, isAsync = false): ReflectionMember | ReflectionValue
+    #parseNext(tokenList: TokenList, isAsync = false): ReflectionMember | ReflectionValue | undefined
     {
         const token = tokenList.current;
 
@@ -164,6 +164,12 @@ export default class Parser
         else if (token.hasValue(List.OPEN))
         {
             return this.#parseArray(tokenList);
+        }
+        else if (token.hasValue(Division.TERMINATOR))
+        {
+            tokenList.step(); // Read away the terminator
+
+            return undefined;
         }
 
         throw new Error(`Unexpected token ${token.value}`);
@@ -692,10 +698,8 @@ export default class Parser
                 {
                     code += token.toString();
                 }
-                else if (token.hasValue(Division.TERMINATOR))
-                {
-                    tokenList.step(); // Read away the terminator
-                }
+
+                tokenList.step(); // Read away the end of statement
                 
                 break;
             }
