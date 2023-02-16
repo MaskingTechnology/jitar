@@ -9,7 +9,8 @@ const TokenType =
     SEPARATOR: 'separator',
     TERMINATOR: 'terminator',
     SCOPE: 'scope',
-    GROUP: 'group'
+    GROUP: 'group',
+    LIST: 'list'
 };
 
 export { TokenType };

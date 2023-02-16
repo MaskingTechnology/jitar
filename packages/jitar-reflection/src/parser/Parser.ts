@@ -19,9 +19,14 @@ import ReflectionField from '../models/ReflectionField.js';
 import ReflectionGetter from '../models/ReflectionGetter.js';
 import ReflectionSetter from '../models/ReflectionSetter.js';
 import ReflectionImport from '../models/ReflectionImport.js';
-import ReflectionModel from '../models/ReflectionModel.js';
-
-type Alias = { name: string, as: string };
+import ReflectionGenerator from '../models/ReflectionGenerator.js';
+import ReflectionExpression from '../models/ReflectionExpression.js';
+import ReflectionArray from '../models/ReflectionArray.js';
+import ReflectionObject from '../models/ReflectionObject.js';
+import ReflectionAlias from '../models/ReflectionAlias.js';
+import Token from './Token.js';
+import ReflectionScope from '../models/ReflectionScope.js';
+import ReflectionValue from '../models/ReflectionValue.js';
 
 const ANONYMOUS = '(anonymous)';
 
@@ -37,29 +42,9 @@ export default class Parser
     parseModule(code: string): ReflectionModule
     {
         const tokenList = this.#lexer.tokenize(code);
-        const models = this.#parseTokens(tokenList);
+        const scope = this.#parseScope(tokenList);
 
-        const imports: ReflectionImport[] = [];
-        const members: ReflectionMember[] = [];
-        const exports: ReflectionExport[] = [];
-
-        for (const model of models)
-        {
-            if (model instanceof ReflectionImport)
-            {
-                imports.push(model);
-            }
-            else if (model instanceof ReflectionMember)
-            {
-                members.push(model);
-            }
-            else if (model instanceof ReflectionExport)
-            {
-                exports.push(model);
-            }
-        }
-
-        return new ReflectionModule(imports, members, exports);
+        return new ReflectionModule(scope);
     }
 
     parseClass(code: string): ReflectionClass
@@ -101,65 +86,77 @@ export default class Parser
         return model as ReflectionField;
     }
 
-    #parseTokens(tokenList: TokenList): ReflectionModel[]
+    #parseScope(tokenList: TokenList): ReflectionScope
     {
-        const models: ReflectionModel[] = [];
+        const members: ReflectionMember[] = [];
 
         while (tokenList.eof === false)
         {
-            const token = tokenList.current;
+            const member = this.#parseNext(tokenList);
 
-            if (token.isType(TokenType.KEYWORD) === false)
+            if (member instanceof ReflectionMember)
             {
-                tokenList.step();
-                continue;
+                members.push(member);
             }
-
-            const model = this.#parseKeyword(tokenList);
-
-            if (model === undefined)
-            {
-                continue;
-            }
-
-            model instanceof Array
-                ? models.push(...model)
-                : models.push(model);
         }
 
-        return models;
+        return new ReflectionScope(members);
     }
 
-    #parseKeyword(tokenList: TokenList, isAsync = false): ReflectionModel[] | ReflectionModel | undefined
+    #parseNext(tokenList: TokenList, name: string | undefined = undefined): ReflectionMember | ReflectionValue
     {
         const token = tokenList.current;
+
+        if (token.isType(TokenType.IDENTIFIER) || token.isType(TokenType.LITERAL) || token.hasValue(Keyword.NEW))
+        {
+            return this.#parseExpression(tokenList);
+        }
+        else if (token.isType(TokenType.KEYWORD))
+        {
+            return this.#parseKeyword(tokenList);
+        }
+        else if (token.hasValue(Group.OPEN))
+        {
+            return this.#parseArrowFunction(tokenList, name ?? ANONYMOUS);
+        }
+        else if (token.hasValue(Scope.OPEN))
+        {
+            return this.#parseObject(tokenList);
+        }
+        else if (token.hasValue(List.OPEN))
+        {
+            return this.#parseArray(tokenList);
+        }
+
+        throw new Error(`Unexpected token ${token.value}`);
+    }
+
+    #parseKeyword(tokenList: TokenList, isAsync = false): ReflectionMember
+    {
+        const token = tokenList.current;
+
+        tokenList.step(); // Read away the keyword
 
         switch (token.value)
         {
             case Keyword.IMPORT:
-                tokenList.step(); // Read away the import keyword
                 return this.#parseImport(tokenList);
             
             case Keyword.EXPORT:
-                tokenList.step(); // Read away the export keyword
                 return this.#parseExport(tokenList);
             
             case Keyword.CLASS:
-                tokenList.step(); // Read away the class keyword
                 return this.#parseClass(tokenList);
 
             case Keyword.FUNCTION:
-                tokenList.step(); // Read away the function keyword
                 return this.#parseFunction(tokenList, isAsync);
 
             case Keyword.VAR:
             case Keyword.LET:
             case Keyword.CONST:
-                tokenList.step(); // Read away the var/let/const keyword
                 return this.#parseField(tokenList, false);
 
             case Keyword.ASYNC:
-                tokenList.step(); // Read away the async keyword
                 return this.#parseKeyword(tokenList, true);
 
             default:
@@ -167,15 +164,15 @@ export default class Parser
         }
     }
 
-    #parseImport(tokenList: TokenList): ReflectionImport[]
+    #parseImport(tokenList: TokenList): ReflectionImport
     {
-        const identifiers: Alias[] = [];
+        const members: ReflectionAlias[] = [];
 
         let token = tokenList.current;
         
         if (token.isType(TokenType.LITERAL))
         {
-            return [new ReflectionImport('', '', token.value)];
+            return new ReflectionImport(members, token.value);
         }
 
         if (token.hasValue(Scope.OPEN) === false)
@@ -183,34 +180,45 @@ export default class Parser
             const name = 'default';
             let as = token.value;
 
-            if (tokenList.next.hasValue(Keyword.AS))
+            token = tokenList.step(); // Read away the name
+
+            if (token.hasValue(Keyword.AS))
             {
-                token = tokenList.step(2); // Read away the AS keyword
+                token = tokenList.step(); // Read away the AS keyword
                 as = token.value;
+
+                token = tokenList.step(); // Read away the alias name
             }
 
-            identifiers.push({ name, as });
+            members.push(new ReflectionAlias(name, as));
         }
 
-        if (tokenList.next.hasValue(Division.SEPARATOR))
+        if (token.hasValue(Division.SEPARATOR))
         {
-            token = tokenList.step(2); // Read away the separator and the opening scope
+            token = tokenList.step(); // Read away the separator
         }
 
         if (token.hasValue(Scope.OPEN))
         {
             const aliases = this.#parseAliasList(tokenList);
 
-            identifiers.push(...aliases);
+            members.push(...aliases);
+
+            token = tokenList.current;
         }
 
-        token = tokenList.step(2); // Read away the FROM keyword
+        if (token.hasValue(Keyword.FROM) === false)
+        {
+            throw new Error('Expected the FROM keyword');
+        }
+
+        token = tokenList.step(); // Read away the FROM keyword
         const from = token.value;
 
-        return identifiers.map(identifier => new ReflectionImport(identifier.name, identifier.as, from));
+        return new ReflectionImport(members, from);
     }
 
-    #parseExport(tokenList: TokenList): ReflectionExport[] | ReflectionExport
+    #parseExport(tokenList: TokenList): ReflectionExport
     {
         const token = tokenList.current;
 
@@ -249,60 +257,76 @@ export default class Parser
         const as = isDefault ? 'default' : name;
         let from: string | undefined = undefined;
 
-        if (tokenList.hasNext() && tokenList.next.hasValue(Keyword.FROM))
+        token = tokenList.step(); // Read away the name
+
+        if (token?.hasValue(Keyword.FROM))
         {
-            tokenList.step(2); // Read away the FROM keyword
+            token = tokenList.step(); // Read away the FROM keyword
             
-            from = tokenList.current.value;
+            from = token.value;
         }
 
-        tokenList.stepBack(stepSize); // Step back to the original position
-
-        return new ReflectionExport(name, as, from);
-    }
-
-    #parseMultiExport(tokenList: TokenList): ReflectionExport[]
-    {
-        const identifiers = this.#parseAliasList(tokenList);
-        let from: string | undefined = undefined;
-
-        if (tokenList.hasNext() && tokenList.next.hasValue(Keyword.FROM))
+        if (stepSize > 0)
         {
-            tokenList.step(2); // Read away the FROM keyword
+            stepSize++; // Include the name when stepping back
 
-            from = tokenList.current.value;
+            tokenList.stepBack(stepSize); // Step back to the original position
         }
 
-        return identifiers.map(identifier => new ReflectionExport(identifier.name, identifier.as, from));
+        const alias = new ReflectionAlias(name, as);
+
+        return new ReflectionExport([alias], from);
     }
 
-    #parseAliasList(tokenList: TokenList): Alias[]
+    #parseMultiExport(tokenList: TokenList): ReflectionExport
     {
-        const identifiers = [];
+        const members = this.#parseAliasList(tokenList);
+        let from: string | undefined = undefined;
+        let token = tokenList.current;
+
+        if (token !== undefined && token.hasValue(Keyword.FROM))
+        {
+            token = tokenList.step(); // Read away the FROM keyword
+            from = token.value;
+        }
+
+        return new ReflectionExport(members, from);
+    }
+
+    // { ... }
+    #parseAliasList(tokenList: TokenList): ReflectionAlias[]
+    {
+        const aliases = [];
+
+        let token = tokenList.step(); // Read away the scope open
 
         while (tokenList.eof === false)
         {
-            const token = tokenList.step();
-            
             if (token.hasValue(Scope.CLOSE))
             {
+                tokenList.step(); // Read away the scope close
+
                 break;
             }
 
             if (token.hasValue(Division.SEPARATOR))
             {
+                token = tokenList.step(); // Read away the separator
+
                 continue;
             }
 
-            const identifier = this.#parseAlias(tokenList);
+            const alias = this.#parseAlias(tokenList);
 
-            identifiers.push(identifier);
+            aliases.push(alias);
+
+            token = tokenList.step();
         }
 
-        return identifiers;
+        return aliases;
     }
 
-    #parseAlias(tokenList: TokenList): Alias
+    #parseAlias(tokenList: TokenList): ReflectionAlias
     {
         let token = tokenList.current;
 
@@ -315,13 +339,12 @@ export default class Parser
             as = token.value;
         }
 
-        return { name, as };
+        return new ReflectionAlias(name, as);
     }
 
     #parseClass(tokenList: TokenList): ReflectionClass
     {
         let token = tokenList.current;
-
         let name = ANONYMOUS;
         let parent: string | undefined = undefined;
 
@@ -340,14 +363,38 @@ export default class Parser
             tokenList.step(); // Read away the extends name
         }
         
-        const members = this.#parseMembers(tokenList);
+        const scope = this.#parseClassScope(tokenList);
 
-        return new ReflectionClass(name, parent, members);
+        return new ReflectionClass(name, parent, scope);
     }
 
-    #parseMembers(tokenList: TokenList): ReflectionMember[]
+    #parseClassScope(tokenList: TokenList): ReflectionScope
     {
+        let token = tokenList.step();
         const members = [];
+
+        while (tokenList.eof === false)
+        {
+            if (token.hasValue(Scope.CLOSE))
+            {
+                tokenList.step(); // Read away the scope close
+
+                break;
+            }
+
+            const member = this.#parseClassMember(tokenList);
+
+            members.push(member);
+
+            token = tokenList.current;
+        }
+        
+        return new ReflectionScope(members);
+    }
+
+    #parseClassMember(tokenList: TokenList): ReflectionMember
+    {
+        let token = tokenList.current;
 
         let isAsync = false;
         let isStatic = false;
@@ -356,74 +403,74 @@ export default class Parser
 
         while (tokenList.eof === false)
         {
-            const token = tokenList.step();
-
-            if (token.hasValue(Scope.CLOSE))
+            if (token.hasValue(Keyword.STATIC))
+            {
+                isStatic = true;
+            }
+            else if (token.hasValue(Keyword.ASYNC))
+            {
+                isAsync = true;
+            }
+            else if (token.hasValue(Keyword.GET))
+            {
+                isGetter = true;
+            }
+            else if (token.hasValue(Keyword.SET))
+            {
+                isSetter = true;
+            }
+            else
             {
                 break;
             }
 
-            if (token.hasValue(Keyword.STATIC))
-            {
-                isStatic = true;
-                continue;
-            }
-
-            if (token.hasValue(Keyword.ASYNC))
-            {
-                isAsync = true;
-                continue;
-            }
-
-            if (token.hasValue(Keyword.GET))
-            {
-                isGetter = true;
-                continue;
-            }
-
-            if (token.hasValue(Keyword.SET))
-            {
-                isSetter = true;
-                continue;
-            }
-
-            const nextToken = tokenList.next;
-
-            const member = nextToken.hasValue(Group.OPEN)
-                ? this.#parseFunction(tokenList, isAsync, isStatic, isGetter, isSetter)
-                : this.#parseField(tokenList, isStatic);
-            
-            isStatic = false;
-            isAsync = false;
-            isGetter = false;
-            isSetter = false;
-
-            members.push(member);
+            token = tokenList.step();
         }
-        
-        return members;
+
+        const nextToken = tokenList.next;
+
+        return nextToken.hasValue(Group.OPEN)
+            ? this.#parseFunction(tokenList, isAsync, isStatic, isGetter, isSetter)
+            : this.#parseField(tokenList, isStatic);
     }
 
     #parseFunction(tokenList: TokenList, isAsync: boolean, isStatic = false, isGetter = false, isSetter = false): ReflectionFunction
     {
-        const token = tokenList.current;
-
+        let token = tokenList.current;
         let name = ANONYMOUS;
+        let isGenerator = false;
         let isPrivate = false;
+
+        if (token.hasValue(Operator.MULTIPLY))
+        {
+            isGenerator = true;
+
+            token = tokenList.step(); // Read away the generator operator
+        }
 
         if (token.isType(TokenType.IDENTIFIER))
         {
             isPrivate = token.value.startsWith('#');
             name = isPrivate ? token.value.substring(1) : token.value;
 
-            tokenList.step(); // Read away the function name
+            token = tokenList.step(); // Read away the function name
         }
         
         const parameters = this.#parseParameters(tokenList);
 
-        tokenList.step(); // Read away the group close
+        token = tokenList.current;
+
+        if (token.hasValue(Scope.OPEN) === false)
+        {
+            throw new Error('Invalid function body');
+        }
         
-        const body = this.#parseBody(tokenList);
+        const body = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
+
+        if (isGenerator)
+        {
+            return new ReflectionGenerator(name, parameters, body, isStatic, isAsync, isPrivate);
+        }
 
         if (isGetter)
         {
@@ -438,6 +485,27 @@ export default class Parser
         return new ReflectionFunction(name, parameters, body, isStatic, isAsync, isPrivate);
     }
 
+    #parseArrowFunction(tokenList: TokenList, name: string): ReflectionFunction
+    {
+        const parameters = this.#parseParameters(tokenList);
+
+        let token = tokenList.step(); // Read away the group close
+
+        if (token.hasValue('=>') === false)
+        {
+            throw new Error('Invalid arrow function');
+        }
+
+        token = tokenList.step(); // Read away the arrow
+        
+        const body = token.hasValue(Scope.OPEN)
+            ? this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE)
+            : this.#parseExpression(tokenList).definition;
+
+        return new ReflectionFunction(name, parameters, body, false, false, false);
+    }
+
+    // ( ... )
     #parseParameters(tokenList: TokenList): ReflectionField[]
     {
         const parameters = [];
@@ -450,6 +518,16 @@ export default class Parser
 
             if (token.hasValue(Group.CLOSE))
             {
+                // No parameters
+
+                tokenList.step(); // Read away the group close
+
+                break;
+            }
+            else if (tokenList.previous.hasValue(Group.CLOSE))
+            {
+                // End of the parameters
+
                 break;
             }
 
@@ -460,15 +538,15 @@ export default class Parser
                 continue;
             }
 
-            const field = this.#parseField(tokenList, false, [ Division.SEPARATOR, Group.CLOSE ]);
+            const parameter = this.#parseField(tokenList, false);
 
-            parameters.push(field);
+            parameters.push(parameter);
         }
 
         return parameters;
     }
 
-    #parseField(tokenList: TokenList, isStatic: boolean, terminators = [ Division.TERMINATOR ]): ReflectionField
+    #parseField(tokenList: TokenList, isStatic: boolean): ReflectionField
     {
         let token = tokenList.current;
 
@@ -479,50 +557,62 @@ export default class Parser
 
         let value = undefined;
 
-        if (token.hasValue(Operator.ASSIGN))
+        if (token.hasValue(Division.TERMINATOR))
         {
-            value = this.#parseStatement(tokenList, terminators);
+            tokenList.step(); // Read away the terminator
+        }
+        else if (token.hasValue(Operator.ASSIGN))
+        {
+            token = tokenList.step(); // Read away the assignment operator
+            value = this.#parseNext(tokenList, name) as ReflectionValue;
         }
 
         return new ReflectionField(name, value, isStatic, isPrivate);
     }
 
-    #parseStatement(tokenList: TokenList, terminators: string[]): string
+    #parseArray(tokenList: TokenList): ReflectionArray
     {
-        let token = tokenList.step();
+        const items = this.#parseBlock(tokenList, List.OPEN, List.CLOSE);
+
+        return new ReflectionArray(items);
+    }
+
+    #parseObject(tokenList: TokenList): ReflectionObject
+    {
+        const fields = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
+
+        return new ReflectionObject(fields);
+    }
+
+    #parseExpression(tokenList: TokenList): ReflectionExpression
+    {
+        let token = tokenList.current;
         let code = '';
 
         while (tokenList.eof === false)
         {
-            if (terminators.includes(token.value))
+            if (this.#opensContainer(token))
             {
-                // Terminator found, we're done here.
-
-                return code.trim();
-            }
-            else if (isKeyword(token.value) && token.hasValue(Keyword.NEW) === false)
-            {
-                // We've just read a keyword, but we're expecting a value.
-                // This means we've reached the end of the statement.
-
-                tokenList.stepBack();
-
-                return code.trim();
-            }
-            else if ([List.OPEN, Group.OPEN, Scope.OPEN].includes(token.value))
-            {
-                // We've just opened a new scope, so we need to parse the contents of that scope.
-
-                code += token.toString() + ' ';
-                code += this.#parseStatement(tokenList, []);
-            }
-            else if ([List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value))
-            {
-                // We've just closed a scope, so we need to return the code we've parsed so far.
-
                 code += token.toString() + ' ';
 
-                return code;
+                tokenList.step(); // Read away the container open
+
+                const expression = this.#parseExpression(tokenList);
+
+                code += expression.definition + ' ';
+            }
+            else if (this.#atEndOfStatement(token))
+            {
+                if (this.#closesContainer(token))
+                {
+                    code += token.toString();
+                }
+                else if (token.hasValue(Division.TERMINATOR))
+                {
+                    tokenList.step(); // Read away the terminator
+                }
+                
+                break;
             }
             else
             {
@@ -532,13 +622,29 @@ export default class Parser
             token = tokenList.step();
         }
 
-        return code.trim();
+        return new ReflectionExpression(code.trim());
     }
 
-    #parseBody(tokenList: TokenList): string
+    #opensContainer(token: Token): boolean
+    {
+        return [List.OPEN, Group.OPEN, Scope.OPEN].includes(token.value);
+    }
+
+    #closesContainer(token: Token): boolean
+    {
+        return [List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value);
+    }
+
+    #atEndOfStatement(token: Token): boolean
+    {
+        return [Division.SEPARATOR, Division.TERMINATOR].includes(token.value)
+            || this.#closesContainer(token);
+    }
+
+    #parseBlock(tokenList: TokenList, openId: string, closeId: string): string
     {
         let token = tokenList.step();
-        let code = Scope.OPEN + ' ';
+        let code = openId + ' ';
 
         while (tokenList.eof === false)
         {
@@ -547,12 +653,14 @@ export default class Parser
                 return code.trim();
             }
 
-            code += token.hasValue(Scope.OPEN)
-                ? this.#parseBody(tokenList) + ' '
+            code += token.hasValue(openId)
+                ? this.#parseBlock(tokenList, openId, closeId) + ' ' + closeId + ' '
                 : token.toString() + ' ';
             
-            if (token.hasValue(Scope.CLOSE))
+            if (token.hasValue(closeId))
             {
+                tokenList.step(); // Read away the close
+
                 return code.trim();
             }
 

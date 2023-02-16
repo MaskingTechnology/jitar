@@ -1,11 +1,12 @@
 
 import ReflectionMember from './ReflectionMember.js';
+import ReflectionValue from './ReflectionValue.js';
 
 export default class ReflectionField extends ReflectionMember
 {
-    #value: unknown | undefined;
+    #value: ReflectionValue | undefined;
 
-    constructor(name: string, value: unknown | undefined, isStatic = false, isPrivate = false)
+    constructor(name: string, value: ReflectionValue | undefined, isStatic = false, isPrivate = false)
     {
         super(name, isStatic, isPrivate);
 

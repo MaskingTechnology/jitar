@@ -1,49 +1,30 @@
 
-import ReflectionModel from './ReflectionModel.js';
-
-import ReflectionClass from './ReflectionClass.js';
-import ReflectionExport from './ReflectionExport.js';
-import ReflectionField from './ReflectionField.js';
-import ReflectionFunction from './ReflectionFunction.js';
-import ReflectionImport from './ReflectionImport.js';
 import ReflectionMember from './ReflectionMember.js';
+import ReflectionScope from './ReflectionScope.js';
 
-export default class ReflectionModule extends ReflectionModel
+export default class ReflectionModule
 {
-    #imports: ReflectionImport[];
-    #members: ReflectionMember[];
-    #exports: ReflectionExport[];
+    #scope: ReflectionScope;
 
-    constructor(imports: ReflectionImport[], member: ReflectionMember[], exports: ReflectionExport[] = [])
+    constructor(scope: ReflectionScope)
     {
-        super();
-        
-        this.#imports = imports;
-        this.#members = member;
-        this.#exports = exports;
+        this.#scope = scope;
     }
 
-    get imports(): ReflectionImport[] { return this.#imports; }
-
-    get members(): ReflectionMember[] { return this.#members; }
-
-    get exports(): ReflectionExport[] { return this.#exports; }
-
-    get classes(): ReflectionMember[] { return this.#members.filter(member => member.constructor.name === 'ReflectionClass'); }
-
-    get functions(): ReflectionMember[] { return this.#members.filter(member => member.constructor.name === 'ReflectionFunction'); }
-
-    get fields(): ReflectionMember[] { return this.#members.filter(member => member.constructor.name === 'ReflectionField'); }
+    get scope(): ReflectionScope { return this.#scope; }
 
     get exported(): ReflectionMember[]
     {
-        const members = this.#exports.map(exported => this.getMember(exported.name));
+        const members = [];
+        
+        for (const exported of this.#scope.exports)
+        {
+            for (const member of exported.members)
+            {
+                members.push(this.#scope.getMember(member.name));
+            }
+        }
 
         return members.filter(member => member !== undefined) as ReflectionMember[];
-    }
-
-    getMember(name: string): ReflectionMember | undefined
-    {
-        return this.#members.find(member => member.name === name);
     }
 }

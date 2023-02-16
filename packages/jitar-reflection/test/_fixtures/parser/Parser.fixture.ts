@@ -102,7 +102,9 @@ const FIELDS =
     CONST: "const name = 'const';",
     LET: "let name = 'let';",
     VAR: "var name = 'var';",
-    STATEMENT: `const number = new Number(Math.ceil(Math.random()) + 10).toString();`,
+    EXPRESSION: `const number = new Number(Math.ceil(Math.random()) + 10).toString();`,
+    ARRAY: "const array = [ 'value1', 'value2' ];",
+    OBJECT: "const object = { key1: 'value1', key2: 'value2' };",
 }
 
 const sum = new Number(Math.ceil(Math.random()) + 10)

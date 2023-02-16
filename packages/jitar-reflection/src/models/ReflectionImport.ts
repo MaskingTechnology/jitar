@@ -1,24 +1,21 @@
 
-import ReflectionModel from './ReflectionModel.js';
+import ReflectionAlias from './ReflectionAlias.js';
+import ReflectionMember from './ReflectionMember.js';
 
-export default class ReflectionImport extends ReflectionModel
+export default class ReflectionImport extends ReflectionMember
 {
-    #name: string;
-    #as: string;
+    #members: ReflectionAlias[];
     #from: string;
 
-    constructor(name: string, as: string, from: string)
+    constructor(members: ReflectionAlias[], from: string)
     {
-        super();
+        super('');
         
-        this.#name = name;
-        this.#as = as;
+        this.#members = members;
         this.#from = from;
     }
 
-    get name(): string { return this.#name; }
+    get members() { return this.#members; }
 
-    get as(): string { return this.#as; }
-
-    get from(): string { return this.#from; }
+    get from() { return this.#from; }
 }

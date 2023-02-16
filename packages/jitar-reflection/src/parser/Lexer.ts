@@ -103,7 +103,7 @@ export default class Lexer
         {
             const end = charList.position;
 
-            return new Token(TokenType.SCOPE, char, start, end);
+            return new Token(TokenType.LIST, char, start, end);
         }
         else if (this.#isEmpty(char))
         {

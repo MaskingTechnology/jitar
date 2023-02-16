@@ -1,7 +1,5 @@
 
-import ReflectionModel from './ReflectionModel.js';
-
-export default class ReflectionMember extends ReflectionModel
+export default class ReflectionMember
 {
     #name: string;
     #isStatic: boolean;
@@ -9,8 +7,6 @@ export default class ReflectionMember extends ReflectionModel
 
     constructor(name: string, isStatic = false, isPrivate = false)
     {
-        super();
-        
         this.#name = name;
         this.#isStatic = isStatic;
         this.#isPrivate = isPrivate;
