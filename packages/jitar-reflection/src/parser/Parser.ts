@@ -350,96 +350,38 @@ export default class Parser
         return new ReflectionAlias(name, as);
     }
 
-    #parseClass(tokenList: TokenList): ReflectionClass
-    {
-        let token = tokenList.current;
-        let name = ANONYMOUS;
-        let parent: string | undefined = undefined;
-
-        if (token.isType(TokenType.IDENTIFIER))
-        {
-            name = token.value;
-
-            tokenList.step(); // Read away the class name
-        }
-
-        if (tokenList.current.hasValue(Keyword.EXTENDS))
-        {
-            token = tokenList.step(); // Read away the extends keyword
-            parent = token.value;
-
-            tokenList.step(); // Read away the extends name
-        }
-        
-        const scope = this.#parseClassScope(tokenList);
-
-        return new ReflectionClass(name, parent, scope);
-    }
-
-    #parseClassScope(tokenList: TokenList): ReflectionScope
-    {
-        let token = tokenList.step();
-        const members = [];
-
-        while (tokenList.eof === false)
-        {
-            if (token.hasValue(Scope.CLOSE))
-            {
-                tokenList.step(); // Read away the scope close
-
-                break;
-            }
-
-            const member = this.#parseClassMember(tokenList);
-
-            members.push(member);
-
-            token = tokenList.current;
-        }
-        
-        return new ReflectionScope(members);
-    }
-
-    #parseClassMember(tokenList: TokenList): ReflectionMember
+    #parseDeclaration(tokenList: TokenList, isStatic: boolean): ReflectionMember
     {
         let token = tokenList.current;
 
-        let isAsync = false;
-        let isStatic = false;
-        let isGetter = false;
-        let isSetter = false;
+        const isPrivate = token.value.startsWith('#');
+        const name = isPrivate ? token.value.substring(1) : token.value;
 
-        while (tokenList.eof === false)
+        token = tokenList.step(); // Read away the field name
+
+        let value = undefined;
+
+        if (token.hasValue(Division.TERMINATOR))
         {
-            if (token.hasValue(Keyword.STATIC))
-            {
-                isStatic = true;
-            }
-            else if (token.hasValue(Keyword.ASYNC))
-            {
-                isAsync = true;
-            }
-            else if (token.hasValue(Keyword.GET))
-            {
-                isGetter = true;
-            }
-            else if (token.hasValue(Keyword.SET))
-            {
-                isSetter = true;
-            }
-            else
-            {
-                break;
-            }
-
-            token = tokenList.step();
+            tokenList.step(); // Read away the terminator
+        }
+        else if (token.hasValue(Operator.ASSIGN))
+        {
+            token = tokenList.step(); // Read away the assignment operator
+            value = this.#parseNext(tokenList, false)
         }
 
-        const nextToken = tokenList.next;
+        if (value instanceof ReflectionFunction)
+        {
+            return new ReflectionFunction(name, value.parameters, value.body, isStatic, value.isAsync, isPrivate);
+        }
 
-        return nextToken.hasValue(Group.OPEN)
-            ? this.#parseFunction(tokenList, isAsync, isStatic, isGetter, isSetter)
-            : this.#parseDeclaration(tokenList, isStatic);
+        if (value instanceof ReflectionClass)
+        {
+            return new ReflectionClass(name, value.parentName, value.scope);
+        }
+        
+        return new ReflectionField(name, value as ReflectionValue, isStatic, isPrivate);
     }
 
     #parseFunction(tokenList: TokenList, isAsync: boolean, isStatic = false, isGetter = false, isSetter = false): ReflectionFunction
@@ -567,38 +509,96 @@ export default class Parser
         return parameters;
     }
 
-    #parseDeclaration(tokenList: TokenList, isStatic: boolean): ReflectionMember
+    #parseClass(tokenList: TokenList): ReflectionClass
+    {
+        let token = tokenList.current;
+        let name = ANONYMOUS;
+        let parent: string | undefined = undefined;
+
+        if (token.isType(TokenType.IDENTIFIER))
+        {
+            name = token.value;
+
+            tokenList.step(); // Read away the class name
+        }
+
+        if (tokenList.current.hasValue(Keyword.EXTENDS))
+        {
+            token = tokenList.step(); // Read away the extends keyword
+            parent = token.value;
+
+            tokenList.step(); // Read away the extends name
+        }
+        
+        const scope = this.#parseClassScope(tokenList);
+
+        return new ReflectionClass(name, parent, scope);
+    }
+
+    #parseClassScope(tokenList: TokenList): ReflectionScope
+    {
+        let token = tokenList.step();
+        const members = [];
+
+        while (tokenList.eof === false)
+        {
+            if (token.hasValue(Scope.CLOSE))
+            {
+                tokenList.step(); // Read away the scope close
+
+                break;
+            }
+
+            const member = this.#parseClassMember(tokenList);
+
+            members.push(member);
+
+            token = tokenList.current;
+        }
+        
+        return new ReflectionScope(members);
+    }
+
+    #parseClassMember(tokenList: TokenList): ReflectionMember
     {
         let token = tokenList.current;
 
-        const isPrivate = token.value.startsWith('#');
-        const name = isPrivate ? token.value.substring(1) : token.value;
+        let isAsync = false;
+        let isStatic = false;
+        let isGetter = false;
+        let isSetter = false;
 
-        token = tokenList.step(); // Read away the field name
-
-        let value = undefined;
-
-        if (token.hasValue(Division.TERMINATOR))
+        while (tokenList.eof === false)
         {
-            tokenList.step(); // Read away the terminator
-        }
-        else if (token.hasValue(Operator.ASSIGN))
-        {
-            token = tokenList.step(); // Read away the assignment operator
-            value = this.#parseNext(tokenList, false)
+            if (token.hasValue(Keyword.STATIC))
+            {
+                isStatic = true;
+            }
+            else if (token.hasValue(Keyword.ASYNC))
+            {
+                isAsync = true;
+            }
+            else if (token.hasValue(Keyword.GET))
+            {
+                isGetter = true;
+            }
+            else if (token.hasValue(Keyword.SET))
+            {
+                isSetter = true;
+            }
+            else
+            {
+                break;
+            }
+
+            token = tokenList.step();
         }
 
-        if (value instanceof ReflectionFunction)
-        {
-            return new ReflectionFunction(name, value.parameters, value.body, isStatic, value.isAsync, isPrivate);
-        }
+        const nextToken = tokenList.next;
 
-        if (value instanceof ReflectionClass)
-        {
-            return new ReflectionClass(name, value.parentName, value.scope);
-        }
-        
-        return new ReflectionField(name, value as ReflectionValue, isStatic, isPrivate);
+        return nextToken.hasValue(Group.OPEN)
+            ? this.#parseFunction(tokenList, isAsync, isStatic, isGetter, isSetter)
+            : this.#parseDeclaration(tokenList, isStatic);
     }
 
     #parseArray(tokenList: TokenList): ReflectionArray
@@ -613,6 +613,22 @@ export default class Parser
         const fields = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
 
         return new ReflectionObject(fields);
+    }
+
+    #opensContainer(token: Token): boolean
+    {
+        return [List.OPEN, Group.OPEN, Scope.OPEN].includes(token.value);
+    }
+
+    #closesContainer(token: Token): boolean
+    {
+        return [List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value);
+    }
+
+    #atEndOfStatement(token: Token): boolean
+    {
+        return [Division.SEPARATOR, Division.TERMINATOR].includes(token.value)
+            || this.#closesContainer(token);
     }
 
     #parseExpression(tokenList: TokenList): ReflectionExpression
@@ -654,22 +670,6 @@ export default class Parser
         }
 
         return new ReflectionExpression(code.trim());
-    }
-
-    #opensContainer(token: Token): boolean
-    {
-        return [List.OPEN, Group.OPEN, Scope.OPEN].includes(token.value);
-    }
-
-    #closesContainer(token: Token): boolean
-    {
-        return [List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value);
-    }
-
-    #atEndOfStatement(token: Token): boolean
-    {
-        return [Division.SEPARATOR, Division.TERMINATOR].includes(token.value)
-            || this.#closesContainer(token);
     }
 
     #parseBlock(tokenList: TokenList, openId: string, closeId: string): string
