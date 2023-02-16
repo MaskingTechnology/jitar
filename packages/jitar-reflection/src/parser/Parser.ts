@@ -103,7 +103,7 @@ export default class Parser
         return new ReflectionScope(members);
     }
 
-    #parseNext(tokenList: TokenList, name: string | undefined = undefined): ReflectionMember | ReflectionValue
+    #parseNext(tokenList: TokenList, isAsync = false): ReflectionMember | ReflectionValue
     {
         const token = tokenList.current;
 
@@ -113,11 +113,18 @@ export default class Parser
         }
         else if (token.isType(TokenType.KEYWORD))
         {
-            return this.#parseKeyword(tokenList);
+            if (token.hasValue(Keyword.ASYNC))
+            {
+                tokenList.step(); // Read away the async keyword
+
+                return this.#parseNext(tokenList, true);
+            }
+
+            return this.#parseKeyword(tokenList, isAsync);
         }
         else if (token.hasValue(Group.OPEN))
         {
-            return this.#parseArrowFunction(tokenList, name ?? ANONYMOUS);
+            return this.#parseArrowFunction(tokenList, isAsync);
         }
         else if (token.hasValue(Scope.OPEN))
         {
@@ -485,11 +492,11 @@ export default class Parser
         return new ReflectionFunction(name, parameters, body, isStatic, isAsync, isPrivate);
     }
 
-    #parseArrowFunction(tokenList: TokenList, name: string): ReflectionFunction
+    #parseArrowFunction(tokenList: TokenList, isAsync: boolean): ReflectionFunction
     {
         const parameters = this.#parseParameters(tokenList);
 
-        let token = tokenList.step(); // Read away the group close
+        let token = tokenList.current;
 
         if (token.hasValue('=>') === false)
         {
@@ -502,7 +509,7 @@ export default class Parser
             ? this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE)
             : this.#parseExpression(tokenList).definition;
 
-        return new ReflectionFunction(name, parameters, body, false, false, false);
+        return new ReflectionFunction(ANONYMOUS, parameters, body, false, isAsync, false);
     }
 
     // ( ... )
@@ -569,7 +576,7 @@ export default class Parser
         else if (token.hasValue(Operator.ASSIGN))
         {
             token = tokenList.step(); // Read away the assignment operator
-            value = this.#parseNext(tokenList, name)
+            value = this.#parseNext(tokenList, false)
         }
 
         if (value instanceof ReflectionFunction)

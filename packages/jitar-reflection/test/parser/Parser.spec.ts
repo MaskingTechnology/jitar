@@ -450,7 +450,7 @@ describe('parser/Parser', () =>
             expect(funktion.body).toBe('{ }');
         });
 
-        it('should parse an function expression declaration', () =>
+        it('should parse an expression function declaration', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.EXPRESSION);
 
@@ -460,9 +460,29 @@ describe('parser/Parser', () =>
             expect(funktion.body).toBe('{ }');
         });
 
-        it('should parse an function expression declaration', () =>
+        it('should parse an async expression function declaration', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.ASYNC_EXPRESSION);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(true);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse an arrow function declaration', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.ARROW);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(false);
+            expect(funktion.parameters.length).toBe(0);
+            expect(funktion.body).toBe('{ }');
+        });
+
+        it('should parse an async arrow function declaration', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.ASYNC_ARROW);
 
             expect(funktion.name).toBe('name');
             expect(funktion.isAsync).toBe(true);
