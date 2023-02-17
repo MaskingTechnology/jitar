@@ -63,6 +63,7 @@ const CLASSES =
 {
     DECLARATION: "class Name {}",
     EXTENDS: "class Name extends Parent {}",
+    EXPRESSION: "const name = class {}",
     MEMBERS: `class Name
 {
     #field1 = 'value1';

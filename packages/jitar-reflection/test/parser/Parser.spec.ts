@@ -563,6 +563,16 @@ describe('parser/Parser', () =>
             expect(members.length).toBe(0);
         });
 
+        it('should parse an expression class declaration', () =>
+        {
+            const clazz = parser.parseClass(CLASSES.EXPRESSION);
+            expect(clazz.name).toBe('name');
+            expect(clazz.parentName).toBe(undefined);
+
+            const members = clazz.scope.members;
+            expect(members.length).toBe(0);
+        });
+
         it('should parse class members', () =>
         {
             const clazz = parser.parseClass(CLASSES.MEMBERS);
