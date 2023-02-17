@@ -32,19 +32,26 @@ export default class ReflectionModule
 
     get classes(): ReflectionClass[] { return this.#scope.classes; }
 
-    get exported(): ReflectionMember[]
+    get exported(): Map<string, ReflectionMember>
     {
-        const members = [];
+        const exported = new Map<string, ReflectionMember>();
         
-        for (const exported of this.#scope.exports)
+        for (const exportItem of this.exports)
         {
-            for (const member of exported.members)
+            for (const alias of exportItem.members)
             {
-                members.push(this.#scope.getMember(member.name));
+                const member = this.getMember(alias.name);
+
+                if (member === undefined)
+                {
+                    throw new Error(`Cannot find exported member '${alias.name}'.`);
+                }
+
+                exported.set(alias.as, member);
             }
         }
 
-        return members.filter(member => member !== undefined) as ReflectionMember[];
+        return exported;
     }
 
     getMember(name: string): ReflectionMember | undefined
