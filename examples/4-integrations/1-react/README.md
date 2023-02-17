@@ -137,7 +137,7 @@ With the start of a server, you need to provide a module importer that imports N
 
 With Jitar all set up, you can get ready for its first run. For this, you need to modify the `tsconfig.js` file to output all compiled JavaScript to the dist folder.
 
-```json
+```js
 /* tsconfig.json */
 {
     "compilerOptions":
