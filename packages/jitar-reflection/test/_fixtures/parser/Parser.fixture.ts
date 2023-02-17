@@ -108,7 +108,7 @@ const CLASSES =
 
 const MODULES =
 {
-    FULL:
+    TERMINATED:
 `
 import { member } from 'module';
 import { member as alias } from 'module2';
@@ -136,6 +136,35 @@ export class Person
 const peter = new Person(name, 42);
 
 export { name, peter };
+`,
+    UNTERMINATED:
+`
+    import { member } from 'module'
+    import { member as alias } from 'module2'
+    
+    const name = 'Peter' + ' van ' + 'Vliet'
+    
+    export default function sum(a, b) { return a + b }
+    
+    [1, 2, 3, 4, 5].sort((a, b) => a - b)
+    
+    sum(1, 2)
+    
+    export class Person
+    {
+        #name
+        #age
+    
+        constructor(name, age)
+        {
+            this.#name = name
+            this.#age = age
+        }
+    }
+    
+    const peter = new Person(name, 42)
+    
+    export { name, peter }
 `,
 }
 

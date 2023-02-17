@@ -4,7 +4,7 @@ import TokenList from './TokenList.js';
 
 import { Division } from './definitions/Division.js';
 import { Group } from './definitions/Group.js';
-import { Keyword, isDeclaration } from './definitions/Keyword.js';
+import { Keyword, isDeclaration, isKeyword } from './definitions/Keyword.js';
 import { List } from './definitions/List.js';
 import { Operator } from './definitions/Operator.js';
 import { Scope } from './definitions/Scope.js';
@@ -138,7 +138,7 @@ export default class Parser
     {
         const token = tokenList.current;
 
-        if (token.isType(TokenType.IDENTIFIER) || token.isType(TokenType.LITERAL) || token.hasValue(Keyword.NEW))
+        if (token.isType(TokenType.IDENTIFIER) || token.isType(TokenType.LITERAL))
         {
             return this.#parseExpression(tokenList);
         }
@@ -259,6 +259,8 @@ export default class Parser
         token = tokenList.step(); // Read away the FROM keyword
         const from = token.value;
 
+        tokenList.step(); // Read away the source
+
         return new ReflectionImport(members, from);
     }
 
@@ -333,6 +335,8 @@ export default class Parser
             token = tokenList.step(); // Read away the FROM keyword
             from = token.value;
         }
+
+        tokenList.step(); // Read away the source
 
         return new ReflectionExport(members, from);
     }
@@ -672,7 +676,8 @@ export default class Parser
     #atEndOfStatement(token: Token): boolean
     {
         return [Division.SEPARATOR, Division.TERMINATOR].includes(token.value)
-            || this.#closesContainer(token);
+            || this.#closesContainer(token)
+            || isKeyword(token.value);
     }
 
     #parseExpression(tokenList: TokenList): ReflectionExpression
@@ -702,8 +707,11 @@ export default class Parser
                     code += token.toString();
                 }
 
-                tokenList.step(); // Read away the end of statement
-
+                if (isKeyword(token.value) === false)
+                {
+                    tokenList.step(); // Read away the end of statement
+                }
+                
                 break;
             }
             else

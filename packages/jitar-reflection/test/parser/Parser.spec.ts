@@ -680,9 +680,32 @@ describe('parser/Parser', () =>
 
     describe('.parseModule(code)', () =>
     {
-        it('should parse a module with imports, members and exports', () =>
+        it('should parse a module with terminated statements', () =>
         {
-            const module = parser.parseModule(MODULES.FULL);
+            const module = parser.parseModule(MODULES.TERMINATED);
+            
+            const imports = module.imports;
+            expect(imports.length).toBe(2);
+
+            const exports = module.exports;
+            expect(exports.length).toBe(3);
+
+            const members = module.members;
+            expect(members.length).toBe(9);
+
+            const fields = module.fields;
+            expect(fields.length).toBe(2);
+
+            const functions = module.functions;
+            expect(functions.length).toBe(1);
+
+            const classes = module.classes;
+            expect(classes.length).toBe(1);
+        });
+
+        it('should parse a module with unterminated statements', () =>
+        {
+            const module = parser.parseModule(MODULES.UNTERMINATED);
             
             const imports = module.imports;
             expect(imports.length).toBe(2);

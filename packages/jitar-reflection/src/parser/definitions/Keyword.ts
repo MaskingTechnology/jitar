@@ -15,8 +15,9 @@ const Keyword =
     SET: 'set',
     EXTENDS: 'extends',
     STATIC: 'static',
-    ASYNC: 'async',
-    NEW: 'new',
+    ASYNC: 'async'
+    // Other keywords are not needed in the parse
+    // process and must be treated as identifiers.
 };
 
 const Keywords = Object.values(Keyword);
