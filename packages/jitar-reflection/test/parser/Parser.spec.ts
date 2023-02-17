@@ -549,7 +549,7 @@ describe('parser/Parser', () =>
             expect(clazz.name).toBe('Name');
             expect(clazz.parentName).toBe(undefined);
 
-            const members = clazz.scope.members;
+            const members = clazz.members;
             expect(members.length).toBe(0);
         });
 
@@ -559,7 +559,7 @@ describe('parser/Parser', () =>
             expect(clazz.name).toBe('Name');
             expect(clazz.parentName).toBe('Parent');
             
-            const members = clazz.scope.members;
+            const members = clazz.members;
             expect(members.length).toBe(0);
         });
 
@@ -569,7 +569,7 @@ describe('parser/Parser', () =>
             expect(clazz.name).toBe('name');
             expect(clazz.parentName).toBe(undefined);
 
-            const members = clazz.scope.members;
+            const members = clazz.members;
             expect(members.length).toBe(0);
         });
 
@@ -579,12 +579,10 @@ describe('parser/Parser', () =>
             expect(clazz.name).toBe('Name');
             expect(clazz.parentName).toBe(undefined);
 
-            const scope = clazz.scope;
-
-            const members = scope.members;
+            const members = clazz.members;
             expect(members.length).toBe(18);
 
-            const fields = scope.fields;
+            const fields = clazz.fields;
             expect(fields.length).toBe(4);
 
             expect(fields[0].name).toBe('field1');
@@ -607,7 +605,7 @@ describe('parser/Parser', () =>
             expect(fields[3].isStatic).toBe(true);
             expect(fields[3].value).toBe(undefined);
 
-            const getters = scope.getters;
+            const getters = clazz.getters;
             expect(getters.length).toBe(4);
 
             expect(getters[0].name).toBe('getter1');
@@ -626,7 +624,7 @@ describe('parser/Parser', () =>
             expect(getters[3].isPrivate).toBe(false);
             expect(getters[3].isStatic).toBe(true);
 
-            const setters = scope.setters;
+            const setters = clazz.setters;
             expect(setters.length).toBe(4);
 
             expect(setters[0].name).toBe('setter1');
@@ -645,7 +643,7 @@ describe('parser/Parser', () =>
             expect(setters[3].isPrivate).toBe(false);
             expect(setters[3].isStatic).toBe(true);
 
-            const functions = scope.functions;
+            const functions = clazz.functions;
             expect(functions.length).toBe(6);
 
             expect(functions[0].name).toBe('constructor');
@@ -685,24 +683,23 @@ describe('parser/Parser', () =>
         it('should parse a module with imports, members and exports', () =>
         {
             const module = parser.parseModule(MODULES.FULL);
-            const scope = module.scope;
-
-            const imports = scope.imports;
+            
+            const imports = module.imports;
             expect(imports.length).toBe(2);
 
-            const exports = scope.exports;
+            const exports = module.exports;
             expect(exports.length).toBe(3);
 
-            const members = scope.members;
+            const members = module.members;
             expect(members.length).toBe(9);
 
-            const fields = scope.fields;
+            const fields = module.fields;
             expect(fields.length).toBe(2);
 
-            const functions = scope.functions;
+            const functions = module.functions;
             expect(functions.length).toBe(1);
 
-            const classes = scope.classes;
+            const classes = module.classes;
             expect(classes.length).toBe(1);
         });
     });

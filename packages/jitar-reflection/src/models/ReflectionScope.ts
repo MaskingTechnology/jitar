@@ -7,6 +7,7 @@ import ReflectionClass from './ReflectionClass.js';
 import ReflectionField from './ReflectionField.js';
 import ReflectionImport from './ReflectionImport.js';
 import ReflectionExport from './ReflectionExport.js';
+import ReflectionGenerator from './ReflectionGenerator.js';
 
 export default class ReflectionScope
 {
@@ -23,7 +24,7 @@ export default class ReflectionScope
 
     get exports(): ReflectionExport[] { return this.#members.filter(member => member instanceof ReflectionExport) as ReflectionExport[]; }
 
-    get classes(): ReflectionClass[] { return this.#members.filter(member => member instanceof ReflectionClass) as ReflectionClass[]; }
+    get fields(): ReflectionField[] { return this.#members.filter(member => member instanceof ReflectionField) as ReflectionField[]; }
 
     get functions(): ReflectionFunction[] { return this.#members.filter(member => member.constructor.name === 'ReflectionFunction') as ReflectionFunction[]; }
 
@@ -31,7 +32,9 @@ export default class ReflectionScope
 
     get setters(): ReflectionSetter[] { return this.#members.filter(member => member.constructor.name === 'ReflectionSetter') as ReflectionSetter[]; }
 
-    get fields(): ReflectionField[] { return this.#members.filter(member => member instanceof ReflectionField) as ReflectionField[]; }
+    get generators(): ReflectionGenerator[] { return this.#members.filter(member => member.constructor.name === 'ReflectionGenerator') as ReflectionGenerator[]; }
+
+    get classes(): ReflectionClass[] { return this.#members.filter(member => member instanceof ReflectionClass) as ReflectionClass[]; }
 
     getMember(name: string): ReflectionMember | undefined
     {
@@ -58,6 +61,21 @@ export default class ReflectionScope
         return this.setters.find(member => member.name === name);
     }
 
+    getGenerator(name: string): ReflectionGenerator | undefined
+    {
+        return this.generators.find(member => member.name === name);
+    }
+
+    getClass(name: string): ReflectionClass | undefined
+    {
+        return this.classes.find(member => member.name === name);
+    }
+
+    hasMember(name: string): boolean
+    {
+        return this.getMember(name) !== undefined;
+    }
+
     hasField(name: string): boolean
     {
         return this.getField(name) !== undefined;
@@ -78,26 +96,13 @@ export default class ReflectionScope
         return this.getSetter(name) !== undefined;
     }
 
-    canRead(name: string): boolean
+    hasGenerator(name: string): boolean
     {
-        const field = this.getField(name);
-
-        return (field !== undefined && field.isPublic)
-            || this.hasGetter(name);
+        return this.getGenerator(name) !== undefined;
     }
 
-    canWrite(name: string): boolean
+    hasClass(name: string): boolean
     {
-        const field = this.getField(name);
-        
-        return (field !== undefined && field.isPublic)
-            || this.hasSetter(name);
-    }
-
-    canCall(name: string): boolean
-    {
-        const funktion = this.getFunction(name);
-
-        return funktion !== undefined && funktion.isPublic;
+        return this.getClass(name) !== undefined;
     }
 }
