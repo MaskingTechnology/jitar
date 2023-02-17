@@ -24,6 +24,11 @@ export default class ItemList<T>
 
     get previous() { return this.#items[this.#position - 1]; }
 
+    get(index: number): T
+    {
+        return this.#items[index];
+    }
+
     step(amount = 1): T
     {
         this.#position += amount;
