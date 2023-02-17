@@ -1,6 +1,7 @@
 {
     "name": "jitar-health-checks-example",
     "type": "module",
+    "private": true,
     "scripts": {
         "build": "tsc",
         "start": "node --experimental-network-imports --experimental-fetch dist/start.js --config=jitar.json"

@@ -1,6 +1,7 @@
 {
     "name": "jitar-microservices-example",
     "type": "module",
+    "private": true,
     "scripts": {
         "build": "tsc",
         "dev": "node --experimental-network-imports --experimental-fetch dist/start.js --config=./conf/dev.json",

@@ -1,6 +1,7 @@
 {
     "name": "jitar-javascript-example",
     "type": "module",
+    "private": true,
     "scripts": {
         "build": "",
         "start": "node --experimental-network-imports --experimental-fetch src/start.js --config=jitar.json"

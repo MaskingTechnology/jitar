@@ -1,6 +1,7 @@
 {
     "name": "jitar-error-handling-example",
     "type": "module",
+    "private": true,
     "scripts": {
         "build": "tsc",
         "repo": "node --experimental-network-imports --experimental-fetch dist/start.js --config=conf/repo.json",
