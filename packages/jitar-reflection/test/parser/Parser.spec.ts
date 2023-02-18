@@ -4,7 +4,7 @@ import ReflectionArray from '../../src/models/ReflectionArray';
 import ReflectionObject from '../../src/models/ReflectionObject';
 import Parser from '../../src/parser/Parser';
 
-import { IMPORTS, EXPORTS, FIELDS, FUNCTIONS, CLASSES, MODULES } from '../_fixtures/parser/Parser.fixture';
+import { VALUES, IMPORTS, EXPORTS, FIELDS, FUNCTIONS, CLASSES, MODULES } from '../_fixtures/parser/Parser.fixture';
 import ReflectionField from '../../src/models/ReflectionField';
 import ReflectionGenerator from '../../src/models/ReflectionGenerator';
 
@@ -12,6 +12,44 @@ const parser = new Parser();
 
 describe('parser/Parser', () =>
 {
+    describe('.parseValue(code)', () =>
+    {
+        it('should parse an array', () =>
+        {
+            const value = parser.parseValue(VALUES.ARRAY);
+            expect(value).toBeInstanceOf(ReflectionArray);
+            expect(value.definition).toBe('[ 1 , "foo" , false , new Person ( "Peter" , 42 ) , { a : 1 , b : 2 } ]');
+        });
+
+        it('should parse an object', () =>
+        {
+            const value = parser.parseValue(VALUES.OBJECT);
+            expect(value).toBeInstanceOf(ReflectionObject);
+            expect(value.definition).toBe('{ key1 : "value1" , "key2" : new Person ( ) .toString ( ) }');
+        });
+
+        it('should parse an expression', () =>
+        {
+            const value = parser.parseValue(VALUES.EXPRESSION);
+            expect(value).toBeInstanceOf(ReflectionExpression);
+            expect(value.definition).toBe('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
+        });
+
+        it('should parse an yield expression', () =>
+        {
+            const value = parser.parseValue(VALUES.YIELD);
+            expect(value).toBeInstanceOf(ReflectionExpression);
+            expect(value.definition).toBe('yield doSomething ( )');
+        });
+
+        it('should parse an try...catch...finally expression', () =>
+        {
+            const value = parser.parseValue(VALUES.TRY_CATCH_FINALLY);
+            expect(value).toBeInstanceOf(ReflectionExpression);
+            expect(value.definition).toBe('try { sum ( 1 , 2 ) ; } catch ( error ) { console.error ( error ) ; } finally { console.log ( "finally" ) ; }');
+        });
+    });
+
     describe('.parseImport(code)', () =>
     {
         it('should parse loading a module', () =>

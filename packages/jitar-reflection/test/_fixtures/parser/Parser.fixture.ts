@@ -1,4 +1,13 @@
 
+const VALUES =
+{
+    ARRAY: '[1, "foo", false, new Person("Peter", 42), { a: 1, b: 2 }]',
+    OBJECT: '{ key1: "value1", "key2": new Person().toString() }',
+    EXPRESSION:'new Number(Math.ceil(Math.random()) + 10).toString();',
+    YIELD: 'yield doSomething();',
+    TRY_CATCH_FINALLY: 'try { sum(1, 2); } catch (error) { console.error(error); } finally { console.log("finally"); }'
+}
+
 const IMPORTS =
 {
     LOAD: "import 'module'",
@@ -120,7 +129,7 @@ export default function sum(a, b) { return a + b; }
 
 [1, 2, 3, 4, 5].sort((a, b) => a - b);
 
-sum(1, 2);
+try { sum(1, 2); } catch (error) { console.error(error); }
 
 export class Person
 {
@@ -149,7 +158,7 @@ export { name, peter };
     
     [1, 2, 3, 4, 5].sort((a, b) => a - b)
     
-    sum(1, 2)
+    try { sum(1, 2) } catch (error) { console.error(error) }
     
     export class Person
     {
@@ -169,4 +178,4 @@ export { name, peter };
 `,
 }
 
-export { IMPORTS, EXPORTS, FIELDS, FUNCTIONS, CLASSES, MODULES  }
+export { VALUES, IMPORTS, EXPORTS, FIELDS, FUNCTIONS, CLASSES, MODULES  }

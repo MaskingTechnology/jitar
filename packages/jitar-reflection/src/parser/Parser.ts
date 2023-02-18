@@ -41,6 +41,35 @@ export default class Parser
         this.#lexer = new Lexer();
     }
 
+    // Rename to parse(code)
+    parseModule(code: string): ReflectionModule
+    {
+        const tokenList = this.#lexer.tokenize(code);
+        const scope = this.#parseScope(tokenList);
+
+        return new ReflectionModule(scope);
+    }
+
+    parseItem(code: string): ReflectionMember | ReflectionValue | undefined
+    {
+        const tokenList = this.#lexer.tokenize(code);
+
+        return this.#parseNext(tokenList);
+    }
+
+    parseValue(code: string): ReflectionValue
+    {
+        const tokenList = this.#lexer.tokenize(code);
+        const model = this.#parseNext(tokenList);
+
+        if ((model instanceof ReflectionValue) === false)
+        {
+            throw new Error('The given code does not contain a value definition');
+        }
+
+        return model as ReflectionValue;
+    }
+
     parseImport(code: string): ReflectionImport
     {
         const tokenList = this.#lexer.tokenize(code);
@@ -104,14 +133,6 @@ export default class Parser
         }
 
         return model as ReflectionClass;
-    }
-
-    parseModule(code: string): ReflectionModule
-    {
-        const tokenList = this.#lexer.tokenize(code);
-        const scope = this.#parseScope(tokenList);
-
-        return new ReflectionModule(scope);
     }
 
     #parseScope(tokenList: TokenList): ReflectionScope
@@ -663,6 +684,88 @@ export default class Parser
         return new ReflectionObject(fields);
     }
 
+    #parseExpression(tokenList: TokenList): ReflectionExpression
+    {
+        let token = tokenList.current;
+        let code = '';
+
+        while (tokenList.eof === false)
+        {
+            if (token.hasValue(List.OPEN))
+            {
+                const array = this.#parseBlock(tokenList, List.OPEN, List.CLOSE);
+
+                code += array + ' ';
+                token = tokenList.current;
+            }
+            else if (token.hasValue(Group.OPEN))
+            {
+                const group = this.#parseBlock(tokenList, Group.OPEN, Group.CLOSE);
+
+                code += group + ' ';
+                token = tokenList.current;
+            }
+            else if (token.hasValue(Scope.OPEN))
+            {
+                const scope = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
+
+                code += scope + ' ';
+                token = tokenList.current;
+            }
+            else
+            {
+                code += token.toString() + ' ';
+                token = tokenList.step();
+            }
+
+            if (token === undefined)
+            {
+                break;
+            }
+            else if (this.#atEndOfStatement(token))
+            {
+                if (isKeyword(token.value) === false)
+                {
+                    tokenList.step(); // Read away the end of statement
+                }
+                
+                break;
+            }
+        }
+
+        return new ReflectionExpression(code.trim());
+    }
+
+    #parseBlock(tokenList: TokenList, openId: string, closeId: string): string
+    {
+        let token = tokenList.step();
+        let code = openId + ' ';
+
+        while (tokenList.eof === false)
+        {
+            if (token.hasValue(openId))
+            {
+                code += this.#parseBlock(tokenList, openId, closeId) + ' ';
+                token = tokenList.current;
+
+                continue;
+            }
+            else if (token.hasValue(closeId))
+            {
+                tokenList.step(); // Read away the close
+
+                code += closeId;
+
+                return code;
+            }
+            
+            code += token.toString() + ' ';
+            token = tokenList.step();
+        }
+
+        return code;
+    }
+
     #opensContainer(token: Token): boolean
     {
         return [List.OPEN, Group.OPEN, Scope.OPEN].includes(token.value);
@@ -678,79 +781,5 @@ export default class Parser
         return [Division.SEPARATOR, Division.TERMINATOR].includes(token.value)
             || this.#closesContainer(token)
             || isKeyword(token.value);
-    }
-
-    #parseExpression(tokenList: TokenList): ReflectionExpression
-    {
-        let token = tokenList.current;
-        let code = '';
-
-        while (tokenList.eof === false)
-        {
-            if (this.#opensContainer(token))
-            {
-                code += token.toString() + ' ';
-
-                tokenList.step(); // Read away the container open
-
-                const expression = this.#parseExpression(tokenList);
-
-                code += expression.definition + ' ';
-                token = tokenList.current;
-                
-                continue;
-            }
-            else if (this.#atEndOfStatement(token))
-            {
-                if (this.#closesContainer(token))
-                {
-                    code += token.toString();
-                }
-
-                if (isKeyword(token.value) === false)
-                {
-                    tokenList.step(); // Read away the end of statement
-                }
-                
-                break;
-            }
-            else
-            {
-                code += token.toString() + ' ';
-            }
-
-            token = tokenList.step();
-        }
-
-        return new ReflectionExpression(code.trim());
-    }
-
-    #parseBlock(tokenList: TokenList, openId: string, closeId: string): string
-    {
-        let token = tokenList.step();
-        let code = openId + ' ';
-
-        while (tokenList.eof === false)
-        {
-            if (token === undefined)
-            {
-                return code.trim();
-            }
-
-            code += token.hasValue(openId)
-                ? this.#parseBlock(tokenList, openId, closeId) + ' ' + closeId + ' '
-                : token.toString() + ' ';
-            
-            if (token.hasValue(closeId))
-            {
-                tokenList.step(); // Read away the close
-
-                return code.trim();
-            }
-
-            token = tokenList.step();
-        }
-
-        return code.trim();
     }
 }
