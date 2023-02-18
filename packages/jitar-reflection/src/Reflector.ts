@@ -1,8 +1,10 @@
 
 import ReflectionClass from './models/ReflectionClass.js';
+import ReflectionExpression from './models/ReflectionExpression.js';
 import ReflectionField from './models/ReflectionField.js';
 import ReflectionFunction from './models/ReflectionFunction.js';
 import ReflectionModule from './models/ReflectionModule.js';
+import ReflectionScope from './models/ReflectionScope.js';
 import Parser from './parser/Parser.js';
 
 const parser = new Parser();
@@ -24,12 +26,17 @@ export default class Reflector
         return parser.parseFunction(code);
     }
 
+    static parseField(code: string): ReflectionField
+    {
+        return parser.parseField(code);
+    }
+
     static fromModule(module: object, inherit = false): ReflectionModule
     {
-        const exported = Object.values(module);
+        const entries = Object.entries(module);
         const members = [];
 
-        for (const member of exported)
+        for (const [key, member] of entries)
         {
             if (typeof member.toString !== 'function')
             {
@@ -46,9 +53,15 @@ export default class Reflector
             {
                 members.push(this.fromFunction(member));
             }
+            else
+            {
+                const expression = new ReflectionExpression(code);
+
+                members.push(new ReflectionField(key, expression));
+            }
         }
         
-        return new ReflectionModule([], members, []);
+        return new ReflectionModule(new ReflectionScope(members));
     }
 
     static fromClass(clazz: Function, inherit = false): ReflectionClass
@@ -127,6 +140,6 @@ export default class Reflector
 
         const members = [...fields.values(), ...functions.values(), ...getters.values(), ...setters.values()];
 
-        return new ReflectionClass(model.name, parentModel.name, members);
+        return new ReflectionClass(model.name, parentModel.name, new ReflectionScope(members));
     }
 }
