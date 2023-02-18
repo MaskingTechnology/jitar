@@ -54,6 +54,7 @@ const FUNCTIONS =
     ASYNC_EXPRESSION: "const name = async function() {}",
     ARROW: "const name = () => {}",
     ARROW_EXPRESSION: "const name = () => 'value';",
+    ARROW_ARGUMENT: 'const name = arg => arg;',
     ASYNC_ARROW: "const name = async () => {}",
     GENERATOR: "function* name() {}",
     ASYNC_GENERATOR: "async function* name() {}",

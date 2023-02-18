@@ -397,6 +397,16 @@ describe('parser/Parser', () =>
             expect(funktion.body).toBe("'value'");
         });
 
+        it('should parse an arrow function argument declaration', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.ARROW_ARGUMENT);
+
+            expect(funktion.name).toBe('name');
+            expect(funktion.isAsync).toBe(false);
+            expect(funktion.parameters.length).toBe(1);
+            expect(funktion.body).toBe('arg');
+        });
+
         it('should parse an async arrow function declaration', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.ASYNC_ARROW);

@@ -158,8 +158,17 @@ export default class Parser
     {
         const token = tokenList.current;
 
-        if (token.isType(TokenType.IDENTIFIER) || token.isType(TokenType.LITERAL))
+        if (token.isType(TokenType.LITERAL))
         {
+            return this.#parseExpression(tokenList);
+        }
+        else if (token.isType(TokenType.IDENTIFIER))
+        {
+            if (tokenList.hasNext() && tokenList.next.hasValue('=>'))
+            {
+                return this.#parseArrowFunction(tokenList, isAsync);
+            }
+
             return this.#parseExpression(tokenList);
         }
         else if (token.isType(TokenType.KEYWORD))
@@ -505,9 +514,19 @@ export default class Parser
 
     #parseArrowFunction(tokenList: TokenList, isAsync: boolean): ReflectionFunction
     {
-        const parameters = this.#parseParameters(tokenList);
-
         let token = tokenList.current;
+        let parameters: ReflectionParameter[];
+
+        if (token.hasValue(Group.OPEN))
+        {
+            parameters = this.#parseParameters(tokenList);
+            token = tokenList.current;
+        }
+        else
+        {
+            parameters = [new ReflectionField(token.value, undefined)];
+            token = tokenList.step();
+        }
 
         if (token.hasValue('=>') === false)
         {
