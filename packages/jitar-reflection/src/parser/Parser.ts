@@ -41,8 +41,7 @@ export default class Parser
         this.#lexer = new Lexer();
     }
 
-    // Rename to parse(code)
-    parseModule(code: string): ReflectionModule
+    parse(code: string): ReflectionModule
     {
         const tokenList = this.#lexer.tokenize(code);
         const scope = this.#parseScope(tokenList);

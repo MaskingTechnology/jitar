@@ -9,9 +9,9 @@ const parser = new Parser();
 
 export default class Reflector
 {
-    static parseModule(code: string): ReflectionModule
+    static parse(code: string): ReflectionModule
     {
-        return parser.parseModule(code);
+        return parser.parse(code);
     }
 
     static parseClass(code: string): ReflectionClass

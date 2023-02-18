@@ -726,11 +726,11 @@ describe('parser/Parser', () =>
         });
     });
 
-    describe('.parseModule(code)', () =>
+    describe('.parse(code)', () =>
     {
         it('should parse a module with terminated statements', () =>
         {
-            const module = parser.parseModule(MODULES.TERMINATED);
+            const module = parser.parse(MODULES.TERMINATED);
             
             const imports = module.imports;
             expect(imports.length).toBe(2);
@@ -753,7 +753,7 @@ describe('parser/Parser', () =>
 
         it('should parse a module with unterminated statements', () =>
         {
-            const module = parser.parseModule(MODULES.UNTERMINATED);
+            const module = parser.parse(MODULES.UNTERMINATED);
             
             const imports = module.imports;
             expect(imports.length).toBe(2);
