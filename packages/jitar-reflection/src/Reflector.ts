@@ -1,37 +1,38 @@
 
+import Parser from './parser/Parser.js';
+
 import ReflectionClass from './models/ReflectionClass.js';
 import ReflectionExpression from './models/ReflectionExpression.js';
 import ReflectionField from './models/ReflectionField.js';
 import ReflectionFunction from './models/ReflectionFunction.js';
 import ReflectionModule from './models/ReflectionModule.js';
 import ReflectionScope from './models/ReflectionScope.js';
-import Parser from './parser/Parser.js';
 
 const parser = new Parser();
 
 export default class Reflector
 {
-    static parse(code: string): ReflectionModule
+    parse(code: string): ReflectionModule
     {
         return parser.parse(code);
     }
 
-    static parseClass(code: string): ReflectionClass
+    parseClass(code: string): ReflectionClass
     {
         return parser.parseClass(code);
     }
 
-    static parseFunction(code: string): ReflectionFunction
+    parseFunction(code: string): ReflectionFunction
     {
         return parser.parseFunction(code);
     }
 
-    static parseField(code: string): ReflectionField
+    parseField(code: string): ReflectionField
     {
         return parser.parseField(code);
     }
 
-    static fromModule(module: object, inherit = false): ReflectionModule
+    fromModule(module: object, inherit = false): ReflectionModule
     {
         const entries = Object.entries(module);
         const members = [];
@@ -64,7 +65,7 @@ export default class Reflector
         return new ReflectionModule(new ReflectionScope(members));
     }
 
-    static fromClass(clazz: Function, inherit = false): ReflectionClass
+    fromClass(clazz: Function, inherit = false): ReflectionClass
     {
         const code = clazz.toString();
         const model = this.parseClass(code);
@@ -86,42 +87,42 @@ export default class Reflector
         return this.#mergeClassModels(model, parentModel);
     }
 
-    static fromObject(object: object): ReflectionClass
+    fromObject(object: object, inherit = true): ReflectionClass
     {
         const clazz = this.getClass(object);
 
-        return this.fromClass(clazz);
+        return this.fromClass(clazz, inherit);
     }
 
-    static fromFunction(funktion: Function): ReflectionFunction
+    fromFunction(funktion: Function): ReflectionFunction
     {
         const code = funktion.toString();
 
         return this.parseFunction(code);
     }
 
-    static createInstance(clazz: Function, args: unknown[] = []): object
+    createInstance(clazz: Function, args: unknown[] = []): object
     {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return new (clazz as any)(...args);
     }
 
-    static isClassObject(object: object): boolean
+    isClassObject(object: object): boolean
     {
         return object.constructor.toString().startsWith('class');
     }
 
-    static getClass(object: object): Function
+    getClass(object: object): Function
     {
         return object.constructor;
     }
 
-    static getParentClass(clazz: Function): Function
+    getParentClass(clazz: Function): Function
     {
         return Object.getPrototypeOf(clazz);
     }
 
-    static #mergeClassModels(model: ReflectionClass, parentModel: ReflectionClass): ReflectionClass
+    #mergeClassModels(model: ReflectionClass, parentModel: ReflectionClass): ReflectionClass
     {
         const fields = new Map<string, ReflectionField>();
         const functions = new Map<string, ReflectionFunction>();
