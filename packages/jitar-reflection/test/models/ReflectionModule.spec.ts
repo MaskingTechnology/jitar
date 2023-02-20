@@ -3,6 +3,7 @@ import ReflectionClass from '../../src/models/ReflectionClass';
 import ReflectionField from '../../src/models/ReflectionField';
 import ReflectionFunction from '../../src/models/ReflectionFunction';
 import ReflectionGenerator from '../../src/models/ReflectionGenerator';
+import ReflectionMember from '../../src/models/ReflectionMember';
 
 import { reflectionModule } from '../_fixtures/models/ReflectionModule.fixture';
 
@@ -65,17 +66,21 @@ describe('models/ReflectionModule', () =>
             const exported = reflectionModule.exported;
             expect(exported.size).toBe(4);
 
-            expect(exported.get('default')).toBeInstanceOf(ReflectionFunction);
-            expect(exported.get('default')!.name).toBe('sum');
+            const first = exported.get('default') as ReflectionFunction;
+            expect(first).toBeInstanceOf(ReflectionFunction);
+            expect(first.name).toBe('sum');
 
-            expect(exported.get('peter')).toBeInstanceOf(ReflectionField);
-            expect(exported.get('peter')!.name).toBe('peter');
+            const second = exported.get('peter') as ReflectionField;
+            expect(second).toBeInstanceOf(ReflectionField);
+            expect(second.name).toBe('peter');
 
-            expect(exported.get('Customer')).toBeInstanceOf(ReflectionClass);
-            expect(exported.get('Customer')!.name).toBe('Customer');
+            const third = exported.get('Customer') as ReflectionClass;
+            expect(third).toBeInstanceOf(ReflectionClass);
+            expect(third.name).toBe('Customer');
 
-            expect(exported.get('generateNumbers')).toBeInstanceOf(ReflectionGenerator);
-            expect(exported.get('generateNumbers')!.name).toBe('generateNumbers');
+            const fourth = exported.get('generateNumbers') as ReflectionGenerator;
+            expect(fourth).toBeInstanceOf(ReflectionGenerator);
+            expect(fourth.name).toBe('generateNumbers');
         });
     });
 
@@ -83,15 +88,15 @@ describe('models/ReflectionModule', () =>
     {
         it('should indicate that a member is exported', () =>
         {
-            const member = reflectionModule.getMember('sum');
-            const result = reflectionModule.isExported(member!);
+            const member = reflectionModule.getMember('sum') as ReflectionMember;
+            const result = reflectionModule.isExported(member);
             expect(result).toBe(true);
         });
 
         it('should indicate that a member is not exported', () =>
         {
-            const member = reflectionModule.getMember('createJohn');
-            const result = reflectionModule.isExported(member!);
+            const member = reflectionModule.getMember('createJohn') as ReflectionMember;
+            const result = reflectionModule.isExported(member);
             expect(result).toBe(false);
         });
     });
@@ -100,9 +105,9 @@ describe('models/ReflectionModule', () =>
     {
         it('should get an exported member', () =>
         {
-            const member = reflectionModule.getExported('default');
+            const member = reflectionModule.getExported('default') as ReflectionFunction;
             expect(member).toBeInstanceOf(ReflectionFunction);
-            expect(member!.name).toBe('sum');
+            expect(member.name).toBe('sum');
         });
 
         it('should not get a non-exported member', () =>

@@ -43,8 +43,6 @@ class Person extends Human
     }
 }
 
-class User extends Person {}
-
 const johnDoe = new Person(1, 'John', 'Doe', 42);
 const janeDoe = { id: 2, fullName: 'Jane Doe', age: 42 };
 

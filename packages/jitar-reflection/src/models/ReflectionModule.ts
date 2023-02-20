@@ -21,7 +21,7 @@ export default class ReflectionModule
 
     get members(): ReflectionMember[] { return this.#scope.members; }
 
-    get exportedMembers(): ReflectionMember[] { return this.#filterExported(this.#scope.members); };
+    get exportedMembers(): ReflectionMember[] { return this.#filterExported(this.#scope.members); }
 
     get imports(): ReflectionImport[] { return this.#scope.imports; }
 
@@ -29,19 +29,19 @@ export default class ReflectionModule
 
     get fields(): ReflectionField[] { return this.#scope.fields; }
 
-    get exportedFields(): ReflectionField[] { return this.#filterExported(this.#scope.fields) as ReflectionField[]; };
+    get exportedFields(): ReflectionField[] { return this.#filterExported(this.#scope.fields) as ReflectionField[]; }
 
     get functions(): ReflectionFunction[] { return this.#scope.functions; }
 
-    get exportedFunctions(): ReflectionFunction[] { return this.#filterExported(this.#scope.functions) as ReflectionFunction[]; };
+    get exportedFunctions(): ReflectionFunction[] { return this.#filterExported(this.#scope.functions) as ReflectionFunction[]; }
 
     get generators(): ReflectionFunction[] { return this.#scope.generators; }
 
-    get exportedGenerators(): ReflectionGenerator[] { return this.#filterExported(this.#scope.generators) as ReflectionGenerator[]; };
+    get exportedGenerators(): ReflectionGenerator[] { return this.#filterExported(this.#scope.generators) as ReflectionGenerator[]; }
 
     get classes(): ReflectionClass[] { return this.#scope.classes; }
 
-    get exportedClasses(): ReflectionClass[] { return this.#filterExported(this.#scope.classes) as ReflectionClass[]; };
+    get exportedClasses(): ReflectionClass[] { return this.#filterExported(this.#scope.classes) as ReflectionClass[]; }
 
     get exported(): Map<string, ReflectionMember>
     {
