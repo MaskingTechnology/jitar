@@ -8,6 +8,7 @@ import ReflectionExpression from '../../../src/models/ReflectionExpression';
 import ReflectionFunction from '../../../src/models/ReflectionFunction';
 import ReflectionClass from '../../../src/models/ReflectionClass';
 import ReflectionExport from '../../../src/models/ReflectionExport';
+import ReflectionGenerator from '../../../src/models/ReflectionGenerator';
 
 const members =
 [
@@ -16,8 +17,16 @@ const members =
     new ReflectionField('bas', new ReflectionExpression('new Person("Bas")')),
     new ReflectionFunction('createJohn', [], 'return new Person("John")'),
     new ReflectionFunction('sum', [new ReflectionField('a', undefined), new ReflectionField('b', undefined)], 'return a + b'),
+    new ReflectionGenerator('generateNumbers', [new ReflectionField('count', undefined)], 'for (let i = 0; i < count; i++) yield i;'),
+    new ReflectionGenerator('createJohn', [], 'yield new Person("John")'),
     new ReflectionClass('Customer', 'Person', new ReflectionScope([])),
-    new ReflectionExport([new ReflectionAlias('peter', 'peter'), new ReflectionAlias('sum', 'default')], undefined)
+    new ReflectionClass('Order', undefined, new ReflectionScope([])),
+    new ReflectionExport([
+        new ReflectionAlias('sum', 'default'),
+        new ReflectionAlias('peter', 'peter'),
+        new ReflectionAlias('Customer', 'Customer'),
+        new ReflectionAlias('generateNumbers', 'generateNumbers')
+    ], undefined)
 ];
 
 const scope = new ReflectionScope(members);

@@ -189,7 +189,7 @@ describe('models/ReflectionScope', () =>
 
     describe('.hasMember(name)', () =>
     {
-        it('should has an existing member', () =>
+        it('should have an existing member', () =>
         {
             const result = reflectionScope.hasMember('sum');
             expect(result).toBe(true);
@@ -204,7 +204,7 @@ describe('models/ReflectionScope', () =>
 
     describe('.hasField(name)', () =>
     {
-        it('should has an existing field', () =>
+        it('should have an existing field', () =>
         {
             const result = reflectionScope.hasField('age');
             expect(result).toBe(true);
@@ -219,7 +219,7 @@ describe('models/ReflectionScope', () =>
 
     describe('.hasFunction(name)', () =>
     {
-        it('should has an existing function', () =>
+        it('should have an existing function', () =>
         {
             const result = reflectionScope.hasFunction('createJohn');
             expect(result).toBe(true);
@@ -234,7 +234,7 @@ describe('models/ReflectionScope', () =>
 
     describe('.hasGetter(name)', () =>
     {
-        it('should has an existing getter', () =>
+        it('should have an existing getter', () =>
         {
             const result = reflectionScope.hasGetter('name');
             expect(result).toBe(true);
@@ -249,7 +249,7 @@ describe('models/ReflectionScope', () =>
 
     describe('.hasSetter(name)', () =>
     {
-        it('should has an existing setter', () =>
+        it('should have an existing setter', () =>
         {
             const result = reflectionScope.hasSetter('age');
             expect(result).toBe(true);
@@ -264,7 +264,7 @@ describe('models/ReflectionScope', () =>
 
     describe('.hasGenerator(name)', () =>
     {
-        it('should has an existing generator', () =>
+        it('should have an existing generator', () =>
         {
             const result = reflectionScope.hasGenerator('createJohn');
             expect(result).toBe(true);
@@ -279,7 +279,7 @@ describe('models/ReflectionScope', () =>
 
     describe('.hasClass(name)', () =>
     {
-        it('should has an existing class', () =>
+        it('should have an existing class', () =>
         {
             const result = reflectionScope.hasClass('Customer');
             expect(result).toBe(true);
