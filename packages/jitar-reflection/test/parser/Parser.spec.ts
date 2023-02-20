@@ -35,11 +35,11 @@ describe('parser/Parser', () =>
             expect(value.definition).toBe('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
         });
 
-        it('should parse an yield expression', () =>
+        it('should parse an if...else expression', () =>
         {
-            const value = parser.parseValue(VALUES.YIELD);
+            const value = parser.parseValue(VALUES.IF_ELSE);
             expect(value).toBeInstanceOf(ReflectionExpression);
-            expect(value.definition).toBe('yield doSomething ( )');
+            expect(value.definition).toBe('if ( true ) { return "value1" ; } else { return "value2" ; }');
         });
 
         it('should parse an try...catch...finally expression', () =>
@@ -738,18 +738,34 @@ describe('parser/Parser', () =>
 
     describe('.parse(code)', () =>
     {
+        it('should parse an empty module', () =>
+        {
+            const module = parser.parse('');
+            
+            const members = module.members;
+            expect(members.length).toBe(0);
+        });
+
+        it('should parse omit root level expressions', () =>
+        {
+            const module = parser.parse(VALUES.EXPRESSION);
+            
+            const members = module.members;
+            expect(members.length).toBe(0);
+        });
+
         it('should parse a module with terminated statements', () =>
         {
             const module = parser.parse(MODULES.TERMINATED);
             
+            const members = module.members;
+            expect(members.length).toBe(9);
+
             const imports = module.imports;
             expect(imports.length).toBe(2);
 
             const exports = module.exports;
             expect(exports.length).toBe(3);
-
-            const members = module.members;
-            expect(members.length).toBe(9);
 
             const fields = module.fields;
             expect(fields.length).toBe(2);
@@ -765,14 +781,14 @@ describe('parser/Parser', () =>
         {
             const module = parser.parse(MODULES.UNTERMINATED);
             
+            const members = module.members;
+            expect(members.length).toBe(9);
+
             const imports = module.imports;
             expect(imports.length).toBe(2);
 
             const exports = module.exports;
             expect(exports.length).toBe(3);
-
-            const members = module.members;
-            expect(members.length).toBe(9);
 
             const fields = module.fields;
             expect(fields.length).toBe(2);
