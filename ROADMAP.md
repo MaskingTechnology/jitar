@@ -7,22 +7,24 @@ Please join our [Discord community](https://discord.gg/Bqwy8azp5R) for feature r
 
 ## Roadmap to v1.0
 
-* Optimize caching (update changed files only)
+* Secure data serialisation
+* Advanced reflection
+* Setup middleware context
+* Response caching
+* Optimize repository caching (update changed files only)
 * Real development mode (auto-reload on save)
-* Build system (combine and minify segment files)
+* Production mode (combine and minify segment files)
 * Authentication / authorization support
-* Asset protection (public private assets) [done]
-* Add support for (de)serializing binary data [done]
-* Data type validation on RPC calls
-* Fail on unexpected parameters on RPC calls [done]
-* Monitoring (metrics)
 * Integrations ([Next.js](https://nextjs.org/), etc.)
-* Split Jitar into multiple packages (e.g. `jitar-core`, `jitar-server`, etc.) [done]
+* Split Jitar into multiple packages (e.g. `@jitar/core`, `@jitar/nodejs`, `@jitar/plugin-vite`, `jitar`, etc.)
 
 ## Roadmap beyond v1.0
 
-* Split Jitar into multiple packages (e.g. `jitar-serializer`, etc.)
+* Procedure specific middleware
 * Add support for other RPC protocols (e.g. [gRPC](https://grpc.io/))
 * Test / add support for other JavaScript runtimes ([Deno](https://deno.land/), [Bun](https://bun.sh/))
 * Provide a configurable Docker image
+* Monitoring (metrics)
+* Data type validation on RPC calls
+* Adapters
 * (more to come ...)

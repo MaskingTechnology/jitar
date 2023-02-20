@@ -1,6 +1,7 @@
 {
     "name": "jitar-full-stack-example",
     "type": "module",
+    "private": true,
     "scripts": {
         "clean": "rimraf dist",
         "compile": "tsc",
