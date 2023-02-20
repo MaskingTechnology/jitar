@@ -9,7 +9,8 @@ const TokenType =
     LIST: 'list',
     LITERAL: 'literal',
     OPERATOR: 'operator',
-    SCOPE: 'scope'
+    SCOPE: 'scope',
+    WHITESPACE: 'whitespace'
 };
 
 export { TokenType };

@@ -5,6 +5,7 @@ import TokenList from './TokenList.js';
 
 import { Comment, isComment } from './definitions/Comment.js';
 import { isDivider } from './definitions/Divider.js';
+import { isEmpty } from './definitions/Empty.js';
 import { isGroup } from './definitions/Group.js';
 import { isKeyword } from './definitions/Keyword.js';
 import { isList } from './definitions/List.js';
@@ -14,11 +15,9 @@ import { isScope } from './definitions/Scope.js';
 import { TokenType } from './definitions/TokenType.js';
 import { Whitespace, isWhitespace } from './definitions/Whitespace.js';
 
-const EMPTY = [undefined, null, ''];
-
 export default class Lexer
 {
-    tokenize(code: string, ignoreComments = true): TokenList
+    tokenize(code: string, omitWhitespace = true, omitComments = true): TokenList
     {
         const charList = new CharList(code);
         const tokens: Token[] = [];
@@ -31,7 +30,13 @@ export default class Lexer
             {
                 break;
             }
-            else if (ignoreComments && token.type === TokenType.COMMENT)
+            else if (omitWhitespace && token.type === TokenType.WHITESPACE)
+            {
+                charList.step(); // Skip the whitespace
+
+                continue;
+            }
+            else if (omitComments && token.type === TokenType.COMMENT)
             {
                 charList.step(); // Skip the comment
 
@@ -48,11 +53,15 @@ export default class Lexer
 
     #getNextToken(charList: CharList): Token | undefined
     {
-        this.#skipIgnored(charList);
-
         const char = charList.current;
         const start = charList.position;
 
+        if (isWhitespace(char))
+        {
+            const end = charList.position;
+
+            return new Token(TokenType.WHITESPACE, char, start, end);
+        }
         if (isComment(char + charList.next))
         {
             const value = this.#readComment(charList);
@@ -98,7 +107,7 @@ export default class Lexer
 
             return new Token(TokenType.LIST, char, start, end);
         }
-        else if (this.#isEmpty(char))
+        else if (isEmpty(char))
         {
             return undefined;
         }
@@ -110,49 +119,17 @@ export default class Lexer
         return new Token(type, value, start, end);
     }
 
-    #isEmpty(char: string): boolean
-    {
-        return EMPTY.includes(char);
-    }
-
     #isIdentifier(char: string): boolean
     {
-        const isOther =
-               this.#isEmpty(char)
-            || isWhitespace(char)
-            || isOperator(char)
-            || isDivider(char)
-            || isGroup(char)
-            || isScope(char)
-            || isList(char);
+        const isOther = isEmpty(char)
+                     || isWhitespace(char)
+                     || isOperator(char)
+                     || isDivider(char)
+                     || isGroup(char)
+                     || isScope(char)
+                     || isList(char);
 
         return isOther === false;
-    }
-
-    #skipIgnored(charList: CharList): void
-    {
-        let inComment = false;
-
-        while (charList.eof === false)
-        {
-            const char = charList.current;
-
-            if (isComment(char))
-            {
-                inComment = !inComment;
-                
-                continue;
-            }
-
-            const skip = inComment || isWhitespace(char);
-
-            if (skip === false)
-            {
-                break;
-            }
-
-            charList.step();
-        }
     }
 
     #readComment(charList: CharList): string
@@ -163,7 +140,7 @@ export default class Lexer
 
         charList.step(2);
 
-        let value = '';
+        let value = isMulti ? Comment.MULTI_START : Comment.SINGLE;
 
         while (charList.eof === false)
         {
@@ -182,7 +159,9 @@ export default class Lexer
             charList.step();
         }
 
-        return value.trim();
+        return isMulti
+            ? value + Comment.MULTI_END
+            : value .trim();
     }
 
     #readLiteral(charList: CharList): string
@@ -243,8 +222,10 @@ export default class Lexer
         {
             const char = charList.current;
 
-            if (!isOperator(char))
+            if (isOperator(char) === false)
             {
+                charList.stepBack();
+
                 break;
             }
 
