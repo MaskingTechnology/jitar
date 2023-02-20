@@ -141,9 +141,9 @@ There are more practical [examples](examples/README.md) in the repository. Pract
 
 ## Integrations
 
-Jitar provides integration examples for the following frameworks:
-- [react-jitar](examples/4-integrations/1-react/README.md)
-- [vue-jitar](examples/4-integrations/2-vue/README.md)
+Jitar provides integration examples for the following frontend frameworks:
+- [React](examples/4-integrations/1-react/README.md)
+- [Vue](examples/4-integrations/2-vue/README.md)
 
 ## Documentation
 
