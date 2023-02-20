@@ -12,7 +12,6 @@ export default {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
   coveragePathIgnorePatterns: [
-    '<rootDir>/dist/',
     '<rootDir>/node_modules/',
     '<rootDir>/test/_fixtures/',
   ]
