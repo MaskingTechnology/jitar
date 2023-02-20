@@ -15,6 +15,7 @@ Jitar runs on top of Node.js and in any modern web browser. It has strong suppor
 * [How it works](#how-it-works)
 * [Getting started](#getting-started)
 * [Example](#example)
+* [Integrations](#integrations)
 * [Documentation](#documentation)
 * [Publications](#publications)
 * [Contributing](#contributing)
@@ -137,6 +138,12 @@ For splitting (segmenting) applications configuration files are used. For each p
 ```
 
 There are more practical [examples](examples/README.md) in the repository. Practical guides are provided in the [publications](#publications) section.
+
+## Integrations
+
+Jitar provides integration examples for the following frameworks:
+- [react-jitar](examples/4-integrations/1-react/README.md)
+- [vue-jitar](examples/4-integrations/2-vue/README.md)
 
 ## Documentation
 
