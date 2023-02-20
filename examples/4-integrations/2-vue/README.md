@@ -1,10 +1,10 @@
-# react-jitar
+# vue-jitar
 
-In this example you will learn how to integrate Jitar with React using Vite.
+The example contains a step-by-step guide to integrate Jitar with Vue using Vite.
 
-## Step 1: Setup a React Project
+## Step 1: Setup a Vue Project
 
-For creating the React app, use Vite with the `react-ts` template.
+For creating the Vue app, use Vite with the `vue-ts` template.
 
 ```bash
 npm create -y vite@latest vue-jitar -- --template vue-ts
@@ -13,16 +13,16 @@ npm install
 npm run dev
 ```
 
-When opening http://localhost:5173/ in a web browser, you should see the Vite and Vue logos.
+When opening http://localhost:5173/ in a web browser it should show the Vite and Vue logos.
 
-Next, you'll extend the app by adding a simple function that generates a welcome message. To hook Jitar later in the app, you need to create a shared folder in the src folder. This folder holds all components that are shared between the client and server.
+Next, the app will be extended by adding a simple function that generates a welcome message. To hook Jitar later in the app, a shared folder needs to be created in the src folder. This folder holds all components that are shared between the client and server.
 
 ```bash
 cd src
 mkdir shared
 ```
 
-Now, you can add the first shared function. Call it `sayHello` and give it the following content.
+Now, the first shared function needs to be created. Call it `sayHello` and give it the following content.
 
 ```ts
 // src/shared/sayHello.ts
@@ -34,50 +34,31 @@ export async function sayHello(name: string): Promise<string>
 
 Note that this function is async. This is an important addition that makes the function distributable across the network.
 
-Use this function to welcome you. The function can be called directly from any Vue component. Use the HelloWorld component that is auto generated and update it like below.
+Use this function to welcome you. The function can be called directly from any Vue component. The [composition api](https://vuejs.org/guide/typescript/composition-api.html) is used in this example, but it will also work with the [options api](https://vuejs.org/guide/typescript/options-api.html) or the [suspense component](https://vuejs.org/guide/built-ins/suspense.html).
 
-```vue
-// src/components/HelloWorld.vue
-<script lang="ts">
-import { sayHello } from '../shared/sayHello';
-
-export default 
-{
-  async setup() 
-  {
-    const message = await sayHello('Vite + Vue + Jitar');
-
-    return { message }
-  }
-}
-</script>
-
-<template>
-    <h1>{{ message }}</h1>
-</template>
-```
-
-The auto generated App component will be simplified like below.
+Update the `App.vue` file to use the new function. This is a very simple example but feel free to extend it.
 
 ```vue
 // src/App.vue
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue';
+import { sayHello } from './shared/sayHello';
+
+const message = ref('');
+
+async function runComponent() {
+  message.value = await sayHello('Vue + Vite + Jitar');
+}
+
+runComponent()
 </script>
 
 <template>
-  <Suspense>
-    
-    <HelloWorld/>
-
-    <template #fallback>
-      <div>Loading...</div>
-    </template>
-  </Suspense>
+  <h1>{{ message }}</h1>
 </template>
 ```
 
-After saving the files, the brower should show the welcome message.
+After saving the file, the brower should show the welcome message.
 
 The function currently lives and runs on the client. Next, it will be moved to the server without touching a single line of code.
 
@@ -105,7 +86,7 @@ import jitar from 'jitar-vite-plugin'
 
 export default defineConfig({
   plugins: [
-    react(),
+    vue(),
     jitar('src', 'shared', 'http://localhost:3000') // Add this
   ]
 })
@@ -113,7 +94,7 @@ export default defineConfig({
 
 The three parameters set the `root source` folder, the shared components folder (relative to the root folder), and the URL of the Jitar server.
 
-Vite is now all set up, so you can configure Jitar. For this, you need two JSON files. The first is the server configuration. This simple example doesn’t need the [cluster options](https://docs.jitar.dev/03_runtime_services) provided by Jitar, so you’ll create a simple standalone setup. Create a new file in the project root (outside the source root) with the name jitar.json and the following content:
+Vite is now all set up, time for the configuration of Jitar. For this, two JSON files are required. The first is the server configuration. This simple example doesn’t need the [cluster options](https://docs.jitar.dev/03_runtime_services) provided by Jitar, so a simple standalone setup will be used. Create a new file in the project root (outside the source root) with the name jitar.json and the following content:
 
 ```json
 {
@@ -138,11 +119,11 @@ The second configuration is a [segment configuration](https://docs.jitar.dev/04_
 }
 ```
 
-The structure of a segment file is very similar to the JavaScript module system. In this case, jitar imports `sayHello` from `./shared/sayHello.js`. Additionally, the access is set to public (private by default).
+The structure of a segment file is very similar to the JavaScript module system. In this case, Jitar imports `sayHello` from `./shared/sayHello.js`. Additionally, the access is set to public (private by default).
 
 Note that the file path is relative to the source root of the application and that it imports the compiled JavaScript file (ends with .js).
 
-That’s almost it. The only thing that’s missing is a bootstrapper starting a Jitar server. You need to add a new code file to the source root folder. Here’s what that looks like:
+That’s almost it. The only thing that’s missing is a bootstrapper for starting a Jitar server. For this, add a new code file to the source root folder. Here’s what that looks like:
 
 ```ts
 // src/jitar.ts
@@ -153,11 +134,13 @@ const moduleImporter = async (specifier: string) => import(specifier);
 startServer(moduleImporter);
 ```
 
-With the start of a server, you need to provide a module importer that imports Node dependencies from the local application context instead of the Jitar context.
+With the start of a server, Jitar needs a module importer that imports Node dependencies from the local application context instead of the Jitar context.
 
 ## Step 3: Build and Run
 
-With Jitar all set up, you can get ready for its first run. For this, you need to modify the `tsconfig.js` file to output all compiled JavaScript to the dist folder.
+With Jitar all set up, get ready for its first run. The current plugin implementation requires some additional configuration which will be optimised in later versions.
+
+The `tsconfig.js` file needs to be updated with the following properties.
 
 ```js
 /* tsconfig.json */
@@ -165,34 +148,36 @@ With Jitar all set up, you can get ready for its first run. For this, you need t
     "compilerOptions":
     {
         /* other properties */
+        "noEmit": false, /* update this property */
         "outDir": "dist", /* add this property */
-    }
+    },
+    "exclude": ["src/main.ts"], /* add this property */
 }
 ```
 
-You also need to modify the package.json file and reverse the order of the build script to make sure that our shared components are available after the Vite build process.
+In the package.json file, the build script needs to be updated to include the TypeScript compiler. This is required to compile the Jitar bootstrapper and the shared functions.
 
 ```json
-"build": "vite build && vue-tsc",
+"build": "vite build && vue-tsc --noEmit && tsc",
 ```
 
-Lastly, you can add the following script for starting the Jitar server.
+Lastly, add the following script for starting the Jitar server.
 
 ```json
 "jitar": "node --experimental-network-imports --experimental-fetch dist/jitar.js --config=jitar.json"
 ```
 
-Now you’re all done and ready to go. You can test both scripts with the following commands:
+And that's it. The server has been configured and is ready to go. Both scripts can be executed with the following commands:
 
 ```bash
 npm run build
 npm run jitar
 ```
 
-Note that our function has been registered successfully by Jitar. This means that it has moved from the client to the server. You can check this by opening our app again at http://localhost:3000/. The Jitar log should indicate that it has run our function.
+Note that the function has been registered successfully by Jitar. This means that it has moved from the client to the server. Run the app by navigating to http://localhost:3000/. The Jitar log should indicate that it has run our function.
 
-When inspecting the network traffic of the browser (in the developer tools), you should also see that it has sent an API request to the server.
+When inspecting the network traffic of the browser (in the developer tools), an API request to the server should be visible, indicating that the function is called from the server.
 
-Congratulations! You’ve just made your fully automated API. From here, the app can be extended with more functions.
+Congratulations! The app just executed a fully automated API. From here, the app can be extended with more functions.
 
-Note that you’re now running the deployable version of the app. It’s also possible to start Vite in dev mode by running `npm run dev` again. Keep in mind that Jitar needs to run in the background. Otherwise, the server functions won’t be available.
+Note that port 3000 is running the deployable version of the app. It’s also possible to start Vite in dev mode by running `npm run dev` again. Keep in mind that Jitar needs to run in the background. Otherwise, the server functions won’t be available.
