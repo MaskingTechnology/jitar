@@ -25,4 +25,4 @@ function isPunctuation(value: string): boolean
     return Punctuations.includes(value);
 }
 
-export { Punctuation, Punctuations, isPunctuation };
+export { Punctuation, isPunctuation };

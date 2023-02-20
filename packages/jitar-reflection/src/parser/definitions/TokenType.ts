@@ -2,15 +2,14 @@
 const TokenType =
 {
     COMMENT: 'comment',
+    DIVIDER: 'divider',
+    GROUP: 'group',
     IDENTIFIER: 'identifier',
     KEYWORD: 'keyword',
+    LIST: 'list',
     LITERAL: 'literal',
     OPERATOR: 'operator',
-    SEPARATOR: 'separator',
-    TERMINATOR: 'terminator',
-    SCOPE: 'scope',
-    GROUP: 'group',
-    LIST: 'list'
+    SCOPE: 'scope'
 };
 
 export { TokenType };

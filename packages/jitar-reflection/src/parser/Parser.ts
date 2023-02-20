@@ -1,14 +1,19 @@
 
 import Lexer from './Lexer.js';
+import Token from './Token.js';
 import TokenList from './TokenList.js';
 
-import { Division } from './definitions/Division.js';
+import { Divider } from './definitions/Divider.js';
 import { Group } from './definitions/Group.js';
 import { Keyword, isDeclaration, isKeyword } from './definitions/Keyword.js';
 import { List } from './definitions/List.js';
 import { Operator } from './definitions/Operator.js';
 import { Scope } from './definitions/Scope.js';
 import { TokenType } from './definitions/TokenType.js';
+
+import UnexpectedKeyword from './errors/UnexpectedKeyword.js';
+import UnexpectedParseResult from './errors/UnexpectedParseResult.js';
+import UnexpectedToken from './errors/UnexpectedToken.js';
 
 import ReflectionModule from '../models/ReflectionModule.js';
 import ReflectionMember from '../models/ReflectionMember.js';
@@ -27,10 +32,13 @@ import ReflectionAlias from '../models/ReflectionAlias.js';
 import ReflectionScope from '../models/ReflectionScope.js';
 import ReflectionValue from '../models/ReflectionValue.js';
 import ReflectionParameter from '../models/ReflectionParameter.js';
+import ExpectedKeyword from './errors/ExpectedKeyword.js';
+import ExpectedToken from './errors/ExpectedToken.js';
 
-import Token from './Token.js';
-
-const ANONYMOUS = '(anonymous)';
+const ANONYMOUS_IDENTIFIER = '';
+const DEFAULT_IDENTIFIER = 'default';
+const PRIVATE_INDICATOR = '#';
+const DEFINITION_SEPARATOR = ' ';
 
 export default class Parser
 {
@@ -49,7 +57,7 @@ export default class Parser
         return new ReflectionModule(scope);
     }
 
-    parseItem(code: string): ReflectionMember | ReflectionValue | undefined
+    parseFirst(code: string): ReflectionMember | ReflectionValue | undefined
     {
         const tokenList = this.#lexer.tokenize(code);
 
@@ -58,12 +66,11 @@ export default class Parser
 
     parseValue(code: string): ReflectionValue
     {
-        const tokenList = this.#lexer.tokenize(code);
-        const model = this.#parseNext(tokenList);
+        const model = this.parseFirst(code);
 
         if ((model instanceof ReflectionValue) === false)
         {
-            throw new Error('The given code does not contain a value definition');
+            throw new UnexpectedParseResult('a value definition');
         }
 
         return model as ReflectionValue;
@@ -71,12 +78,11 @@ export default class Parser
 
     parseImport(code: string): ReflectionImport
     {
-        const tokenList = this.#lexer.tokenize(code);
-        const model = this.#parseKeyword(tokenList);
+        const model = this.parseFirst(code);
 
         if ((model instanceof ReflectionImport) === false)
         {
-            throw new Error('The given code does not contain a import definition');
+            throw new UnexpectedParseResult('an import definition');
         }
 
         return model as ReflectionImport;
@@ -84,12 +90,11 @@ export default class Parser
 
     parseExport(code: string): ReflectionExport
     {
-        const tokenList = this.#lexer.tokenize(code);
-        const model = this.#parseKeyword(tokenList);
+        const model = this.parseFirst(code);
 
         if ((model instanceof ReflectionExport) === false)
         {
-            throw new Error('The given code does not contain a export definition');
+            throw new UnexpectedParseResult('an export definition');
         }
 
         return model as ReflectionExport;
@@ -97,12 +102,11 @@ export default class Parser
 
     parseField(code: string): ReflectionField
     {
-        const tokenList = this.#lexer.tokenize(code);
-        const model = this.#parseKeyword(tokenList);
+        const model = this.parseFirst(code);
 
         if ((model instanceof ReflectionField) === false)
         {
-            throw new Error('The given code does not contain a field definition');
+            throw new UnexpectedParseResult('a field definition');
         }
 
         return model as ReflectionField;
@@ -115,7 +119,7 @@ export default class Parser
 
         if ((model instanceof ReflectionFunction) === false)
         {
-            throw new Error('The given code does not contain a function definition');
+            throw new UnexpectedParseResult('a function definition');
         }
 
         return model as ReflectionFunction;
@@ -128,7 +132,7 @@ export default class Parser
 
         if ((model instanceof ReflectionClass) === false)
         {
-            throw new Error('The given code does not contain a class definition');
+            throw new UnexpectedParseResult('a class definition');
         }
 
         return model as ReflectionClass;
@@ -164,7 +168,7 @@ export default class Parser
         }
         else if (token.isType(TokenType.IDENTIFIER))
         {
-            if (tokenList.hasNext() && tokenList.next.hasValue('=>'))
+            if (tokenList.hasNext() && tokenList.next.hasValue(Operator.ARROW))
             {
                 return this.#parseArrowFunction(tokenList, isAsync);
             }
@@ -194,14 +198,14 @@ export default class Parser
         {
             return this.#parseArray(tokenList);
         }
-        else if (token.hasValue(Division.TERMINATOR))
+        else if (token.hasValue(Divider.TERMINATOR))
         {
             tokenList.step(); // Read away the terminator
 
             return undefined;
         }
 
-        throw new Error(`Unexpected token ${token.value}`);
+        throw new UnexpectedToken(token.value, token.start);
     }
 
     #parseKeyword(tokenList: TokenList, isAsync = false): ReflectionMember
@@ -233,7 +237,7 @@ export default class Parser
                 return this.#parseKeyword(tokenList, true);
 
             default:
-                throw new Error(`Unexpected keyword: ${token.value}`);
+                throw new UnexpectedKeyword(token.value, token.start);
         }
     }
 
@@ -250,7 +254,7 @@ export default class Parser
 
         if (token.hasValue(Scope.OPEN) === false)
         {
-            const name = 'default';
+            const name = DEFAULT_IDENTIFIER;
             let as = token.value;
 
             token = tokenList.step(); // Read away the name
@@ -266,7 +270,7 @@ export default class Parser
             members.push(new ReflectionAlias(name, as));
         }
 
-        if (token.hasValue(Division.SEPARATOR))
+        if (token.hasValue(Divider.SEPARATOR))
         {
             token = tokenList.step(); // Read away the separator
         }
@@ -282,7 +286,7 @@ export default class Parser
 
         if (token.hasValue(Keyword.FROM) === false)
         {
-            throw new Error('Expected the FROM keyword');
+            throw new ExpectedKeyword(Keyword.FROM, token.start);
         }
 
         token = tokenList.step(); // Read away the FROM keyword
@@ -328,8 +332,8 @@ export default class Parser
             stepSize++;
         }
 
-        const name = token.isType(TokenType.IDENTIFIER) ? token.value : ANONYMOUS;
-        const as = isDefault ? 'default' : name;
+        const name = token.isType(TokenType.IDENTIFIER) ? token.value : ANONYMOUS_IDENTIFIER;
+        const as = isDefault ? DEFAULT_IDENTIFIER : name;
         let from: string | undefined = undefined;
 
         token = tokenList.step(); // Read away the name
@@ -356,6 +360,7 @@ export default class Parser
     #parseMultiExport(tokenList: TokenList): ReflectionExport
     {
         const members = this.#parseAliasList(tokenList);
+        
         let from: string | undefined = undefined;
         let token = tokenList.current;
 
@@ -370,7 +375,6 @@ export default class Parser
         return new ReflectionExport(members, from);
     }
 
-    // { ... }
     #parseAliasList(tokenList: TokenList): ReflectionAlias[]
     {
         const aliases = [];
@@ -386,7 +390,7 @@ export default class Parser
                 break;
             }
 
-            if (token.hasValue(Division.SEPARATOR))
+            if (token.hasValue(Divider.SEPARATOR))
             {
                 token = tokenList.step(); // Read away the separator
 
@@ -423,14 +427,14 @@ export default class Parser
     {
         let token = tokenList.current;
 
-        const isPrivate = token.value.startsWith('#');
+        const isPrivate = token.value.startsWith(PRIVATE_INDICATOR);
         const name = isPrivate ? token.value.substring(1) : token.value;
 
         token = tokenList.step(); // Read away the field name
 
         let value = undefined;
 
-        if (token.hasValue(Division.TERMINATOR))
+        if (token.hasValue(Divider.TERMINATOR))
         {
             tokenList.step(); // Read away the terminator
         }
@@ -447,13 +451,11 @@ export default class Parser
         {
             return new ReflectionGenerator(name, value.parameters, value.body, isStatic, value.isAsync, isPrivate);
         }
-
-        if (value instanceof ReflectionFunction)
+        else if (value instanceof ReflectionFunction)
         {
             return new ReflectionFunction(name, value.parameters, value.body, isStatic, value.isAsync, isPrivate);
         }
-
-        if (value instanceof ReflectionClass)
+        else if (value instanceof ReflectionClass)
         {
             return new ReflectionClass(name, value.parentName, value.scope);
         }
@@ -464,7 +466,7 @@ export default class Parser
     #parseFunction(tokenList: TokenList, isAsync: boolean, isStatic = false, isGetter = false, isSetter = false): ReflectionFunction
     {
         let token = tokenList.current;
-        let name = ANONYMOUS;
+        let name = ANONYMOUS_IDENTIFIER;
         let isGenerator = false;
         let isPrivate = false;
 
@@ -477,7 +479,7 @@ export default class Parser
 
         if (token.isType(TokenType.IDENTIFIER))
         {
-            isPrivate = token.value.startsWith('#');
+            isPrivate = token.value.startsWith(PRIVATE_INDICATOR);
             name = isPrivate ? token.value.substring(1) : token.value;
 
             token = tokenList.step(); // Read away the function name
@@ -489,7 +491,7 @@ export default class Parser
 
         if (token.hasValue(Scope.OPEN) === false)
         {
-            throw new Error('Invalid function body');
+            throw new ExpectedToken(Scope.OPEN, token.start);
         }
         
         const body = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
@@ -498,13 +500,11 @@ export default class Parser
         {
             return new ReflectionGenerator(name, parameters, body, isStatic, isAsync, isPrivate);
         }
-
-        if (isGetter)
+        else if (isGetter)
         {
             return new ReflectionGetter(name, parameters, body, isStatic, isAsync, isPrivate);
         }
-
-        if (isSetter)
+        else if (isSetter)
         {
             return new ReflectionSetter(name, parameters, body, isStatic, isAsync, isPrivate);
         }
@@ -528,9 +528,9 @@ export default class Parser
             token = tokenList.step();
         }
 
-        if (token.hasValue('=>') === false)
+        if (token.hasValue(Operator.ARROW) === false)
         {
-            throw new Error('Invalid arrow function');
+            throw new ExpectedToken(Operator.ARROW, token.start);
         }
 
         token = tokenList.step(); // Read away the arrow
@@ -539,10 +539,9 @@ export default class Parser
             ? this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE)
             : this.#parseExpression(tokenList).definition;
 
-        return new ReflectionFunction(ANONYMOUS, parameters, body, false, isAsync, false);
+        return new ReflectionFunction(ANONYMOUS_IDENTIFIER, parameters, body, false, isAsync, false);
     }
 
-    // ( ... )
     #parseParameters(tokenList: TokenList): ReflectionParameter[]
     {
         const parameters = [];
@@ -563,13 +562,14 @@ export default class Parser
             }
             else if (tokenList.previous.hasValue(Group.CLOSE))
             {
-                // End of the parameters
+                // End of the parameter list
 
                 break;
             }
-
-            if (token.hasValue(Division.SEPARATOR))
+            else if (token.hasValue(Divider.SEPARATOR))
             {
+                // End of parameter
+
                 tokenList.step(); // Read away the separator
 
                 continue;
@@ -599,22 +599,27 @@ export default class Parser
     #parseClass(tokenList: TokenList): ReflectionClass
     {
         let token = tokenList.current;
-        let name = ANONYMOUS;
+        let name = ANONYMOUS_IDENTIFIER;
         let parent: string | undefined = undefined;
 
         if (token.isType(TokenType.IDENTIFIER))
         {
             name = token.value;
 
-            tokenList.step(); // Read away the class name
+            token = tokenList.step(); // Read away the class name
         }
 
-        if (tokenList.current.hasValue(Keyword.EXTENDS))
+        if (token.hasValue(Keyword.EXTENDS))
         {
             token = tokenList.step(); // Read away the extends keyword
             parent = token.value;
 
-            tokenList.step(); // Read away the extends name
+            token = tokenList.step(); // Read away the extends name
+        }
+
+        if (token.hasValue(Scope.OPEN) === false)
+        {
+            throw new ExpectedToken(Scope.OPEN, token.start);
         }
         
         const scope = this.#parseClassScope(tokenList);
@@ -624,7 +629,8 @@ export default class Parser
 
     #parseClassScope(tokenList: TokenList): ReflectionScope
     {
-        let token = tokenList.step();
+        let token = tokenList.step(); // Read away the scope open
+
         const members = [];
 
         while (tokenList.eof === false)
@@ -713,31 +719,33 @@ export default class Parser
             {
                 const array = this.#parseBlock(tokenList, List.OPEN, List.CLOSE);
 
-                code += array + ' ';
+                code += array + DEFINITION_SEPARATOR;
                 token = tokenList.current;
             }
             else if (token.hasValue(Group.OPEN))
             {
                 const group = this.#parseBlock(tokenList, Group.OPEN, Group.CLOSE);
 
-                code += group + ' ';
+                code += group + DEFINITION_SEPARATOR;
                 token = tokenList.current;
             }
             else if (token.hasValue(Scope.OPEN))
             {
                 const scope = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
 
-                code += scope + ' ';
+                code += scope + DEFINITION_SEPARATOR;
                 token = tokenList.current;
             }
             else
             {
-                code += token.toString() + ' ';
+                code += token.toString() + DEFINITION_SEPARATOR;
                 token = tokenList.step();
             }
 
             if (token === undefined)
             {
+                // End of the list
+
                 break;
             }
             else if (this.#atEndOfStatement(token))
@@ -756,14 +764,15 @@ export default class Parser
 
     #parseBlock(tokenList: TokenList, openId: string, closeId: string): string
     {
-        let token = tokenList.step();
-        let code = openId + ' ';
+        let token = tokenList.step(); // Read away the open
+
+        let code = openId + DEFINITION_SEPARATOR;
 
         while (tokenList.eof === false)
         {
             if (token.hasValue(openId))
             {
-                code += this.#parseBlock(tokenList, openId, closeId) + ' ';
+                code += this.#parseBlock(tokenList, openId, closeId) + DEFINITION_SEPARATOR;
                 token = tokenList.current;
 
                 continue;
@@ -777,27 +786,17 @@ export default class Parser
                 return code;
             }
             
-            code += token.toString() + ' ';
+            code += token.toString() + DEFINITION_SEPARATOR;
             token = tokenList.step();
         }
 
         return code;
     }
 
-    #opensContainer(token: Token): boolean
-    {
-        return [List.OPEN, Group.OPEN, Scope.OPEN].includes(token.value);
-    }
-
-    #closesContainer(token: Token): boolean
-    {
-        return [List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value);
-    }
-
     #atEndOfStatement(token: Token): boolean
     {
-        return [Division.SEPARATOR, Division.TERMINATOR].includes(token.value)
-            || this.#closesContainer(token)
+        return [Divider.SEPARATOR, Divider.TERMINATOR].includes(token.value)
+            || [List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value)
             || isKeyword(token.value);
     }
 }

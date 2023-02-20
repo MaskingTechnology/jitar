@@ -254,8 +254,8 @@ describe('parser/Parser', () =>
             expect(exported.from).toBe("'module'");
 
             const member = exported.members[0];
-            expect(member.name).toBe('(anonymous)');
-            expect(member.as).toBe('(anonymous)');
+            expect(member.name).toBe('');
+            expect(member.as).toBe('');
         });
 
         it('should parse reexporting a member', () =>

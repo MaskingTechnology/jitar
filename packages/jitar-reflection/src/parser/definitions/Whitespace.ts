@@ -19,4 +19,4 @@ function isNewLine(value: string): boolean
     return value === Whitespace.NEWLINE;
 }
 
-export { Whitespace, Whitespaces, isWhitespace, isNewLine };
+export { Whitespace, isWhitespace, isNewLine };

@@ -13,4 +13,4 @@ function isComment(value: string): boolean
     return Comments.includes(value);
 }
 
-export { Comment, Comments, isComment };
+export { Comment, isComment };

@@ -36,4 +36,4 @@ function isDeclaration(value: string): boolean
         || value === Keyword.VAR;
 }
 
-export { Keyword, Keywords, isKeyword, isDeclaration };
+export { Keyword, isKeyword, isDeclaration };

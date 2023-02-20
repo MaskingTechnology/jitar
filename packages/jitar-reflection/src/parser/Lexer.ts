@@ -4,7 +4,7 @@ import Token from './Token.js';
 import TokenList from './TokenList.js';
 
 import { Comment, isComment } from './definitions/Comment.js';
-import { isSeparator, isTerminator } from './definitions/Division.js';
+import { isDivider } from './definitions/Divider.js';
 import { isGroup } from './definitions/Group.js';
 import { isKeyword } from './definitions/Keyword.js';
 import { isList } from './definitions/List.js';
@@ -31,10 +31,9 @@ export default class Lexer
             {
                 break;
             }
-
-            if (ignoreComments && token.type === TokenType.COMMENT)
+            else if (ignoreComments && token.type === TokenType.COMMENT)
             {
-                charList.step();
+                charList.step(); // Skip the comment
 
                 continue;
             }
@@ -68,12 +67,6 @@ export default class Lexer
 
             return new Token(TokenType.LITERAL, value, start, end);
         }
-        else if (isSeparator(char))
-        {
-            const end = charList.position;
-
-            return new Token(TokenType.SEPARATOR, char, start, end);
-        }
         else if (isOperator(char))
         {
             const value = this.#readOperation(charList);
@@ -81,11 +74,11 @@ export default class Lexer
 
             return new Token(TokenType.OPERATOR, value, start, end);
         }
-        else if (isTerminator(char))
+        else if (isDivider(char))
         {
             const end = charList.position;
 
-            return new Token(TokenType.TERMINATOR, char, start, end);
+            return new Token(TokenType.DIVIDER, char, start, end);
         }
         else if (isGroup(char))
         {
@@ -128,8 +121,7 @@ export default class Lexer
                this.#isEmpty(char)
             || isWhitespace(char)
             || isOperator(char)
-            || isSeparator(char)
-            || isTerminator(char)
+            || isDivider(char)
             || isGroup(char)
             || isScope(char)
             || isList(char);

@@ -1,5 +1,5 @@
 
-import { Division } from '../../src/parser/definitions/Division';
+import { Divider } from '../../src/parser/definitions/Divider';
 import { Group } from '../../src/parser/definitions/Group';
 import { List } from '../../src/parser/definitions/List';
 import { Operator } from '../../src/parser/definitions/Operator';
@@ -27,7 +27,7 @@ describe('parser/Lexer', () =>
             expect(tokens.get(1).value).toBe('identifier');
 
             expect(tokens.get(2).type).toBe(TokenType.OPERATOR);
-            expect(tokens.get(2).value).toBe(Operator.EQUAL);
+            expect(tokens.get(2).value).toBe(Operator.ASSIGN);
 
             expect(tokens.get(3).type).toBe(TokenType.GROUP);
             expect(tokens.get(3).value).toBe(Group.OPEN);
@@ -36,7 +36,7 @@ describe('parser/Lexer', () =>
             expect(tokens.get(4).value).toBe('12');
 
             expect(tokens.get(5).type).toBe(TokenType.OPERATOR);
-            expect(tokens.get(5).value).toBe(Operator.GREATER + Operator.EQUAL);
+            expect(tokens.get(5).value).toBe(Operator.GREATER_EQUAL);
 
             expect(tokens.get(6).type).toBe(TokenType.IDENTIFIER);
             expect(tokens.get(6).value).toBe('3');
@@ -56,8 +56,8 @@ describe('parser/Lexer', () =>
             expect(tokens.get(11).type).toBe(TokenType.SCOPE);
             expect(tokens.get(11).value).toBe(Scope.CLOSE);
 
-            expect(tokens.get(12).type).toBe(TokenType.OPERATOR);
-            expect(tokens.get(12).value).toBe(Operator.COLON);
+            expect(tokens.get(12).type).toBe(TokenType.DIVIDER);
+            expect(tokens.get(12).value).toBe(Divider.SCOPE);
 
             expect(tokens.get(13).type).toBe(TokenType.LIST);
             expect(tokens.get(13).value).toBe(List.OPEN);
@@ -68,8 +68,8 @@ describe('parser/Lexer', () =>
             expect(tokens.get(15).type).toBe(TokenType.LIST);
             expect(tokens.get(15).value).toBe(List.CLOSE);
 
-            expect(tokens.get(16).type).toBe(TokenType.TERMINATOR);
-            expect(tokens.get(16).value).toBe(Division.TERMINATOR);
+            expect(tokens.get(16).type).toBe(TokenType.DIVIDER);
+            expect(tokens.get(16).value).toBe(Divider.TERMINATOR);
         });
     });
 });
