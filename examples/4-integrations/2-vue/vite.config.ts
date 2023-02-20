@@ -7,8 +7,4 @@ export default defineConfig({
   plugins: [
     vue(),
     jitar('src', 'shared', 'http://localhost:3000')],
-
-  build: {
-
-  }
 })

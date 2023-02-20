@@ -12,11 +12,9 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "noEmit": false,
-    "outDir": "dist",
-    "types": [
-      "vite/client"
-    ]
+    "outDir": "dist"
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "exclude": ["src/main.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
