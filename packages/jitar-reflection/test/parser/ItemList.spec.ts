@@ -57,13 +57,13 @@ describe('parser/ItemList', () =>
         });
     });
 
-    describe('.eof', () =>
+    describe('.eol', () =>
     {
         it('should be false for a new list', () =>
         {
             const itemList = createList();
 
-            expect(itemList.eof).toBe(false);
+            expect(itemList.eol).toBe(false);
         });
 
         it('should be true for at the end of the list', () =>
@@ -71,7 +71,28 @@ describe('parser/ItemList', () =>
             const itemList = createList();
             itemList.step(10);
 
-            expect(itemList.eof).toBe(true);
+            expect(itemList.eol).toBe(true);
+        });
+    });
+
+    describe('.notAtEnd()', () =>
+    {
+        it('should be true for a new list', () =>
+        {
+            const itemList = createList();
+            const result = itemList.notAtEnd();
+
+            expect(result).toBe(true);
+        });
+
+        it('should be false for at the end of the list', () =>
+        {
+            const itemList = createList();
+            itemList.step(10);
+
+            const result = itemList.notAtEnd();
+
+            expect(result).toBe(false);
         });
     });
 
