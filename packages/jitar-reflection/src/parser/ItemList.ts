@@ -16,13 +16,18 @@ export default class ItemList<T>
 
     get size() { return this.#items.length; }
 
-    get eof() { return this.#position >= this.#items.length; }
+    get eol() { return this.#position >= this.#items.length; }
 
     get current() { return this.#items[this.#position]; }
 
     get next() { return this.#items[this.#position + 1]; }
 
     get previous() { return this.#items[this.#position - 1]; }
+
+    notAtEnd(): boolean
+    {
+        return this.eol === false;
+    }
 
     get(index: number): T
     {

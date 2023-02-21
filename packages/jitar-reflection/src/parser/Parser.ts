@@ -142,7 +142,7 @@ export default class Parser
     {
         const members: ReflectionMember[] = [];
 
-        while (tokenList.eof === false)
+        while (tokenList.notAtEnd())
         {
             const member = this.#parseNext(tokenList);
 
@@ -381,7 +381,7 @@ export default class Parser
 
         let token = tokenList.step(); // Read away the scope open
 
-        while (tokenList.eof === false)
+        while (tokenList.notAtEnd())
         {
             if (token.hasValue(Scope.CLOSE))
             {
@@ -548,7 +548,7 @@ export default class Parser
 
         tokenList.step(); // Read away the group open
 
-        while (tokenList.eof === false)
+        while (tokenList.notAtEnd())
         {
             const token = tokenList.current;
 
@@ -633,7 +633,7 @@ export default class Parser
 
         const members = [];
 
-        while (tokenList.eof === false)
+        while (tokenList.notAtEnd())
         {
             if (token.hasValue(Scope.CLOSE))
             {
@@ -661,7 +661,7 @@ export default class Parser
         let isGetter = false;
         let isSetter = false;
 
-        while (tokenList.eof === false)
+        while (tokenList.notAtEnd())
         {
             if (token.hasValue(Keyword.STATIC))
             {
@@ -713,7 +713,7 @@ export default class Parser
         let token = tokenList.current;
         let code = '';
 
-        while (tokenList.eof === false)
+        while (tokenList.notAtEnd())
         {
             if (token.hasValue(List.OPEN))
             {
@@ -768,7 +768,7 @@ export default class Parser
 
         let code = openId + DEFINITION_SEPARATOR;
 
-        while (tokenList.eof === false)
+        while (tokenList.notAtEnd())
         {
             if (token.hasValue(openId))
             {

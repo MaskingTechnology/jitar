@@ -22,7 +22,7 @@ export default class Lexer
         const charList = new CharList(code);
         const tokens: Token[] = [];
 
-        while (charList.eof === false)
+        while (charList.notAtEnd())
         {
             const token = this.#getNextToken(charList);
 
@@ -142,7 +142,7 @@ export default class Lexer
 
         let value = isMulti ? Comment.MULTI_START : Comment.SINGLE;
 
-        while (charList.eof === false)
+        while (charList.notAtEnd())
         {
             const char = charList.current;
             const check = isMulti ? char + charList.next : char;
@@ -172,7 +172,7 @@ export default class Lexer
 
         charList.step();
 
-        while (charList.eof === false)
+        while (charList.notAtEnd())
         {
             const char = charList.current;
 
@@ -193,7 +193,7 @@ export default class Lexer
     {
         let value = '';
 
-        while (charList.eof === false)
+        while (charList.notAtEnd())
         {
             const char = charList.current;
 
@@ -218,7 +218,7 @@ export default class Lexer
 
         charList.step();
 
-        while (charList.eof === false)
+        while (charList.notAtEnd())
         {
             const char = charList.current;
 
