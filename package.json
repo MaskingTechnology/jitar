@@ -21,7 +21,9 @@
         "examples/2-advanced/3-health-checks",
         "examples/2-advanced/4-middleware",
         "examples/3-apps/1-full-stack",
-        "examples/3-apps/2-microservices"
+        "examples/3-apps/2-microservices",
+        "examples/4-integrations/1-react",
+        "examples/4-integrations/2-vue"
     ],
     "scripts": {
         "build": "npm run build --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present",
