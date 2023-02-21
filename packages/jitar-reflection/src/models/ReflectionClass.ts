@@ -34,6 +34,31 @@ export default class ReflectionClass extends ReflectionMember
 
     get setters(): ReflectionSetter[] { return this.#scope.setters; }
 
+    get readable(): Array<ReflectionField | ReflectionGetter>
+    {
+        const members = new Map<string, ReflectionField | ReflectionGetter>();
+
+        this.getters.forEach(getter => { members.set(getter.name, getter) });
+        this.fields.forEach(field => { if(field.isPublic) members.set(field.name, field); });
+
+        return [...members.values()];
+    }
+
+    get writable(): Array<ReflectionField | ReflectionSetter>
+    {
+        const members = new Map<string, ReflectionField | ReflectionSetter>();
+
+        this.setters.forEach(setter => { members.set(setter.name, setter) });
+        this.fields.forEach(field => { if(field.isPublic) members.set(field.name, field); });
+
+        return [...members.values()];
+    }
+
+    get callable(): ReflectionFunction[]
+    {
+        return this.functions.filter(funktion => funktion.isPublic);
+    }
+
     getMember(name: string): ReflectionMember | undefined
     {
         return this.#scope.getMember(name);
