@@ -90,22 +90,22 @@ export default class ReflectionModule
 
     hasMember(name: string): boolean
     {
-        return this.#scope.getMember(name) !== undefined;
+        return this.#scope.hasMember(name);
     }
 
     hasField(name: string): boolean
     {
-        return this.#scope.getField(name) !== undefined;
+        return this.#scope.hasField(name);
     }
 
     hasFunction(name: string): boolean
     {
-        return this.#scope.getFunction(name) !== undefined;
+        return this.#scope.hasFunction(name);
     }
 
     hasGenerator(name: string): boolean
     {
-        return this.#scope.getGenerator(name) !== undefined;
+        return this.#scope.hasGenerator(name);
     }
 
     hasClass(name: string): boolean
