@@ -1,9 +1,9 @@
 
-import { describe, expect, it } from 'vitest'
-
 import Version from '../../src/core/Version';
 
 import { testRuntime } from '../_fixtures/runtime/ProcedureRuntime.fixture';
+
+import { describe, expect, it } from 'vitest';
 
 describe('runtime/ProcedureRuntime', () =>
 {

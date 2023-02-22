@@ -1,10 +1,11 @@
 
-import { describe, expect, it } from 'vitest'
 
 import { segmentModule } from '../_fixtures/core/SegmentBuilder.fixture';
 
 import SegmentBuilder from '../../src/core/SegmentBuilder';
 import Version from '../../src/core/Version';
+
+import { describe, expect, it } from 'vitest';
 
 describe('core/SegmentBuilder', () =>
 {

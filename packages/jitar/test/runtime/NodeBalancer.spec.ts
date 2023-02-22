@@ -1,16 +1,16 @@
 
-import { describe, expect, it } from 'vitest'
-
 import NoNodeAvailable from '../../src/runtime/errors/NoNodeAvailable';
 import Version from '../../src/core/Version';
 
 import
-    {
-        balancer,
-        emptyBalancer,
-        firstNode,
-        secondNode
-    } from '../_fixtures/runtime/NodeBalancer.fixture';
+{
+    balancer,
+    emptyBalancer,
+    firstNode,
+    secondNode
+} from '../_fixtures/runtime/NodeBalancer.fixture';
+
+import { describe, expect, it } from 'vitest';
 
 describe('runtime/LocalGateway', () =>
 {

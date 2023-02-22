@@ -1,8 +1,8 @@
 
-import { Reflector, ReflectionFunction, ReflectionField, ReflectionModule } from 'jitar-reflection';
-
 import Implementation from '../../../../src/runtime/caching/models/Implementation';
 import SegmentModule from '../../../../src/runtime/caching/models/SegmentModule';
+
+import { Reflector, ReflectionFunction, ReflectionField, ReflectionModule } from 'jitar-reflection';
 
 const code = `
 export function defaultFunction() {

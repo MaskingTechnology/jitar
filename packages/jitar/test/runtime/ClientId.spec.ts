@@ -1,7 +1,7 @@
 
-import { describe, expect, it } from 'vitest'
-
 import ClientId from '../../src/runtime/ClientId';
+
+import { describe, expect, it } from 'vitest';
 
 describe('runtime/ClientId', () =>
 {

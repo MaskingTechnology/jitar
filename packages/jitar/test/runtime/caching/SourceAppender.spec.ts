@@ -1,6 +1,4 @@
 
-import { describe, expect, it } from 'vitest'
-
 import SourceAppender from '../../../src/runtime/caching/SourceAppender';
 
 import
@@ -11,6 +9,8 @@ import
     filename,
     codeResult
 } from '../../_fixtures/runtime/caching/SourceAppender.fixture';
+
+import { describe, expect, it } from 'vitest';
 
 describe('runtime/utils/SourceAppender', () =>
 {

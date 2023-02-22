@@ -1,13 +1,13 @@
 
-import { describe, expect, it } from 'vitest'
-
 import
-    {
-        goodNode,
-        badNode,
-        gateway,
-        monitor
-    } from '../_fixtures/runtime/NodeMonitor.fixture';
+{
+    goodNode,
+    badNode,
+    gateway,
+    monitor
+} from '../_fixtures/runtime/NodeMonitor.fixture';
+
+import { describe, expect, it } from 'vitest';
 
 describe('runtime/LocalGateway', () =>
 {
