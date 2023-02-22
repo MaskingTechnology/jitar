@@ -16,11 +16,33 @@ For more information about Jitar:
 
 ## Known limitations
 
-Declaration of multiple values is not supported
+1. Declaration of multiple values is not supported
 
 ```ts
-const a = 1, b = 2, c = 3;
+// Supported
+const a = 1;
+export { a }
 
-// Only a is defined, b and c are undefined
-export { a, b, c }
+// Unsupported
+const b = 2, c = 3;
+export { b, c }
+```
+
+2. Generator as object properties are not supported
+
+```ts
+// Supported
+function* myGenerator() { /* ... */ }
+
+// Unsupported
+const myObject =
+{
+    *generator() { /* ... */ }
+};
+
+// Unsupported
+class Foo
+{
+  *[Symbol.iterator]() { /* ... */ }
+}
 ```
