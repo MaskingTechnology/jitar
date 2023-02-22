@@ -18,5 +18,5 @@ export default class ReflectionMember
 
     get isPrivate() { return this.#isPrivate; }
 
-    get isPublic() { return !this.#isPrivate; }
+    get isPublic() { return this.#isPrivate === false; }
 }
