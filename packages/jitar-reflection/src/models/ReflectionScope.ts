@@ -18,13 +18,16 @@ export default class ReflectionScope
         this.#members = members;
     }
 
+    // The constructor name is used to determine the type of the member.
+    // This makes sure that the member is of the exact type and not a subclass.
+
     get members(): ReflectionMember[] { return this.#members; }
 
-    get imports(): ReflectionImport[] { return this.#members.filter(member => member instanceof ReflectionImport) as ReflectionImport[]; }
+    get imports(): ReflectionImport[] { return this.#members.filter(member => member.constructor.name === 'ReflectionImport') as ReflectionImport[]; }
 
-    get exports(): ReflectionExport[] { return this.#members.filter(member => member instanceof ReflectionExport) as ReflectionExport[]; }
+    get exports(): ReflectionExport[] { return this.#members.filter(member => member.constructor.name === 'ReflectionExport') as ReflectionExport[]; }
 
-    get fields(): ReflectionField[] { return this.#members.filter(member => member instanceof ReflectionField) as ReflectionField[]; }
+    get fields(): ReflectionField[] { return this.#members.filter(member => member.constructor.name === 'ReflectionField') as ReflectionField[]; }
 
     get functions(): ReflectionFunction[] { return this.#members.filter(member => member.constructor.name === 'ReflectionFunction') as ReflectionFunction[]; }
 
@@ -34,7 +37,7 @@ export default class ReflectionScope
 
     get generators(): ReflectionGenerator[] { return this.#members.filter(member => member.constructor.name === 'ReflectionGenerator') as ReflectionGenerator[]; }
 
-    get classes(): ReflectionClass[] { return this.#members.filter(member => member instanceof ReflectionClass) as ReflectionClass[]; }
+    get classes(): ReflectionClass[] { return this.#members.filter(member => member.constructor.name === 'ReflectionClass') as ReflectionClass[]; }
 
     getMember(name: string): ReflectionMember | undefined
     {
