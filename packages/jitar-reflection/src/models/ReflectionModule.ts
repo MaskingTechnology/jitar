@@ -110,7 +110,7 @@ export default class ReflectionModule
 
     hasClass(name: string): boolean
     {
-        return this.#scope.getClass(name) !== undefined;
+        return this.#scope.hasClass(name);
     }
 
     isExported(member: ReflectionMember): boolean
