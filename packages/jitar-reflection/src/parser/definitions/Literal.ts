@@ -3,8 +3,8 @@ const Literal =
 {
     SINGLE: "'",
     DOUBLE: '"',
-    BACKTICK: "`"
-};
+    BACKTICK: '`'
+}
 
 const Literals = Object.values(Literal);
 

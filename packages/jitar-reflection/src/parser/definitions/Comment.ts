@@ -1,9 +1,9 @@
 
 const Comment =
 {
-    SINGLE: "//",
-    MULTI_START: "/*",
-    MULTI_END: "*/"
+    SINGLE: '//',
+    MULTI_START: '/*',
+    MULTI_END: '*/'
 };
 
 const Comments = Object.values(Comment);
