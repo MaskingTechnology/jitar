@@ -117,6 +117,12 @@ const CLASSES =
     static async method4() { return this.#field1; }
 
     #method5() { return this.#field1; }
+
+    *generator1() { yield 1; }
+
+    async *generator2() { yield 1; }
+
+    static async *generator3() { yield 1; }
 }`,
 }
 

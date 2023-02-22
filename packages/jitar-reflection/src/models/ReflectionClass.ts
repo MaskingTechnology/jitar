@@ -34,6 +34,8 @@ export default class ReflectionClass extends ReflectionMember
 
     get setters(): ReflectionSetter[] { return this.#scope.setters; }
 
+    get generators(): ReflectionGenerator[] { return this.#scope.generators; }
+
     get readable(): Array<ReflectionField | ReflectionGetter>
     {
         const members = new Map<string, ReflectionField | ReflectionGetter>();
@@ -112,6 +114,11 @@ export default class ReflectionClass extends ReflectionMember
     hasSetter(name: string): boolean
     {
         return this.#scope.hasSetter(name);
+    }
+
+    hasGenerator(name: string): boolean
+    {
+        return this.#scope.hasGenerator(name);
     }
 
     canRead(name: string): boolean

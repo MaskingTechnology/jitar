@@ -693,6 +693,11 @@ export default class Parser
             {
                 isSetter = true;
             }
+            else if (token.hasValue(Operator.MULTIPLY))
+            {
+                // Generator function
+                return this.#parseFunction(tokenList, isAsync, isStatic, false, false);
+            }
             else
             {
                 break;

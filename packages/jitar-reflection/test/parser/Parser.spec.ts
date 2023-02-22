@@ -662,7 +662,7 @@ describe('parser/Parser', () =>
             expect(clazz.parentName).toBe(undefined);
 
             const members = clazz.members;
-            expect(members.length).toBe(18);
+            expect(members.length).toBe(21);
 
             const fields = clazz.fields;
             expect(fields.length).toBe(4);
@@ -757,6 +757,24 @@ describe('parser/Parser', () =>
             expect(functions[5].isPrivate).toBe(true);
             expect(functions[5].isStatic).toBe(false);
             expect(functions[5].isAsync).toBe(false);
+
+            const generators = clazz.generators;
+            expect(generators.length).toBe(3);
+
+            expect(generators[0].name).toBe('generator1');
+            expect(generators[0].isPrivate).toBe(false);
+            expect(generators[0].isStatic).toBe(false);
+            expect(generators[0].isAsync).toBe(false);
+
+            expect(generators[1].name).toBe('generator2');
+            expect(generators[1].isPrivate).toBe(false);
+            expect(generators[1].isStatic).toBe(false);
+            expect(generators[1].isAsync).toBe(true);
+
+            expect(generators[2].name).toBe('generator3');
+            expect(generators[2].isPrivate).toBe(false);
+            expect(generators[2].isStatic).toBe(true);
+            expect(generators[2].isAsync).toBe(true);
         });
     });
 

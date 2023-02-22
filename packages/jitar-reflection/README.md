@@ -34,14 +34,18 @@ export { b, c }
 // Supported
 function* myGenerator() { /* ... */ }
 
-// Unsupported
-const myObject =
+// Supported
+class Foo =
 {
-    *generator() { /* ... */ }
+    *generator1() { /* ... */ }
+
+    async *generator2() { /* ... */ }
+
+    static *generator3() { /* ... */ }
 };
 
 // Unsupported
-class Foo
+class Bar
 {
   *[Symbol.iterator]() { /* ... */ }
 }
