@@ -11,6 +11,8 @@ import { Operator } from './definitions/Operator.js';
 import { Scope } from './definitions/Scope.js';
 import { TokenType } from './definitions/TokenType.js';
 
+import ExpectedKeyword from './errors/ExpectedKeyword.js';
+import ExpectedToken from './errors/ExpectedToken.js';
 import UnexpectedKeyword from './errors/UnexpectedKeyword.js';
 import UnexpectedParseResult from './errors/UnexpectedParseResult.js';
 import UnexpectedToken from './errors/UnexpectedToken.js';
@@ -32,8 +34,6 @@ import ReflectionAlias from '../models/ReflectionAlias.js';
 import ReflectionScope from '../models/ReflectionScope.js';
 import ReflectionValue from '../models/ReflectionValue.js';
 import ReflectionParameter from '../models/ReflectionParameter.js';
-import ExpectedKeyword from './errors/ExpectedKeyword.js';
-import ExpectedToken from './errors/ExpectedToken.js';
 
 const ANONYMOUS_IDENTIFIER = '';
 const DEFAULT_IDENTIFIER = 'default';
