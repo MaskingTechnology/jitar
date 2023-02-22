@@ -1,26 +1,22 @@
 
+import { describe, expect, it } from 'vitest'
+
 import ModuleAnalyser from '../../../src/runtime/utils/ModuleAnalyser';
 
-import {
-    theModule,
-    pojo,
-    realFunction,
-    realClass
-} from '../../_fixtures/runtime/utils/ModuleAnaliser.fixture';
+import { ReflectionClass, ReflectionField, ReflectionFunction } from 'jitar-reflection';
+
+import { theModule } from '../../_fixtures/runtime/utils/ModuleAnaliser.fixture';
 
 describe('runtime/utils/ModuleAnaliser', () =>
 {
-    describe('.filterObjects(module)', () =>
+    describe('.filterFields(module)', () =>
     {
-        it('should filter all object types', () =>
+        it('should filter all field types', () =>
         {
-            const result = ModuleAnalyser.filterObjects(theModule);
+            const result = ModuleAnalyser.filterFields(theModule);
 
-            expect(result.size).toBe(3);
-            expect(result.get('string')).toBe(undefined);
-            expect(result.get('pojo')).toBe(pojo);
-            expect(result.get('realFunction')).toBe(realFunction);
-            expect(result.get('realClass')).toBe(realClass);
+            expect(result.size).toBe(1);
+            expect(result.get('hello')).toBeInstanceOf(ReflectionField);
         });
     });
 
@@ -31,10 +27,7 @@ describe('runtime/utils/ModuleAnaliser', () =>
             const result = ModuleAnalyser.filterFunctions(theModule);
 
             expect(result.size).toBe(1);
-            expect(result.get('string')).toBe(undefined);
-            expect(result.get('pojo')).toBe(undefined);
-            expect(result.get('realFunction')).toBe(realFunction);
-            expect(result.get('realClass')).toBe(undefined);
+            expect(result.get('sayHello')).toBeInstanceOf(ReflectionFunction);
         });
     });
 
@@ -45,10 +38,7 @@ describe('runtime/utils/ModuleAnaliser', () =>
             const result = ModuleAnalyser.filterClasses(theModule);
 
             expect(result.size).toBe(1);
-            expect(result.get('string')).toBe(undefined);
-            expect(result.get('pojo')).toBe(undefined);
-            expect(result.get('realFunction')).toBe(undefined);
-            expect(result.get('realClass')).toBe(realClass);
+            expect(result.get('default')).toBeInstanceOf(ReflectionClass);
         });
     });
 });

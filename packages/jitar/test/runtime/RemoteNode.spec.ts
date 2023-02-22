@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest'
+
 import { API_URL, node } from '../_fixtures/runtime/RemoteNode.fixture';
 
 describe('runtime/LocalGateway', () =>
@@ -21,7 +23,7 @@ describe('runtime/LocalGateway', () =>
             expect(names).toContain('SecondProcedure');
         });
     });
-    
+
     describe('.hasProcedure(name)', () =>
     {
         it('should find a procedure', () =>

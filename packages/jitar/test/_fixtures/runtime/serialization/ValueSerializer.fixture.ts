@@ -120,7 +120,7 @@ const privateClass = new PrivateFieldClass(1, true);
 const serializedDataClass = { serialized: true, name: 'Data', source: IMPORT_URL, args: [], fields: { a: 1, b: true } };
 const serializedConstructedClass = { serialized: true, name: 'Constructed', source: IMPORT_URL, args: [1, true], fields: { c: 'hello' } };
 const serializedNestedClass = { serialized: true, name: 'Nested', source: IMPORT_URL, args: ['hello', { serialized: true, name: 'Constructed', source: IMPORT_URL, args: [1, true], fields: { c: 'hello' } }], fields: {} };
-const serializedPrivateClass = { serialized: true, name: 'PrivateFieldClass', source: IMPORT_URL, args: [], fields: { c: undefined } };
+const serializedPrivateClass = { serialized: true, name: 'PrivateFieldClass', source: IMPORT_URL, args: [undefined, undefined], fields: { c: undefined } };
 
 const serializedInvalidClass = { serialized: true, name: 'Invalid', source: null, args: [], fields: {} };
 const serializedUnserializableClass = { serialized: true, name: 'Infinity', source: null, args: [], fields: {} };

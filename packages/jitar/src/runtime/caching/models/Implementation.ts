@@ -1,6 +1,7 @@
 
-import Component from '../../../core/types/Component.js';
 import FqnBuilder from '../../../core/utils/FqnBuilder.js';
+
+import { ReflectionFunction } from 'jitar-reflection';
 
 let lastId = 0;
 
@@ -12,9 +13,9 @@ export default class Implementation
     #fqn: string;
     #access: string;
     #version: string;
-    #executable: Component;
+    #executable: ReflectionFunction;
 
-    constructor(module: string, name: string, access: string, version: string, executable: Component)
+    constructor(module: string, name: string, access: string, version: string, executable: ReflectionFunction)
     {
         this.#id = ++lastId;
         this.#module = module;

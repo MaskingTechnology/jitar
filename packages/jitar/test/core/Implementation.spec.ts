@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest'
+
 import Context from '../../src/core/Context';
 import MissingParameterValue from '../../src/core/errors/MissingParameterValue';
 import UnknownParameter from '../../src/core/errors/UnknownParameter';
@@ -91,7 +93,7 @@ describe('core/Implementation', () =>
 
         it('should not run an executable with an additional parameter', async () => 
         {
-            const args = new Map().set('mandatory', 'mandatory').set('optional','optional').set('additional','additional');
+            const args = new Map().set('mandatory', 'mandatory').set('optional', 'optional').set('additional', 'additional');
             const run = async () => await parameterImplementation.run(args, new Map())
 
             expect(run).rejects.toEqual(new UnknownParameter('additional'));

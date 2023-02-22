@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest'
+
 import FqnBuilder from '../../../src/core/utils/FqnBuilder';
 
 describe('core/utils/FqnBuilder', () =>

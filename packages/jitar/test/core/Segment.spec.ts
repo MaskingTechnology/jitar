@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest'
+
 import ProcedureNotFound from '../../src/core/errors/ProcedureNotFound';
 import Version from '../../src/core/Version';
 

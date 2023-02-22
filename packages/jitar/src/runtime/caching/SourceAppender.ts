@@ -25,12 +25,10 @@ export default class SourceAppender
 
         for (const key of classes.keys())
         {
-            const clazz = classes.get(key) as Function;
+            const clazz = classes.get(key);
 
-            if (clazz.name === '')
+            if (clazz === undefined)
             {
-                // The  exported object does not have a name,
-                // so we can't add the source properties.
                 continue;
             }
 

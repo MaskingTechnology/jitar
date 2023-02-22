@@ -1,15 +1,15 @@
 
-import Module from '../../../core/types/Module.js';
-
 import Implementation from './Implementation.js';
+
+import { ReflectionModule } from 'jitar-reflection';
 
 export default class SegmentModule
 {
     #filename: string;
-    #exports: Module;
+    #exports: ReflectionModule;
     #implementations: Map<string, Implementation>;
 
-    constructor(filename: string, exports: Module, implementations: Map<string, Implementation>)
+    constructor(filename: string, exports: ReflectionModule, implementations: Map<string, Implementation>)
     {
         this.#filename = filename;
         this.#exports = exports;

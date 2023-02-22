@@ -1,57 +1,36 @@
 
-import Module from '../../core/types/Module.js';
+import { ReflectionModule, ReflectionFunction, ReflectionField, ReflectionClass } from 'jitar-reflection';
 
 export default class ModuleAnalyser
 {
-    static filterObjects(module: Module): Map<string, Object>
+    static filterFields(module: ReflectionModule): Map<string, ReflectionField>
     {
-        return this.#filterexported(module, Object);
+        return this.#filterexported<ReflectionField>(module, ReflectionField);
     }
 
-    static filterFunctions(module: Module): Map<string, Function>
+    static filterFunctions(module: ReflectionModule): Map<string, ReflectionFunction>
     {
-        const functions = this.#filterexported(module, Function);
-
-        return this.#filterFunctionTypes(functions, false);
+        return this.#filterexported<ReflectionFunction>(module, ReflectionFunction);
     }
 
-    static filterClasses(module: Module): Map<string, Function>
+    static filterClasses(module: ReflectionModule): Map<string, ReflectionClass>
     {
-        const functions = this.#filterexported(module, Function);
-
-        return this.#filterFunctionTypes(functions, true);
+        return this.#filterexported<ReflectionClass>(module, ReflectionClass);
     }
 
-    static #filterexported(module: Module, type: ReturnType<typeof Function>): Map<string, typeof Function>
+    static #filterexported<T>(module: ReflectionModule, type: any): Map<string, T>
     {
-        const keys = Object.keys(module);
+        const keys = [...module.exported.keys()]
 
         const filtered = new Map();
 
         for (const key of keys)
         {
-            const exported = module[key];
+            const member = module.getExported(key) as T;
 
-            if (exported instanceof type)
+            if (member?.constructor.name === type.name)
             {
-                filtered.set(key, exported);
-            }
-        }
-
-        return filtered;
-    }
-
-    static #filterFunctionTypes(functions: Map<string, Function>, filterClasses: boolean): Map<string, Function>
-    {
-        const filtered = new Map();
-
-        for (const [key, value] of functions)
-        {
-            const code = value.toString();
-
-            if (code.startsWith('class') === filterClasses)
-            {
-                filtered.set(key, value);
+                filtered.set(key, member);
             }
         }
 

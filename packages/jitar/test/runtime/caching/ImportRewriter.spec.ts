@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest'
+
 import ImportRewriter from '../../../src/runtime/caching/ImportRewriter';
 
 import

@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest'
+
 import SourceAppender from '../../../src/runtime/caching/SourceAppender';
 
 import

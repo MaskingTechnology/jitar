@@ -1,11 +1,8 @@
 
-import Component from '../../core/types/Component.js';
-import Module from '../../core/types/Module.js';
 import * as AccessLevel from '../../core/definitions/AccessLevel.js';
 import Version from '../../core/Version.js';
 
 import FileManager from '../interfaces/FileManager.js';
-import ModuleLoader from '../utils/ModuleLoader.js';
 import ModuleAnalyser from '../utils/ModuleAnalyser.js';
 
 import SourceAppender from './SourceAppender.js';
@@ -26,10 +23,14 @@ import SegmentModuleNotLoaded from './errors/SegmentModuleNotLoaded.js';
 import MissingModuleExport from './errors/MissingModuleExport.js';
 import InvalidSegmentFilename from './errors/InvalidSegmentFilename.js';
 
+import { ReflectionFunction, ReflectionModule, Reflector } from 'jitar-reflection';
+
 const IGNORED_SOURCE_FILES = ['.min.js'];
 
 const DEFAULT_ACCESS_LEVEL = AccessLevel.PRIVATE;
 const DEFAULT_VERSION_NUMBER = Version.DEFAULT.toString();
+
+const reflector = new Reflector();
 
 export default class CacheBuilder
 {
@@ -116,7 +117,7 @@ export default class CacheBuilder
         return new SegmentModule(absoluteLocation, exports, implementations);
     }
 
-    async #loadSegmentModule(absoluteLocation: string): Promise<Module>
+    async #loadSegmentModule(absoluteLocation: string): Promise<ReflectionModule>
     {
         const module = await this.#loadModule(absoluteLocation);
 
@@ -128,14 +129,14 @@ export default class CacheBuilder
         return module;
     }
 
-    async #createSegmentModuleImplementations(absoluteLocation: string, exports: Module, imports: SegmentImports): Promise<Map<string, Implementation>>
+    async #createSegmentModuleImplementations(absoluteLocation: string, exports: ReflectionModule, imports: SegmentImports): Promise<Map<string, Implementation>>
     {
         const moduleName = this.#extractModuleName(absoluteLocation);
         const implementations: Map<string, Implementation> = new Map();
 
         for (const [importKey, properties] of Object.entries(imports))
         {
-            const executable = exports[importKey] as Component;
+            const executable = exports.getExported(importKey) as ReflectionFunction;
 
             if (executable === undefined)
             {
@@ -211,19 +212,12 @@ export default class CacheBuilder
         return new ApplicationModule(relativeLocation, classes, functions);
     }
 
-    async #loadModule(filename: string): Promise<Module | undefined>
+    async #loadModule(filename: string): Promise<ReflectionModule>
     {
-        try
-        {
-            return await ModuleLoader.load(filename);
-        }
-        catch (error: unknown)
-        {
-            // If the module cannot load in this context it does not mean that the module is corrupted.
-            // Therefore we can ignore the error and continue to let it work (or fail) at runtime.
+        console.log('LOAD', filename);
+        const code = await this.#sourceManager.getContent(filename);
 
-            return undefined;
-        }
+        return reflector.parse(code.toString());
     }
 
     async #buildSegmentCache(segments: Segment[]): Promise<void[]>

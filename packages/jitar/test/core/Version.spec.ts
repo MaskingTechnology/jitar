@@ -1,15 +1,18 @@
 
+import { describe, expect, it } from 'vitest'
+
 import Version from '../../src/core/Version';
 import InvalidVersionNumber from '../../src/core/errors/InvalidVersionNumber';
 
-import {
-    actualVersion,
-    equalVersion,
-    greaterVersion,
-    lesserVersion,
-    majorMinorVersion,
-    majorVersion
-} from '../_fixtures/core/Version.fixture';
+import
+    {
+        actualVersion,
+        equalVersion,
+        greaterVersion,
+        lesserVersion,
+        majorMinorVersion,
+        majorVersion
+    } from '../_fixtures/core/Version.fixture';
 
 describe('core/Version', () =>
 {

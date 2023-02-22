@@ -1,10 +1,11 @@
 
 import * as AccessLevel from '../../core/definitions/AccessLevel.js';
-import ReflectionHelper from '../../core/reflection/ReflectionHelper.js';
 
 import Implementation from './models/Implementation.js';
 import SegmentModule from './models/SegmentModule.js';
 import * as Keywords from './definitions/Keywords.js';
+
+import { ReflectionField } from 'jitar-reflection';
 
 export default class RemoteBuilder
 {
@@ -34,7 +35,7 @@ export default class RemoteBuilder
 
     static #createRemoteCode(implementation: Implementation, asDefault: boolean): string
     {
-        const parameters = ReflectionHelper.getFunctionParameters(implementation.executable as Function);
+        const parameters = implementation.executable.parameters.filter(parameter => parameter instanceof ReflectionField) as ReflectionField[];
         const parameterNames = parameters.map(parameter => parameter.name);
 
         const procedureName = implementation.executable.name;
