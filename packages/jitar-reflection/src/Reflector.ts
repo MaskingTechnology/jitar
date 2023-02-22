@@ -8,28 +8,33 @@ import ReflectionFunction from './models/ReflectionFunction.js';
 import ReflectionModule from './models/ReflectionModule.js';
 import ReflectionScope from './models/ReflectionScope.js';
 
-const parser = new Parser();
-
 export default class Reflector
 {
+    #parser: Parser;
+
+    constructor(parser = new Parser())
+    {
+        this.#parser = parser;
+    }
+
     parse(code: string): ReflectionModule
     {
-        return parser.parse(code);
+        return this.#parser.parse(code);
     }
 
     parseClass(code: string): ReflectionClass
     {
-        return parser.parseClass(code);
+        return this.#parser.parseClass(code);
     }
 
     parseFunction(code: string): ReflectionFunction
     {
-        return parser.parseFunction(code);
+        return this.#parser.parseFunction(code);
     }
 
     parseField(code: string): ReflectionField
     {
-        return parser.parseField(code);
+        return this.#parser.parseField(code);
     }
 
     fromModule(module: object, inherit = false): ReflectionModule

@@ -44,9 +44,9 @@ export default class Parser
 {
     #lexer: Lexer;
 
-    constructor()
+    constructor(lexer = new Lexer())
     {
-        this.#lexer = new Lexer();
+        this.#lexer = lexer;
     }
 
     parse(code: string): ReflectionModule
