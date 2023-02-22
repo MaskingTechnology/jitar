@@ -207,9 +207,14 @@ export default class Parser
         {
             return this.#parseArray(tokenList);
         }
-        else if (token.hasValue(Divider.TERMINATOR))
+        else if (token.hasValue(Operator.DIVIDE) || token.hasValue(Operator.NOT))
         {
-            tokenList.step(); // Read away the terminator
+            // Regular expression or logical not
+            return this.#parseExpression(tokenList);
+        }
+        else if (token.hasValue(Divider.TERMINATOR) || token.hasValue(Divider.SEPARATOR))
+        {
+            tokenList.step(); // Read away the divider
 
             return undefined;
         }
@@ -687,6 +692,11 @@ export default class Parser
             else if (token.hasValue(Keyword.SET))
             {
                 isSetter = true;
+            }
+            else if (token.hasValue(Operator.MULTIPLY))
+            {
+                // Generator function
+                return this.#parseFunction(tokenList, isAsync, isStatic, false, false);
             }
             else
             {

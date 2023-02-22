@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import ReflectionClass from '../../src/models/ReflectionClass';
 import ReflectionField from '../../src/models/ReflectionField';
 import ReflectionFunction from '../../src/models/ReflectionFunction';

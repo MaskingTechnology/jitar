@@ -42,9 +42,11 @@ const FIELDS =
     CONST: "const name = 'const';",
     LET: "let name = 'let';",
     VAR: "var name = 'var';",
+    DECLARATIONS: "let name1, name2, name3;",
     EXPRESSION: `const number = new Number(Math.ceil(Math.random()) + 10).toString();`,
     ARRAY: "const array = [ 'value1', 'value2' ];",
     OBJECT: "const object = { key1: 'value1', key2: 'value2' };",
+    REGEX: "const regex = /regex/g;",
 }
 
 const FUNCTIONS =
@@ -115,6 +117,12 @@ const CLASSES =
     static async method4() { return this.#field1; }
 
     #method5() { return this.#field1; }
+
+    *generator1() { yield 1; }
+
+    async *generator2() { yield 1; }
+
+    static async *generator3() { yield 1; }
 }`,
 }
 
@@ -177,7 +185,7 @@ export { name, peter };
     const peter = new Person(name, 42)
     
     export { name, peter }
-`,
+`
 }
 
-export { VALUES, IMPORTS, EXPORTS, FIELDS, FUNCTIONS, CLASSES, MODULES  }
+export { VALUES, IMPORTS, EXPORTS, FIELDS, FUNCTIONS, CLASSES, MODULES }

@@ -222,7 +222,7 @@ export default class Lexer
         {
             const char = charList.current;
 
-            if (isOperator(char) === false)
+            if (isOperator(char) === false || isOperator(value + char) === false)
             {
                 charList.stepBack();
 
