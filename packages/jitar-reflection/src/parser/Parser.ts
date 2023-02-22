@@ -214,7 +214,7 @@ export default class Parser
         }
         else if (token.hasValue(Divider.TERMINATOR) || token.hasValue(Divider.SEPARATOR))
         {
-            tokenList.step(); // Read away the terminator
+            tokenList.step(); // Read away the divider
 
             return undefined;
         }
