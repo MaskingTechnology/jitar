@@ -338,7 +338,7 @@ export default class Parser
 
         token = tokenList.step(); // Read away the name
 
-        if (token?.hasValue(Keyword.FROM))
+        if (token !== undefined && token.hasValue(Keyword.FROM))
         {
             token = tokenList.step(); // Read away the FROM keyword
             
