@@ -18,7 +18,7 @@
     "release": "npm run clean && npm run build && npm publish"
   },
   "dependencies": {
-    "jitar-reflection": "^0.1.0"
+    "jitar-reflection": "^0.3.3"
   },
   "peerDependencies": {
     "vite": "^4.0.0"
