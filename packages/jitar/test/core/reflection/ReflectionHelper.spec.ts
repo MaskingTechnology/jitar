@@ -1,7 +1,7 @@
 
-import ReflectionHelper from '../../../src/core/reflection/ReflectionHelper';
-
 import { describe, expect, it } from 'vitest';
+
+import ReflectionHelper from '../../../src/core/reflection/ReflectionHelper';
 
 import
 {

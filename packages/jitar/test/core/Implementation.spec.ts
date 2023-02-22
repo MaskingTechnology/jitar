@@ -1,9 +1,9 @@
 
+import { describe, expect, it } from 'vitest';
+
 import Context from '../../src/core/Context';
 import MissingParameterValue from '../../src/core/errors/MissingParameterValue';
 import UnknownParameter from '../../src/core/errors/UnknownParameter';
-
-import { describe, expect, it } from 'vitest';
 
 import
 {

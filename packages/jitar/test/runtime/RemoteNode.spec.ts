@@ -1,7 +1,7 @@
 
-import { API_URL, node } from '../_fixtures/runtime/RemoteNode.fixture';
-
 import { describe, expect, it } from 'vitest';
+
+import { API_URL, node } from '../_fixtures/runtime/RemoteNode.fixture';
 
 describe('runtime/LocalGateway', () =>
 {

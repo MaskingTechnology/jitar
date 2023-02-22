@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import
 {
     numberValue, boolValue, stringValue, nullValue, undefinedValue,
@@ -19,8 +21,6 @@ import ValueSerializer from '../../../src/runtime/serialization/ValueSerializer'
 import ClassNotFound from '../../../src/runtime/serialization/errors/ClassNotFound';
 import InvalidClass from '../../../src/runtime/serialization/errors/InvalidClass';
 import InvalidPropertyType from '../../../src/runtime/serialization/errors/InvalidPropertyType';
-
-import { describe, expect, it } from 'vitest';
 
 describe('serialization/ValueSerializer', () =>
 {

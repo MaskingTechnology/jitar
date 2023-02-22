@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import ImportRewriter from '../../../src/runtime/caching/ImportRewriter';
 
 import
@@ -11,8 +13,6 @@ import
     hasImportsAndContent, hasImportsAndContentResult,
     hasImportsNoSemicolon, hasImportsResultNoSemicolon
 } from '../../_fixtures/runtime/caching/ImportRewriter.fixture';
-
-import { describe, expect, it } from 'vitest';
 
 describe('runtime/utils/ImportRewriter', () =>
 {

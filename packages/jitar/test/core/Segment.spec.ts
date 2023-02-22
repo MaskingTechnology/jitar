@@ -1,10 +1,10 @@
 
+import { describe, expect, it } from 'vitest';
+
 import ProcedureNotFound from '../../src/core/errors/ProcedureNotFound';
 import Version from '../../src/core/Version';
 
 import { segment } from '../_fixtures/core/Segment.fixture';
-
-import { describe, expect, it } from 'vitest';
 
 describe('core/Segment', () =>
 {

@@ -1,10 +1,10 @@
 
+import { describe, expect, it } from 'vitest';
+
 import ProcedureNotFound from '../../src/core/errors/ProcedureNotFound';
 import Version from '../../src/core/Version';
 
 import { API_URL, node } from '../_fixtures/runtime/LocalNode.fixture';
-
-import { describe, expect, it } from 'vitest';
 
 describe('runtime/LocalNode', () =>
 {

@@ -1,11 +1,11 @@
 
+import { describe, expect, it } from 'vitest';
+
 import ModuleAnalyser from '../../../src/runtime/utils/ModuleAnalyser';
 
 import { ReflectionClass, ReflectionField, ReflectionFunction } from 'jitar-reflection';
 
 import { theModule } from '../../_fixtures/runtime/utils/ModuleAnaliser.fixture';
-
-import { describe, expect, it } from 'vitest';
 
 describe('runtime/utils/ModuleAnaliser', () =>
 {
