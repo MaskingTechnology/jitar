@@ -35,7 +35,7 @@ describe('parser/Parser', () =>
             expect(value.definition).toBe('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
         });
 
-        it('should parse a math expression', () =>
+        it('should parse a grouped expression', () =>
         {
             const value = parser.parseValue(VALUES.EXPRESSION_GROUP);
             expect(value).toBeInstanceOf(ReflectionExpression);
@@ -314,6 +314,14 @@ describe('parser/Parser', () =>
             expect(field.value?.definition).toBe("'var'");
         });
 
+        it('should parse a field with multiple declarations', () =>
+        {
+            const field = parser.parseField(FIELDS.DECLARATIONS);
+
+            expect(field.name).toBe('name1');
+            expect(field.value).toBe(undefined);
+        });
+
         it('should parse a field with an expression', () =>
         {
             const field = parser.parseField(FIELDS.EXPRESSION);
@@ -339,6 +347,15 @@ describe('parser/Parser', () =>
             expect(field.name).toBe('object');
             expect(field.value).toBeInstanceOf(ReflectionObject);
             expect(field.value?.definition).toBe("{ key1 : 'value1' , key2 : 'value2' }");
+        });
+
+        it('should parse a field with an regex value', () =>
+        {
+            const field = parser.parseField(FIELDS.REGEX);
+
+            expect(field.name).toBe('regex');
+            expect(field.value).toBeInstanceOf(ReflectionExpression);
+            expect(field.value?.definition).toBe("/ regex / g");
         });
     });
 
