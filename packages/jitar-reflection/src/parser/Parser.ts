@@ -168,7 +168,9 @@ export default class Parser
         }
         else if (token.isType(TokenType.IDENTIFIER))
         {
-            if (tokenList.hasNext() && tokenList.next.hasValue(Operator.ARROW))
+            const next = tokenList.next;
+
+            if (next !== undefined && next.hasValue(Operator.ARROW))
             {
                 return this.#parseArrowFunction(tokenList, isAsync);
             }
@@ -188,7 +190,14 @@ export default class Parser
         }
         else if (token.hasValue(Group.OPEN))
         {
-            return this.#parseArrowFunction(tokenList, isAsync);
+            const next = this.#peekAfterBlock(tokenList, Group.OPEN, Group.CLOSE);
+
+            if (next !== undefined && next.hasValue(Operator.ARROW))
+            {
+                return this.#parseArrowFunction(tokenList, isAsync);
+            }
+
+            return this.#parseExpression(tokenList);
         }
         else if (token.hasValue(Scope.OPEN))
         {
@@ -791,6 +800,20 @@ export default class Parser
         }
 
         return code;
+    }
+
+    #peekAfterBlock(tokenList: TokenList, openId: string, closeId: string): Token | undefined
+    {
+        const start = tokenList.position;
+
+        this.#parseBlock(tokenList, openId, closeId);
+
+        const token = tokenList.current;
+        const end = tokenList.position;
+
+        tokenList.stepBack(end - start);
+
+        return token;
     }
 
     #atEndOfStatement(token: Token): boolean

@@ -35,6 +35,13 @@ describe('parser/Parser', () =>
             expect(value.definition).toBe('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
         });
 
+        it('should parse a math expression', () =>
+        {
+            const value = parser.parseValue(VALUES.EXPRESSION_GROUP);
+            expect(value).toBeInstanceOf(ReflectionExpression);
+            expect(value.definition).toBe('( a + b ) * c');
+        });
+
         it('should parse an if...else expression', () =>
         {
             const value = parser.parseValue(VALUES.IF_ELSE);

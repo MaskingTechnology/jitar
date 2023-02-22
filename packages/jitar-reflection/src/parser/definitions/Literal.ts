@@ -1,7 +1,7 @@
 
 const Literal =
 {
-    SINGLE: "'",
+    SINGLE: '\'',
     DOUBLE: '"',
     BACKTICK: '`'
 }
