@@ -1,11 +1,13 @@
 
+import { describe, expect, it } from 'vitest';
+
 import RemoteBuilder from '../../../src/runtime/caching/RemoteBuilder';
 
 import
-    {
-        segmentModule,
-        codeResult
-    } from '../../_fixtures/runtime/caching/RemoteBuilder.fixture';
+{
+    segmentModule,
+    codeResult
+} from '../../_fixtures/runtime/caching/RemoteBuilder.fixture';
 
 describe('runtime/utils/RemoteBuilder', () =>
 {

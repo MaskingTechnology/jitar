@@ -1,5 +1,8 @@
 
-import {
+import { describe, expect, it } from 'vitest';
+
+import
+{
     goodNode,
     badNode,
     gateway,

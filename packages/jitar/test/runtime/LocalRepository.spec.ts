@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import InvalidClientId from '../../src/runtime/errors/InvalidClientId';
 import ClientNotFound from '../../src/runtime/errors/ClientNotFound';
 

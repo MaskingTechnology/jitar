@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import ErrorManager from '../../../src/core/ErrorManager';
 
 describe('core/errors/ErrorManager', () =>

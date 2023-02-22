@@ -1,8 +1,11 @@
 
+import { describe, expect, it } from 'vitest';
+
 import Version from '../../src/core/Version';
 import InvalidVersionNumber from '../../src/core/errors/InvalidVersionNumber';
 
-import {
+import
+{
     actualVersion,
     equalVersion,
     greaterVersion,

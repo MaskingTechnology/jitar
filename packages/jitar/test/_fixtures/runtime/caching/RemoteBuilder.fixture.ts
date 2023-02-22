@@ -1,35 +1,36 @@
 
-import FlexObject from '../../../../src/core/types/FlexObject';
 import Implementation from '../../../../src/runtime/caching/models/Implementation';
 import SegmentModule from '../../../../src/runtime/caching/models/SegmentModule';
 
-function defaultFunction(): string
-{
-    return 'default';
+import { Reflector, ReflectionFunction, ReflectionField, ReflectionModule } from 'jitar-reflection';
+
+const code = `
+export function defaultFunction() {
+return 'default'
 }
 
-function anotherFunction(a: string, b: string): string
-{
-    return a + b;
+export function anotherFunction(a, b) {
+return a + b;
 }
 
-function privateFunction(): string
-{
-    return 'private';
+function privateFunction() {
+return 'private';
 }
+`;
 
-const functions: FlexObject =
-{
-    default: defaultFunction,
-    anotherFunction
-}
+const reflector = new Reflector();
+const reflectionModule = reflector.parse(code);
+
+const defaultFunction = reflectionModule.getFunction('defaultFunction') as ReflectionFunction;
+const anotherFunction = reflectionModule.getFunction('anotherFunction') as ReflectionFunction;
+const privateFunction = reflectionModule.getFunction('privateFunction') as ReflectionFunction;
 
 const implementations: Map<string, Implementation> = new Map();
 implementations.set('default', new Implementation('', 'defaultFunction', 'public', '0.0.0', defaultFunction));
 implementations.set('anotherFunction', new Implementation('', 'anotherFunction', 'public', '1.0.0', anotherFunction));
 implementations.set('privateFunction', new Implementation('', 'privateFunction', 'private', '1.0.0', privateFunction));
 
-const segmentModule = new SegmentModule('app/module.js', functions, implementations);
+const segmentModule = new SegmentModule('app/module.js', reflectionModule, implementations);
 
 const codeResult =
     `import { runProcedure } from "/jitar/hooks.js";

@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import UrlRewriter from '../../../src/runtime/utils/UrlRewriter';
 
 describe('runtime/utils/UrlRewriter', () =>

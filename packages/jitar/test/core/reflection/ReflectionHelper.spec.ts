@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import ReflectionHelper from '../../../src/core/reflection/ReflectionHelper';
 
 import
@@ -118,7 +120,7 @@ describe('core/reflection/ReflectionHelper', () =>
 
             expect(result[1].name).toBe('b');
             expect(result[1].isOptional).toBe(true);
-            expect(result[1].defaultValue).toBe(`new Person(1, 'Jane', 'Doe', 42)`);
+            expect(result[1].defaultValue).toBe(`new Person(1, "Jane", "Doe", 42)`);
 
             expect(result[2].name).toBe('c');
             expect(result[2].isOptional).toBe(true);

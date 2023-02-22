@@ -1,26 +1,22 @@
 
-import Module from '../../../../src/core/types/Module';
+import { Reflector } from 'jitar-reflection';
 
-const string = 'Hello World';
+const code = `
 
-const pojo = { a: 10, b: 20 }
+const hello = 'Hello World';
 
-function realFunction(a: number, b: number): number
+const sayHello = (name) => \`Hello \${name}\`;
+
+export default class Test
 {
-    return a + b;
+    //empty
 }
 
-class realClass {}
+export { hello, sayHello };
+`;
 
-const theModule: Module = {};
-theModule.string = string;
-theModule.pojo = pojo;
-theModule.realFunction = realFunction;
-theModule.realClass = realClass;
+const reflector = new Reflector();
 
-export {
-    theModule,
-    pojo,
-    realFunction,
-    realClass
-}
+const theModule = reflector.parse(code);
+
+export { theModule };

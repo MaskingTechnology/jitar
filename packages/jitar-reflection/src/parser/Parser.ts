@@ -232,10 +232,10 @@ export default class Parser
         {
             case Keyword.IMPORT:
                 return this.#parseImport(tokenList);
-            
+
             case Keyword.EXPORT:
                 return this.#parseExport(tokenList);
-            
+
             case Keyword.CLASS:
                 return this.#parseClass(tokenList);
 
@@ -260,7 +260,7 @@ export default class Parser
         const members: ReflectionAlias[] = [];
 
         let token = tokenList.current;
-        
+
         if (token.isType(TokenType.LITERAL))
         {
             return new ReflectionImport(members, token.value);
@@ -355,7 +355,7 @@ export default class Parser
         if (token !== undefined && token.hasValue(Keyword.FROM))
         {
             token = tokenList.step(); // Read away the FROM keyword
-            
+
             from = token.value;
         }
 
@@ -374,7 +374,7 @@ export default class Parser
     #parseMultiExport(tokenList: TokenList): ReflectionExport
     {
         const members = this.#parseAliasList(tokenList);
-        
+
         let from: string | undefined = undefined;
         let token = tokenList.current;
 
@@ -473,7 +473,7 @@ export default class Parser
         {
             return new ReflectionClass(name, value.parentName, value.scope);
         }
-        
+
         return new ReflectionField(name, value as ReflectionValue, isStatic, isPrivate);
     }
 
@@ -498,7 +498,7 @@ export default class Parser
 
             token = tokenList.step(); // Read away the function name
         }
-        
+
         const parameters = this.#parseParameters(tokenList);
 
         token = tokenList.current;
@@ -507,7 +507,7 @@ export default class Parser
         {
             throw new ExpectedToken(Scope.OPEN, token.start);
         }
-        
+
         const body = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
 
         if (isGenerator)
@@ -548,7 +548,7 @@ export default class Parser
         }
 
         token = tokenList.step(); // Read away the arrow
-        
+
         const body = token.hasValue(Scope.OPEN)
             ? this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE)
             : this.#parseExpression(tokenList).definition;
@@ -635,7 +635,7 @@ export default class Parser
         {
             throw new ExpectedToken(Scope.OPEN, token.start);
         }
-        
+
         const scope = this.#parseClassScope(tokenList);
 
         return new ReflectionClass(name, parent, scope);
@@ -662,7 +662,7 @@ export default class Parser
 
             token = tokenList.current;
         }
-        
+
         return new ReflectionScope(members);
     }
 
@@ -773,7 +773,7 @@ export default class Parser
                 {
                     tokenList.step(); // Read away the end of statement
                 }
-                
+
                 break;
             }
         }
@@ -804,7 +804,7 @@ export default class Parser
 
                 return code;
             }
-            
+
             code += token.toString() + DEFINITION_SEPARATOR;
             token = tokenList.step();
         }

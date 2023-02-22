@@ -4,6 +4,6 @@ test
 node_modules
 .eslintignore
 .eslintrc
-jest.config.js
+vite.config.ts
 tsconfig.json
 *.tgz

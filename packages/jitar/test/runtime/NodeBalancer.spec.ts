@@ -1,8 +1,11 @@
 
+import { describe, expect, it } from 'vitest';
+
 import NoNodeAvailable from '../../src/runtime/errors/NoNodeAvailable';
 import Version from '../../src/core/Version';
 
-import {
+import
+{
     balancer,
     emptyBalancer,
     firstNode,
@@ -31,7 +34,7 @@ describe('runtime/LocalGateway', () =>
     {
         it('throw a node not available error', async () =>
         {
-            const run = async() => await emptyBalancer.run('NoProcedure', Version.DEFAULT, new Map(), new Map());
+            const run = async () => await emptyBalancer.run('NoProcedure', Version.DEFAULT, new Map(), new Map());
 
             expect(run).rejects.toEqual(new NoNodeAvailable('NoProcedure'));
         });

@@ -1,11 +1,13 @@
 
+import { ReflectionClass, ReflectionFunction } from 'jitar-reflection';
+
 export default class ApplicationModule
 {
     #filename: string;
-    #classes: Map<string, Function>;
-    #functions: Map<string, Function>;
+    #classes: Map<string, ReflectionClass>;
+    #functions: Map<string, ReflectionFunction>;
 
-    constructor(filename: string, classes: Map<string, Function>, functions: Map<string, Function>)
+    constructor(filename: string, classes: Map<string, ReflectionClass>, functions: Map<string, ReflectionFunction>)
     {
         this.#filename = filename;
         this.#classes = classes;

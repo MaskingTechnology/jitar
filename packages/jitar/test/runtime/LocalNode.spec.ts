@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import ProcedureNotFound from '../../src/core/errors/ProcedureNotFound';
 import Version from '../../src/core/Version';
 
@@ -79,7 +81,7 @@ describe('runtime/LocalNode', () =>
 
         it('should not run a non-existing procedure', async () =>
         {
-            const run = async() => await node.run('my/module/nonExistingTask', Version.DEFAULT, new Map(), new Map());
+            const run = async () => await node.run('my/module/nonExistingTask', Version.DEFAULT, new Map(), new Map());
 
             expect(run).rejects.toEqual(new ProcedureNotFound('my/module/nonExistingTask'));
         });

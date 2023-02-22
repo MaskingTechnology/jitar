@@ -26,9 +26,9 @@
         "examples/4-integrations/2-vue"
     ],
     "scripts": {
-        "build": "npm run build --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present",
-        "lint": "npm run lint --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present",
-        "test": "npm run test --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=packages/jitar-vite-plugin --if-present"
+        "build": "npm run build --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=/packages/jitar-reflection --workspace=packages/jitar-vite-plugin --if-present",
+        "lint": "npm run lint --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=/packages/jitar-reflection --workspace=packages/jitar-vite-plugin --if-present",
+        "test": "npm run test --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=/packages/jitar-reflection --workspace=packages/jitar-vite-plugin --if-present"
     },
     "devDependencies": {
         "lerna": "^6.5.1"

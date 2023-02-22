@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import { segmentModule } from '../_fixtures/core/SegmentBuilder.fixture';
 
 import SegmentBuilder from '../../src/core/SegmentBuilder';
