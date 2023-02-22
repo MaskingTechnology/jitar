@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import { Divider } from '../../src/parser/definitions/Divider';
 import { Group } from '../../src/parser/definitions/Group';
 import { List } from '../../src/parser/definitions/List';

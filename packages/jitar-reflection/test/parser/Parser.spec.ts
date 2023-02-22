@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import ReflectionExpression from '../../src/models/ReflectionExpression';
 import ReflectionArray from '../../src/models/ReflectionArray';
 import ReflectionObject from '../../src/models/ReflectionObject';

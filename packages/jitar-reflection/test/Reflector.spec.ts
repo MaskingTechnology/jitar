@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import ReflectionExpression from '../src/models/ReflectionExpression';
 import ReflectionField from '../src/models/ReflectionField';
 import Reflector from '../src/Reflector';
@@ -142,7 +144,7 @@ describe('Reflector', () =>
             const second = parameters[1] as ReflectionField;
             expect(second.name).toBe('b');
             expect(second.value).toBeInstanceOf(ReflectionExpression);
-            expect(second.value?.definition).toBe("new Person ( 1 , 'Jane' , 'Doe' , 42 )");
+            expect(second.value?.definition).toBe('new Person ( 1 , "Jane" , "Doe" , 42 )');
 
             const third = parameters[2] as ReflectionField;
             expect(third.name).toBe('c');
