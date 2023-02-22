@@ -16,6 +16,30 @@ describe('parser/Lexer', () =>
 {
     describe('.tokenize(code, ignoreComments)', () =>
     {
+        it('should separate operators', () =>
+        {
+            const tokens = lexer.tokenize(CODE.OPERATORS);
+            expect(tokens.size).toBe(6);
+
+            expect(tokens.get(0).type).toBe(TokenType.OPERATOR);
+            expect(tokens.get(0).value).toBe(Operator.EQUAL_STRICT);
+
+            expect(tokens.get(1).type).toBe(TokenType.OPERATOR);
+            expect(tokens.get(1).value).toBe(Operator.EQUAL);
+
+            expect(tokens.get(2).type).toBe(TokenType.OPERATOR);
+            expect(tokens.get(2).value).toBe(Operator.NOT_EQUAL);
+
+            expect(tokens.get(3).type).toBe(TokenType.OPERATOR);
+            expect(tokens.get(3).value).toBe(Operator.ASSIGN_DIVIDE);
+
+            expect(tokens.get(4).type).toBe(TokenType.OPERATOR);
+            expect(tokens.get(4).value).toBe(Operator.DIVIDE);
+
+            expect(tokens.get(5).type).toBe(TokenType.OPERATOR);
+            expect(tokens.get(5).value).toBe(Operator.NOT_EQUAL);
+        });
+
         it('should include whitespace when requested', () =>
         {
             const tokens = lexer.tokenize(CODE.WHITESPACE_INCLUDED, false);
