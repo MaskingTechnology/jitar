@@ -1,8 +1,9 @@
 
 import path from 'path';
 import { PluginOption, normalizePath, ResolvedConfig } from 'vite';
+import { Reflector, ReflectionFunction } from 'jitar-reflection';
 
-const IMPORT_PATTERN = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g;
+const reflector = new Reflector();
 
 function formatPath(path: string)
 {
@@ -52,28 +53,17 @@ async function createImportCode(code: string, id: string, jitarFullPath: string,
         .replace(jitarFullPath, '')
         .replace('.ts', '.js');
 
-    // Remove all imports from the code
-    code = code.replace(IMPORT_PATTERN, () =>
-    {
-        return '';
-    });
-
-    // Later on, we need to strip the code further into an interface to make sure it can be imported
-    // (we can than share and reuse this code for the Jitar cache builder)
-
-    // Load the code as data url into a module
-    const importData = Buffer.from(code).toString('base64');
-    const importUrl = `data:text/javascript;base64,${importData}`;
-    const module = await import(importUrl);
+    const module = reflector.parse(code);
+    const exported = module.exported;
 
     // Extract all exports from the module
-    const allKeys = Object.keys(module);
-    const functionKeys = allKeys.filter(key => key !== 'default' && typeof module[key] === 'function');
+    const allKeys = [...exported.keys()];
+    const functionKeys = allKeys.filter(key => key !== 'default' && exported.get(key) instanceof ReflectionFunction);
 
     let importCode = '';
     let exportCode = '';
 
-    if (allKeys.includes('default'))
+    if (exported.has('default'))
     {
         importCode += `const defaultExport = module.default;\n`;
         exportCode += `export default defaultExport;\n`;
