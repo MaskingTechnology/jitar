@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import { createList } from '../_fixtures/parser/ItemList.fixture';
 
 describe('parser/ItemList', () =>

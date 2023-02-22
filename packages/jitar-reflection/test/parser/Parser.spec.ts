@@ -1,4 +1,6 @@
 
+import { describe, expect, it } from 'vitest';
+
 import ReflectionExpression from '../../src/models/ReflectionExpression';
 import ReflectionArray from '../../src/models/ReflectionArray';
 import ReflectionObject from '../../src/models/ReflectionObject';
@@ -35,7 +37,7 @@ describe('parser/Parser', () =>
             expect(value.definition).toBe('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
         });
 
-        it('should parse a math expression', () =>
+        it('should parse a grouped expression', () =>
         {
             const value = parser.parseValue(VALUES.EXPRESSION_GROUP);
             expect(value).toBeInstanceOf(ReflectionExpression);
@@ -314,6 +316,14 @@ describe('parser/Parser', () =>
             expect(field.value?.definition).toBe("'var'");
         });
 
+        it('should parse a field with multiple declarations', () =>
+        {
+            const field = parser.parseField(FIELDS.DECLARATIONS);
+
+            expect(field.name).toBe('name1');
+            expect(field.value).toBe(undefined);
+        });
+
         it('should parse a field with an expression', () =>
         {
             const field = parser.parseField(FIELDS.EXPRESSION);
@@ -339,6 +349,15 @@ describe('parser/Parser', () =>
             expect(field.name).toBe('object');
             expect(field.value).toBeInstanceOf(ReflectionObject);
             expect(field.value?.definition).toBe("{ key1 : 'value1' , key2 : 'value2' }");
+        });
+
+        it('should parse a field with an regex value', () =>
+        {
+            const field = parser.parseField(FIELDS.REGEX);
+
+            expect(field.name).toBe('regex');
+            expect(field.value).toBeInstanceOf(ReflectionExpression);
+            expect(field.value?.definition).toBe("/ regex / g");
         });
     });
 
@@ -645,7 +664,7 @@ describe('parser/Parser', () =>
             expect(clazz.parentName).toBe(undefined);
 
             const members = clazz.members;
-            expect(members.length).toBe(18);
+            expect(members.length).toBe(21);
 
             const fields = clazz.fields;
             expect(fields.length).toBe(4);
@@ -740,6 +759,24 @@ describe('parser/Parser', () =>
             expect(functions[5].isPrivate).toBe(true);
             expect(functions[5].isStatic).toBe(false);
             expect(functions[5].isAsync).toBe(false);
+
+            const generators = clazz.generators;
+            expect(generators.length).toBe(3);
+
+            expect(generators[0].name).toBe('generator1');
+            expect(generators[0].isPrivate).toBe(false);
+            expect(generators[0].isStatic).toBe(false);
+            expect(generators[0].isAsync).toBe(false);
+
+            expect(generators[1].name).toBe('generator2');
+            expect(generators[1].isPrivate).toBe(false);
+            expect(generators[1].isStatic).toBe(false);
+            expect(generators[1].isAsync).toBe(true);
+
+            expect(generators[2].name).toBe('generator3');
+            expect(generators[2].isPrivate).toBe(false);
+            expect(generators[2].isStatic).toBe(true);
+            expect(generators[2].isAsync).toBe(true);
         });
     });
 
