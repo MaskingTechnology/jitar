@@ -13,3 +13,14 @@ For more information about Jitar:
 
 * [Visit our website](https://jitar.dev)
 * [Read the documentation](https://docs.jitar.dev).
+
+## Known limitations
+
+Declaration of multiple values is not supported
+
+```ts
+const a = 1, b = 2, c = 3;
+
+// Only a is defined, b and c are undefined
+export { a, b, c }
+```
