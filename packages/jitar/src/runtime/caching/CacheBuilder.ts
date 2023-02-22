@@ -214,7 +214,6 @@ export default class CacheBuilder
 
     async #loadModule(filename: string): Promise<ReflectionModule>
     {
-        console.log('LOAD', filename);
         const code = await this.#sourceManager.getContent(filename);
 
         return reflector.parse(code.toString());
