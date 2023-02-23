@@ -4,7 +4,7 @@
 ## 0.3.4 (February 23, 2023)
 
 New features:
-- \[[`00a1f4f`](https://github.com/MaskingTechnology/jitar/commit/00a1f4f)] Extended options for CORS middleware [basmasking](https://github.com/MaskingTechnology/jitar/pull/1368)
+- \[[`00a1f4f`](https://github.com/MaskingTechnology/jitar/commit/00a1f4f)] Use the advanced reflection library [basmasking](https://github.com/MaskingTechnology/jitar/pull/168)
 
 ## 0.3.3 (February 13, 2023)
 

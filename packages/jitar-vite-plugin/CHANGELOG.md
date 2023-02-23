@@ -4,7 +4,7 @@
 ## 0.3.4 (February 23, 2023)
 
 New feature:
-- \[[`3748286`](https://github.com/MaskingTechnology/jitar/commit/3748286)] Vite plugin added [petermasking](https://github.com/MaskingTechnology/jitar/pull/165)
+- \[[`3748286`](https://github.com/MaskingTechnology/jitar/commit/3748286)] Enhance the vite plugin [petermasking](https://github.com/MaskingTechnology/jitar/pull/165)
 
 
 ## 0.2.2 (December 16, 2022)
