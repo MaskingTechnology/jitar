@@ -16,7 +16,7 @@
     },
     "dependencies": {
         "mongodb": "^4.13.0",
-        "jitar-nodejs-server": "^0.3.2"
+        "jitar-nodejs-server": "^0.3.4"
     },
     "devDependencies": {
         "@types/react": "^18.0.26",

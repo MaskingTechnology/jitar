@@ -18,6 +18,8 @@ export default class ModuleAnalyser
         return this.#filterexported<ReflectionClass>(module, ReflectionClass);
     }
 
+    // Quick fix, this will be solved when migrating to the cache package
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     static #filterexported<T>(module: ReflectionModule, type: any): Map<string, T>
     {
         const keys = [...module.exported.keys()]

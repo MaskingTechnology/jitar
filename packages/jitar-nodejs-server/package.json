@@ -26,7 +26,7 @@
         "fs-extra": "^11.1.0",
         "glob": "^8.0.3",
         "glob-promise": "6.0.2",
-        "jitar": "^0.3.3",
+        "jitar": "^0.3.4",
         "mime-types": "^2.1.35",
         "tslog": "^4.6.0",
         "yargs": "^17.6.2"

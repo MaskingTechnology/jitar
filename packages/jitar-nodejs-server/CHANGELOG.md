@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.3.4 (February 23, 2023)
+
+- Bump dependency for the latest version of jitar.
+
 ## 0.3.2 (February 10, 2023)
 
 Fixes:
