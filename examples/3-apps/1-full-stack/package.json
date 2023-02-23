@@ -15,7 +15,7 @@
         "proxy": "node --experimental-network-imports --experimental-fetch dist/server.js --config=./conf/proxy.json"
     },
     "dependencies": {
-        "mongodb": "^4.13.0",
+        "mongodb": "^5.0.1",
         "jitar-nodejs-server": "^0.3.4"
     },
     "devDependencies": {
