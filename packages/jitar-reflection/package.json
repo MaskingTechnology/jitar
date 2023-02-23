@@ -17,13 +17,6 @@
     "clean": "rm -rf dist",
     "release": "npm run clean && npm run build && npm publish"
   },
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.51.0",
-    "@typescript-eslint/parser": "^5.51.0",
-    "@vitest/coverage-c8": "^0.28.5",
-    "eslint": "^8.33.0",
-    "vitest": "^0.28.5"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/MaskingTechnology/jitar"
