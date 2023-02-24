@@ -440,11 +440,27 @@ export default class Parser
     #parseDeclaration(tokenList: TokenList, isStatic: boolean): ReflectionMember
     {
         let token = tokenList.current;
+        let name = ANONYMOUS_IDENTIFIER;
+        let isPrivate = false;
 
-        const isPrivate = token.value.startsWith(PRIVATE_INDICATOR);
-        const name = isPrivate ? token.value.substring(1) : token.value;
-
-        token = tokenList.step(); // Read away the field name
+        if (token.hasValue(List.OPEN))
+        {
+            // Array destructuring
+            name = this.#parseBlock(tokenList, List.OPEN, List.CLOSE);
+            token = tokenList.current;
+        }
+        else if (token.hasValue(Scope.OPEN))
+        {
+            // Object destructuring
+            name = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
+            token = tokenList.current;
+        }
+        else
+        {
+            isPrivate = token.value.startsWith(PRIVATE_INDICATOR);
+            name = isPrivate ? token.value.substring(1) : token.value;
+            token = tokenList.step(); // Read away the field name
+        }
 
         let value = undefined;
 
