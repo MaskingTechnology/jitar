@@ -124,6 +124,7 @@ export default class Lexer
         const isOther = isEmpty(char)
                      || isWhitespace(char)
                      || isOperator(char)
+                     || isLiteral(char)
                      || isDivider(char)
                      || isGroup(char)
                      || isScope(char)
