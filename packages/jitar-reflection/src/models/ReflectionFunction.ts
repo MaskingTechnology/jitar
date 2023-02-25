@@ -22,4 +22,11 @@ export default class ReflectionFunction extends ReflectionMember
     get body() { return this.#body; }
 
     get isAsync() { return this.#isAsync; }
+
+    toString(): string
+    {
+        const parameters = this.parameters.map((parameter) => parameter.toString());
+
+        return `${this.isAsync ? 'async ' : ''}${this.name}(${parameters.join(', ')}) { ${this.body} }`;
+    }
 }

@@ -143,4 +143,9 @@ export default class ReflectionClass extends ReflectionMember
 
         return funktion !== undefined && funktion.isPublic;
     }
+
+    toString(): string
+    {
+        return `class ${this.name}${this.#parentName !== undefined ? ` extends ${this.#parentName}` : ''} { ${this.#scope.toString()} }`;
+    }
 }

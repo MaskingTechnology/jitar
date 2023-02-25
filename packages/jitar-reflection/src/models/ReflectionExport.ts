@@ -18,4 +18,9 @@ export default class ReflectionExport extends ReflectionMember
     get members() { return this.#members; }
 
     get from() { return this.#from; }
+
+    toString(): string
+    {
+        return `export { ${this.#members.join(', ')} }${this.#from ? ` from '${this.#from}'` : ''}`;
+    }
 }

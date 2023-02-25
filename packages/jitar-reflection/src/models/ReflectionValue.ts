@@ -9,4 +9,9 @@ export default class ReflectionValue
     }
 
     get definition() { return this.#definition; }
+
+    toString(): string
+    {
+        return this.#definition;
+    }
 }
