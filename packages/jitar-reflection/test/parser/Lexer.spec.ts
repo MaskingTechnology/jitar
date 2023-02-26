@@ -42,9 +42,42 @@ describe('parser/Lexer', () =>
             expect(tokens.get(5).value).toBe(Operator.NOT_EQUAL);
         });
 
+        it('should separate keywords from literals', () =>
+        {
+            const tokens = lexer.tokenize(CODE.LITERALS);
+            expect(tokens.size).toBe(3);
+
+            expect(tokens.get(0).type).toBe(TokenType.LITERAL);
+            expect(tokens.get(0).value).toBe('`foo\\\`ter`');
+
+            expect(tokens.get(1).type).toBe(TokenType.LITERAL);
+            expect(tokens.get(1).value).toBe('"bar\\\"becue"');
+
+            expect(tokens.get(2).type).toBe(TokenType.LITERAL);
+            expect(tokens.get(2).value).toBe("'baz'");
+        });
+
+        it('should separate keywords from identifiers', () =>
+        {
+            const tokens = lexer.tokenize(CODE.KEYWORDS_IDENTIFIERS);
+            expect(tokens.size).toBe(4);
+
+            expect(tokens.get(0).type).toBe(TokenType.KEYWORD);
+            expect(tokens.get(0).value).toBe('class');
+
+            expect(tokens.get(1).type).toBe(TokenType.IDENTIFIER);
+            expect(tokens.get(1).value).toBe('Foo');
+
+            expect(tokens.get(2).type).toBe(TokenType.KEYWORD);
+            expect(tokens.get(2).value).toBe('function');
+
+            expect(tokens.get(3).type).toBe(TokenType.IDENTIFIER);
+            expect(tokens.get(3).value).toBe('bar');
+        });
+
         it('should include whitespace when requested', () =>
         {
-            const tokens = lexer.tokenize(CODE.WHITESPACE_INCLUDED, false);
+            const tokens = lexer.tokenize(CODE.WHITESPACE, false);
             expect(tokens.size).toBe(9);
 
             expect(tokens.get(0).type).toBe(TokenType.KEYWORD);
@@ -77,28 +110,7 @@ describe('parser/Lexer', () =>
 
         it('should omit whitespace when requested', () =>
         {
-            const tokens = lexer.tokenize(CODE.WHITESPACE_INCLUDED, true);
-            expect(tokens.size).toBe(5);
-
-            expect(tokens.get(0).type).toBe(TokenType.KEYWORD);
-            expect(tokens.get(0).value).toBe('const');
-
-            expect(tokens.get(1).type).toBe(TokenType.IDENTIFIER);
-            expect(tokens.get(1).value).toBe('identifier');
-
-            expect(tokens.get(2).type).toBe(TokenType.OPERATOR);
-            expect(tokens.get(2).value).toBe(Operator.ASSIGN);
-
-            expect(tokens.get(3).type).toBe(TokenType.LITERAL);
-            expect(tokens.get(3).value).toBe('"value"');
-
-            expect(tokens.get(4).type).toBe(TokenType.DIVIDER);
-            expect(tokens.get(4).value).toBe(Divider.TERMINATOR);
-        });
-
-        it('should tokenize when whitespace is excluded', () =>
-        {
-            const tokens = lexer.tokenize(CODE.WHITESPACE_EXCLUDED, true);
+            const tokens = lexer.tokenize(CODE.WHITESPACE, true);
             expect(tokens.size).toBe(5);
 
             expect(tokens.get(0).type).toBe(TokenType.KEYWORD);
@@ -226,6 +238,30 @@ describe('parser/Lexer', () =>
 
             expect(tokens.get(16).type).toBe(TokenType.DIVIDER);
             expect(tokens.get(16).value).toBe(Divider.TERMINATOR);
+        });
+
+        it('should tokenize minified code', () =>
+        {
+            const tokens = lexer.tokenize(CODE.MINIFIED);
+            expect(tokens.size).toBe(6);
+
+            expect(tokens.get(0).type).toBe(TokenType.IDENTIFIER);
+            expect(tokens.get(0).value).toBe('return');
+
+            expect(tokens.get(1).type).toBe(TokenType.LITERAL);
+            expect(tokens.get(1).value).toBe('`foo`');
+
+            expect(tokens.get(2).type).toBe(TokenType.DIVIDER);
+            expect(tokens.get(2).value).toBe(Divider.TERMINATOR);
+
+            expect(tokens.get(3).type).toBe(TokenType.IDENTIFIER);
+            expect(tokens.get(3).value).toBe('identifier1');
+
+            expect(tokens.get(4).type).toBe(TokenType.OPERATOR);
+            expect(tokens.get(4).value).toBe(Operator.ASSIGN);
+
+            expect(tokens.get(5).type).toBe(TokenType.IDENTIFIER);
+            expect(tokens.get(5).value).toBe('identifier2');
         });
     });
 });

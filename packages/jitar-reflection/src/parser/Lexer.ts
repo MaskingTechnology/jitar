@@ -177,7 +177,7 @@ export default class Lexer
         {
             const char = charList.current;
 
-            if (isLiteral(char) && char === identifier)
+            if (char === identifier && charList.previous !== '\\')
             {
                 break;
             }
