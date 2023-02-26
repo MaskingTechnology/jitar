@@ -171,6 +171,11 @@ The publications are a great way to learn more about jitar. They provide a lot o
 
 We welcome contributions to Jitar. Please read our [contributing guidelines](CONTRIBUTING.md) for more information.
 
+A special thanks to everyone who has contributed to Jitar so far!
+
+- [Yusuf-YENICERI](https://github.com/Yusuf-YENICERI)
+- [Tawakal](https://github.com/tawakal)
+
 ## Roadmap
 
 We are working hard towards a stable 1.0 release. Details can be found in our [roadmap](ROADMAP.md) document.
