@@ -125,7 +125,7 @@ const CLASSES =
     async *generator2() { yield 1; }
 
     static async *generator3() { yield 1; }
-}`,
+}`
 }
 
 const MODULES =

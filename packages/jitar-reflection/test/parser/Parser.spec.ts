@@ -1,14 +1,14 @@
 
 import { describe, expect, it } from 'vitest';
 
-import ReflectionExpression from '../../src/models/ReflectionExpression';
 import ReflectionArray from '../../src/models/ReflectionArray';
+import ReflectionExpression from '../../src/models/ReflectionExpression';
+import ReflectionField from '../../src/models/ReflectionField';
+import ReflectionGenerator from '../../src/models/ReflectionGenerator';
 import ReflectionObject from '../../src/models/ReflectionObject';
 import Parser from '../../src/parser/Parser';
 
 import { VALUES, IMPORTS, EXPORTS, FIELDS, FUNCTIONS, CLASSES, MODULES } from '../_fixtures/parser/Parser.fixture';
-import ReflectionField from '../../src/models/ReflectionField';
-import ReflectionGenerator from '../../src/models/ReflectionGenerator';
 
 const parser = new Parser();
 
