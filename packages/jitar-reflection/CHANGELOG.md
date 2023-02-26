@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 0.3.5 (February 26, 2023)
+## 0.3.6 (February 26, 2023)
 
 Fixes:
 - \[[`7e983f5`](https://github.com/MaskingTechnology/jitar/commit/7e983f5)] Added missing parsing options [petermasking](https://github.com/MaskingTechnology/jitar/pull/180)

@@ -1,7 +1,7 @@
 
 # Changelog
 
-## 0.3.5 (February 26, 2023)
+## 0.3.6 (February 26, 2023)
 
 - Bump dependency for the latest version of jitar-reflection.
 
