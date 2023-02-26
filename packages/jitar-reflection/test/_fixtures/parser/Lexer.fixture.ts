@@ -2,7 +2,7 @@
 const CODE =
 {
     OPERATORS: `=====!=/=/!=`,
-    LITERALS: '`foo\\\`ter`"bar\\\"becue"\'baz\'',
+    LITERALS: '`foo\\`ter`"bar\\"becue"\'baz\'',
     KEYWORDS_IDENTIFIERS: 'class Foo function bar',
     WHITESPACE: `const identifier\n=\t"value" ;`,
     COMMENT_LINE: `const // This is a comment\nidentifier`,

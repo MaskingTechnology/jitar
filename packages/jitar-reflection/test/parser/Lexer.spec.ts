@@ -48,10 +48,10 @@ describe('parser/Lexer', () =>
             expect(tokens.size).toBe(3);
 
             expect(tokens.get(0).type).toBe(TokenType.LITERAL);
-            expect(tokens.get(0).value).toBe('`foo\\\`ter`');
+            expect(tokens.get(0).value).toBe('`foo\\`ter`');
 
             expect(tokens.get(1).type).toBe(TokenType.LITERAL);
-            expect(tokens.get(1).value).toBe('"bar\\\"becue"');
+            expect(tokens.get(1).value).toBe('"bar\\"becue"');
 
             expect(tokens.get(2).type).toBe(TokenType.LITERAL);
             expect(tokens.get(2).value).toBe("'baz'");
