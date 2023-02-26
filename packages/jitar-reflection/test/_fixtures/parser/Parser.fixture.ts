@@ -47,6 +47,8 @@ const FIELDS =
     ARRAY: "const array = [ 'value1', 'value2' ];",
     OBJECT: "const object = { key1: 'value1', key2: 'value2' };",
     REGEX: "const regex = /regex/g;",
+    DESTRUCTURING_ARRAY: "const [value1, value2] = array;",
+    DESTRUCTURING_OBJECT: "const {key1, key2} = object;",
 }
 
 const FUNCTIONS =
@@ -123,7 +125,7 @@ const CLASSES =
     async *generator2() { yield 1; }
 
     static async *generator3() { yield 1; }
-}`,
+}`
 }
 
 const MODULES =

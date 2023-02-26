@@ -108,4 +108,9 @@ export default class ReflectionScope
     {
         return this.getClass(name) !== undefined;
     }
+
+    toString(): string
+    {
+        return this.#members.map(member => member.toString()).join('\n');
+    }
 }

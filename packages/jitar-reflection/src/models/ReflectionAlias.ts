@@ -13,4 +13,9 @@ export default class ReflectionAlias
     get name(): string { return this.#name; }
 
     get as(): string { return this.#as; }
+
+    toString(): string
+    {
+        return `${this.#name} as ${this.#as}`;
+    }
 }

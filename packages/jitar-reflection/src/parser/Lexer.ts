@@ -124,6 +124,7 @@ export default class Lexer
         const isOther = isEmpty(char)
                      || isWhitespace(char)
                      || isOperator(char)
+                     || isLiteral(char)
                      || isDivider(char)
                      || isGroup(char)
                      || isScope(char)
@@ -176,7 +177,7 @@ export default class Lexer
         {
             const char = charList.current;
 
-            if (isLiteral(char) && char === identifier)
+            if (char === identifier && charList.previous !== '\\')
             {
                 break;
             }

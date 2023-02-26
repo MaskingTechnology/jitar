@@ -14,4 +14,9 @@ export default class ReflectionField extends ReflectionMember
     }
 
     get value() { return this.#value; }
+
+    toString(): string
+    {
+        return `${this.name}${this.value ? ' = ' + this.value.toString() : ''}`;
+    }
 }

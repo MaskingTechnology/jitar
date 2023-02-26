@@ -1,14 +1,14 @@
 
 import { describe, expect, it } from 'vitest';
 
-import ReflectionExpression from '../../src/models/ReflectionExpression';
 import ReflectionArray from '../../src/models/ReflectionArray';
+import ReflectionExpression from '../../src/models/ReflectionExpression';
+import ReflectionField from '../../src/models/ReflectionField';
+import ReflectionGenerator from '../../src/models/ReflectionGenerator';
 import ReflectionObject from '../../src/models/ReflectionObject';
 import Parser from '../../src/parser/Parser';
 
 import { VALUES, IMPORTS, EXPORTS, FIELDS, FUNCTIONS, CLASSES, MODULES } from '../_fixtures/parser/Parser.fixture';
-import ReflectionField from '../../src/models/ReflectionField';
-import ReflectionGenerator from '../../src/models/ReflectionGenerator';
 
 const parser = new Parser();
 
@@ -358,6 +358,24 @@ describe('parser/Parser', () =>
             expect(field.name).toBe('regex');
             expect(field.value).toBeInstanceOf(ReflectionExpression);
             expect(field.value?.definition).toBe("/ regex / g");
+        });
+
+        it('should parse a field that is destructuring an array', () =>
+        {
+            const field = parser.parseField(FIELDS.DESTRUCTURING_ARRAY);
+
+            expect(field.name).toBe('[ value1 , value2 ]');
+            expect(field.value).toBeInstanceOf(ReflectionExpression);
+            expect(field.value?.definition).toBe("array");
+        });
+
+        it('should parse a field that is destructuring an object', () =>
+        {
+            const field = parser.parseField(FIELDS.DESTRUCTURING_OBJECT);
+
+            expect(field.name).toBe('{ key1 , key2 }');
+            expect(field.value).toBeInstanceOf(ReflectionExpression);
+            expect(field.value?.definition).toBe("object");
         });
     });
 

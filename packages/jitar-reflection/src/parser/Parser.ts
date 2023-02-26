@@ -3,7 +3,7 @@ import Lexer from './Lexer.js';
 import Token from './Token.js';
 import TokenList from './TokenList.js';
 
-import { Divider } from './definitions/Divider.js';
+import { Divider, isDivider } from './definitions/Divider.js';
 import { Group } from './definitions/Group.js';
 import { Keyword, isDeclaration, isKeyword } from './definitions/Keyword.js';
 import { List } from './definitions/List.js';
@@ -212,8 +212,13 @@ export default class Parser
             // Regular expression or logical not
             return this.#parseExpression(tokenList);
         }
-        else if (token.hasValue(Divider.TERMINATOR) || token.hasValue(Divider.SEPARATOR))
+        else if (isDivider(token.value))
         {
+            // Use cases:
+            // - Terminator as end of statement
+            // - Separator as multi declaration
+            // - Scope as ternary else expression
+
             tokenList.step(); // Read away the divider
 
             return undefined;
@@ -440,11 +445,27 @@ export default class Parser
     #parseDeclaration(tokenList: TokenList, isStatic: boolean): ReflectionMember
     {
         let token = tokenList.current;
+        let name = ANONYMOUS_IDENTIFIER;
+        let isPrivate = false;
 
-        const isPrivate = token.value.startsWith(PRIVATE_INDICATOR);
-        const name = isPrivate ? token.value.substring(1) : token.value;
-
-        token = tokenList.step(); // Read away the field name
+        if (token.hasValue(List.OPEN))
+        {
+            // Array destructuring
+            name = this.#parseBlock(tokenList, List.OPEN, List.CLOSE);
+            token = tokenList.current;
+        }
+        else if (token.hasValue(Scope.OPEN))
+        {
+            // Object destructuring
+            name = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
+            token = tokenList.current;
+        }
+        else
+        {
+            isPrivate = token.value.startsWith(PRIVATE_INDICATOR);
+            name = isPrivate ? token.value.substring(1) : token.value;
+            token = tokenList.step(); // Read away the field name
+        }
 
         let value = undefined;
 
@@ -828,7 +849,7 @@ export default class Parser
 
     #atEndOfStatement(token: Token): boolean
     {
-        return [Divider.SEPARATOR, Divider.TERMINATOR].includes(token.value)
+        return [Divider.TERMINATOR, Divider.SEPARATOR].includes(token.value)
             || [List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value)
             || isKeyword(token.value);
     }

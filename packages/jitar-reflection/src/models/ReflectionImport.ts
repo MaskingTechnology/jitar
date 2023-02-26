@@ -18,4 +18,9 @@ export default class ReflectionImport extends ReflectionMember
     get members() { return this.#members; }
 
     get from() { return this.#from; }
+
+    toString(): string
+    {
+        return `import { ${this.#members.map(member => member.toString()).join(', ')} } from '${this.#from}';`;
+    }
 }
