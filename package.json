@@ -39,7 +39,6 @@
         "@types/fs-extra": "^11.0.1",
         "@types/mime-types": "^2.1.1",
         "@types/yargs": "^17.0.13",
-        "@types/node": "^18.11.15",
         "@vitest/coverage-c8": "^0.28.5",
         "eslint": "^8.34.0",
         "vitest": "^0.28.5",
