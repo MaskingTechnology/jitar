@@ -97,7 +97,7 @@ describe('parser/Parser', () =>
             expect(imported.from).toBe("'module'");
 
             const member = imported.members[0];
-            expect(member.name).toBe('default');
+            expect(member.name).toBe('*');
             expect(member.as).toBe('name');
         });
 

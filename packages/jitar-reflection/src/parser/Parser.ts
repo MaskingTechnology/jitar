@@ -273,7 +273,9 @@ export default class Parser
 
         if (token.hasValue(Scope.OPEN) === false)
         {
-            const name = DEFAULT_IDENTIFIER;
+            // Keep the * indicator, otherwise use the default identifier
+            const name = token.hasValue(Operator.MULTIPLY) ? Operator.MULTIPLY : DEFAULT_IDENTIFIER;
+            
             let as = token.value;
 
             token = tokenList.step(); // Read away the name

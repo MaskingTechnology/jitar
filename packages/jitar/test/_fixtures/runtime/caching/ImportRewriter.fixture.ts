@@ -8,7 +8,7 @@ import { component1, component2 } from '../path/to/components.js';
 const noSystemImportsResult = noSystemImports;
 
 const hasSystemImports =
-    `import fs from 'fs';
+    `import * as fs from 'fs';
 import component from 'http';
 import { component1, component2 } from 'https';
 `;
@@ -16,7 +16,7 @@ import { component1, component2 } from 'https';
 const hasSystemImportsResult =
     `import { getDependency } from "/jitar/hooks.js";
 const fs = await getDependency('fs');
-const component = await getDependency('http');
+const { default: component } = await getDependency('http');
 const { component1, component2 } = await getDependency('https');
 `;
 
@@ -41,7 +41,7 @@ import { runProcedure } from 'jitar';
 const hasMixedImportsResult =
     `import { getDependency } from "/jitar/hooks.js";
 import component from './path/to/component.js';
-const os = await getDependency('os');
+const { default: os } = await getDependency('os');
 import { runProcedure } from "/jitar/hooks.js";
 `;
 
@@ -62,7 +62,7 @@ import { runProcedure } from 'jitar';
 
 const hasImportsAndContentResult =
     `import { getDependency } from "/jitar/hooks.js";
-const os = await getDependency('os');
+const { default: os } = await getDependency('os');
 
 export default function test() {}
 

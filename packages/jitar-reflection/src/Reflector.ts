@@ -3,8 +3,10 @@ import Parser from './parser/Parser.js';
 
 import ReflectionClass from './models/ReflectionClass.js';
 import ReflectionExpression from './models/ReflectionExpression.js';
+import ReflectionExport from './models/ReflectionExport.js';
 import ReflectionField from './models/ReflectionField.js';
 import ReflectionFunction from './models/ReflectionFunction.js';
+import ReflectionImport from './models/ReflectionImport.js';
 import ReflectionModule from './models/ReflectionModule.js';
 import ReflectionScope from './models/ReflectionScope.js';
 
@@ -35,6 +37,16 @@ export default class Reflector
     parseField(code: string): ReflectionField
     {
         return this.#parser.parseField(code);
+    }
+
+    parseImport(code: string): ReflectionImport
+    {
+        return this.#parser.parseImport(code);
+    }
+
+    parseExport(code: string): ReflectionExport
+    {
+        return this.#parser.parseExport(code);
     }
 
     fromModule(module: object, inherit = false): ReflectionModule
