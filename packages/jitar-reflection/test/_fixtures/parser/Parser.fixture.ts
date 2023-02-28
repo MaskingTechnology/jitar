@@ -42,7 +42,7 @@ const FIELDS =
     CONST: "const name = 'const';",
     LET: "let name = 'let';",
     VAR: "var name = 'var';",
-    DECLARATIONS: "let name1, name2, name3;",
+    DECLARATIONS: "let name1 = (1 + 2) * 3, name2, name3 = 'foo';",
     EXPRESSION: `const number = new Number(Math.ceil(Math.random()) + 10).toString();`,
     ARRAY: "const array = [ 'value1', 'value2' ];",
     OBJECT: "const object = { key1: 'value1', key2: 'value2' };",

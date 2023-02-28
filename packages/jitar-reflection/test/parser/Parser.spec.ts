@@ -321,7 +321,8 @@ describe('parser/Parser', () =>
             const field = parser.parseField(FIELDS.DECLARATIONS);
 
             expect(field.name).toBe('name1');
-            expect(field.value).toBe(undefined);
+            expect(field.value).toBeInstanceOf(ReflectionExpression);
+            expect(field.value?.definition).toBe('( 1 + 2 ) * 3');
         });
 
         it('should parse a field with an expression', () =>
@@ -351,13 +352,13 @@ describe('parser/Parser', () =>
             expect(field.value?.definition).toBe("{ key1 : 'value1' , key2 : 'value2' }");
         });
 
-        it('should parse a field with an regex value', () =>
+        it('should parse a field with a regex value', () =>
         {
             const field = parser.parseField(FIELDS.REGEX);
 
             expect(field.name).toBe('regex');
             expect(field.value).toBeInstanceOf(ReflectionExpression);
-            expect(field.value?.definition).toBe("/ regex / g");
+            expect(field.value?.definition).toBe("/regex/g");
         });
 
         it('should parse a field that is destructuring an array', () =>
