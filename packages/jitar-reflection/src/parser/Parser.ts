@@ -481,7 +481,8 @@ export default class Parser
 
         if (token.hasValue(Operator.ASSIGN))
         {
-            token = tokenList.step(); // Read away the assignment operator
+            tokenList.step(); // Read away the assignment operator
+            
             value = this.#parseNext(tokenList, false);
             token = tokenList.current;
         }
