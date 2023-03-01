@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 0.3.7 (February 26, 2023)
+
+Fixes:
+- \[[`b9c9db3`](https://github.com/MaskingTechnology/jitar/commit/b9c9db3)] Fixed importing commonJS modules [petermasking](https://github.com/MaskingTechnology/jitar/pull/182)
+
 ## 0.3.6 (February 26, 2023)
 
 - Bump dependency for the latest version of jitar-reflection.
