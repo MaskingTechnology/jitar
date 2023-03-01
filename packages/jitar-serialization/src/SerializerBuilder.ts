@@ -1,20 +1,23 @@
 
 import Serializer from './Serializer.js';
-import ClassLoader from './interfaces/ClassLoader.js';
-import ObjectSerializer from './serializers/ObjectSerializer.js';
+import ArrayBufferSerializer from './serializers/ArrayBufferSerializer.js';
+import ArraySerializer from './serializers/ArraySerializer.js';
 import ClassSerializer from './serializers/ClassSerializer.js';
 import DateSerializer from './serializers/DateSerializer.js';
-import SetSerializer from './serializers/SetSerializer.js';
-import MapSerializer from './serializers/MapSerializer.js';
-import ArraySerializer from './serializers/ArraySerializer.js';
-import ArrayBufferSerializer from './serializers/ArrayBufferSerializer.js';
 import ErrorSerializer from './serializers/ErrorSerializer.js';
+import MapSerializer from './serializers/MapSerializer.js';
+import ObjectSerializer from './serializers/ObjectSerializer.js';
+import PrimitiveSerializer from './serializers/PrimitiveSerializer.js';
+import SetSerializer from './serializers/SetSerializer.js';
+
+import ClassLoader from './interfaces/ClassLoader.js';
 
 export default class SerializerBuilder
 {
     public static build(loader: ClassLoader): Serializer
     {
         const serializer = new Serializer();
+        serializer.addSerializer(new PrimitiveSerializer());
         serializer.addSerializer(new ObjectSerializer());
         serializer.addSerializer(new ClassSerializer(loader));
         serializer.addSerializer(new ErrorSerializer(loader));
