@@ -6,14 +6,17 @@ import TokenList from './TokenList.js';
 import { Comment, isComment } from './definitions/Comment.js';
 import { isDivider } from './definitions/Divider.js';
 import { isEmpty } from './definitions/Empty.js';
-import { isGroup } from './definitions/Group.js';
+import { Group, isGroup } from './definitions/Group.js';
 import { isKeyword } from './definitions/Keyword.js';
-import { isList } from './definitions/List.js';
+import { List, isList } from './definitions/List.js';
 import { isLiteral } from './definitions/Literal.js';
-import { isOperator } from './definitions/Operator.js';
+import { isOperator, Operator } from './definitions/Operator.js';
+import { Punctuation } from './definitions/Punctuation.js';
 import { isScope } from './definitions/Scope.js';
 import { TokenType } from './definitions/TokenType.js';
 import { Whitespace, isWhitespace } from './definitions/Whitespace.js';
+
+const ESCAPE_CHAR = '\\';
 
 export default class Lexer
 {
@@ -22,21 +25,23 @@ export default class Lexer
         const charList = new CharList(code);
         const tokens: Token[] = [];
 
+        let last: Token | undefined = undefined;
+
         while (charList.notAtEnd())
         {
-            const token = this.#getNextToken(charList);
+            const token = this.#getNextToken(charList, last);
 
             if (token === undefined)
             {
                 break;
             }
-            else if (omitWhitespace && token.type === TokenType.WHITESPACE)
+            else if (omitWhitespace && token.isType(TokenType.WHITESPACE))
             {
                 charList.step(); // Skip the whitespace
 
                 continue;
             }
-            else if (omitComments && token.type === TokenType.COMMENT)
+            else if (omitComments && token.isType(TokenType.COMMENT))
             {
                 charList.step(); // Skip the comment
 
@@ -44,14 +49,27 @@ export default class Lexer
             }
 
             tokens.push(token);
-            
+
+            if (this.#isCodeToken(token))
+            {
+                // We want to keep the last token that is an actual part of the code.
+                // This is used to determine if a regex is a division or not.
+                
+                last = token;
+            }
+
             charList.step();
         }
 
         return new TokenList(tokens);
     }
 
-    #getNextToken(charList: CharList): Token | undefined
+    #isCodeToken(token: Token): boolean
+    {
+        return [TokenType.WHITESPACE, TokenType.COMMENT].includes(token.type) === false;
+    }
+
+    #getNextToken(charList: CharList, lastToken: Token | undefined): Token | undefined
     {
         const char = charList.current;
         const start = charList.position;
@@ -68,6 +86,13 @@ export default class Lexer
             const end = charList.position;
 
             return new Token(TokenType.COMMENT, value, start, end);
+        }
+        if (this.#startsRegex(char, lastToken))
+        {
+            const value = this.#readRegex(charList);
+            const end = charList.position;
+
+            return new Token(TokenType.REGEX, value, start, end);
         }
         else if (isLiteral(char))
         {
@@ -119,29 +144,18 @@ export default class Lexer
         return new Token(type, value, start, end);
     }
 
-    #isIdentifier(char: string): boolean
-    {
-        const isOther = isEmpty(char)
-                     || isWhitespace(char)
-                     || isOperator(char)
-                     || isLiteral(char)
-                     || isDivider(char)
-                     || isGroup(char)
-                     || isScope(char)
-                     || isList(char);
-
-        return isOther === false;
-    }
-
     #readComment(charList: CharList): string
     {
+        // Comments are parsed including the start (and optional end) characters.
+        // This makes it clear what type of comment it is.
+
         const identifier = charList.current + charList.next;
         const isMulti = identifier === Comment.MULTI_START;
         const terminator = isMulti ? Comment.MULTI_END : Whitespace.NEWLINE;
 
-        charList.step(2);
-
         let value = isMulti ? Comment.MULTI_START : Comment.SINGLE;
+
+        charList.step(2);
 
         while (charList.notAtEnd())
         {
@@ -160,16 +174,83 @@ export default class Lexer
             charList.step();
         }
 
-        return isMulti
-            ? value + Comment.MULTI_END
-            : value .trim();
+        return isMulti ? value + Comment.MULTI_END : value.trim();
+    }
+
+    #startsRegex(char: string, lastToken: Token | undefined): boolean
+    {
+        // We 'parse' a regex in the lexer to avoid conflicts with literal values.
+        // For example, the regex /['"]/g will be parsed as an incorrect literal.
+        // This works great for now, but might change in the future if needed.
+
+        if (char !== Operator.DIVIDE)
+        {
+            return false;
+        }
+        else if (lastToken === undefined)
+        {
+            // The code starts with a regex.
+            return true;
+        }
+
+        // A regex can only be preceded by an operator, divider, keyword or placed in a group / list.
+        return [TokenType.OPERATOR, TokenType.DIVIDER, TokenType.KEYWORD].includes(lastToken.type)
+            || [Group.OPEN, List.OPEN].includes(lastToken.value);
+    }
+
+    #endsRegex(char: string): boolean
+    {
+        // A regex can only be followed by an identifier.
+        // The dot is added to this situation because we treat it as an identifier.
+        // This simplifies the whole parsing process, but is important here.
+
+        return isWhitespace(char)
+            || char == Punctuation.DOT
+            || this.#isIdentifier(char) === false;
+    }
+
+    #readRegex(charList: CharList): string
+    {
+        // A regex is parsed including the start character.
+
+        let value = charList.current;
+        let closed = false;
+
+        charList.step();
+
+        while (charList.notAtEnd())
+        {
+            const current = charList.current;
+            const previous = charList.previous;
+
+            if (current === Operator.DIVIDE && previous !== ESCAPE_CHAR)
+            {
+                closed = true;
+            }
+            else if (closed === true && this.#endsRegex(current))
+            {
+                charList.stepBack();
+
+                break;
+            }
+
+            value += current;
+
+            charList.step();
+        }
+
+        return value;
     }
 
     #readLiteral(charList: CharList): string
     {
+        // Literals are parsed including the start and end characters.
+        // This makes it clear what type of literal it is.
+
         const identifier = charList.current;
 
-        let value = '';
+        let value = identifier;
+        let escaped = false;
 
         charList.step();
 
@@ -177,9 +258,22 @@ export default class Lexer
         {
             const char = charList.current;
 
-            if (char === identifier && charList.previous !== '\\')
+            if (escaped === false)
             {
-                break;
+                if (char === identifier)
+                {
+                    value += char;
+
+                    break;
+                }
+                else if (char === ESCAPE_CHAR)
+                {
+                    escaped = true;
+                }
+            }
+            else
+            {
+                escaped = false;
             }
 
             value += char;
@@ -187,7 +281,24 @@ export default class Lexer
             charList.step();
         }
 
-        return `${identifier}${value}${identifier}`;
+        return value;
+    }
+
+    #isIdentifier(char: string): boolean
+    {
+        // Values like numbers, booleans, null, etc. are parsed as literals.
+        // This is because they don't have any meaning in the reflection context.
+
+        const isOther = isEmpty(char)
+                     || isWhitespace(char)
+                     || isOperator(char)
+                     || isLiteral(char)
+                     || isDivider(char)
+                     || isGroup(char)
+                     || isScope(char)
+                     || isList(char);
+
+        return isOther === false;
     }
 
     #readIdentifier(charList: CharList): string

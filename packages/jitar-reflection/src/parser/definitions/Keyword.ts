@@ -15,7 +15,8 @@ const Keyword =
     SET: 'set',
     EXTENDS: 'extends',
     STATIC: 'static',
-    ASYNC: 'async'
+    ASYNC: 'async',
+    RETURN: 'return',
     // Other keywords are not needed in the parse
     // process and must be treated as identifiers.
 };

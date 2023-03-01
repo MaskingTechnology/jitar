@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import { Divider } from '../../src/parser/definitions/Divider';
 import { Group } from '../../src/parser/definitions/Group';
+import { Keyword } from '../../src/parser/definitions/Keyword';
 import { List } from '../../src/parser/definitions/List';
 import { Operator } from '../../src/parser/definitions/Operator';
 import { Scope } from '../../src/parser/definitions/Scope';
@@ -33,10 +34,10 @@ describe('parser/Lexer', () =>
             expect(tokens.get(2).value).toBe(Operator.NOT_EQUAL);
 
             expect(tokens.get(3).type).toBe(TokenType.OPERATOR);
-            expect(tokens.get(3).value).toBe(Operator.ASSIGN_DIVIDE);
+            expect(tokens.get(3).value).toBe(Operator.ASSIGN_ADD);
 
             expect(tokens.get(4).type).toBe(TokenType.OPERATOR);
-            expect(tokens.get(4).value).toBe(Operator.DIVIDE);
+            expect(tokens.get(4).value).toBe(Operator.MULTIPLY);
 
             expect(tokens.get(5).type).toBe(TokenType.OPERATOR);
             expect(tokens.get(5).value).toBe(Operator.NOT_EQUAL);
@@ -240,13 +241,118 @@ describe('parser/Lexer', () =>
             expect(tokens.get(16).value).toBe(Divider.TERMINATOR);
         });
 
+        it('should tokenize a regex statement', () =>
+        {
+            const tokens = lexer.tokenize(CODE.REGEX_STATEMENT);
+            expect(tokens.size).toBe(8);
+
+            expect(tokens.get(0).type).toBe(TokenType.KEYWORD);
+            expect(tokens.get(0).value).toBe(Keyword.CONST);
+
+            expect(tokens.get(1).type).toBe(TokenType.IDENTIFIER);
+            expect(tokens.get(1).value).toBe('regex');
+
+            expect(tokens.get(2).type).toBe(TokenType.OPERATOR);
+            expect(tokens.get(2).value).toBe(Operator.ASSIGN);
+
+            expect(tokens.get(3).type).toBe(TokenType.REGEX);
+            expect(tokens.get(3).value).toBe(`/[\\"]['"]/g`);
+
+            expect(tokens.get(4).type).toBe(TokenType.IDENTIFIER);
+            expect(tokens.get(4).value).toBe('.test');
+
+            expect(tokens.get(5).type).toBe(TokenType.GROUP);
+            expect(tokens.get(5).value).toBe(Group.OPEN);
+
+            expect(tokens.get(6).type).toBe(TokenType.LITERAL);
+            expect(tokens.get(6).value).toBe("'foo'");
+
+            expect(tokens.get(7).type).toBe(TokenType.GROUP);
+            expect(tokens.get(7).value).toBe(Group.CLOSE);
+        });
+
+        it('should tokenize a regex array', () =>
+        {
+            const tokens = lexer.tokenize(CODE.REGEX_ARRAY);
+            expect(tokens.size).toBe(5);
+
+            expect(tokens.get(0).type).toBe(TokenType.LIST);
+            expect(tokens.get(0).value).toBe(List.OPEN);
+
+            expect(tokens.get(1).type).toBe(TokenType.REGEX);
+            expect(tokens.get(1).value).toBe(`/[\\"]['"]/g`);
+
+            expect(tokens.get(2).type).toBe(TokenType.DIVIDER);
+            expect(tokens.get(2).value).toBe(Divider.SEPARATOR);
+
+            expect(tokens.get(3).type).toBe(TokenType.REGEX);
+            expect(tokens.get(3).value).toBe(`/Windows (?:NT|Phone) ([0-9.]+)/`);
+
+            expect(tokens.get(4).type).toBe(TokenType.LIST);
+            expect(tokens.get(4).value).toBe(List.CLOSE);
+        });
+
+        it('should tokenize a regex object', () =>
+        {
+            const tokens = lexer.tokenize(CODE.REGEX_OBJECT);
+            expect(tokens.size).toBe(5);
+
+            expect(tokens.get(0).type).toBe(TokenType.SCOPE);
+            expect(tokens.get(0).value).toBe(Scope.OPEN);
+
+            expect(tokens.get(1).type).toBe(TokenType.IDENTIFIER);
+            expect(tokens.get(1).value).toBe('test');
+
+            expect(tokens.get(2).type).toBe(TokenType.DIVIDER);
+            expect(tokens.get(2).value).toBe(Divider.SCOPE);
+
+            expect(tokens.get(3).type).toBe(TokenType.REGEX);
+            expect(tokens.get(3).value).toBe(`/[\\"]['"]/g`);
+
+            expect(tokens.get(4).type).toBe(TokenType.SCOPE);
+            expect(tokens.get(4).value).toBe(Scope.CLOSE);
+        });
+
+        it('should tokenize a regex result', () =>
+        {
+            const tokens = lexer.tokenize(CODE.REGEX_RESULT);
+            expect(tokens.size).toBe(3);
+
+            expect(tokens.get(0).type).toBe(TokenType.KEYWORD);
+            expect(tokens.get(0).value).toBe(Keyword.RETURN);
+
+            expect(tokens.get(1).type).toBe(TokenType.REGEX);
+            expect(tokens.get(1).value).toBe(`/[\\"]['"]/g`);
+
+            expect(tokens.get(2).type).toBe(TokenType.DIVIDER);
+            expect(tokens.get(2).value).toBe(Divider.TERMINATOR);
+        });
+
+        it('should tokenize a regex argument', () =>
+        {
+            const tokens = lexer.tokenize(CODE.REGEX_ARGUMENT);
+            expect(tokens.size).toBe(4);
+
+            expect(tokens.get(0).type).toBe(TokenType.IDENTIFIER);
+            expect(tokens.get(0).value).toBe('doSomething');
+
+            expect(tokens.get(1).type).toBe(TokenType.GROUP);
+            expect(tokens.get(1).value).toBe(Group.OPEN);
+
+            expect(tokens.get(2).type).toBe(TokenType.REGEX);
+            expect(tokens.get(2).value).toBe(`/[\\"]['"]/g`);
+
+            expect(tokens.get(3).type).toBe(TokenType.GROUP);
+            expect(tokens.get(3).value).toBe(Group.CLOSE);
+        });
+
         it('should tokenize minified code', () =>
         {
             const tokens = lexer.tokenize(CODE.MINIFIED);
             expect(tokens.size).toBe(6);
 
-            expect(tokens.get(0).type).toBe(TokenType.IDENTIFIER);
-            expect(tokens.get(0).value).toBe('return');
+            expect(tokens.get(0).type).toBe(TokenType.KEYWORD);
+            expect(tokens.get(0).value).toBe(Keyword.RETURN);
 
             expect(tokens.get(1).type).toBe(TokenType.LITERAL);
             expect(tokens.get(1).value).toBe('`foo`');

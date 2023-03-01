@@ -115,7 +115,7 @@ export default class Parser
     parseFunction(code: string): ReflectionFunction
     {
         const tokenList = this.#lexer.tokenize(code);
-        const model = this.#parseKeyword(tokenList);
+        const model = this.#parseMember(tokenList);
 
         if ((model instanceof ReflectionFunction) === false)
         {
@@ -128,7 +128,7 @@ export default class Parser
     parseClass(code: string): ReflectionClass
     {
         const tokenList = this.#lexer.tokenize(code);
-        const model = this.#parseKeyword(tokenList);
+        const model = this.#parseMember(tokenList);
 
         if ((model instanceof ReflectionClass) === false)
         {
@@ -185,8 +185,16 @@ export default class Parser
 
                 return this.#parseNext(tokenList, true);
             }
+            else if (token.hasValue(Keyword.RETURN))
+            {
+                return this.#parseExpression(tokenList);
+            }
 
-            return this.#parseKeyword(tokenList, isAsync);
+            return this.#parseMember(tokenList, isAsync);
+        }
+        else if (token.isType(TokenType.REGEX))
+        {
+            return this.#parseExpression(tokenList);
         }
         else if (token.hasValue(Group.OPEN))
         {
@@ -207,9 +215,9 @@ export default class Parser
         {
             return this.#parseArray(tokenList);
         }
-        else if (token.hasValue(Operator.DIVIDE) || token.hasValue(Operator.NOT))
+        else if (token.hasValue(Operator.NOT) || token.hasValue(Operator.SUBTRACT))
         {
-            // Regular expression or logical not
+            // Logical not or negative number
             return this.#parseExpression(tokenList);
         }
         else if (isDivider(token.value))
@@ -227,7 +235,7 @@ export default class Parser
         throw new UnexpectedToken(token.value, token.start);
     }
 
-    #parseKeyword(tokenList: TokenList, isAsync = false): ReflectionMember
+    #parseMember(tokenList: TokenList, isAsync = false): ReflectionMember
     {
         const token = tokenList.current;
 
@@ -250,10 +258,10 @@ export default class Parser
             case Keyword.VAR:
             case Keyword.LET:
             case Keyword.CONST:
-                return this.#parseDeclaration(tokenList, false);
+                return this.#parseDeclaration(tokenList, false, true);
 
             case Keyword.ASYNC:
-                return this.#parseKeyword(tokenList, true);
+                return this.#parseMember(tokenList, true);
 
             default:
                 throw new UnexpectedKeyword(token.value, token.start);
@@ -444,7 +452,7 @@ export default class Parser
         return new ReflectionAlias(name, as);
     }
 
-    #parseDeclaration(tokenList: TokenList, isStatic: boolean): ReflectionMember
+    #parseDeclaration(tokenList: TokenList, isStatic: boolean, parseMultiple = false): ReflectionMember
     {
         let token = tokenList.current;
         let name = ANONYMOUS_IDENTIFIER;
@@ -471,14 +479,29 @@ export default class Parser
 
         let value = undefined;
 
-        if (token.hasValue(Divider.TERMINATOR))
+        if (token.hasValue(Operator.ASSIGN))
         {
-            tokenList.step(); // Read away the terminator
+            tokenList.step(); // Read away the assignment operator
+            
+            value = this.#parseNext(tokenList, false);
+            token = tokenList.current;
         }
-        else if (token.hasValue(Operator.ASSIGN))
+
+        if (token !== undefined)
         {
-            token = tokenList.step(); // Read away the assignment operator
-            value = this.#parseNext(tokenList, false)
+            if (token.hasValue(Divider.TERMINATOR))
+            {
+                tokenList.step(); // Read away the terminator
+            }
+            else if (parseMultiple === true && token.hasValue(Divider.SEPARATOR))
+            {
+                // Parse await the next declaration without saving it.
+                // Note that this is a known limitation as described in the readme.
+    
+                tokenList.step(); // Read away the separator
+    
+                this.#parseDeclaration(tokenList, isStatic, true);
+            }
         }
 
         // Now we have the value we need to check if we need to recreate it
@@ -591,15 +614,9 @@ export default class Parser
 
             if (token.hasValue(Group.CLOSE))
             {
-                // No parameters
+                // End of the parameter list
 
                 tokenList.step(); // Read away the group close
-
-                break;
-            }
-            else if (tokenList.previous.hasValue(Group.CLOSE))
-            {
-                // End of the parameter list
 
                 break;
             }
@@ -784,18 +801,9 @@ export default class Parser
                 token = tokenList.step();
             }
 
-            if (token === undefined)
+            if (token === undefined || this.#atEndOfStatement(token))
             {
                 // End of the list
-
-                break;
-            }
-            else if (this.#atEndOfStatement(token))
-            {
-                if (isKeyword(token.value) === false)
-                {
-                    tokenList.step(); // Read away the end of statement
-                }
 
                 break;
             }
