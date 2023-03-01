@@ -115,7 +115,7 @@ export default class Parser
     parseFunction(code: string): ReflectionFunction
     {
         const tokenList = this.#lexer.tokenize(code);
-        const model = this.#parseKeyword(tokenList);
+        const model = this.#parseMember(tokenList);
 
         if ((model instanceof ReflectionFunction) === false)
         {
@@ -128,7 +128,7 @@ export default class Parser
     parseClass(code: string): ReflectionClass
     {
         const tokenList = this.#lexer.tokenize(code);
-        const model = this.#parseKeyword(tokenList);
+        const model = this.#parseMember(tokenList);
 
         if ((model instanceof ReflectionClass) === false)
         {
@@ -190,7 +190,7 @@ export default class Parser
                 return this.#parseExpression(tokenList);
             }
 
-            return this.#parseKeyword(tokenList, isAsync);
+            return this.#parseMember(tokenList, isAsync);
         }
         else if (token.isType(TokenType.REGEX))
         {
@@ -235,7 +235,7 @@ export default class Parser
         throw new UnexpectedToken(token.value, token.start);
     }
 
-    #parseKeyword(tokenList: TokenList, isAsync = false): ReflectionMember
+    #parseMember(tokenList: TokenList, isAsync = false): ReflectionMember
     {
         const token = tokenList.current;
 
@@ -261,7 +261,7 @@ export default class Parser
                 return this.#parseDeclaration(tokenList, false, true);
 
             case Keyword.ASYNC:
-                return this.#parseKeyword(tokenList, true);
+                return this.#parseMember(tokenList, true);
 
             default:
                 throw new UnexpectedKeyword(token.value, token.start);
