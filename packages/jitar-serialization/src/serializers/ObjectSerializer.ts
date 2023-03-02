@@ -14,10 +14,8 @@ export default class ObjectSerializer extends ValueSerializer
 
     canDeserialize(value: unknown): boolean
     {
-        const object = value as Serialized;
-
-        return object instanceof Object
-            && object.serialized !== true; 
+        return value instanceof Object
+            && value.constructor === Object;
     }
     
     async serialize(object: SerializableObject): Promise<SerializedObject>
