@@ -11,12 +11,9 @@ class MockClassLoader implements ClassLoader
 }
 
 const errorClass = new Error('hello');
-errorClass.stack = 'stacktrace';
-
-const serializedError = { serialized: true, name: 'Error', source: null, args: [], fields: { stack: 'stacktrace', message: 'hello' } };
+const otherClass = new Map();
 
 export {
     MockClassLoader,
-    errorClass,
-    serializedError
+    errorClass, otherClass
 }
