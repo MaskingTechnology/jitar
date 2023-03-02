@@ -10,29 +10,29 @@ const reflector = new Reflector();
 
 export default class ArrayBufferSerializer extends ValueSerializer
 {
-    canSerialize(data: unknown): boolean
+    canSerialize(value: unknown): boolean
     {
-        return (data instanceof Int8Array)
-            || (data instanceof Uint8Array)
-            || (data instanceof Uint8ClampedArray)
-            || (data instanceof Int16Array)
-            || (data instanceof Uint16Array)
-            || (data instanceof Int32Array)
-            || (data instanceof Uint32Array)
-            || (data instanceof Float32Array)
-            || (data instanceof Float64Array)
-            || (data instanceof BigInt64Array)
-            || (data instanceof BigUint64Array);
+        return (value instanceof Int8Array)
+            || (value instanceof Uint8Array)
+            || (value instanceof Uint8ClampedArray)
+            || (value instanceof Int16Array)
+            || (value instanceof Uint16Array)
+            || (value instanceof Int32Array)
+            || (value instanceof Uint32Array)
+            || (value instanceof Float32Array)
+            || (value instanceof Float64Array)
+            || (value instanceof BigInt64Array)
+            || (value instanceof BigUint64Array);
     }
 
-    canDeserialize(data: unknown): boolean
+    canDeserialize(value: unknown): boolean
     {
-        if ((data instanceof Object) === false)
+        if ((value instanceof Object) === false)
         {
             return false;
         }
         
-        const array = data as SerializedTypedArray;
+        const array = value as SerializedTypedArray;
 
         return array.serialized === true
             && array.name === 'TypedArray'
