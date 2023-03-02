@@ -13,7 +13,7 @@ const serializer = new TypedArraySerializer();
 
 describe('serializers/TypedArraySerializer', () =>
 {
-    describe('.canSerialize(data)', () =>
+    describe('.canSerialize(value)', () =>
     {
         it('should tell it can serialize an array buffer', () =>
         {
@@ -69,13 +69,13 @@ describe('serializers/TypedArraySerializer', () =>
     {
         it('should serialize an array buffer', async () =>
         {
-            const uint16 = await serializer.serialize(viewUint16);
-            const int8 = await serializer.serialize(viewInt8);
-            const bigInt64 = await serializer.serialize(viewBigInt64);
+            const resultUint16 = await serializer.serialize(viewUint16);
+            const resultInt8 = await serializer.serialize(viewInt8);
+            const resultBigInt64 = await serializer.serialize(viewBigInt64);
 
-            expect(uint16).toEqual(serializedViewUint16);
-            expect(int8).toEqual(serializedViewInt8);
-            expect(bigInt64).toEqual(serializedViewBigInt64);
+            expect(resultUint16).toEqual(serializedViewUint16);
+            expect(resultInt8).toEqual(serializedViewInt8);
+            expect(resultBigInt64).toEqual(serializedViewBigInt64);
         });
     });
 
@@ -83,13 +83,13 @@ describe('serializers/TypedArraySerializer', () =>
     {
         it('should deserialize an array buffer', async () =>
         {
-            const uint16 = await serializer.deserialize(serializedViewUint16);
-            const int8 = await serializer.deserialize(serializedViewInt8);
-            const bigInt64 = await serializer.deserialize(serializedViewBigInt64);
+            const resultUint16 = await serializer.deserialize(serializedViewUint16);
+            const resultInt8 = await serializer.deserialize(serializedViewInt8);
+            const resultBigInt64 = await serializer.deserialize(serializedViewBigInt64);
 
-            expect(uint16).toEqual(viewUint16);
-            expect(int8).toEqual(viewInt8);
-            expect(bigInt64).toEqual(viewBigInt64);
+            expect(resultUint16).toEqual(viewUint16);
+            expect(resultInt8).toEqual(viewInt8);
+            expect(resultBigInt64).toEqual(viewBigInt64);
         });
     });
 });

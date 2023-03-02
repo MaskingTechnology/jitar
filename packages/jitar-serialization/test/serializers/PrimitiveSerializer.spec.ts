@@ -65,17 +65,17 @@ describe('serializers/PrimitiveSerializer', () =>
     {
         it('should serialize a primitive', async () =>
         {
-            const serializedNumber = await serializer.serialize(numberValue);
-            const serializedBool = await serializer.serialize(boolValue);
-            const serializedString = await serializer.serialize(stringValue);
-            const serializedNull = await serializer.serialize(nullValue);
-            const serializedUndefined = await serializer.serialize(undefinedValue);
+            const resultNumber = await serializer.serialize(numberValue);
+            const resultBool = await serializer.serialize(boolValue);
+            const resultString = await serializer.serialize(stringValue);
+            const resultNull = await serializer.serialize(nullValue);
+            const resultUndefined = await serializer.serialize(undefinedValue);
 
-            expect(serializedNumber).toBe(numberValue);
-            expect(serializedBool).toBe(boolValue);
-            expect(serializedString).toBe(stringValue);
-            expect(serializedNull).toBe(nullValue);
-            expect(serializedUndefined).toBe(undefinedValue);
+            expect(resultNumber).toBe(numberValue);
+            expect(resultBool).toBe(boolValue);
+            expect(resultString).toBe(stringValue);
+            expect(resultNull).toBe(nullValue);
+            expect(resultUndefined).toBe(undefinedValue);
         });
     });
 
@@ -83,17 +83,17 @@ describe('serializers/PrimitiveSerializer', () =>
     {
         it('should deserialize a primitive', async () =>
         {
-            const deserializedNumber = await serializer.deserialize(numberValue);
-            const deserializedBool = await serializer.deserialize(boolValue);
-            const deserializedString = await serializer.deserialize(stringValue);
-            const deserializedNull = await serializer.deserialize(nullValue);
-            const deserializedUndefined = await serializer.deserialize(undefinedValue);
+            const resultNumber = await serializer.deserialize(numberValue);
+            const resultBool = await serializer.deserialize(boolValue);
+            const resultString = await serializer.deserialize(stringValue);
+            const resultNull = await serializer.deserialize(nullValue);
+            const resultUndefined = await serializer.deserialize(undefinedValue);
 
-            expect(deserializedNumber).toBe(numberValue);
-            expect(deserializedBool).toBe(boolValue);
-            expect(deserializedString).toBe(stringValue);
-            expect(deserializedNull).toBe(nullValue);
-            expect(deserializedUndefined).toBe(undefinedValue);
+            expect(resultNumber).toBe(numberValue);
+            expect(resultBool).toBe(boolValue);
+            expect(resultString).toBe(stringValue);
+            expect(resultNull).toBe(nullValue);
+            expect(resultUndefined).toBe(undefinedValue);
         });
     });
 });
