@@ -1,7 +1,7 @@
 
-import Serializer from "../../../src/Serializer";
-import PrimitiveSerializer from "../../../src/serializers/PrimitiveSerializer";
-import ObjectSerializer from "../../../src/serializers/ObjectSerializer";
+import Serializer from '../../../src/Serializer';
+import PrimitiveSerializer from '../../../src/serializers/PrimitiveSerializer';
+import ObjectSerializer from '../../../src/serializers/ObjectSerializer';
 
 const parent = new Serializer();
 parent.addSerializer(new ObjectSerializer());

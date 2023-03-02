@@ -1,7 +1,7 @@
 
-import Serializer from "../../../src/Serializer";
-import PrimitiveSerializer from "../../../src/serializers/PrimitiveSerializer";
-import SetSerializer from "../../../src/serializers/SetSerializer";
+import Serializer from '../../../src/Serializer';
+import PrimitiveSerializer from '../../../src/serializers/PrimitiveSerializer';
+import SetSerializer from '../../../src/serializers/SetSerializer';
 
 const parent = new Serializer();
 parent.addSerializer(new SetSerializer());
@@ -17,7 +17,7 @@ const serializedNestedSet = { serialized: true, name: 'Set', values: ['hello', {
 
 const nonObject = 42;
 const nonSet = new Map();
-const notSerialized = { name: 'Set', type: 'Set', bytes: [] };
+const notSerialized = { name: 'Set', bytes: [] };
 const wrongName = { serialized: true, name: 'Map', values: [] };
 const wrongValues = { serialized: true, name: 'Set', values: {} };
 
