@@ -14,7 +14,8 @@ export default class DateSerializer extends ValueSerializer
     {
         const date = value as SerializedDate;
         
-        return date.serialized === true
+        return date instanceof Object
+            && date.serialized === true
             && date.name === 'Date'
             && typeof date.value === 'string';
     }

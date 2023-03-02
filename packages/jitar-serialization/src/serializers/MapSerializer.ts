@@ -13,7 +13,8 @@ export default class MapSerializer extends ValueSerializer
     {
         const map = value as SerializedMap;
 
-        return map.serialized === true
+        return map instanceof Object
+            && map.serialized === true
             && map.name === 'Map'
             && map.entries instanceof Object
             && map.entries.keys instanceof Array

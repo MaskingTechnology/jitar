@@ -27,14 +27,10 @@ export default class ArrayBufferSerializer extends ValueSerializer
 
     canDeserialize(value: unknown): boolean
     {
-        if ((value instanceof Object) === false)
-        {
-            return false;
-        }
-        
         const array = value as SerializedTypedArray;
 
-        return array.serialized === true
+        return array instanceof Object
+            && array.serialized === true
             && array.name === 'TypedArray'
             && array.type in globalThis
             && array.bytes instanceof Array;  

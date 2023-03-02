@@ -34,7 +34,8 @@ export default class ClassSerializer extends ValueSerializer
     {
         const object = value as SerializedClass;
         
-        return object.serialized === true
+        return object instanceof Object
+            && object.serialized === true
             && typeof object.name === 'string'
             && object.args instanceof Array
             && object.fields instanceof Object;

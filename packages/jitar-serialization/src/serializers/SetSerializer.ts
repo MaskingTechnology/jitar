@@ -13,7 +13,8 @@ export default class SetSerializer extends ValueSerializer
     {
         const set = value as SerializedSet;
 
-        return set.serialized === true
+        return set instanceof Object
+            && set.serialized === true
             && set.name === 'Set'
             && set.values instanceof Array; 
     }
