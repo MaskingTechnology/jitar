@@ -1,4 +1,7 @@
 
+import Serializer from '../../../src/Serializer';
+import PrimitiveSerializer from '../../../src/serializers/PrimitiveSerializer';
+import ClassSerializer from '../../../src/serializers/ClassSerializer';
 import ClassLoader from '../../../src/interfaces/ClassLoader';
 import Loadable from '../../../src/types/Loadable';
 
@@ -82,6 +85,12 @@ class MockClassLoader implements ClassLoader
     }
 }
 
+const classLoader = new MockClassLoader();
+
+const parent = new Serializer();
+parent.addSerializer(new ClassSerializer(classLoader));
+parent.addSerializer(new PrimitiveSerializer());
+
 const dataClass = new Data();
 dataClass.a = 1;
 dataClass.b = true;
@@ -100,8 +109,17 @@ const serializedPrivateClass = { serialized: true, name: 'PrivateFieldClass', so
 const serializedInvalidClass = { serialized: true, name: 'Invalid', source: null, args: [], fields: {} };
 const serializedUnserializableClass = { serialized: true, name: 'Infinity', source: null, args: [], fields: {} };
 
+const nonObject = 42;
+const nonClassObject = new Object();
+const notSerialized = { name: 'Data', source: null, args: [], fields: {} };
+const invalidName = { serialized: true, name: 123, source: null, args: [], fields: {} };
+const invalidArgs = { serialized: true, name: 'Data', source: null, args: {}, fields: {} };
+const invalidFields = { serialized: true, name: 'Data', source: null, args: [], fields: [] };
+
 export {
-    Data, Constructed, Nested, PrivateFieldClass, MockClassLoader,
+    Data, Constructed, Nested, PrivateFieldClass,
+    parent, classLoader,
     dataClass, constructedClass, nestedClass, privateClass,
-    serializedDataClass, serializedConstructedClass, serializedNestedClass, serializedPrivateClass, serializedInvalidClass, serializedUnserializableClass
+    serializedDataClass, serializedConstructedClass, serializedNestedClass, serializedPrivateClass, serializedInvalidClass, serializedUnserializableClass,
+    nonObject, nonClassObject, notSerialized, invalidName, invalidArgs, invalidFields
 }

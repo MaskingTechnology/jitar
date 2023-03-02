@@ -25,9 +25,8 @@ export default class ClassSerializer extends ValueSerializer
 
     canSerialize(value: unknown): boolean
     {
-        return value instanceof Function
-            ? reflector.isClassObject(value)
-            : false;
+        return value instanceof Object
+            && reflector.isClassObject(value);
     }
 
     canDeserialize(value: unknown): boolean
@@ -38,10 +37,11 @@ export default class ClassSerializer extends ValueSerializer
             && object.serialized === true
             && typeof object.name === 'string'
             && object.args instanceof Array
-            && object.fields instanceof Object;
+            && object.fields instanceof Object
+            && object.fields.constructor === Object;
     }
 
-    async serialize(object: SerializableObject): Promise<SerializedClass>
+    async serialize(object: object): Promise<SerializedClass>
     {
         const clazz = reflector.getClass(object);
         const model = reflector.fromClass(clazz, true);
@@ -63,20 +63,17 @@ export default class ClassSerializer extends ValueSerializer
         return parameters.map(parameter => parameter.name);
     }
 
-    async #extractArguments(model: ReflectionClass, includeNames: string[], object: SerializableObject): Promise<unknown[]>
+    async #extractArguments(model: ReflectionClass, includeNames: string[], object: object): Promise<unknown[]>
     {
         const args: unknown[] = [];
 
         for (const name of includeNames)
         {
-            if (model.canRead(name) === false)
-            {
-                // Constructor parameters that can't be read make it impossible to reconstruct the object.
+            // Constructor parameters that can't be read make it impossible to fully reconstruct the object.
 
-                throw new Error(`Can't read parameter '${name}' of class '${model.name}'.`);
-            }
-
-            const objectValue = await this.serializeOther(object[name]);
+            const objectValue = model.canRead(name)
+                ? await this.serializeOther((object as FlexObject)[name])
+                : undefined;
             
             args.push(objectValue);
         }
@@ -84,7 +81,7 @@ export default class ClassSerializer extends ValueSerializer
         return args;
     }
 
-    async #extractFields(model: ReflectionClass, excludeNames: string[], object: SerializableObject): Promise<FlexObject>
+    async #extractFields(model: ReflectionClass, excludeNames: string[], object: object): Promise<FlexObject>
     {
         const fields: FlexObject = {};
 
@@ -99,7 +96,7 @@ export default class ClassSerializer extends ValueSerializer
                 continue;
             }
 
-            fields[name] = await this.serializeOther(object[name]);
+            fields[name] = await this.serializeOther((object as FlexObject)[name]);
         }
 
         return fields;
