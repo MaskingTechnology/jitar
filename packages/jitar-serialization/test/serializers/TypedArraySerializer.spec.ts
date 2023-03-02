@@ -6,7 +6,7 @@ import TypedArraySerializer from '../../src/serializers/TypedArraySerializer';
 import {
     viewUint16, viewInt8, viewBigInt64,
     serializedViewUint16, serializedViewInt8, serializedViewBigInt64,
-    nonObject, notSerialized, wrongName, wrongType, wrongBytes
+    nonObject, notSerialized, invalidName, invalidType, invalidBytes
 } from '../_fixtures/serializers/TypedArraySerializer.fixture';
 
 const serializer = new TypedArraySerializer();
@@ -53,15 +53,15 @@ describe('serializers/TypedArraySerializer', () =>
         {
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNotSerialized = serializer.canSerialize(notSerialized);
-            const supportsWrongName = serializer.canSerialize(wrongName);
-            const supportsWrongType = serializer.canSerialize(wrongType);
-            const supportsWrongBytes = serializer.canSerialize(wrongBytes);
+            const supportsinvalidName = serializer.canSerialize(invalidName);
+            const supportsinvalidType = serializer.canSerialize(invalidType);
+            const supportsinvalidBytes = serializer.canSerialize(invalidBytes);
 
             expect(supportsNonObject).toBe(false);
             expect(supportsNotSerialized).toBe(false);
-            expect(supportsWrongName).toBe(false);
-            expect(supportsWrongType).toBe(false);
-            expect(supportsWrongBytes).toBe(false);
+            expect(supportsinvalidName).toBe(false);
+            expect(supportsinvalidType).toBe(false);
+            expect(supportsinvalidBytes).toBe(false);
         });
     });
 

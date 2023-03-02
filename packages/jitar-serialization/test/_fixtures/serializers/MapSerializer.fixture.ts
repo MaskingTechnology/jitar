@@ -18,13 +18,13 @@ const serializedNestedMap = { serialized: true, name: 'Map', entries: { keys: ['
 const nonObject = 42;
 const nonMap = new Set();
 const notSerialized = { name: 'Map', entries: [], values: [] };
-const wrongName = { serialized: true, name: 'Set', entries: [], values: [] };
-const wrongKeys = { serialized: true, name: 'Map', entries: {}, values: [] };
-const wrongValues = { serialized: true, name: 'Map', entries: [], values: {} };
+const invalidName = { serialized: true, name: 'Set', entries: [], values: [] };
+const invalidKeys = { serialized: true, name: 'Map', entries: {}, values: [] };
+const invalidValues = { serialized: true, name: 'Map', entries: [], values: {} };
 
 export {
     parent,
     emptyMap, mixedMap, nestedMap,
     serializedEmptyMap, serializedMixedMap, serializedNestedMap,
-    nonObject, nonMap, notSerialized, wrongName, wrongKeys, wrongValues
+    nonObject, nonMap, notSerialized, invalidName, invalidKeys, invalidValues
 }

@@ -7,7 +7,7 @@ import DateSerializer from '../../src/serializers/DateSerializer';
 import {
     fixedDate,
     serializedFixedDate,
-    nonObject, nonDate, notSerialized, wrongName, wrongDateValue, invalidDateString
+    nonObject, nonDate, notSerialized, invalidName, invalidDateValue, invalidDateString
 } from '../_fixtures/serializers/DateSerializer.fixture';
 
 const serializer = new DateSerializer();
@@ -46,13 +46,13 @@ describe('serializers/DateSerializer', () =>
         {
             const supportsNonObject = serializer.canDeserialize(nonObject);
             const supportsNotSerialized = serializer.canDeserialize(notSerialized);
-            const supportsWrongName = serializer.canDeserialize(wrongName);
-            const supportsWrongDateValue = serializer.canDeserialize(wrongDateValue);
+            const supportsinvalidName = serializer.canDeserialize(invalidName);
+            const supportsinvalidDateValue = serializer.canDeserialize(invalidDateValue);
 
             expect(supportsNonObject).toBe(false);
             expect(supportsNotSerialized).toBe(false);
-            expect(supportsWrongName).toBe(false);
-            expect(supportsWrongDateValue).toBe(false);
+            expect(supportsinvalidName).toBe(false);
+            expect(supportsinvalidDateValue).toBe(false);
         });
     });
 

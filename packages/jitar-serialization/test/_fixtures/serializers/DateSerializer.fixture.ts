@@ -6,12 +6,12 @@ const serializedFixedDate = { serialized: true, name: 'Date', value: '2021-01-01
 const nonObject = 42;
 const nonDate = new Map();
 const notSerialized = { name: 'Date', bytes: [] };
-const wrongName = { serialized: true, name: 'Map', value: '2021-01-01T00:00:00.000Z' };
-const wrongDateValue = { serialized: true, name: 'Date', value: true };
+const invalidName = { serialized: true, name: 'Map', value: '2021-01-01T00:00:00.000Z' };
+const invalidDateValue = { serialized: true, name: 'Date', value: true };
 const invalidDateString = { serialized: true, name: 'Date', value: 'hello' };
 
 export {
     fixedDate,
     serializedFixedDate,
-    nonObject, nonDate, notSerialized, wrongName, wrongDateValue, invalidDateString
+    nonObject, nonDate, notSerialized, invalidName, invalidDateValue, invalidDateString
 }

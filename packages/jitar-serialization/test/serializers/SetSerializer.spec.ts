@@ -7,7 +7,7 @@ import {
     parent,
     emptySet, mixedSet, nestedSet,
     serializedEmptySet, serializedMixedSet, serializedNestedSet,
-    nonObject, nonSet, notSerialized, wrongName, wrongValues
+    nonObject, nonSet, notSerialized, invalidName, invalidValues
 } from '../_fixtures/serializers/SetSerializer.fixture';
 
 const serializer = new SetSerializer();
@@ -47,13 +47,13 @@ describe('serializers/SetSerializer', () =>
         {
             const supportsNonObject = serializer.canDeserialize(nonObject);
             const supportsNotSerialized = serializer.canDeserialize(notSerialized);
-            const supportsWrongName = serializer.canDeserialize(wrongName);
-            const supportsWrongValues = serializer.canDeserialize(wrongValues);
+            const supportsinvalidName = serializer.canDeserialize(invalidName);
+            const supportsinvalidValues = serializer.canDeserialize(invalidValues);
 
             expect(supportsNonObject).toBe(false);
             expect(supportsNotSerialized).toBe(false);
-            expect(supportsWrongName).toBe(false);
-            expect(supportsWrongValues).toBe(false);
+            expect(supportsinvalidName).toBe(false);
+            expect(supportsinvalidValues).toBe(false);
         });
     });
 

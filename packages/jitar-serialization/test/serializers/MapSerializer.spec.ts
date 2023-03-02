@@ -7,7 +7,7 @@ import {
     parent,
     emptyMap, mixedMap, nestedMap,
     serializedEmptyMap, serializedMixedMap, serializedNestedMap,
-    nonObject, nonMap, notSerialized, wrongName, wrongKeys, wrongValues
+    nonObject, nonMap, notSerialized, invalidName, invalidKeys, invalidValues
 } from '../_fixtures/serializers/MapSerializer.fixture';
 
 const serializer = new MapSerializer();
@@ -47,15 +47,15 @@ describe('serializers/MapSerializer', () =>
         {
             const supportsNonObject = serializer.canDeserialize(nonObject);
             const supportsNotSerialized = serializer.canDeserialize(notSerialized);
-            const supportsWrongName = serializer.canDeserialize(wrongName);
-            const supportsWrongKeys = serializer.canDeserialize(wrongKeys);
-            const supportsWrongValues = serializer.canDeserialize(wrongValues);
+            const supportsinvalidName = serializer.canDeserialize(invalidName);
+            const supportsinvalidKeys = serializer.canDeserialize(invalidKeys);
+            const supportsinvalidValues = serializer.canDeserialize(invalidValues);
 
             expect(supportsNonObject).toBe(false);
             expect(supportsNotSerialized).toBe(false);
-            expect(supportsWrongName).toBe(false);
-            expect(supportsWrongKeys).toBe(false);
-            expect(supportsWrongValues).toBe(false);
+            expect(supportsinvalidName).toBe(false);
+            expect(supportsinvalidKeys).toBe(false);
+            expect(supportsinvalidValues).toBe(false);
         });
     });
 

@@ -48,12 +48,12 @@ const serializedViewBigInt64 = { serialized: true, name: 'TypedArray', type: 'Bi
 
 const nonObject = 42;
 const notSerialized = { name: 'TypedArray', type: 'Uint16Array', bytes: [] };
-const wrongName = { serialized: true, name: 'OtherBuffer', type: 'Uint16Array', bytes: [] };
-const wrongType = { serialized: true, name: 'TypedArray', type: 'Int42Array', bytes: [] };
-const wrongBytes = { serialized: true, name: 'TypedArray', type: 'Uint16Array', bytes: {} };
+const invalidName = { serialized: true, name: 'OtherBuffer', type: 'Uint16Array', bytes: [] };
+const invalidType = { serialized: true, name: 'TypedArray', type: 'Int42Array', bytes: [] };
+const invalidBytes = { serialized: true, name: 'TypedArray', type: 'Uint16Array', bytes: {} };
 
 export {
     viewUint16, viewInt8, viewBigInt64,
     serializedViewUint16, serializedViewInt8, serializedViewBigInt64,
-    nonObject, notSerialized, wrongName, wrongType, wrongBytes
+    nonObject, notSerialized, invalidName, invalidType, invalidBytes
 }
