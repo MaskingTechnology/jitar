@@ -2,38 +2,73 @@
 import { describe, expect, it } from 'vitest';
 
 import Serializer from '../src/Serializer';
+import NoSerializerFound from '../src/errors/NoSerializerFound';
+import NoDeserializerFound from '../src/errors/NoDeserializerFound';
 
 import {
     FirstSerializer, SecondSerializer,
     NumberSerializer, StringSerializer
 } from './_fixtures/Serializer.fixture';
 
+const overrideSerializer = new Serializer();
+overrideSerializer.addSerializer(new FirstSerializer());
+overrideSerializer.addSerializer(new SecondSerializer());
+
+const typeSerializer = new Serializer();
+typeSerializer.addSerializer(new NumberSerializer());
+typeSerializer.addSerializer(new StringSerializer());
+
 describe('serializers/ErrorSerializer', () =>
 {
     describe('.serialize(value)', () =>
     {
+        it('should use the last added applicable serializer', async () =>
+        {
+            const result = await overrideSerializer.serialize(42);
+
+            expect(result).toBe(2);
+        });
+
         it('should use the applicable serializer for a specific value type', async () =>
         {
-            const serializer = new Serializer();
-            serializer.addSerializer(new NumberSerializer());
-            serializer.addSerializer(new StringSerializer());
-
-            const resultNumber = await serializer.serialize(42);
-            const resultString = await serializer.serialize('42');
+            const resultNumber = await typeSerializer.serialize(42);
+            const resultString = await typeSerializer.serialize('42');
 
             expect(resultNumber).toBe(42);
             expect(resultString).toBe('42');
         });
 
-        it('should use the last added applicable serializer', async () =>
+        it('should throw error when no applicable serializer is found', async () =>
         {
-            const serializer = new Serializer();
-            serializer.addSerializer(new FirstSerializer());
-            serializer.addSerializer(new SecondSerializer());
+            const serialize = async () => await typeSerializer.serialize(true);
 
-            const result = await serializer.serialize(42);
+            expect(serialize).rejects.toEqual(new NoSerializerFound('boolean'));
+        });
+    });
+
+    describe('.deserialize(value)', () =>
+    {
+        it('should use the last added applicable deserializer', async () =>
+        {
+            const result = await overrideSerializer.deserialize(42);
 
             expect(result).toBe(2);
+        });
+
+        it('should use the applicable deserializer for a specific value type', async () =>
+        {
+            const resultNumber = await typeSerializer.deserialize(42);
+            const resultString = await typeSerializer.deserialize('42');
+
+            expect(resultNumber).toBe(42);
+            expect(resultString).toBe('42');
+        });
+
+        it('should throw error when no applicable deserializer is found', async () =>
+        {
+            const deserialize = async () => await typeSerializer.deserialize(true);
+
+            expect(deserialize).rejects.toEqual(new NoDeserializerFound('boolean'));
         });
     });
 });
