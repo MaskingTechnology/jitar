@@ -60,7 +60,7 @@ describe('serializers/ClassSerializer', () =>
         });
     });
 
-    describe('.serialize(data)', () =>
+    describe('.serialize(object)', () =>
     {
         it('should serialize a class instance', async () =>
         {

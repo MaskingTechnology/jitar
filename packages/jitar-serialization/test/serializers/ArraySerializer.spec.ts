@@ -52,7 +52,7 @@ describe('serializers/ArraySerializer', () =>
         });
     });
 
-    describe('.serialize(data)', () =>
+    describe('.serialize(array)', () =>
     {
         it('should serialize an array', async () =>
         {
@@ -66,7 +66,7 @@ describe('serializers/ArraySerializer', () =>
         });
     });
 
-    describe('.deserialize(object)', () =>
+    describe('.deserialize(array)', () =>
     {
         it('should deserialize an array', async () =>
         {

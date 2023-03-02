@@ -56,7 +56,7 @@ describe('serializers/DateSerializer', () =>
         });
     });
 
-    describe('.serialize(data)', () =>
+    describe('.serialize(date)', () =>
     {
         it('should serialize a date', async () =>
         {

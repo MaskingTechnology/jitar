@@ -59,7 +59,7 @@ describe('serializers/MapSerializer', () =>
         });
     });
 
-    describe('.serialize(data)', () =>
+    describe('.serialize(map)', () =>
     {
         it('should serialize a map', async () =>
         {

@@ -57,7 +57,7 @@ describe('serializers/SetSerializer', () =>
         });
     });
 
-    describe('.serialize(data)', () =>
+    describe('.serialize(set)', () =>
     {
         it('should serialize a set', async () =>
         {

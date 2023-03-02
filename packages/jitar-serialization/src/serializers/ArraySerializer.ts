@@ -25,8 +25,8 @@ export default class ArraySerializer extends ValueSerializer
         return values;
     }
 
-    async deserialize(values: unknown[]): Promise<unknown[]>
+    async deserialize(array: unknown[]): Promise<unknown[]>
     {
-        return await Promise.all(values.map(async (value) => await this.deserializeOther(value)));
+        return await Promise.all(array.map(async (value) => await this.deserializeOther(value)));
     }
 }

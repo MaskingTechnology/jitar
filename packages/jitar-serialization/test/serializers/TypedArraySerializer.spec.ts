@@ -65,7 +65,7 @@ describe('serializers/TypedArraySerializer', () =>
         });
     });
 
-    describe('.serialize(data)', () =>
+    describe('.serialize(array)', () =>
     {
         it('should serialize an array buffer', async () =>
         {

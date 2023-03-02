@@ -36,10 +36,10 @@ export default class ArrayBufferSerializer extends ValueSerializer
             && array.bytes instanceof Array;  
     }
     
-    async serialize(data: TypedArray): Promise<SerializedTypedArray>
+    async serialize(array: TypedArray): Promise<SerializedTypedArray>
     {
-        const type = data.constructor.name;
-        const view = new DataView(data.buffer);
+        const type = array.constructor.name;
+        const view = new DataView(array.buffer);
         const bytes: number[] = [];
 
         for (let index = 0; index < view.byteLength; index++)

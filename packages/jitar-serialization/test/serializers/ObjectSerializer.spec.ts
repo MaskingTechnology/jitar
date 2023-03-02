@@ -52,7 +52,7 @@ describe('serializers/ObjectSerializer', () =>
         });
     });
 
-    describe('.serialize(data)', () =>
+    describe('.serialize(object)', () =>
     {
         it('should serialize an object', async () =>
         {
