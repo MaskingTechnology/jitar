@@ -1,5 +1,7 @@
 
 import ValueSerializer from './ValueSerializer.js';
+import NoDeserializerFound from './errors/NoDeserializerFound.js';
+import NoSerializerFound from './errors/NoSerializerFound.js';
 
 export default class Serializer
 {
@@ -21,7 +23,7 @@ export default class Serializer
 
         if (serializer === undefined)
         {
-            throw new Error(`No serializer found for value of type ${typeof value}`);
+            throw new NoSerializerFound(typeof value);
         }
 
         return serializer.serialize(value);
@@ -33,7 +35,7 @@ export default class Serializer
 
         if (serializer === undefined)
         {
-            throw new Error(`No deserializer found for value of type ${typeof value}`);
+            throw new NoDeserializerFound(typeof value);
         }
 
         return serializer.deserialize(value);

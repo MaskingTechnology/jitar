@@ -1,5 +1,6 @@
 
 import Serializer from './Serializer.js';
+import ParentSerializerNotSet from './errors/ParentSerializerNotSet.js';
 
 export default abstract class ValueSerializer
 {
@@ -19,7 +20,7 @@ export default abstract class ValueSerializer
     {
         if (this.#parent === undefined)
         {
-            throw new Error('Parent not set');
+            throw new ParentSerializerNotSet();
         }
 
         return this.#parent.serialize(value);
@@ -29,7 +30,7 @@ export default abstract class ValueSerializer
     {
         if (this.#parent === undefined)
         {
-            throw new Error('Parent not set');
+            throw new ParentSerializerNotSet();
         }
 
         return this.#parent.deserialize(value);
