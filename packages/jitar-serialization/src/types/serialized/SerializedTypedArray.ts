@@ -1,10 +1,10 @@
 
 import Serialized from '../Serialized.js';
 
-type SerializedArrayBuffer = Serialized &
+type SerializedTypedArray = Serialized &
 {
     type: string;
     bytes: number[]
 }
 
-export default SerializedArrayBuffer;
+export default SerializedTypedArray;
