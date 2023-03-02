@@ -1,7 +1,7 @@
 
 import ValueSerializer from '../ValueSerializer.js';
-import InvalidPropertyType from '../errors/InvalidPropertyType.js';
 import SerializedDate from '../types/serialized/SerializedDate.js';
+import InvalidDateString from './errors/InvalidDateString.js';
 
 export default class DateSerializer extends ValueSerializer
 {
@@ -31,7 +31,7 @@ export default class DateSerializer extends ValueSerializer
         
         if (date.toString() === 'Invalid Date')
         {
-            throw new InvalidPropertyType('date', 'value', 'date');
+            throw new InvalidDateString(object.value);
         }
 
         return date;

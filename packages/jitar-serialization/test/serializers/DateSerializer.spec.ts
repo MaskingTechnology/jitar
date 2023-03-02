@@ -1,8 +1,8 @@
 
 import { describe, expect, it } from 'vitest';
-import InvalidPropertyType from '../../src/errors/InvalidPropertyType';
 
 import DateSerializer from '../../src/serializers/DateSerializer';
+import InvalidDateString from '../../src/serializers/errors/InvalidDateString';
 
 import {
     fixedDate,
@@ -79,7 +79,7 @@ describe('serializers/DateSerializer', () =>
         {
             const run = async () => await serializer.deserialize(invalidDateString);
 
-            expect(run).rejects.toEqual(new InvalidPropertyType('date', 'value', 'date'));
+            expect(run).rejects.toEqual(new InvalidDateString('hello'));
         });
     });
 });
