@@ -1,9 +1,85 @@
 
 import { describe, expect, it } from 'vitest';
+import InvalidPropertyType from '../../src/errors/InvalidPropertyType';
 
 import DateSerializer from '../../src/serializers/DateSerializer';
 
 import {
     fixedDate,
-    serializedFixedDate, serializedInvalidDateValue, serializedInvalidDateString
+    serializedFixedDate,
+    nonObject, nonDate, notSerialized, wrongName, wrongDateValue, invalidDateString
 } from '../_fixtures/serializers/DateSerializer.fixture';
+
+const serializer = new DateSerializer();
+
+describe('serializers/DateSerializer', () =>
+{
+    describe('.canSerialize(value)', () =>
+    {
+        it('should tell it can serialize a date', () =>
+        {
+            const supportsDate = serializer.canSerialize(fixedDate);
+
+            expect(supportsDate).toBe(true);
+        });
+
+        it('should tell it can not serialize others', () =>
+        {
+            const supportsNonObject = serializer.canSerialize(nonObject);
+            const supportsNonDate = serializer.canSerialize(nonDate);
+
+            expect(supportsNonObject).toBe(false);
+            expect(supportsNonDate).toBe(false);
+        });
+    });
+
+    describe('.canDeserialize(value)', () =>
+    {
+        it('should tell it can deserialize a date', () =>
+        {
+            const supportsDate = serializer.canDeserialize(serializedFixedDate);
+
+            expect(supportsDate).toBe(true);
+        });
+
+        it('should tell it can not deserialize others', () =>
+        {
+            const supportsNonObject = serializer.canDeserialize(nonObject);
+            const supportsNotSerialized = serializer.canDeserialize(notSerialized);
+            const supportsWrongName = serializer.canDeserialize(wrongName);
+            const supportsWrongDateValue = serializer.canDeserialize(wrongDateValue);
+
+            expect(supportsNonObject).toBe(false);
+            expect(supportsNotSerialized).toBe(false);
+            expect(supportsWrongName).toBe(false);
+            expect(supportsWrongDateValue).toBe(false);
+        });
+    });
+
+    describe('.serialize(data)', () =>
+    {
+        it('should serialize a date', async () =>
+        {
+            const resultFixedDate = await serializer.serialize(fixedDate);
+
+            expect(resultFixedDate).toEqual(serializedFixedDate);
+        });
+    });
+
+    describe('.deserialize(object)', () =>
+    {
+        it('should deserialize a date', async () =>
+        {
+            const resultFixedDate = await serializer.deserialize(serializedFixedDate);
+
+            expect(resultFixedDate).toEqual(fixedDate);
+        });
+
+        it('should not deserialize a date with an invalid date string', async () =>
+        {
+            const run = async () => await serializer.deserialize(invalidDateString);
+
+            expect(run).rejects.toEqual(new InvalidPropertyType('date', 'value', 'date'));
+        });
+    });
+});

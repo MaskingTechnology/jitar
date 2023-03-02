@@ -25,11 +25,11 @@ export default class DateSerializer extends ValueSerializer
         return { serialized: true, name: 'Date', value: date.toISOString() };
     }
 
-    async deserialize(serializedDate: SerializedDate): Promise<Date>
+    async deserialize(object: SerializedDate): Promise<Date>
     {
-        const date = new Date(serializedDate.value);
-
-        if (Number.isNaN(date))
+        const date = new Date(object.value);
+        
+        if (date.toString() === 'Invalid Date')
         {
             throw new InvalidPropertyType('date', 'value', 'date');
         }
