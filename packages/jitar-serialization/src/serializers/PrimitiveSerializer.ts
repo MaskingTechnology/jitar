@@ -5,12 +5,12 @@ export default class PrimitiveSerializer extends ValueSerializer
 {
     canSerialize(value: unknown): boolean
     {
-        return (value instanceof Date) === false;
+        return (value instanceof Object) === false;
     }
 
     canDeserialize(value: unknown): boolean
     {
-        return (value instanceof Date) === false;
+        return (value instanceof Object) === false;
     }
     
     async serialize(primitive: unknown): Promise<unknown>
