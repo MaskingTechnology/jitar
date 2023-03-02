@@ -42,13 +42,18 @@ const viewUint16 = createViewUint16('jitar');
 const viewInt8 = createViewInt8('jitar');
 const viewBigInt64 = createViewBigInt64('jitar');
 
-const serializedViewUint16 = { serialized: true, name: 'ArrayBuffer', type: 'Uint16Array', bytes: [106, 0, 105, 0, 116, 0, 97, 0, 114, 0] };
-const serializedViewInt8 = { serialized: true, name: 'ArrayBuffer', type: 'Int8Array', bytes: [106, 105, 116, 97, 114] };
-const serializedViewBigInt64 = { serialized: true, name: 'ArrayBuffer', type: 'BigInt64Array', bytes: [106, 0, 0, 0, 0, 0, 0, 0, 105, 0, 0, 0, 0, 0, 0, 0, 116, 0, 0, 0, 0, 0, 0, 0, 97, 0, 0, 0, 0, 0, 0, 0, 114, 0, 0, 0, 0, 0, 0, 0] };
-const serializedViewInt7 = { serialized: true, name: 'ArrayBuffer', type: 'Int7Array', bytes: [106, 105, 116, 97, 114] };
-const serializedViewString8 = { serialized: true, name: 'ArrayBuffer', type: 'Int8Array', bytes: '[106, 105, 116, 97, 114]' };
+const serializedViewUint16 = { serialized: true, name: 'TypedArray', type: 'Uint16Array', bytes: [106, 0, 105, 0, 116, 0, 97, 0, 114, 0] };
+const serializedViewInt8 = { serialized: true, name: 'TypedArray', type: 'Int8Array', bytes: [106, 105, 116, 97, 114] };
+const serializedViewBigInt64 = { serialized: true, name: 'TypedArray', type: 'BigInt64Array', bytes: [106, 0, 0, 0, 0, 0, 0, 0, 105, 0, 0, 0, 0, 0, 0, 0, 116, 0, 0, 0, 0, 0, 0, 0, 97, 0, 0, 0, 0, 0, 0, 0, 114, 0, 0, 0, 0, 0, 0, 0] };
+
+const nonObject = 42;
+const notSerialized = { name: 'TypedArray', type: 'Uint16Array', bytes: [] };
+const wrongName = { serialized: true, name: 'OtherBuffer', type: 'Uint16Array', bytes: [] };
+const wrongType = { serialized: true, name: 'TypedArray', type: 'Int42Array', bytes: [] };
+const wrongBytes = { serialized: true, name: 'TypedArray', type: 'Uint16Array', bytes: {} };
 
 export {
     viewUint16, viewInt8, viewBigInt64,
-    serializedViewUint16, serializedViewInt8, serializedViewBigInt64, serializedViewInt7, serializedViewString8
+    serializedViewUint16, serializedViewInt8, serializedViewBigInt64,
+    nonObject, notSerialized, wrongName, wrongType, wrongBytes
 }
