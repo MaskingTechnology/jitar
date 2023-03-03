@@ -27,6 +27,7 @@ describe('SerializerBuilder', () =>
         const resultMap = await serializer.serialize(mixedMap);
         const resultSet = await serializer.serialize(mixedSet);
         const resultView = await serializer.serialize(viewInt8);
+        const resultString = await serializer.serialize(stringValue);
 
         expect(resultArray).toStrictEqual(mixedArray);
         expect(resultObject).toStrictEqual(mixedObject);
@@ -35,6 +36,7 @@ describe('SerializerBuilder', () =>
         expect(resultMap).toStrictEqual(serializedMixedMap);
         expect(resultSet).toStrictEqual(serializedMixedSet);
         expect(resultView).toStrictEqual(serializedViewInt8);
+        expect(resultString).toStrictEqual(stringValue);
     });
 
     it('should deserialize mixed types with the build serializer', async () =>
@@ -46,6 +48,7 @@ describe('SerializerBuilder', () =>
         const resultMap = await serializer.deserialize(serializedMixedMap);
         const resultSet = await serializer.deserialize(serializedMixedSet);
         const resultView = await serializer.deserialize(serializedViewInt8);
+        const resultString = await serializer.deserialize(stringValue);
 
         expect(resultArray).toStrictEqual(mixedArray);
         expect(resultObject).toStrictEqual(mixedObject);
@@ -54,5 +57,6 @@ describe('SerializerBuilder', () =>
         expect(resultMap).toStrictEqual(mixedMap);
         expect(resultSet).toStrictEqual(mixedSet);
         expect(resultView).toStrictEqual(viewInt8);
+        expect(resultString).toStrictEqual(stringValue);
     });
 });

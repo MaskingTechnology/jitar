@@ -2,7 +2,6 @@
 import ValueSerializer from '../ValueSerializer.js';
 import SerializableObject from '../types/serialized/SerializableObject.js';
 import SerializedObject from '../types/serialized/SerializedObject.js';
-import Serialized from '../types/Serialized.js';
 
 export default class ObjectSerializer extends ValueSerializer
 {
