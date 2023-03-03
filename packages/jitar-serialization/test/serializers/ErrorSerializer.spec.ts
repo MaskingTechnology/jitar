@@ -19,14 +19,14 @@ describe('serializers/ErrorSerializer', () =>
         {
             const supportsErrorClass = serializer.canSerialize(errorClass);
 
-            expect(supportsErrorClass).toBe(true);
+            expect(supportsErrorClass).toBeTruthy();
         });
 
         it('should tell it can not serialize others', () =>
         {
             const supportsOtherClass = serializer.canSerialize(otherClass);
 
-            expect(supportsOtherClass).toBe(false);
+            expect(supportsOtherClass).toBeFalsy();
         });
     });
 });

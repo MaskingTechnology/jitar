@@ -21,18 +21,18 @@ describe('serializers/PrimitiveSerializer', () =>
             const supportsNull = serializer.canSerialize(nullValue);
             const supportsUndefined = serializer.canSerialize(undefinedValue);
 
-            expect(supportsNumber).toBe(true);
-            expect(supportsBool).toBe(true);
-            expect(supportsString).toBe(true);
-            expect(supportsNull).toBe(true);
-            expect(supportsUndefined).toBe(true);
+            expect(supportsNumber).toBeTruthy();
+            expect(supportsBool).toBeTruthy();
+            expect(supportsString).toBeTruthy();
+            expect(supportsNull).toBeTruthy();
+            expect(supportsUndefined).toBeTruthy();
         });
 
         it('should tell it can not serialize others', () =>
         {
             const supportsObject = serializer.canSerialize(objectValue);
 
-            expect(supportsObject).toBe(false);
+            expect(supportsObject).toBeFalsy();
         });
     });
 
@@ -46,18 +46,18 @@ describe('serializers/PrimitiveSerializer', () =>
             const supportsNull = serializer.canSerialize(nullValue);
             const supportsUndefined = serializer.canSerialize(undefinedValue);
 
-            expect(supportsNumber).toBe(true);
-            expect(supportsBool).toBe(true);
-            expect(supportsString).toBe(true);
-            expect(supportsNull).toBe(true);
-            expect(supportsUndefined).toBe(true);
+            expect(supportsNumber).toBeTruthy();
+            expect(supportsBool).toBeTruthy();
+            expect(supportsString).toBeTruthy();
+            expect(supportsNull).toBeTruthy();
+            expect(supportsUndefined).toBeTruthy();
         });
 
         it('should tell it can not deserialize others', () =>
         {
             const supportsObject = serializer.canSerialize(objectValue);
 
-            expect(supportsObject).toBe(false);
+            expect(supportsObject).toBeFalsy();
         });
     });
 
@@ -71,11 +71,11 @@ describe('serializers/PrimitiveSerializer', () =>
             const resultNull = await serializer.serialize(nullValue);
             const resultUndefined = await serializer.serialize(undefinedValue);
 
-            expect(resultNumber).toBe(numberValue);
-            expect(resultBool).toBe(boolValue);
-            expect(resultString).toBe(stringValue);
-            expect(resultNull).toBe(nullValue);
-            expect(resultUndefined).toBe(undefinedValue);
+            expect(resultNumber).toEqual(numberValue);
+            expect(resultBool).toEqual(boolValue);
+            expect(resultString).toEqual(stringValue);
+            expect(resultNull).toEqual(nullValue);
+            expect(resultUndefined).toEqual(undefinedValue);
         });
     });
 
@@ -89,11 +89,11 @@ describe('serializers/PrimitiveSerializer', () =>
             const resultNull = await serializer.deserialize(nullValue);
             const resultUndefined = await serializer.deserialize(undefinedValue);
 
-            expect(resultNumber).toBe(numberValue);
-            expect(resultBool).toBe(boolValue);
-            expect(resultString).toBe(stringValue);
-            expect(resultNull).toBe(nullValue);
-            expect(resultUndefined).toBe(undefinedValue);
+            expect(resultNumber).toEqual(numberValue);
+            expect(resultBool).toEqual(boolValue);
+            expect(resultString).toEqual(stringValue);
+            expect(resultNull).toEqual(nullValue);
+            expect(resultUndefined).toEqual(undefinedValue);
         });
     });
 });

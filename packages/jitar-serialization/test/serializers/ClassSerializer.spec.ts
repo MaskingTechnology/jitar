@@ -24,7 +24,7 @@ describe('serializers/ClassSerializer', () =>
         {
             const supportsClass = serializer.canSerialize(dataClass);
 
-            expect(supportsClass).toBe(true);
+            expect(supportsClass).toBeTruthy();
         });
 
         it('should tell it can not serialize others', () =>
@@ -32,8 +32,8 @@ describe('serializers/ClassSerializer', () =>
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNonClassObject = serializer.canSerialize(nonClassObject);
             
-            expect(supportsNonObject).toBe(false);
-            expect(supportsNonClassObject).toBe(false);
+            expect(supportsNonObject).toBeFalsy();
+            expect(supportsNonClassObject).toBeFalsy();
         });
     });
 
@@ -43,7 +43,7 @@ describe('serializers/ClassSerializer', () =>
         {
             const supportsClass = serializer.canDeserialize(serializedDataClass);
 
-            expect(supportsClass).toBe(true);
+            expect(supportsClass).toBeTruthy();
         });
 
         it('should tell it can not deserialize others', () =>
@@ -53,10 +53,10 @@ describe('serializers/ClassSerializer', () =>
             const supportsInvalidArgs = serializer.canDeserialize(invalidArgs);
             const supportsInvalidFields = serializer.canDeserialize(invalidFields);
 
-            expect(supportsNotSerialized).toBe(false);
-            expect(supportsInvalidName).toBe(false);
-            expect(supportsInvalidArgs).toBe(false);
-            expect(supportsInvalidFields).toBe(false);
+            expect(supportsNotSerialized).toBeFalsy();
+            expect(supportsInvalidName).toBeFalsy();
+            expect(supportsInvalidArgs).toBeFalsy();
+            expect(supportsInvalidFields).toBeFalsy();
         });
     });
 
@@ -68,16 +68,16 @@ describe('serializers/ClassSerializer', () =>
             const resultConstructedClass = await serializer.serialize(constructedClass);
             const resultNestedClass = await serializer.serialize(nestedClass);
 
-            expect(resultDataClass).toEqual(serializedDataClass);
-            expect(resultConstructedClass).toEqual(serializedConstructedClass);
-            expect(resultNestedClass).toEqual(serializedNestedClass);
+            expect(resultDataClass).toStrictEqual(serializedDataClass);
+            expect(resultConstructedClass).toStrictEqual(serializedConstructedClass);
+            expect(resultNestedClass).toStrictEqual(serializedNestedClass);
         });
 
         it('should not serialize set or get only variables', async () =>
         {
             const resultPrivateClass = await serializer.serialize(privateClass);
 
-            expect(resultPrivateClass).toEqual(serializedPrivateClass);
+            expect(resultPrivateClass).toStrictEqual(serializedPrivateClass);
         });
     });
 
@@ -89,23 +89,23 @@ describe('serializers/ClassSerializer', () =>
             const resultConstructedClass = await serializer.deserialize(serializedConstructedClass);
             const resultNestedClass = await serializer.deserialize(serializedNestedClass);
 
-            expect(resultDataClass).toEqual(dataClass);
-            expect(resultConstructedClass).toEqual(constructedClass);
-            expect(resultNestedClass).toEqual(nestedClass);
+            expect(resultDataClass).toStrictEqual(dataClass);
+            expect(resultConstructedClass).toStrictEqual(constructedClass);
+            expect(resultNestedClass).toStrictEqual(nestedClass);
         });
 
         it('should not deserialize invalid objects', async () =>
         {
             const deserialize = async () => await serializer.deserialize(serializedInvalidClass);
 
-            expect(deserialize).rejects.toEqual(new ClassNotFound('Invalid'));
+            expect(deserialize).rejects.toStrictEqual(new ClassNotFound('Invalid'));
         });
 
         it('should not deserialize non-function instances', async () =>
         {
             const deserialize = async () => await serializer.deserialize(serializedUnserializableClass);
 
-            expect(deserialize).rejects.toEqual(new InvalidClass('Infinity'));
+            expect(deserialize).rejects.toStrictEqual(new InvalidClass('Infinity'));
         });
     });
 });

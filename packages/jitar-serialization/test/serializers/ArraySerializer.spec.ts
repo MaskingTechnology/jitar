@@ -20,7 +20,7 @@ describe('serializers/ArraySerializer', () =>
         {
             const supportsArray = serializer.canSerialize(emptyArray);
 
-            expect(supportsArray).toBe(true);
+            expect(supportsArray).toBeTruthy();
         });
 
         it('should tell it can not serialize others', () =>
@@ -28,8 +28,8 @@ describe('serializers/ArraySerializer', () =>
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNonArray = serializer.canSerialize(nonArray);
 
-            expect(supportsNonObject).toBe(false);
-            expect(supportsNonArray).toBe(false);
+            expect(supportsNonObject).toBeFalsy();
+            expect(supportsNonArray).toBeFalsy();
         });
     });
 
@@ -39,7 +39,7 @@ describe('serializers/ArraySerializer', () =>
         {
             const supportsArray = serializer.canDeserialize(emptyArray);
 
-            expect(supportsArray).toBe(true);
+            expect(supportsArray).toBeTruthy();
         });
 
         it('should tell it can not deserialize others', () =>
@@ -47,8 +47,8 @@ describe('serializers/ArraySerializer', () =>
             const supportsNonObject = serializer.canDeserialize(nonObject);
             const supportsNonArray = serializer.canDeserialize(nonArray);
 
-            expect(supportsNonObject).toBe(false);
-            expect(supportsNonArray).toBe(false);
+            expect(supportsNonObject).toBeFalsy();
+            expect(supportsNonArray).toBeFalsy();
         });
     });
 
@@ -60,9 +60,9 @@ describe('serializers/ArraySerializer', () =>
             const resultMixedArray = await serializer.serialize(mixedArray);
             const resultNestedArray = await serializer.serialize(nestedArray);
 
-            expect(resultEmptyArray).toEqual(emptyArray);
-            expect(resultMixedArray).toEqual(mixedArray);
-            expect(resultNestedArray).toEqual(nestedArray);
+            expect(resultEmptyArray).toStrictEqual(emptyArray);
+            expect(resultMixedArray).toStrictEqual(mixedArray);
+            expect(resultNestedArray).toStrictEqual(nestedArray);
         });
     });
 
@@ -74,9 +74,9 @@ describe('serializers/ArraySerializer', () =>
             const resultMixedArray = await serializer.deserialize(mixedArray);
             const resultNestedArray = await serializer.deserialize(nestedArray);
 
-            expect(resultEmptyArray).toEqual(emptyArray);
-            expect(resultMixedArray).toEqual(mixedArray);
-            expect(resultNestedArray).toEqual(nestedArray);
+            expect(resultEmptyArray).toStrictEqual(emptyArray);
+            expect(resultMixedArray).toStrictEqual(mixedArray);
+            expect(resultNestedArray).toStrictEqual(nestedArray);
         });
     });
 });

@@ -21,7 +21,7 @@ describe('serializers/SetSerializer', () =>
         {
             const supportsSet = serializer.canSerialize(emptySet);
 
-            expect(supportsSet).toBe(true);
+            expect(supportsSet).toBeTruthy();
         });
 
         it('should tell it can not serialize others', () =>
@@ -29,8 +29,8 @@ describe('serializers/SetSerializer', () =>
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNonSet = serializer.canSerialize(nonSet);
 
-            expect(supportsNonObject).toBe(false);
-            expect(supportsNonSet).toBe(false);
+            expect(supportsNonObject).toBeFalsy();
+            expect(supportsNonSet).toBeFalsy();
         });
     });
 
@@ -40,20 +40,20 @@ describe('serializers/SetSerializer', () =>
         {
             const supportsSet = serializer.canDeserialize(serializedEmptySet);
 
-            expect(supportsSet).toBe(true);
+            expect(supportsSet).toBeTruthy();
         });
 
         it('should tell it can not deserialize others', () =>
         {
             const supportsNonObject = serializer.canDeserialize(nonObject);
             const supportsNotSerialized = serializer.canDeserialize(notSerialized);
-            const supportsinvalidName = serializer.canDeserialize(invalidName);
-            const supportsinvalidValues = serializer.canDeserialize(invalidValues);
+            const supportsInvalidName = serializer.canDeserialize(invalidName);
+            const supportsInvalidValues = serializer.canDeserialize(invalidValues);
 
-            expect(supportsNonObject).toBe(false);
-            expect(supportsNotSerialized).toBe(false);
-            expect(supportsinvalidName).toBe(false);
-            expect(supportsinvalidValues).toBe(false);
+            expect(supportsNonObject).toBeFalsy();
+            expect(supportsNotSerialized).toBeFalsy();
+            expect(supportsInvalidName).toBeFalsy();
+            expect(supportsInvalidValues).toBeFalsy();
         });
     });
 
@@ -65,9 +65,9 @@ describe('serializers/SetSerializer', () =>
             const resultMixedSet = await serializer.serialize(mixedSet);
             const resultNestedSet = await serializer.serialize(nestedSet);
 
-            expect(resultEmptySet).toEqual(serializedEmptySet);
-            expect(resultMixedSet).toEqual(serializedMixedSet);
-            expect(resultNestedSet).toEqual(serializedNestedSet);
+            expect(resultEmptySet).toStrictEqual(serializedEmptySet);
+            expect(resultMixedSet).toStrictEqual(serializedMixedSet);
+            expect(resultNestedSet).toStrictEqual(serializedNestedSet);
         });
     });
 
@@ -79,9 +79,9 @@ describe('serializers/SetSerializer', () =>
             const resultMixedSet = await serializer.deserialize(serializedMixedSet);
             const resultNestedSet = await serializer.deserialize(serializedNestedSet);
 
-            expect(resultEmptySet).toEqual(emptySet);
-            expect(resultMixedSet).toEqual(mixedSet);
-            expect(resultNestedSet).toEqual(nestedSet);
+            expect(resultEmptySet).toStrictEqual(emptySet);
+            expect(resultMixedSet).toStrictEqual(mixedSet);
+            expect(resultNestedSet).toStrictEqual(nestedSet);
         });
     });
 });

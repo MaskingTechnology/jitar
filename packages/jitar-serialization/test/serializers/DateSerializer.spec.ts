@@ -20,7 +20,7 @@ describe('serializers/DateSerializer', () =>
         {
             const supportsDate = serializer.canSerialize(fixedDate);
 
-            expect(supportsDate).toBe(true);
+            expect(supportsDate).toBeTruthy();
         });
 
         it('should tell it can not serialize others', () =>
@@ -28,8 +28,8 @@ describe('serializers/DateSerializer', () =>
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNonDate = serializer.canSerialize(nonDate);
 
-            expect(supportsNonObject).toBe(false);
-            expect(supportsNonDate).toBe(false);
+            expect(supportsNonObject).toBeFalsy();
+            expect(supportsNonDate).toBeFalsy();
         });
     });
 
@@ -39,20 +39,20 @@ describe('serializers/DateSerializer', () =>
         {
             const supportsDate = serializer.canDeserialize(serializedFixedDate);
 
-            expect(supportsDate).toBe(true);
+            expect(supportsDate).toBeTruthy();
         });
 
         it('should tell it can not deserialize others', () =>
         {
             const supportsNonObject = serializer.canDeserialize(nonObject);
             const supportsNotSerialized = serializer.canDeserialize(notSerialized);
-            const supportsinvalidName = serializer.canDeserialize(invalidName);
-            const supportsinvalidDateValue = serializer.canDeserialize(invalidDateValue);
+            const supportsInvalidName = serializer.canDeserialize(invalidName);
+            const supportsInvalidDateValue = serializer.canDeserialize(invalidDateValue);
 
-            expect(supportsNonObject).toBe(false);
-            expect(supportsNotSerialized).toBe(false);
-            expect(supportsinvalidName).toBe(false);
-            expect(supportsinvalidDateValue).toBe(false);
+            expect(supportsNonObject).toBeFalsy();
+            expect(supportsNotSerialized).toBeFalsy();
+            expect(supportsInvalidName).toBeFalsy();
+            expect(supportsInvalidDateValue).toBeFalsy();
         });
     });
 
@@ -62,7 +62,7 @@ describe('serializers/DateSerializer', () =>
         {
             const resultFixedDate = await serializer.serialize(fixedDate);
 
-            expect(resultFixedDate).toEqual(serializedFixedDate);
+            expect(resultFixedDate).toStrictEqual(serializedFixedDate);
         });
     });
 
@@ -72,14 +72,14 @@ describe('serializers/DateSerializer', () =>
         {
             const resultFixedDate = await serializer.deserialize(serializedFixedDate);
 
-            expect(resultFixedDate).toEqual(fixedDate);
+            expect(resultFixedDate).toStrictEqual(fixedDate);
         });
 
         it('should not deserialize a date with an invalid date string', async () =>
         {
             const run = async () => await serializer.deserialize(invalidDateString);
 
-            expect(run).rejects.toEqual(new InvalidDateString('hello'));
+            expect(run).rejects.toStrictEqual(new InvalidDateString('hello'));
         });
     });
 });

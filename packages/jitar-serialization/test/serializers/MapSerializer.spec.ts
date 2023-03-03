@@ -21,7 +21,7 @@ describe('serializers/MapSerializer', () =>
         {
             const supportsMap = serializer.canSerialize(emptyMap);
 
-            expect(supportsMap).toBe(true);
+            expect(supportsMap).toBeTruthy();
         });
 
         it('should tell it can not serialize others', () =>
@@ -29,8 +29,8 @@ describe('serializers/MapSerializer', () =>
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNonMap = serializer.canSerialize(nonMap);
 
-            expect(supportsNonObject).toBe(false);
-            expect(supportsNonMap).toBe(false);
+            expect(supportsNonObject).toBeFalsy();
+            expect(supportsNonMap).toBeFalsy();
         });
     });
 
@@ -40,22 +40,22 @@ describe('serializers/MapSerializer', () =>
         {
             const supportsMap = serializer.canDeserialize(serializedEmptyMap);
 
-            expect(supportsMap).toBe(true);
+            expect(supportsMap).toBeTruthy();
         });
 
         it('should tell it can not deserialize others', () =>
         {
             const supportsNonObject = serializer.canDeserialize(nonObject);
             const supportsNotSerialized = serializer.canDeserialize(notSerialized);
-            const supportsinvalidName = serializer.canDeserialize(invalidName);
-            const supportsinvalidKeys = serializer.canDeserialize(invalidKeys);
-            const supportsinvalidValues = serializer.canDeserialize(invalidValues);
+            const supportsInvalidName = serializer.canDeserialize(invalidName);
+            const supportsInvalidKeys = serializer.canDeserialize(invalidKeys);
+            const supportsInvalidValues = serializer.canDeserialize(invalidValues);
 
-            expect(supportsNonObject).toBe(false);
-            expect(supportsNotSerialized).toBe(false);
-            expect(supportsinvalidName).toBe(false);
-            expect(supportsinvalidKeys).toBe(false);
-            expect(supportsinvalidValues).toBe(false);
+            expect(supportsNonObject).toBeFalsy();
+            expect(supportsNotSerialized).toBeFalsy();
+            expect(supportsInvalidName).toBeFalsy();
+            expect(supportsInvalidKeys).toBeFalsy();
+            expect(supportsInvalidValues).toBeFalsy();
         });
     });
 
@@ -67,9 +67,9 @@ describe('serializers/MapSerializer', () =>
             const resultMixedMap = await serializer.serialize(mixedMap);
             const resultNestedMap = await serializer.serialize(nestedMap);
 
-            expect(resultEmptyMap).toEqual(serializedEmptyMap);
-            expect(resultMixedMap).toEqual(serializedMixedMap);
-            expect(resultNestedMap).toEqual(serializedNestedMap);
+            expect(resultEmptyMap).toStrictEqual(serializedEmptyMap);
+            expect(resultMixedMap).toStrictEqual(serializedMixedMap);
+            expect(resultNestedMap).toStrictEqual(serializedNestedMap);
         });
     });
 
@@ -81,9 +81,9 @@ describe('serializers/MapSerializer', () =>
             const resultMixedMap = await serializer.deserialize(serializedMixedMap);
             const resultNestedMap = await serializer.deserialize(serializedNestedMap);
 
-            expect(resultEmptyMap).toEqual(emptyMap);
-            expect(resultMixedMap).toEqual(mixedMap);
-            expect(resultNestedMap).toEqual(nestedMap);
+            expect(resultEmptyMap).toStrictEqual(emptyMap);
+            expect(resultMixedMap).toStrictEqual(mixedMap);
+            expect(resultNestedMap).toStrictEqual(nestedMap);
         });
     });
 });

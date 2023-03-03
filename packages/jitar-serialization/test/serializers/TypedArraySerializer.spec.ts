@@ -21,9 +21,9 @@ describe('serializers/TypedArraySerializer', () =>
             const supportsInt8 = serializer.canSerialize(viewInt8);
             const supportsBigInt64 = serializer.canSerialize(viewBigInt64);
 
-            expect(supportsUint16).toBe(true);
-            expect(supportsInt8).toBe(true);
-            expect(supportsBigInt64).toBe(true);
+            expect(supportsUint16).toBeTruthy();
+            expect(supportsInt8).toBeTruthy();
+            expect(supportsBigInt64).toBeTruthy();
         });
 
         it('should tell it can not serialize others', () =>
@@ -31,8 +31,8 @@ describe('serializers/TypedArraySerializer', () =>
             const supportsPlainObject = serializer.canSerialize({});
             const supportsNonObject = serializer.canSerialize(nonObject);
 
-            expect(supportsPlainObject).toBe(false);
-            expect(supportsNonObject).toBe(false);
+            expect(supportsPlainObject).toBeFalsy();
+            expect(supportsNonObject).toBeFalsy();
         });
     });
 
@@ -44,24 +44,24 @@ describe('serializers/TypedArraySerializer', () =>
             const supportsInt8 = serializer.canDeserialize(serializedViewInt8);
             const supportsBigInt64 = serializer.canDeserialize(serializedViewBigInt64);
 
-            expect(supportsUint16).toBe(true);
-            expect(supportsInt8).toBe(true);
-            expect(supportsBigInt64).toBe(true);
+            expect(supportsUint16).toBeTruthy();
+            expect(supportsInt8).toBeTruthy();
+            expect(supportsBigInt64).toBeTruthy();
         });
 
         it('should tell it can not deserialize others', () =>
         {
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNotSerialized = serializer.canSerialize(notSerialized);
-            const supportsinvalidName = serializer.canSerialize(invalidName);
-            const supportsinvalidType = serializer.canSerialize(invalidType);
-            const supportsinvalidBytes = serializer.canSerialize(invalidBytes);
+            const supportsInvalidName = serializer.canSerialize(invalidName);
+            const supportsInvalidType = serializer.canSerialize(invalidType);
+            const supportsInvalidBytes = serializer.canSerialize(invalidBytes);
 
-            expect(supportsNonObject).toBe(false);
-            expect(supportsNotSerialized).toBe(false);
-            expect(supportsinvalidName).toBe(false);
-            expect(supportsinvalidType).toBe(false);
-            expect(supportsinvalidBytes).toBe(false);
+            expect(supportsNonObject).toBeFalsy();
+            expect(supportsNotSerialized).toBeFalsy();
+            expect(supportsInvalidName).toBeFalsy();
+            expect(supportsInvalidType).toBeFalsy();
+            expect(supportsInvalidBytes).toBeFalsy();
         });
     });
 
@@ -73,9 +73,9 @@ describe('serializers/TypedArraySerializer', () =>
             const resultInt8 = await serializer.serialize(viewInt8);
             const resultBigInt64 = await serializer.serialize(viewBigInt64);
 
-            expect(resultUint16).toEqual(serializedViewUint16);
-            expect(resultInt8).toEqual(serializedViewInt8);
-            expect(resultBigInt64).toEqual(serializedViewBigInt64);
+            expect(resultUint16).toStrictEqual(serializedViewUint16);
+            expect(resultInt8).toStrictEqual(serializedViewInt8);
+            expect(resultBigInt64).toStrictEqual(serializedViewBigInt64);
         });
     });
 
@@ -87,9 +87,9 @@ describe('serializers/TypedArraySerializer', () =>
             const resultInt8 = await serializer.deserialize(serializedViewInt8);
             const resultBigInt64 = await serializer.deserialize(serializedViewBigInt64);
 
-            expect(resultUint16).toEqual(viewUint16);
-            expect(resultInt8).toEqual(viewInt8);
-            expect(resultBigInt64).toEqual(viewBigInt64);
+            expect(resultUint16).toStrictEqual(viewUint16);
+            expect(resultInt8).toStrictEqual(viewInt8);
+            expect(resultBigInt64).toStrictEqual(viewBigInt64);
         });
     });
 });
