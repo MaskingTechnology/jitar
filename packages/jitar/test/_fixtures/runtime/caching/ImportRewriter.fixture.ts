@@ -16,7 +16,7 @@ import { component1, component2 } from 'https';
 const hasSystemImportsResult =
     `import { getDependency } from "/jitar/hooks.js";
 const fs = await getDependency('fs');
-const { default: component } = await getDependency('http');
+const component = await getDependency('http');
 const { component1, component2 } = await getDependency('https');
 `;
 
@@ -36,13 +36,15 @@ const hasMixedImports =
     `import component from './path/to/component.js';
 import os from 'os';
 import { runProcedure } from 'jitar';
+import main, { some as other } from 'library';
 `;
 
 const hasMixedImportsResult =
     `import { getDependency } from "/jitar/hooks.js";
 import component from './path/to/component.js';
-const { default: os } = await getDependency('os');
+const os = await getDependency('os');
 import { runProcedure } from "/jitar/hooks.js";
+const { default: main, some: other } = await getDependency('library');
 `;
 
 const hasDynamicImports =
@@ -62,7 +64,7 @@ import { runProcedure } from 'jitar';
 
 const hasImportsAndContentResult =
     `import { getDependency } from "/jitar/hooks.js";
-const { default: os } = await getDependency('os');
+const os = await getDependency('os');
 
 export default function test() {}
 
