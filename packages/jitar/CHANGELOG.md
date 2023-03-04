@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 0.3.8 (March 04, 2023)
+
+Fixes:
+- \[[`5ce818e`](https://github.com/MaskingTechnology/jitar/commit/5ce818e)] Fixed importing commonJS modules [petermasking](https://github.com/MaskingTechnology/jitar/pull/195)
+
 ## 0.3.7 (February 26, 2023)
 
 Fixes:
