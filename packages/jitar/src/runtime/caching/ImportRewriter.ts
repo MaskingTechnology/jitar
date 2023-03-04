@@ -58,7 +58,7 @@ export default class ImportRewriter
 
     static #rewriteImportMembers(dependency: ReflectionImport): string
     {
-        if (this.#doesImportAll(dependency))
+        if (this.#mustUseAs(dependency))
         {
             return dependency.members[0].as;
         }
@@ -68,10 +68,22 @@ export default class ImportRewriter
         return `{ ${members.join(', ')} }`;
     }
 
+    static #mustUseAs(dependency: ReflectionImport): boolean
+    {
+        return this.#doesImportAll(dependency)
+            || this.#doesImportDefault(dependency);
+    }
+
     static #doesImportAll(dependency: ReflectionImport): boolean
     {
         return dependency.members.length === 1
             && dependency.members[0].name === '*';
+    }
+
+    static #doesImportDefault(dependency: ReflectionImport): boolean
+    {
+        return dependency.members.length === 1
+            && dependency.members[0].name === 'default';
     }
 
     static #insertGetDependency(module: string): string
