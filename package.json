@@ -23,7 +23,8 @@
         "examples/3-apps/1-full-stack",
         "examples/3-apps/2-microservices",
         "examples/4-integrations/1-react",
-        "examples/4-integrations/2-vue"
+        "examples/4-integrations/2-vue",
+        "examples/4-integrations/3-svelte"
     ],
     "scripts": {
         "build": "npm run build --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=/packages/jitar-reflection --workspace=packages/jitar-vite-plugin --if-present",
