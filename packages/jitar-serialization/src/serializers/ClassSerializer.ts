@@ -110,8 +110,7 @@ export default class ClassSerializer extends ValueSerializer
         {
             throw new ClassNotFound(object.name);
         }
-
-        if ((clazz instanceof Function) === false)
+        else if ((clazz instanceof Function) === false)
         {
             throw new InvalidClass(object.name);
         }
