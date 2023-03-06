@@ -55,3 +55,4 @@ The following examples demonstrate how to integrate Jitar with other frameworks 
 
 1. [React](4-integrations/1-react/README.md) - Demonstrates how to integrate Jitar with React.
 1. [Vue](4-integrations/2-vue/README.md) - Demonstrates how to integrate Jitar with Vue.
+1. [Svelte](4-integrations/3-svelte/README.md) - Demonstrates how to integrate Jitar with Svelte.
