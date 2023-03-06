@@ -1,4 +1,9 @@
+coverage
 src
+test
 node_modules
+.eslintignore
+.eslintrc
+vite.config.ts
 tsconfig.json
 *.tgz
