@@ -23,7 +23,7 @@ describe('serializers/ArraySerializer', () =>
             expect(supportsArray).toBeTruthy();
         });
 
-        it('should tell it can not serialize others', () =>
+        it('should tell it cannot serialize others', () =>
         {
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNonArray = serializer.canSerialize(nonArray);
@@ -42,7 +42,7 @@ describe('serializers/ArraySerializer', () =>
             expect(supportsArray).toBeTruthy();
         });
 
-        it('should tell it can not deserialize others', () =>
+        it('should tell it cannot deserialize others', () =>
         {
             const supportsNonObject = serializer.canDeserialize(nonObject);
             const supportsNonArray = serializer.canDeserialize(nonArray);

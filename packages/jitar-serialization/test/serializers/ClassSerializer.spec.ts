@@ -27,7 +27,7 @@ describe('serializers/ClassSerializer', () =>
             expect(supportsClass).toBeTruthy();
         });
 
-        it('should tell it can not serialize others', () =>
+        it('should tell it cannot serialize others', () =>
         {
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNonClassObject = serializer.canSerialize(nonClassObject);
@@ -46,7 +46,7 @@ describe('serializers/ClassSerializer', () =>
             expect(supportsClass).toBeTruthy();
         });
 
-        it('should tell it can not deserialize others', () =>
+        it('should tell it cannot deserialize others', () =>
         {
             const supportsNotSerialized = serializer.canDeserialize(notSerialized);
             const supportsInvalidName = serializer.canDeserialize(invalidName);

@@ -22,7 +22,7 @@ describe('serializers/ErrorSerializer', () =>
             expect(supportsErrorClass).toBeTruthy();
         });
 
-        it('should tell it can not serialize others', () =>
+        it('should tell it cannot serialize others', () =>
         {
             const supportsOtherClass = serializer.canSerialize(otherClass);
 

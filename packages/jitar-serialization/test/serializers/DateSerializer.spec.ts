@@ -23,7 +23,7 @@ describe('serializers/DateSerializer', () =>
             expect(supportsDate).toBeTruthy();
         });
 
-        it('should tell it can not serialize others', () =>
+        it('should tell it cannot serialize others', () =>
         {
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNonDate = serializer.canSerialize(nonDate);
@@ -42,7 +42,7 @@ describe('serializers/DateSerializer', () =>
             expect(supportsDate).toBeTruthy();
         });
 
-        it('should tell it can not deserialize others', () =>
+        it('should tell it cannot deserialize others', () =>
         {
             const supportsNonObject = serializer.canDeserialize(nonObject);
             const supportsNotSerialized = serializer.canDeserialize(notSerialized);

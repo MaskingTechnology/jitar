@@ -28,7 +28,7 @@ describe('serializers/PrimitiveSerializer', () =>
             expect(supportsUndefined).toBeTruthy();
         });
 
-        it('should tell it can not serialize others', () =>
+        it('should tell it cannot serialize others', () =>
         {
             const supportsObject = serializer.canSerialize(objectValue);
 
@@ -53,7 +53,7 @@ describe('serializers/PrimitiveSerializer', () =>
             expect(supportsUndefined).toBeTruthy();
         });
 
-        it('should tell it can not deserialize others', () =>
+        it('should tell it cannot deserialize others', () =>
         {
             const supportsObject = serializer.canSerialize(objectValue);
 

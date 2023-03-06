@@ -26,7 +26,7 @@ describe('serializers/TypedArraySerializer', () =>
             expect(supportsBigInt64).toBeTruthy();
         });
 
-        it('should tell it can not serialize others', () =>
+        it('should tell it cannot serialize others', () =>
         {
             const supportsPlainObject = serializer.canSerialize({});
             const supportsNonObject = serializer.canSerialize(nonObject);
@@ -49,7 +49,7 @@ describe('serializers/TypedArraySerializer', () =>
             expect(supportsBigInt64).toBeTruthy();
         });
 
-        it('should tell it can not deserialize others', () =>
+        it('should tell it cannot deserialize others', () =>
         {
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNotSerialized = serializer.canSerialize(notSerialized);
