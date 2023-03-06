@@ -51,11 +51,11 @@ describe('serializers/TypedArraySerializer', () =>
 
         it('should tell it cannot deserialize others', () =>
         {
-            const supportsNonObject = serializer.canSerialize(nonObject);
-            const supportsNotSerialized = serializer.canSerialize(notSerialized);
-            const supportsInvalidName = serializer.canSerialize(invalidName);
-            const supportsInvalidType = serializer.canSerialize(invalidType);
-            const supportsInvalidBytes = serializer.canSerialize(invalidBytes);
+            const supportsNonObject = serializer.canDeserialize(nonObject);
+            const supportsNotSerialized = serializer.canDeserialize(notSerialized);
+            const supportsInvalidName = serializer.canDeserialize(invalidName);
+            const supportsInvalidType = serializer.canDeserialize(invalidType);
+            const supportsInvalidBytes = serializer.canDeserialize(invalidBytes);
 
             expect(supportsNonObject).toBeFalsy();
             expect(supportsNotSerialized).toBeFalsy();
