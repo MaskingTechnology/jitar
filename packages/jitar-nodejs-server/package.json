@@ -24,11 +24,10 @@
         "express": "^4.18.2",
         "express-http-proxy": "^1.6.3",
         "fs-extra": "^11.1.0",
-        "glob": "^9.0.2",
         "glob-promise": "6.0.2",
         "jitar": "^0.3.8",
         "mime-types": "^2.1.35",
-        "tslog": "^4.7.5",
+        "tslog": "^4.8.2",
         "yargs": "^17.7.1"
     },
     "engines": {
