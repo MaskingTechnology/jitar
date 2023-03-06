@@ -48,7 +48,7 @@ export default class ClassSerializer extends ValueSerializer
         const parameterNames = this.#extractParameterNames(model);
 
         const name = clazz.name;
-        const source = (clazz as Loadable).source || null;
+        const source = (clazz as Loadable).source;
         const args: unknown[] = await this.#extractArguments(model, parameterNames, object);
         const fields: FlexObject = await this.#extractFields(model, parameterNames, object);
 
@@ -132,7 +132,7 @@ export default class ClassSerializer extends ValueSerializer
 
     async #getClass(clazz: Loadable): Promise<unknown>
     {
-        if (clazz.source === null)
+        if (clazz.source === undefined)
         {
             return (globalThis as FlexObject)[clazz.name];
         }

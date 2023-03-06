@@ -106,15 +106,15 @@ const serializedConstructedClass = { serialized: true, name: 'Constructed', sour
 const serializedNestedClass = { serialized: true, name: 'Nested', source: 'Nested', args: ['hello', { serialized: true, name: 'Constructed', source: 'Constructed', args: [1, true], fields: { c: 'hello' } }], fields: {} };
 const serializedPrivateClass = { serialized: true, name: 'PrivateFieldClass', source: 'PrivateFieldClass', args: [undefined, undefined], fields: { c: undefined } };
 
-const serializedInvalidClass = { serialized: true, name: 'Invalid', source: null, args: [], fields: {} };
-const serializedUnserializableClass = { serialized: true, name: 'Infinity', source: null, args: [], fields: {} };
+const serializedInvalidClass = { serialized: true, name: 'Invalid', source: undefined, args: [], fields: {} };
+const serializedUnserializableClass = { serialized: true, name: 'Infinity', source: undefined, args: [], fields: {} };
 
 const nonObject = 42;
 const nonClassObject = new Object();
-const notSerialized = { name: 'Data', source: null, args: [], fields: {} };
-const invalidName = { serialized: true, name: 123, source: null, args: [], fields: {} };
-const invalidArgs = { serialized: true, name: 'Data', source: null, args: {}, fields: {} };
-const invalidFields = { serialized: true, name: 'Data', source: null, args: [], fields: [] };
+const notSerialized = { name: 'Data', source: undefined, args: [], fields: {} };
+const invalidName = { serialized: true, name: 123, source: undefined, args: [], fields: {} };
+const invalidArgs = { serialized: true, name: 'Data', source: undefined, args: {}, fields: {} };
+const invalidFields = { serialized: true, name: 'Data', source: undefined, args: [], fields: [] };
 
 export {
     Data, Constructed, Nested, PrivateFieldClass,

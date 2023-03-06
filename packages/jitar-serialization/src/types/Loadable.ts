@@ -2,7 +2,7 @@
 type Loadable =
 {
     name: string;
-    source?: string | null;
+    source?: string;
 }
 
 export default Loadable;
