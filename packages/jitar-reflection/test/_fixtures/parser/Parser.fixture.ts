@@ -19,6 +19,7 @@ const IMPORTS =
     IMPORT_DEFAULT_MEMBER: "import name, { member } from 'module'",
     IMPORT_DEFAULT_MEMBER_AS: "import name, { member as alias } from 'module'",
     IMPORT_MULTIPLE_MEMBERS_AS: "import { name, member as alias } from 'module'",
+    IMPORT_DYNAMIC: "import('module')",
 }
 
 const EXPORTS =
