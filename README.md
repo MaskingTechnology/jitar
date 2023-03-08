@@ -144,6 +144,8 @@ There are more practical [examples](examples/README.md) in the repository. Pract
 Jitar provides integration examples for the following frontend frameworks:
 - [React](examples/4-integrations/1-react/README.md)
 - [Vue](examples/4-integrations/2-vue/README.md)
+- [Svelte](examples/4-integrations/3-svelte/README.md)
+- [Lit](examples/4-integrations/4-lit/README.md)
 
 We are working on integrations with more frontend and meta frameworks, so this list will grow over time.
 
