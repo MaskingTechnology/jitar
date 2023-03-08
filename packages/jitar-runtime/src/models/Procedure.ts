@@ -4,22 +4,14 @@ import Version from './Version.js';
 
 export default class Procedure
 {
-    #module: string;
-    #name: string;
     #fqn: string;
     #implementations: Map<Version, Implementation> = new Map();
     #latestImplementation?: Implementation;
 
-    constructor(module: string, name: string, fqn: string)
+    constructor(fqn: string)
     {
-        this.#module = module;
-        this.#name = name;
         this.#fqn = fqn;
     }
-
-    get module() { return this.#module; }
-
-    get name() { return this.#name; }
 
     get fqn() { return this.#fqn; }
 
@@ -33,7 +25,7 @@ export default class Procedure
         return implementations.some(implementation => implementation.public);
     }
 
-    addImplementation(implementation: Implementation): void
+    addImplementation(implementation: Implementation): Procedure
     {
         this.#implementations.set(implementation.version, implementation);
 
@@ -41,6 +33,8 @@ export default class Procedure
         {
             this.#latestImplementation = implementation;
         }
+
+        return this;
     }
 
     #isNewLatestImplementation(implementation: Implementation): boolean

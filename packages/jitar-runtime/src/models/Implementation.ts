@@ -1,5 +1,5 @@
 
-import Parameter from './Parameter.js';
+import Parameter from '../interfaces/Parameter.js';
 import * as AccessLevel from '../definitions/AccessLevel.js';
 import Version from './Version.js';
 

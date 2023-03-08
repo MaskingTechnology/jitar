@@ -1,5 +1,7 @@
 
-export default class Parameter
+import Parameter from '../interfaces/Parameter.js';
+
+export default class NamedParameter implements Parameter
 {
     #name: string;
     #isOptional: boolean;

@@ -13,9 +13,11 @@ export default class Segment
 
     get id() { return this.#id; }
 
-    addProcedure(procedure: Procedure): void
+    addProcedure(procedure: Procedure): Segment
     {
         this.#procedures.set(procedure.fqn, procedure);
+
+        return this;
     }
 
     hasProcedure(fqn: string): boolean
