@@ -10,3 +10,6 @@ export { default as NamedParameter } from './models/NamedParameter.js';
 export { default as ObjectParameter } from './models/ObjectParameter.js';
 export { default as Procedure } from './models/Procedure.js';
 export { default as Segment } from './models/Segment.js';
+
+// Utils
+export { default as VersionParser } from './utils/VersionParser.js';
