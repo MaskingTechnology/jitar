@@ -278,6 +278,16 @@ export default class Parser
         {
             return new ReflectionImport(members, token.value);
         }
+        else if (token.hasValue(Group.OPEN))
+        {
+            token = tokenList.step(); // Read away the open group
+
+            const from = token.value;
+
+            tokenList.step(2); // Read away the from value and scope close
+
+            return new ReflectionImport(members, from);
+        }
 
         if (token.hasValue(Scope.OPEN) === false)
         {

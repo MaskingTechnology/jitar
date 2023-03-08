@@ -156,6 +156,13 @@ describe('parser/Parser', () =>
             expect(second.name).toBe('member');
             expect(second.as).toBe('alias');
         });
+
+        it('should parse importing modules dynamically', () =>
+        {
+            const imported = parser.parseImport(IMPORTS.IMPORT_DYNAMIC);
+            expect(imported.members.length).toBe(0);
+            expect(imported.from).toBe("'module'");
+        });
     });
 
     describe('.parseExport(code)', () =>
