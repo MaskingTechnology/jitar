@@ -1,0 +1,29 @@
+{
+  "name": "4-lit",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "dist/my-element.es.js",
+  "exports": {
+    ".": "./dist/my-element.es.js"
+  },
+  "types": "types/my-element.d.ts",
+  "files": [
+    "dist",
+    "types"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc",
+    "jitar": "node --experimental-network-imports --experimental-fetch dist/jitar.js --config=jitar.json"
+  },
+  "dependencies": {
+    "jitar-nodejs-server": "^0.3.8",
+    "lit": "^2.6.1"
+  },
+  "devDependencies": {
+    "jitar-vite-plugin": "^0.3.7",
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0"
+  }
+}
