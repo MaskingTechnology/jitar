@@ -5,6 +5,7 @@
     "license": "MIT",
     "workspaces": [
         "packages/jitar",
+        "packages/jitar-caching",
         "packages/jitar-nodejs-server",
         "packages/jitar-reflection",
         "packages/jitar-runtime",

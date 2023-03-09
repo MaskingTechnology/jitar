@@ -30,7 +30,7 @@ export default class SegmentReader
         this.#fileManager = fileManager;
     }
 
-    async read(filename: string)
+    async read(filename: string): Promise<Segment>
     {
         const name = this.#extractSegmentName(filename);
         const definition = await this.#loadSegmentDefinition(filename);
