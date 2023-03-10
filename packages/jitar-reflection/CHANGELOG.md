@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 0.3.9 (March 10, 2023)
+
+New features:
+- \[[`1a7b415`](https://github.com/MaskingTechnology/jitar/commit/1a7b415)] Added support for dynamic imports [petermasking](https://github.com/MaskingTechnology/jitar/pull/199)
+
 ## 0.3.7 (February 26, 2023)
 
 Fixes:
