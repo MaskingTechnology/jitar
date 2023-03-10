@@ -25,7 +25,8 @@
         "examples/4-integrations/1-react",
         "examples/4-integrations/2-vue",
         "examples/4-integrations/3-svelte",
-        "examples/4-integrations/4-lit"
+        "examples/4-integrations/4-lit",
+        "examples/4-integrations/5-solid"
     ],
     "scripts": {
         "build": "npm run build --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=/packages/jitar-reflection --workspace=packages/jitar-vite-plugin --if-present",

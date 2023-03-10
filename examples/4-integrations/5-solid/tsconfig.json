@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+      "target": "ESNext",
+      "module": "ESNext",
+      "moduleResolution": "node",
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "jsx": "preserve",
+      "jsxImportSource": "solid-js",
+      "types": ["vite/client"],
+      "noEmit": false, /* update this property */
+      "isolatedModules": true,
+      "outDir": "dist" /* add this property */
+    },
+    "include": ["src/**/*.ts"], /* add this property */
+  }
+  
