@@ -29,6 +29,11 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
         this.#middlewares.push(middleware);
     }
 
+    getMiddleware(type: Function): Middleware | undefined
+    {
+        return this.#middlewares.find(middleware => middleware instanceof type);
+    }
+
     handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         const startHandler = this.#getNextHandler(fqn, version, args, headers, 0);
