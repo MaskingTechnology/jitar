@@ -1,13 +1,14 @@
 
-import { Controller, Get, Post } from '@overnightjs/core';
+import { Controller, Get, Options, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { Version, Forbidden, BadRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized, LocalGateway, LocalNode, Proxy } from 'jitar';
+import { Version, Forbidden, BadRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized, LocalGateway, LocalNode, Proxy, CorsMiddleware } from 'jitar';
 import { ValueSerializer } from 'jitar';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
 const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
+const CORS_MAX_AGE = 86400;
 
 @Controller('rpc')
 export default class RPCController
@@ -61,6 +62,12 @@ export default class RPCController
         const serialize = this.#extractSerialize(request);
 
         return this.#run(fqn, version, args, headers, response, serialize);
+    }
+
+    @Options('*')
+    async runOptions(request: Request, response: Response): Promise<Response>
+    {
+        return this.#setCors(response);
     }
 
     #extractFqn(request: Request): string
@@ -163,6 +170,23 @@ export default class RPCController
 
             return this.#createErrorResponse(error, errorData, response, serialize);
         }
+    }
+
+    async #setCors(response: Response): Promise<Response>
+    {
+        const cors = this.#runtime.getMiddleware(CorsMiddleware) as CorsMiddleware;
+
+        if (cors === undefined)
+        {
+            return response.status(204).send();
+        }
+
+        response.setHeader('Access-Control-Allow-Origin', cors.allowOrigin);
+        response.setHeader('Access-Control-Allow-Methods', cors.allowMethods);
+        response.setHeader('Access-Control-Allow-Headers', cors.allowHeaders);
+        response.setHeader('Access-Control-Max-Age', CORS_MAX_AGE);
+
+        return response.status(204).send();
     }
 
     #createResultResponse(result: unknown, response: Response, serialize: boolean): Response

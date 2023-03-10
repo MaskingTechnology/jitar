@@ -15,6 +15,12 @@ export default class CorsMiddleware implements Middleware
         this.#allowHeaders = headers;
     }
 
+    get allowOrigin() { return this.#allowOrigin; }
+
+    get allowMethods() { return this.#allowMethods; }
+
+    get allowHeaders() { return this.#allowHeaders; }
+
     async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: NextHandler): Promise<unknown>
     {
         const result = await next();
