@@ -13,7 +13,11 @@ export default interface FileManager
 
     getContent(filename: string): Promise<Buffer | string>;
 
-    load(filename: string): Promise<File>;
+    read(filename: string): Promise<File>;
 
-    store(filename: string, content: string): Promise<void>;
+    write(filename: string, content: string): Promise<void>;
+
+    delete(filename: string): Promise<void>;
+
+    filter(pattern: string): Promise<string[]>;
 }

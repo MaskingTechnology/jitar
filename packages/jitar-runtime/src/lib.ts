@@ -1,4 +1,8 @@
 
+// Definitions
+export * from './definitions/AccessLevel.js';
+export * from './definitions/Files.js';
+
 // Interfaces
 export { default as FileManager } from './interfaces/FileManager.js';
 
