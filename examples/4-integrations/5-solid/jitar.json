@@ -10,6 +10,7 @@
             "my-element.js",
             "style.css",
             "vite.svg",
+            "solid.svg",
             "assets/**/*"
         ]
     }

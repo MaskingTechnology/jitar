@@ -13,5 +13,6 @@
       "outDir": "dist" /* add this property */
     },
     "include": ["src/**/*.ts"], /* add this property */
+    "references": [{ "path": "./tsconfig.node.json" }]
   }
   

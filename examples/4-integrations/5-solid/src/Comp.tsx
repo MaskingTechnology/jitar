@@ -1,7 +1,7 @@
+
 import './Comp.css';
 import { createResource } from 'solid-js';
 import { sayHello } from './shared/sayHello';
-
 
 const sayHelloResource = async () => {
     return await sayHello('Vite + Solid + Jitar');
@@ -11,7 +11,7 @@ export default () => {
     const [message] = createResource(sayHelloResource);
     
     return(<>
-        <div>
+        <div class="logos">
             <a href="https://vitejs.dev" target="_blank">
             <img src="/vite.svg" class="logo" alt="Vite logo" />
             </a>
