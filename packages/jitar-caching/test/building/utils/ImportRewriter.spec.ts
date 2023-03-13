@@ -16,7 +16,7 @@ import
 
 const importRewriter = new ImportRewriter();
 
-describe('runtime/utils/ImportRewriter', () =>
+describe('building/utils/ImportRewriter', () =>
 {
     describe('.rewrite(module)', () =>
     {

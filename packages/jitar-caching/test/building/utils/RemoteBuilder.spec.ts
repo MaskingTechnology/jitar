@@ -11,7 +11,7 @@ import
 
 const remoteBuilder = new RemoteBuilder();
 
-describe('runtime/utils/RemoteBuilder', () =>
+describe('building/utils/RemoteBuilder', () =>
 {
     describe('.build(module)', () =>
     {
