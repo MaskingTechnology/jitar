@@ -1,0 +1,13 @@
+{
+    "url": "http://127.0.0.1:3000",
+    "standalone": {
+        "source": "./dist",
+        "cache": "./cache",
+        "index": "index.html",
+        "assets": [
+            "index.html",
+            "vite.svg",
+            "assets/**/*"
+        ]
+    }
+}

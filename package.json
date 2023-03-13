@@ -25,7 +25,8 @@
         "examples/4-integrations/1-react",
         "examples/4-integrations/2-vue",
         "examples/4-integrations/3-svelte",
-        "examples/4-integrations/4-lit"
+        "examples/4-integrations/4-lit",
+        "examples/4-integrations/5-solid"
     ],
     "scripts": {
         "build": "npm run build --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=/packages/jitar-reflection --workspace=packages/jitar-vite-plugin --if-present",
@@ -33,17 +34,18 @@
         "test": "npm run test --workspace=packages/jitar --workspace=packages/jitar-nodejs-server --workspace=/packages/jitar-reflection --workspace=packages/jitar-vite-plugin --if-present"
     },
     "devDependencies": {
-        "lerna": "^6.5.1",
-        "@typescript-eslint/eslint-plugin": "^5.53.0",
-        "@typescript-eslint/parser": "^5.53.0",
         "@types/express": "^4.17.17",
         "@types/express-http-proxy": "^1.6.3",
         "@types/fs-extra": "^11.0.1",
         "@types/mime-types": "^2.1.1",
         "@types/yargs": "^17.0.22",
+        "@typescript-eslint/eslint-plugin": "^5.53.0",
+        "@typescript-eslint/parser": "^5.53.0",
         "@vitest/coverage-c8": "^0.29.1",
+        "degit": "^2.8.4",
         "eslint": "^8.35.0",
-        "vitest": "^0.29.1",
-        "vite": "^4.1.4"
+        "lerna": "^6.5.1",
+        "vite": "^4.1.4",
+        "vitest": "^0.29.1"
     }
 }
