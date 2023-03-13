@@ -2,7 +2,7 @@
 import { Reflector } from 'jitar-reflection';
 import { FileManager } from 'jitar-runtime';
 
-import ApplicationFileNotLoaded from './errors/ApplicationFileNotLoaded.js';
+import ModuleFileNotLoaded from './errors/ModuleFileNotLoaded.js';
 
 import Module from './models/Module.js';
 
@@ -36,7 +36,7 @@ export default class ModuleReader
         }
         catch (error: unknown)
         {
-            throw new ApplicationFileNotLoaded(filename);
+            throw new ModuleFileNotLoaded(filename);
         }
     }
 
