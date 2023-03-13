@@ -1,6 +1,8 @@
 
 import { ReflectionImport, Reflector } from 'jitar-reflection';
 
+import Keyword from '../definitions/Keyword.js';
+
 const IMPORT_PATTERN = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g;
 const NON_SYSTEM_INDICATORS = ['.', '/', 'http:', 'https:'];
 
@@ -34,7 +36,7 @@ export default class ImportRewriter
 
     #isJitarDependency(dependency: ReflectionImport): boolean
     {
-        return dependency.from.includes('jitar');
+        return dependency.from.includes(Keyword.JITAR);
     }
 
     #rewriteImport(dependency: ReflectionImport): string
@@ -81,7 +83,7 @@ export default class ImportRewriter
     #doesImportDefault(dependency: ReflectionImport): boolean
     {
         return dependency.members.length === 1
-            && dependency.members[0].name === 'default';
+            && dependency.members[0].name === Keyword.DEFAULT;
     }
 
     #insertGetDependency(module: string): string

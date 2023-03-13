@@ -2,10 +2,10 @@
 import { ReflectionField } from 'jitar-reflection';
 import { AccessLevel } from 'jitar-runtime';
 
+import Keyword from '../definitions/Keyword.js';
+
 import SegmentImplementation from '../models/SegmentImplementation.js';
 import SegmentModule from '../models/SegmentModule.js';
-
-const KEYWORD_DEFAULT = 'default';
 
 export default class RemoteBuilder
 {
@@ -22,7 +22,7 @@ export default class RemoteBuilder
                     continue;
                 }
 
-                const asDefault = implementation.importKey === KEYWORD_DEFAULT;
+                const asDefault = implementation.importKey === Keyword.DEFAULT;
 
                 code += this.#createRemoteCode(procedure.fqn, implementation, asDefault);
             }
@@ -46,7 +46,7 @@ export default class RemoteBuilder
         const procedueParameters = parameterNames.join(', ');
         const procedureArguments = parameterNames.map(name => `'${name}': ${name}`).join(', ');
 
-        const functionName = `\nexport ${asDefault ? `${KEYWORD_DEFAULT} ` : ''}async function ${procedureName}(${procedueParameters})`;
+        const functionName = `\nexport ${asDefault ? `${Keyword.DEFAULT} ` : ''}async function ${procedureName}(${procedueParameters})`;
         const functionBody = `return runProcedure('${fqn}', '${procedureVersion}', { ${procedureArguments} }, this)`;
 
         return `${functionName} {\n\t${functionBody}\n}\n`;
