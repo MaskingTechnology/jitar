@@ -1,5 +1,5 @@
 
-import { FileManager } from 'jitar-runtime';
+import { FileManager, Files } from 'jitar-runtime';
 
 import ApplicationCacheBuilder from './building/ApplicationCacheBuilder';
 import ApplicationCacheWriter from './building/ApplicationCacheWriter';
@@ -25,8 +25,8 @@ export default class CacheManager
 
     async build(): Promise<void>
     {
-        const segmentFiles = await this.#fileManager.filter('**/*.segment.json');
-        const moduleFiles = await this.#fileManager.filter('**/*.js');
+        const segmentFiles = await this.#fileManager.filter(Files.SEGMENT_PATTERN);
+        const moduleFiles = await this.#fileManager.filter(Files.MODULE_PATTERN);
 
         const application = await this.#reader.read(segmentFiles, moduleFiles);
         const cache = this.#builder.build(application);
