@@ -1,0 +1,28 @@
+{
+  "name": "create-jitar",
+  "version": "0.0.1",
+  "type": "module",
+  "license": "MIT",
+  "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
+  "description": "npm creator for jitar",
+  "bin": {
+    "create-jitar": "index.js"
+  },
+  "files": [
+    "../../examples/4-integrations/**/*",
+    "dist"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MaskingTechnology/jitar",
+    "directory": "packages/create-jitar"
+  },
+  "bugs": {
+    "url": "https://github.com/MaskingTechnology/jitar/issues"
+  },
+  "homepage": "https://jitar.dev"
+}
