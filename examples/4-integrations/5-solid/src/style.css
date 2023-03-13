@@ -14,6 +14,10 @@
   -webkit-text-size-adjust: 100%;
 }
 
+#app {
+  text-align: center;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -30,6 +34,24 @@ body {
   min-width: 320px;
   min-height: 100vh;
   justify-content: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.lit:hover {
+  filter: drop-shadow(0 0 2em #325cffaa);
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
 }
 
 @media (prefers-color-scheme: light) {
