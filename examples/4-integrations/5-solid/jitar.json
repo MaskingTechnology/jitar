@@ -6,9 +6,6 @@
         "index": "index.html",
         "assets": [
             "index.html",
-            "4-lit.js",
-            "my-element.js",
-            "style.css",
             "vite.svg",
             "assets/**/*"
         ]

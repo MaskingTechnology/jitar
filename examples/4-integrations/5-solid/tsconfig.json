@@ -1,24 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "module": "ESNext",
-    "lib": ["ESNext", "DOM"],
-    "moduleResolution": "Node",
     "strict": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "types": ["vite/client"],
     "noEmit": false, /* update this property */
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "skipLibCheck": true,
-    "jsx": "preserve", /* add this property */
-    "jsxImportSource": "solid-js", /* add this property */
-    "types": ["vite/client"], /* add this property */
-    "outDir": "dist" /* add this property */
+    "outDir": "dist", /* add this property */
+    "isolatedModules": true
   },
   "include": ["src/**/*.ts"], /* update this property */
-  "references": [{ "path": "./tsconfig.node.json" }] /* add this property */
 }
