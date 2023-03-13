@@ -137,7 +137,7 @@ export default class SegmentReader
             const uid = `\$${id++}`;
             const fqn = moduleName !== '' ? `${moduleName}/${procedureName}` : procedureName;
 
-            const implementation = new SegmentImplementation(uid, access, version, executable as ReflectionFunction);
+            const implementation = new SegmentImplementation(uid, importKey, access, version, executable as ReflectionFunction);
 
             const procedure = procedures.has(fqn)
                 ? procedures.get(fqn) as SegmentProcedure

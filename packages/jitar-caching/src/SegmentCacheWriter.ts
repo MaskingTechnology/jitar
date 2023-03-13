@@ -1,6 +1,6 @@
 
 import { ReflectionArray, ReflectionField, ReflectionFunction, ReflectionObject } from 'jitar-reflection';
-import { FileManager, VersionParser } from 'jitar-runtime';
+import { FileManager, VersionParser, createNodeFilename, createRepositoryFilename } from 'jitar-runtime';
 
 import SegmentCache from './models/SegmentCache.js';
 import SegmentImport from './models/SegmentImport.js';
@@ -19,12 +19,12 @@ export default class SegmentCacheWriter
         this.#fileManager = fileManager;
     }
 
-    async write(cache: SegmentCache): Promise<void[]>
+    async write(cache: SegmentCache): Promise<void>
     {
         return Promise.all([
             this.#writeNodeCache(cache),
             this.#writeRepositoryCache(cache)
-        ]);
+        ]).then(() => {});
     }
 
     async #writeNodeCache(cache: SegmentCache): Promise<void>
@@ -32,18 +32,18 @@ export default class SegmentCacheWriter
         const importCode = this.#createImportCode(cache.imports);
         const segmentCode = this.#createSegmentCode(cache.name, cache.procedures);
 
-        const filename = `${cache.name}${SEGMENT_NODE_CACHE_FILENAME}`;
+        const filename = createNodeFilename(cache.name);
         const code = `${importCode}\n${segmentCode}`;
 
-        return this.#fileManager.store(filename, code);
+        return this.#fileManager.write(filename, code);
     }
 
     async #writeRepositoryCache(cache: SegmentCache): Promise<void>
     {
-        const filename = `${cache.name}${SEGMENT_REPOSITORY_CACHE_FILENAME}`;
+        const filename = createRepositoryFilename(cache.name);
         const code = `export const files = [\n\t"${[...cache.files].join('",\n\t"')}"\n];`;
 
-        return this.#fileManager.store(filename, code);
+        return this.#fileManager.write(filename, code);
     }
 
     #createImportCode(imports: SegmentImport[]): string

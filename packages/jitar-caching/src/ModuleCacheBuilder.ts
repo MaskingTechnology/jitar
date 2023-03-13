@@ -7,11 +7,8 @@ export default class ModuleCacheBuilder
 {
     build(application: Application, module: Module): ModuleCache
     {
-        const filename = module.filename;
-        const code = module.code;
-        const classes = module.content.exportedClasses;
-        const functions = module.content.exportedFunctions;
+        const segment = application.getSegmentModule(module.filename);
 
-        return new ModuleCache(filename, code, classes, functions);
+        return new ModuleCache(module, segment);
     }
 }

@@ -1,26 +1,19 @@
 
-import { ReflectionClass, ReflectionFunction, ReflectionImport } from 'jitar-reflection';
+import Module from './Module.js';
+import SegmentModule from './SegmentModule.js';
 
 export default class ModuleCache
 {
-    #filename: string;
-    #code: string;
-    #classes: ReflectionClass[];
-    #functions: ReflectionFunction[];
+    #module: Module;
+    #segment?: SegmentModule;
 
-    constructor(filename: string, code: string, classes: ReflectionClass[], functions: ReflectionFunction[])
+    constructor(module: Module, segment?: SegmentModule)
     {
-        this.#filename = filename;
-        this.#code = code;
-        this.#classes = classes;
-        this.#functions = functions;
+        this.#module = module;
+        this.#segment = segment;
     }
 
-    get filename() { return this.#filename; }
+    get module() { return this.#module; }
 
-    get code() { return this.#code; }
-
-    get classes() { return this.#classes; }
-
-    get functions() { return this.#functions; }
+    get segment() { return this.#segment; }
 }

@@ -18,12 +18,12 @@ export default class ApplicationCacheWriter
         this.#segmentWriter = new SegmentCacheWriter(fileManager);
     }
 
-    async write(cache: ApplicationCache): Promise<void[]>
+    async write(cache: ApplicationCache): Promise<void>
     {
         return Promise.all([
             this.#writeSegmentCache(cache.segments),
             this.#writeModuleCache(cache.modules)
-        ]);
+        ]).then(() => {});
     }
 
     async #writeSegmentCache(segments: SegmentCache[]): Promise<void>
