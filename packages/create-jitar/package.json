@@ -9,7 +9,7 @@
     "create-jitar": "index.js"
   },
   "files": [
-    "../../examples/4-integrations/**/*",
+    "templates/**/*",
     "dist"
   ],
   "main": "index.js",
