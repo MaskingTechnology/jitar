@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 0.3.9 (March 10, 2023)
+
+New features:
+- \[[`ccd0d50`](https://github.com/MaskingTechnology/jitar/commit/ccd0d50)] Added support for preflight requests [basmasking](https://github.com/MaskingTechnology/jitar/pull/204)
+
 ## 0.3.8 (March 04, 2023)
 
 Fixes:
