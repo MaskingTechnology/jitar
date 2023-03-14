@@ -30,7 +30,7 @@ export default class SegmentCacheBuilder
 
             for (const procedure of module.procedures)
             {
-                const ids = procedure.implementations.map(implementation => implementation.id);
+                const ids = procedure.implementations.map(implementation => `${implementation.importKey} as ${implementation.id}`);
 
                 members = [...members, ...ids];
             }

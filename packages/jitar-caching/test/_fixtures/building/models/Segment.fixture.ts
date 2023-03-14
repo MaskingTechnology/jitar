@@ -1,13 +1,12 @@
 
-import SegmentModule from '../../../../src/building/models/SegmentModule';
+import Segment from '../../../../src/building/models/Segment';
 
-const module = new SegmentModule('existing.js', []);
-const modules = [module];
+import { SEGMENT_MODULES } from './SegmentModule.fixture';
 
-const existingFilename = 'existing.js';
-const nonExistingFilename = 'non-existing.js';
-
-export {
-    modules,
-    existingFilename, nonExistingFilename
+const SEGMENTS =
+{
+    ORDER: new Segment('order', [SEGMENT_MODULES.CREATE_ORDER, SEGMENT_MODULES.STORE_ORDER]),
+    PRODUCT: new Segment('product', [SEGMENT_MODULES.GET_PRODUCTS])
 }
+
+export { SEGMENTS }

@@ -1,18 +1,13 @@
 
-import Segment from '../../../../src/building/models/Segment';
-import SegmentModule from '../../../../src/building/models/SegmentModule';
+import Application from '../../../../src/building/models/Application';
 
-const segmentModule = new SegmentModule('existing.js', []);
-const segmentModules = [segmentModule];
-const segment = new Segment('segment', segmentModules);
-const segments = [segment];
+import { SEGMENTS } from './Segment.fixture';
+import { MODULES } from './Module.fixture';
 
-const modules = [];
+const APPLICATION = new Application
+(
+    [SEGMENTS.ORDER, SEGMENTS.PRODUCT],
+    [MODULES.CREATE_ORDER, MODULES.STORE_ORDER, MODULES.GET_PRODUCTS, MODULES.ORDER_MODELS, MODULES.PRODUCT_MODELS]
+);
 
-const existingFilename = 'existing.js';
-const nonExistingFilename = 'non-existing.js';
-
-export {
-    segments, modules,
-    existingFilename, nonExistingFilename
-}
+export { APPLICATION }

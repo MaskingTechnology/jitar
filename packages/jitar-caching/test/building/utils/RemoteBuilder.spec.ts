@@ -3,11 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import RemoteBuilder from '../../../src/building/utils/RemoteBuilder';
 
-import
-{
-    segmentModule,
-    codeResult
-} from '../../_fixtures/building/utils/RemoteBuilder.fixture';
+import { INPUT, OUTPUT } from '../../_fixtures/building/utils/RemoteBuilder.fixture';
 
 const remoteBuilder = new RemoteBuilder();
 
@@ -17,9 +13,9 @@ describe('building/utils/RemoteBuilder', () =>
     {
         it('should create remote calls for all procedure implementations', () =>
         {
-            const result = remoteBuilder.build(segmentModule);
+            const result = remoteBuilder.build(INPUT);
 
-            expect(result).toBe(codeResult);
+            expect(result).toBe(OUTPUT);
         });
     });
 });

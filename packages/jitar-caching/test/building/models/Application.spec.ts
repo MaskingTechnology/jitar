@@ -1,15 +1,9 @@
 
 import { describe, expect, it } from 'vitest';
 
-import Application from '../../../src/building/models/Application';
+import { APPLICATION } from '../../_fixtures/building/models/Application.fixture';
 
-import
-{
-    segments, modules,
-    existingFilename, nonExistingFilename
-} from '../../_fixtures/building/models/Application.fixture';
-
-const application = new Application(segments, modules);
+const application = APPLICATION;
 
 describe('building/models/Application', () =>
 {
@@ -17,14 +11,14 @@ describe('building/models/Application', () =>
     {
         it('should get an existing segment module', () =>
         {
-            const result = application.getSegmentModule(existingFilename);
+            const result = application.getSegmentModule('./order/createOrder.js');
 
             expect(result).toBeDefined();
         });
 
         it('should not get an non-existing segment module', () =>
         {
-            const result = application.getSegmentModule(nonExistingFilename);
+            const result = application.getSegmentModule('./non-existing.js');
 
             expect(result).toBeUndefined();
         });
