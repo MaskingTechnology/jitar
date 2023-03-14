@@ -11,19 +11,17 @@ class TestFileManager implements FileManager
 
     getRootLocation(): string
     {
-        return '{root}';
+        return '';
     }
 
     getAbsoluteLocation(filename: string): string
     {
-        const relativeLocation = this.getRelativeLocation(filename);
-
-        return `{root}/${relativeLocation}`;
+        return filename;
     }
 
     getRelativeLocation(filename: string): string
     {
-        return filename.substring(2);
+        return filename;
     }
 
     async getType(filename: string): Promise<string>

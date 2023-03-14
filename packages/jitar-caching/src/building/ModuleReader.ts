@@ -39,6 +39,4 @@ export default class ModuleReader
             throw new ModuleFileNotLoaded(filename);
         }
     }
-
-
 }
