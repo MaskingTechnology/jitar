@@ -13,7 +13,7 @@ describe('building/ModuleReader', () =>
 {
     describe('.read(filename)', () =>
     {
-        it('should read a module from a JavaScript file', async () =>
+        it('should read a module from a source file', async () =>
         {
             const result = await moduleReader.read(INPUT);
 

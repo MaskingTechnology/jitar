@@ -11,9 +11,9 @@ const applicationReader = new ApplicationReader(fileManager);
 
 describe('building/ApplicationReader', () =>
 {
-    describe('.read(filename)', () =>
+    describe('.read(segmentFiles, moduleFiles)', () =>
     {
-        it('should read an application from its source', async () =>
+        it('should read an application from its sources', async () =>
         {
             const result = await applicationReader.read(INPUT.SEGMENT_FILENAMES, INPUT.MODULE_FILENAMES);
             expect(result.segments).toHaveLength(OUTPUT.segments.length);

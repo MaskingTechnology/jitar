@@ -8,9 +8,9 @@ import { INPUT, OUTPUT } from '../_fixtures/building/SegmentCacheWriter.fixture'
 
 describe('building/SegmentCacheWriter', () =>
 {
-    describe('.read(filename)', () =>
+    describe('.write(cache)', () =>
     {
-        it('should write a segment from a definition file', async () =>
+        it('should write segment cache files', async () =>
         {
             // We need to create a new file manager for each test, because the file manager
             // keeps track of the files that are written to disk.
