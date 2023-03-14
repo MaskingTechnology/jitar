@@ -29,7 +29,7 @@ import { runProcedure } from "/jitar/hooks.js";`;
 const HAS_IMPORT_NO_SEMICOLON = `import { runProcedure } from 'jitar'`;
 
 const HAS_IMPORT_NO_SEMICOLON_RESULT =
-    `import { getDependency } from "/jitar/hooks.js";
+`import { getDependency } from "/jitar/hooks.js";
 import { runProcedure } from "/jitar/hooks.js";`;
 
 const HAS_MIXED_IMPORTS =

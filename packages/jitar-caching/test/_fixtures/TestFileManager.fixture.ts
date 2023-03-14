@@ -5,7 +5,7 @@ import { SOURCE_FILES, SEGMENT_FILENAMES, MODULE_FILENAMES } from './SourceFiles
 
 class TestFileManager implements FileManager
 {
-    #writtenFiles: File[] = [];
+    #writtenFiles: Map<string, string> = new Map();
 
     get writtenFiles() { return this.#writtenFiles; }
 
@@ -16,7 +16,12 @@ class TestFileManager implements FileManager
 
     getAbsoluteLocation(filename: string): string
     {
-        return filename;
+        if (filename.startsWith('./'))
+        {
+            return filename;
+        }
+
+        return `./${filename}`;
     }
 
     getRelativeLocation(filename: string): string
@@ -43,18 +48,18 @@ class TestFileManager implements FileManager
 
     async read(filename: string): Promise<File>
     {
+        const absoluteFilename = this.getAbsoluteLocation(filename);
         const type = await this.getType(filename);
         const content = await this.getContent(filename);
 
-        return new File(filename, type, content);
+        return new File(absoluteFilename, type, content);
     }
 
     async write(filename: string, content: string): Promise<void>
     {
-        const type = await this.getType(filename);
-        const file = new File(filename, type, content);
-
-        this.#writtenFiles.push(file);
+        const absoluteFilename = this.getAbsoluteLocation(filename);
+        
+        this.#writtenFiles.set(absoluteFilename, content);
     }
 
     delete(filename: string): Promise<void>

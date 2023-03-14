@@ -11,14 +11,14 @@ describe('building/models/Application', () =>
     {
         it('should get an existing segment module', () =>
         {
-            const result = application.getSegmentModule('./order/createOrder.js');
+            const result = application.getSegmentModule('order/createOrder.js');
 
             expect(result).toBeDefined();
         });
 
         it('should not get an non-existing segment module', () =>
         {
-            const result = application.getSegmentModule('./non-existing.js');
+            const result = application.getSegmentModule('non-existing.js');
 
             expect(result).toBeUndefined();
         });

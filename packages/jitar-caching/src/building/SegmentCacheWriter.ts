@@ -6,10 +6,6 @@ import SegmentCache from './models/SegmentCache.js';
 import SegmentImport from './models/SegmentImport.js';
 import SegmentProcedure from './models/SegmentProcedure.js';
 
-const SEGMENT_FILE_EXTENSION = '.segment.js';
-const SEGMENT_NODE_CACHE_FILENAME = `.node${SEGMENT_FILE_EXTENSION}`;
-const SEGMENT_REPOSITORY_CACHE_FILENAME = `.repository${SEGMENT_FILE_EXTENSION}`;
-
 export default class SegmentCacheWriter
 {
     #fileManager: FileManager;
@@ -52,7 +48,7 @@ export default class SegmentCacheWriter
 
         for (const { members, from } of imports)
         {
-            codes.push(`import { ${members.join(',')} } from "./${from}";`);
+            codes.push(`import { ${members.join(', ')} } from "./${from}";`);
         }
 
         return codes.join('\n');
@@ -74,7 +70,7 @@ export default class SegmentCacheWriter
                 const version = this.#createVersionCode(implementation.version);
                 const parameters = this.#createParametersCode(implementation.executable);
 
-                codes.push(`\t\t.addImplementation(new Implementation("${version}", "${implementation.access}", ${parameters}, ${implementation.id}))`);
+                codes.push(`\t\t.addImplementation(new Implementation(${version}, "${implementation.access}", ${parameters}, ${implementation.id}))`);
             }
 
             codes.push('\t)');
@@ -87,7 +83,7 @@ export default class SegmentCacheWriter
     {
         const version = VersionParser.parse(versionString);
 
-        return `new Version(${version.major}, ${version.minor}, ${version.patch}})`;
+        return `new Version(${version.major}, ${version.minor}, ${version.patch})`;
     }
 
     #createParametersCode(executable: ReflectionFunction): string
