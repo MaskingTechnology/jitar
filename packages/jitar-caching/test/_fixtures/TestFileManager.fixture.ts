@@ -21,7 +21,7 @@ class TestFileManager implements FileManager
 
     getRelativeLocation(filename: string): string
     {
-        return filename;
+        return filename.substring(2);
     }
 
     async getType(filename: string): Promise<string>

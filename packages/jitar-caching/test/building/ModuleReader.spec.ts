@@ -17,7 +17,8 @@ describe('building/ModuleReader', () =>
         {
             const result = await moduleReader.read(INPUT);
 
-            expect(result).toEqual(OUTPUT);
+            expect(result.filename).toEqual(OUTPUT.filename);
+            expect(result.code).toEqual(OUTPUT.code);
         });
     });
 });

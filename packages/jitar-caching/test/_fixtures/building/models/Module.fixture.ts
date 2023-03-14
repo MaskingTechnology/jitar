@@ -9,10 +9,11 @@ const reflector = new Reflector();
 
 function createModule(filename: string): Module
 {
+    const relativeFilename = filename.substring(2);
     const code = SOURCE_FILES[filename];
     const content = reflector.parse(code);
 
-    return new Module(filename, code, content);
+    return new Module(relativeFilename, code, content);
 }
 
 const MODULES =

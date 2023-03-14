@@ -134,7 +134,7 @@ export default class SegmentReader
             const access = properties.access ?? DEFAULT_ACCESS_LEVEL;
             const version = properties.version ?? DEFAULT_VERSION_NUMBER;
 
-            const uid = `\$${id++}`;
+            const uid = `\$${++id}`;
             const fqn = moduleName !== '' ? `${moduleName}/${procedureName}` : procedureName;
 
             const implementation = new SegmentImplementation(uid, importKey, access, version, executable as ReflectionFunction);

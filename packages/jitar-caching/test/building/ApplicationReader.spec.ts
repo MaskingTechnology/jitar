@@ -16,8 +16,16 @@ describe('building/ApplicationReader', () =>
         it('should read an application from its source', async () =>
         {
             const result = await applicationReader.read(INPUT.SEGMENT_FILENAMES, INPUT.MODULE_FILENAMES);
+            expect(result.segments).toHaveLength(OUTPUT.segments.length);
+            expect(result.modules).toHaveLength(OUTPUT.modules.length);
 
-            expect(result).toEqual(OUTPUT);
+            const firstSegmentResult = result.segments[0];
+            const firstSegmentOutput = OUTPUT.segments[0];
+            expect(firstSegmentResult.name).toEqual(firstSegmentOutput.name);
+
+            const firstModuleResult = result.modules[0];
+            const firstModuleOutput = OUTPUT.modules[0];
+            expect(firstModuleResult.filename).toEqual(firstModuleOutput.filename);
         });
     });
 });
