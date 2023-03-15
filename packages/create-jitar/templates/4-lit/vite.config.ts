@@ -2,8 +2,7 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import jitar from 'jitar-vite-plugin'
 
-// https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) =>
+export default defineConfig(({ mode }) =>
 {
   return {
     plugins: [

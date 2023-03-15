@@ -1,10 +1,17 @@
-#!/usr/bin/env node
 
 import inquirer from 'inquirer';
-import fs from 'fs';
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const templateDir = path.resolve(
+    fileURLToPath(import.meta.url),
+    '../..',
+    `templates`,
+);
 
 const CURR_DIR = process.cwd();
-const CHOICES = fs.readdirSync(`../../examples/4-integrations/`);
+const CHOICES = fs.readdirSync(templateDir);
 
 const QUESTIONS = [
     {
@@ -19,23 +26,11 @@ const QUESTIONS = [
         message: 'Project name:',
         validate: function (input: string)
         {
-            if (/^([A-Za-z\-\_\d])+$/.test(input)) return true;
+            if (/^([A-Za-z\-_\d])+$/.test(input)) return true;
             else return 'Project name may only include letters, numbers, underscores and hashes.';
         }
     }
 ];
-
-inquirer.prompt(QUESTIONS)
-    .then(answers =>
-    {
-        const projectChoice = answers['project-choice'];
-        const projectName = answers['project-name'];
-        const templatePath = `../../examples/4-integrations/${projectChoice}`;
-
-        fs.mkdirSync(`${CURR_DIR}/${projectName}`);
-
-        createDirectoryContents(templatePath, projectName);
-    });
 
 function createDirectoryContents(templatePath: string, newProjectPath: string)
 {
@@ -44,8 +39,6 @@ function createDirectoryContents(templatePath: string, newProjectPath: string)
     filesToCreate.forEach(file =>
     {
         const origFilePath = `${templatePath}/${file}`;
-
-        // get stats about the current file
         const stats = fs.statSync(origFilePath);
 
         if (stats.isFile())
@@ -54,12 +47,24 @@ function createDirectoryContents(templatePath: string, newProjectPath: string)
 
             const writePath = `${CURR_DIR}/${newProjectPath}/${file}`;
             fs.writeFileSync(writePath, contents, 'utf8');
-        } else if (stats.isDirectory())
+        }
+        else if (stats.isDirectory())
         {
             fs.mkdirSync(`${CURR_DIR}/${newProjectPath}/${file}`);
 
-            // recursive call
             createDirectoryContents(`${templatePath}/${file}`, `${newProjectPath}/${file}`);
         }
     });
 }
+
+inquirer.prompt(QUESTIONS)
+    .then(answers =>
+    {
+        const projectChoice = answers['project-choice'];
+        const projectName = answers['project-name'];
+        const templatePath = `${templateDir}/${projectChoice}`;
+
+        fs.mkdirSync(`${CURR_DIR}/${projectName}`);
+
+        createDirectoryContents(templatePath, projectName);
+    });

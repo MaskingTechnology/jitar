@@ -13,8 +13,8 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": false, /* default true, changed to false */
-    "outDir": "dist", /* added this property */
+    "noEmit": false,
+    "outDir": "dist",
     "jsx": "react-jsx"
   },
   "include": ["src"],
