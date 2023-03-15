@@ -45,8 +45,11 @@ body {
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
-.logo.lit:hover {
+.logo.solid:hover {
   filter: drop-shadow(0 0 2em #325cffaa);
+}
+.logo.jitar:hover {
+  filter: drop-shadow(0 0 2em #6e9ae1);
 }
 
 h1 {

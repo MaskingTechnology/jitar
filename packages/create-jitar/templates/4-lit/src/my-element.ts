@@ -2,6 +2,7 @@
 import { LitElement, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import litLogo from './assets/lit.svg'
+import jitarLogo from './assets/jitar.svg'
 import { sayHello } from './shared/sayHello';
 
 @customElement('my-element')
@@ -21,12 +22,9 @@ export class MyElement extends LitElement
   {
     return html`
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" class="logo" alt="Vite logo" />
-        </a>
-        <a href="https://lit.dev" target="_blank">
-          <img src=${litLogo} class="logo lit" alt="Lit logo" />
-        </a>
+        <a href="https://vitejs.dev" target="_blank"><img src="/vite.svg" class="logo" alt="Vite logo" /></a>
+        <a href="https://lit.dev" target="_blank"><img src=${litLogo} class="logo lit" alt="Lit logo" /></a>
+        <a href="https://jitar.dev" target="_blank"><img src=${jitarLogo} class="logo jitar" alt="Jitar logo" /></a>
       </div>
       <div><h1>${this.message}</h1></div>
     `
@@ -51,6 +49,9 @@ export class MyElement extends LitElement
     }
     .logo.lit:hover {
       filter: drop-shadow(0 0 2em #325cffaa);
+    }
+    .logo.jitar:hover {
+      filter: drop-shadow(0 0 2em #6e9ae1);
     }
 
     h1 {
