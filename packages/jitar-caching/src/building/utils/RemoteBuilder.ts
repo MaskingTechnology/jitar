@@ -86,11 +86,11 @@ export default class RemoteBuilder
             }
             else if (parameter instanceof ReflectionArray)
             {
-                result.push(`'\$${number++}': []`); // Unsupported for now
+                result.push(`'$${number++}': []`); // Unsupported for now
             }
             else if (parameter instanceof ReflectionObject)
             {
-                result.push(`'\$${number++}': {}`); // Unsupported for now
+                result.push(`'$${number++}': {}`); // Unsupported for now
             }
         }
         

@@ -20,7 +20,7 @@ export default class SegmentCacheWriter
         return Promise.all([
             this.#writeNodeCache(cache),
             this.#writeRepositoryCache(cache)
-        ]).then(() => {});
+        ]).then(() => undefined);
     }
 
     async #writeNodeCache(cache: SegmentCache): Promise<void>

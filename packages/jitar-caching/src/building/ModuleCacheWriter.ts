@@ -25,13 +25,13 @@ export default class ModuleCacheWriter
         return Promise.all([
             this.#writeLocal(cache),
             this.#writeRemote(cache)
-        ]).then(() => {});
+        ]).then(() => undefined);
     }
 
     async #writeLocal(cache: ModuleCache): Promise<void>
     {
         const importCode = this.#rewriteImports(cache.module);
-        const sourceCode = this.#createSourceCode(cache.module, importCode);
+        const sourceCode = this.#createSourceCode(cache.module);
 
         const filename = convertToLocalFilename(cache.module.filename);
         const code = `${importCode}\n${sourceCode}`;
@@ -44,7 +44,7 @@ export default class ModuleCacheWriter
         return importRewriter.rewrite(module.code);
     }
 
-    #createSourceCode(module: Module, code: string): string
+    #createSourceCode(module: Module): string
     {
         const filename = module.filename;
         const classes = module.content.exportedClasses;

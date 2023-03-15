@@ -23,16 +23,16 @@ export default class ApplicationCacheWriter
         return Promise.all([
             this.#writeSegmentCache(cache.segments),
             this.#writeModuleCache(cache.modules)
-        ]).then(() => {});
+        ]).then(() => undefined);
     }
 
     async #writeSegmentCache(segments: SegmentCache[]): Promise<void>
     {
-        return Promise.all(segments.map(async (segment) => await this.#segmentWriter.write(segment))).then(() => {});
+        return Promise.all(segments.map(async (segment) => await this.#segmentWriter.write(segment))).then(() => undefined);
     }
 
     async #writeModuleCache(modules: ModuleCache[]): Promise<void>
     {
-        return Promise.all(modules.map(async (module) => await this.#moduleWriter.write(module))).then(() => {});
+        return Promise.all(modules.map(async (module) => await this.#moduleWriter.write(module))).then(() => undefined);
     }
 }

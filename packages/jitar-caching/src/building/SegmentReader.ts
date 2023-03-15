@@ -153,6 +153,6 @@ export default class SegmentReader
 
     #createImplementationId(number: number): string
     {
-        return `\$${number}`;
+        return `$${number}`;
     }
 }
