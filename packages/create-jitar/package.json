@@ -30,7 +30,9 @@
     "release": "npm run clean && npm run build && npm publish"
   },
   "dependencies": {
-    "inquirer": "^9.1.4"
+    "minimist": "^1.2.8",
+    "prompts": "^2.4.2",
+    "kolorist": "1.7.0"
   },
   "repository": {
     "type": "git",
