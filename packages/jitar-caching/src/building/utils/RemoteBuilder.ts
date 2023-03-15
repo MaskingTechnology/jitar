@@ -1,5 +1,5 @@
 
-import { ReflectionField } from 'jitar-reflection';
+import { ReflectionArray, ReflectionField, ReflectionFunction, ReflectionObject } from 'jitar-reflection';
 import { AccessLevel } from 'jitar-runtime';
 
 import Keyword from '../definitions/Keyword.js';
@@ -38,17 +38,64 @@ export default class RemoteBuilder
 
     #createRemoteCode(fqn: string, implementation: SegmentImplementation, asDefault: boolean): string
     {
-        const parameters = implementation.executable.parameters.filter(parameter => parameter instanceof ReflectionField) as ReflectionField[];
-        const parameterNames = parameters.map(parameter => parameter.name);
+        const name = implementation.executable.name;
+        const version = implementation.version;
+        const parameters = this.#createParameters(implementation.executable);
+        const argumentz = this.#createArguments(implementation.executable);
 
-        const procedureName = implementation.executable.name;
-        const procedureVersion = implementation.version;
-        const procedueParameters = parameterNames.join(', ');
-        const procedureArguments = parameterNames.map(name => `'${name}': ${name}`).join(', ');
-
-        const functionName = `\nexport ${asDefault ? `${Keyword.DEFAULT} ` : ''}async function ${procedureName}(${procedueParameters})`;
-        const functionBody = `return runProcedure('${fqn}', '${procedureVersion}', { ${procedureArguments} }, this)`;
+        const functionName = `\nexport ${asDefault ? `${Keyword.DEFAULT} ` : ''}async function ${name}(${parameters})`;
+        const functionBody = `return runProcedure('${fqn}', '${version}', { ${argumentz} }, this)`;
 
         return `${functionName} {\n\t${functionBody}\n}\n`;
+    }
+
+    #createParameters(executable: ReflectionFunction): string
+    {
+        const result: string[] = [];
+
+        let number = 0;
+
+        for (const parameter of executable.parameters)
+        {
+            if (parameter instanceof ReflectionField)
+            {
+                result.push(parameter.name);
+            }
+            else if (parameter instanceof ReflectionArray)
+            {
+                result.push(parameter.toString()); // Unsupported for now
+            }
+            else if (parameter instanceof ReflectionObject)
+            {
+                result.push(parameter.toString()); // Unsupported for now
+            }
+        }
+        
+        return result.join(', ');
+    }
+
+    #createArguments(executable: ReflectionFunction): string
+    {
+        const result: string[] = [];
+
+        let number = 0;
+
+        for (const parameter of executable.parameters)
+        {
+            if (parameter instanceof ReflectionField)
+            {
+                result.push(`'${parameter.name}': ${parameter.name}`);
+            }
+            else if (parameter instanceof ReflectionArray)
+            {
+                result.push(`'\$${number++}': []`); // Unsupported for now
+            }
+            else if (parameter instanceof ReflectionObject)
+            {
+                result.push(`'\$${number++}': {}`); // Unsupported for now
+            }
+        }
+        
+        return result.join(', ');
     }
 }
