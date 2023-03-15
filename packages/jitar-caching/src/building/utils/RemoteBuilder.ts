@@ -53,8 +53,6 @@ export default class RemoteBuilder
     {
         const result: string[] = [];
 
-        let number = 0;
-
         for (const parameter of executable.parameters)
         {
             if (parameter instanceof ReflectionField)
