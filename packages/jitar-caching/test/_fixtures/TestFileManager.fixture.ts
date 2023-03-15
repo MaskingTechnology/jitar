@@ -1,7 +1,7 @@
 
 import { File, FileManager, Files } from 'jitar-runtime';
 
-import { SOURCE_FILES, SEGMENT_FILENAMES, MODULE_FILENAMES } from './SourceFiles.fixture';
+import { SOURCE_FILES, SOURCE_SEGMENT_FILENAMES, SOURCE_MODULE_FILENAMES } from './SourceFiles.fixture';
 
 class TestFileManager implements FileManager
 {
@@ -71,8 +71,8 @@ class TestFileManager implements FileManager
     {
         switch (pattern)
         {
-            case Files.SEGMENT_PATTERN: return SEGMENT_FILENAMES;
-            case Files.MODULE_PATTERN: return MODULE_FILENAMES;
+            case Files.SEGMENT_PATTERN: return SOURCE_SEGMENT_FILENAMES;
+            case Files.MODULE_PATTERN: return SOURCE_MODULE_FILENAMES;
         }
 
         return [];

@@ -32,8 +32,8 @@ export const segment = new Segment("product")
 \t\t.addImplementation(new Implementation(new Version(0, 0, 0), "public", [new NamedParameter("query", false)], $2))
 \t)`;
 
-const CREATE_ORDER_LOCAL = `
-import { Order, OrderLine } from './models';
+const CREATE_ORDER_LOCAL =
+`import { Order, OrderLine } from './models';
 
 export default async function createOrder(items)
 {
@@ -43,13 +43,10 @@ export default async function createOrder(items)
 export async function createOrderLine(item)
 {
     return 'order line';
-}
-
-`;
+}`;
 
 const CREATE_ORDER_REMOTE =
-`import { runProcedure } from "/jitar/hooks.js";
-`;
+`import { runProcedure } from "/jitar/hooks.js";`;
 
 const STORE_ORDER_LOCAL =
 `import { getDependency } from "/jitar/hooks.js";
@@ -66,9 +63,7 @@ export async function v0_0_0(order)
 export async function v1_0_0(order)
 {
     return 'order v1';
-}
-
-`;
+}`;
 
 const STORE_ORDER_REMOTE =
 `import { runProcedure } from "/jitar/hooks.js";
@@ -79,11 +74,10 @@ export async function v0_0_0(order) {
 
 export async function v1_0_0(order) {
 \treturn runProcedure('order/storeOrder', '1.0.0', { 'order': order }, this)
-}
-`;
+}`;
 
-const ORDER_MODELS_LOCAL = `
-export class Order {}
+const ORDER_MODELS_LOCAL =
+`export class Order {}
 export class OrderLine {}
 
 Order.source = "order/models.js";
@@ -108,20 +102,17 @@ function validateFound(product)
 export async function searchProducts(query)
 {
     return 'product list';
-}
-
-`;
+}`;
 
 const GET_PRODUCTS_REMOTE =
 `import { runProcedure } from "/jitar/hooks.js";
 
 export async function searchProducts(query) {
 \treturn runProcedure('product/searchProducts', '0.0.0', { 'query': query }, this)
-}
-`;
+}`;
 
-const PRODUCT_MODELS_LOCAL = `
-export class Product {}
+const PRODUCT_MODELS_LOCAL =
+`export class Product {}
 
 Product.source = "product/models.js";`;
 
@@ -141,7 +132,7 @@ const CACHE_FILES =
     './product/models.local.js': PRODUCT_MODELS_LOCAL
 }
 
-const SEGMENT_FILENAMES =
+const CACHE_SEGMENT_FILENAMES =
 [
     './order.segment.node.js',
     './order.segment.repository.js',
@@ -149,7 +140,7 @@ const SEGMENT_FILENAMES =
     './product.segment.repository.js',
 ];
 
-const MODULE_FILENAMES =
+const CACHE_MODULE_FILENAMES =
 [
     './order/createOrder.local.js',
     './order/createOrder.remote.js',
@@ -161,4 +152,4 @@ const MODULE_FILENAMES =
     './product/models.local.js',
 ]
 
-export { CACHE_FILES, SEGMENT_FILENAMES, MODULE_FILENAMES }
+export { CACHE_FILES, CACHE_SEGMENT_FILENAMES, CACHE_MODULE_FILENAMES }

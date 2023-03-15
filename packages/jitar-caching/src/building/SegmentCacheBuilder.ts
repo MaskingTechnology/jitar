@@ -1,6 +1,7 @@
 
 import Segment from './models/Segment.js';
 import SegmentCache from './models/SegmentCache.js';
+import SegmentImplementation from './models/SegmentImplementation.js';
 import SegmentImport from './models/SegmentImport.js';
 import SegmentProcedure from './models/SegmentProcedure.js';
 
@@ -30,7 +31,7 @@ export default class SegmentCacheBuilder
 
             for (const procedure of module.procedures)
             {
-                const ids = procedure.implementations.map(implementation => `${implementation.importKey} as ${implementation.id}`);
+                const ids = procedure.implementations.map(implementation => this.#createImportMember(implementation));
 
                 members = [...members, ...ids];
             }
@@ -39,6 +40,11 @@ export default class SegmentCacheBuilder
         }
 
         return imports;
+    }
+
+    #createImportMember(implementation: SegmentImplementation): string
+    {
+        return `${implementation.importKey} as ${implementation.id}`;
     }
 
     #mergeProcedures(segment: Segment): SegmentProcedure[]

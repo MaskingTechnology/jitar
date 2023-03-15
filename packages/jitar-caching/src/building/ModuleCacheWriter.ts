@@ -1,12 +1,12 @@
 
 import { FileManager, convertToLocalFilename, convertToRemoteFilename } from 'jitar-runtime';
 
-import ImportRewriter from './utils/ImportRewriter.js';
-import RemoteBuilder from './utils/RemoteBuilder.js';
-
 import ModuleCache from './models/ModuleCache.js';
 import Module from './models/Module.js';
 import SegmentModule from './models/SegmentModule.js';
+
+import ImportRewriter from './utils/ImportRewriter.js';
+import RemoteBuilder from './utils/RemoteBuilder.js';
 
 const importRewriter = new ImportRewriter();
 const remoteBuilder = new RemoteBuilder();
@@ -36,7 +36,7 @@ export default class ModuleCacheWriter
         const filename = convertToLocalFilename(cache.module.filename);
         const code = `${importCode}\n${sourceCode}`;
 
-        return this.#fileManager.write(filename, code);
+        return this.#fileManager.write(filename, code.trim());
     }
 
     #rewriteImports(module: Module): string
@@ -64,7 +64,7 @@ export default class ModuleCacheWriter
         const filename = convertToRemoteFilename(cache.module.filename);
         const code = this.#createRemoteCode(cache.segment);
 
-        return this.#fileManager.write(filename, code);
+        return this.#fileManager.write(filename, code.trim());
     }
 
     #createRemoteCode(module: SegmentModule): string

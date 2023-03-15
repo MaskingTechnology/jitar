@@ -1,12 +1,12 @@
 
 import { FileManager } from 'jitar-runtime';
 
-import ModuleReader from './ModuleReader.js';
-import SegmentReader from './SegmentReader.js';
-
 import Application from './models/Application.js';
 import Segment from './models/Segment.js';
 import Module from './models/Module.js';
+
+import ModuleReader from './ModuleReader.js';
+import SegmentReader from './SegmentReader.js';
 
 export default class ApplicationReader
 {

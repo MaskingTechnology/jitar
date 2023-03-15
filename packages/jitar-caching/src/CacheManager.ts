@@ -3,7 +3,6 @@ import { FileManager, Files } from 'jitar-runtime';
 
 import ApplicationCacheBuilder from './building/ApplicationCacheBuilder';
 import ApplicationCacheWriter from './building/ApplicationCacheWriter';
-
 import ApplicationReader from './building/ApplicationReader.js';
 
 export default class CacheManager

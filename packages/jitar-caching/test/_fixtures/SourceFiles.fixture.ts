@@ -93,13 +93,13 @@ const SOURCE_FILES =
     './product/models.js': PRODUCT_MODELS
 }
 
-const SEGMENT_FILENAMES =
+const SOURCE_SEGMENT_FILENAMES =
 [
     './order.segment.json',
     './product.segment.json'
 ]
 
-const MODULE_FILENAMES =
+const SOURCE_MODULE_FILENAMES =
 [
     './order/createOrder.js',
     './order/storeOrder.js',
@@ -108,4 +108,4 @@ const MODULE_FILENAMES =
     './product/models.js'
 ]
 
-export { SOURCE_FILES, SEGMENT_FILENAMES, MODULE_FILENAMES }
+export { SOURCE_FILES, SOURCE_SEGMENT_FILENAMES, SOURCE_MODULE_FILENAMES }

@@ -28,7 +28,7 @@ export default class RemoteBuilder
             }
         }
 
-        return code;
+        return code.trim();
     }
 
     #createRemoteImports(): string

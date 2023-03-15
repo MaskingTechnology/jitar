@@ -1,11 +1,11 @@
 
-import { SEGMENT_FILENAMES, MODULE_FILENAMES } from '../SourceFiles.fixture';
 import { APPLICATION } from './models/Application.fixture';
+import { SOURCE_SEGMENT_FILENAMES, SOURCE_MODULE_FILENAMES } from '../SourceFiles.fixture';
 
 const INPUT =
 {
-    SEGMENT_FILENAMES,
-    MODULE_FILENAMES
+    SEGMENT_FILENAMES: SOURCE_SEGMENT_FILENAMES,
+    MODULE_FILENAMES: SOURCE_MODULE_FILENAMES
 }
 
 const OUTPUT = APPLICATION;

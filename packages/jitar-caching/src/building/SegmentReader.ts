@@ -115,7 +115,7 @@ export default class SegmentReader
     {
         const procedures = new Map<string, SegmentProcedure>();
 
-        let id = 0;
+        let number = 0;
 
         for (const [importKey, properties] of Object.entries(imports))
         {
@@ -134,10 +134,10 @@ export default class SegmentReader
             const access = properties.access ?? DEFAULT_ACCESS_LEVEL;
             const version = properties.version ?? DEFAULT_VERSION_NUMBER;
 
-            const uid = `\$${++id}`;
+            const id = this.#createImplementationId(++number);
             const fqn = moduleName !== '' ? `${moduleName}/${procedureName}` : procedureName;
 
-            const implementation = new SegmentImplementation(uid, importKey, access, version, executable as ReflectionFunction);
+            const implementation = new SegmentImplementation(id, importKey, access, version, executable as ReflectionFunction);
 
             const procedure = procedures.has(fqn)
                 ? procedures.get(fqn) as SegmentProcedure
@@ -149,5 +149,10 @@ export default class SegmentReader
         }
 
         return [...procedures.values()];
+    }
+
+    #createImplementationId(number: number): string
+    {
+        return `\$${number}`;
     }
 }
