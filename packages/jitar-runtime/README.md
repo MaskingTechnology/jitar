@@ -1,2 +1,2 @@
 
-# Caching package for Jitar
+# Runtime package for Jitar
