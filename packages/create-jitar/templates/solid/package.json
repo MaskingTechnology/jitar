@@ -8,7 +8,7 @@
     "dev": "vite",
     "build": "vite build && tsc",
     "serve": "vite preview",
-    "jitar": "node --experimental-network-imports --experimental-fetch dist/jitar.js --config=jitar.json"
+    "jitar": "node --experimental-network-imports --experimental-fetch dist/jitar.js --config=conf/jitar.json"
   },
   "license": "MIT",
   "devDependencies": {

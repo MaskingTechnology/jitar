@@ -15,7 +15,7 @@ export class MyElement extends LitElement
   {
     super();
 
-    sayHello('Lit + Vite + Jitar').then((message: string) => this.message = message);
+    sayHello('Vite + Lit + Jitar').then((message: string) => this.message = message);
   }
 
   render()
