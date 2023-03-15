@@ -9,6 +9,7 @@ import ReflectionFunction from './models/ReflectionFunction.js';
 import ReflectionImport from './models/ReflectionImport.js';
 import ReflectionModule from './models/ReflectionModule.js';
 import ReflectionScope from './models/ReflectionScope.js';
+import ReflectionDeclaration from './models/ReflectionDeclaration.js';
 
 export default class Reflector
 {
@@ -34,9 +35,9 @@ export default class Reflector
         return this.#parser.parseFunction(code);
     }
 
-    parseField(code: string): ReflectionField
+    parseDeclaration(code: string): ReflectionDeclaration
     {
-        return this.#parser.parseField(code);
+        return this.#parser.parseDeclaration(code);
     }
 
     parseImport(code: string): ReflectionImport
@@ -75,7 +76,7 @@ export default class Reflector
             {
                 const expression = new ReflectionExpression(code);
 
-                members.push(new ReflectionField(key, expression));
+                members.push(new ReflectionDeclaration(key, expression));
             }
         }
         
@@ -141,22 +142,22 @@ export default class Reflector
 
     #mergeClassModels(model: ReflectionClass, parentModel: ReflectionClass): ReflectionClass
     {
-        const fields = new Map<string, ReflectionField>();
+        const declarations = new Map<string, ReflectionDeclaration>();
         const functions = new Map<string, ReflectionFunction>();
         const getters = new Map<string, ReflectionFunction>();
         const setters = new Map<string, ReflectionFunction>();
         
-        parentModel.fields.forEach(field => fields.set(field.name, field));
+        parentModel.declarations.forEach(declaration => declarations.set(declaration.name, declaration));
         parentModel.functions.forEach(funktion => functions.set(funktion.name, funktion));
         parentModel.getters.forEach(getter => getters.set(getter.name, getter));
         parentModel.setters.forEach(setter => setters.set(setter.name, setter));
 
-        model.fields.forEach(field => fields.set(field.name, field));
+        model.declarations.forEach(declaration => declarations.set(declaration.name, declaration));
         model.functions.forEach(funktion => functions.set(funktion.name, funktion));
         model.getters.forEach(getter => getters.set(getter.name, getter));
         model.setters.forEach(setter => setters.set(setter.name, setter));
 
-        const members = [...fields.values(), ...functions.values(), ...getters.values(), ...setters.values()];
+        const members = [...declarations.values(), ...functions.values(), ...getters.values(), ...setters.values()];
 
         return new ReflectionClass(model.name, parentModel.name, new ReflectionScope(members));
     }

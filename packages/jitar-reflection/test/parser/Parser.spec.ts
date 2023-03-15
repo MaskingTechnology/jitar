@@ -288,104 +288,114 @@ describe('parser/Parser', () =>
         });
     });
 
-    describe('.parseField(code)', () =>
+    describe('.parseDeclaration(code)', () =>
     {
-        it('should parse an empty field', () =>
+        it('should parse an empty declaration', () =>
         {
-            const field = parser.parseField(FIELDS.EMPTY);
+            const declaration = parser.parseDeclaration(FIELDS.EMPTY);
 
-            expect(field.name).toBe('name');
-            expect(field.value).toBe(undefined);
+            expect(declaration.name).toBe('name');
+            expect(declaration.value).toBe(undefined);
         });
 
-        it('should parse a const field', () =>
+        it('should parse a const declaration', () =>
         {
-            const field = parser.parseField(FIELDS.CONST);
+            const declaration = parser.parseDeclaration(FIELDS.CONST);
 
-            expect(field.name).toBe('name');
-            expect(field.value).toBeInstanceOf(ReflectionExpression);
-            expect(field.value?.definition).toBe("'const'");
+            expect(declaration.name).toBe('name');
+            expect(declaration.value).toBeInstanceOf(ReflectionExpression);
+            expect(declaration.value?.definition).toBe("'const'");
         });
 
-        it('should parse a let field with value', () =>
+        it('should parse a let declaration with value', () =>
         {
-            const field = parser.parseField(FIELDS.LET);
+            const declaration = parser.parseDeclaration(FIELDS.LET);
 
-            expect(field.name).toBe('name');
-            expect(field.value).toBeInstanceOf(ReflectionExpression);
-            expect(field.value?.definition).toBe("'let'");
+            expect(declaration.name).toBe('name');
+            expect(declaration.value).toBeInstanceOf(ReflectionExpression);
+            expect(declaration.value?.definition).toBe("'let'");
         });
 
-        it('should parse a var field with value', () =>
+        it('should parse a var declaration with value', () =>
         {
-            const field = parser.parseField(FIELDS.VAR);
+            const declaration = parser.parseDeclaration(FIELDS.VAR);
 
-            expect(field.name).toBe('name');
-            expect(field.value).toBeInstanceOf(ReflectionExpression);
-            expect(field.value?.definition).toBe("'var'");
+            expect(declaration.name).toBe('name');
+            expect(declaration.value).toBeInstanceOf(ReflectionExpression);
+            expect(declaration.value?.definition).toBe("'var'");
         });
 
-        it('should parse a field with multiple declarations', () =>
+        it('should parse a declaration with multiple declarations', () =>
         {
-            const field = parser.parseField(FIELDS.DECLARATIONS);
+            const declaration = parser.parseDeclaration(FIELDS.DECLARATIONS);
 
-            expect(field.name).toBe('name1');
-            expect(field.value).toBeInstanceOf(ReflectionExpression);
-            expect(field.value?.definition).toBe('( 1 + 2 ) * 3');
+            expect(declaration.name).toBe('name1');
+            expect(declaration.value).toBeInstanceOf(ReflectionExpression);
+            expect(declaration.value?.definition).toBe('( 1 + 2 ) * 3');
         });
 
-        it('should parse a field with an expression', () =>
+        it('should parse a declaration with an expression', () =>
         {
-            const field = parser.parseField(FIELDS.EXPRESSION);
+            const declaration = parser.parseDeclaration(FIELDS.EXPRESSION);
 
-            expect(field.name).toBe('number');
-            expect(field.value).toBeInstanceOf(ReflectionExpression);
-            expect(field.value?.definition).toBe("new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )");
+            expect(declaration.name).toBe('number');
+            expect(declaration.value).toBeInstanceOf(ReflectionExpression);
+            expect(declaration.value?.definition).toBe("new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )");
         });
 
-        it('should parse a field with an array value', () =>
+        it('should parse a declaration with an array value', () =>
         {
-            const field = parser.parseField(FIELDS.ARRAY);
+            const declaration = parser.parseDeclaration(FIELDS.ARRAY);
 
-            expect(field.name).toBe('array');
-            expect(field.value).toBeInstanceOf(ReflectionArray);
-            expect(field.value?.definition).toBe("[ 'value1' , 'value2' ]");
+            expect(declaration.name).toBe('array');
+            expect(declaration.value).toBeInstanceOf(ReflectionArray);
+            expect(declaration.value?.definition).toBe("[ 'value1' , 'value2' ]");
         });
 
-        it('should parse a field with an array value', () =>
+        it('should parse a declaration with an array value', () =>
         {
-            const field = parser.parseField(FIELDS.OBJECT);
+            const declaration = parser.parseDeclaration(FIELDS.OBJECT);
 
-            expect(field.name).toBe('object');
-            expect(field.value).toBeInstanceOf(ReflectionObject);
-            expect(field.value?.definition).toBe("{ key1 : 'value1' , key2 : 'value2' }");
+            expect(declaration.name).toBe('object');
+            expect(declaration.value).toBeInstanceOf(ReflectionObject);
+            expect(declaration.value?.definition).toBe("{ key1 : 'value1' , key2 : 'value2' }");
         });
 
-        it('should parse a field with a regex value', () =>
+        it('should parse a declaration with a regex value', () =>
         {
-            const field = parser.parseField(FIELDS.REGEX);
+            const declaration = parser.parseDeclaration(FIELDS.REGEX);
 
-            expect(field.name).toBe('regex');
-            expect(field.value).toBeInstanceOf(ReflectionExpression);
-            expect(field.value?.definition).toBe("/regex/g");
+            expect(declaration.name).toBe('regex');
+            expect(declaration.value).toBeInstanceOf(ReflectionExpression);
+            expect(declaration.value?.definition).toBe("/regex/g");
         });
 
-        it('should parse a field that is destructuring an array', () =>
+        it('should parse a declaration that is destructuring an array', () =>
         {
-            const field = parser.parseField(FIELDS.DESTRUCTURING_ARRAY);
+            const declaration = parser.parseDeclaration(FIELDS.DESTRUCTURING_ARRAY);
 
-            expect(field.name).toBe('[ value1 , value2 ]');
-            expect(field.value).toBeInstanceOf(ReflectionExpression);
-            expect(field.value?.definition).toBe("array");
+            expect(declaration.name).toBe('[ value1 , value2 ]');
+            expect(declaration.value).toBeInstanceOf(ReflectionExpression);
+            expect(declaration.identifier).toBeInstanceOf(ReflectionDestructuredArray);
+
+            const identifier = declaration.identifier as ReflectionDestructuredArray;
+            expect(identifier.fields.length).toBe(2);
+            expect(identifier.fields[0].name).toBe('value1');
+            expect(identifier.fields[1].name).toBe('value2');
         });
 
-        it('should parse a field that is destructuring an object', () =>
+        it('should parse a declaration that is destructuring an object', () =>
         {
-            const field = parser.parseField(FIELDS.DESTRUCTURING_OBJECT);
+            const declaration = parser.parseDeclaration(FIELDS.DESTRUCTURING_OBJECT);
 
-            expect(field.name).toBe('{ key1 , key2 }');
-            expect(field.value).toBeInstanceOf(ReflectionExpression);
-            expect(field.value?.definition).toBe("object");
+            expect(declaration.name).toBe('{ key1 , key2 }');
+            expect(declaration.value).toBeInstanceOf(ReflectionExpression);
+            expect(declaration.identifier).toBeInstanceOf(ReflectionDestructuredObject);
+
+            const identifier = declaration.identifier as ReflectionDestructuredArray;
+            expect(identifier.fields.length).toBe(2);
+            expect(identifier.fields[0].name).toBe('key1');
+            expect(identifier.fields[1].name).toBe('key2');
         });
     });
 
@@ -718,28 +728,28 @@ describe('parser/Parser', () =>
             const members = clazz.members;
             expect(members.length).toBe(21);
 
-            const fields = clazz.fields;
-            expect(fields.length).toBe(4);
+            const declarations = clazz.declarations;
+            expect(declarations.length).toBe(4);
 
-            expect(fields[0].name).toBe('field1');
-            expect(fields[0].isPrivate).toBe(true);
-            expect(fields[0].isStatic).toBe(false);
-            expect(fields[0].value?.definition).toBe("'value1'");
+            expect(declarations[0].name).toBe('field1');
+            expect(declarations[0].isPrivate).toBe(true);
+            expect(declarations[0].isStatic).toBe(false);
+            expect(declarations[0].value?.definition).toBe("'value1'");
 
-            expect(fields[1].name).toBe('field2');
-            expect(fields[1].isPrivate).toBe(false);
-            expect(fields[1].isStatic).toBe(false);
-            expect(fields[1].value).toBe(undefined);
+            expect(declarations[1].name).toBe('field2');
+            expect(declarations[1].isPrivate).toBe(false);
+            expect(declarations[1].isStatic).toBe(false);
+            expect(declarations[1].value).toBe(undefined);
 
-            expect(fields[2].name).toBe('field3');
-            expect(fields[2].isPrivate).toBe(true);
-            expect(fields[2].isStatic).toBe(true);
-            expect(fields[2].value?.definition).toBe('"value3"');
+            expect(declarations[2].name).toBe('field3');
+            expect(declarations[2].isPrivate).toBe(true);
+            expect(declarations[2].isStatic).toBe(true);
+            expect(declarations[2].value?.definition).toBe('"value3"');
 
-            expect(fields[3].name).toBe('field4');
-            expect(fields[3].isPrivate).toBe(false);
-            expect(fields[3].isStatic).toBe(true);
-            expect(fields[3].value).toBe(undefined);
+            expect(declarations[3].name).toBe('field4');
+            expect(declarations[3].isPrivate).toBe(false);
+            expect(declarations[3].isStatic).toBe(true);
+            expect(declarations[3].value).toBe(undefined);
 
             const getters = clazz.getters;
             expect(getters.length).toBe(4);
@@ -863,8 +873,8 @@ describe('parser/Parser', () =>
             const exports = module.exports;
             expect(exports.length).toBe(3);
 
-            const fields = module.fields;
-            expect(fields.length).toBe(2);
+            const declarations = module.declarations;
+            expect(declarations.length).toBe(2);
 
             const functions = module.functions;
             expect(functions.length).toBe(1);
@@ -886,8 +896,8 @@ describe('parser/Parser', () =>
             const exports = module.exports;
             expect(exports.length).toBe(3);
 
-            const fields = module.fields;
-            expect(fields.length).toBe(2);
+            const declarations = module.declarations;
+            expect(declarations.length).toBe(2);
 
             const functions = module.functions;
             expect(functions.length).toBe(1);

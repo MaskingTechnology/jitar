@@ -11,4 +11,9 @@ export default class ReflectionDestructuredValue
     }
 
     get fields() { return this.#fields; }
+
+    toString(): string
+    {
+        return this.#fields.map(field => field.toString()).join(' , ');
+    }
 }

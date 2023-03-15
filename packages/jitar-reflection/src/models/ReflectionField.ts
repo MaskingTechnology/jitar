@@ -1,17 +1,18 @@
 
-import ReflectionMember from './ReflectionMember.js';
 import ReflectionValue from './ReflectionValue.js';
 
-export default class ReflectionField extends ReflectionMember
+export default class ReflectionField
 {
+    #name: string;
     #value: ReflectionValue | undefined;
 
-    constructor(name: string, value: ReflectionValue | undefined, isStatic = false, isPrivate = false)
+    constructor(name: string, value: ReflectionValue | undefined)
     {
-        super(name, isStatic, isPrivate);
-
+        this.#name = name;
         this.#value = value;
     }
+
+    get name() { return this.#name; }
 
     get value() { return this.#value; }
 

@@ -1,7 +1,7 @@
 
 import ReflectionClass from './ReflectionClass.js';
+import ReflectionDeclaration from './ReflectionDeclaration.js';
 import ReflectionExport from './ReflectionExport.js';
-import ReflectionField from './ReflectionField.js';
 import ReflectionFunction from './ReflectionFunction.js';
 import ReflectionGenerator from './ReflectionGenerator.js';
 import ReflectionImport from './ReflectionImport.js';
@@ -27,9 +27,9 @@ export default class ReflectionModule
 
     get exports(): ReflectionExport[] { return this.#scope.exports; }
 
-    get fields(): ReflectionField[] { return this.#scope.fields; }
+    get declarations(): ReflectionDeclaration[] { return this.#scope.declarations; }
 
-    get exportedFields(): ReflectionField[] { return this.#filterExported(this.#scope.fields) as ReflectionField[]; }
+    get exportedDeclarations(): ReflectionDeclaration[] { return this.#filterExported(this.#scope.declarations) as ReflectionDeclaration[]; }
 
     get functions(): ReflectionFunction[] { return this.#scope.functions; }
 
@@ -68,9 +68,9 @@ export default class ReflectionModule
         return this.#scope.getMember(name);
     }
 
-    getField(name: string): ReflectionField | undefined
+    getDeclaration(name: string): ReflectionDeclaration | undefined
     {
-        return this.#scope.getField(name);
+        return this.#scope.getDeclaration(name);
     }
 
     getFunction(name: string): ReflectionFunction | undefined
@@ -93,9 +93,9 @@ export default class ReflectionModule
         return this.#scope.hasMember(name);
     }
 
-    hasField(name: string): boolean
+    hasDeclaration(name: string): boolean
     {
-        return this.#scope.hasField(name);
+        return this.#scope.hasDeclaration(name);
     }
 
     hasFunction(name: string): boolean

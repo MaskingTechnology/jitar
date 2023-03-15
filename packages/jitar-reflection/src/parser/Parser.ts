@@ -36,6 +36,8 @@ import ReflectionValue from '../models/ReflectionValue.js';
 import ReflectionParameter from '../models/ReflectionParameter.js';
 import ReflectionDestructuredArray from '../models/ReflectionDestructuredArray.js';
 import ReflectionDestructuredObject from '../models/ReflectionDestructuredObject.js';
+import ReflectionDeclaration from '../models/ReflectionDeclaration.js';
+import ReflectionIdentifier from '../models/ReflectionIdentifier.js';
 
 const ANONYMOUS_IDENTIFIER = '';
 const DEFAULT_IDENTIFIER = 'default';
@@ -102,16 +104,16 @@ export default class Parser
         return model as ReflectionExport;
     }
 
-    parseField(code: string): ReflectionField
+    parseDeclaration(code: string): ReflectionDeclaration
     {
         const model = this.parseFirst(code);
 
-        if ((model instanceof ReflectionField) === false)
+        if ((model instanceof ReflectionDeclaration) === false)
         {
-            throw new UnexpectedParseResult('a field definition');
+            throw new UnexpectedParseResult('a declaration definition');
         }
 
-        return model as ReflectionField;
+        return model as ReflectionDeclaration;
     }
 
     parseFunction(code: string): ReflectionFunction
@@ -467,24 +469,24 @@ export default class Parser
     #parseDeclaration(tokenList: TokenList, isStatic: boolean, parseMultiple = false): ReflectionMember
     {
         let token = tokenList.current;
-        let name = ANONYMOUS_IDENTIFIER;
+        let identifier: ReflectionIdentifier = ANONYMOUS_IDENTIFIER;
         let isPrivate = false;
 
         if (token.hasValue(List.OPEN))
         {
-            name = this.#parseBlock(tokenList, List.OPEN, List.CLOSE);
+            identifier = this.#parseDestructuredArray(tokenList);
             token = tokenList.current;
         }
         else if (token.hasValue(Scope.OPEN))
         {
-            name = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
+            identifier = this.#parseDestructuredObject(tokenList);
             token = tokenList.current;
         }
         else
         {
             isPrivate = token.value.startsWith(PRIVATE_INDICATOR);
-            name = isPrivate ? token.value.substring(1) : token.value;
-            token = tokenList.step(); // Read away the field name
+            identifier = isPrivate ? token.value.substring(1) : token.value;
+            token = tokenList.step(); // Read away the identifier
         }
 
         let value = undefined;
@@ -519,18 +521,18 @@ export default class Parser
 
         if (value instanceof ReflectionGenerator)
         {
-            return new ReflectionGenerator(name, value.parameters, value.body, isStatic, value.isAsync, isPrivate);
+            return new ReflectionGenerator(identifier.toString(), value.parameters, value.body, isStatic, value.isAsync, isPrivate);
         }
         else if (value instanceof ReflectionFunction)
         {
-            return new ReflectionFunction(name, value.parameters, value.body, isStatic, value.isAsync, isPrivate);
+            return new ReflectionFunction(identifier.toString(), value.parameters, value.body, isStatic, value.isAsync, isPrivate);
         }
         else if (value instanceof ReflectionClass)
         {
-            return new ReflectionClass(name, value.parentName, value.scope);
+            return new ReflectionClass(identifier.toString(), value.parentName, value.scope);
         }
 
-        return new ReflectionField(name, value as ReflectionValue, isStatic, isPrivate);
+        return new ReflectionDeclaration(identifier, value as ReflectionValue, isStatic, isPrivate);
     }
 
     #parseFunction(tokenList: TokenList, isAsync: boolean, isStatic = false, isGetter = false, isSetter = false): ReflectionFunction
@@ -651,7 +653,7 @@ export default class Parser
             }
             else
             {
-                parameter = this.#parseDeclaration(tokenList, false) as ReflectionField;
+                parameter = this.#parseField(tokenList);
             }
 
             parameters.push(parameter);
@@ -863,12 +865,32 @@ export default class Parser
                 continue;
             }
 
-            const field = this.#parseDeclaration(tokenList, false) as ReflectionField;
+            const field = this.#parseField(tokenList);
 
             fields.push(field);
         }
 
         return fields;
+    }
+
+    #parseField(tokenList: TokenList): ReflectionField
+    {
+        let token = tokenList.current;
+
+        const name = token.value;
+
+        token = tokenList.step(); // Read away the name
+
+        let value = undefined;
+
+        if (token.hasValue(Operator.ASSIGN))
+        {
+            tokenList.step(); // Read away the assignment operator
+            
+            value = this.#parseNext(tokenList, false) as ReflectionValue;
+        }
+
+        return new ReflectionField(name, value);
     }
 
     #parseBlock(tokenList: TokenList, openId: string, closeId: string): string
