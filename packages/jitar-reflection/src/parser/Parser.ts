@@ -34,6 +34,8 @@ import ReflectionAlias from '../models/ReflectionAlias.js';
 import ReflectionScope from '../models/ReflectionScope.js';
 import ReflectionValue from '../models/ReflectionValue.js';
 import ReflectionParameter from '../models/ReflectionParameter.js';
+import ReflectionDestructuredArray from '../models/ReflectionDestructuredArray.js';
+import ReflectionDestructuredObject from '../models/ReflectionDestructuredObject.js';
 
 const ANONYMOUS_IDENTIFIER = '';
 const DEFAULT_IDENTIFIER = 'default';
@@ -470,13 +472,11 @@ export default class Parser
 
         if (token.hasValue(List.OPEN))
         {
-            // Array destructuring
             name = this.#parseBlock(tokenList, List.OPEN, List.CLOSE);
             token = tokenList.current;
         }
         else if (token.hasValue(Scope.OPEN))
         {
-            // Object destructuring
             name = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
             token = tokenList.current;
         }
@@ -505,7 +505,7 @@ export default class Parser
             }
             else if (parseMultiple === true && token.hasValue(Divider.SEPARATOR))
             {
-                // Parse await the next declaration without saving it.
+                // Parse away the next declaration without saving it.
                 // Note that this is a known limitation as described in the readme.
     
                 tokenList.step(); // Read away the separator
@@ -643,11 +643,11 @@ export default class Parser
 
             if (token.hasValue(Scope.OPEN))
             {
-                parameter = this.#parseObject(tokenList);
+                parameter = this.#parseDestructuredObject(tokenList);
             }
             else if (token.hasValue(List.OPEN))
             {
-                parameter = this.#parseArray(tokenList);
+                parameter = this.#parseDestructuredArray(tokenList);
             }
             else
             {
@@ -770,11 +770,25 @@ export default class Parser
         return new ReflectionArray(items);
     }
 
+    #parseDestructuredArray(tokenList: TokenList): ReflectionDestructuredArray
+    {
+        const fields = this.#parseFields(tokenList, List.CLOSE);
+
+        return new ReflectionDestructuredArray(fields);
+    }
+
     #parseObject(tokenList: TokenList): ReflectionObject
     {
         const fields = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
 
         return new ReflectionObject(fields);
+    }
+
+    #parseDestructuredObject(tokenList: TokenList): ReflectionDestructuredObject
+    {
+        const fields = this.#parseFields(tokenList, Scope.CLOSE);
+
+        return new ReflectionDestructuredObject(fields);
     }
 
     #parseExpression(tokenList: TokenList): ReflectionExpression
@@ -820,6 +834,41 @@ export default class Parser
         }
 
         return new ReflectionExpression(code.trim());
+    }
+
+    #parseFields(tokenList: TokenList, closeId: string): ReflectionField[]
+    {
+        const fields = [];
+
+        tokenList.step(); // Read away the open id
+
+        while (tokenList.notAtEnd())
+        {
+            const token = tokenList.current;
+
+            if (token.hasValue(closeId))
+            {
+                // End of the field list
+
+                tokenList.step(); // Read away the close id
+
+                break;
+            }
+            else if (token.hasValue(Divider.SEPARATOR))
+            {
+                // End of field
+
+                tokenList.step(); // Read away the separator
+
+                continue;
+            }
+
+            const field = this.#parseDeclaration(tokenList, false) as ReflectionField;
+
+            fields.push(field);
+        }
+
+        return fields;
     }
 
     #parseBlock(tokenList: TokenList, openId: string, closeId: string): string

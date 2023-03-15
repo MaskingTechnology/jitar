@@ -2,6 +2,8 @@
 import { describe, expect, it } from 'vitest';
 
 import ReflectionArray from '../../src/models/ReflectionArray';
+import ReflectionDestructuredArray from '../../src/models/ReflectionDestructuredArray';
+import ReflectionDestructuredObject from '../../src/models/ReflectionDestructuredObject';
 import ReflectionExpression from '../../src/models/ReflectionExpression';
 import ReflectionField from '../../src/models/ReflectionField';
 import ReflectionGenerator from '../../src/models/ReflectionGenerator';
@@ -581,13 +583,21 @@ describe('parser/Parser', () =>
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(2);
 
-            const first = parameters[0] as ReflectionObject;
-            expect(first).toBeInstanceOf(ReflectionObject);
-            expect(first.definition).toBe('{ param1 , param2 }');
+            const first = parameters[0] as ReflectionDestructuredObject;
+            expect(first).toBeInstanceOf(ReflectionDestructuredObject);
+            expect(first.fields.length).toBe(2);
+            expect(first.fields[0].name).toBe('param1');
+            expect(first.fields[0].value).toBe(undefined);
+            expect(first.fields[1].name).toBe('param2');
+            expect(first.fields[1].value).toBe(undefined);
 
-            const second = parameters[1] as ReflectionArray;
-            expect(second).toBeInstanceOf(ReflectionArray);
-            expect(second.definition).toBe('[ param3 , param4 ]');
+            const second = parameters[1] as ReflectionDestructuredArray;
+            expect(second).toBeInstanceOf(ReflectionDestructuredArray);
+            expect(second.fields.length).toBe(2);
+            expect(second.fields[0].name).toBe('param3');
+            expect(second.fields[0].value).toBe(undefined);
+            expect(second.fields[1].name).toBe('param4');
+            expect(second.fields[1].value).toBe(undefined);
         });
 
         it('should parse a function with destructuring default parameters', () =>
@@ -600,13 +610,21 @@ describe('parser/Parser', () =>
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(2);
 
-            const first = parameters[0] as ReflectionObject;
-            expect(first).toBeInstanceOf(ReflectionObject);
-            expect(first.definition).toBe("{ param1 = 'value1' , param2 = true }");
+            const first = parameters[0] as ReflectionDestructuredObject;
+            expect(first).toBeInstanceOf(ReflectionDestructuredObject);
+            expect(first.fields.length).toBe(2);
+            expect(first.fields[0].name).toBe('param1');
+            expect(first.fields[0].value).toBeInstanceOf(ReflectionExpression);
+            expect(first.fields[1].name).toBe('param2');
+            expect(first.fields[1].value).toBeInstanceOf(ReflectionExpression);
 
-            const second = parameters[1] as ReflectionArray;
-            expect(second).toBeInstanceOf(ReflectionArray);
-            expect(second.definition).toBe("[ param3 = 'value3' , param4 = true ]");
+            const second = parameters[1] as ReflectionDestructuredArray;
+            expect(second).toBeInstanceOf(ReflectionDestructuredArray);
+            expect(second.fields.length).toBe(2);
+            expect(second.fields[0].name).toBe('param3');
+            expect(second.fields[0].value).toBeInstanceOf(ReflectionExpression);
+            expect(second.fields[1].name).toBe('param4');
+            expect(second.fields[1].value).toBeInstanceOf(ReflectionExpression);
         });
 
         it('should parse a function with destructuring rest parameters', () =>
@@ -619,13 +637,21 @@ describe('parser/Parser', () =>
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(2);
 
-            const first = parameters[0] as ReflectionObject;
-            expect(first).toBeInstanceOf(ReflectionObject);
-            expect(first.definition).toBe('{ param1 , param2 }');
+            const first = parameters[0] as ReflectionDestructuredObject;
+            expect(first).toBeInstanceOf(ReflectionDestructuredObject);
+            expect(first.fields.length).toBe(2);
+            expect(first.fields[0].name).toBe('param1');
+            expect(first.fields[0].value).toBe(undefined);
+            expect(first.fields[1].name).toBe('param2');
+            expect(first.fields[1].value).toBe(undefined);
 
-            const second = parameters[1] as ReflectionArray;
-            expect(second).toBeInstanceOf(ReflectionArray);
-            expect(second.definition).toBe('[ param3 , ...param4 ]');
+            const second = parameters[1] as ReflectionDestructuredArray;
+            expect(second).toBeInstanceOf(ReflectionDestructuredArray);
+            expect(second.fields.length).toBe(2);
+            expect(second.fields[0].name).toBe('param3');
+            expect(second.fields[0].value).toBe(undefined);
+            expect(second.fields[1].name).toBe('...param4');
+            expect(second.fields[1].value).toBe(undefined);
         });
 
         it('should parse a simple function body', () =>
