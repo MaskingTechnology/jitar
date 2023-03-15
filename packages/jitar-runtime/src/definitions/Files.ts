@@ -3,8 +3,8 @@ const Files =
 {
     MODULE_PATTERN: '**/*.js',
     SEGMENT_PATTERN: '**/*.segment.json',
-    NODE_SEGMENT_PATTERN: '**/*.node.segment.js',
-    REPOSITORY_SEGMENT_PATTERN: '**/*.repository.segment.js'
+    NODE_SEGMENT_PATTERN: '**/*.segment.node.js',
+    REPOSITORY_SEGMENT_PATTERN: '**/*.segment.repository.js'
 };
 
 Object.freeze(Files);
