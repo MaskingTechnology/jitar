@@ -33,7 +33,7 @@ type Framework = {
 const FRAMEWORKS: Framework[] = [
     {
         name: 'jitar-only',
-        display: 'No framework',
+        display: 'None',
         color: yellow
     },
     {
@@ -242,13 +242,11 @@ async function init()
             console.log('  yarn');
             console.log('  yarn build');
             console.log('  yarn jitar');
-            console.log('  yarn dev');
             break
         default:
             console.log(`  ${pkgManager} install`);
             console.log(`  ${pkgManager} run build`);
             console.log(`  ${pkgManager} run jitar`);
-            console.log(`  ${pkgManager} run dev`);
             break
     }
     console.log();
