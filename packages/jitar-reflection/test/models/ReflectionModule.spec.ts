@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 
 import ReflectionClass from '../../src/models/ReflectionClass';
-import ReflectionField from '../../src/models/ReflectionField';
+import ReflectionDeclaration from '../../src/models/ReflectionDeclaration';
 import ReflectionFunction from '../../src/models/ReflectionFunction';
 import ReflectionGenerator from '../../src/models/ReflectionGenerator';
 import ReflectionMember from '../../src/models/ReflectionMember';
@@ -13,15 +13,15 @@ describe('models/ReflectionModule', () =>
 {
     // Scope tests are omitted
 
-    describe('.exportedFields', () =>
+    describe('.exportedDeclarations', () =>
     {
-        it('should filter exported fields', () =>
+        it('should filter exported declarations', () =>
         {
-            const fields = reflectionModule.exportedFields;
-            expect(fields.length).toBe(1);
+            const declarations = reflectionModule.exportedDeclarations;
+            expect(declarations.length).toBe(1);
 
-            expect(fields[0]).toBeInstanceOf(ReflectionField);
-            expect(fields[0].name).toBe('peter');
+            expect(declarations[0]).toBeInstanceOf(ReflectionDeclaration);
+            expect(declarations[0].name).toBe('peter');
         });
     });
 
@@ -72,8 +72,8 @@ describe('models/ReflectionModule', () =>
             expect(first).toBeInstanceOf(ReflectionFunction);
             expect(first.name).toBe('sum');
 
-            const second = exported.get('peter') as ReflectionField;
-            expect(second).toBeInstanceOf(ReflectionField);
+            const second = exported.get('peter') as ReflectionDeclaration;
+            expect(second).toBeInstanceOf(ReflectionDeclaration);
             expect(second.name).toBe('peter');
 
             const third = exported.get('Customer') as ReflectionClass;
