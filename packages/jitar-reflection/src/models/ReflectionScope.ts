@@ -4,10 +4,10 @@ import ReflectionGetter from './ReflectionGetter.js';
 import ReflectionSetter from './ReflectionSetter.js';
 import ReflectionFunction from './ReflectionFunction.js';
 import ReflectionClass from './ReflectionClass.js';
-import ReflectionField from './ReflectionField.js';
 import ReflectionImport from './ReflectionImport.js';
 import ReflectionExport from './ReflectionExport.js';
 import ReflectionGenerator from './ReflectionGenerator.js';
+import ReflectionDeclaration from './ReflectionDeclaration.js';
 
 export default class ReflectionScope
 {
@@ -27,7 +27,7 @@ export default class ReflectionScope
 
     get exports(): ReflectionExport[] { return this.#members.filter(member => member.constructor.name === 'ReflectionExport') as ReflectionExport[]; }
 
-    get fields(): ReflectionField[] { return this.#members.filter(member => member.constructor.name === 'ReflectionField') as ReflectionField[]; }
+    get declarations(): ReflectionDeclaration[] { return this.#members.filter(member => member.constructor.name === 'ReflectionDeclaration') as ReflectionDeclaration[]; }
 
     get functions(): ReflectionFunction[] { return this.#members.filter(member => member.constructor.name === 'ReflectionFunction') as ReflectionFunction[]; }
 
@@ -44,9 +44,9 @@ export default class ReflectionScope
         return this.#members.find(member => member.name === name);
     }
 
-    getField(name: string): ReflectionField | undefined
+    getDeclaration(name: string): ReflectionDeclaration | undefined
     {
-        return this.fields.find(member => member.name === name);
+        return this.declarations.find(member => member.name === name);
     }
 
     getFunction(name: string): ReflectionFunction | undefined
@@ -79,9 +79,9 @@ export default class ReflectionScope
         return this.getMember(name) !== undefined;
     }
 
-    hasField(name: string): boolean
+    hasDeclaration(name: string): boolean
     {
-        return this.getField(name) !== undefined;
+        return this.getDeclaration(name) !== undefined;
     }
 
     hasFunction(name: string): boolean

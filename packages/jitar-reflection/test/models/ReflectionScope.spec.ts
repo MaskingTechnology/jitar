@@ -2,8 +2,8 @@
 import { describe, expect, it } from 'vitest';
 
 import ReflectionClass from '../../src/models/ReflectionClass';
+import ReflectionDeclaration from '../../src/models/ReflectionDeclaration';
 import ReflectionExport from '../../src/models/ReflectionExport';
-import ReflectionField from '../../src/models/ReflectionField';
 import ReflectionFunction from '../../src/models/ReflectionFunction';
 import ReflectionGenerator from '../../src/models/ReflectionGenerator';
 import ReflectionGetter from '../../src/models/ReflectionGetter';
@@ -42,14 +42,14 @@ describe('models/ReflectionScope', () =>
     {
         it('should filter field members', () =>
         {
-            const fields = reflectionScope.fields;
-            expect(fields.length).toBe(2);
+            const declarations = reflectionScope.declarations;
+            expect(declarations.length).toBe(2);
 
-            expect(fields[0]).toBeInstanceOf(ReflectionField);
-            expect(fields[0].name).toBe('name');
+            expect(declarations[0]).toBeInstanceOf(ReflectionDeclaration);
+            expect(declarations[0].name).toBe('name');
 
-            expect(fields[1]).toBeInstanceOf(ReflectionField);
-            expect(fields[1].name).toBe('age');
+            expect(declarations[1]).toBeInstanceOf(ReflectionDeclaration);
+            expect(declarations[1].name).toBe('age');
         });
     });
 
@@ -129,12 +129,12 @@ describe('models/ReflectionScope', () =>
         });
     });
 
-    describe('.getField(name)', () =>
+    describe('.getDeclaration(name)', () =>
     {
         it('should get a field by its name', () =>
         {
-            const member = reflectionScope.getField('name');
-            expect(member).toBeInstanceOf(ReflectionField);
+            const member = reflectionScope.getDeclaration('name');
+            expect(member).toBeInstanceOf(ReflectionDeclaration);
             expect(member?.name).toBe('name');
         });
     });
@@ -204,17 +204,17 @@ describe('models/ReflectionScope', () =>
         });
     });
 
-    describe('.hasField(name)', () =>
+    describe('.hasDeclaration(name)', () =>
     {
         it('should have an existing field', () =>
         {
-            const result = reflectionScope.hasField('age');
+            const result = reflectionScope.hasDeclaration('age');
             expect(result).toBe(true);
         });
 
         it('should not have a non-existing field', () =>
         {
-            const result = reflectionScope.hasField('Customer');
+            const result = reflectionScope.hasDeclaration('Customer');
             expect(result).toBe(false);
         });
     });

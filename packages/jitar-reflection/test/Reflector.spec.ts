@@ -26,9 +26,9 @@ describe('Reflector', () =>
             const members = reflectionModule.members;
             expect(members.length).toBe(3);
 
-            const fields = reflectionModule.fields;
-            expect(fields.length).toBe(1);
-            expect(fields[0].name).toBe('johnDoe');
+            const declarations = reflectionModule.declarations;
+            expect(declarations.length).toBe(1);
+            expect(declarations[0].name).toBe('johnDoe');
             
             const functions = reflectionModule.functions;
             expect(functions.length).toBe(1);
@@ -50,12 +50,12 @@ describe('Reflector', () =>
             const members = reflectionClass.members;
             expect(members.length).toBe(9);
 
-            const fields = reflectionClass.fields;
-            expect(fields.length).toBe(4);
-            expect(fields[0].name).toBe('firstName');
-            expect(fields[1].name).toBe('lastName');
-            expect(fields[2].name).toBe('age');
-            expect(fields[3].name).toBe('state');
+            const declarations = reflectionClass.declarations;
+            expect(declarations.length).toBe(4);
+            expect(declarations[0].name).toBe('firstName');
+            expect(declarations[1].name).toBe('lastName');
+            expect(declarations[2].name).toBe('age');
+            expect(declarations[3].name).toBe('state');
 
             const getters = reflectionClass.getters;
             expect(getters.length).toBe(2);
@@ -80,13 +80,13 @@ describe('Reflector', () =>
             const members = reflectionClass.members;
             expect(members.length).toBe(11);
 
-            const fields = reflectionClass.fields;
-            expect(fields.length).toBe(5);
-            expect(fields[0].name).toBe('id');
-            expect(fields[1].name).toBe('firstName');
-            expect(fields[2].name).toBe('lastName');
-            expect(fields[3].name).toBe('age');
-            expect(fields[4].name).toBe('state');
+            const declarations = reflectionClass.declarations;
+            expect(declarations.length).toBe(5);
+            expect(declarations[0].name).toBe('id');
+            expect(declarations[1].name).toBe('firstName');
+            expect(declarations[2].name).toBe('lastName');
+            expect(declarations[3].name).toBe('age');
+            expect(declarations[4].name).toBe('state');
 
             const getters = reflectionClass.getters;
             expect(getters.length).toBe(2);

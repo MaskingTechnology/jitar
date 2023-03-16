@@ -50,3 +50,15 @@ class Bar
   *[Symbol.iterator]() { /* ... */ }
 }
 ```
+
+3. Nested destructuring is not supported
+
+```ts
+// Supported
+const [ a, b = 42, ...others ] = myArray;
+const { a, b = 42, ...others } = myObject;
+
+// Unsupported
+const [ a, [ b, c, d ] ] = myArray;
+const { a: { c, d = true }, b = 42 } = myObject;
+```

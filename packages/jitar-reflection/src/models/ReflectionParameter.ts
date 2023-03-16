@@ -1,8 +1,8 @@
 
-import ReflectionArray from './ReflectionArray.js';
+import ReflectionDestructuredArray from './ReflectionDestructuredArray.js';
 import ReflectionField from './ReflectionField.js';
-import ReflectionObject from './ReflectionObject.js';
+import ReflectionDestructuredObject from './ReflectionDestructuredObject.js';
 
-type ReflectionParameter = ReflectionField | ReflectionObject | ReflectionArray;
+type ReflectionParameter = ReflectionField | ReflectionDestructuredObject | ReflectionDestructuredArray;
 
 export default ReflectionParameter;

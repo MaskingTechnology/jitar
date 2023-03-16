@@ -10,12 +10,13 @@ import ReflectionImport from '../../../src/models/ReflectionImport';
 import ReflectionAlias from '../../../src/models/ReflectionAlias';
 import ReflectionExport from '../../../src/models/ReflectionExport';
 import ReflectionGenerator from '../../../src/models/ReflectionGenerator';
+import ReflectionDeclaration from '../../../src/models/ReflectionDeclaration';
 
 const members =
 [
     new ReflectionImport([new ReflectionAlias('default', 'Person')], './Person.js'),
-    new ReflectionField('name', new ReflectionExpression('"john"'), false, true),
-    new ReflectionField('age', new ReflectionExpression('42'), false, true),
+    new ReflectionDeclaration('name', new ReflectionExpression('"john"'), false, true),
+    new ReflectionDeclaration('age', new ReflectionExpression('42'), false, true),
     new ReflectionFunction('createJohn', [], '{ return new Person("John") }'),
     new ReflectionFunction('sum', [new ReflectionField('a', undefined), new ReflectionField('b', undefined)], 'return a + b'),
     new ReflectionGetter('name', [], 'return this.#name;'),

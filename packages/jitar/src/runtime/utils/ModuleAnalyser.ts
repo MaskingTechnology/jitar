@@ -1,11 +1,11 @@
 
-import { ReflectionModule, ReflectionFunction, ReflectionField, ReflectionClass } from 'jitar-reflection';
+import { ReflectionModule, ReflectionFunction, ReflectionDeclaration, ReflectionClass } from 'jitar-reflection';
 
 export default class ModuleAnalyser
 {
-    static filterFields(module: ReflectionModule): Map<string, ReflectionField>
+    static filterFields(module: ReflectionModule): Map<string, ReflectionDeclaration>
     {
-        return this.#filterexported<ReflectionField>(module, ReflectionField);
+        return this.#filterexported<ReflectionDeclaration>(module, ReflectionDeclaration);
     }
 
     static filterFunctions(module: ReflectionModule): Map<string, ReflectionFunction>

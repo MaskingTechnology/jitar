@@ -1,5 +1,5 @@
 
-import ReflectionField from './ReflectionField.js';
+import ReflectionDeclaration from './ReflectionDeclaration.js';
 import ReflectionFunction from './ReflectionFunction.js';
 import ReflectionGenerator from './ReflectionGenerator.js';
 import ReflectionGetter from './ReflectionGetter.js';
@@ -26,7 +26,7 @@ export default class ReflectionClass extends ReflectionMember
 
     get members(): ReflectionMember[] { return this.#scope.members; }
 
-    get fields(): ReflectionField[] { return this.#scope.fields; }
+    get declarations(): ReflectionDeclaration[] { return this.#scope.declarations; }
 
     get functions(): ReflectionFunction[] { return this.#scope.functions; }
 
@@ -36,22 +36,22 @@ export default class ReflectionClass extends ReflectionMember
 
     get generators(): ReflectionGenerator[] { return this.#scope.generators; }
 
-    get readable(): Array<ReflectionField | ReflectionGetter>
+    get readable(): Array<ReflectionDeclaration | ReflectionGetter>
     {
-        const members = new Map<string, ReflectionField | ReflectionGetter>();
+        const members = new Map<string, ReflectionDeclaration | ReflectionGetter>();
 
         this.getters.forEach(getter => { members.set(getter.name, getter) });
-        this.fields.forEach(field => { if(field.isPublic) members.set(field.name, field); });
+        this.declarations.forEach(declaration => { if(declaration.isPublic) members.set(declaration.name, declaration); });
 
         return [...members.values()];
     }
 
-    get writable(): Array<ReflectionField | ReflectionSetter>
+    get writable(): Array<ReflectionDeclaration | ReflectionSetter>
     {
-        const members = new Map<string, ReflectionField | ReflectionSetter>();
+        const members = new Map<string, ReflectionDeclaration | ReflectionSetter>();
 
         this.setters.forEach(setter => { members.set(setter.name, setter) });
-        this.fields.forEach(field => { if(field.isPublic) members.set(field.name, field); });
+        this.declarations.forEach(declaration => { if(declaration.isPublic) members.set(declaration.name, declaration); });
 
         return [...members.values()];
     }
@@ -66,9 +66,9 @@ export default class ReflectionClass extends ReflectionMember
         return this.#scope.getMember(name);
     }
 
-    getField(name: string): ReflectionField | undefined
+    getDeclaration(name: string): ReflectionDeclaration | undefined
     {
-        return this.#scope.getField(name);
+        return this.#scope.getDeclaration(name);
     }
 
     getFunction(name: string): ReflectionFunction | undefined
@@ -96,9 +96,9 @@ export default class ReflectionClass extends ReflectionMember
         return this.#scope.hasMember(name);
     }
 
-    hasField(name: string): boolean
+    hasDeclaration(name: string): boolean
     {
-        return this.#scope.hasField(name);
+        return this.#scope.hasDeclaration(name);
     }
 
     hasFunction(name: string): boolean
@@ -123,17 +123,17 @@ export default class ReflectionClass extends ReflectionMember
 
     canRead(name: string): boolean
     {
-        const field = this.getField(name);
+        const declaration = this.getDeclaration(name);
 
-        return (field !== undefined && field.isPublic)
+        return (declaration !== undefined && declaration.isPublic)
             || this.hasGetter(name);
     }
 
     canWrite(name: string): boolean
     {
-        const field = this.getField(name);
+        const declaration = this.getDeclaration(name);
         
-        return (field !== undefined && field.isPublic)
+        return (declaration !== undefined && declaration.isPublic)
             || this.hasSetter(name);
     }
 

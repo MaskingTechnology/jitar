@@ -1,7 +1,7 @@
 
 import { describe, expect, it } from 'vitest';
+import ReflectionDeclaration from '../../src/models/ReflectionDeclaration';
 
-import ReflectionField from '../../src/models/ReflectionField';
 import ReflectionFunction from '../../src/models/ReflectionFunction';
 import ReflectionGetter from '../../src/models/ReflectionGetter';
 import ReflectionSetter from '../../src/models/ReflectionSetter';
@@ -26,7 +26,7 @@ describe('models/ReflectionClass', () =>
             expect(readable[1]).toBeInstanceOf(ReflectionGetter);
 
             expect(readable[2].name).toBe('length');
-            expect(readable[2]).toBeInstanceOf(ReflectionField);
+            expect(readable[2]).toBeInstanceOf(ReflectionDeclaration);
         });
     });
 
@@ -41,7 +41,7 @@ describe('models/ReflectionClass', () =>
             expect(writable[0]).toBeInstanceOf(ReflectionSetter);
 
             expect(writable[1].name).toBe('length');
-            expect(writable[1]).toBeInstanceOf(ReflectionField);
+            expect(writable[1]).toBeInstanceOf(ReflectionDeclaration);
         });
     });
 
