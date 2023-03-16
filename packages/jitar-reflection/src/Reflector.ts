@@ -4,7 +4,6 @@ import Parser from './parser/Parser.js';
 import ReflectionClass from './models/ReflectionClass.js';
 import ReflectionExpression from './models/ReflectionExpression.js';
 import ReflectionExport from './models/ReflectionExport.js';
-import ReflectionField from './models/ReflectionField.js';
 import ReflectionFunction from './models/ReflectionFunction.js';
 import ReflectionImport from './models/ReflectionImport.js';
 import ReflectionModule from './models/ReflectionModule.js';
