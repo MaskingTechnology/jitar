@@ -10,7 +10,7 @@ import ReflectionGenerator from '../../src/models/ReflectionGenerator';
 import ReflectionObject from '../../src/models/ReflectionObject';
 import Parser from '../../src/parser/Parser';
 
-import { VALUES, IMPORTS, EXPORTS, FIELDS, FUNCTIONS, CLASSES, MODULES } from '../_fixtures/parser/Parser.fixture';
+import { VALUES, IMPORTS, EXPORTS, DECLARATIONS, FUNCTIONS, CLASSES, MODULES } from '../_fixtures/parser/Parser.fixture';
 
 const parser = new Parser();
 
@@ -292,7 +292,7 @@ describe('parser/Parser', () =>
     {
         it('should parse an empty declaration', () =>
         {
-            const declaration = parser.parseDeclaration(FIELDS.EMPTY);
+            const declaration = parser.parseDeclaration(DECLARATIONS.EMPTY);
 
             expect(declaration.name).toBe('name');
             expect(declaration.value).toBe(undefined);
@@ -300,7 +300,7 @@ describe('parser/Parser', () =>
 
         it('should parse a const declaration', () =>
         {
-            const declaration = parser.parseDeclaration(FIELDS.CONST);
+            const declaration = parser.parseDeclaration(DECLARATIONS.CONST);
 
             expect(declaration.name).toBe('name');
             expect(declaration.value).toBeInstanceOf(ReflectionExpression);
@@ -309,7 +309,7 @@ describe('parser/Parser', () =>
 
         it('should parse a let declaration with value', () =>
         {
-            const declaration = parser.parseDeclaration(FIELDS.LET);
+            const declaration = parser.parseDeclaration(DECLARATIONS.LET);
 
             expect(declaration.name).toBe('name');
             expect(declaration.value).toBeInstanceOf(ReflectionExpression);
@@ -318,7 +318,7 @@ describe('parser/Parser', () =>
 
         it('should parse a var declaration with value', () =>
         {
-            const declaration = parser.parseDeclaration(FIELDS.VAR);
+            const declaration = parser.parseDeclaration(DECLARATIONS.VAR);
 
             expect(declaration.name).toBe('name');
             expect(declaration.value).toBeInstanceOf(ReflectionExpression);
@@ -327,7 +327,7 @@ describe('parser/Parser', () =>
 
         it('should parse a declaration with multiple declarations', () =>
         {
-            const declaration = parser.parseDeclaration(FIELDS.DECLARATIONS);
+            const declaration = parser.parseDeclaration(DECLARATIONS.MULTIPLE);
 
             expect(declaration.name).toBe('name1');
             expect(declaration.value).toBeInstanceOf(ReflectionExpression);
@@ -336,7 +336,7 @@ describe('parser/Parser', () =>
 
         it('should parse a declaration with an expression', () =>
         {
-            const declaration = parser.parseDeclaration(FIELDS.EXPRESSION);
+            const declaration = parser.parseDeclaration(DECLARATIONS.EXPRESSION);
 
             expect(declaration.name).toBe('number');
             expect(declaration.value).toBeInstanceOf(ReflectionExpression);
@@ -345,7 +345,7 @@ describe('parser/Parser', () =>
 
         it('should parse a declaration with an array value', () =>
         {
-            const declaration = parser.parseDeclaration(FIELDS.ARRAY);
+            const declaration = parser.parseDeclaration(DECLARATIONS.ARRAY);
 
             expect(declaration.name).toBe('array');
             expect(declaration.value).toBeInstanceOf(ReflectionArray);
@@ -354,7 +354,7 @@ describe('parser/Parser', () =>
 
         it('should parse a declaration with an array value', () =>
         {
-            const declaration = parser.parseDeclaration(FIELDS.OBJECT);
+            const declaration = parser.parseDeclaration(DECLARATIONS.OBJECT);
 
             expect(declaration.name).toBe('object');
             expect(declaration.value).toBeInstanceOf(ReflectionObject);
@@ -363,7 +363,7 @@ describe('parser/Parser', () =>
 
         it('should parse a declaration with a regex value', () =>
         {
-            const declaration = parser.parseDeclaration(FIELDS.REGEX);
+            const declaration = parser.parseDeclaration(DECLARATIONS.REGEX);
 
             expect(declaration.name).toBe('regex');
             expect(declaration.value).toBeInstanceOf(ReflectionExpression);
@@ -372,30 +372,47 @@ describe('parser/Parser', () =>
 
         it('should parse a declaration that is destructuring an array', () =>
         {
-            const declaration = parser.parseDeclaration(FIELDS.DESTRUCTURING_ARRAY);
+            const declaration = parser.parseDeclaration(DECLARATIONS.DESTRUCTURING_ARRAY);
 
-            expect(declaration.name).toBe('[ value1 , value2 ]');
+            expect(declaration.name).toBe('[ value1 , value2 = true ]');
             expect(declaration.value).toBeInstanceOf(ReflectionExpression);
             expect(declaration.identifier).toBeInstanceOf(ReflectionDestructuredArray);
 
             const identifier = declaration.identifier as ReflectionDestructuredArray;
-            expect(identifier.fields.length).toBe(2);
-            expect(identifier.fields[0].name).toBe('value1');
-            expect(identifier.fields[1].name).toBe('value2');
+            expect(identifier.members.length).toBe(2);
+            
+            const firstMember = identifier.members[0] as ReflectionField;
+            expect(firstMember).toBeInstanceOf(ReflectionField);
+            expect(firstMember.name).toBe('value1');
+            expect(firstMember.value).toBe(undefined);
+
+            const secondMember = identifier.members[1] as ReflectionField;
+            expect(secondMember).toBeInstanceOf(ReflectionField);
+            expect(secondMember.name).toBe('value2');
+            expect(secondMember.value).toBeInstanceOf(ReflectionExpression);
+            expect(secondMember.value?.definition).toBe('true');
         });
 
         it('should parse a declaration that is destructuring an object', () =>
         {
-            const declaration = parser.parseDeclaration(FIELDS.DESTRUCTURING_OBJECT);
+            const declaration = parser.parseDeclaration(DECLARATIONS.DESTRUCTURING_OBJECT);
 
-            expect(declaration.name).toBe('{ key1 , key2 }');
+            expect(declaration.name).toBe('{ key1 , key2 = false }');
             expect(declaration.value).toBeInstanceOf(ReflectionExpression);
             expect(declaration.identifier).toBeInstanceOf(ReflectionDestructuredObject);
 
             const identifier = declaration.identifier as ReflectionDestructuredArray;
-            expect(identifier.fields.length).toBe(2);
-            expect(identifier.fields[0].name).toBe('key1');
-            expect(identifier.fields[1].name).toBe('key2');
+            expect(identifier.members.length).toBe(2);
+
+            const firstMember = identifier.members[0] as ReflectionField;
+            expect(firstMember).toBeInstanceOf(ReflectionField);
+            expect(firstMember.name).toBe('key1');
+
+            const secondMember = identifier.members[1] as ReflectionField;
+            expect(secondMember).toBeInstanceOf(ReflectionField);
+            expect(secondMember.name).toBe('key2');
+            expect(secondMember.value).toBeInstanceOf(ReflectionExpression);
+            expect(secondMember.value?.definition).toBe('false');
         });
     });
 
@@ -593,21 +610,33 @@ describe('parser/Parser', () =>
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(2);
 
-            const first = parameters[0] as ReflectionDestructuredObject;
-            expect(first).toBeInstanceOf(ReflectionDestructuredObject);
-            expect(first.fields.length).toBe(2);
-            expect(first.fields[0].name).toBe('param1');
-            expect(first.fields[0].value).toBe(undefined);
-            expect(first.fields[1].name).toBe('param2');
-            expect(first.fields[1].value).toBe(undefined);
+            const firstParameter = parameters[0] as ReflectionDestructuredObject;
+            expect(firstParameter).toBeInstanceOf(ReflectionDestructuredObject);
+            expect(firstParameter.members.length).toBe(2);
 
-            const second = parameters[1] as ReflectionDestructuredArray;
-            expect(second).toBeInstanceOf(ReflectionDestructuredArray);
-            expect(second.fields.length).toBe(2);
-            expect(second.fields[0].name).toBe('param3');
-            expect(second.fields[0].value).toBe(undefined);
-            expect(second.fields[1].name).toBe('param4');
-            expect(second.fields[1].value).toBe(undefined);
+            const firstMember = firstParameter.members[0] as ReflectionField;
+            expect(firstMember).toBeInstanceOf(ReflectionField);
+            expect(firstMember.name).toBe('param1');
+            expect(firstMember.value).toBe(undefined);
+
+            const secondMember = firstParameter.members[1] as ReflectionField;
+            expect(secondMember).toBeInstanceOf(ReflectionField);
+            expect(secondMember.name).toBe('param2');
+            expect(secondMember.value).toBe(undefined);
+
+            const secondParameter = parameters[1] as ReflectionDestructuredArray;
+            expect(secondParameter).toBeInstanceOf(ReflectionDestructuredArray);
+            expect(secondParameter.members.length).toBe(2);
+
+            const thirdMember = secondParameter.members[0] as ReflectionField;
+            expect(thirdMember).toBeInstanceOf(ReflectionField);
+            expect(thirdMember.name).toBe('param3');
+            expect(thirdMember.value).toBe(undefined);
+
+            const fourthMember = secondParameter.members[1] as ReflectionField;
+            expect(fourthMember).toBeInstanceOf(ReflectionField);
+            expect(fourthMember.name).toBe('param4');
+            expect(fourthMember.value).toBe(undefined);
         });
 
         it('should parse a function with destructuring default parameters', () =>
@@ -620,21 +649,33 @@ describe('parser/Parser', () =>
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(2);
 
-            const first = parameters[0] as ReflectionDestructuredObject;
-            expect(first).toBeInstanceOf(ReflectionDestructuredObject);
-            expect(first.fields.length).toBe(2);
-            expect(first.fields[0].name).toBe('param1');
-            expect(first.fields[0].value).toBeInstanceOf(ReflectionExpression);
-            expect(first.fields[1].name).toBe('param2');
-            expect(first.fields[1].value).toBeInstanceOf(ReflectionExpression);
+            const firstParameter = parameters[0] as ReflectionDestructuredObject;
+            expect(firstParameter).toBeInstanceOf(ReflectionDestructuredObject);
+            expect(firstParameter.members.length).toBe(2);
+            
+            const firstMember = firstParameter.members[0] as ReflectionField;
+            expect(firstMember).toBeInstanceOf(ReflectionField);
+            expect(firstMember.name).toBe('param1');
+            expect(firstMember.value).toBeInstanceOf(ReflectionExpression);
 
-            const second = parameters[1] as ReflectionDestructuredArray;
-            expect(second).toBeInstanceOf(ReflectionDestructuredArray);
-            expect(second.fields.length).toBe(2);
-            expect(second.fields[0].name).toBe('param3');
-            expect(second.fields[0].value).toBeInstanceOf(ReflectionExpression);
-            expect(second.fields[1].name).toBe('param4');
-            expect(second.fields[1].value).toBeInstanceOf(ReflectionExpression);
+            const secondMember = firstParameter.members[1] as ReflectionField;
+            expect(secondMember).toBeInstanceOf(ReflectionField);
+            expect(secondMember.name).toBe('param2');
+            expect(secondMember.value).toBeInstanceOf(ReflectionExpression);
+
+            const secondParameter = parameters[1] as ReflectionDestructuredArray;
+            expect(secondParameter).toBeInstanceOf(ReflectionDestructuredArray);
+            expect(secondParameter.members.length).toBe(2);
+            
+            const thirdMember = secondParameter.members[0] as ReflectionField;
+            expect(thirdMember).toBeInstanceOf(ReflectionField);
+            expect(thirdMember.name).toBe('param3');
+            expect(thirdMember.value).toBeInstanceOf(ReflectionExpression);
+
+            const fourthMember = secondParameter.members[1] as ReflectionField;
+            expect(fourthMember).toBeInstanceOf(ReflectionField);
+            expect(fourthMember.name).toBe('param4');
+            expect(fourthMember.value).toBeInstanceOf(ReflectionExpression);
         });
 
         it('should parse a function with destructuring rest parameters', () =>
@@ -647,21 +688,33 @@ describe('parser/Parser', () =>
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(2);
 
-            const first = parameters[0] as ReflectionDestructuredObject;
-            expect(first).toBeInstanceOf(ReflectionDestructuredObject);
-            expect(first.fields.length).toBe(2);
-            expect(first.fields[0].name).toBe('param1');
-            expect(first.fields[0].value).toBe(undefined);
-            expect(first.fields[1].name).toBe('param2');
-            expect(first.fields[1].value).toBe(undefined);
+            const firstParameter = parameters[0] as ReflectionDestructuredObject;
+            expect(firstParameter).toBeInstanceOf(ReflectionDestructuredObject);
+            expect(firstParameter.members.length).toBe(2);
+            
+            const firstMember = firstParameter.members[0] as ReflectionField;
+            expect(firstMember).toBeInstanceOf(ReflectionField);
+            expect(firstMember.name).toBe('param1');
+            expect(firstMember.value).toBe(undefined);
 
-            const second = parameters[1] as ReflectionDestructuredArray;
-            expect(second).toBeInstanceOf(ReflectionDestructuredArray);
-            expect(second.fields.length).toBe(2);
-            expect(second.fields[0].name).toBe('param3');
-            expect(second.fields[0].value).toBe(undefined);
-            expect(second.fields[1].name).toBe('...param4');
-            expect(second.fields[1].value).toBe(undefined);
+            const secondMember = firstParameter.members[1] as ReflectionField;
+            expect(secondMember).toBeInstanceOf(ReflectionField);
+            expect(secondMember.name).toBe('param2');
+            expect(secondMember.value).toBe(undefined);
+
+            const secondParameter = parameters[1] as ReflectionDestructuredArray;
+            expect(secondParameter).toBeInstanceOf(ReflectionDestructuredArray);
+            expect(secondParameter.members.length).toBe(2);
+            
+            const thirdMember = secondParameter.members[0] as ReflectionField;
+            expect(thirdMember).toBeInstanceOf(ReflectionField);
+            expect(thirdMember.name).toBe('param3');
+            expect(thirdMember.value).toBe(undefined);
+
+            const fourthMember = secondParameter.members[1] as ReflectionField;
+            expect(fourthMember).toBeInstanceOf(ReflectionField);
+            expect(fourthMember.name).toBe('...param4');
+            expect(fourthMember.value).toBe(undefined);
         });
 
         it('should parse a simple function body', () =>

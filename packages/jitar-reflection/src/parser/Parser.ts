@@ -557,7 +557,7 @@ export default class Parser
             token = tokenList.step(); // Read away the function name
         }
 
-        const parameters = this.#parseParameters(tokenList);
+        const parameters = this.#parseParameters(tokenList, Group.CLOSE);
 
         token = tokenList.current;
 
@@ -591,7 +591,7 @@ export default class Parser
 
         if (token.hasValue(Group.OPEN))
         {
-            parameters = this.#parseParameters(tokenList);
+            parameters = this.#parseParameters(tokenList, Group.CLOSE);
             token = tokenList.current;
         }
         else
@@ -614,7 +614,7 @@ export default class Parser
         return new ReflectionFunction(ANONYMOUS_IDENTIFIER, parameters, body, false, isAsync, false);
     }
 
-    #parseParameters(tokenList: TokenList): ReflectionParameter[]
+    #parseParameters(tokenList: TokenList, closeId: string): ReflectionParameter[]
     {
         const parameters = [];
 
@@ -624,7 +624,7 @@ export default class Parser
         {
             const token = tokenList.current;
 
-            if (token.hasValue(Group.CLOSE))
+            if (token.hasValue(closeId))
             {
                 // End of the parameter list
 
@@ -774,7 +774,7 @@ export default class Parser
 
     #parseDestructuredArray(tokenList: TokenList): ReflectionDestructuredArray
     {
-        const fields = this.#parseFields(tokenList, List.CLOSE);
+        const fields = this.#parseParameters(tokenList, List.CLOSE);
 
         return new ReflectionDestructuredArray(fields);
     }
@@ -788,9 +788,29 @@ export default class Parser
 
     #parseDestructuredObject(tokenList: TokenList): ReflectionDestructuredObject
     {
-        const fields = this.#parseFields(tokenList, Scope.CLOSE);
+        const fields = this.#parseParameters(tokenList, Scope.CLOSE);
 
         return new ReflectionDestructuredObject(fields);
+    }
+
+    #parseField(tokenList: TokenList): ReflectionField
+    {
+        let token = tokenList.current;
+
+        const name = token.value;
+
+        token = tokenList.step(); // Read away the name
+
+        let value = undefined;
+
+        if (token.hasValue(Operator.ASSIGN))
+        {
+            tokenList.step(); // Read away the assignment operator
+            
+            value = this.#parseNext(tokenList, false) as ReflectionValue;
+        }
+
+        return new ReflectionField(name, value);
     }
 
     #parseExpression(tokenList: TokenList): ReflectionExpression
@@ -836,61 +856,6 @@ export default class Parser
         }
 
         return new ReflectionExpression(code.trim());
-    }
-
-    #parseFields(tokenList: TokenList, closeId: string): ReflectionField[]
-    {
-        const fields = [];
-
-        tokenList.step(); // Read away the open id
-
-        while (tokenList.notAtEnd())
-        {
-            const token = tokenList.current;
-
-            if (token.hasValue(closeId))
-            {
-                // End of the field list
-
-                tokenList.step(); // Read away the close id
-
-                break;
-            }
-            else if (token.hasValue(Divider.SEPARATOR))
-            {
-                // End of field
-
-                tokenList.step(); // Read away the separator
-
-                continue;
-            }
-
-            const field = this.#parseField(tokenList);
-
-            fields.push(field);
-        }
-
-        return fields;
-    }
-
-    #parseField(tokenList: TokenList): ReflectionField
-    {
-        let token = tokenList.current;
-
-        const name = token.value;
-
-        token = tokenList.step(); // Read away the name
-
-        let value = undefined;
-
-        if (token.hasValue(Operator.ASSIGN))
-        {
-            tokenList.step(); // Read away the assignment operator
-            
-            value = this.#parseNext(tokenList, false) as ReflectionValue;
-        }
-
-        return new ReflectionField(name, value);
     }
 
     #parseBlock(tokenList: TokenList, openId: string, closeId: string): string

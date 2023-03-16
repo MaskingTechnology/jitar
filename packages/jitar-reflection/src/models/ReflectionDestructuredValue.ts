@@ -1,19 +1,19 @@
 
-import ReflectionField from './ReflectionField.js';
+import ReflectionParameter from './ReflectionParameter.js';
 
 export default class ReflectionDestructuredValue
 {
-    #fields: ReflectionField[];
+    #members: ReflectionParameter[];
 
-    constructor(fields: ReflectionField[])
+    constructor(members: ReflectionParameter[])
     {
-        this.#fields = fields;
+        this.#members = members;
     }
 
-    get fields() { return this.#fields; }
+    get members() { return this.#members; }
 
     toString(): string
     {
-        return this.#fields.map(field => field.toString()).join(' , ');
+        return this.#members.map(member => member.toString()).join(' , ');
     }
 }
