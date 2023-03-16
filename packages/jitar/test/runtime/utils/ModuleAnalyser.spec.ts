@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import ModuleAnalyser from '../../../src/runtime/utils/ModuleAnalyser';
 
-import { ReflectionClass, ReflectionField, ReflectionFunction } from 'jitar-reflection';
+import { ReflectionClass, ReflectionDeclaration, ReflectionFunction } from 'jitar-reflection';
 
 import { theModule } from '../../_fixtures/runtime/utils/ModuleAnaliser.fixture';
 
@@ -16,7 +16,7 @@ describe('runtime/utils/ModuleAnaliser', () =>
             const result = ModuleAnalyser.filterFields(theModule);
 
             expect(result.size).toBe(1);
-            expect(result.get('hello')).toBeInstanceOf(ReflectionField);
+            expect(result.get('hello')).toBeInstanceOf(ReflectionDeclaration);
         });
     });
 
