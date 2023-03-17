@@ -22,6 +22,9 @@
     "templates/**/*",
     "dist"
   ],
+  "engines": {
+    "node": ">=18.7"
+  },
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
