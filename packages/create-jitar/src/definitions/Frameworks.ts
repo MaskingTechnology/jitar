@@ -3,7 +3,7 @@ import { cyan, green, magenta, red, yellow, blue } from 'kolorist';
 
 import { Framework } from '../types/Framework.js';
 
-const FRAMEWORKS: Framework[] = [
+const Frameworks: Framework[] = [
     {
         name: 'jitar-only',
         display: 'None',
@@ -36,4 +36,4 @@ const FRAMEWORKS: Framework[] = [
     }
 ];
 
-export { FRAMEWORKS };
+export { Frameworks };

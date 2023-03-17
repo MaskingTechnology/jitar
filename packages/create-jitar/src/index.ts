@@ -8,7 +8,7 @@ import minimist from 'minimist';
 import prompts from 'prompts';
 import { red, reset } from 'kolorist';
 
-import { FRAMEWORKS } from './definitions/Frameworks.js';
+import { Frameworks } from './definitions/Frameworks.js';
 
 const VALID_PACKAGE_NAME_REGEX = /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/;
 
@@ -19,7 +19,7 @@ const argv = minimist<{
 
 const cwd = process.cwd();
 
-const TEMPLATES = FRAMEWORKS.map(
+const TEMPLATES = Frameworks.map(
     (f) => [f.name],
 ).reduce((a, b) => a.concat(b), []);
 
@@ -97,7 +97,7 @@ async function execute()
                             )
                             : reset('Select a framework:'),
                     initial: 0,
-                    choices: FRAMEWORKS.map((framework) =>
+                    choices: Frameworks.map((framework) =>
                     {
                         const frameworkColor = framework.color
                         return {
