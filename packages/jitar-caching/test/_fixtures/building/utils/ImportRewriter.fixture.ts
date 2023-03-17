@@ -8,13 +8,15 @@ import { component1, component2 } from '../path/to/components.js';
 const NO_SYSTEM_IMPORTS_RESULT = NO_SYSTEM_IMPORTS;
 
 const HAS_SYSTEM_IMPORTS =
-`import * as fs from 'fs';
+`import 'polyfills';
+import * as fs from 'fs';
 import component from 'http';
 import { component1, component2 } from 'https';
 `;
 
 const HAS_SYSTEM_IMPORTS_RESULT =
 `import { getDependency } from "/jitar/hooks.js";
+await getDependency('polyfills');
 const fs = await getDependency('fs');
 const component = await getDependency('http');
 const { component1, component2 } = await getDependency('https');
