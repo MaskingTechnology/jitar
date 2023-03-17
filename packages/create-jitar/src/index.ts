@@ -115,9 +115,14 @@ async function execute()
             },
         )
     }
-    catch (cancelled: any)
+    catch (cancelled: unknown)
     {
-        console.log(cancelled.message);
+        const message = cancelled instanceof Error
+            ? cancelled.message
+            : String(cancelled);
+
+        console.log(message);
+
         return;
     }
 
@@ -135,7 +140,7 @@ async function execute()
         fs.mkdirSync(root, { recursive: true });
     }
 
-    let template: string = framework?.name || argTemplate;
+    const template: string = framework?.name || argTemplate;
 
     const pkgInfo = pkgFromUserAgent(process.env.npm_config_user_agent);
     const pkgManager = pkgInfo ? pkgInfo.name : 'npm';
