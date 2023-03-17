@@ -43,7 +43,7 @@ export default class SegmentReader
     {
         const file = filename.split('/').pop();
 
-        if (file === undefined)
+        if (file === undefined || file === '')
         {
             throw new InvalidSegmentFilename(filename);
         }
