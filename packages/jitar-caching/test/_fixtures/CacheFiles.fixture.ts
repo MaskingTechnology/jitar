@@ -23,13 +23,16 @@ const PRODUCT_SEGMENT_REPOSITORY = `export const files = [
 
 const PRODUCT_SEGMENT_NODE = 
 `import { default as $1, searchProducts as $2 } from "./product/getProducts.js";
+import { default as $3, searchProducts as $4 } from "./product/getProducts_v1.js";
 import { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } from "jitar-runtime";
 export const segment = new Segment("product")
 \t.addProcedure(new Procedure("product/getProducts")
 \t\t.addImplementation(new Implementation(new Version(0, 0, 0), "private", [new NamedParameter("id", false)], $1))
+\t\t.addImplementation(new Implementation(new Version(1, 0, 0), "private", [new NamedParameter("id", false)], $3))
 \t)
 \t.addProcedure(new Procedure("product/searchProducts")
 \t\t.addImplementation(new Implementation(new Version(0, 0, 0), "public", [new NamedParameter("query", false)], $2))
+\t\t.addImplementation(new Implementation(new Version(1, 0, 0), "public", [new NamedParameter("query", false)], $4))
 \t)`;
 
 const CREATE_ORDER_LOCAL =
@@ -111,6 +114,15 @@ export async function searchProducts(query) {
 \treturn runProcedure('product/searchProducts', '0.0.0', { 'query': query }, this)
 }`;
 
+const GET_PRODUCTS_LOCAL_V1 = GET_PRODUCTS_LOCAL;
+
+const GET_PRODUCTS_REMOTE_V1 =
+`import { runProcedure } from "/jitar/hooks.js";
+
+export async function searchProducts(query) {
+\treturn runProcedure('product/searchProducts', '1.0.0', { 'query': query }, this)
+}`;
+
 const PRODUCT_MODELS_LOCAL =
 `export class Product {}
 
@@ -129,6 +141,8 @@ const CACHE_FILES =
     './order/models.local.js': ORDER_MODELS_LOCAL,
     './product/getProducts.local.js': GET_PRODUCTS_LOCAL,
     './product/getProducts.remote.js': GET_PRODUCTS_REMOTE,
+    './product/getProducts_v1.local.js': GET_PRODUCTS_LOCAL_V1,
+    './product/getProducts_v1.remote.js': GET_PRODUCTS_REMOTE_V1,
     './product/models.local.js': PRODUCT_MODELS_LOCAL
 }
 
@@ -149,6 +163,8 @@ const CACHE_MODULE_FILENAMES =
     './order/models.local.js',
     './product/getProducts.local.js',
     './product/getProducts.remote.js',
+    './product/getProducts_v1.local.js',
+    './product/getProducts_v1.remote.js',
     './product/models.local.js',
 ]
 

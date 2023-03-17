@@ -21,6 +21,7 @@ const MODULES =
     CREATE_ORDER: createModule('./order/createOrder.js'),
     STORE_ORDER: createModule('./order/storeOrder.js'),
     GET_PRODUCTS: createModule('./product/getProducts.js'),
+    GET_PRODUCTS_V1: createModule('./product/getProducts_v1.js'),
     ORDER_MODELS: createModule('./order/models.js'),
     PRODUCT_MODELS: createModule('./product/models.js')
 }

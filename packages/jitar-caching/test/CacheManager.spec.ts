@@ -20,7 +20,7 @@ describe('building/ApplicationCacheWriter', () =>
             await cacheManager.build();
 
             const result = fileManager.writtenFiles;
-            expect(result.size).toBe(12);
+            expect(result.size).toBe(14);
         });
     });
 });

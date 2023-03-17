@@ -17,7 +17,9 @@ const SEGMENT_IMPLEMENTATIONS =
     STORE_ORDER_V0: new SegmentImplementation('$2', 'v0_0_0', 'public', '0.0.0', STORE_ORDER_V0),
     STORE_ORDER_V1: new SegmentImplementation('$3', 'v1_0_0', 'public', '1.0.0', STORE_ORDER_V1),
     GET_PRODUCTS: new SegmentImplementation('$1', 'default', 'private', '0.0.0', GET_PRODUCTS),
-    SEARCH_PRODUCTS: new SegmentImplementation('$2', 'searchProducts', 'public', '0.0.0', SEARCH_PRODUCTS)
+    SEARCH_PRODUCTS: new SegmentImplementation('$2', 'searchProducts', 'public', '0.0.0', SEARCH_PRODUCTS),
+    GET_PRODUCTS_V1: new SegmentImplementation('$3', 'default', 'private', '1.0.0', GET_PRODUCTS),
+    SEARCH_PRODUCTS_V1: new SegmentImplementation('$4', 'searchProducts', 'public', '1.0.0', SEARCH_PRODUCTS)
 }
 
 export { SEGMENT_IMPLEMENTATIONS }

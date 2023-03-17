@@ -19,6 +19,11 @@ const PRODUCT_SEGMENT = `
     {
         "default": { "access": "private" },
         "searchProducts": { "access": "public" }
+    },
+    "./product/getProducts_v1.js":
+    {
+        "default": { "access": "private", "version": "1.0.0" },
+        "searchProducts": { "access": "public", "version": "1.0.0" }
     }
 }
 `;
@@ -78,6 +83,8 @@ export async function searchProducts(query)
 }
 `;
 
+const GET_PRODUCTS_V1 = GET_PRODUCTS;
+
 const PRODUCT_MODELS = `
 export class Product {}
 `;
@@ -90,6 +97,7 @@ const SOURCE_FILES =
     './order/storeOrder.js': STORE_ORDER,
     './order/models.js': ORDER_MODELS,
     './product/getProducts.js': GET_PRODUCTS,
+    './product/getProducts_v1.js': GET_PRODUCTS_V1,
     './product/models.js': PRODUCT_MODELS
 }
 
@@ -105,6 +113,7 @@ const SOURCE_MODULE_FILENAMES =
     './order/storeOrder.js',
     './order/models.js',
     './product/getProducts.js',
+    './product/getProducts_v1.js',
     './product/models.js'
 ]
 

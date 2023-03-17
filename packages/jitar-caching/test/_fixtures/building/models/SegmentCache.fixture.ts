@@ -21,9 +21,10 @@ const PRODUCT = new SegmentCache
     'product',
     [SEGMENT_MODULES.GET_PRODUCTS.filename],
     [
-        new SegmentImport(['default as $1', 'searchProducts as $2'], SEGMENT_MODULES.GET_PRODUCTS.filename)
+        new SegmentImport(['default as $1', 'searchProducts as $2'], SEGMENT_MODULES.GET_PRODUCTS.filename),
+        new SegmentImport(['default as $3', 'searchProducts as $4'], SEGMENT_MODULES.GET_PRODUCTS_V1.filename)
     ],
-    [SEGMENT_PROCEDURES.GET_PRODUCTS, SEGMENT_PROCEDURES.SEARCH_PRODUCTS]
+    [SEGMENT_PROCEDURES.GET_PRODUCTS_MERGED, SEGMENT_PROCEDURES.SEARCH_PRODUCTS_MERGED]
 );
 
 const SEGMENT_CACHES =
