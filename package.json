@@ -6,8 +6,10 @@
     "workspaces": [
         "packages/create-jitar",
         "packages/jitar",
+        "packages/jitar-caching",
         "packages/jitar-nodejs-server",
         "packages/jitar-reflection",
+        "packages/jitar-runtime",
         "packages/jitar-vite-plugin",
         "examples/1-basic/1-hello-world",
         "examples/1-basic/2-segmentation",
