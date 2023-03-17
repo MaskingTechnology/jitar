@@ -10,4 +10,4 @@ const INPUT =
 
 const OUTPUT = APPLICATION;
 
-export { INPUT, OUTPUT };
+export { INPUT, OUTPUT }

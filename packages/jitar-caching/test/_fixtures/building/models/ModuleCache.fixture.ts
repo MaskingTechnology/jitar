@@ -13,4 +13,4 @@ const MODULE_CACHES =
     PRODUCT_MODELS: new ModuleCache(MODULES.PRODUCT_MODELS, undefined)
 }
 
-export { MODULE_CACHES };
+export { MODULE_CACHES }

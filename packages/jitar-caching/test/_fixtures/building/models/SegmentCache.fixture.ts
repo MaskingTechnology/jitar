@@ -32,4 +32,4 @@ const SEGMENT_CACHES =
     PRODUCT
 }
 
-export { SEGMENT_CACHES };
+export { SEGMENT_CACHES }

@@ -11,4 +11,4 @@ const INPUT =
 
 const OUTPUT = MODULE_CACHES.STORE_ORDER;
 
-export { INPUT, OUTPUT };
+export { INPUT, OUTPUT }
