@@ -36,7 +36,9 @@ export default class ModuleReader
         }
         catch (error: unknown)
         {
-            throw new ModuleFileNotLoaded(filename);
+            const message = error instanceof Error ? error.message : String(error);
+
+            throw new ModuleFileNotLoaded(filename, message);
         }
     }
 }

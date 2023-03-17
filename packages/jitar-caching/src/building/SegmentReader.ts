@@ -61,7 +61,9 @@ export default class SegmentReader
         }
         catch (error: unknown)
         {
-            throw new SegmentFileNotLoaded(filename);
+            const message = error instanceof Error ? error.message : String(error);
+
+            throw new SegmentFileNotLoaded(filename, message);
         }
     }
 
@@ -92,15 +94,18 @@ export default class SegmentReader
 
     async #loadSegmentModule(absoluteLocation: string): Promise<ReflectionModule>
     {
-        const code = await this.#fileManager.getContent(absoluteLocation);
-        const module = reflector.parse(code.toString());
-
-        if (module === undefined)
+        try
         {
-            throw new SegmentModuleNotLoaded(absoluteLocation);
-        }
+            const code = await this.#fileManager.getContent(absoluteLocation);
 
-        return module;
+            return reflector.parse(code.toString());
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : String(error);
+
+            throw new SegmentModuleNotLoaded(absoluteLocation, message);
+        }
     }
 
     #extractModuleName(relativeFilename: string): string

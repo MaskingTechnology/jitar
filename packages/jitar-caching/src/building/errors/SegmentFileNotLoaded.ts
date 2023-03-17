@@ -1,8 +1,8 @@
 
 export default class SegmentFileNotLoaded extends Error
 {
-    constructor(filename: string)
+    constructor(filename: string, message: string)
     {
-        super(`Failed to load segment file '${filename}'`);
+        super(`Failed to load segment file '${filename}' because of: ${message}`);
     }
 }
