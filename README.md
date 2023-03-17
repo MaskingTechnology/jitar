@@ -15,7 +15,6 @@ Jitar runs on top of Node.js and in any modern web browser. It has strong suppor
 * [How it works](#how-it-works)
 * [Getting started](#getting-started)
 * [Example](#example)
-* [Integrations](#integrations)
 * [Documentation](#documentation)
 * [Publications](#publications)
 * [Contributing](#contributing)
@@ -80,7 +79,17 @@ npm install jitar-nodejs-server
 
 Now you're ready to chop applications! Follow our [Getting started](https://docs.jitar.dev/02_getting_started) guide to create your first application.
 
-## Example
+### Creator
+
+An npm creator is available to kick start a Jitar application. It will create a new project with all the required files and dependencies.
+
+```bash
+npm create jitar@latest
+```
+
+More information about the available templates can be found [here](packages/create-jitar/README.md).
+
+### Manual example
 
 The following example shows how a client imports and calls a procedure from a server as if its locally available (like a monolith).
 
@@ -138,17 +147,6 @@ For splitting (segmenting) applications configuration files are used. For each p
 ```
 
 There are more practical [examples](examples/README.md) in the repository. Practical guides are provided in the [publications](#publications) section.
-
-## Integrations
-
-Jitar provides integration examples for the following frontend frameworks:
-- [React](examples/4-integrations/1-react/README.md)
-- [Vue](examples/4-integrations/2-vue/README.md)
-- [Svelte](examples/4-integrations/3-svelte/README.md)
-- [Lit](examples/4-integrations/4-lit/README.md)
-- [SolidJS](examples/4-integrations/5-solid/README.md)
-
-We are working on integrations with more frontend and meta frameworks, so this list will grow over time.
 
 ## Documentation
 
