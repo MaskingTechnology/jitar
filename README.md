@@ -71,25 +71,34 @@ After a node starts successfully it will register itself to the gateway with all
 
 ## Getting started
 
-Setting up Jitar is easy. It simply needs to be added as a NPM dependency to your application. Node.js version 18.7 or higher are required.
+To start with jitar we recommend to use the create-jitar npm package. This will create a new project with all the required files and dependencies. Node.js version 18.7 or higher is required.
+
+### Using the creator
+
+The creator provides integration with the most popular frameworks using Vite. The result of the creator is a fully working hello world application, including the configuration of the server and client.
+
+```bash
+npm create jitar@latest
+```
+
+The following frameworks are supported:
+* react
+* vue
+* lit
+* svelte
+* solid
+
+The full description of the create-jitar package can be found [here](packages/create-jitar/README.md).
+
+### Manual setup
+
+Setting up Jitar manually is also easy. It simply needs to be added as a NPM dependency to your application.
 
 ```bash
 npm install jitar-nodejs-server
 ```
 
 Now you're ready to chop applications! Follow our [Getting started](https://docs.jitar.dev/02_getting_started) guide to create your first application.
-
-### Creator
-
-An npm creator is available to kick start a Jitar application. It will create a new project with all the required files and dependencies.
-
-```bash
-npm create jitar@latest
-```
-
-More information about the available templates can be found [here](packages/create-jitar/README.md).
-
-### Manual example
 
 The following example shows how a client imports and calls a procedure from a server as if its locally available (like a monolith).
 
