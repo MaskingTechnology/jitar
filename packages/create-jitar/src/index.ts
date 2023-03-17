@@ -1,4 +1,6 @@
 
+// This code is based on the create-vite code. Special thanks to the creators of this code.
+
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,32 +12,33 @@ import { FRAMEWORKS } from './definitions/Frameworks.js';
 
 const VALID_PACKAGE_NAME_REGEX = /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/;
 
-// Avoids autoconversion to number of the project name by defining that the args
-// non associated with an option ( _ ) needs to be parsed as a string. See #4606
 const argv = minimist<{
     t?: string
     template?: string
-}>(process.argv.slice(2), { string: ['_'] })
-const cwd = process.cwd()
+}>(process.argv.slice(2), { string: ['_'] });
+
+const cwd = process.cwd();
 
 const TEMPLATES = FRAMEWORKS.map(
     (f) => [f.name],
-).reduce((a, b) => a.concat(b), [])
+).reduce((a, b) => a.concat(b), []);
 
 const renameFiles: Record<string, string | undefined> = {
-    _gitignore: '.gitignore',
+    _gitignore: '.gitignore'
 }
 
-const defaultTargetDir = 'jitar-project'
+const defaultTargetDir = 'jitar-project';
 
-async function init()
+async function execute()
 {
     const argTargetDir = formatTargetDir(argv._[0]);
     const argTemplate = argv.template || argv.t;
 
-    let targetDir = argTargetDir || defaultTargetDir
-    const getProjectName = () =>
-        targetDir === '.' ? path.basename(path.resolve()) : targetDir
+    let targetDir = argTargetDir || defaultTargetDir;
+
+    const getProjectName = () => targetDir === '.'
+        ? path.basename(path.resolve())
+        : targetDir;
 
     let result: prompts.Answers<'projectName' | 'overwrite' | 'packageName' | 'framework'>;
 
@@ -168,6 +171,7 @@ async function init()
     }
 
     const cdProjectName = path.relative(cwd, root);
+
     console.log(`\nDone. Now run:\n`);
 
     if (root !== cwd)
@@ -292,7 +296,7 @@ function pkgFromUserAgent(userAgent: string | undefined)
     }
 }
 
-init().catch((e) =>
+execute().catch((e) =>
 {
-    console.error(e)
+    console.error(e);
 });
