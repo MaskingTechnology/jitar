@@ -1,6 +1,7 @@
 
 import { ReflectionFunction, ReflectionModule, Reflector } from 'jitar-reflection';
 import { FileManager } from 'jitar-runtime';
+import FunctionNotAsync from './errors/FunctionNotAsync.js';
 
 import InvalidSegmentFilename from './errors/InvalidSegmentFilename.js';
 import MissingModuleExport from './errors/MissingModuleExport.js';
@@ -124,7 +125,7 @@ export default class SegmentReader
 
         for (const [importKey, properties] of Object.entries(imports))
         {
-            const executable = module.getExported(importKey);
+            const executable = module.getExported(importKey) as ReflectionFunction;
 
             if (executable === undefined)
             {
@@ -134,6 +135,10 @@ export default class SegmentReader
             {
                 continue;
             }
+            else if (executable.isAsync === false)
+            {
+                throw new FunctionNotAsync(moduleName, executable.name);
+            }
 
             const procedureName = properties.as ?? executable.name;
             const access = properties.access ?? DEFAULT_ACCESS_LEVEL;
@@ -142,7 +147,7 @@ export default class SegmentReader
             const id = this.#createImplementationId(++number);
             const fqn = moduleName !== '' ? `${moduleName}/${procedureName}` : procedureName;
 
-            const implementation = new SegmentImplementation(id, importKey, access, version, executable as ReflectionFunction);
+            const implementation = new SegmentImplementation(id, importKey, access, version, executable);
 
             const procedure = procedures.has(fqn)
                 ? procedures.get(fqn) as SegmentProcedure
