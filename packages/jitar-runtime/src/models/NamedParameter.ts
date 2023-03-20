@@ -1,18 +1,18 @@
 
-import Parameter from '../interfaces/Parameter.js';
+import Parameter from './Parameter.js';
 
-export default class NamedParameter implements Parameter
+export default class NamedParameter extends Parameter
 {
-    #name: string;
     #isOptional: boolean;
 
     constructor(name: string, isOptional: boolean)
     {
-        this.#name = name;
+        super(name);
+        
         this.#isOptional = isOptional;
     }
 
-    get name() { return this.#name; }
+    get name() { return this.key; }
 
     get isOptional() { return this.#isOptional; }
 }
