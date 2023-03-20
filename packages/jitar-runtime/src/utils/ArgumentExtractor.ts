@@ -13,14 +13,7 @@ export default class ArgumentExtractor
 {
     extract(parameters: Parameter[], args: Map<string, unknown>): unknown[]
     {
-        const incomingKeys = Array.from(args.keys());
-        const knownKeys = parameters.map(parameter => parameter.key);
-        const additionalKeys = incomingKeys.filter(key => knownKeys.includes(key) === false);
-        
-        if(additionalKeys.length !== 0)
-        {
-            throw new UnknownParameter(additionalKeys[0]);
-        }
+        this.#validateAllParametersKnown(parameters, args);
 
         const values: unknown[] = [];
 
@@ -69,6 +62,8 @@ export default class ArgumentExtractor
             throw new InvalidParameterValue(parameter.key);
         }
 
+        this.#validateAllParametersKnown(parameter.variables, value as Map<string, unknown>);
+
         return parameter instanceof ArrayParameter
             ? this.#extractArrayArgumentValue(parameter, value as Map<string, unknown>)
             : this.#extractObjectArgumentValue(parameter, value as Map<string, unknown>);
@@ -106,5 +101,17 @@ export default class ArgumentExtractor
         }
 
         return values;
+    }
+
+    #validateAllParametersKnown(parameters: Parameter[], args: Map<string, unknown>): void
+    {
+        const incomingKeys = Array.from(args.keys());
+        const knownKeys = parameters.map(parameter => parameter.key);
+        const additionalKeys = incomingKeys.filter(key => knownKeys.includes(key) === false);
+        
+        if(additionalKeys.length !== 0)
+        {
+            throw new UnknownParameter(additionalKeys[0]);
+        }
     }
 }
