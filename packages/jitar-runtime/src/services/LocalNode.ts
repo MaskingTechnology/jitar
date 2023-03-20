@@ -1,19 +1,17 @@
 
 import { createNodeFilename } from '../definitions/Files.js';
 import ImplementationNotFound from '../errors/ImplementationNotFound.js';
-import MissingParameterValue from '../errors/MissingParameterValue.js';
 import ProcedureNotFound from '../errors/ProcedureNotFound.js';
 import RepositoryNotAvailable from '../errors/RepositoryNotAvailable.js';
-import UnknownParameter from '../errors/UnknownParameter.js';
 
 import Context from '../models/Context.js';
-import Implementation from '../models/Implementation.js';
 import Procedure from '../models/Procedure.js';
 import Segment from '../models/Segment.js';
 import Version from '../models/Version.js';
 
 import Module from '../types/Module.js';
 
+import ArgumentExtractor from '../utils/ArgumentExtractor.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
 import UrlRewriter from '../utils/UrlRewriter.js';
 
@@ -24,10 +22,18 @@ import Repository from './Repository.js';
 
 export default class LocalNode extends Node
 {
+    #argumentExtractor: ArgumentExtractor;
     #segments: Map<string, Segment> = new Map();
     #gateway?: Gateway;
     #repository?: Repository;
     #clientId = '';
+
+    constructor(url?: string, argumentExtractor = new ArgumentExtractor())
+    {
+        super(url);
+
+        this.#argumentExtractor = argumentExtractor;
+    }
 
     getProcedureNames(): string[]
     {
@@ -154,42 +160,9 @@ export default class LocalNode extends Node
             throw new ImplementationNotFound(procedure.fqn, version.toString());
         }
 
-        const context = this.#createContext(headers);
-        const values = this.#extractParameterValues(implementation, args);
+        const context = new Context(headers);
+        const values = this.#argumentExtractor.extract(implementation.parameters, args);
 
         return await implementation.executable.call(context, ...values);
-    }
-
-    #createContext(headers: Map<string, string>)
-    {
-        return new Context(headers);
-    }
-
-    #extractParameterValues(implementation: Implementation, parameters: Map<string, unknown>): unknown[]
-    {
-        const values: unknown[] = [];
-
-        // const incomingKeys = Array.from(parameters.keys());
-        // const knownKeys = implementation.parameters.map(parameter => parameter.name);
-        // const additionalKeys = incomingKeys.filter(key => knownKeys.includes(key) === false);
-        
-        // if(additionalKeys.length !== 0)
-        // {
-        //     throw new UnknownParameter(additionalKeys[0]);
-        // }
-
-        // for (const parameter of implementation.parameters)
-        // {
-        //     const value = parameters.get(parameter.name);
-
-        //     if (value === undefined && parameter.isOptional === false)
-        //     {
-        //         throw new MissingParameterValue(parameter.name);
-        //     }
-
-        //     values.push(value);
-        // }
-
-        return values;
     }
 }

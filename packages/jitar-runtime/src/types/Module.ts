@@ -1,4 +1,4 @@
 
-type Module = { [key: string]: unknown };
+type Module = Record<string, unknown>;
 
 export default Module;
