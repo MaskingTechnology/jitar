@@ -45,8 +45,6 @@
         "eslint": "^8.35.0",
         "lerna": "^6.5.1",
         "vite": "^4.1.4",
-        "vitest": "^0.29.1",
-        "@types/inquirer": "^9.0.3",
-        "inquirer": "9.1.4"
+        "vitest": "^0.29.1"
     }
 }
