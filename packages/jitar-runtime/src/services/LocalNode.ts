@@ -11,7 +11,7 @@ import Version from '../models/Version.js';
 
 import Module from '../types/Module.js';
 
-import ArgumentExtractor from '../utils/ArgumentExtractor.js';
+import ArgumentConstructor from '../utils/ArgumentConstructor.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
 import UrlRewriter from '../utils/UrlRewriter.js';
 
@@ -22,17 +22,17 @@ import Repository from './Repository.js';
 
 export default class LocalNode extends Node
 {
-    #argumentExtractor: ArgumentExtractor;
+    #argumentConstructor: ArgumentConstructor;
     #segments: Map<string, Segment> = new Map();
     #gateway?: Gateway;
     #repository?: Repository;
     #clientId = '';
 
-    constructor(url?: string, argumentExtractor = new ArgumentExtractor())
+    constructor(url?: string, argumentConstructor = new ArgumentConstructor())
     {
         super(url);
 
-        this.#argumentExtractor = argumentExtractor;
+        this.#argumentConstructor = argumentConstructor;
     }
 
     getProcedureNames(): string[]
@@ -161,7 +161,7 @@ export default class LocalNode extends Node
         }
 
         const context = new Context(headers);
-        const values = this.#argumentExtractor.extract(implementation.parameters, args);
+        const values: unknown[] = this.#argumentConstructor.extract(implementation.parameters, args);
 
         return await implementation.executable.call(context, ...values);
     }

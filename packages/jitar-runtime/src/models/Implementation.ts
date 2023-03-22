@@ -1,6 +1,6 @@
 
-import Parameter from './Parameter.js';
 import { AccessLevel } from '../definitions/AccessLevel.js';
+import Parameter from '../interfaces/Parameter.js';
 import Version from './Version.js';
 
 export default class Implementation

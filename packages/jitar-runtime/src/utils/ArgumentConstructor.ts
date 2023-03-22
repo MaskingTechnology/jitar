@@ -1,30 +1,33 @@
 
 import UnknownParameter from '../errors/UnknownParameter.js';
-import InvalidParameterValue from '../errors/InvalidParameterValue.js';
 import MissingParameterValue from '../errors/MissingParameterValue.js';
 
 import ArrayParameter from '../models/ArrayParameter.js';
 import DestructuredParameter from '../models/DestructuredParameter.js';
 import NamedParameter from '../models/NamedParameter.js';
 import ObjectParameter from '../models/ObjectParameter.js';
-import Parameter from '../models/Parameter.js';
+import Parameter from '../interfaces/Parameter.js';
+import InvalidParameterValue from '../errors/InvalidParameterValue.js';
 
 export default class ArgumentExtractor
 {
     extract(parameters: Parameter[], args: Map<string, unknown>): unknown[]
     {
-        this.#validateAllParametersKnown(parameters, args);
-
+        const argsCopy = new Map(args);
         const values: unknown[] = [];
 
         for (const parameter of parameters)
         {
-            const value = this.#extractArgumentValue(parameter, args);
+            const value = this.#extractArgumentValue(parameter, argsCopy);
             
-            if (value !== undefined)
-            {
-                values.push(value);
-            }
+            values.push(value);
+        }
+
+        if (argsCopy.size > 0)
+        {
+            const name = argsCopy.keys().next().value;
+
+            throw new UnknownParameter(name);
         }
 
         return values;
@@ -39,34 +42,27 @@ export default class ArgumentExtractor
 
     #extractNamedArgumentValue(parameter: NamedParameter, args: Map<string, unknown>): unknown
     {
-        const value = args.get(parameter.key);
+        const value = args.get(parameter.name);
 
         if (value === undefined && parameter.isOptional === false)
         {
-            throw new MissingParameterValue(parameter.key);
+            throw new MissingParameterValue(parameter.name);
         }
+        else if (parameter.name.startsWith('...') && value instanceof Array === false)
+        {
+            throw new InvalidParameterValue(parameter.name);
+        }
+
+        args.delete(parameter.name);
 
         return value;
     }
 
     #extractDestructedArgumentValue(parameter: DestructuredParameter, args: Map<string, unknown>): unknown
     {
-        const value = args.get(parameter.key);
-
-        if (value === undefined)
-        {
-            throw new MissingParameterValue(parameter.key);
-        }
-        else if (value instanceof Map === false)
-        {
-            throw new InvalidParameterValue(parameter.key);
-        }
-
-        this.#validateAllParametersKnown(parameter.variables, value as Map<string, unknown>);
-
         return parameter instanceof ArrayParameter
-            ? this.#extractArrayArgumentValue(parameter, value as Map<string, unknown>)
-            : this.#extractObjectArgumentValue(parameter, value as Map<string, unknown>);
+            ? this.#extractArrayArgumentValue(parameter, args)
+            : this.#extractObjectArgumentValue(parameter, args);
     }
 
     #extractArrayArgumentValue(parameter: ArrayParameter, args: Map<string, unknown>): unknown[]
@@ -77,41 +73,29 @@ export default class ArgumentExtractor
         {
             const value = this.#extractArgumentValue(variable, args);
             
-            if (value !== undefined)
-            {
-                values.push(value);
-            }
+            values.push(value);
         }
 
         return values;
     }
 
-    #extractObjectArgumentValue(parameter: ObjectParameter, args: Map<string, unknown>): object
+    #extractObjectArgumentValue(parameter: ObjectParameter, args: Map<string, unknown>): Record<string, unknown>
     {
         const values: Record<string, unknown> = {};
 
         for (const variable of parameter.variables)
         {
+            if (variable instanceof NamedParameter === false)
+            {
+                throw new InvalidParameterValue('unknown'); // TODO: Add a proper error message
+            }
+            
+            const key = (variable as NamedParameter).name;
             const value = this.#extractArgumentValue(variable, args);
             
-            if (value !== undefined)
-            {
-                values[variable.key] = value;
-            }
+            values[key] = value;
         }
 
         return values;
-    }
-
-    #validateAllParametersKnown(parameters: Parameter[], args: Map<string, unknown>): void
-    {
-        const incomingKeys = Array.from(args.keys());
-        const knownKeys = parameters.map(parameter => parameter.key);
-        const additionalKeys = incomingKeys.filter(key => knownKeys.includes(key) === false);
-        
-        if(additionalKeys.length !== 0)
-        {
-            throw new UnknownParameter(additionalKeys[0]);
-        }
     }
 }

@@ -1,14 +1,12 @@
 
-import Parameter from './Parameter.js';
+import Parameter from '../interfaces/Parameter.js';
 
-export default class DestructuredParameter extends Parameter
+export default class DestructuredParameter implements Parameter
 {
     #variables: Parameter[];
 
-    constructor(key: string, variables: Parameter[])
+    constructor(variables: Parameter[])
     {
-        super(key);
-        
         this.#variables = variables;
     }
 
