@@ -52,7 +52,7 @@ export async function v0_0_0(order)
     return 'order v0'
 }
 
-export async function v1_0_0(order)
+export async function v1_0_0(...orders)
 {
     return 'order v1';
 }

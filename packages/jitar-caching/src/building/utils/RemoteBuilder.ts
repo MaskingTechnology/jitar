@@ -1,5 +1,5 @@
 
-import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionField, ReflectionFunction } from 'jitar-reflection';
+import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionDestructuredValue, ReflectionField } from 'jitar-reflection';
 import ReflectionParameter from 'jitar-reflection/dist/models/ReflectionParameter.js';
 import { AccessLevel } from 'jitar-runtime';
 
@@ -52,13 +52,6 @@ export default class RemoteBuilder
 
     #createParameters(parameters: ReflectionParameter[]): string
     {
-        const result = this.#extractParameters(parameters);
-        
-        return result.join(', ');
-    }
-
-    #extractParameters(parameters: ReflectionParameter[]): string[]
-    {
         const result: string[] = [];
 
         for (const parameter of parameters)
@@ -77,7 +70,7 @@ export default class RemoteBuilder
             }
         }
         
-        return result;
+        return result.join(', ');
     }
 
     #createArguments(parameters: ReflectionParameter[]): string
@@ -91,49 +84,30 @@ export default class RemoteBuilder
     {
         const result: string[] = [];
 
-        // Named parameters are identified by their name.
-        // Destructured parameters are identified by their index.
-
-        let index = 0;
-
         for (const parameter of parameters)
         {
-            result.push(this.#extractArgument(index++, parameter));
+            if (parameter instanceof ReflectionDestructuredValue)
+            {
+                const argumentz = this.#extractArguments(parameter.members);
+
+                result.push(...argumentz);
+            }
+            else if (parameter instanceof ReflectionField)
+            {
+                const argument = this.#createNamedArgument(parameter);
+
+                result.push(argument);
+            }
         }
         
         return result;
     }
 
-    #extractArgument(index: number, parameter: ReflectionField | ReflectionDestructuredArray | ReflectionDestructuredObject): string
-    {
-        if (parameter instanceof ReflectionDestructuredArray)
-        {
-            return this.#createArrayArgument(index, parameter);
-        }
-        else if (parameter instanceof ReflectionDestructuredObject)
-        {
-            return this.#createObjectArgument(index, parameter);
-        }
-
-        return this.#createNamedArgument(parameter);
-    }
-
     #createNamedArgument(parameter: ReflectionField): string
     {
-        return `'${parameter.name}': ${parameter.name}`;
-    }
+        const key = parameter.name;
+        const value = key.startsWith('...') ? key.substring(3) : key;
 
-    #createArrayArgument(index: number, parameter: ReflectionDestructuredArray): string
-    {
-        const members = this.#extractArguments(parameter.members).join('}, {');
-
-        return `'$${index}': [{${members}}]`;
-    }
-
-    #createObjectArgument(index: number, parameter: ReflectionDestructuredObject): string
-    {
-        const members = this.#createArguments(parameter.members);
-
-        return `'$${index}': {${members}}`;
+        return `'${key}': ${value}`;
     }
 }

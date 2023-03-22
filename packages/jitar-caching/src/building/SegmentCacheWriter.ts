@@ -101,25 +101,23 @@ export default class SegmentCacheWriter
         // Named parameters are identified by their name.
         // Destructured parameters are identified by their index.
 
-        let index = 0;
-
         for (const parameter of parameters)
         {
-            result.push(this.#extractParameter(index++, parameter));
+            result.push(this.#extractParameter(parameter));
         }
 
         return result;
     }
 
-    #extractParameter(index: number, parameter: ReflectionParameter): string
+    #extractParameter(parameter: ReflectionParameter): string
     {
         if (parameter instanceof ReflectionDestructuredArray)
         {
-            return this.#createArrayParameter(index, parameter);
+            return this.#createArrayParameter(parameter);
         }
         else if (parameter instanceof ReflectionDestructuredObject)
         {
-            return this.#createObjectParameter(index, parameter);
+            return this.#createObjectParameter(parameter);
         }
 
         return this.#createNamedParameter(parameter);
@@ -130,17 +128,17 @@ export default class SegmentCacheWriter
         return `new NamedParameter("${parameter.name}", ${parameter.value !== undefined})`;
     }
 
-    #createArrayParameter(index: number, parameter: ReflectionDestructuredArray): string
+    #createArrayParameter(parameter: ReflectionDestructuredArray): string
     {
         const members = this.#extractParameters(parameter.members);
 
-        return `new ArrayParameter('$${index}', [${members.join(', ')}])`;
+        return `new ArrayParameter([${members.join(', ')}])`;
     }
 
-    #createObjectParameter(index: number, parameter: ReflectionDestructuredObject): string
+    #createObjectParameter(parameter: ReflectionDestructuredObject): string
     {
         const members = this.#extractParameters(parameter.members);
 
-        return `new ObjectParameter('$${index}', [${members.join(', ')}])`;
+        return `new ObjectParameter([${members.join(', ')}])`;
     }
 }

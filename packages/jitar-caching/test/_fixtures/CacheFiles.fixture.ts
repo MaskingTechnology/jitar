@@ -14,7 +14,7 @@ export const segment = new Segment("order")
 \t)
 \t.addProcedure(new Procedure("order/storeOrder")
 \t\t.addImplementation(new Implementation(new Version(0, 0, 0), "public", [new NamedParameter("order", false)], $2))
-\t\t.addImplementation(new Implementation(new Version(1, 0, 0), "public", [new NamedParameter("order", false)], $3))
+\t\t.addImplementation(new Implementation(new Version(1, 0, 0), "public", [new NamedParameter("...orders", false)], $3))
 \t)`;
 
 const PRODUCT_SEGMENT_REPOSITORY = `export const files = [
@@ -31,8 +31,8 @@ export const segment = new Segment("product")
 \t\t.addImplementation(new Implementation(new Version(1, 0, 0), "private", [new NamedParameter("id", false)], $3))
 \t)
 \t.addProcedure(new Procedure("product/searchProducts")
-\t\t.addImplementation(new Implementation(new Version(0, 0, 0), "public", [new ObjectParameter('$0', [new NamedParameter("query", false), new NamedParameter("sort", false)])], $2))
-\t\t.addImplementation(new Implementation(new Version(1, 0, 0), "public", [new ArrayParameter('$0', [new NamedParameter("query", false), new NamedParameter("sort", false)])], $4))
+\t\t.addImplementation(new Implementation(new Version(0, 0, 0), "public", [new ObjectParameter([new NamedParameter("query", false), new NamedParameter("sort", false)])], $2))
+\t\t.addImplementation(new Implementation(new Version(1, 0, 0), "public", [new ArrayParameter([new NamedParameter("query", false), new NamedParameter("sort", false)])], $4))
 \t)`;
 
 const CREATE_ORDER_LOCAL =
@@ -63,7 +63,7 @@ export async function v0_0_0(order)
     return 'order v0'
 }
 
-export async function v1_0_0(order)
+export async function v1_0_0(...orders)
 {
     return 'order v1';
 }`;
@@ -75,8 +75,8 @@ export async function v0_0_0(order) {
 \treturn runProcedure('order/storeOrder', '0.0.0', { 'order': order }, this)
 }
 
-export async function v1_0_0(order) {
-\treturn runProcedure('order/storeOrder', '1.0.0', { 'order': order }, this)
+export async function v1_0_0(...orders) {
+\treturn runProcedure('order/storeOrder', '1.0.0', { '...orders': orders }, this)
 }`;
 
 const ORDER_MODELS_LOCAL =
@@ -111,7 +111,7 @@ const GET_PRODUCTS_REMOTE =
 `import { runProcedure } from "/jitar/hooks.js";
 
 export async function searchProducts({ query , sort }) {
-\treturn runProcedure('product/searchProducts', '0.0.0', { '$0': {'query': query, 'sort': sort} }, this)
+\treturn runProcedure('product/searchProducts', '0.0.0', { 'query': query, 'sort': sort }, this)
 }`;
 
 const GET_PRODUCTS_LOCAL_V1 =
@@ -139,7 +139,7 @@ const GET_PRODUCTS_REMOTE_V1 =
 `import { runProcedure } from "/jitar/hooks.js";
 
 export async function searchProducts([ query , sort ]) {
-\treturn runProcedure('product/searchProducts', '1.0.0', { '$0': [{'query': query}, {'sort': sort}] }, this)
+\treturn runProcedure('product/searchProducts', '1.0.0', { 'query': query, 'sort': sort }, this)
 }`;
 
 const PRODUCT_MODELS_LOCAL =
