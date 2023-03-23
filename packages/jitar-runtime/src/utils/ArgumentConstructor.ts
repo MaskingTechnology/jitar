@@ -6,7 +6,7 @@ import ArrayParameter from '../models/ArrayParameter.js';
 import DestructuredParameter from '../models/DestructuredParameter.js';
 import NamedParameter from '../models/NamedParameter.js';
 import ObjectParameter from '../models/ObjectParameter.js';
-import Parameter from '../interfaces/Parameter.js';
+import Parameter from '../models/Parameter.js';
 import InvalidParameterValue from '../errors/InvalidParameterValue.js';
 
 export default class ArgumentExtractor
@@ -85,15 +85,9 @@ export default class ArgumentExtractor
 
         for (const variable of parameter.variables)
         {
-            if (variable instanceof NamedParameter === false)
-            {
-                throw new InvalidParameterValue('unknown'); // TODO: Add a proper error message
-            }
-            
-            const key = (variable as NamedParameter).name;
             const value = this.#extractArgumentValue(variable, args);
             
-            values[key] = value;
+            values[variable.name] = value;
         }
 
         return values;

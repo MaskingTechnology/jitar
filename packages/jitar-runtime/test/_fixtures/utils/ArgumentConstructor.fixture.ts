@@ -7,7 +7,26 @@ const PARAMETERS =
 {
     NAMED: [new NamedParameter('id', false), new NamedParameter('name', false), new NamedParameter('age', true)],
     ARRAY: [new ArrayParameter([new NamedParameter('query', false), new NamedParameter('sort', true)])],
-    OBJECT: [new ObjectParameter([new NamedParameter('query', false), new NamedParameter('sort', true)])]
+    OBJECT: [new ObjectParameter([new NamedParameter('query', false), new NamedParameter('sort', true)])],
+    MIXED: [
+        new NamedParameter('id', false),
+        new ArrayParameter([new NamedParameter('name', false), new NamedParameter('age', true)]),
+        new ObjectParameter([new NamedParameter('query', false), new NamedParameter('sort', true)])
+    ],
+    NESTED_ARRAY: [
+        new ArrayParameter([
+            new NamedParameter('id', false),
+            new ArrayParameter([new NamedParameter('name', false), new NamedParameter('age', true)]),
+            new ObjectParameter([new NamedParameter('query', false), new NamedParameter('sort', true)], undefined, true)
+        ])
+    ],
+    NESTED_OBJECT: [
+        new ObjectParameter([
+            new NamedParameter('id', false),
+            new ArrayParameter([new NamedParameter('name', false), new NamedParameter('age', true)], 'person'),
+            new ObjectParameter([new NamedParameter('query', false), new NamedParameter('sort', true)], 'filter', true)
+        ])
+    ]
 }
 
 const ARGUMENTS =
@@ -20,7 +39,14 @@ const ARGUMENTS =
     DESTRUCTURED_ALL: new Map(Object.entries({ 'query': 'foo', 'sort': 'bar' })),
     DESTRUCTURED_OPTIONAL: new Map(Object.entries({ 'query': 'foo' })),
     DESTRUCTURED_MISSING: new Map(Object.entries({ 'sort': 'bar' })),
-    DESTRUCTURED_EXTRA: new Map(Object.entries({ 'query': 'foo', 'sort': 'bar', 'extra': 'extra' }))
+    DESTRUCTURED_EXTRA: new Map(Object.entries({ 'query': 'foo', 'sort': 'bar', 'extra': 'extra' })),
+
+    MIXED_ALL: new Map(Object.entries({ 'id': 1, 'name': 'John Doe', 'age': 42, 'query': 'foo', 'sort': 'bar' })),
+    MIXED_OPTIONAL: new Map(Object.entries({ 'id': 1, 'name': 'John Doe', 'query': 'foo' })),
+    MIXED_MISSING: new Map(Object.entries({ 'id': 1, 'age': 42, 'query': 'foo', 'sort': 'bar' })),
+    MIXED_EXTRA: new Map(Object.entries({ 'id': 1, 'name': 'John Doe', 'age': 42, 'query': 'foo', 'sort': 'bar', 'extra': 'extra' }))
 }
+
+// Rest parameters
 
 export { PARAMETERS, ARGUMENTS }
