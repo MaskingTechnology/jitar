@@ -1,15 +1,9 @@
 
 import { describe, expect, it } from 'vitest';
 
-import
-{
-    actualVersion,
-    equalVersion,
-    greaterVersion,
-    lesserVersion,
-    majorMinorVersion,
-    majorVersion
-} from '../_fixtures/models/Version.fixture';
+import { VERSIONS } from '../_fixtures/models/Version.fixture';
+
+const actualVersion = VERSIONS.ACTUAL;
 
 describe('models/Version', () =>
 {
@@ -17,15 +11,15 @@ describe('models/Version', () =>
     {
         it('should be equal', () =>
         {
-            const equal = actualVersion.equals(equalVersion);
+            const equal = actualVersion.equals(VERSIONS.EQUAL);
 
             expect(equal).toBeTruthy();
         });
 
         it('should not be equal', () =>
         {
-            const greaterEqual = actualVersion.equals(greaterVersion);
-            const lesserEqual = actualVersion.equals(lesserVersion);
+            const greaterEqual = actualVersion.equals(VERSIONS.GREATER);
+            const lesserEqual = actualVersion.equals(VERSIONS.LESSER);
 
             expect(greaterEqual).toBeFalsy();
             expect(lesserEqual).toBeFalsy();
@@ -36,15 +30,15 @@ describe('models/Version', () =>
     {
         it('should be greater', () =>
         {
-            const equal = actualVersion.greater(lesserVersion);
+            const equal = actualVersion.greater(VERSIONS.LESSER);
 
             expect(equal).toBeTruthy();
         });
 
         it('should not be greater', () =>
         {
-            const equalEqual = actualVersion.greater(equalVersion);
-            const greaterEqual = actualVersion.greater(greaterVersion);
+            const equalEqual = actualVersion.greater(VERSIONS.EQUAL);
+            const greaterEqual = actualVersion.greater(VERSIONS.GREATER);
 
             expect(equalEqual).toBeFalsy();
             expect(greaterEqual).toBeFalsy();
@@ -55,15 +49,15 @@ describe('models/Version', () =>
     {
         it('should be less', () =>
         {
-            const equal = actualVersion.less(greaterVersion);
+            const equal = actualVersion.less(VERSIONS.GREATER);
 
             expect(equal).toBeTruthy();
         });
 
         it('should not be less', () =>
         {
-            const equalEqual = actualVersion.less(equalVersion);
-            const lesserEqual = actualVersion.less(lesserVersion);
+            const equalEqual = actualVersion.less(VERSIONS.EQUAL);
+            const lesserEqual = actualVersion.less(VERSIONS.LESSER);
 
             expect(equalEqual).toBeFalsy();
             expect(lesserEqual).toBeFalsy();

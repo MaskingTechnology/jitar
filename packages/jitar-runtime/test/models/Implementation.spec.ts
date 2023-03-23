@@ -1,12 +1,11 @@
 
 import { describe, expect, it } from 'vitest';
 
-import
-{
-    privateImplementation,
-    publicImplementation,
-    parameterImplementation
-} from '../_fixtures/models/Implementation.fixture';
+import { IMPLEMENTATIONS } from '../_fixtures/models/Implementation.fixture';
+
+const privateImplementation = IMPLEMENTATIONS.PRIVATE;
+const publicImplementation = IMPLEMENTATIONS.PUBLIC;
+const parameterImplementation = IMPLEMENTATIONS.PARAMETERS;
 
 describe('models/Implementation', () =>
 {
