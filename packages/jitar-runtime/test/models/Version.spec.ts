@@ -63,35 +63,4 @@ describe('models/Version', () =>
             expect(lesserEqual).toBeFalsy();
         });
     });
-
-    // describe('.parse(number)', () =>
-    // {
-    //     it('should parse a major number', () =>
-    //     {
-    //         const version = Version.parse('1');
-
-    //         expect(version).toEqual(majorVersion);
-    //     });
-
-    //     it('should parse a major.minor number', () =>
-    //     {
-    //         const version = Version.parse('1.2');
-
-    //         expect(version).toEqual(majorMinorVersion);
-    //     });
-
-    //     it('should parse a major.minor.patch number', () =>
-    //     {
-    //         const version = Version.parse('1.2.3');
-
-    //         expect(version).toEqual(actualVersion);
-    //     });
-
-    //     it('should not parse an invalid number', () =>
-    //     {
-    //         const run = () => Version.parse('1.2.3.4');
-
-    //         expect(run).toThrow(new InvalidVersionNumber('1.2.3.4'));
-    //     });
-    // });
 });

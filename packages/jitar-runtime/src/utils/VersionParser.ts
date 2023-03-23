@@ -6,6 +6,11 @@ export default class VersionParser
 {
     static parse(number: string): Version
     {
+        if (number.trim().length === 0)
+        {
+            return Version.DEFAULT;
+        }
+        
         const parts = number.split('.');
 
         switch (parts.length)

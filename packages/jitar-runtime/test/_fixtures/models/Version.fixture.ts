@@ -3,6 +3,7 @@ import Version from '../../../src/models/Version';
 
 const VERSIONS =
 {
+    DEFAULT: Version.DEFAULT,
     ACTUAL: new Version(1, 2, 3),
     EQUAL: new Version(1, 2, 3),
     GREATER: new Version(10, 2, 3),
