@@ -42,16 +42,15 @@ describe('models/Implementation', () =>
 
         it('should have parameters', () =>
         {
-            // TODO: Fix this test
             const parameters = parameterImplementation.parameters;
 
-            // expect(parameters.length).toBe(2);
+            expect(parameters.length).toBe(2);
 
-            // expect(parameters[0].name).toBe('mandatory');
-            // expect(parameters[0].isOptional).toBe(false);
+            expect(parameters[0].name).toBe('mandatory');
+            expect(parameters[0].isOptional).toBe(false);
 
-            // expect(parameters[1].name).toBe('optional');
-            // expect(parameters[1].isOptional).toBe(true);
+            expect(parameters[1].name).toBe('optional');
+            expect(parameters[1].isOptional).toBe(true);
         });
     });
 });

@@ -1,6 +1,7 @@
 
 import { AccessLevel } from '../../../src/definitions/AccessLevel';
 import Implementation from '../../../src/models/Implementation';
+import NamedParameter from '../../../src/models/NamedParameter';
 import Version from '../../../src/models/Version';
 
 function getPrivate(): string
@@ -30,7 +31,8 @@ function getContext(): unknown
 
 const parameters =
 [
-    // TODO: Add more parameters.
+    new NamedParameter('mandatory', false),
+    new NamedParameter('optional', true)
 ];
 
 const privateImplementation = new Implementation(Version.DEFAULT, AccessLevel.PRIVATE, [], getPrivate);
