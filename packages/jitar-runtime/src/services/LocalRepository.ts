@@ -9,10 +9,12 @@ import File from '../models/File.js';
 import Module from '../types/Module.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
 
-import ClientId from './ClientId.js';
+import ClientIdHelper from '../utils/ClientIdHelper.js';
 import LocalNode from './LocalNode.js';
 import Repository from './Repository.js';
 import { setRuntime } from '../hooks.js';
+
+const clientIdHelper = new ClientIdHelper();
 
 export default class LocalRepository extends Repository
 {
@@ -51,7 +53,7 @@ export default class LocalRepository extends Repository
 
     async registerClient(segmentFilenames: string[]): Promise<string>
     {
-        const clientId = ClientId.generate();
+        const clientId = clientIdHelper.generate();
 
         this.#clients.set(clientId, segmentFilenames);
 
@@ -109,7 +111,7 @@ export default class LocalRepository extends Repository
 
     #validateClientId(clientId: string): void
     {
-        if (ClientId.validate(clientId) === false)
+        if (clientIdHelper.validate(clientId) === false)
         {
             throw new InvalidClientId(clientId);
         }
