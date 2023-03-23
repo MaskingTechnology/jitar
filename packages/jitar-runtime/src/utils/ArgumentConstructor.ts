@@ -65,32 +65,50 @@ export default class ArgumentExtractor
             : this.#extractObjectArgumentValue(parameter, args);
     }
 
-    #extractArrayArgumentValue(parameter: ArrayParameter, args: Map<string, unknown>): unknown[]
+    #extractArrayArgumentValue(parameter: ArrayParameter, args: Map<string, unknown>): unknown[] | undefined
     {
-        const values: unknown[] = [];
+        const values = this.#extractVariableValues(parameter, args);
 
-        for (const variable of parameter.variables)
-        {
-            const value = this.#extractArgumentValue(variable, args);
-            
-            values.push(value);
-        }
-
-        return values;
+        return values !== undefined ? Object.values(values) : undefined;
     }
 
-    #extractObjectArgumentValue(parameter: ObjectParameter, args: Map<string, unknown>): Record<string, unknown>
+    #extractObjectArgumentValue(parameter: ObjectParameter, args: Map<string, unknown>): Record<string, unknown> | undefined
     {
+        return this.#extractVariableValues(parameter, args);
+    }
+
+    #extractVariableValues(parameter: DestructuredParameter, args: Map<string, unknown>): Record<string, unknown> | undefined
+    {
+        const useIndex = parameter instanceof ArrayParameter;
         const values: Record<string, unknown> = {};
+        const missingValues: string[] = [];
+
+        let containsValues = false;
+        let index = 0;
 
         for (const variable of parameter.variables)
         {
+            const key = useIndex ? index++ : variable.name;
             const value = this.#extractArgumentValue(variable, args, parameter);
+
+            if (value !== undefined)
+            {
+                containsValues = true;
+            }
+            else if (variable.isOptional === false)
+            {
+                missingValues.push(variable.name);
+            }
             
-            values[variable.name] = value;
+            values[key] = value;
         }
 
-        return values;
+        if (containsValues === true && missingValues.length > 0)
+        {
+            throw new MissingParameterValue(missingValues[0]);
+        }
+
+        return containsValues ? values : undefined;
     }
 
     #isMissingParameterValue(parameter: Parameter, value: unknown, parent?: Parameter): boolean

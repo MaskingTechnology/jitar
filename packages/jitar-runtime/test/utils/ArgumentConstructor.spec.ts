@@ -197,7 +197,7 @@ describe('utils/ArgumentExtractor', () =>
     {
         it('should extract all nested array parameter values', () =>
         {
-            const args = argumentConstructor.extract(PARAMETERS.NESTED_ARRAY, ARGUMENTS.MIXED_ALL);
+            const args = argumentConstructor.extract(PARAMETERS.NESTED_ARRAY, ARGUMENTS.NESTED_ALL);
 
             expect(args).toHaveLength(1);
             expect(args[0]).toBeInstanceOf(Array);
@@ -222,7 +222,7 @@ describe('utils/ArgumentExtractor', () =>
 
         it('should ignore missing optional value for a nested array parameter', () =>
         {
-            const args = argumentConstructor.extract(PARAMETERS.NESTED_ARRAY, ARGUMENTS.MIXED_OPTIONAL);
+            const args = argumentConstructor.extract(PARAMETERS.NESTED_ARRAY, ARGUMENTS.NESTED_OPTIONAL);
 
             expect(args).toHaveLength(1);
             expect(args[0]).toBeInstanceOf(Array);
@@ -231,7 +231,7 @@ describe('utils/ArgumentExtractor', () =>
             expect(array).toHaveLength(3);
             expect(array[0]).toBeTypeOf('number');
             expect(array[1]).toBeInstanceOf(Array);
-            expect(array[2]).toBeInstanceOf(Object);
+            expect(array[2]).toBeUndefined();
             
             expect(array[0]).toBe(1);
 
@@ -239,22 +239,18 @@ describe('utils/ArgumentExtractor', () =>
             expect(innerArray).toHaveLength(2);
             expect(innerArray[0]).toBe('John Doe');
             expect(innerArray[1]).toBeUndefined();
-
-            const innerObject = array[2] as object;
-            expect(innerObject['query']).toBe('foo');
-            expect(innerObject['sort']).toBeUndefined();
         });
 
         it('should throw an error when a value misses for a mandatory nested array parameter', () =>
         {
-            const run = () => argumentConstructor.extract(PARAMETERS.NESTED_ARRAY, ARGUMENTS.MIXED_MISSING);
+            const run = () => argumentConstructor.extract(PARAMETERS.NESTED_ARRAY, ARGUMENTS.NESTED_MISSING);
 
-            expect(run).toThrowError(new MissingParameterValue('name'));
+            expect(run).toThrowError(new MissingParameterValue('sort'));
         });
 
         it('should throw an error when an unknown argument is given in a nested array parameter', () =>
         {
-            const run = () => argumentConstructor.extract(PARAMETERS.NESTED_ARRAY, ARGUMENTS.MIXED_EXTRA);
+            const run = () => argumentConstructor.extract(PARAMETERS.NESTED_ARRAY, ARGUMENTS.NESTED_EXTRA);
 
             expect(run).toThrowError(new UnknownParameter('extra'));
         });
@@ -262,9 +258,9 @@ describe('utils/ArgumentExtractor', () =>
 
     describe('.extract(parameters, args) | Nested object', () =>
     {
-        it('should extract all nested array parameter values', () =>
+        it('should extract all nested object parameter values', () =>
         {
-            const args = argumentConstructor.extract(PARAMETERS.NESTED_OBJECT, ARGUMENTS.MIXED_ALL);
+            const args = argumentConstructor.extract(PARAMETERS.NESTED_OBJECT, ARGUMENTS.NESTED_ALL);
 
             expect(args).toHaveLength(1);
             expect(args[0]).toBeInstanceOf(Object);
@@ -286,9 +282,9 @@ describe('utils/ArgumentExtractor', () =>
             expect(innerObject['sort']).toBe('bar');
         });
 
-        it('should ignore missing optional value for a nested array parameter', () =>
+        it('should ignore missing optional value for a nested object parameter', () =>
         {
-            const args = argumentConstructor.extract(PARAMETERS.NESTED_OBJECT, ARGUMENTS.MIXED_OPTIONAL);
+            const args = argumentConstructor.extract(PARAMETERS.NESTED_OBJECT, ARGUMENTS.NESTED_OPTIONAL);
 
             expect(args).toHaveLength(1);
             expect(args[0]).toBeInstanceOf(Object);
@@ -296,7 +292,7 @@ describe('utils/ArgumentExtractor', () =>
             const object = args[0] as object;
             expect(object['id']).toBeTypeOf('number');
             expect(object['person']).toBeInstanceOf(Array);
-            expect(object['filter']).toBeInstanceOf(Object);
+            expect(object['filter']).toBeUndefined();
             
             expect(object['id']).toBe(1);
 
@@ -304,22 +300,18 @@ describe('utils/ArgumentExtractor', () =>
             expect(innerArray).toHaveLength(2);
             expect(innerArray[0]).toBe('John Doe');
             expect(innerArray[1]).toBeUndefined();
-
-            const innerObject = object['filter'] as object;
-            expect(innerObject['query']).toBe('foo');
-            expect(innerObject['sort']).toBeUndefined();
         });
 
-        it('should throw an error when a value misses for a mandatory nested array parameter', () =>
+        it('should throw an error when a value misses for a mandatory nested object parameter', () =>
         {
-            const run = () => argumentConstructor.extract(PARAMETERS.NESTED_OBJECT, ARGUMENTS.MIXED_MISSING);
+            const run = () => argumentConstructor.extract(PARAMETERS.NESTED_OBJECT, ARGUMENTS.NESTED_MISSING);
 
-            expect(run).toThrowError(new MissingParameterValue('name'));
+            expect(run).toThrowError(new MissingParameterValue('sort'));
         });
 
-        it('should throw an error when an unknown argument is given in a nested array parameter', () =>
+        it('should throw an error when an unknown argument is given in a nested object parameter', () =>
         {
-            const run = () => argumentConstructor.extract(PARAMETERS.NESTED_OBJECT, ARGUMENTS.MIXED_EXTRA);
+            const run = () => argumentConstructor.extract(PARAMETERS.NESTED_OBJECT, ARGUMENTS.NESTED_EXTRA);
 
             expect(run).toThrowError(new UnknownParameter('extra'));
         });
