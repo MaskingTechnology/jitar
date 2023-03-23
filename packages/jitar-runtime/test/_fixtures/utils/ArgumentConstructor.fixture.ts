@@ -26,7 +26,10 @@ const PARAMETERS =
             new ArrayParameter([new NamedParameter('name', false), new NamedParameter('age', true)], 'person'),
             new ObjectParameter([new NamedParameter('query', false), new NamedParameter('sort', true)], 'filter', true)
         ])
-    ]
+    ],
+    REST: [new NamedParameter('...rest', false)],
+    REST_ARRAY: [new ArrayParameter([new NamedParameter('name', false), new NamedParameter('...rest', true)])],
+    REST_OBJECT: [new ObjectParameter([new NamedParameter('name', false), new NamedParameter('...rest', true)])]
 }
 
 const ARGUMENTS =
@@ -41,10 +44,20 @@ const ARGUMENTS =
     DESTRUCTURED_MISSING: new Map(Object.entries({ 'sort': 'bar' })),
     DESTRUCTURED_EXTRA: new Map(Object.entries({ 'query': 'foo', 'sort': 'bar', 'extra': 'extra' })),
 
+    // Also used for the nested test cases
     MIXED_ALL: new Map(Object.entries({ 'id': 1, 'name': 'John Doe', 'age': 42, 'query': 'foo', 'sort': 'bar' })),
     MIXED_OPTIONAL: new Map(Object.entries({ 'id': 1, 'name': 'John Doe', 'query': 'foo' })),
     MIXED_MISSING: new Map(Object.entries({ 'id': 1, 'age': 42, 'query': 'foo', 'sort': 'bar' })),
-    MIXED_EXTRA: new Map(Object.entries({ 'id': 1, 'name': 'John Doe', 'age': 42, 'query': 'foo', 'sort': 'bar', 'extra': 'extra' }))
+    MIXED_EXTRA: new Map(Object.entries({ 'id': 1, 'name': 'John Doe', 'age': 42, 'query': 'foo', 'sort': 'bar', 'extra': 'extra' })),
+
+    REST_VALID: new Map(Object.entries({ '...rest': ['foo', 'bar'] })),
+    REST_INVALID: new Map(Object.entries({ '...rest': 'foo' })),
+
+    REST_ARRAY_VALID: new Map(Object.entries({ 'name': 'John Doe', '...rest': ['foo', 'bar'] })),
+    REST_ARRAY_INVALID: new Map(Object.entries({ 'name': 'John Doe', '...rest': 'foo' })),
+
+    REST_OBJECT_VALID: new Map(Object.entries({ 'name': 'John Doe', '...rest': { 'first': 'foo', 'second': 'bar' }})),
+    REST_OBJECT_INVALID: new Map(Object.entries({ 'name': 'John Doe', '...rest': 'foo' })),
 }
 
 // Rest parameters

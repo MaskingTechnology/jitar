@@ -33,22 +33,22 @@ export default class ArgumentExtractor
         return values;
     }
 
-    #extractArgumentValue(parameter: Parameter, args: Map<string, unknown>): unknown
+    #extractArgumentValue(parameter: Parameter, args: Map<string, unknown>, parent?: Parameter): unknown
     {
         return parameter instanceof NamedParameter
-                ? this.#extractNamedArgumentValue(parameter as NamedParameter, args)
+                ? this.#extractNamedArgumentValue(parameter as NamedParameter, args, parent)
                 : this.#extractDestructedArgumentValue(parameter as DestructuredParameter, args);
     }
 
-    #extractNamedArgumentValue(parameter: NamedParameter, args: Map<string, unknown>): unknown
+    #extractNamedArgumentValue(parameter: NamedParameter, args: Map<string, unknown>, parent?: Parameter): unknown
     {
         const value = args.get(parameter.name);
 
-        if (value === undefined && parameter.isOptional === false)
+        if (this.#isMissingParameterValue(parameter, value, parent))
         {
             throw new MissingParameterValue(parameter.name);
         }
-        else if (parameter.name.startsWith('...') && value instanceof Array === false)
+        else if (this.#isInvalidRestParameter(parameter, value, parent))
         {
             throw new InvalidParameterValue(parameter.name);
         }
@@ -85,11 +85,34 @@ export default class ArgumentExtractor
 
         for (const variable of parameter.variables)
         {
-            const value = this.#extractArgumentValue(variable, args);
+            const value = this.#extractArgumentValue(variable, args, parameter);
             
             values[variable.name] = value;
         }
 
         return values;
+    }
+
+    #isMissingParameterValue(parameter: Parameter, value: unknown, parent?: Parameter): boolean
+    {
+        if (value !== undefined)
+        {
+            return false;
+        }
+
+        return parameter.isOptional !== true
+            && parent?.isOptional !== true;
+    }
+
+    #isInvalidRestParameter(parameter: Parameter, value: unknown, parent?: Parameter): boolean
+    {
+        if (parameter.name.startsWith('...') === false)
+        {
+            return false;
+        }
+
+        return (parent === undefined && value instanceof Array === false)
+            || (parent instanceof ArrayParameter && value instanceof Array === false)
+            || (parent instanceof ObjectParameter && value instanceof Object === false);
     }
 }

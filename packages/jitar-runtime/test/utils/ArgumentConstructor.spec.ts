@@ -1,5 +1,7 @@
 
 import { describe, expect, it } from 'vitest';
+
+import InvalidParameterValue from '../../src/errors/InvalidParameterValue';
 import MissingParameterValue from '../../src/errors/MissingParameterValue';
 import UnknownParameter from '../../src/errors/UnknownParameter';
 
@@ -320,6 +322,83 @@ describe('utils/ArgumentExtractor', () =>
             const run = () => argumentConstructor.extract(PARAMETERS.NESTED_OBJECT, ARGUMENTS.MIXED_EXTRA);
 
             expect(run).toThrowError(new UnknownParameter('extra'));
+        });
+    });
+
+    describe('.extract(parameters, args) | Rest parameter', () =>
+    {
+        it('should extract all nested rest parameter values', () =>
+        {
+            const args = argumentConstructor.extract(PARAMETERS.REST, ARGUMENTS.REST_VALID);
+
+            expect(args).toHaveLength(1);
+            expect(args[0]).toBeInstanceOf(Array);
+            
+            const array = args[0] as unknown[];
+            expect(array).toHaveLength(2);
+            expect(array[0]).toBe('foo');
+            expect(array[1]).toBe('bar');
+        });
+
+        it('should throw an error when a rest parameter value is invalid', () =>
+        {
+            const run = () => argumentConstructor.extract(PARAMETERS.REST, ARGUMENTS.REST_INVALID);
+
+            expect(run).toThrowError(new InvalidParameterValue('...rest'));
+        });
+    });
+
+    describe('.extract(parameters, args) | Array rest parameter', () =>
+    {
+        it('should extract all nested array rest parameter values', () =>
+        {
+            const args = argumentConstructor.extract(PARAMETERS.REST_ARRAY, ARGUMENTS.REST_ARRAY_VALID);
+
+            expect(args).toHaveLength(1);
+            expect(args[0]).toBeInstanceOf(Array);
+
+            const array = args[0] as unknown[];
+            expect(array).toHaveLength(2);
+            expect(array[0]).toBeTypeOf('string');
+            expect(array[1]).toBeInstanceOf(Array);
+            
+            const restArray = array[1] as unknown[];
+            expect(restArray).toHaveLength(2);
+            expect(restArray[0]).toBe('foo');
+            expect(restArray[1]).toBe('bar');
+        });
+
+        it('should throw an error when a array rest parameter value is invalid', () =>
+        {
+            const run = () => argumentConstructor.extract(PARAMETERS.REST, ARGUMENTS.REST_INVALID);
+
+            expect(run).toThrowError(new InvalidParameterValue('...rest'));
+        });
+    });
+
+    describe('.extract(parameters, args) | Object rest parameter', () =>
+    {
+        it('should extract all nested object rest parameter values', () =>
+        {
+            const args = argumentConstructor.extract(PARAMETERS.REST_OBJECT, ARGUMENTS.REST_OBJECT_VALID);
+
+            expect(args).toHaveLength(1);
+            expect(args[0]).toBeInstanceOf(Object);
+
+            const object = args[0] as object;
+            expect(object['name']).toBeTypeOf('string');
+            expect(object['...rest']).toBeInstanceOf(Object);
+            
+            const restObject = object['...rest'] as object;
+            expect(restObject['first']).toBe('foo');
+            expect(restObject['second']).toBe('bar');
+        });
+
+        it('should throw an error when a object rest parameter value is invalid', () =>
+        {
+            const run = () => argumentConstructor.extract(PARAMETERS.REST_OBJECT, ARGUMENTS.REST_OBJECT_INVALID);
+
+            expect(run).toThrowError(new InvalidParameterValue('...rest'));
         });
     });
 });
