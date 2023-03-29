@@ -4,7 +4,7 @@
     "private": true,
     "scripts": {
         "build": "",
-        "start": "node --experimental-network-imports --experimental-fetch src/start.js --config=jitar.json"
+        "start": "node --experimental-network-imports src/start.js --config=jitar.json"
     },
     "dependencies": {
         "jitar-nodejs-server": "^0.3.4"

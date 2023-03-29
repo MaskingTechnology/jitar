@@ -8,7 +8,7 @@
     "build": "vite build && tsc",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "jitar": "node --experimental-network-imports --experimental-fetch dist/jitar.js --config=conf/jitar.json"
+    "jitar": "node --experimental-network-imports dist/jitar.js --config=conf/jitar.json"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.3",
