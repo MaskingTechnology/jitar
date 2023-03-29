@@ -11,13 +11,13 @@ Welcome to the Jitar documentation! We are excited to have you here. Our goal is
 
 ## Table of contents
 
-* [Introduction](01_introduction) - Introduces Jitar and its concepts.
-* [Getting started](02_getting_started) - Gets you up and running quickly.
-* [Runtime services](03_runtime_services) - Explains the services to run and scale applications.
-* [Basic features](04_basic_features) - Explains the basic features of Jitar.
-* [Advanced features](05_advanced_features) - Explains the advanced features of Jitar.
-* [Building applications](06_building_applications) - Shows how to build real-world applications that run on Jitar.
-* [Deployment](07_deployment) - Explains how to deploy applications.
+* [Introduction](01_introduction.html) - Introduces Jitar and its concepts.
+* [Getting started](02_getting_started.html) - Gets you up and running quickly.
+* [Runtime services](03_runtime_services.html) - Explains the services to run and scale applications.
+* [Basic features](04_basic_features.html) - Explains the basic features of Jitar.
+* [Advanced features](05_advanced_features.html) - Explains the advanced features of Jitar.
+* [Building applications](06_building_applications.html) - Shows how to build real-world applications that run on Jitar.
+* [Deployment](07_deployment.html) - Explains how to deploy applications.
 
 ---
 
