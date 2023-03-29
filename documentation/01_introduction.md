@@ -48,4 +48,4 @@ After a node starts successfully it will register itself to the gateway with all
 ---
 
 {:.next-chapter}
-[Getting started](02_getting_started)
+[Getting started](02_getting_started.html)

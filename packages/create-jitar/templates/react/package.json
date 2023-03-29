@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc",
-    "jitar": "node --experimental-network-imports --experimental-fetch dist/jitar.js --config=conf/jitar.json",
+    "jitar": "node --experimental-network-imports dist/jitar.js --config=conf/jitar.json",
     "preview": "vite preview"
   },
   "dependencies": {

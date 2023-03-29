@@ -5,7 +5,7 @@ title: Runtime services
 
 # Runtime services
 
-The Jitar runtime consists of several services that are introduced in the [How it works](01_introduction#how-it-works) section on the introduction page. In this section we will take a detailed look at the individual services and how to use and configure them.
+The Jitar runtime consists of several services that are introduced in the [How it works](01_introduction.html#how-it-works) section on the introduction page. In this section we will take a detailed look at the individual services and how to use and configure them.
 
 ---
 
@@ -184,13 +184,13 @@ Additionally there are some general options that can be used to configure the se
 These options can be specified in the command line:
 
 ```bash
-node --experimental-network-imports --experimental-fetch dist/start.js --loglevel=debug --config=jitar.json
+node --experimental-network-imports dist/start.js --loglevel=debug --config=jitar.json
 ```
 
 ---
 
 {:.previous-chapter}
-[Getting started](02_getting_started)
+[Getting started](02_getting_started.html)
 
 {:.next-chapter}
-[Basic features](04_basic_features)
+[Basic features](04_basic_features.html)

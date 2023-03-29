@@ -5,7 +5,7 @@ title: Basic features
 
 # Basic features
 
-In this section we will look at the basic features of Jitar. Each feature will be explained with an example based on the ``Hello World`` example from the [getting started](02_getting_started) page. All examples are available on [GitHub](https://github.com/MaskingTechnology/jitar){:target="_blank"} as separate projects.
+In this section we will look at the basic features of Jitar. Each feature will be explained with an example based on the ``Hello World`` example from the [getting started](02_getting_started.html) page. All examples are available on [GitHub](https://github.com/MaskingTechnology/jitar){:target="_blank"} as separate projects.
 
 ---
 
@@ -116,7 +116,7 @@ GET http://app.example.com:3000/rpc/greetings/sayBoth?firstName=Jim&lastName=Doe
 
 ## Orchestration
 
-Orchestration is the process of finding and running segmented procedures that are spread over multiple nodes. The [gateway](03_runtime_services#gateway) is responsible for this task and keeps track of all nodes and the procedures they contain.
+Orchestration is the process of finding and running segmented procedures that are spread over multiple nodes. The [gateway](03_runtime_services.html#gateway) is responsible for this task and keeps track of all nodes and the procedures they contain.
 
 Besides configuring the segmentation, no extra configuration is needed. When a node is started, it will register itself at the gateway. When a procedure is called, the gateway will find the node that contains the procedure and forward the request to that node.
 
@@ -157,9 +157,9 @@ If a procedure is placed in multiple segments, the procedure will be load balanc
 
 ## Access protection
 
-Procedures are not accessible by default. This means that they cannot be called from the outside world using the [RPC API](05_advanced_features#apis). To enable the access of a procedure, it has to be made public. We have done this throughout the examples by setting the **access** to **public** in the segment files.
+Procedures are not accessible by default. This means that they cannot be called from the outside world using the [RPC API](05_advanced_features.html#apis). To enable the access of a procedure, it has to be made public. We have done this throughout the examples by setting the **access** to **public** in the segment files.
 
-We've used the *Hello World* application from the [getting started page](02_getting_started) for the example. You can also use the example from the [GitHub repository](https://github.com/MaskingTechnology/jitar){:target="_blank"}.
+We've used the *Hello World* application from the [getting started page](02_getting_started.html) for the example. You can also use the example from the [GitHub repository](https://github.com/MaskingTechnology/jitar){:target="_blank"}.
 
 We will need to add a new procedure that will call a private procedure.
 
@@ -500,7 +500,7 @@ export default class BrainNotFound extends NotFound
 ---
 
 {:.previous-chapter}
-[Runtime services](03_runtime_services)
+[Runtime services](03_runtime_services.html)
 
 {:.next-chapter}
-[Advanced features](05_advanced_features)
+[Advanced features](05_advanced_features.html)
