@@ -1,16 +1,36 @@
 
 import LocalNode from '../../../src/services/LocalNode';
+import { setRuntime } from '../../../src/hooks/runtime';
 
-import { setRuntime } from '../../../src/hooks';
+import { HEALTH_CHECKS } from '../interfaces/HealthCheck.fixture';
+import { SEGMENTS } from '../models/Segment.fixture';
 
-import { firstSegment, secondSegment } from './segments';
+const singleNode = new LocalNode();
+singleNode.addSegment(SEGMENTS.GENERAL);
+singleNode.addSegment(SEGMENTS.FIRST);
+singleNode.addSegment(SEGMENTS.SECOND);
 
-const API_URL = 'http://localhost:80';
+const firstNode = new LocalNode();
+firstNode.addSegment(SEGMENTS.FIRST);
 
-const node = new LocalNode(API_URL);
-node.addSegment(firstSegment);
-node.addSegment(secondSegment);
+const secondNode = new LocalNode();
+secondNode.addSegment(SEGMENTS.SECOND);
 
-setRuntime(node);
+const goodNode = new LocalNode();
+goodNode.addHealthCheck('good', HEALTH_CHECKS.GOOD);
 
-export { API_URL, node }
+const badNode = new LocalNode();
+badNode.addHealthCheck('bad', HEALTH_CHECKS.BAD);
+
+const NODES =
+{
+    SINGLE: singleNode,
+    FIRST: firstNode,
+    SECOND: secondNode,
+    GOOD: goodNode,
+    BAD: badNode
+}
+
+setRuntime(singleNode);
+
+export { NODES }

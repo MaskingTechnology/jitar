@@ -4,13 +4,10 @@ import { describe, expect, it } from 'vitest';
 import NoNodeAvailable from '../../src/errors/NoNodeAvailable';
 import Version from '../../src/models/Version';
 
-import
-{
-    balancer,
-    emptyBalancer,
-    firstNode,
-    secondNode
-} from '../_fixtures/services/NodeBalancer.fixture';
+import { BALANCERS, NODES } from '../_fixtures/services/NodeBalancer.fixture';
+
+const balancer = BALANCERS.FILLED;
+const emptyBalancer = BALANCERS.EMPTY;
 
 describe('services/LocalGateway', () =>
 {
@@ -21,22 +18,22 @@ describe('services/LocalGateway', () =>
             const firstSelectedNode = balancer.getNextNode();
             const secondSelectedNode = balancer.getNextNode();
             const thirdSelectedNode = balancer.getNextNode();
-            const fouthSelectedNode = balancer.getNextNode();
+            const fourthSelectedNode = balancer.getNextNode();
 
-            expect(firstSelectedNode).toBe(firstNode);
-            expect(secondSelectedNode).toBe(secondNode);
-            expect(thirdSelectedNode).toBe(firstNode);
-            expect(fouthSelectedNode).toBe(secondNode);
+            expect(firstSelectedNode).toBe(NODES.FIRST);
+            expect(secondSelectedNode).toBe(NODES.SECOND);
+            expect(thirdSelectedNode).toBe(NODES.FIRST);
+            expect(fourthSelectedNode).toBe(NODES.SECOND);
         });
     });
 
     describe('.run(name, version, parameters)', () =>
     {
-        it('throw a node not available error', async () =>
+        it('should throw a node not available error', async () =>
         {
-            const run = async () => await emptyBalancer.run('NoProcedure', Version.DEFAULT, new Map(), new Map());
+            const run = async () => await emptyBalancer.run('nonExisting', Version.DEFAULT, new Map(), new Map());
 
-            expect(run).rejects.toEqual(new NoNodeAvailable('NoProcedure'));
+            expect(run).rejects.toEqual(new NoNodeAvailable('nonExisting'));
         });
     });
 });

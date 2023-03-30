@@ -2,18 +2,20 @@
 import LocalNode from '../../../src/services/LocalNode';
 import NodeBalancer from '../../../src/services/NodeBalancer';
 
-const firstNode = new LocalNode();
-const secondNode = new LocalNode();
-
-const balancer = new NodeBalancer();
-balancer.addNode(firstNode);
-balancer.addNode(secondNode);
-
-const emptyBalancer = new NodeBalancer();
-
-export {
-    balancer,
-    emptyBalancer,
-    firstNode,
-    secondNode
+const NODES =
+{
+    FIRST: new LocalNode(),
+    SECOND: new LocalNode()
 }
+
+const filledBalancer = new NodeBalancer();
+filledBalancer.addNode(NODES.FIRST);
+filledBalancer.addNode(NODES.SECOND);
+
+const BALANCERS =
+{
+    FILLED: filledBalancer,
+    EMPTY: new NodeBalancer()
+}
+
+export { BALANCERS, NODES }

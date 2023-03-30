@@ -1,24 +1,26 @@
 
-import LocalNode from '../../../src/services/LocalNode';
 import LocalGateway from '../../../src/services/LocalGateway';
 
-import { setRuntime } from '../../../src/hooks';
+import { NODES } from './LocalNode.fixture';
 
-import { firstSegment, secondSegment } from './segments';
+const GATEWAY_URL = 'http://localhost:80';
 
-const API_URL = 'http://localhost:80';
+const standaloneGateway = new LocalGateway(GATEWAY_URL);
+standaloneGateway.addNode(NODES.SINGLE);
 
-const gateway = new LocalGateway(API_URL);
+const distributedGateway = new LocalGateway(GATEWAY_URL);
+distributedGateway.addNode(NODES.FIRST);
+distributedGateway.addNode(NODES.SECOND);
 
-const firstNode = new LocalNode();
-firstNode.addSegment(firstSegment);
-firstNode.setGateway(gateway);
+const healthGateway = new LocalGateway(GATEWAY_URL);
+healthGateway.addNode(NODES.GOOD);
+healthGateway.addNode(NODES.BAD);
 
-const secondNode = new LocalNode();
-secondNode.addSegment(secondSegment);
-secondNode.setGateway(gateway);
+const GATEWAYS =
+{
+    STANDALONE: standaloneGateway,
+    DISTRIBUTED: distributedGateway,
+    HEALTH: healthGateway
+}
 
-// All test cases have to start from this node
-setRuntime(firstNode);
-
-export { API_URL, gateway }
+export { GATEWAYS, GATEWAY_URL }

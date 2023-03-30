@@ -4,19 +4,13 @@ import { describe, expect, it } from 'vitest';
 import ProcedureNotFound from '../../src/errors/ProcedureNotFound';
 import Version from '../../src/models/Version';
 
-import { API_URL, node } from '../_fixtures/services/LocalNode.fixture';
+import { NODES } from '../_fixtures/services/LocalNode.fixture';
+
+const node = NODES.SINGLE;
 
 describe('services/LocalNode', () =>
 {
-    describe('.url', () =>
-    {
-        it('should contain an url', () =>
-        {
-            expect(node.url).toContain(API_URL);
-        });
-    });
-
-    describe('.isHealty()', () =>
+    describe('.isHealthy()', () =>
     {
         it('should be healthy', () =>
         {
@@ -30,29 +24,27 @@ describe('services/LocalNode', () =>
     {
         it('should find public procedures', () =>
         {
-            const hasFirstProcedure = node.hasProcedure('my/module/firstPublicTask');
-            const hasSecondProcedure = node.hasProcedure('my/module/secondPublicTask');
-            const hasThirdProcedure = node.hasProcedure('my/module/thirdPublicTask');
+            const hasSecondProcedure = node.hasProcedure('second');
+            const hasThirdProcedure = node.hasProcedure('third');
 
-            expect(hasFirstProcedure).toBeTruthy();
             expect(hasSecondProcedure).toBeTruthy();
             expect(hasThirdProcedure).toBeTruthy();
         });
 
         it('should not find private procedures', () =>
         {
-            const hasFirstProcedure = node.hasProcedure('my/module/firstPrivateTask');
-            const hasSecondProcedure = node.hasProcedure('my/module/secondPrivateTask');
+            const hasPrivateProcedure = node.hasProcedure('private');
+            const hasFirstProcedure = node.hasProcedure('first');
 
+            expect(hasPrivateProcedure).toBeFalsy();
             expect(hasFirstProcedure).toBeFalsy();
-            expect(hasSecondProcedure).toBeFalsy();
         });
 
         it('should not find non-existing procedures', () =>
         {
-            const hasNoProcedure = node.hasProcedure('my/module/nonExistingTask');
+            const hasNonExistingProcedure = node.hasProcedure('nonExisting');
 
-            expect(hasNoProcedure).toBeFalsy();
+            expect(hasNonExistingProcedure).toBeFalsy();
         });
     });
 
@@ -60,30 +52,30 @@ describe('services/LocalNode', () =>
     {
         it('should run a public procedure that calls a private procedure on the same segment', async () =>
         {
-            const result = await node.run('my/module/firstPublicTask', Version.DEFAULT, new Map(), new Map());
+            const result = await node.run('second', Version.DEFAULT, new Map(), new Map());
 
             expect(result).toBe('first');
         });
 
         it('should run a public procedure that calls a private procedure on another segment', async () =>
         {
-            const result = await node.run('my/module/secondPublicTask', Version.DEFAULT, new Map(), new Map());
+            const result = await node.run('sixth', Version.DEFAULT, new Map(), new Map());
 
             expect(result).toBe('first');
         });
 
         it('should run a public procedure that calls a public procedure on another segment', async () =>
         {
-            const result = await node.run('my/module/thirdPublicTask', Version.DEFAULT, new Map(), new Map());
+            const result = await node.run('third', Version.DEFAULT, new Map(), new Map());
 
             expect(result).toBe('fourth');
         });
 
         it('should not run a non-existing procedure', async () =>
         {
-            const run = async () => await node.run('my/module/nonExistingTask', Version.DEFAULT, new Map(), new Map());
+            const run = async () => await node.run('nonExisting', Version.DEFAULT, new Map(), new Map());
 
-            expect(run).rejects.toEqual(new ProcedureNotFound('my/module/nonExistingTask'));
+            expect(run).rejects.toEqual(new ProcedureNotFound('nonExisting'));
         });
     });
 });

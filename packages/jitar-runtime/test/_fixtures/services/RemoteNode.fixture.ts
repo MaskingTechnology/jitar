@@ -1,8 +1,11 @@
 
 import RemoteNode from '../../../src/services/RemoteNode';
 
-const API_URL = 'http://localhost:80';
+const NODE_URL = 'http://localhost:80';
 
-const node = new RemoteNode(API_URL, ['FirstProcedure', 'SecondProcedure']);
+const NODES =
+{
+    REMOTE: new RemoteNode(NODE_URL, ['first', 'second'])
+}
 
-export { API_URL, node }
+export { NODES, NODE_URL }

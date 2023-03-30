@@ -15,13 +15,13 @@ const EXECUTABLES =
 
     // First segment
     FIRST: () => { return 'first'; },
-    SECOND: () => { return runProcedure('my/module/first', '0.0.0', new Map()); }, // Runs a private task on the same segment
-    THIRD: () => { return runProcedure('my/module/fourth', '0.0.0', new Map()); }, // Runs a public task on another segment
+    SECOND: () => { return runProcedure('first', '0.0.0', new Map()); }, // Runs a private task on the same segment
+    THIRD: () => { return runProcedure('fourth', '0.0.0', new Map()); }, // Runs a public task on another segment
 
     // Second segment
     FOURTH: () => { return 'fourth'; },
     FIFTH: () => { return 'second'; },
-    SIXTH: () => { return runProcedure('my/module/first', '0.0.0', new Map()); }, // Runs a private task on another segment
+    SIXTH: () => { return runProcedure('first', '0.0.0', new Map()); }, // Runs a private task on another segment
 }
 
 Object.freeze(EXECUTABLES);

@@ -4,7 +4,10 @@ import { describe, expect, it } from 'vitest';
 import ProcedureNotFound from '../../src/errors/ProcedureNotFound';
 import Version from '../../src/models/Version';
 
-import { API_URL, gateway } from '../_fixtures/services/LocalGateway.fixture';
+import '../_fixtures/services/LocalNode.fixture';
+import { GATEWAYS, GATEWAY_URL } from '../_fixtures/services/LocalGateway.fixture';
+
+const gateway = GATEWAYS.STANDALONE;
 
 describe('services/LocalGateway', () =>
 {
@@ -12,7 +15,7 @@ describe('services/LocalGateway', () =>
     {
         it('should contain an url', () =>
         {
-            expect(gateway.url).toContain(API_URL);
+            expect(gateway.url).toContain(GATEWAY_URL);
         });
     });
 
@@ -20,23 +23,23 @@ describe('services/LocalGateway', () =>
     {
         it('should find and run a procedure from a node', async () =>
         {
-            const firstResult = await gateway.run('my/module/firstPublicTask', Version.DEFAULT, new Map(), new Map());
+            const firstResult = await gateway.run('second', Version.DEFAULT, new Map(), new Map());
 
             expect(firstResult).toBe('first');
         });
 
         it('should find and run a procedure from a node that calls a procedure on another node', async () =>
         {
-            const result = await gateway.run('my/module/thirdPublicTask', Version.DEFAULT, new Map(), new Map());
+            const result = await gateway.run('third', Version.DEFAULT, new Map(), new Map());
 
             expect(result).toBe('fourth');
         });
 
         it('should not run a non-existing procedure', async () =>
         {
-            const run = async () => await gateway.run('my/module/nonExistingTask', Version.DEFAULT, new Map(), new Map());
+            const run = async () => await gateway.run('nonExisting', Version.DEFAULT, new Map(), new Map());
 
-            expect(run).rejects.toEqual(new ProcedureNotFound('my/module/nonExistingTask'));
+            expect(run).rejects.toEqual(new ProcedureNotFound('nonExisting'));
         });
     });
 });
