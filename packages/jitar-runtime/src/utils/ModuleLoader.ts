@@ -1,6 +1,5 @@
 
 import ModuleNotLoaded from '../errors/ModuleNotLoaded.js';
-
 import Module from '../types/Module.js';
 import ModuleImporter from '../types/ModuleImporter.js';
 

@@ -1,13 +1,12 @@
 
 import UnknownParameter from '../errors/UnknownParameter.js';
 import MissingParameterValue from '../errors/MissingParameterValue.js';
-
+import InvalidParameterValue from '../errors/InvalidParameterValue.js';
 import ArrayParameter from '../models/ArrayParameter.js';
 import DestructuredParameter from '../models/DestructuredParameter.js';
 import NamedParameter from '../models/NamedParameter.js';
 import ObjectParameter from '../models/ObjectParameter.js';
 import Parameter from '../models/Parameter.js';
-import InvalidParameterValue from '../errors/InvalidParameterValue.js';
 
 export default class ArgumentExtractor
 {
