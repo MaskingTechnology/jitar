@@ -4,7 +4,6 @@ import { Reflector } from 'jitar-reflection';
 import ValueSerializer from '../ValueSerializer.js';
 import SerializedTypedArray from '../types/serialized/SerializedTypedArray.js';
 import TypedArray from '../types/TypedArray.js';
-import FlexObject from '../types/FlexObject.js';
 
 const reflector = new Reflector();
 
@@ -64,7 +63,7 @@ export default class ArrayBufferSerializer extends ValueSerializer
             view.setUint8(index, bytes[index]);
         }
 
-        const clazz = (globalThis as FlexObject)[type] as Function;
+        const clazz = (globalThis as Record<string, unknown>)[type] as Function;
 
         return reflector.createInstance(clazz, [buffer]) as TypedArray;
     }
