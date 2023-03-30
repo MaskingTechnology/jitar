@@ -9,4 +9,4 @@ export default class Teapot extends Error
     }
 }
 
-(Teapot as Loadable).source = '/jitar/core/errors/Teapot.js';
+(Teapot as Loadable).source = '/jitar/errors/generic/Teapot.js';
