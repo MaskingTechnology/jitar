@@ -14,7 +14,7 @@ Setting up Jitar is easy. In this section we help you get up and running.
 Jitar requires Node.js version 18.7 or higher to be installed.
 
 {:.alert-warning}
-Running Jitar currently requires the *network imports* and *fetch api* experimental features.
+Running Jitar with Node.js currently requires the *network imports* experimental features.
 
 {:.alert-info}
 When working with TypeScript version 4.4.2 or higher is required.
@@ -73,7 +73,7 @@ export default async function sayHello(name = 'World'): Promise<string>
 }
 ```
 
-Parameters can be mandatory or optional. Optional parameters need to be defined with a default value. The parameters will be checked when calling the procedure using the [RPC API](05_advanced_features#apis).
+Parameters can be mandatory or optional. Optional parameters need to be defined with a default value. The parameters will be checked when calling the procedure using the [RPC API](05_advanced_features.html#apis).
 
 ### Step 2 - Put the procedure in a segment
 
@@ -92,7 +92,7 @@ src/default.segment.json
 }
 ```
 
-More information regarding segment configuration is described in the [segments section](04_basic_features#segments) of the basic features.
+More information regarding segment configuration is described in the [segments section](04_basic_features.html#segments) of the basic features.
 
 ### Step 3 - Create an application starting point
 
@@ -109,7 +109,7 @@ const moduleImporter = async(specifier: string) => import(specifier);
 startServer(moduleImporter);
 ```
 
-This setup can be used in most situations and is used in all our examples. More information about this hook can be found in the [hooks section](05_advanced_features#hooks) of the advanced features.
+This setup can be used in most situations and is used in all our examples. More information about this hook can be found in the [hooks section](05_advanced_features.html#hooks) of the advanced features.
 
 ### Step 4 - Configure Jitar
 
@@ -127,7 +127,7 @@ jitar.json
 }
 ```
 
-In the [runtime services page](03_runtime_services) we will look at all the configuration options.
+In the [runtime services page](03_runtime_services.html) we will look at all the configuration options.
 
 ### Step 5 - Build, Run and test
 
@@ -142,7 +142,7 @@ package.json
     "type": "module",
     "scripts": {
         "build": "tsc",
-        "start": "node --experimental-network-imports --experimental-fetch dist/start.js --config=jitar.json"
+        "start": "node --experimental-network-imports dist/start.js --config=jitar.json"
     }
 }
 ```
@@ -151,13 +151,13 @@ Then we run `npm run build` to let the TypeScript compiler generate the JavaScri
 
 Next we can fire up Jitar.
 
-The start script will run the application starting point and pass the configuration file to Jitar. The ``--experimental-network-imports`` and ``--experimental-fetch`` flags are required for Jitar to work. More options can be found in the [server options section](03_runtime_services#server-options) of the runtime services.
+The start script will run the application starting point and pass the configuration file to Jitar. The ``--experimental-network-imports`` flag is required for Jitar to work. More options can be found in the [server options section](03_runtime_services.html#server-options) of the runtime services.
 
 ```bash
 npm run start
 ```
 
-Once Jitar has started we can run our procedure using the [RPC API](05_advanced_features#apis).
+Once Jitar has started we can run our procedure using the [RPC API](05_advanced_features.html#apis).
 
 ```http
 GET http://localhost:3000/rpc/greetings/sayHello?name=John HTTP/1.1
@@ -166,7 +166,7 @@ GET http://localhost:3000/rpc/greetings/sayHello?name=John HTTP/1.1
 ---
 
 {:.previous-chapter}
-[Introduction](01_introduction)
+[Introduction](01_introduction.html)
 
 {:.next-chapter}
-[Runtime services](03_runtime_services)
+[Runtime services](03_runtime_services.html)

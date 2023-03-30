@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build && vue-tsc --noEmit && tsc",
     "preview": "vite preview",
-    "jitar": "node --experimental-network-imports --experimental-fetch dist/jitar.js --config=conf/jitar.json"
+    "jitar": "node --experimental-network-imports dist/jitar.js --config=conf/jitar.json"
   },
   "dependencies": {
     "jitar-nodejs-server": "^0.3.9",

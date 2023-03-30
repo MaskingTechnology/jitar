@@ -8,11 +8,11 @@
         "copy": "cpx -u 'src/index.html' dist",
         "build": "npm-run-all clean copy compile",
         "update": "npm-run-all copy compile",
-        "dev": "node --experimental-network-imports --experimental-fetch dist/server.js --config=./conf/dev.json",
-        "repo": "node --experimental-network-imports --experimental-fetch dist/server.js --config=./conf/repo.json",
-        "gateway": "node --experimental-network-imports --experimental-fetch dist/server.js --config=./conf/gateway.json",
-        "node": "node --experimental-network-imports --experimental-fetch dist/server.js --config=./conf/node.json",
-        "proxy": "node --experimental-network-imports --experimental-fetch dist/server.js --config=./conf/proxy.json"
+        "dev": "node --experimental-network-imports dist/server.js --config=./conf/dev.json",
+        "repo": "node --experimental-network-imports dist/server.js --config=./conf/repo.json",
+        "gateway": "node --experimental-network-imports dist/server.js --config=./conf/gateway.json",
+        "node": "node --experimental-network-imports dist/server.js --config=./conf/node.json",
+        "proxy": "node --experimental-network-imports dist/server.js --config=./conf/proxy.json"
     },
     "dependencies": {
         "mongodb": "^5.1.0",

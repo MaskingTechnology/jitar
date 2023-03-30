@@ -7,7 +7,7 @@
         "compile": "tsc",
         "copy": "cpx -u 'src/index.html' dist",
         "build": "npm-run-all clean copy compile",
-        "start": "node --experimental-network-imports --experimental-fetch dist/server.js --config=jitar.json"
+        "start": "node --experimental-network-imports dist/server.js --config=jitar.json"
     },
     "dependencies": {
         "jitar-nodejs-server": "^0.3.4"
