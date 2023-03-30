@@ -66,11 +66,6 @@ export default class LocalNode extends Node
         this.#segments.set(segment.id, segment);
     }
 
-    getSegment(id: string): Segment | undefined
-    {
-        return this.#segments.get(id);
-    }
-
     hasProcedure(fqn: string): boolean
     {
         const procedureNames = this.getProcedureNames();
