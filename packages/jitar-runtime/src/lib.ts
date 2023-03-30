@@ -3,8 +3,20 @@
 export * from './definitions/AccessLevel.js';
 export * from './definitions/Files.js';
 
+// Errors
+export { default as BadRequest } from './errors/generic/BadRequest.js';
+export { default as Forbidden } from './errors/generic/Forbidden.js';
+export { default as NotFound } from './errors/generic/NotFound.js';
+export { default as NotImplemented } from './errors/generic/NotImplemented.js';
+export { default as PaymentRequired } from './errors/generic/PaymentRequired.js';
+export { default as ServerError } from './errors/generic/ServerError.js';
+export { default as Teapot } from './errors/generic/Teapot.js';
+export { default as Unauthorized } from './errors/generic/Unauthorized.js';
+
 // Interfaces
 export { default as FileManager } from './interfaces/FileManager.js';
+export { default as HealthCheck } from './interfaces/HealthCheck.js';
+export { default as Middleware } from './interfaces/Middleware.js';
 
 // Models
 export { default as ArrayParameter } from './models/ArrayParameter.js';
@@ -15,5 +27,28 @@ export { default as ObjectParameter } from './models/ObjectParameter.js';
 export { default as Procedure } from './models/Procedure.js';
 export { default as Segment } from './models/Segment.js';
 
+// Services
+export { default as Gateway } from './services/Gateway.js';
+export { default as LocalGateway } from './services/LocalGateway.js';
+export { default as LocalNode } from './services/LocalNode.js';
+export { default as LocalRepository } from './services/LocalRepository.js';
+export { default as Node } from './services/Node.js';
+export { default as NodeMonitor } from './services/NodeMonitor.js';
+export { default as ProcedureRuntime } from './services/ProcedureRuntime.js';
+export { default as Proxy } from './services/Proxy.js';
+export { default as Remote } from './services/Runtime.js';
+export { default as RemoteNode } from './services/Remote.js';
+export { default as RemoteGateway } from './services/RemoteGateway.js';
+export { default as RemoteRepository } from './services/RemoteRepository.js';
+export { default as Repository } from './services/Repository.js';
+export { default as Runtime } from './services/Runtime.js';
+
+// Types
+export { default as NextHandler } from './types/NextHandler.js';
+
 // Utils
 export { default as VersionParser } from './utils/VersionParser.js';
+
+// Root
+export * from './client.js';
+export * from './hooks.js';
