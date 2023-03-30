@@ -1,5 +1,5 @@
 
-import { createRepositoryFilename } from '../definitions/Files.js';
+import { createRepositoryFilename, convertToLocalFilename, convertToRemoteFilename } from '../definitions/Files.js';
 import ClientNotFound from '../errors/ClientNotFound.js';
 import FileNotFound from '../errors/FileNotFound.js';
 import InvalidClientId from '../errors/InvalidClientId.js';
@@ -89,11 +89,11 @@ export default class LocalRepository extends Repository
 
         if (segmentFilename === undefined)
         {
-            return this.#getNodeModule(filename, false);
+            return this.#getNodeModule(filename);
         }
 
         return this.#hasClientSegmentFile(clientId, segmentFilename)
-            ? this.#getNodeModule(filename, true)
+            ? this.#getNodeModule(filename)
             : this.#getRemoteModule(filename);
     }
 
@@ -134,18 +134,14 @@ export default class LocalRepository extends Repository
         return clientSegmentFiles.some(clientSegmentFilename => segmentFilename.endsWith(clientSegmentFilename));
     }
 
-    async #getNodeModule(filename: string, isSegmented: boolean): Promise<File>
+    async #getNodeModule(filename: string): Promise<File>
     {
         // This function loads the node module file containing the rewritten
         // imports to prevent import issues while loading the module from
         // a remote repository.
 
-        if (isSegmented)
-        {
-            filename = filename.replace('.js', '.local.js');
-        }
-
-        const file = await this.#readFile(filename);
+        const localFilename = convertToLocalFilename(filename);
+        const file = await this.#readFile(localFilename);
         const code = file.content.toString();
 
         return new File(filename, 'application/javascript', code);
@@ -156,7 +152,7 @@ export default class LocalRepository extends Repository
         // This function loads the remote module file containing the rewritten
         // implementation for each function to execute them on another node.
 
-        const remoteFilename = filename.replace('.js', '.remote.js');
+        const remoteFilename = convertToRemoteFilename(filename);
 
         return this.#readFile(remoteFilename);
     }
