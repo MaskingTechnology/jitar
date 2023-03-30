@@ -12,6 +12,7 @@ export { default as PaymentRequired } from './errors/generic/PaymentRequired.js'
 export { default as ServerError } from './errors/generic/ServerError.js';
 export { default as Teapot } from './errors/generic/Teapot.js';
 export { default as Unauthorized } from './errors/generic/Unauthorized.js';
+export { default as FileNotFound } from './errors/FileNotFound.js';
 
 // Interfaces
 export { default as FileManager } from './interfaces/FileManager.js';
@@ -26,6 +27,7 @@ export { default as NamedParameter } from './models/NamedParameter.js';
 export { default as ObjectParameter } from './models/ObjectParameter.js';
 export { default as Procedure } from './models/Procedure.js';
 export { default as Segment } from './models/Segment.js';
+export { default as Version } from './models/Version.js';
 
 // Services
 export { default as Gateway } from './services/Gateway.js';
@@ -36,8 +38,8 @@ export { default as Node } from './services/Node.js';
 export { default as NodeMonitor } from './services/NodeMonitor.js';
 export { default as ProcedureRuntime } from './services/ProcedureRuntime.js';
 export { default as Proxy } from './services/Proxy.js';
-export { default as Remote } from './services/Runtime.js';
-export { default as RemoteNode } from './services/Remote.js';
+export { default as Remote } from './services/Remote.js';
+export { default as RemoteNode } from './services/RemoteNode.js';
 export { default as RemoteGateway } from './services/RemoteGateway.js';
 export { default as RemoteRepository } from './services/RemoteRepository.js';
 export { default as Repository } from './services/Repository.js';
@@ -47,6 +49,7 @@ export { default as Runtime } from './services/Runtime.js';
 export { default as NextHandler } from './types/NextHandler.js';
 
 // Utils
+export { default as ClientIdHelper } from './utils/ClientIdHelper.js';
 export { default as VersionParser } from './utils/VersionParser.js';
 
 // Root
