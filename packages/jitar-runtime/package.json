@@ -19,7 +19,7 @@
     "release": "npm run clean && npm run build && npm publish"
   },
   "dependencies": {
-    "jitar-reflection": "^0.3.7"
+    "jitar-serialization": "^0.3.8"
   },
   "repository": {
     "type": "git",

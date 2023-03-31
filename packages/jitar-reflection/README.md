@@ -23,7 +23,7 @@ For more information about Jitar:
 const a = 1;
 export { a }
 
-// Unsupported
+// Unsupported (will be supported)
 const b = 2, c = 3;
 export { b, c }
 ```
@@ -44,21 +44,35 @@ class Foo =
     static *generator3() { /* ... */ }
 };
 
-// Unsupported
+// Unsupported (dynamic properties won't be supported)
 class Bar
 {
   *[Symbol.iterator]() { /* ... */ }
 }
 ```
 
-3. Nested destructuring is not supported
+3. Destructuring not fully supported
 
 ```ts
 // Supported
 const [ a, b = 42, ...others ] = myArray;
 const { a, b = 42, ...others } = myObject;
+```
 
-// Unsupported
-const [ a, [ b, c, d ] ] = myArray;
+```ts
+// Aliases are not supported (will be supported)
+const [ a, b: c, ...others ] = myArray;
+const { a, b: c, ...others } = myObject;
+```
+
+```ts
+// Nested destructuring is not supported (will be supported)
+const [ a, [ b = 42, c, d ] ] = myArray;
 const { a: { c, d = true }, b = 42 } = myObject;
+```
+
+```ts
+// Dynamic property destructuring is not supported (won't be supported)
+const [ [a]: b ] = myArray;
+const { [a]: b } = myObject;
 ```

@@ -1,5 +1,6 @@
 
-import { ReflectionArray, ReflectionField, ReflectionFunction, ReflectionObject } from 'jitar-reflection';
+import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionField, ReflectionFunction } from 'jitar-reflection';
+import ReflectionParameter from 'jitar-reflection/dist/models/ReflectionParameter.js';
 import { FileManager, VersionParser, createNodeFilename, createRepositoryFilename } from 'jitar-runtime';
 
 import SegmentCache from './models/SegmentCache.js';
@@ -88,24 +89,56 @@ export default class SegmentCacheWriter
 
     #createParametersCode(executable: ReflectionFunction): string
     {
-        const codes: string[] = [];
+        const result = this.#extractParameters(executable.parameters);
 
-        for (const parameter of executable.parameters)
+        return `[${result.join(', ')}]`;
+    }
+
+    #extractParameters(parameters: ReflectionParameter[]): string[]
+    {
+        const result: string[] = [];
+
+        // Named parameters are identified by their name.
+        // Destructured parameters are identified by their index.
+
+        for (const parameter of parameters)
         {
-            if (parameter instanceof ReflectionField)
-            {
-                codes.push(`new NamedParameter("${parameter.name}", ${parameter.value !== undefined})`);
-            }
-            if (parameter instanceof ReflectionArray)
-            {
-                codes.push(`new ArrayParameter([])`); // Unsupported for now
-            }
-            else if (parameter instanceof ReflectionObject)
-            {
-                codes.push(`new ObjectParameter([])`); // Unsupported for now
-            }
+            result.push(this.#extractParameter(parameter));
         }
 
-        return `[${codes.join(', ')}]`;
+        return result;
+    }
+
+    #extractParameter(parameter: ReflectionParameter): string
+    {
+        if (parameter instanceof ReflectionDestructuredArray)
+        {
+            return this.#createArrayParameter(parameter);
+        }
+        else if (parameter instanceof ReflectionDestructuredObject)
+        {
+            return this.#createObjectParameter(parameter);
+        }
+
+        return this.#createNamedParameter(parameter);
+    }
+
+    #createNamedParameter(parameter: ReflectionField): string
+    {
+        return `new NamedParameter("${parameter.name}", ${parameter.value !== undefined})`;
+    }
+
+    #createArrayParameter(parameter: ReflectionDestructuredArray): string
+    {
+        const members = this.#extractParameters(parameter.members);
+
+        return `new ArrayParameter([${members.join(', ')}])`;
+    }
+
+    #createObjectParameter(parameter: ReflectionDestructuredObject): string
+    {
+        const members = this.#extractParameters(parameter.members);
+
+        return `new ObjectParameter([${members.join(', ')}])`;
     }
 }

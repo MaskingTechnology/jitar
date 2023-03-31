@@ -6,6 +6,7 @@ export { default as ReflectionClass } from './models/ReflectionClass.js';
 export { default as ReflectionDeclaration } from './models/ReflectionDeclaration.js';
 export { default as ReflectionDestructuredArray } from './models/ReflectionDestructuredArray.js';
 export { default as ReflectionDestructuredObject } from './models/ReflectionDestructuredObject.js';
+export { default as ReflectionDestructuredValue } from './models/ReflectionDestructuredValue.js';
 export { default as ReflectionExport } from './models/ReflectionExport.js';
 export { default as ReflectionExpression } from './models/ReflectionExpression.js';
 export { default as ReflectionField } from './models/ReflectionField.js';
