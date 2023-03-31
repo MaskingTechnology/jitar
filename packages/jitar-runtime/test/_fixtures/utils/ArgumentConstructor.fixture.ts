@@ -64,6 +64,4 @@ const ARGUMENTS =
     REST_OBJECT_INVALID: new Map(Object.entries({ 'name': 'John Doe', '...rest': 'foo' })),
 }
 
-// Rest parameters
-
 export { PARAMETERS, ARGUMENTS }

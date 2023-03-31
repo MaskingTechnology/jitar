@@ -4,7 +4,6 @@ import { describe, expect, it } from 'vitest';
 import ProcedureNotFound from '../../src/errors/ProcedureNotFound';
 import Version from '../../src/models/Version';
 
-import '../_fixtures/services/LocalNode.fixture';
 import { GATEWAYS, GATEWAY_URL } from '../_fixtures/services/LocalGateway.fixture';
 
 const gateway = GATEWAYS.STANDALONE;

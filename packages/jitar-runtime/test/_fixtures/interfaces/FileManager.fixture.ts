@@ -4,10 +4,6 @@ import File from '../../../src/models/File';
 
 class TestFileManager implements FileManager
 {
-    #writtenFiles: Map<string, string> = new Map();
-
-    get writtenFiles() { return this.#writtenFiles; }
-
     getRootLocation(): string
     {
         return '';
