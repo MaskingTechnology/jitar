@@ -1,6 +1,6 @@
 
 import SegmentImportProperties from './SegmentImportProperties.js';
 
-type SegmentImports = {[key: string]: SegmentImportProperties };
+type SegmentImports = Record<string, SegmentImportProperties>;
 
 export default SegmentImports;

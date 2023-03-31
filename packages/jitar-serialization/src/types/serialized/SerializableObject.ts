@@ -1,6 +1,4 @@
 
-import FlexObject from '../FlexObject.js';
-
-type SerializableObject = FlexObject;
+type SerializableObject = Record<string, unknown>;
 
 export default SerializableObject;

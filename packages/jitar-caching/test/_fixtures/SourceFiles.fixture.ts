@@ -52,7 +52,7 @@ export async function v0_0_0(order)
     return 'order v0'
 }
 
-export async function v1_0_0(order)
+export async function v1_0_0(...orders)
 {
     return 'order v1';
 }
@@ -77,13 +77,31 @@ function validateFound(product)
     /* ... */
 }
 
-export async function searchProducts(query)
+export async function searchProducts({query, sort})
 {
     return 'product list';
 }
 `;
 
-const GET_PRODUCTS_V1 = GET_PRODUCTS;
+const GET_PRODUCTS_V1 = `
+import * as mongodb from 'mongodb';
+import { Product } from './models';
+
+export default async function getProducts(id)
+{
+    return 'product';
+}
+
+function validateFound(product)
+{
+    /* ... */
+}
+
+export async function searchProducts([query, sort])
+{
+    return 'product list';
+}
+`;
 
 const PRODUCT_MODELS = `
 export class Product {}
