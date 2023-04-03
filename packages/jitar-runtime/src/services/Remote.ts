@@ -105,12 +105,15 @@ export default class Remote
         const headersObject = Object.fromEntries(headers);
 
         const url = `${this.#url}/rpc/${fqn}?version=${versionString}&serialize=true`;
+        const body = await this.#createRequestBody(argsObject, this.#useSerializer);
         const options =
         {
             method: 'POST',
             headers: headersObject,
-            body: this.#createRequestBody(argsObject, this.#useSerializer)
+            body: body
         };
+
+        console.log('options', options);
 
         const response = await this.#callRemote(url, options, 200);
 
@@ -131,10 +134,10 @@ export default class Remote
         return response;
     }
 
-    #createRequestBody(body: unknown, serialize: boolean): string
+    async #createRequestBody(body: unknown, serialize: boolean): Promise<string>
     {
         const data = serialize
-            ? this.#serializer.serialize(body)
+            ? await this.#serializer.serialize(body)
             : body;
 
         return JSON.stringify(data);

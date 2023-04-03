@@ -4,10 +4,12 @@ import File from '../models/File.js';
 import JitarHooks from '../types/JitarHooks.js';
 import Module from '../types/Module.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
+import { setRuntime, setDependencyLoader } from '../hooks.js';
 
 import Remote from './Remote.js';
 import Repository from './Repository.js';
 import Runtime from './Runtime.js';
+import LocalNode from './LocalNode.js';
 
 export default class RemoteRepository extends Repository
 {
@@ -25,17 +27,20 @@ export default class RemoteRepository extends Repository
         return this.#remote.registerClient(segmentFiles);
     }
 
-    async setRuntime(runtime: Runtime): Promise<void>
+    async setRuntime(runtime: LocalNode): Promise<void>
     {
-        const jitar = await this.#remote.importFile('jitar/hooks.js') as JitarHooks;
+        // const jitar = await this.#remote.importFile('jitar/hooks.js') as JitarHooks;
 
-        if (jitar?.setRuntime === undefined || jitar?.setDependencyLoader === undefined)
-        {
-            throw new InvalidJitarHooks();
-        }
+        // if (jitar?.setRuntime === undefined || jitar?.setDependencyLoader === undefined)
+        // {
+        //     throw new InvalidJitarHooks();
+        // }
 
-        jitar.setRuntime(runtime);
-        jitar.setDependencyLoader(ModuleLoader.import);
+        // jitar.setRuntime(runtime);
+        // jitar.setDependencyLoader(ModuleLoader.import);
+
+        setRuntime(runtime);
+        setDependencyLoader(ModuleLoader.import);
     }
 
     async loadAsset(filename: string): Promise<File>
