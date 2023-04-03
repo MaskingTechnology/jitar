@@ -15,8 +15,7 @@ import { component1, component2 } from 'https';
 `;
 
 const HAS_SYSTEM_IMPORTS_RESULT =
-`import { getDependency } from "/jitar/hooks.js";
-await getDependency('polyfills');
+`await getDependency('polyfills');
 const fs = await getDependency('fs');
 const component = await getDependency('http');
 const { component1, component2 } = await getDependency('https');
@@ -24,15 +23,11 @@ const { component1, component2 } = await getDependency('https');
 
 const HAS_JITAR_IMPORTS = `import { runProcedure } from 'jitar';`;
 
-const HAS_JITAR_IMPORTS_RESULT =
-`import { getDependency } from "/jitar/hooks.js";
-import { runProcedure } from "/jitar/hooks.js";`;
+const HAS_JITAR_IMPORTS_RESULT =`import { runProcedure } from "/jitar/hooks.js";`;
 
 const HAS_IMPORT_NO_SEMICOLON = `import { runProcedure } from 'jitar'`;
 
-const HAS_IMPORT_NO_SEMICOLON_RESULT =
-`import { getDependency } from "/jitar/hooks.js";
-import { runProcedure } from "/jitar/hooks.js";`;
+const HAS_IMPORT_NO_SEMICOLON_RESULT = `import { runProcedure } from "/jitar/hooks.js";`;
 
 const HAS_MIXED_IMPORTS =
 `import component from './path/to/component.js';
@@ -42,8 +37,7 @@ import main, { some as other } from 'library';
 `;
 
 const HAS_MIXED_IMPORTS_RESULT =
-`import { getDependency } from "/jitar/hooks.js";
-import component from './path/to/component.js';
+`import component from './path/to/component.js';
 const os = await getDependency('os');
 import { runProcedure } from "/jitar/hooks.js";
 const { default: main, some: other } = await getDependency('library');
@@ -65,8 +59,7 @@ import { runProcedure } from 'jitar';
 `;
 
 const HAS_IMPORTS_AND_CONTENT_RESULT =
-`import { getDependency } from "/jitar/hooks.js";
-const os = await getDependency('os');
+`const os = await getDependency('os');
 
 export default function test() {}
 
