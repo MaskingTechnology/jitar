@@ -56,4 +56,5 @@ export { default as VersionParser } from './utils/VersionParser.js';
 
 // Root
 export * from './client.js';
-export * from './hooks.js';
+
+import './globals.js';
