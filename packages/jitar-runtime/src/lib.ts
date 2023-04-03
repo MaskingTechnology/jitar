@@ -52,6 +52,7 @@ export { default as ModuleImporter } from './types/ModuleImporter.js';
 // Utils
 export { default as ClientIdHelper } from './utils/ClientIdHelper.js';
 export { default as ModuleLoader } from './utils/ModuleLoader.js';
+export { default as RemoteClassLoader } from './utils/RemoteClassLoader.js';
 export { default as VersionParser } from './utils/VersionParser.js';
 
 // Root

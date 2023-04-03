@@ -5,8 +5,12 @@ import File from '../models/File.js';
 import Version from '../models/Version.js';
 import Module from '../types/Module.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
+import RemoteClassLoader from '../utils/RemoteClassLoader.js';
 
 import Node from './Node.js';
+
+const remoteClassLoader = new RemoteClassLoader();
+const defaultSerializer = SerializerBuilder.build(remoteClassLoader);
 
 export default class Remote
 {
@@ -14,7 +18,7 @@ export default class Remote
     #useSerializer: boolean;
     #serializer: Serializer;
 
-    constructor(url: string, useSerializer: boolean, serializer: Serializer = SerializerBuilder.build())
+    constructor(url: string, useSerializer: boolean, serializer: Serializer = defaultSerializer)
     {
         this.#url = url;
         this.#useSerializer = useSerializer;
