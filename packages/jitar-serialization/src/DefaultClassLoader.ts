@@ -14,7 +14,7 @@ export default class DefaultClassLoader implements ClassLoader
         }
 
         const module = await import(loadable.source);
-        const clazz = module[loadable.name];
+        const clazz = (module[loadable.name] ?? module['default']) as Function;
 
         if (clazz === undefined)
         {
