@@ -13,11 +13,8 @@ export default class ImportRewriter
     rewrite(code: string): string
     {
         const replacer = (statement: string) => this.#replaceImport(statement);
-        const newContent = code.replaceAll(IMPORT_PATTERN, replacer);
 
-        return newContent !== code
-            ? this.#insertGetDependency(newContent)
-            : newContent;
+        return code.replaceAll(IMPORT_PATTERN, replacer);
     }
 
     #replaceImport(statement: string): string
@@ -84,10 +81,5 @@ export default class ImportRewriter
     {
         return dependency.members.length === 1
             && dependency.members[0].name === Keyword.DEFAULT;
-    }
-
-    #insertGetDependency(module: string): string
-    {
-        return `import { getDependency } from "/jitar/hooks.js";\n${module}`;
     }
 }

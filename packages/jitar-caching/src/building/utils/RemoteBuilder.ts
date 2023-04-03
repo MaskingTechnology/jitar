@@ -12,7 +12,7 @@ export default class RemoteBuilder
 {
     build(module: SegmentModule): string
     {
-        let code = this.#createRemoteImports();
+        let code = '';
 
         for (const procedure of module.procedures)
         {
@@ -30,11 +30,6 @@ export default class RemoteBuilder
         }
 
         return code.trim();
-    }
-
-    #createRemoteImports(): string
-    {
-        return `import { runProcedure } from "/jitar/hooks.js";\n`;
     }
 
     #createRemoteCode(fqn: string, implementation: SegmentImplementation, asDefault: boolean): string
