@@ -47,9 +47,11 @@ export { default as Runtime } from './services/Runtime.js';
 
 // Types
 export { default as NextHandler } from './types/NextHandler.js';
+export { default as ModuleImporter } from './types/ModuleImporter.js';
 
 // Utils
 export { default as ClientIdHelper } from './utils/ClientIdHelper.js';
+export { default as ModuleLoader } from './utils/ModuleLoader.js';
 export { default as VersionParser } from './utils/VersionParser.js';
 
 // Root

@@ -3,7 +3,8 @@ import { Server as OvernightServer } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import { Logger } from 'tslog';
 
-import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime } from 'jitar';
+import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime } from 'jitar-runtime';
+import { Serializer, SerializerBuilder } from 'jitar-serialization';
 
 import RuntimeConfigurationLoader from './utils/RuntimeConfigurationLoader.js';
 import RuntimeConfigurator from './utils/RuntimeConfigurator.js';
@@ -21,7 +22,7 @@ import RPCController from './controllers/RPCController.js';
 import RuntimeConfiguration from './configuration/RuntimeConfiguration.js';
 import RuntimeDefaults from './definitions/RuntimeDefaults.js';
 
-import RuntimeNotAvaiable from './errors/RuntimeNotAvaiable.js';
+import RuntimeNotAvailable from './errors/RuntimeNotAvailable.js';
 import MiddlewareNotSupported from './errors/MiddlewareNotSupported.js';
 import LogBuilder from './utils/LogBuilder.js';
 
@@ -38,10 +39,13 @@ const STARTUP_MESSAGE = `
 export default class JitarServer extends OvernightServer
 {
     #runtime?: Runtime;
+    #serializer: Serializer;
 
     constructor()
     {
         super(false);
+
+        this.#serializer = SerializerBuilder.build();
 
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
@@ -72,7 +76,7 @@ export default class JitarServer extends OvernightServer
     {
         if (this.#runtime === undefined)
         {
-            throw new RuntimeNotAvaiable();
+            throw new RuntimeNotAvailable();
         }
 
         this.#runtime.addHealthCheck(name, healthCheck);
@@ -82,7 +86,7 @@ export default class JitarServer extends OvernightServer
     {
         if (this.#runtime === undefined)
         {
-            throw new RuntimeNotAvaiable();
+            throw new RuntimeNotAvailable();
         }
         
         if ( ! (this.#runtime instanceof ProcedureRuntime))
@@ -125,16 +129,16 @@ export default class JitarServer extends OvernightServer
     {
         super.addControllers(new HealthController(proxy, logger));
         super.addControllers(new JitarController(this.app));
-        super.addControllers(new ModulesController(proxy, logger));
+        super.addControllers(new ModulesController(proxy, this.#serializer, logger));
         super.addControllers(new ProceduresController(proxy, logger));
-        super.addControllers(new RPCController(proxy, logger, true));
+        super.addControllers(new RPCController(proxy, this.#serializer, logger));
         super.addControllers(new AssetsController(this.app, proxy, index, logger));
     }
 
     #addRepositoryControllers(repository: LocalRepository, logger: Logger<unknown>, index: string): void
     {
         super.addControllers(new JitarController(this.app));
-        super.addControllers(new ModulesController(repository, logger));
+        super.addControllers(new ModulesController(repository, this.#serializer, logger));
         super.addControllers(new AssetsController(this.app, repository, index, logger));
     }
 
@@ -142,14 +146,14 @@ export default class JitarServer extends OvernightServer
     {
         super.addControllers(new NodesController(gateway, logger));
         super.addControllers(new ProceduresController(gateway, logger));
-        super.addControllers(new RPCController(gateway, logger, false));
+        super.addControllers(new RPCController(gateway, this.#serializer, logger));
     }
 
     #addNodeControllers(node: LocalNode, logger: Logger<unknown>): void
     {
         super.addControllers(new HealthController(node, logger));
         super.addControllers(new ProceduresController(node, logger));
-        super.addControllers(new RPCController(node, logger, true));
+        super.addControllers(new RPCController(node, this.#serializer, logger));
     }
 
     #addProxyControllers(proxy: Proxy, logger: Logger<unknown>): void

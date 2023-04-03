@@ -3,8 +3,10 @@ import { Controller, Get, Options, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { Version, Forbidden, BadRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized, LocalGateway, LocalNode, Proxy, CorsMiddleware } from 'jitar';
-import { ValueSerializer } from 'jitar';
+import { Version, VersionParser, Forbidden, BadRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized, ProcedureRuntime } from 'jitar-runtime';
+import { Serializer } from 'jitar-serialization';
+
+import CorsMiddleware from '../middleware/CorsMiddleware.js';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
 const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
@@ -13,15 +15,15 @@ const CORS_MAX_AGE = 86400;
 @Controller('rpc')
 export default class RPCController
 {
-    #runtime: LocalGateway | LocalNode | Proxy;
+    #runtime: ProcedureRuntime;
+    #serializer: Serializer | undefined;
     #logger: Logger<unknown>;
-    #useSerializer: boolean;
 
-    constructor(runtime: LocalGateway | LocalNode | Proxy, logger: Logger<unknown>, useSerializer: boolean)
+    constructor(runtime: ProcedureRuntime, serializer: Serializer, logger: Logger<unknown>)
     {
         this.#runtime = runtime;
+        this.#serializer = serializer;
         this.#logger = logger;
-        this.#useSerializer = useSerializer;
 
         this.#showProcedureInfo();
     }
@@ -78,7 +80,7 @@ export default class RPCController
     #extractVersion(request: Request): Version
     {
         return request.query.version !== undefined
-            ? Version.parse(request.query.version.toString())
+            ? VersionParser.parse(request.query.version.toString())
             : Version.DEFAULT;
     }
 
@@ -109,8 +111,8 @@ export default class RPCController
 
     async #extractBodyArguments(request: Request): Promise<Map<string, unknown>>
     {
-        const args = this.#useSerializer
-            ? await ValueSerializer.deserialize(request.body) as unknown
+        const args = this.#serializer !== undefined
+            ? await this.#serializer.deserialize(request.body) as unknown
             : request.body;
 
         return new Map<string, unknown>(Object.entries(args));
@@ -156,7 +158,7 @@ export default class RPCController
 
             this.#setResponseHeaders(response, headers);
 
-            return this.#createResultResponse(result, response, this.#useSerializer && serialize);
+            return this.#createResultResponse(result, response, serialize);
         }
         catch (error: unknown)
         {
@@ -212,8 +214,8 @@ export default class RPCController
 
     #createResponseContent(data: unknown, serialize: boolean): unknown
     {
-        return serialize
-            ? ValueSerializer.serialize(data)
+        return this.#serializer !== undefined && serialize
+            ? this.#serializer.serialize(data)
             : data;
     }
 

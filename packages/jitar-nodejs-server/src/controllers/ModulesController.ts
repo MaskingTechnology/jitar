@@ -3,17 +3,22 @@ import { Controller, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { ClientId, LocalRepository, Proxy, ValueSerializer } from 'jitar';
+import { ClientIdHelper, LocalRepository, Proxy } from 'jitar-runtime';
+import { Serializer } from 'jitar-serialization';
+
+const clientIdHelper = new ClientIdHelper();
 
 @Controller('modules')
 export default class ModulesController
 {
     #repository: LocalRepository | Proxy;
+    #serializer: Serializer;
     #logger: Logger<unknown>;
 
-    constructor(repository: LocalRepository | Proxy, logger: Logger<unknown>)
+    constructor(repository: LocalRepository | Proxy, serializer: Serializer, logger: Logger<unknown>)
     {
         this.#repository = repository;
+        this.#serializer = serializer;
         this.#logger = logger;
     }
 
@@ -39,7 +44,7 @@ export default class ModulesController
     {
         const clientId = request.params.clientId;
 
-        if (typeof clientId !== 'string' || ClientId.validate(clientId) === false)
+        if (typeof clientId !== 'string' || clientIdHelper.validate(clientId) === false)
         {
             return response.status(400).send('Invalid client id.');
         }
@@ -64,7 +69,7 @@ export default class ModulesController
 
             this.#logger.error(`Failed to get module -> '${filename}' (${clientId}) | ${message}`);
 
-            const data = ValueSerializer.serialize(error);
+            const data = this.#serializer.serialize(error);
 
             response.setHeader('Content-Type', 'application/json');
 
