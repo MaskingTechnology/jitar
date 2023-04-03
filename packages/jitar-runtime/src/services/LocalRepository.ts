@@ -1,5 +1,5 @@
 
-import { createRepositoryFilename, convertToLocalFilename, convertToRemoteFilename } from '../definitions/Files.js';
+import { createRepositoryFilename, convertToLocalFilename, convertToRemoteFilename, isSegmentFilename } from '../definitions/Files.js';
 
 import ClientNotFound from '../errors/ClientNotFound.js';
 import FileNotFound from '../errors/FileNotFound.js';
@@ -141,7 +141,7 @@ export default class LocalRepository extends Repository
         // imports to prevent import issues while loading the module from
         // a remote repository.
 
-        const localFilename = convertToLocalFilename(filename);
+        const localFilename = isSegmentFilename(filename) ? filename : convertToLocalFilename(filename);
         const file = await this.#readFile(localFilename);
         const code = file.content.toString();
 
