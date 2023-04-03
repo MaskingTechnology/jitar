@@ -16,13 +16,15 @@ const CORS_MAX_AGE = 86400;
 export default class RPCController
 {
     #runtime: ProcedureRuntime;
-    #serializer: Serializer | undefined;
+    #serializer: Serializer;
+    #useSerializer: boolean;
     #logger: Logger<unknown>;
 
-    constructor(runtime: ProcedureRuntime, serializer: Serializer, logger: Logger<unknown>)
+    constructor(runtime: ProcedureRuntime, serializer: Serializer, useSerializer: boolean, logger: Logger<unknown>)
     {
         this.#runtime = runtime;
         this.#serializer = serializer;
+        this.#useSerializer = useSerializer;
         this.#logger = logger;
 
         this.#showProcedureInfo();
@@ -111,7 +113,7 @@ export default class RPCController
 
     async #extractBodyArguments(request: Request): Promise<Map<string, unknown>>
     {
-        const args = this.#serializer !== undefined
+        const args = this.#useSerializer
             ? await this.#serializer.deserialize(request.body) as unknown
             : request.body;
 
@@ -158,7 +160,7 @@ export default class RPCController
 
             this.#setResponseHeaders(response, headers);
 
-            return this.#createResultResponse(result, response, serialize);
+            return this.#createResultResponse(result, response, this.#useSerializer && serialize);
         }
         catch (error: unknown)
         {
@@ -214,7 +216,7 @@ export default class RPCController
 
     async #createResponseContent(data: unknown, serialize: boolean): Promise<unknown>
     {
-        return this.#serializer !== undefined && serialize
+        return serialize
             ? this.#serializer.serialize(data)
             : data;
     }

@@ -3,7 +3,7 @@ import { Server as OvernightServer } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import { Logger } from 'tslog';
 
-import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime } from 'jitar-runtime';
+import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime, RemoteClassLoader } from 'jitar-runtime';
 import { Serializer, SerializerBuilder } from 'jitar-serialization';
 
 import RuntimeConfigurationLoader from './utils/RuntimeConfigurationLoader.js';
@@ -45,7 +45,7 @@ export default class JitarServer extends OvernightServer
     {
         super(false);
 
-        this.#serializer = SerializerBuilder.build();
+        this.#serializer = SerializerBuilder.build(new RemoteClassLoader());
 
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
@@ -131,7 +131,7 @@ export default class JitarServer extends OvernightServer
         super.addControllers(new JitarController(this.app));
         super.addControllers(new ModulesController(proxy, this.#serializer, logger));
         super.addControllers(new ProceduresController(proxy, logger));
-        super.addControllers(new RPCController(proxy, this.#serializer, logger));
+        super.addControllers(new RPCController(proxy, this.#serializer, true, logger));
         super.addControllers(new AssetsController(this.app, proxy, index, logger));
     }
 
@@ -146,14 +146,14 @@ export default class JitarServer extends OvernightServer
     {
         super.addControllers(new NodesController(gateway, logger));
         super.addControllers(new ProceduresController(gateway, logger));
-        super.addControllers(new RPCController(gateway, this.#serializer, logger));
+        super.addControllers(new RPCController(gateway, this.#serializer, false, logger));
     }
 
     #addNodeControllers(node: LocalNode, logger: Logger<unknown>): void
     {
         super.addControllers(new HealthController(node, logger));
         super.addControllers(new ProceduresController(node, logger));
-        super.addControllers(new RPCController(node, this.#serializer, logger));
+        super.addControllers(new RPCController(node, this.#serializer, true, logger));
     }
 
     #addProxyControllers(proxy: Proxy, logger: Logger<unknown>): void
