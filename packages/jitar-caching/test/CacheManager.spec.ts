@@ -15,7 +15,7 @@ describe('building/ApplicationCacheWriter', () =>
             // keeps track of the files that are written to disk.
 
             const fileManager = new TestFileManager();
-            const cacheManager = new CacheManager(fileManager);
+            const cacheManager = new CacheManager(fileManager, fileManager);
 
             await cacheManager.build();
 

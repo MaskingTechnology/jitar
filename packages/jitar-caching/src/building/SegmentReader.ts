@@ -10,7 +10,7 @@ import SegmentModuleNotLoaded from './errors/SegmentModuleNotLoaded.js';
 
 import Segment from './models/Segment.js';
 import SegmentImplementation from './models/SegmentImplementation.js';
-import SegmentModule from './models/SegmentModule';
+import SegmentModule from './models/SegmentModule.js';
 import SegmentProcedure from './models/SegmentProcedure.js';
 
 import SegmentFile from './types/SegmentFile.js';

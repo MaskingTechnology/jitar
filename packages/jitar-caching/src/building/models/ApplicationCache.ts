@@ -1,5 +1,5 @@
 
-import ModuleCache from './ModuleCache';
+import ModuleCache from './ModuleCache.js';
 import SegmentCache from './SegmentCache.js';
 
 export default class ApplicationCache
