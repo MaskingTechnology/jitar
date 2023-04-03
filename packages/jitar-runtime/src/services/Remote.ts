@@ -113,8 +113,6 @@ export default class Remote
             body: body
         };
 
-        console.log('options', options);
-
         const response = await this.#callRemote(url, options, 200);
 
         return this.#createResponseResult(response, this.#useSerializer);
