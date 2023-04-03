@@ -191,9 +191,9 @@ export default class RPCController
         return response.status(204).send();
     }
 
-    #createResultResponse(result: unknown, response: Response, serialize: boolean): Response
+    async #createResultResponse(result: unknown, response: Response, serialize: boolean): Promise<Response>
     {
-        const content = this.#createResponseContent(result, serialize);
+        const content = await this.#createResponseContent(result, serialize);
         const contentType = this.#createResponseContentType(content);
 
         response.setHeader('Content-Type', contentType);
@@ -201,9 +201,9 @@ export default class RPCController
         return response.status(200).send(content);
     }
 
-    #createErrorResponse(error: unknown, errorData: unknown, response: Response, serialize: boolean): Response
+    async #createErrorResponse(error: unknown, errorData: unknown, response: Response, serialize: boolean): Promise<Response>
     {
-        const content = this.#createResponseContent(errorData, serialize);
+        const content = await this.#createResponseContent(errorData, serialize);
         const contentType = this.#createResponseContentType(content);
         const statusCode = this.#createResponseStatusCode(error);
 
@@ -212,7 +212,7 @@ export default class RPCController
         return response.status(statusCode).send(content);
     }
 
-    #createResponseContent(data: unknown, serialize: boolean): unknown
+    async #createResponseContent(data: unknown, serialize: boolean): Promise<unknown>
     {
         return this.#serializer !== undefined && serialize
             ? this.#serializer.serialize(data)
