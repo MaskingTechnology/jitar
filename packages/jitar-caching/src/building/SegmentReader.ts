@@ -124,8 +124,6 @@ export default class SegmentReader
     {
         const procedures = new Map<string, SegmentProcedure>();
 
-        let number = 0;
-
         for (const [importKey, properties] of Object.entries(imports))
         {
             const executable = module.getExported(importKey) as ReflectionFunction;
