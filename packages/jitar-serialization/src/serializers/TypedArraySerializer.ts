@@ -46,9 +46,7 @@ export default class ArrayBufferSerializer extends ValueSerializer
             bytes.push(view.getUint8(index));
         }
 
-        const returnvalue = { serialized: true, name: 'TypedArray', type: type, bytes: bytes };
-
-        return returnvalue;
+        return { serialized: true, name: 'TypedArray', type: type, bytes: bytes };
     }
 
     async deserialize(object: SerializedTypedArray): Promise<TypedArray>
