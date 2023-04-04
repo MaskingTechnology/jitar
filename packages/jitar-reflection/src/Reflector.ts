@@ -2,21 +2,29 @@
 import Parser from './parser/Parser.js';
 
 import ReflectionClass from './models/ReflectionClass.js';
+import ReflectionDeclaration from './models/ReflectionDeclaration.js';
 import ReflectionExpression from './models/ReflectionExpression.js';
 import ReflectionExport from './models/ReflectionExport.js';
 import ReflectionFunction from './models/ReflectionFunction.js';
+import ReflectionGetter from './models/ReflectionGetter.js';
 import ReflectionImport from './models/ReflectionImport.js';
+import ReflectionMember from './models/ReflectionMember.js';
 import ReflectionModule from './models/ReflectionModule.js';
 import ReflectionScope from './models/ReflectionScope.js';
-import ReflectionDeclaration from './models/ReflectionDeclaration.js';
+import ReflectionSetter from './models/ReflectionSetter.js';
+import ReflectionValue from './models/ReflectionValue.js';
+
+import ClassMerger from './utils/ClassMerger.js';
 
 export default class Reflector
 {
     #parser: Parser;
+    #merger: ClassMerger;
 
-    constructor(parser = new Parser())
+    constructor(parser = new Parser(), merger = new ClassMerger())
     {
         this.#parser = parser;
+        this.#merger = merger;
     }
 
     parse(code: string): ReflectionModule
@@ -84,8 +92,9 @@ export default class Reflector
 
     fromClass(clazz: Function, inherit = false): ReflectionClass
     {
-        const code = clazz.toString();
-        const model = this.parseClass(code);
+        const model = this.isClass(clazz)
+            ? this.#reflectStatic(clazz)
+            : this.#reflectDynamic(clazz);
 
         if (inherit === false)
         {
@@ -101,7 +110,7 @@ export default class Reflector
 
         const parentModel = this.fromClass(parentClazz, true);
 
-        return this.#mergeClassModels(model, parentModel);
+        return this.#merger.merge(model, parentModel);
     }
 
     fromObject(object: object, inherit = true): ReflectionClass
@@ -124,11 +133,6 @@ export default class Reflector
         return new (clazz as any)(...args);
     }
 
-    isClassObject(object: object): boolean
-    {
-        return object.constructor.toString().startsWith('class');
-    }
-
     getClass(object: object): Function
     {
         return object.constructor;
@@ -139,25 +143,102 @@ export default class Reflector
         return Object.getPrototypeOf(clazz);
     }
 
-    #mergeClassModels(model: ReflectionClass, parentModel: ReflectionClass): ReflectionClass
+    isClassObject(object: object): boolean
     {
-        const declarations = new Map<string, ReflectionDeclaration>();
-        const functions = new Map<string, ReflectionFunction>();
-        const getters = new Map<string, ReflectionFunction>();
-        const setters = new Map<string, ReflectionFunction>();
-        
-        parentModel.declarations.forEach(declaration => declarations.set(declaration.name, declaration));
-        parentModel.functions.forEach(funktion => functions.set(funktion.name, funktion));
-        parentModel.getters.forEach(getter => getters.set(getter.name, getter));
-        parentModel.setters.forEach(setter => setters.set(setter.name, setter));
+        return this.isClass(object.constructor);
+    }
 
-        model.declarations.forEach(declaration => declarations.set(declaration.name, declaration));
-        model.functions.forEach(funktion => functions.set(funktion.name, funktion));
-        model.getters.forEach(getter => getters.set(getter.name, getter));
-        model.setters.forEach(setter => setters.set(setter.name, setter));
+    isFunctionObject(object: object): boolean
+    {
+        return this.isFunction(object.constructor);
+    }
 
-        const members = [...declarations.values(), ...functions.values(), ...getters.values(), ...setters.values()];
+    isClass(clazz: Function): boolean
+    {
+        return clazz.toString().startsWith('class');
+    }
 
-        return new ReflectionClass(model.name, parentModel.name, new ReflectionScope(members));
+    isFunction(clazz: Function): boolean
+    {
+        return clazz.toString().startsWith('function')
+            || clazz.toString().startsWith('async function');
+    }
+
+    #reflectStatic(clazz: Function): ReflectionClass
+    {
+        const code = clazz.toString();
+
+        return this.parseClass(code);
+    }
+
+    #reflectDynamic(clazz: Function): ReflectionClass
+    {
+        const object = this.createInstance(clazz);
+        const members = this.#getMembers(clazz, object);
+        const scope = new ReflectionScope(members);
+
+        return new ReflectionClass(clazz.name, undefined, scope);
+    }
+
+    #getMembers(clazz: Function, object: Object): ReflectionMember[]
+    {
+        const declarations = this.#getDeclarations(object);
+        const functions = this.#getFunctions(clazz);
+
+        return [...declarations, ...functions];
+    }
+
+    #getDeclarations(object: Object): ReflectionDeclaration[]
+    {
+        const fieldNames = Object.getOwnPropertyNames(object);
+        const values = object as Record<string, unknown>;
+
+        const models: ReflectionDeclaration[] = [];
+
+        for (const fieldName of fieldNames)
+        {
+            const content = values[fieldName];
+            const value = content !== undefined ? new ReflectionValue(String(content)) : undefined;
+            const model = new ReflectionDeclaration(fieldName, value);
+
+            models.push(model);
+        }
+
+        return models;
+    }
+
+    #getFunctions(clazz: Function): ReflectionFunction[]
+    {
+        const functionDescriptions = Object.getOwnPropertyDescriptors(clazz.prototype);
+
+        const models: ReflectionFunction[] = [];
+
+        for (const functionName in functionDescriptions)
+        {
+            const description = functionDescriptions[functionName];
+            const funktion = description.value;
+
+            if (funktion instanceof Function === false)
+            {
+                continue;
+            }
+
+            const model = this.fromFunction(funktion);
+
+            if (description.get !== undefined)
+            {
+                models.push(new ReflectionGetter(model.name, model.parameters, model.body, model.isStatic, model.isAsync, model.isPrivate));
+            }
+            else if (description.set !== undefined)
+            {
+                models.push(new ReflectionSetter(model.name, model.parameters, model.body, model.isStatic, model.isAsync, model.isPrivate));
+            }
+            else
+            {
+                models.push(model);
+            }
+        }
+
+        return models;
     }
 }

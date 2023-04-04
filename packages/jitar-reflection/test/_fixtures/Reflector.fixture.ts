@@ -43,8 +43,25 @@ class Person extends Human
     }
 }
 
+// Custom class with function declaration parent
+class CustomError extends Error
+{
+    #additional: string;
+
+    constructor(message: string, additional: string)
+    {
+        super(message);
+
+        this.#additional = additional;
+    }
+
+    get additional() { return this.#additional; }
+}
+
 const johnDoe = new Person(1, 'John', 'Doe', 42);
 const janeDoe = { id: 2, fullName: 'Jane Doe', age: 42 };
+const plainError = new Error('Plain error');
+const customError = new CustomError('Custom error', 'with extras');
 
 function requiredFunction(a: string, b: Person, c: number): string
 {
@@ -60,8 +77,8 @@ const testModule = { Person, johnDoe, requiredFunction };
 
 export
 {
-    Person,
-    johnDoe, janeDoe,
+    Person, CustomError,
+    johnDoe, janeDoe, plainError, customError,
     optionalFunction,
     testModule
 };

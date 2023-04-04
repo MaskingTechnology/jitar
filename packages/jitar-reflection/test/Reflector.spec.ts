@@ -7,8 +7,8 @@ import Reflector from '../src/Reflector';
 
 import
 {
-    Person,
-    johnDoe, janeDoe,
+    Person, CustomError,
+    johnDoe, janeDoe, plainError, customError,
     optionalFunction,
     testModule
 } from './_fixtures/Reflector.fixture';
@@ -42,7 +42,7 @@ describe('Reflector', () =>
 
     describe('.fromClass(clazz, inherit)', () =>
     {
-        it('should get class reflection model without parent members', () =>
+        it('should get class reflection model without parent members from a class', () =>
         {
             const reflectionClass = reflector.fromClass(Person, false);
             expect(reflectionClass.name).toBe('Person');
@@ -72,7 +72,7 @@ describe('Reflector', () =>
             expect(functions[1].name).toBe('toString');
         });
 
-        it('should get class reflection model with parent members', () =>
+        it('should get class reflection model with parent members from a class', () =>
         {
             const reflectionClass = reflector.fromClass(Person, true);
             expect(reflectionClass.name).toBe('Person');
@@ -103,11 +103,53 @@ describe('Reflector', () =>
             expect(functions[1].name).toBe('speak');
             expect(functions[2].name).toBe('toString');
         });
+
+        it('should get class reflection model from a function based class', () =>
+        {
+            const reflectionClass = reflector.fromClass(Error, true);
+            expect(reflectionClass.name).toBe('Error');
+
+            const members = reflectionClass.members;
+            expect(members.length).toBe(3);
+
+            const declarations = reflectionClass.declarations;
+            expect(declarations.length).toBe(1);
+            expect(declarations[0].name).toBe('stack');
+
+            const functions = reflectionClass.functions;
+            expect(functions.length).toBe(2);
+            expect(functions[0].name).toBe('Error');
+            expect(functions[1].name).toBe('toString');
+        });
+
+        it('should get class reflection model from a class with function based parent class', () =>
+        {
+            const reflectionClass = reflector.fromClass(CustomError, true);
+            expect(reflectionClass.name).toBe('CustomError');
+
+            const members = reflectionClass.members;
+            expect(members.length).toBe(6);
+
+            const declarations = reflectionClass.declarations;
+            expect(declarations.length).toBe(2);
+            expect(declarations[0].name).toBe('stack');
+            expect(declarations[1].name).toBe('additional');
+
+            const getters = reflectionClass.getters;
+            expect(getters.length).toBe(1);
+            expect(getters[0].name).toBe('additional');
+
+            const functions = reflectionClass.functions;
+            expect(functions.length).toBe(3);
+            expect(functions[0].name).toBe('Error');
+            expect(functions[1].name).toBe('toString');
+            expect(functions[2].name).toBe('constructor');
+        });
     });
 
     describe('.fromObject(object)', () =>
     {
-        it('should get class reflection model without parent members', () =>
+        it('should get class reflection model without parent members from an object', () =>
         {
             const reflectionClass = reflector.fromObject(johnDoe, false);
             expect(reflectionClass.name).toBe('Person');
@@ -116,13 +158,31 @@ describe('Reflector', () =>
             expect(members.length).toBe(9);
         });
 
-        it('should get class reflection model with parent members', () =>
+        it('should get class reflection model with parent members from an object', () =>
         {
             const reflectionClass = reflector.fromObject(johnDoe, true);
             expect(reflectionClass.name).toBe('Person');
 
             const members = reflectionClass.members;
             expect(members.length).toBe(11);
+        });
+
+        it('should get class reflection model from a function based class object', () =>
+        {
+            const reflectionClass = reflector.fromObject(plainError, true);
+            expect(reflectionClass.name).toBe('Error');
+
+            const members = reflectionClass.members;
+            expect(members.length).toBe(3);
+        });
+
+        it('should get class reflection model from a a class object with function based parent class', () =>
+        {
+            const reflectionClass = reflector.fromObject(customError, true);
+            expect(reflectionClass.name).toBe('CustomError');
+
+            const members = reflectionClass.members;
+            expect(members.length).toBe(6);
         });
     });
 
