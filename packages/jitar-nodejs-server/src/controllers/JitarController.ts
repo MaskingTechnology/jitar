@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 const filePath = fileURLToPath(import.meta.url);
 const fileLocation = path.dirname(filePath);
-const rootLocation = path.join(fileLocation, '../../../jitar/dist');
+const rootLocation = path.join(fileLocation, '../../../jitar-runtime/dist');
 
 @Controller('')
 export default class JitarController
