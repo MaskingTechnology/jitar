@@ -1,4 +1,6 @@
 src
+dist
 node_modules
 tsconfig.json
 *.tgz
+rollup.config.js

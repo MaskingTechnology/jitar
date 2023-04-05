@@ -1,9 +1,11 @@
 coverage
 src
 test
+dist
 node_modules
 .eslintignore
 .eslintrc
 vite.config.ts
 tsconfig.json
 *.tgz
+rollup.config.js

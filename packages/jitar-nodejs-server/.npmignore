@@ -1,8 +1,10 @@
 coverage
 src
 test
+dist
 node_modules
 .eslintignore
 .eslintrc
 tsconfig.json
 *.tgz
+rollup.config.js
