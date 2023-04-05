@@ -204,6 +204,8 @@ export default class RPCController
         const contentType = this.#createResponseContentType(content);
         const statusCode = this.#createResponseStatusCode(error);
 
+        console.log('ERROR CODE', statusCode);
+
         response.setHeader('Content-Type', contentType);
 
         return response.status(statusCode).send(content);
@@ -230,14 +232,38 @@ export default class RPCController
 
     #createResponseStatusCode(error: unknown): number
     {
-        if (error instanceof BadRequest) return 400;
-        if (error instanceof Unauthorized) return 401;
-        if (error instanceof PaymentRequired) return 402;
-        if (error instanceof Forbidden) return 403;
-        if (error instanceof NotFound) return 404;
-        if (error instanceof Teapot) return 418;
-        if (error instanceof NotImplemented) return 501;
+        if (error instanceof Object === false)
+        {
+            return 500;
+        }
+
+        const errorClass = (error as Object).constructor as Function;
+
+        if (this.#isClassType(errorClass, 'BadRequest')) return 400;
+        if (this.#isClassType(errorClass, 'Unauthorized')) return 401;
+        if (this.#isClassType(errorClass, 'PaymentRequired')) return 402;
+        if (this.#isClassType(errorClass, 'Forbidden')) return 403;
+        if (this.#isClassType(errorClass, 'NotFound')) return 404;
+        if (this.#isClassType(errorClass, 'Teapot')) return 418;
+        if (this.#isClassType(errorClass, 'NotImplemented')) return 501;
 
         return 500;
+    }
+
+    #isClassType(clazz: Function, className: string): boolean
+    {
+        if (clazz.name === className)
+        {
+            return true;
+        }
+
+        const parentClass = Object.getPrototypeOf(clazz);
+
+        if (parentClass.name === '')
+        {
+            return false;
+        }
+
+        return this.#isClassType(parentClass, className);
     }
 }
