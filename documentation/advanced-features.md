@@ -5,7 +5,7 @@ title: Advanced features
 
 # Advanced features
 
-In this section we will look at the advanced features of Jitar. Each feature will be explained with an example based on the ``Hello World`` example from the [getting started](02_getting_started.html) page. All examples are available on [GitHub](https://github.com/MaskingTechnology/jitar){:target="_blank"} as separate projects.
+In this section we will look at the advanced features of Jitar. Each feature will be explained with an example based on the ``Hello World`` example from the [getting started](quickstart.html) page. All examples are available on [GitHub](https://github.com/MaskingTechnology/jitar/tree/main/examples){:target="_blank"} as separate projects.
 
 ---
 
@@ -49,7 +49,7 @@ GET http://repository.example.com:3000/images/logo.png HTTP/1.1
 This request will return the logo.png file from the application images directory. Files can also be requested from the root directory. If no filename is provided the index file will be returned that is configured for the repository.
 
 {:.alert-info}
-All assets are private by default. They can be made public using [glob patterns](https://en.wikipedia.org/wiki/Glob_(programming)), i.e. ``assets/**/*`` to make all files public in the *assets* folder and it child folders. See the [repository](03_runtime_services.html#repository) description for the configuration.
+All assets are private by default. They can be made public using [glob patterns](https://en.wikipedia.org/wiki/Glob_(programming)), i.e. ``assets/**/*`` to make all files public in the *assets* folder and it child folders. See the [repository](runtime-services.html#repository) description for the configuration.
 
 ### Jitar
 
@@ -148,7 +148,7 @@ export default async function sayBoth(firstName: string, lastName: string): Prom
 }
 ```
 
-We need to pass the ``module/name`` of the procedure, the version and the arguments. The arguments must be a JavaScript object containing the argument values by name. The value can be any [transferable type](04_basic_features.html#data-transportation).
+We need to pass the ``module/name`` of the procedure, the version and the arguments. The arguments must be a JavaScript object containing the argument values by name. The value can be any [transferable type](basic-features.html#data-transportation).
 
 Optionally you can pass the ``this`` value containing the runtime context of the procedure. This context contains the headers - like the authorization header - that need to be used in a remote call in case the procedure is not locally available.
 Therefore it is highly recommended to pass this value.
@@ -165,7 +165,7 @@ Using this hook breaks the IntelliSense support and will make your application d
 
 ## Health checks
 
-Health checks are used to determine if a [node](03_runtime_services.html#node) is healthy or not. They are used by the [gateway](03_runtime_services.html#gateway) to determine if a node still can be used. If for example a node can not reach the database anymore, it will be removed from the gateway. For checking the database connection a health check has to be created.
+Health checks are used to determine if a [node](runtime-services.html#node) is healthy or not. They are used by the [gateway](runtime-services.html#gateway) to determine if a node still can be used. If for example a node can not reach the database anymore, it will be removed from the gateway. For checking the database connection a health check has to be created.
 
 A health check is a class that implements the HealthCheck interface. The interface has a single function called isHealthy() that returns a boolean.
 
@@ -266,8 +266,8 @@ startServer(moduleImporter).then(server =>
 });
 ```
 
-Middleware can be added to the [node](03_runtime_services.html#node), [gateway](03_runtime_services.html#gateway),
-[proxy](03_runtime_services.html#proxy) and [standalone](03_runtime_services.html#standalone) services support middleware.
+Middleware can be added to the [node](runtime-services.html#node), [gateway](runtime-services.html#gateway),
+[proxy](runtime-services.html#proxy) and [standalone](runtime-services.html#standalone) services support middleware.
 
 {:.alert-warning}
 The execution order of the middleware is reversed. This means that the middleware that is added last is called first.
@@ -307,7 +307,7 @@ The [Access-Control-Allow-Methods](https://developer.mozilla.org/en-US/docs/Web/
 ---
 
 {:.previous-chapter}
-[Basic features](04_basic_features.html)
+[Basic features](basic-features.html)
 
 {:.next-chapter}
-[Building applications](06_building_applications.html)
+[Building applications](building-applications.html)

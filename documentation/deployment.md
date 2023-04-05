@@ -67,10 +67,10 @@ Creating a cluster means spreading multiple services over multiple servers to ru
 
 Important to know is that any cluster:
 
-1. Requires at least one [repository](03_runtime_services.html#repository).
-1. Requires at least one [node](03_runtime_services.html#node) and can scale up to a large amount of nodes.
-1. Only requires a [gateway](03_runtime_services.html#gateway) when working with multiple nodes that need orchestration or load balancing.
-1. Does not require a [proxy](03_runtime_services.html#proxy).
+1. Requires at least one [repository](runtime-services.html#repository).
+1. Requires at least one [node](runtime-services.html#node) and can scale up to a large amount of nodes.
+1. Only requires a [gateway](runtime-services.html#gateway) when working with multiple nodes that need orchestration or load balancing.
+1. Does not require a [proxy](runtime-services.html#proxy).
 
 The following are some examples of clusters:
 
@@ -90,4 +90,4 @@ In the future we will provide a Docker image for Jitar.
 ---
 
 {:.previous-chapter}
-[Building applications](06_building_applications.html)
+[Building applications](building-applications.html)

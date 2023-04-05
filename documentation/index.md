@@ -3,24 +3,25 @@ layout: default
 title: Welcome
 ---
 
-# Jitar documentation
+# Welcome to Jitar
 
-Welcome to the Jitar documentation! We are excited to have you here. Our goal is to provide you with the information you need to get started with Jitar and to help you get the most out of it. We hope you find this documentation useful.
+![Jitar logo](./assets/images/icon.png)
+
+**Automate all end-to-end communication. Type-safe, configurable and extendable.**
 
 ---
 
 ## Table of contents
 
-* [Introduction](01_introduction.html) - Introduces Jitar and its concepts.
-* [Getting started](02_getting_started.html) - Gets you up and running quickly.
-* [Runtime services](03_runtime_services.html) - Explains the services to run and scale applications.
-* [Basic features](04_basic_features.html) - Explains the basic features of Jitar.
-* [Advanced features](05_advanced_features.html) - Explains the advanced features of Jitar.
-* [Building applications](06_building_applications.html) - Shows how to build real-world applications that run on Jitar.
-* [Deployment](07_deployment.html) - Explains how to deploy applications.
+* [Quickstart](quickstart.html) - Gets you up and running quickly.
+* [Building applications](building-applications.html) - Shows how to build real-world applications that run on Jitar.
+* [Basic features](basic-features.html) - Explains the basic features of Jitar.
+* [Runtime services](runtime-services.html) - Explains the services to run and scale applications.
+* [Advanced features](advanced-features.html) - Explains the advanced features of Jitar.
+* [Deployment](deployment.html) - Explains how to deploy applications.
 
 ---
 
-## We love feedback!
+## We love to hear from you!
 
 Jitar and its documentation, examples and website are a work in progress. We are constantly improving them. If you have any feedback, please let us know by [creating an issue](https://github.com/MaskingTechnology/jitar/issues){:target="_blank"}, or [starting a discussion](https://github.com/MaskingTechnology/jitar/discussions){:target="_blank"}.

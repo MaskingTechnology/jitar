@@ -190,7 +190,7 @@ node --experimental-network-imports dist/start.js --loglevel=debug --config=jita
 ---
 
 {:.previous-chapter}
-[Getting started](02_getting_started.html)
+[Getting started](quickstart.html)
 
 {:.next-chapter}
-[Basic features](04_basic_features.html)
+[Basic features](basic-features.html)

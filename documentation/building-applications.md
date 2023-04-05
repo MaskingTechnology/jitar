@@ -18,7 +18,7 @@ Jitar has two types of components as primary building blocks for applications:
 
 This means that applications that run on Jitar are [procedural](https://en.wikipedia.org/wiki/Procedural_programming){:target="_blank"} by nature. They are composed of procedures that can be called by other procedures or clients. The use of classes and objects is supported, but only as data types or utilities. Their functions can not be called remotely.
 
-An example of this is the ``sayBoth`` procedure from the [data transportation example](04_basic_features.html#data-transportation) on the basic features page. This example uses a ``Person`` class to pass the name to the ``sayHi`` and ``sayHello`` procedures.
+An example of this is the ``sayBoth`` procedure from the [data transportation example](basic-features.html#data-transportation) on the basic features page. This example uses a ``Person`` class to pass the name to the ``sayHi`` and ``sayHello`` procedures.
 
 {:.filename}
 src/greetings/sayBoth.ts
@@ -303,7 +303,7 @@ The full example has more segments and provides all the configurations and has m
 ---
 
 {:.previous-chapter}
-[Advanced features](05_advanced_features.html)
+[Advanced features](advanced-features.html)
 
 {:.next-chapter}
-[Deployment](07_deployment.html)
+[Deployment](deployment.html)
