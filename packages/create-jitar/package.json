@@ -20,7 +20,7 @@
   },
   "files": [
     "templates/**/*",
-    "dist"
+    "lib"
   ],
   "engines": {
     "node": ">=18.7"
@@ -28,14 +28,15 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .ts",
-    "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist build",
-    "release": "npm run clean && npm run build && npm publish"
+    "clean": "rm -rf dist && rm -rf build",
+    "build:tsc": "tsc -p tsconfig.json",
+    "build:rollup": "rollup -c rollup.config.js",
+    "build": "npm run clean && npm run build:tsc && npm run build:rollup"
   },
   "dependencies": {
+    "kolorist": "1.7.0",
     "minimist": "^1.2.8",
-    "prompts": "^2.4.2",
-    "kolorist": "1.7.0"
+    "prompts": "^2.4.2"
   },
   "repository": {
     "type": "git",

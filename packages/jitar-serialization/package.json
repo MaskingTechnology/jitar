@@ -6,17 +6,18 @@
   "license": "MIT",
   "type": "module",
   "private": true,
-  "types": "dist/lib.d.ts",
+  "types": "lib/index.d.ts",
   "exports": {
-    ".": "./dist/lib.js"
+    ".": "./lib/index.js"
   },
   "scripts": {
     "test": "vitest run",
     "test-coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts",
-    "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist",
-    "release": "npm run clean && npm run build && npm publish"
+    "clean": "rm -rf dist && rm -rf build",
+    "build:tsc": "tsc -p tsconfig.json",
+    "build:rollup": "rollup -c rollup.config.js",
+    "build": "npm run clean && npm run build:tsc && npm run build:rollup"
   },
   "dependencies": {
     "jitar-reflection": "^0.3.7"
