@@ -23,13 +23,31 @@ export default class ModuleCacheWriter
     async write(cache: ModuleCache): Promise<void>
     {
         return Promise.all([
+            this.#writeOriginal(cache),
             this.#writeLocal(cache),
             this.#writeRemote(cache)
         ]).then(() => undefined);
     }
 
+    async #writeOriginal(cache: ModuleCache): Promise<void>
+    {
+        // The original module files will be loaded in standalone mode.
+        // These only require the addition of the source locations.
+        // All imports can be left alone because they will always resolve.
+
+        const sourceCode = this.#createSourceCode(cache.module);
+
+        const filename = cache.module.filename;
+        const code = `${cache.module.code}\n${sourceCode}`;
+
+        return this.#fileManager.write(filename, code.trim());
+    }
+
     async #writeLocal(cache: ModuleCache): Promise<void>
     {
+        // The local module files will be loaded in distributed mode.
+        // These require both the rewrite of imports and the addition of the source locations.
+
         const importCode = this.#rewriteImports(cache.module);
         const sourceCode = this.#createSourceCode(cache.module);
 
@@ -56,6 +74,9 @@ export default class ModuleCacheWriter
 
     async #writeRemote(cache: ModuleCache): Promise<void>
     {
+        // The remote module files will be loaded in distributed mode.
+        // These only have to call the global runProcedure(...) function.
+
         if (cache.segment === undefined)
         {
             return;

@@ -162,15 +162,21 @@ const CACHE_SEGMENT_FILENAMES =
 
 const CACHE_MODULE_FILENAMES =
 [
+    './order/createOrder.js',
     './order/createOrder.local.js',
     './order/createOrder.remote.js',
+    './order/storeOrder.js',
     './order/storeOrder.local.js',
     './order/storeOrder.remote.js',
+    './order/models.js',
     './order/models.local.js',
+    './product/getProducts.js',
     './product/getProducts.local.js',
     './product/getProducts.remote.js',
+    './product/getProducts_v1.js',
     './product/getProducts_v1.local.js',
     './product/getProducts_v1.remote.js',
+    './product/models.js',
     './product/models.local.js',
 ]
 

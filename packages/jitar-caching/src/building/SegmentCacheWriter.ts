@@ -1,6 +1,5 @@
 
-import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionField, ReflectionFunction } from 'jitar-reflection';
-import ReflectionParameter from 'jitar-reflection/dist/models/ReflectionParameter.js';
+import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionField, ReflectionFunction, ReflectionParameter } from 'jitar-reflection';
 import { FileManager, VersionParser, createNodeFilename, createRepositoryFilename } from 'jitar-runtime';
 
 import SegmentCache from './models/SegmentCache.js';
