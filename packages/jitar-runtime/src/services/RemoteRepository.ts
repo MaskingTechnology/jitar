@@ -19,7 +19,7 @@ export default class RemoteRepository extends Repository
         this.#remote = new Remote(url, true);
     }
 
-    async registerClient(segmentFiles: string[]): Promise<string>
+    registerClient(segmentFiles: string[]): Promise<string>
     {
         return this.#remote.registerClient(segmentFiles);
     }
@@ -30,7 +30,7 @@ export default class RemoteRepository extends Repository
         setDependencyLoader(ModuleLoader.import);
     }
 
-    async loadAsset(filename: string): Promise<File>
+    loadAsset(filename: string): Promise<File>
     {
         return this.#remote.loadFile(filename);
     }

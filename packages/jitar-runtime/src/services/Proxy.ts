@@ -37,22 +37,22 @@ export default class Proxy extends ProcedureRuntime
         return procedureNames.includes(fqn);
     }
 
-    async loadAsset(filename: string): Promise<File>
+    loadAsset(filename: string): Promise<File>
     {
         return this.#repository.loadAsset(filename);
     }
 
-    async registerClient(segmentFiles: string[]): Promise<string>
+    registerClient(segmentFiles: string[]): Promise<string>
     {
         return this.#repository.registerClient(segmentFiles);
     }
 
-    async loadModule(clientId: string, filename: string): Promise<File>
+    loadModule(clientId: string, filename: string): Promise<File>
     {
         return this.#repository.loadModule(clientId, filename);
     }
 
-    async run(name: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    run(name: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         return this.#runner.run(name, version, args, headers);
     }

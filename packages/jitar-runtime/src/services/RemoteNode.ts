@@ -33,17 +33,17 @@ export default class RemoteNode extends Node
         return this.#procedureNames.has(name);
     }
 
-    async isHealthy(): Promise<boolean>
+    isHealthy(): Promise<boolean>
     {
         return this.#remote.isHealthy();
     }
 
-    async getHealth(): Promise<Map<string, boolean>>
+    getHealth(): Promise<Map<string, boolean>>
     {
         return this.#remote.getHealth();
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         return this.#remote.run(fqn, version, args, headers);
     }

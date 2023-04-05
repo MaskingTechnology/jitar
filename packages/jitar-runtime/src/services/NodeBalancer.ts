@@ -46,7 +46,7 @@ export default class NodeBalancer
         return this.#nodes[this.#currentIndex++];
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         const node = this.getNextNode();
 

@@ -53,7 +53,7 @@ export default class Remote
         return new File(filename, type, content);
     }
 
-    async importFile(filename: string): Promise<Module>
+    importFile(filename: string): Promise<Module>
     {
         const url = `${this.#url}/${filename}`;
 
@@ -154,7 +154,7 @@ export default class Remote
             : result;
     }
 
-    async #getResponseResult(response: Response): Promise<unknown>
+    #getResponseResult(response: Response): Promise<unknown>
     {
         const contentType = response.headers.get('Content-Type');
 

@@ -66,7 +66,7 @@ export default class LocalRepository extends Repository
         setRuntime(runtime);
     }
 
-    async loadAsset(filename: string): Promise<File>
+    loadAsset(filename: string): Promise<File>
     {
         if (this.#assets.includes(filename) === false)
         {
@@ -82,7 +82,7 @@ export default class LocalRepository extends Repository
         return this.#fileManager.getRootLocation();
     }
 
-    async loadModule(clientId: string, filename: string): Promise<File>
+    loadModule(clientId: string, filename: string): Promise<File>
     {
         this.#validateClientId(clientId);
 
@@ -99,7 +99,7 @@ export default class LocalRepository extends Repository
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async importModule(clientId: string, filename: string): Promise<Module>
+    importModule(clientId: string, filename: string): Promise<Module>
     {
         // This function loads the original module file containing the
         // original imports to prevent import issues while loading the
@@ -148,7 +148,7 @@ export default class LocalRepository extends Repository
         return new File(filename, 'application/javascript', code);
     }
 
-    async #getRemoteModule(filename: string): Promise<File>
+    #getRemoteModule(filename: string): Promise<File>
     {
         // This function loads the remote module file containing the rewritten
         // implementation for each function to execute them on another node.
@@ -158,7 +158,7 @@ export default class LocalRepository extends Repository
         return this.#readFile(remoteFilename);
     }
 
-    async #readFile(filename: string): Promise<File>
+    #readFile(filename: string): Promise<File>
     {
         return this.#fileManager.read(filename);
     }
