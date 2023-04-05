@@ -6,7 +6,7 @@
  * Middleware is executed in the reversed order it is registered.
  */
 
-import { Middleware, Version, NextHandler } from 'jitar';
+import { Middleware, Version, NextHandler } from 'jitar-runtime';
 
 export default class LoggingMiddleware implements Middleware
 {
