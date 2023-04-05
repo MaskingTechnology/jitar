@@ -31,11 +31,6 @@ export default class ImportRewriter
         return NON_SYSTEM_INDICATORS.some(indicator => dependency.from.startsWith(indicator, 1)) === false;
     }
 
-    #isJitarDependency(dependency: ReflectionImport): boolean
-    {
-        return dependency.from.includes(Keyword.JITAR);
-    }
-
     #rewriteImport(dependency: ReflectionImport): string
     {
         if (dependency.members.length === 0)
@@ -44,11 +39,6 @@ export default class ImportRewriter
         }
 
         const members = this.#rewriteImportMembers(dependency);
-
-        if (this.#isJitarDependency(dependency))
-        {
-            return `import ${members} from "/jitar/hooks.js";`;
-        }
 
         return `const ${members} = await getDependency(${dependency.from});`;
     }
