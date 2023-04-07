@@ -1,12 +1,9 @@
 
 import File from '../models/File.js';
 import Module from '../types/Module.js';
-import ModuleLoader from '../utils/ModuleLoader.js';
-import { setRuntime, setDependencyLoader } from '../hooks.js';
 
 import Remote from './Remote.js';
 import Repository from './Repository.js';
-import LocalNode from './LocalNode.js';
 
 export default class RemoteRepository extends Repository
 {
@@ -22,12 +19,6 @@ export default class RemoteRepository extends Repository
     registerClient(segmentFiles: string[]): Promise<string>
     {
         return this.#remote.registerClient(segmentFiles);
-    }
-
-    async setRuntime(runtime: LocalNode): Promise<void>
-    {
-        setRuntime(runtime);
-        setDependencyLoader(ModuleLoader.import);
     }
 
     loadAsset(filename: string): Promise<File>

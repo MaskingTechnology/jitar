@@ -8,8 +8,6 @@ export default abstract class Repository extends Runtime
 {
     abstract registerClient(segmentFiles: string[]): Promise<string>;
 
-    abstract setRuntime(runtime: Runtime): Promise<void>;
-
     abstract loadAsset(filename: string): Promise<File>;
 
     abstract getModuleLocation(clientId: string): Promise<string>;

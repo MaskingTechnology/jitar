@@ -17,6 +17,8 @@ import LocalGateway from './LocalGateway.js';
 import Node from './Node.js';
 import Repository from './Repository.js';
 
+import { setRuntime, setDependencyLoader } from '../hooks.js';
+
 export default class LocalNode extends Node
 {
     #argumentConstructor: ArgumentConstructor;
@@ -97,7 +99,8 @@ export default class LocalNode extends Node
     {
         this.#clientId = await repository.registerClient(segmentNames);
 
-        await repository.setRuntime(this);
+        setRuntime(this);
+        setDependencyLoader(ModuleLoader.import);
 
         const moduleLocation = await repository.getModuleLocation(this.#clientId);
 

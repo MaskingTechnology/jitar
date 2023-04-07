@@ -58,7 +58,7 @@ export default class SegmentCacheWriter
     {
         const codes: string[] = [];
         
-        codes.push('const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await getDependency("jitar-runtime");');
+        codes.push('const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __getDependency("jitar-runtime");');
         codes.push(`export const segment = new Segment("${name}")`);
 
         for (const procedure of procedures)

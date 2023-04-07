@@ -35,12 +35,12 @@ export default class ImportRewriter
     {
         if (dependency.members.length === 0)
         {
-            return `await getDependency(${dependency.from});`;
+            return `await __getDependency(${dependency.from});`;
         }
 
         const members = this.#rewriteImportMembers(dependency);
 
-        return `const ${members} = await getDependency(${dependency.from});`;
+        return `const ${members} = await __getDependency(${dependency.from});`;
     }
 
     #rewriteImportMembers(dependency: ReflectionImport): string

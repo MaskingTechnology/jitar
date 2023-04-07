@@ -39,7 +39,7 @@ export default class RemoteBuilder
         const argumentz = this.#createArguments(implementation.executable.parameters);
 
         const functionName = `\nexport ${asDefault ? `${Keyword.DEFAULT} ` : ''}async function ${name}(${parameters})`;
-        const functionBody = `return runProcedure('${fqn}', '${version}', { ${argumentz} }, this)`;
+        const functionBody = `return __runProcedure('${fqn}', '${version}', { ${argumentz} }, this)`;
 
         return `${functionName} {\n\t${functionBody}\n}\n`;
     }

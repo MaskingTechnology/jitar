@@ -10,9 +10,7 @@ import File from '../models/File.js';
 import Module from '../types/Module.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
 import ClientIdHelper from '../utils/ClientIdHelper.js';
-import { setRuntime } from '../hooks.js';
 
-import LocalNode from './LocalNode.js';
 import Repository from './Repository.js';
 
 const clientIdHelper = new ClientIdHelper();
@@ -59,11 +57,6 @@ export default class LocalRepository extends Repository
         this.#clients.set(clientId, segmentFilenames);
 
         return clientId;
-    }
-
-    async setRuntime(runtime: LocalNode): Promise<void>
-    {
-        setRuntime(runtime);
     }
 
     loadAsset(filename: string): Promise<File>
