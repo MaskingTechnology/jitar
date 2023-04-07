@@ -1,9 +1,9 @@
 
 import { Loadable } from 'jitar-serialization';
 
-import ServerError from './generic/ServerError.js';
+import BadRequest from './generic/BadRequest.js';
 
-export default class InvalidClientId extends ServerError
+export default class InvalidClientId extends BadRequest
 {
     #clientId: string;
 
