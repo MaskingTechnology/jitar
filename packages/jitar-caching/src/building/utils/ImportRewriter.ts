@@ -3,7 +3,7 @@ import { ReflectionImport, Reflector } from 'jitar-reflection';
 
 import Keyword from '../definitions/Keyword.js';
 
-const IMPORT_PATTERN = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g;
+const IMPORT_PATTERN = /import\s(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g;
 const NON_SYSTEM_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 const reflector = new Reflector();
