@@ -15,15 +15,15 @@ import { component1, component2 } from 'https';
 `;
 
 const HAS_SYSTEM_IMPORTS_RESULT =
-`await getDependency('polyfills');
-const fs = await getDependency('fs');
-const component = await getDependency('http');
-const { component1, component2 } = await getDependency('https');
+`await __getDependency('polyfills');
+const fs = await __getDependency('fs');
+const component = await __getDependency('http');
+const { component1, component2 } = await __getDependency('https');
 `;
 
 const HAS_IMPORT_NO_SEMICOLON = `import { runProcedure } from 'jitar'`;
 
-const HAS_IMPORT_NO_SEMICOLON_RESULT = `const { runProcedure } = await getDependency('jitar');`;
+const HAS_IMPORT_NO_SEMICOLON_RESULT = `const { runProcedure } = await __getDependency('jitar');`;
 
 const HAS_MIXED_IMPORTS =
 `import component from './path/to/component.js';
@@ -34,9 +34,9 @@ import main, { some as other } from 'library';
 
 const HAS_MIXED_IMPORTS_RESULT =
 `import component from './path/to/component.js';
-const os = await getDependency('os');
-const { runProcedure } = await getDependency('jitar');
-const { default: main, some: other } = await getDependency('library');
+const os = await __getDependency('os');
+const { runProcedure } = await __getDependency('jitar');
+const { default: main, some: other } = await __getDependency('library');
 `;
 
 const HAS_DYNAMIC_IMPORTS =
@@ -55,11 +55,11 @@ import { runProcedure } from 'jitar';
 `;
 
 const HAS_IMPORTS_AND_CONTENT_RESULT =
-`const os = await getDependency('os');
+`const os = await __getDependency('os');
 
 export default function test() {}
 
-const { runProcedure } = await getDependency('jitar');
+const { runProcedure } = await __getDependency('jitar');
 `;
 
 const INPUTS =

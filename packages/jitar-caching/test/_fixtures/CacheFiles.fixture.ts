@@ -7,7 +7,7 @@ const ORDER_SEGMENT_REPOSITORY = `export const files = [
 const ORDER_SEGMENT_NODE = 
 `import { default as $1 } from "./order/createOrder.js";
 import { v0_0_0 as $2, v1_0_0 as $3 } from "./order/storeOrder.js";
-const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await getDependency("jitar-runtime");
+const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __getDependency("jitar-runtime");
 export const segment = new Segment("order")
 \t.addProcedure(new Procedure("order/createOrder")
 \t\t.addImplementation(new Implementation(new Version(0, 0, 0), "private", [new NamedParameter("items", false)], $1))
@@ -24,7 +24,7 @@ const PRODUCT_SEGMENT_REPOSITORY = `export const files = [
 const PRODUCT_SEGMENT_NODE = 
 `import { default as $1, searchProducts as $2 } from "./product/getProducts.js";
 import { default as $3, searchProducts as $4 } from "./product/getProducts_v1.js";
-const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await getDependency("jitar-runtime");
+const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __getDependency("jitar-runtime");
 export const segment = new Segment("product")
 \t.addProcedure(new Procedure("product/getProducts")
 \t\t.addImplementation(new Implementation(new Version(0, 0, 0), "private", [new NamedParameter("id", false)], $1))
@@ -51,8 +51,8 @@ export async function createOrderLine(item)
 const CREATE_ORDER_REMOTE = ``;
 
 const STORE_ORDER_LOCAL =
-`const mysql = await getDependency('mysql');
-const createId = await getDependency('uuid');
+`const mysql = await __getDependency('mysql');
+const createId = await __getDependency('uuid');
 import { Order } from './models';
 
 export async function v0_0_0(order)
@@ -67,11 +67,11 @@ export async function v1_0_0(...orders)
 
 const STORE_ORDER_REMOTE =
 `export async function v0_0_0(order) {
-\treturn runProcedure('order/storeOrder', '0.0.0', { 'order': order }, this)
+\treturn __runProcedure('order/storeOrder', '0.0.0', { 'order': order }, this)
 }
 
 export async function v1_0_0(...orders) {
-\treturn runProcedure('order/storeOrder', '1.0.0', { '...orders': orders }, this)
+\treturn __runProcedure('order/storeOrder', '1.0.0', { '...orders': orders }, this)
 }`;
 
 const ORDER_MODELS_LOCAL =
@@ -82,7 +82,7 @@ Order.source = "order/models.js";
 OrderLine.source = "order/models.js";`;
 
 const GET_PRODUCTS_LOCAL =
-`const mongodb = await getDependency('mongodb');
+`const mongodb = await __getDependency('mongodb');
 import { Product } from './models';
 
 export default async function getProducts(id)
@@ -102,11 +102,11 @@ export async function searchProducts({query, sort})
 
 const GET_PRODUCTS_REMOTE =
 `export async function searchProducts({ query , sort }) {
-\treturn runProcedure('product/searchProducts', '0.0.0', { 'query': query, 'sort': sort }, this)
+\treturn __runProcedure('product/searchProducts', '0.0.0', { 'query': query, 'sort': sort }, this)
 }`;
 
 const GET_PRODUCTS_LOCAL_V1 =
-`const mongodb = await getDependency('mongodb');
+`const mongodb = await __getDependency('mongodb');
 import { Product } from './models';
 
 export default async function getProducts(id)
@@ -126,7 +126,7 @@ export async function searchProducts([query, sort])
 
 const GET_PRODUCTS_REMOTE_V1 =
 `export async function searchProducts([ query , sort ]) {
-\treturn runProcedure('product/searchProducts', '1.0.0', { 'query': query, 'sort': sort }, this)
+\treturn __runProcedure('product/searchProducts', '1.0.0', { 'query': query, 'sort': sort }, this)
 }`;
 
 const PRODUCT_MODELS_LOCAL =
