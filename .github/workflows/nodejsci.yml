@@ -29,5 +29,6 @@ jobs:
           cache: npm
           cache-dependency-path: '**/package-lock.json'
         
-      - run: npm install
+      - run: npm ci
+      - run: npm install @nrwl/nx-linux-x64-gnu
       - run: npx lerna run lint,test --scope=create-jitar --scope=jitar-caching --scope=jitar-nodejs-server --scope=jitar-reflection --scope=create-runtime --scope=create-serialization --scope=jitar-vite-plugin
