@@ -17,6 +17,8 @@ import LocalGateway from './LocalGateway.js';
 import Node from './Node.js';
 import Repository from './Repository.js';
 
+import { setRuntime, setDependencyLoader } from '../hooks.js';
+
 export default class LocalNode extends Node
 {
     #argumentConstructor: ArgumentConstructor;
@@ -97,7 +99,8 @@ export default class LocalNode extends Node
     {
         this.#clientId = await repository.registerClient(segmentNames);
 
-        await repository.setRuntime(this);
+        setRuntime(this);
+        setDependencyLoader(ModuleLoader.import);
 
         const moduleLocation = await repository.getModuleLocation(this.#clientId);
 
@@ -106,7 +109,7 @@ export default class LocalNode extends Node
         this.#repository = repository;
     }
 
-    async import(url: string, base?: string): Promise<Module>
+    import(url: string, base?: string): Promise<Module>
     {
         if (this.#repository === undefined)
         {
@@ -121,19 +124,16 @@ export default class LocalNode extends Node
         return this.#repository.importModule(this.#clientId, url);
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         const procedure = this.#getProcedure(fqn);
         
-        if (procedure === undefined)
-        {
-            return this.#runGateway(fqn, version, args, headers);
-        }
-
-        return this.#runProcedure(procedure, version, args, headers);
+        return procedure === undefined
+            ? this.#runGateway(fqn, version, args, headers)
+            : this.#runProcedure(procedure, version, args, headers);
     }
 
-    async #runGateway(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    #runGateway(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         if (this.#gateway === undefined)
         {
@@ -143,7 +143,7 @@ export default class LocalNode extends Node
         return this.#gateway.run(fqn, version, args, headers);
     }
 
-    async #runProcedure(procedure: Procedure, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    #runProcedure(procedure: Procedure, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         const implementation = procedure.getImplementation(version);
 
@@ -155,6 +155,6 @@ export default class LocalNode extends Node
         const context = new Context(headers);
         const values: unknown[] = this.#argumentConstructor.extract(implementation.parameters, args);
 
-        return await implementation.executable.call(context, ...values);
+        return implementation.executable.call(context, ...values);
     }
 }

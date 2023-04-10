@@ -25,7 +25,8 @@
         "express-http-proxy": "^1.6.3",
         "fs-extra": "^11.1.0",
         "glob-promise": "6.0.2",
-        "jitar": "^0.3.9",
+        "jitar-caching": "^0.3.8",
+        "jitar-runtime": "^0.3.8",
         "mime-types": "^2.1.35",
         "tslog": "^4.8.2",
         "yargs": "^17.7.1"

@@ -17,6 +17,7 @@ export { default as ReflectionImport } from './models/ReflectionImport.js';
 export { default as ReflectionMember } from './models/ReflectionMember.js';
 export { default as ReflectionModule } from './models/ReflectionModule.js';
 export { default as ReflectionObject } from './models/ReflectionObject.js';
+export { default as ReflectionParameter } from './models/ReflectionParameter.js';
 export { default as ReflectionSetter } from './models/ReflectionSetter.js';
 
 // Root

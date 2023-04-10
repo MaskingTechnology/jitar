@@ -3,7 +3,7 @@ import { Controller, Get } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalGateway, LocalNode, Proxy } from 'jitar';
+import { LocalGateway, LocalNode, Proxy } from 'jitar-runtime';
 
 @Controller('procedures')
 export default class ProceduresController

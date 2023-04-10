@@ -5,8 +5,12 @@ import File from '../models/File.js';
 import Version from '../models/Version.js';
 import Module from '../types/Module.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
+import RemoteClassLoader from '../utils/RemoteClassLoader.js';
 
 import Node from './Node.js';
+
+const remoteClassLoader = new RemoteClassLoader();
+const defaultSerializer = SerializerBuilder.build(remoteClassLoader);
 
 export default class Remote
 {
@@ -14,7 +18,7 @@ export default class Remote
     #useSerializer: boolean;
     #serializer: Serializer;
 
-    constructor(url: string, useSerializer: boolean, serializer: Serializer = SerializerBuilder.build())
+    constructor(url: string, useSerializer: boolean, serializer: Serializer = defaultSerializer)
     {
         this.#url = url;
         this.#useSerializer = useSerializer;
@@ -49,7 +53,7 @@ export default class Remote
         return new File(filename, type, content);
     }
 
-    async importFile(filename: string): Promise<Module>
+    importFile(filename: string): Promise<Module>
     {
         const url = `${this.#url}/${filename}`;
 
@@ -105,11 +109,12 @@ export default class Remote
         const headersObject = Object.fromEntries(headers);
 
         const url = `${this.#url}/rpc/${fqn}?version=${versionString}&serialize=true`;
+        const body = await this.#createRequestBody(argsObject, this.#useSerializer);
         const options =
         {
             method: 'POST',
             headers: headersObject,
-            body: this.#createRequestBody(argsObject, this.#useSerializer)
+            body: body
         };
 
         const response = await this.#callRemote(url, options, 200);
@@ -131,10 +136,10 @@ export default class Remote
         return response;
     }
 
-    #createRequestBody(body: unknown, serialize: boolean): string
+    async #createRequestBody(body: unknown, serialize: boolean): Promise<string>
     {
         const data = serialize
-            ? this.#serializer.serialize(body)
+            ? await this.#serializer.serialize(body)
             : body;
 
         return JSON.stringify(data);
@@ -149,7 +154,7 @@ export default class Remote
             : result;
     }
 
-    async #getResponseResult(response: Response): Promise<unknown>
+    #getResponseResult(response: Response): Promise<unknown>
     {
         const contentType = response.headers.get('Content-Type');
 

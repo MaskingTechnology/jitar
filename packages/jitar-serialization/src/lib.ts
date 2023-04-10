@@ -1,4 +1,8 @@
 
+// Errors
+export { default as ClassNotFound } from './errors/ClassNotFound.js';
+export { default as InvalidClass } from './errors/InvalidClass.js';
+
 // Interfaces
 export { default as ClassLoader } from './interfaces/ClassLoader.js';
 

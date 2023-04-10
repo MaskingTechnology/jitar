@@ -25,13 +25,6 @@ describe('building/utils/ImportRewriter', () =>
             expect(result).toBe(OUTPUTS.HAS_SYSTEM_IMPORTS_RESULT);
         });
 
-        it('should rewrite all jitar imports', () =>
-        {
-            const result = importRewriter.rewrite(INPUTS.HAS_JITAR_IMPORTS);
-
-            expect(result).toBe(OUTPUTS.HAS_JITAR_IMPORTS_RESULT);
-        });
-
         it('should rewrite all imports without semicolon', () =>
         {
             const result = importRewriter.rewrite(INPUTS.HAS_IMPORT_NO_SEMICOLON);

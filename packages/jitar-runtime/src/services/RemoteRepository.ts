@@ -1,13 +1,9 @@
 
-import InvalidJitarHooks from '../errors/InvalidJitarHooks.js';
 import File from '../models/File.js';
-import JitarHooks from '../types/JitarHooks.js';
 import Module from '../types/Module.js';
-import ModuleLoader from '../utils/ModuleLoader.js';
 
 import Remote from './Remote.js';
 import Repository from './Repository.js';
-import Runtime from './Runtime.js';
 
 export default class RemoteRepository extends Repository
 {
@@ -20,25 +16,12 @@ export default class RemoteRepository extends Repository
         this.#remote = new Remote(url, true);
     }
 
-    async registerClient(segmentFiles: string[]): Promise<string>
+    registerClient(segmentFiles: string[]): Promise<string>
     {
         return this.#remote.registerClient(segmentFiles);
     }
 
-    async setRuntime(runtime: Runtime): Promise<void>
-    {
-        const jitar = await this.#remote.importFile('jitar/hooks.js') as JitarHooks;
-
-        if (jitar?.setRuntime === undefined || jitar?.setDependencyLoader === undefined)
-        {
-            throw new InvalidJitarHooks();
-        }
-
-        jitar.setRuntime(runtime);
-        jitar.setDependencyLoader(ModuleLoader.import);
-    }
-
-    async loadAsset(filename: string): Promise<File>
+    loadAsset(filename: string): Promise<File>
     {
         return this.#remote.loadFile(filename);
     }

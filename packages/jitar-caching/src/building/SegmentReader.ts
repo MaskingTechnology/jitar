@@ -10,11 +10,13 @@ import SegmentModuleNotLoaded from './errors/SegmentModuleNotLoaded.js';
 
 import Segment from './models/Segment.js';
 import SegmentImplementation from './models/SegmentImplementation.js';
-import SegmentModule from './models/SegmentModule';
+import SegmentModule from './models/SegmentModule.js';
 import SegmentProcedure from './models/SegmentProcedure.js';
 
 import SegmentFile from './types/SegmentFile.js';
 import SegmentImports from './types/SegmentImports.js';
+
+import IdGenerator from './utils/IdGenerator.js';
 
 const SEGMENT_FILE_EXTENSION = '.segment.json';
 const DEFAULT_ACCESS_LEVEL = 'private';
@@ -71,11 +73,12 @@ export default class SegmentReader
     async #createSegmentModules(definition: SegmentFile): Promise<SegmentModule[]>
     {
         const modules: SegmentModule[] = [];
+        const idGenerator = new IdGenerator();
 
         for (const [filename, moduleImports] of Object.entries(definition))
         {
             const absoluteFilename = this.#fileManager.getAbsoluteLocation(filename);
-            const module = await this.#createSegmentModule(absoluteFilename, moduleImports);
+            const module = await this.#createSegmentModule(absoluteFilename, moduleImports, idGenerator);
 
             modules.push(module);
         }
@@ -83,12 +86,12 @@ export default class SegmentReader
         return modules;
     }
 
-    async #createSegmentModule(absoluteFilename: string, imports: SegmentImports): Promise<SegmentModule>
+    async #createSegmentModule(absoluteFilename: string, imports: SegmentImports, idGenerator: IdGenerator): Promise<SegmentModule>
     {
         const module = await this.#loadSegmentModule(absoluteFilename);
         const relativeFilename = this.#fileManager.getRelativeLocation(absoluteFilename);
         const moduleName = this.#extractModuleName(relativeFilename);
-        const procedures = this.#extractSegmentProcedures(module, moduleName, imports);
+        const procedures = this.#extractSegmentProcedures(module, moduleName, imports, idGenerator);
         
         return new SegmentModule(relativeFilename, procedures);
     }
@@ -117,11 +120,9 @@ export default class SegmentReader
         return moduleParts.join('/');
     }
 
-    #extractSegmentProcedures(module: ReflectionModule, moduleName: string, imports: SegmentImports): SegmentProcedure[]
+    #extractSegmentProcedures(module: ReflectionModule, moduleName: string, imports: SegmentImports, idGenerator: IdGenerator): SegmentProcedure[]
     {
         const procedures = new Map<string, SegmentProcedure>();
-
-        let number = 0;
 
         for (const [importKey, properties] of Object.entries(imports))
         {
@@ -144,7 +145,7 @@ export default class SegmentReader
             const access = properties.access ?? DEFAULT_ACCESS_LEVEL;
             const version = properties.version ?? DEFAULT_VERSION_NUMBER;
 
-            const id = this.#createImplementationId(++number);
+            const id = idGenerator.next();
             const fqn = moduleName !== '' ? `${moduleName}/${procedureName}` : procedureName;
 
             const implementation = new SegmentImplementation(id, importKey, access, version, executable);
@@ -159,10 +160,5 @@ export default class SegmentReader
         }
 
         return [...procedures.values()];
-    }
-
-    #createImplementationId(number: number): string
-    {
-        return `$${number}`;
     }
 }

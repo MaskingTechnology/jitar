@@ -1,12 +1,20 @@
 
 import { Loadable } from 'jitar-serialization';
 
-export default class ClientNotFound extends Error
+import BadRequest from './generic/BadRequest.js';
+
+export default class ClientNotFound extends BadRequest
 {
+    #clientId: string;
+
     constructor(clientId: string)
     {
-        super(`Client found for id '${clientId}'`);
+        super(`Client not found for id '${clientId}'`);
+
+        this.#clientId = clientId;
     }
+
+    get clientId() { return this.#clientId; }
 }
 
 (ClientNotFound as Loadable).source = '/jitar/errors/ClientNotFound.js';

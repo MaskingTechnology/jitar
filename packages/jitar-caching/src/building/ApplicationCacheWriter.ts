@@ -1,11 +1,11 @@
 
 import { FileManager } from 'jitar-runtime';
 
-import ApplicationCache from './models/ApplicationCache';
-import ModuleCache from './models/ModuleCache';
-import SegmentCache from './models/SegmentCache';
-import ModuleCacheWriter from './ModuleCacheWriter';
-import SegmentCacheWriter from './SegmentCacheWriter';
+import ApplicationCache from './models/ApplicationCache.js';
+import ModuleCache from './models/ModuleCache.js';
+import SegmentCache from './models/SegmentCache.js';
+import ModuleCacheWriter from './ModuleCacheWriter.js';
+import SegmentCacheWriter from './SegmentCacheWriter.js';
 
 export default class ApplicationCacheWriter
 {

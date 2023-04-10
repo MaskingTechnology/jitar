@@ -29,4 +29,9 @@ function createRepositoryFilename(name: string): string
     return `${name}.segment.repository.js`;
 }
 
-export { Files, convertToLocalFilename, convertToRemoteFilename, createNodeFilename, createRepositoryFilename };
+function isSegmentFilename(filename: string): boolean
+{
+    return filename.includes('.segment.');
+}
+
+export { Files, convertToLocalFilename, convertToRemoteFilename, createNodeFilename, createRepositoryFilename, isSegmentFilename };

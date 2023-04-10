@@ -5,7 +5,7 @@ import CacheManager from '../src/CacheManager';
 
 import { TestFileManager } from './_fixtures/TestFileManager.fixture';
 
-describe('building/ApplicationCacheWriter', () =>
+describe('CacheManager', () =>
 {
     describe('.build()', () =>
     {
@@ -15,12 +15,12 @@ describe('building/ApplicationCacheWriter', () =>
             // keeps track of the files that are written to disk.
 
             const fileManager = new TestFileManager();
-            const cacheManager = new CacheManager(fileManager);
+            const cacheManager = new CacheManager(fileManager, fileManager);
 
             await cacheManager.build();
 
             const result = fileManager.writtenFiles;
-            expect(result.size).toBe(14);
+            expect(result.size).toBe(20);
         });
     });
 });

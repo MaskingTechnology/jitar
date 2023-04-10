@@ -5,7 +5,7 @@ import expressProxy from 'express-http-proxy';
 import { IncomingMessage } from 'http';
 import { Logger } from 'tslog';
 
-import { Proxy } from 'jitar';
+import { Proxy } from 'jitar-runtime';
 
 @Controller('')
 export default class ProxyController

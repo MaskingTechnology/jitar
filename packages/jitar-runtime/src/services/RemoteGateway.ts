@@ -28,12 +28,12 @@ export default class RemoteGateway extends Gateway
         throw new NotImplemented();
     }
 
-    async addNode(node: Node): Promise<void>
+    addNode(node: Node): Promise<void>
     {
         return this.#remote.addNode(node);
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
         return this.#remote.run(fqn, version, args, headers);
     }

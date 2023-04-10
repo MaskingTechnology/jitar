@@ -1,6 +1,5 @@
 
-import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionDestructuredValue, ReflectionField } from 'jitar-reflection';
-import ReflectionParameter from 'jitar-reflection/dist/models/ReflectionParameter.js';
+import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionDestructuredValue, ReflectionField, ReflectionParameter } from 'jitar-reflection';
 import { AccessLevel } from 'jitar-runtime';
 
 import Keyword from '../definitions/Keyword.js';
@@ -12,7 +11,7 @@ export default class RemoteBuilder
 {
     build(module: SegmentModule): string
     {
-        let code = this.#createRemoteImports();
+        let code = '';
 
         for (const procedure of module.procedures)
         {
@@ -32,11 +31,6 @@ export default class RemoteBuilder
         return code.trim();
     }
 
-    #createRemoteImports(): string
-    {
-        return `import { runProcedure } from "/jitar/hooks.js";\n`;
-    }
-
     #createRemoteCode(fqn: string, implementation: SegmentImplementation, asDefault: boolean): string
     {
         const name = implementation.executable.name;
@@ -45,7 +39,7 @@ export default class RemoteBuilder
         const argumentz = this.#createArguments(implementation.executable.parameters);
 
         const functionName = `\nexport ${asDefault ? `${Keyword.DEFAULT} ` : ''}async function ${name}(${parameters})`;
-        const functionBody = `return runProcedure('${fqn}', '${version}', { ${argumentz} }, this)`;
+        const functionBody = `return __runProcedure('${fqn}', '${version}', { ${argumentz} }, this)`;
 
         return `${functionName} {\n\t${functionBody}\n}\n`;
     }

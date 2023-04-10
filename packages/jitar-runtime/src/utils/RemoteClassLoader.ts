@@ -1,10 +1,9 @@
 
-import ClassNotFound from './errors/ClassNotFound.js';
-import InvalidClass from './errors/InvalidClass.js';
-import ClassLoader from './interfaces/ClassLoader.js';
-import Loadable from './types/Loadable.js';
+import { ClassLoader, Loadable, ClassNotFound, InvalidClass } from 'jitar-serialization';
 
-export default class DefaultClassLoader implements ClassLoader
+import ModuleLoader from './ModuleLoader.js';
+
+export default class RemoteClassLoader implements ClassLoader
 {
     async loadClass(loadable: Loadable): Promise<Function>
     {
@@ -13,7 +12,7 @@ export default class DefaultClassLoader implements ClassLoader
             throw new ClassNotFound(loadable.name);
         }
 
-        const module = await import(loadable.source);
+        const module = await ModuleLoader.load(loadable.source);
         const clazz = (module[loadable.name] ?? module['default']) as Function;
 
         if (clazz === undefined)

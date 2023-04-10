@@ -66,8 +66,10 @@ export default class SegmentCacheBuilder
 
                     continue;
                 }
+
+                const procedureCopy = new SegmentProcedure(procedure.fqn, [...procedure.implementations]);
                 
-                procedures.set(procedure.fqn, procedure);
+                procedures.set(procedure.fqn, procedureCopy);
             }
         }
 

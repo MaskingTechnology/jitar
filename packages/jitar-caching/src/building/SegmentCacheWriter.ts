@@ -1,6 +1,5 @@
 
-import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionField, ReflectionFunction } from 'jitar-reflection';
-import ReflectionParameter from 'jitar-reflection/dist/models/ReflectionParameter.js';
+import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionField, ReflectionFunction, ReflectionParameter } from 'jitar-reflection';
 import { FileManager, VersionParser, createNodeFilename, createRepositoryFilename } from 'jitar-runtime';
 
 import SegmentCache from './models/SegmentCache.js';
@@ -59,7 +58,7 @@ export default class SegmentCacheWriter
     {
         const codes: string[] = [];
         
-        codes.push('import { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } from "jitar-runtime";');
+        codes.push('const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __getDependency("jitar-runtime");');
         codes.push(`export const segment = new Segment("${name}")`);
 
         for (const procedure of procedures)

@@ -1,8 +1,7 @@
 
 const Keyword =
 {
-    DEFAULT: 'default',
-    JITAR: 'jitar'
+    DEFAULT: 'default'
 }
 
 Object.freeze(Keyword);

@@ -3,8 +3,10 @@ import { Controller, Get, Options, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { Version, Forbidden, BadRequest, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized, LocalGateway, LocalNode, Proxy, CorsMiddleware } from 'jitar';
-import { ValueSerializer } from 'jitar';
+import { Version, VersionParser, ProcedureRuntime } from 'jitar-runtime';
+import { Serializer } from 'jitar-serialization';
+
+import CorsMiddleware from '../middleware/CorsMiddleware.js';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
 const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
@@ -13,15 +15,17 @@ const CORS_MAX_AGE = 86400;
 @Controller('rpc')
 export default class RPCController
 {
-    #runtime: LocalGateway | LocalNode | Proxy;
-    #logger: Logger<unknown>;
+    #runtime: ProcedureRuntime;
+    #serializer: Serializer;
     #useSerializer: boolean;
+    #logger: Logger<unknown>;
 
-    constructor(runtime: LocalGateway | LocalNode | Proxy, logger: Logger<unknown>, useSerializer: boolean)
+    constructor(runtime: ProcedureRuntime, serializer: Serializer, useSerializer: boolean, logger: Logger<unknown>)
     {
         this.#runtime = runtime;
-        this.#logger = logger;
+        this.#serializer = serializer;
         this.#useSerializer = useSerializer;
+        this.#logger = logger;
 
         this.#showProcedureInfo();
     }
@@ -78,7 +82,7 @@ export default class RPCController
     #extractVersion(request: Request): Version
     {
         return request.query.version !== undefined
-            ? Version.parse(request.query.version.toString())
+            ? VersionParser.parse(request.query.version.toString())
             : Version.DEFAULT;
     }
 
@@ -110,7 +114,7 @@ export default class RPCController
     async #extractBodyArguments(request: Request): Promise<Map<string, unknown>>
     {
         const args = this.#useSerializer
-            ? await ValueSerializer.deserialize(request.body) as unknown
+            ? await this.#serializer.deserialize(request.body) as unknown
             : request.body;
 
         return new Map<string, unknown>(Object.entries(args));
@@ -143,11 +147,6 @@ export default class RPCController
 
     async #run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, response: Response, serialize: boolean): Promise<Response>
     {
-        if (this.#runtime.hasProcedure(fqn) === false)
-        {
-            return response.status(404).send(`Procedure not found -> ${fqn}`);
-        }
-
         try
         {
             const result = await this.#runtime.handle(fqn, version, args, headers);
@@ -189,9 +188,9 @@ export default class RPCController
         return response.status(204).send();
     }
 
-    #createResultResponse(result: unknown, response: Response, serialize: boolean): Response
+    async #createResultResponse(result: unknown, response: Response, serialize: boolean): Promise<Response>
     {
-        const content = this.#createResponseContent(result, serialize);
+        const content = await this.#createResponseContent(result, serialize);
         const contentType = this.#createResponseContentType(content);
 
         response.setHeader('Content-Type', contentType);
@@ -199,21 +198,23 @@ export default class RPCController
         return response.status(200).send(content);
     }
 
-    #createErrorResponse(error: unknown, errorData: unknown, response: Response, serialize: boolean): Response
+    async #createErrorResponse(error: unknown, errorData: unknown, response: Response, serialize: boolean): Promise<Response>
     {
-        const content = this.#createResponseContent(errorData, serialize);
+        const content = await this.#createResponseContent(errorData, serialize);
         const contentType = this.#createResponseContentType(content);
         const statusCode = this.#createResponseStatusCode(error);
+
+        console.log('ERROR CODE', statusCode);
 
         response.setHeader('Content-Type', contentType);
 
         return response.status(statusCode).send(content);
     }
 
-    #createResponseContent(data: unknown, serialize: boolean): unknown
+    async #createResponseContent(data: unknown, serialize: boolean): Promise<unknown>
     {
         return serialize
-            ? ValueSerializer.serialize(data)
+            ? this.#serializer.serialize(data)
             : data;
     }
 
@@ -231,14 +232,38 @@ export default class RPCController
 
     #createResponseStatusCode(error: unknown): number
     {
-        if (error instanceof BadRequest) return 400;
-        if (error instanceof Unauthorized) return 401;
-        if (error instanceof PaymentRequired) return 402;
-        if (error instanceof Forbidden) return 403;
-        if (error instanceof NotFound) return 404;
-        if (error instanceof Teapot) return 418;
-        if (error instanceof NotImplemented) return 501;
+        if (error instanceof Object === false)
+        {
+            return 500;
+        }
+
+        const errorClass = (error as Object).constructor as Function;
+
+        if (this.#isClassType(errorClass, 'BadRequest')) return 400;
+        if (this.#isClassType(errorClass, 'Unauthorized')) return 401;
+        if (this.#isClassType(errorClass, 'PaymentRequired')) return 402;
+        if (this.#isClassType(errorClass, 'Forbidden')) return 403;
+        if (this.#isClassType(errorClass, 'NotFound')) return 404;
+        if (this.#isClassType(errorClass, 'Teapot')) return 418;
+        if (this.#isClassType(errorClass, 'NotImplemented')) return 501;
 
         return 500;
+    }
+
+    #isClassType(clazz: Function, className: string): boolean
+    {
+        if (clazz.name === className)
+        {
+            return true;
+        }
+
+        const parentClass = Object.getPrototypeOf(clazz);
+
+        if (parentClass.name === '')
+        {
+            return false;
+        }
+
+        return this.#isClassType(parentClass, className);
     }
 }

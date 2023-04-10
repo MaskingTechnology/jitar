@@ -1,5 +1,6 @@
 
-import { Runtime, LocalRepository, LocalGateway, LocalNode, RemoteRepository, RemoteGateway, RemoteNode, CacheBuilder, NodeMonitor, Proxy, Repository, Gateway, Node } from 'jitar';
+import { Runtime, LocalRepository, LocalGateway, LocalNode, RemoteRepository, RemoteGateway, RemoteNode, NodeMonitor, Proxy, Repository, Gateway, Node } from 'jitar-runtime';
+import { CacheManager } from 'jitar-caching';
 
 import LocalFileManager from './LocalFileManager.js';
 
@@ -100,22 +101,16 @@ export default class RuntimeConfigurator
         return this.#buildProxy(url, repository, runner);
     }
 
-    static async #buildCache(sourceLocation: string, cacheLocation: string): Promise<LocalFileManager>
+    static async #buildCache(sourceLocation: string, cacheLocation: string): Promise<void>
     {
-        const rootManager = new LocalFileManager('./');
-        await rootManager.remove(cacheLocation);
-        await rootManager.copy(sourceLocation, cacheLocation);
+        const projectFileManager = new LocalFileManager('./');
+        await projectFileManager.delete(cacheLocation);
+        await projectFileManager.copy(sourceLocation, cacheLocation);
 
-        const sourceManager = new LocalFileManager(sourceLocation);
-        const cacheManager = new LocalFileManager(cacheLocation);
+        const appFileManager = new LocalFileManager(cacheLocation);
 
-        const segmentFiles = await rootManager.getSegmentFiles();
-        const moduleFiles = await sourceManager.getModuleFileNames();
-
-        const cacheBuilder = new CacheBuilder(sourceManager, cacheManager);
-        await cacheBuilder.build(segmentFiles, moduleFiles);
-
-        return cacheManager;
+        const cacheManager = new CacheManager(projectFileManager, appFileManager);
+        await cacheManager.build();
     }
 
     static async #getSegmentNames(cacheLocation: string): Promise<string[]>

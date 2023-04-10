@@ -1,5 +1,5 @@
 
-import { createRepositoryFilename, convertToLocalFilename, convertToRemoteFilename } from '../definitions/Files.js';
+import { createRepositoryFilename, convertToLocalFilename, convertToRemoteFilename, isSegmentFilename } from '../definitions/Files.js';
 
 import ClientNotFound from '../errors/ClientNotFound.js';
 import FileNotFound from '../errors/FileNotFound.js';
@@ -10,9 +10,7 @@ import File from '../models/File.js';
 import Module from '../types/Module.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
 import ClientIdHelper from '../utils/ClientIdHelper.js';
-import { setRuntime } from '../hooks.js';
 
-import LocalNode from './LocalNode.js';
 import Repository from './Repository.js';
 
 const clientIdHelper = new ClientIdHelper();
@@ -61,12 +59,7 @@ export default class LocalRepository extends Repository
         return clientId;
     }
 
-    async setRuntime(runtime: LocalNode): Promise<void>
-    {
-        setRuntime(runtime);
-    }
-
-    async loadAsset(filename: string): Promise<File>
+    loadAsset(filename: string): Promise<File>
     {
         if (this.#assets.includes(filename) === false)
         {
@@ -82,7 +75,7 @@ export default class LocalRepository extends Repository
         return this.#fileManager.getRootLocation();
     }
 
-    async loadModule(clientId: string, filename: string): Promise<File>
+    loadModule(clientId: string, filename: string): Promise<File>
     {
         this.#validateClientId(clientId);
 
@@ -99,7 +92,7 @@ export default class LocalRepository extends Repository
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async importModule(clientId: string, filename: string): Promise<Module>
+    importModule(clientId: string, filename: string): Promise<Module>
     {
         // This function loads the original module file containing the
         // original imports to prevent import issues while loading the
@@ -141,14 +134,14 @@ export default class LocalRepository extends Repository
         // imports to prevent import issues while loading the module from
         // a remote repository.
 
-        const localFilename = convertToLocalFilename(filename);
+        const localFilename = isSegmentFilename(filename) ? filename : convertToLocalFilename(filename);
         const file = await this.#readFile(localFilename);
         const code = file.content.toString();
 
         return new File(filename, 'application/javascript', code);
     }
 
-    async #getRemoteModule(filename: string): Promise<File>
+    #getRemoteModule(filename: string): Promise<File>
     {
         // This function loads the remote module file containing the rewritten
         // implementation for each function to execute them on another node.
@@ -158,7 +151,7 @@ export default class LocalRepository extends Repository
         return this.#readFile(remoteFilename);
     }
 
-    async #readFile(filename: string): Promise<File>
+    #readFile(filename: string): Promise<File>
     {
         return this.#fileManager.read(filename);
     }

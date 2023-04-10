@@ -22,7 +22,7 @@ export default class SerializerBuilder
         serializer.addSerializer(new PrimitiveSerializer());
         serializer.addSerializer(new ObjectSerializer());
         serializer.addSerializer(new ClassSerializer(loader));
-        serializer.addSerializer(new ErrorSerializer(loader));
+        serializer.addSerializer(new ErrorSerializer());
         serializer.addSerializer(new DateSerializer());
         serializer.addSerializer(new SetSerializer());
         serializer.addSerializer(new MapSerializer());

@@ -1,5 +1,5 @@
 
-export default class RuntimeNotAvaiable extends Error
+export default class RuntimeNotAvailable extends Error
 {
     constructor()
     {

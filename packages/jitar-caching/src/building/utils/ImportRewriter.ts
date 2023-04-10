@@ -3,7 +3,7 @@ import { ReflectionImport, Reflector } from 'jitar-reflection';
 
 import Keyword from '../definitions/Keyword.js';
 
-const IMPORT_PATTERN = /import(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g;
+const IMPORT_PATTERN = /import\s(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g;
 const NON_SYSTEM_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 const reflector = new Reflector();
@@ -13,11 +13,8 @@ export default class ImportRewriter
     rewrite(code: string): string
     {
         const replacer = (statement: string) => this.#replaceImport(statement);
-        const newContent = code.replaceAll(IMPORT_PATTERN, replacer);
 
-        return newContent !== code
-            ? this.#insertGetDependency(newContent)
-            : newContent;
+        return code.replaceAll(IMPORT_PATTERN, replacer);
     }
 
     #replaceImport(statement: string): string
@@ -34,26 +31,16 @@ export default class ImportRewriter
         return NON_SYSTEM_INDICATORS.some(indicator => dependency.from.startsWith(indicator, 1)) === false;
     }
 
-    #isJitarDependency(dependency: ReflectionImport): boolean
-    {
-        return dependency.from.includes(Keyword.JITAR);
-    }
-
     #rewriteImport(dependency: ReflectionImport): string
     {
         if (dependency.members.length === 0)
         {
-            return `await getDependency(${dependency.from});`;
+            return `await __getDependency(${dependency.from});`;
         }
 
         const members = this.#rewriteImportMembers(dependency);
 
-        if (this.#isJitarDependency(dependency))
-        {
-            return `import ${members} from "/jitar/hooks.js";`;
-        }
-
-        return `const ${members} = await getDependency(${dependency.from});`;
+        return `const ${members} = await __getDependency(${dependency.from});`;
     }
 
     #rewriteImportMembers(dependency: ReflectionImport): string
@@ -84,10 +71,5 @@ export default class ImportRewriter
     {
         return dependency.members.length === 1
             && dependency.members[0].name === Keyword.DEFAULT;
-    }
-
-    #insertGetDependency(module: string): string
-    {
-        return `import { getDependency } from "/jitar/hooks.js";\n${module}`;
     }
 }
