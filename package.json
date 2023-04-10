@@ -36,15 +36,15 @@
         "@types/express-http-proxy": "^1.6.3",
         "@types/fs-extra": "^11.0.1",
         "@types/mime-types": "^2.1.1",
-        "@types/yargs": "^17.0.22",
-        "@types/prompts": "^2.4.3",
-        "@typescript-eslint/eslint-plugin": "^5.53.0",
-        "@typescript-eslint/parser": "^5.53.0",
-        "@vitest/coverage-c8": "^0.29.1",
+        "@types/yargs": "^17.0.24",
+        "@types/prompts": "^2.4.4",
+        "@typescript-eslint/eslint-plugin": "^5.57.0",
+        "@typescript-eslint/parser": "^5.57.0",
+        "@vitest/coverage-c8": "^0.29.8",
         "degit": "^2.8.4",
-        "eslint": "^8.35.0",
-        "lerna": "^6.5.1",
-        "vite": "^4.1.4",
-        "vitest": "^0.29.1"
+        "eslint": "^8.37.0",
+        "lerna": "^6.6.1",
+        "vite": "^4.2.1",
+        "vitest": "^0.29.8"
     }
 }
