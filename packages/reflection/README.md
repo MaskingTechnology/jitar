@@ -6,7 +6,7 @@ This package is used for reading and splitting [Jitar](https://jitar.dev) applic
 To add this package to your project run:
 
 ```bash
-npm install jitar-reflection
+npm install @jitar/reflection
 ```
 
 For more information about Jitar:

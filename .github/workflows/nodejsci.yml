@@ -31,4 +31,4 @@ jobs:
         
       - run: npm ci
       - run: npm install @nrwl/nx-linux-x64-gnu
-      - run: npx lerna run lint,test --scope=create-jitar --scope=jitar-caching --scope=jitar-nodejs-server --scope=jitar-reflection --scope=create-runtime --scope=create-serialization --scope=jitar-vite-plugin
+      - run: npx lerna run lint,test --scope=caching --scope=create-jitar --scope=jitar --scope=plugin-vite --scope=reflection --scope=runtime --scope=serialization --scope=server-nodejs

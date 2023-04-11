@@ -4,14 +4,14 @@
     "private": true,
     "license": "MIT",
     "workspaces": [
+        "packages/caching",
         "packages/create-jitar",
         "packages/jitar",
-        "packages/jitar-caching",
-        "packages/jitar-nodejs-server",
-        "packages/jitar-reflection",
-        "packages/jitar-serialization",
-        "packages/jitar-runtime",
-        "packages/jitar-vite-plugin",
+        "packages/plugin-vite",
+        "packages/reflection",
+        "packages/runtime",
+        "packages/serialization",
+        "packages/server-nodejs",
         "examples/1-basic/1-hello-world",
         "examples/1-basic/2-segmentation",
         "examples/1-basic/3-load-balancing",
@@ -28,9 +28,9 @@
         "examples/3-apps/2-microservices"
     ],
     "scripts": {
-        "build": "npm run build --workspace=packages/create-jitar --workspace=packages/jitar --workspace=packages/jitar-caching --workspace=packages/jitar-nodejs-server --workspace=/packages/jitar-reflection --workspace=packages/jitar-runtime --workspace=/packages/jitar-serialization --workspace=packages/jitar-vite-plugin --if-present",
-        "lint": "npm run lint --workspace=packages/create-jitar --workspace=packages/jitar --workspace=packages/jitar-caching --workspace=packages/jitar-nodejs-server --workspace=/packages/jitar-reflection --workspace=packages/jitar-runtime --workspace=/packages/jitar-serialization --workspace=packages/jitar-vite-plugin --if-present",
-        "test": "npm run test --workspace=packages/create-jitar --workspace=packages/jitar --workspace=packages/jitar-caching --workspace=packages/jitar-nodejs-server --workspace=/packages/jitar-reflection --workspace=packages/jitar-runtime --workspace=/packages/jitar-serialization --workspace=packages/jitar-vite-plugin --if-present"
+        "build": "npm run build --workspace=packages/caching --workspace=packages/create-jitar --workspace=packages/jitar --workspace=packages/plugin-vite --workspace=/packages/reflection --workspace=packages/runtime --workspace=/packages/serialization --workspace=packages/server-nodejs  --if-present",
+        "lint": "npm run lint --workspace=packages/caching --workspace=packages/create-jitar --workspace=packages/jitar --workspace=packages/plugin-vite --workspace=/packages/reflection --workspace=packages/runtime --workspace=/packages/serialization --workspace=packages/server-nodejs --if-present",
+        "test": "npm run test --workspace=packages/caching --workspace=packages/create-jitar --workspace=packages/jitar --workspace=packages/plugin-vite --workspace=/packages/reflection --workspace=packages/runtime --workspace=/packages/serialization --workspace=packages/server-nodejs --if-present"
     },
     "devDependencies": {
         "@types/express": "^4.17.17",
