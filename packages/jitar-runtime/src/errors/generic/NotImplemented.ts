@@ -9,4 +9,4 @@ export default class NotImplemented extends Error
     }
 }
 
-(NotImplemented as Loadable).source = '/jitar/errors/generic/NotImplemented.js';
+(NotImplemented as Loadable).source = '/jitar-runtime/errors/generic/NotImplemented.js';

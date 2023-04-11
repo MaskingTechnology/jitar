@@ -17,4 +17,4 @@ export default class ClientNotFound extends BadRequest
     get clientId() { return this.#clientId; }
 }
 
-(ClientNotFound as Loadable).source = '/jitar/errors/ClientNotFound.js';
+(ClientNotFound as Loadable).source = '/jitar-runtime/errors/ClientNotFound.js';

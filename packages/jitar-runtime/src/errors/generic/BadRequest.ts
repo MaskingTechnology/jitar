@@ -9,4 +9,4 @@ export default class BadRequest extends Error
     }
 }
 
-(BadRequest as Loadable).source = '/jitar/errors/generic/BadRequest.js';
+(BadRequest as Loadable).source = '/jitar-runtime/errors/generic/BadRequest.js';

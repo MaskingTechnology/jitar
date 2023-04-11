@@ -17,4 +17,4 @@ export default class InvalidClientId extends BadRequest
     get clientId() { return this.#clientId; }
 }
 
-(InvalidClientId as Loadable).source = '/jitar/errors/InvalidClientId.js';
+(InvalidClientId as Loadable).source = '/jitar-runtime/errors/InvalidClientId.js';

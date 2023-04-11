@@ -9,4 +9,4 @@ export default class PaymentRequired extends Error
     }
 }
 
-(PaymentRequired as Loadable).source = '/jitar/errors/generic/PaymentRequired.js';
+(PaymentRequired as Loadable).source = '/jitar-runtime/errors/generic/PaymentRequired.js';

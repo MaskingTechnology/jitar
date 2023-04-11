@@ -11,4 +11,4 @@ export default class RuntimeNotAvailable extends ServerError
     }
 }
 
-(RuntimeNotAvailable as Loadable).source = '/jitar/errors/RuntimeNotAvailable.js';
+(RuntimeNotAvailable as Loadable).source = '/jitar-runtime/errors/RuntimeNotAvailable.js';

@@ -17,4 +17,4 @@ export default class ProcedureNotFound extends NotFound
     get fqn() { return this.#fqn; }
 }
 
-(ProcedureNotFound as Loadable).source = '/jitar/errors/ProcedureNotFound.js';
+(ProcedureNotFound as Loadable).source = '/jitar-runtime/errors/ProcedureNotFound.js';

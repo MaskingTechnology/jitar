@@ -21,4 +21,4 @@ export default class ImplementationNotFound extends NotFound
     get version() { return this.#version; }
 }
 
-(ImplementationNotFound as Loadable).source = '/jitar/errors/ImplementationNotFound.js';
+(ImplementationNotFound as Loadable).source = '/jitar-runtime/errors/ImplementationNotFound.js';

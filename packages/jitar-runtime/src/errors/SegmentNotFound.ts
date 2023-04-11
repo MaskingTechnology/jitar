@@ -17,4 +17,4 @@ export default class SegmentNotFound extends ServerError
     get source() { return this.#source; }
 }
 
-(SegmentNotFound as Loadable).source = '/jitar/errors/SegmentNotFound.js';
+(SegmentNotFound as Loadable).source = '/jitar-runtime/errors/SegmentNotFound.js';

@@ -21,4 +21,4 @@ export default class ModuleNotLoaded extends ServerError
     get reason() { return this.#reason; }
 }
 
-(ModuleNotLoaded as Loadable).source = '/jitar/errors/ModuleNotLoaded.js';
+(ModuleNotLoaded as Loadable).source = '/jitar-runtime/errors/ModuleNotLoaded.js';

@@ -17,4 +17,4 @@ export default class InvalidParameterValue extends BadRequest
     get parameterName() { return this.#parameterName; }
 }
 
-(InvalidParameterValue as Loadable).source = '/jitar/errors/InvalidParameterValue.js';
+(InvalidParameterValue as Loadable).source = '/jitar-runtime/errors/InvalidParameterValue.js';

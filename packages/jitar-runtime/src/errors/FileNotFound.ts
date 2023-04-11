@@ -17,4 +17,4 @@ export default class FileNotFound extends NotFound
     get filename() { return this.#filename; }
 }
 
-(FileNotFound as Loadable).source = '/jitar/errors/FileNotFound.js';
+(FileNotFound as Loadable).source = '/jitar-runtime/errors/FileNotFound.js';
