@@ -204,8 +204,6 @@ export default class RPCController
         const contentType = this.#createResponseContentType(content);
         const statusCode = this.#createResponseStatusCode(error);
 
-        console.log('ERROR CODE', statusCode);
-
         response.setHeader('Content-Type', contentType);
 
         return response.status(statusCode).send(content);
