@@ -7,7 +7,7 @@ const ORDER_SEGMENT_REPOSITORY = `export const files = [
 const ORDER_SEGMENT_NODE = 
 `import { default as $1 } from "./order/createOrder.js";
 import { v0_0_0 as $2, v1_0_0 as $3 } from "./order/storeOrder.js";
-const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __getDependency("jitar-runtime");
+const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __getDependency("jitar");
 export const segment = new Segment("order")
 \t.addProcedure(new Procedure("order/createOrder")
 \t\t.addImplementation(new Implementation(new Version(0, 0, 0), "private", [new NamedParameter("items", false)], $1))
@@ -24,7 +24,7 @@ const PRODUCT_SEGMENT_REPOSITORY = `export const files = [
 const PRODUCT_SEGMENT_NODE = 
 `import { default as $1, searchProducts as $2 } from "./product/getProducts.js";
 import { default as $3, searchProducts as $4 } from "./product/getProducts_v1.js";
-const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __getDependency("jitar-runtime");
+const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __getDependency("jitar");
 export const segment = new Segment("product")
 \t.addProcedure(new Procedure("product/getProducts")
 \t\t.addImplementation(new Implementation(new Version(0, 0, 0), "private", [new NamedParameter("id", false)], $1))

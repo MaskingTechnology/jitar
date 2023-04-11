@@ -1,5 +1,5 @@
 
-import { FileManager, Files } from 'jitar-runtime';
+import { FileManager, Files } from '@jitar/runtime';
 
 import ApplicationCacheBuilder from './building/ApplicationCacheBuilder.js';
 import ApplicationCacheWriter from './building/ApplicationCacheWriter.js';

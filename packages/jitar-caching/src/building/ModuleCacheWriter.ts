@@ -1,5 +1,5 @@
 
-import { FileManager, convertToLocalFilename, convertToRemoteFilename } from 'jitar-runtime';
+import { FileManager, convertToLocalFilename, convertToRemoteFilename } from '@jitar/runtime';
 
 import ModuleCache from './models/ModuleCache.js';
 import Module from './models/Module.js';

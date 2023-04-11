@@ -1,5 +1,5 @@
 
-import { ReflectionModule } from 'jitar-reflection';
+import { ReflectionModule } from '@jitar/reflection';
 
 export default class Module
 {

@@ -1,6 +1,6 @@
 
-import { Runtime, LocalRepository, LocalGateway, LocalNode, RemoteRepository, RemoteGateway, RemoteNode, NodeMonitor, Proxy, Repository, Gateway, Node } from 'jitar-runtime';
-import { CacheManager } from 'jitar-caching';
+import { Runtime, LocalRepository, LocalGateway, LocalNode, RemoteRepository, RemoteGateway, RemoteNode, NodeMonitor, Proxy, Repository, Gateway, Node } from '@jitar/runtime';
+import { CacheManager } from '@jitar/caching';
 
 import LocalFileManager from './LocalFileManager.js';
 

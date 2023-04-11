@@ -3,7 +3,7 @@ import { Controller, Get } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalNode, Proxy } from 'jitar-runtime';
+import { LocalNode, Proxy } from '@jitar/runtime';
 
 @Controller('health')
 export default class HealthController

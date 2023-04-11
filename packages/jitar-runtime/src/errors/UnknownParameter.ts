@@ -1,5 +1,5 @@
 
-import { Loadable } from 'jitar-serialization';
+import { Loadable } from '@jitar/serialization';
 
 import BadRequest from './generic/BadRequest.js';
 

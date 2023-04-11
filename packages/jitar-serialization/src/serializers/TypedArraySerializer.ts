@@ -1,5 +1,5 @@
 
-import { Reflector } from 'jitar-reflection';
+import { Reflector } from '@jitar/reflection';
 
 import ValueSerializer from '../ValueSerializer.js';
 import SerializedTypedArray from '../types/serialized/SerializedTypedArray.js';

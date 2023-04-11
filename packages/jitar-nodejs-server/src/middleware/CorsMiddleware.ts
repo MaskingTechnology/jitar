@@ -1,5 +1,5 @@
 
-import { Middleware, NextHandler, Version } from 'jitar-runtime';
+import { Middleware, NextHandler, Version } from '@jitar/runtime';
 
 export default class CorsMiddleware implements Middleware
 {

@@ -3,7 +3,7 @@ import { Controller, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalGateway, RemoteNode } from 'jitar-runtime';
+import { LocalGateway, RemoteNode } from '@jitar/runtime';
 
 import NodeDto from '../models/NodeDto.js';
 import DataConverter from '../utils/DataConverter.js';

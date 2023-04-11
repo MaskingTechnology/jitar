@@ -1,5 +1,5 @@
 
-import { ReflectionFunction } from 'jitar-reflection';
+import { ReflectionFunction } from '@jitar/reflection';
 
 export default class SegmentImplementation
 {

@@ -1,4 +1,4 @@
 
-export { startClient, getClient } from 'jitar-runtime';
+export { startClient, getClient } from '@jitar/runtime';
 
 export * from './shared.js';

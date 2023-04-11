@@ -1,5 +1,5 @@
 
-import { ClassLoader, Loadable, ClassNotFound, InvalidClass } from 'jitar-serialization';
+import { ClassLoader, Loadable, ClassNotFound, InvalidClass } from '@jitar/serialization';
 
 import ModuleLoader from './ModuleLoader.js';
 

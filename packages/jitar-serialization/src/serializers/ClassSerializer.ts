@@ -1,5 +1,5 @@
 
-import { ReflectionClass, ReflectionField, Reflector } from 'jitar-reflection';
+import { ReflectionClass, ReflectionField, Reflector } from '@jitar/reflection';
 
 import ValueSerializer from '../ValueSerializer.js';
 import ClassNotFound from '../errors/ClassNotFound.js';

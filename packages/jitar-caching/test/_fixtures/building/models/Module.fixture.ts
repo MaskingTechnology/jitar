@@ -1,5 +1,5 @@
 
-import { Reflector } from 'jitar-reflection';
+import { Reflector } from '@jitar/reflection';
 
 import Module from '../../../../src/building/models/Module';
 

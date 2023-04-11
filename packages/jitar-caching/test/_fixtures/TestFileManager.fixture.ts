@@ -1,5 +1,5 @@
 
-import { File, FileManager, Files } from 'jitar-runtime';
+import { File, FileManager, Files } from '@jitar/runtime';
 
 import { SOURCE_FILES, SOURCE_SEGMENT_FILENAMES, SOURCE_MODULE_FILENAMES } from './SourceFiles.fixture';
 

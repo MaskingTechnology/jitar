@@ -1,7 +1,7 @@
 
 import path from 'path';
 import { PluginOption, normalizePath, ResolvedConfig } from 'vite';
-import { Reflector, ReflectionFunction } from 'jitar-reflection';
+import { Reflector, ReflectionFunction } from '@jitar/reflection';
 
 const reflector = new Reflector();
 
@@ -43,7 +43,7 @@ function createBootstrapCode(segments: string[]): string
 {
     const segmentString = segments.map(segment => `'${segment}'`).join(', ');
 
-    return `<script type="importmap"> { "imports": { "jitar": "/jitar/client.js", "jitar-runtime": "/jitar-runtime/lib.js", "jitar-serialization": "/jitar-serialization/lib.js", "jitar-reflection": "/jitar-reflection/lib.js" } } </script>`
+    return `<script type="importmap"> { "imports": { "jitar": "/jitar/client.js", "@jitar/runtime": "/jitar-runtime/lib.js", "@jitar/serialization": "/jitar-serialization/lib.js", "@jitar/reflection": "/jitar-reflection/lib.js" } } </script>`
          + `<script type="module">const jitar = await import('/jitar/client.js'); await jitar.startClient(${segmentString});</script>`;
 }
 

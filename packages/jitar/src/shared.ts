@@ -1,2 +1,13 @@
 
-export { HealthCheck, Middleware, Version, NextHandler } from 'jitar-runtime';
+export {
+    HealthCheck,
+    Middleware,
+    NextHandler,
+    Segment,
+    Procedure,
+    Implementation,
+    Version,
+    NamedParameter,
+    ArrayParameter,
+    ObjectParameter
+} from '@jitar/runtime';

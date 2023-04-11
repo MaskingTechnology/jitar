@@ -1,6 +1,6 @@
 
-import { Reflector } from 'jitar-reflection';
-import { FileManager } from 'jitar-runtime';
+import { Reflector } from '@jitar/reflection';
+import { FileManager } from '@jitar/runtime';
 
 import ModuleFileNotLoaded from './errors/ModuleFileNotLoaded.js';
 

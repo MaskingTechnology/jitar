@@ -1,5 +1,5 @@
 
-import { Loadable } from 'jitar-serialization';
+import { Loadable } from '@jitar/serialization';
 
 export default class Unauthorized extends Error
 {

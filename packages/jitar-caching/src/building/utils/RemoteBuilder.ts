@@ -1,6 +1,6 @@
 
-import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionDestructuredValue, ReflectionField, ReflectionParameter } from 'jitar-reflection';
-import { AccessLevel } from 'jitar-runtime';
+import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionDestructuredValue, ReflectionField, ReflectionParameter } from '@jitar/reflection';
+import { AccessLevel } from '@jitar/runtime';
 
 import Keyword from '../definitions/Keyword.js';
 

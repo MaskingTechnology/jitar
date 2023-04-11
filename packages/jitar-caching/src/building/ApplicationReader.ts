@@ -1,5 +1,5 @@
 
-import { FileManager } from 'jitar-runtime';
+import { FileManager } from '@jitar/runtime';
 
 import Application from './models/Application.js';
 import Segment from './models/Segment.js';

@@ -1,6 +1,6 @@
 
-import { ReflectionFunction, ReflectionModule, Reflector } from 'jitar-reflection';
-import { FileManager } from 'jitar-runtime';
+import { ReflectionFunction, ReflectionModule, Reflector } from '@jitar/reflection';
+import { FileManager } from '@jitar/runtime';
 import FunctionNotAsync from './errors/FunctionNotAsync.js';
 
 import InvalidSegmentFilename from './errors/InvalidSegmentFilename.js';

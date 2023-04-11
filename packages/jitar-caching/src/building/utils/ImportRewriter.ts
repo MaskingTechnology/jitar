@@ -1,5 +1,5 @@
 
-import { ReflectionImport, Reflector } from 'jitar-reflection';
+import { ReflectionImport, Reflector } from '@jitar/reflection';
 
 import Keyword from '../definitions/Keyword.js';
 

@@ -3,8 +3,8 @@ import { Controller, Get, Post } from '@overnightjs/core';
 import { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { ClientIdHelper, LocalRepository, Proxy } from 'jitar-runtime';
-import { Serializer } from 'jitar-serialization';
+import { ClientIdHelper, LocalRepository, Proxy } from '@jitar/runtime';
+import { Serializer } from '@jitar/serialization';
 
 const clientIdHelper = new ClientIdHelper();
 

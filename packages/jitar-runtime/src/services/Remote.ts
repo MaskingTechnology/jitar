@@ -1,5 +1,5 @@
 
-import { Serializer, SerializerBuilder } from 'jitar-serialization';
+import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
 import File from '../models/File.js';
 import Version from '../models/Version.js';

@@ -1,5 +1,5 @@
 
-import { FileManager } from 'jitar-runtime';
+import { FileManager } from '@jitar/runtime';
 
 import ApplicationCache from './models/ApplicationCache.js';
 import ModuleCache from './models/ModuleCache.js';

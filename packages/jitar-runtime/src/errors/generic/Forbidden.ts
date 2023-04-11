@@ -1,5 +1,5 @@
 
-import { Loadable } from 'jitar-serialization';
+import { Loadable } from '@jitar/serialization';
 
 export default class Forbidden extends Error
 {

@@ -3,8 +3,8 @@ import { Server as OvernightServer } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import { Logger } from 'tslog';
 
-import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime, RemoteClassLoader } from 'jitar-runtime';
-import { Serializer, SerializerBuilder } from 'jitar-serialization';
+import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime, RemoteClassLoader } from '@jitar/runtime';
+import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
 import RuntimeConfigurationLoader from './utils/RuntimeConfigurationLoader.js';
 import RuntimeConfigurator from './utils/RuntimeConfigurator.js';

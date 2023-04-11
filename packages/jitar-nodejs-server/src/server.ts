@@ -1,5 +1,5 @@
 
-import { ModuleImporter, ModuleLoader } from 'jitar-runtime';
+import { ModuleImporter, ModuleLoader } from '@jitar/runtime';
 
 import JitarServer from './JitarServer.js';
 

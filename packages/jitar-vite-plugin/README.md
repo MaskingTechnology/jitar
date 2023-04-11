@@ -16,7 +16,7 @@ The plugin needs to be added to the vite config file.
 ```js
 // vite.config.js
 import { defineConfig } from 'vite'
-import jitar from 'jitar-vite-plugin'
+import jitar from '@jitar/plugin-vite'
 
 export default defineConfig({
   plugins: [
