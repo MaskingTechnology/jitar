@@ -7,6 +7,6 @@
         "start": "node --experimental-network-imports dist/start.js --config=jitar.json"
     },
     "dependencies": {
-        "jitar-nodejs-server": "^0.3.4"
+        "jitar": "^0.4.0"
     }
 }
