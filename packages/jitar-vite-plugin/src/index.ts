@@ -43,8 +43,8 @@ function createBootstrapCode(segments: string[]): string
 {
     const segmentString = segments.map(segment => `'${segment}'`).join(', ');
 
-    return `<script type="importmap"> { "imports": { "jitar-runtime": "/jitar-runtime/lib.js", "jitar-serialization": "/jitar-serialization/lib.js", "jitar-reflection": "/jitar-reflection/lib.js" } } </script>`
-         + `<script type="module">const jitar = await import('/jitar-runtime/lib.js'); await jitar.startClient(${segmentString});</script>`;
+    return `<script type="importmap"> { "imports": { "jitar": "/jitar/client.js", "jitar-runtime": "/jitar-runtime/lib.js", "jitar-serialization": "/jitar-serialization/lib.js", "jitar-reflection": "/jitar-reflection/lib.js" } } </script>`
+         + `<script type="module">const jitar = await import('/jitar/client.js'); await jitar.startClient(${segmentString});</script>`;
 }
 
 async function createImportCode(code: string, id: string, jitarFullPath: string, jitarPath: string): Promise<string>
@@ -76,7 +76,7 @@ async function createImportCode(code: string, id: string, jitarFullPath: string,
         exportCode += `export { ${functionKeys.join(', ')} };\n`;
     }
 
-    return 'const jitar = await import(/* @vite-ignore */`/jitar-runtime/lib.js`);\n'
+    return 'const jitar = await import(/* @vite-ignore */`/jitar/client.js`);\n'
         + 'const client = await jitar.getClient();\n'
         + `const module = await client.import('./${jitarPath}${relativeId}');\n`
         + importCode
@@ -108,7 +108,7 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
 
         resolveId(source: string)
         {
-            if (source === '/jitar-runtime/lib.js')
+            if (source === '/jitar/client.js')
             {
                 return { id: source, external: 'absolute' };
             }
