@@ -92,7 +92,7 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
 
     return {
 
-        name: 'jitar-vite-plugin',
+        name: 'jitar-plugin-vite',
         enforce: 'post', // After Vite converted the code to JS
         //apply: '...', // Apply in serve and build mode
 
