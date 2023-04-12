@@ -47,6 +47,7 @@ export default class JitarServer extends OvernightServer
 
         this.#serializer = SerializerBuilder.build(new RemoteClassLoader());
 
+        this.app.disable('x-powered-by');
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
     }
