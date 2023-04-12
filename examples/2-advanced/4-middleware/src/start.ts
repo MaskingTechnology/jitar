@@ -1,5 +1,5 @@
 
-import { startServer } from 'jitar-nodejs-server';
+import { startServer } from 'jitar';
 
 import LoggingMiddleware from './LoggingMiddleware.js';
 

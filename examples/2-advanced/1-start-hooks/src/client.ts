@@ -1,5 +1,5 @@
 
-import { startClient } from 'jitar-runtime';
+import { startClient } from 'jitar';
 
 const client = await startClient('client');
 

@@ -1,6 +1,6 @@
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
-import jitar from 'jitar-vite-plugin'
+import jitar from '@jitar/plugin-vite'
 
 export default defineConfig(({ mode }) =>
 {

@@ -10,7 +10,7 @@
  * (e.g. database avaialability).
  */
 
-import { HealthCheck } from 'jitar-runtime';
+import { HealthCheck } from 'jitar';
 
 export default class DatabaseHealthCheck implements HealthCheck
 {

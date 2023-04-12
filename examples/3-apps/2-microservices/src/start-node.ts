@@ -1,5 +1,5 @@
 
-import { startServer } from 'jitar-nodejs-server';
+import { startServer } from 'jitar';
 
 const moduleImporter = async (specifier: string) => import(specifier);
 
