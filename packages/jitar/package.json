@@ -8,9 +8,7 @@
     "types": "dist/lib.d.ts",
     "sideEffects": true,
     "exports": {
-        ".": "./dist/lib.js",
-        "./client.js": "./dist/client.js",
-        "./hooks.js": "./dist/hooks.js"
+        ".": "./dist/lib.js"
     },
     "scripts": {
         "lint": "eslint . --ext .ts",
