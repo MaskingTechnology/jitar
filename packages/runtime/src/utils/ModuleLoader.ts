@@ -1,4 +1,5 @@
 
+import ModuleNotAccessible from '../errors/ModuleNotAccessible.js';
 import ModuleNotLoaded from '../errors/ModuleNotLoaded.js';
 import Module from '../types/Module.js';
 import ModuleImporter from '../types/ModuleImporter.js';
@@ -20,8 +21,10 @@ export default class ModuleLoader
         _import = importer;
     }
 
-    static async load(url: string): Promise<Module>
+    static async load(specifier: string): Promise<Module>
     {
+        let url = specifier;
+        
         if (url.startsWith('/jitar'))
         {
             url = `../..${url}`;
@@ -30,6 +33,11 @@ export default class ModuleLoader
         if (_baseUrl !== undefined && url.startsWith(_baseUrl) === false)
         {
             url = UrlRewriter.addBase(url, _baseUrl);
+
+            if (url.startsWith(_baseUrl) === false)
+            {
+                throw new ModuleNotAccessible(specifier);
+            }
         }
 
         return this.import(url) as Promise<Module>;

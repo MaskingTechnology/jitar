@@ -40,7 +40,7 @@ export default class UrlRewriter
         {
             const part = parts[index].trim();
 
-            if (part === '.' || part === '')
+            if (part === '.')
             {
                 continue;
             }

@@ -91,9 +91,9 @@ export default class RPCController
         return request.query.serialize === 'true';
     }
 
-    #extractQueryArguments(request: Request): Map<string, unknown>
+    #extractQueryArguments(request: Request): Record<string, unknown>
     {
-        const args = new Map<string, unknown>();
+        const args: Record<string, unknown> = {};
 
         for (const [key, value] of Object.entries(request.query))
         {
@@ -105,19 +105,15 @@ export default class RPCController
                 continue;
             }
 
-            args.set(key, value);
+            args[key] = value;
         }
 
         return args;
     }
 
-    async #extractBodyArguments(request: Request): Promise<Map<string, unknown>>
+    async #extractBodyArguments(request: Request): Promise<Record<string, unknown>>
     {
-        const args = this.#useSerializer
-            ? await this.#serializer.deserialize(request.body) as unknown
-            : request.body;
-
-        return new Map<string, unknown>(Object.entries(args));
+        return request.body;
     }
 
     #extractHeaders(request: Request): Map<string, string>
@@ -145,7 +141,7 @@ export default class RPCController
         return headers;
     }
 
-    async #run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, response: Response, serialize: boolean): Promise<Response>
+    async #run(fqn: string, version: Version, args: Record<string, unknown>, headers: Map<string, string>, response: Response, serialize: boolean): Promise<Response>
     {
         if (this.#runtime.hasProcedure(fqn) === false)
         {
@@ -155,7 +151,14 @@ export default class RPCController
 
         try
         {
-            const result = await this.#runtime.handle(fqn, version, args, headers);
+            if (this.#useSerializer)
+            {
+                args = await this.#serializer.deserialize(args) as Record<string, unknown>;
+            }
+
+            const args2 = new Map<string, unknown>(Object.entries(args));
+
+            const result = await this.#runtime.handle(fqn, version, args2, headers);
 
             this.#logger.info(`Ran procedure -> ${fqn} (${version.toString()})`);
 
