@@ -147,6 +147,12 @@ export default class RPCController
 
     async #run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, response: Response, serialize: boolean): Promise<Response>
     {
+        if (this.#runtime.hasProcedure(fqn) === false)
+        {
+            // We need this check to make sure we won't run an private procedure.
+            return response.status(404).send(`Procedure not found -> ${fqn}`);
+        }
+
         try
         {
             const result = await this.#runtime.handle(fqn, version, args, headers);
