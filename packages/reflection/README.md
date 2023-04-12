@@ -1,7 +1,7 @@
 
-# Reflection package for Jitar
+# Jitar Reflection
 
-This package is used for reading and splitting [Jitar](https://jitar.dev) applications.
+This package provides dynamic and static reflection for JavaScript applications. It's used in the [Jitar](https://jitar.dev) project for analyzing and splitting applications, but can also be used as standalone library in any project.
 
 To add this package to your project run:
 

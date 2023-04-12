@@ -1,12 +1,12 @@
 
-# Vite plugin for Jitar
+# Jitar Plugin for Vite
 
 This plugin allows you to use [Vite](https://vitejs.dev/) to build your [Jitar](https://jitar.dev/) app.
 
 ## Installation
 
 ```bash
-npm install --save-dev jitar-vite-plugin
+npm install --save-dev @jitar/vite-plugin
 ```
 
 ## Usage

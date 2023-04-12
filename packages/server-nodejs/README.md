@@ -1,13 +1,7 @@
 
-# NodeJS server implementation for jitar!
+# Jitar Server for NodeJS
 
-This is the [NodeJS](https://nodejs.org/) server implementation to run [Jitar](https://jitar.dev) applications.
-
-To add the server to your project run:
-
-```bash
-npm install jitar-nodejs-server
-```
+This package contains the [NodeJS](https://nodejs.org/) server implementation to run [Jitar](https://jitar.dev) applications.
 
 For more information about Jitar:
 

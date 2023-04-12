@@ -1,7 +1,7 @@
 
 # Create Jitar
 
-The Create Jitar package provides a command line tool to create a new Jitar application.
+This package provides a command line tool to create new Jitar applications quickly.
 
 ## Usage
 

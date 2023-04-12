@@ -1,7 +1,7 @@
 
 #  Jitar Serialization
 
-This package provides extensible serialization and is used in the [Jitar](https://jitar.dev) project for automating data transportation.
+This package provides extensible serialization for automating end-to-end data transportation. It's used in the [Jitar](https://jitar.dev) project, but can also be used as standalone library in any project.
 
 By default it supports:
 
@@ -17,7 +17,7 @@ You can also write and add your own.
 To add this package to your project run:
 
 ```bash
-npm install jitar-serialization
+npm install @jitar/serialization
 ```
 
 ## Basic usage

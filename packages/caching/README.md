@@ -1,7 +1,7 @@
 
-# Caching package for Jitar
+# Jitar Caching
 
-This package is used for creating the runtime cache for [Jitar](https://jitar.dev) applications.
+This package contains the components for creating the runtime cache for [Jitar](https://jitar.dev) applications.
 
 For more information about Jitar:
 
