@@ -40,20 +40,25 @@ export default class ModuleLoader
             }
         }
 
-        return this.import(url) as Promise<Module>;
+        return this.#import(url, specifier) as Promise<Module>;
     }
 
-    static async import(specifier: string)
+    static async import(specifier: string): Promise<Module>
+    {
+        return this.#import(specifier, specifier);
+    }
+
+    static async #import(absolute: string, relative: string)
     {
         try
         {
-            return await _import(specifier);
+            return await _import(absolute);
         }
         catch (error: unknown)
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            throw new ModuleNotLoaded(specifier, message);
+            throw new ModuleNotLoaded(relative, message);
         }
     }
 }
