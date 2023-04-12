@@ -156,9 +156,9 @@ export default class RPCController
                 args = await this.#serializer.deserialize(args) as Record<string, unknown>;
             }
 
-            const args2 = new Map<string, unknown>(Object.entries(args));
+            const argsMap = new Map<string, unknown>(Object.entries(args));
 
-            const result = await this.#runtime.handle(fqn, version, args2, headers);
+            const result = await this.#runtime.handle(fqn, version, argsMap, headers);
 
             this.#logger.info(`Ran procedure -> ${fqn} (${version.toString()})`);
 
