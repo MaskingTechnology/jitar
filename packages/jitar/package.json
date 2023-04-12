@@ -17,10 +17,7 @@
         "release": "npm run clean && npm run build && npm publish"
     },
     "dependencies": {
-        "@jitar/caching": "^0.4.0",
-        "@jitar/reflection": "^0.4.0",
         "@jitar/runtime": "^0.4.0",
-        "@jitar/serialization": "^0.4.0",
         "@jitar/server-nodejs": "^0.4.0"
     },
     "engines": {
