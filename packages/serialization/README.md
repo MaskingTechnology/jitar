@@ -25,7 +25,7 @@ npm install @jitar/serialization
 Serializers are created by the `SerializerBuilder` class. Once a serializer is created it can be used for serialization and deserialization of all type of values mentioned above.
 
 ```ts
-import { SerializerBuilder } from 'jitar-serializer';
+import { SerializerBuilder } from '@jitar/serializer';
 
 const set = new Set().add('apple').add('banana');
 const map = new Map().set('bicycle', 1).set('car', 2).set('plane', 3);
@@ -48,7 +48,7 @@ console.log(deserializedArray);
 In order to (de)serialize class instances, the serializer needs to know the source location of the class so it can be imported and instantiated. The source must be defined as a class property.
 
 ```ts
-import { SerializerBuilder, Loadable } from 'jitar-serializer';
+import { SerializerBuilder, Loadable } from '@jitar/serializer';
 
 class Person
 {
@@ -84,7 +84,7 @@ console.log(deserializedPeter.toString()); // Peter is 42
 The `SerializerBuilder` uses a default class loader if no other loader is provided. This is fine is most cases, but for other cases you can implement your own class loader.
 
 ```ts
-import { ClassLoader } from 'jitar-serializer';
+import { ClassLoader } from '@jitar/serializer';
 
 export default class MyClassLoader implements ClassLoader
 {
@@ -99,7 +99,7 @@ export default class MyClassLoader implements ClassLoader
 Simply provide your class loader to the `SerializerBuilder` to use it.
 
 ```ts
-import { SerializerBuilder } from 'jitar-serializer';
+import { SerializerBuilder } from '@jitar/serializer';
 import MyClassLoader from './MyClassLoader';
 
 const serializer = SerializerBuilder.build(new MyClassLoader());
@@ -119,7 +119,7 @@ You can write and add your own (de)serializers by extending the `ValueSerializer
 For example, this is how the `ArraySerializer` looks like.
 
 ```ts
-import { ValueSerializer } from 'jitar-serializer';
+import { ValueSerializer } from '@jitar/serializer';
 
 export default class ArraySerializer extends ValueSerializer
 {
@@ -157,7 +157,7 @@ The `this.deserializeOther(value)` function lets the main serializer handle the 
 Value serializers can easily be added to the main serializer.
 
 ```ts
-import { SerializerBuilder } from 'jitar-serializer';
+import { SerializerBuilder } from '@jitar/serializer';
 import MySerializer from './MySerializer';
 
 const serializer = SerializerBuilder.build();
