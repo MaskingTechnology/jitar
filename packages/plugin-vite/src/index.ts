@@ -36,7 +36,7 @@ function createServerConfig(jitarUrl: string)
                 '/modules': jitarUrl,
             }
         }
-    }
+    };
 }
 
 function createBootstrapCode(segments: string[]): string
