@@ -20,6 +20,12 @@ module.exports = {
                     const sourceCode = context.getSourceCode();
                     const firstToken = sourceCode.getFirstToken(node);
     
+                    
+                    if (firstToken === null)
+                    {
+                        return;
+                    }
+
                     if (firstToken.loc.start.line === 1 && firstToken.value)
                     {
                         context.report({
