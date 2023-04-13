@@ -20,4 +20,4 @@ export default interface FileManager
     delete(filename: string): Promise<void>;
 
     filter(pattern: string): Promise<string[]>;
-}
+} /* eslint semi: 0 */ //conflicts with TypeScript linter

@@ -15,6 +15,6 @@ const HEALTH_CHECKS =
 {
     GOOD: new HealthyCheck(),
     BAD: new UnhealthyCheck()
-}
+};
 
-export { HEALTH_CHECKS }
+export { HEALTH_CHECKS };

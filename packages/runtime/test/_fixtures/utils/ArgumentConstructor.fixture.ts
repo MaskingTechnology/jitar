@@ -30,7 +30,7 @@ const PARAMETERS =
     REST: [new NamedParameter('...rest', false)],
     REST_ARRAY: [new ArrayParameter([new NamedParameter('name', false), new NamedParameter('...rest', true)])],
     REST_OBJECT: [new ObjectParameter([new NamedParameter('name', false), new NamedParameter('...rest', true)])]
-}
+};
 
 const ARGUMENTS =
 {
@@ -62,6 +62,6 @@ const ARGUMENTS =
 
     REST_OBJECT_VALID: new Map(Object.entries({ 'name': 'John Doe', '...rest': { 'first': 'foo', 'second': 'bar' }})),
     REST_OBJECT_INVALID: new Map(Object.entries({ 'name': 'John Doe', '...rest': 'foo' })),
-}
+};
 
-export { PARAMETERS, ARGUMENTS }
+export { PARAMETERS, ARGUMENTS };

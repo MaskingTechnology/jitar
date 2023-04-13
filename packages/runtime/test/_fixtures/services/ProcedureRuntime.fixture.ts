@@ -23,6 +23,6 @@ middlewareRuntime.addMiddleware(MIDDLEWARES.THIRD);
 const RUNTIMES =
 {
     MIDDLEWARE: middlewareRuntime
-}
+};
 
-export { RUNTIMES }
+export { RUNTIMES };

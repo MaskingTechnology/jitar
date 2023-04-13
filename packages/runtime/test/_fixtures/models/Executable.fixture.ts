@@ -22,7 +22,7 @@ const EXECUTABLES =
     FOURTH: () => { return 'fourth'; },
     FIFTH: () => { return 'fifth'; },
     SIXTH: () => { return runProcedure('first', '0.0.0', new Map()); }, // Runs a private task on another segment
-}
+};
 
 Object.freeze(EXECUTABLES);
 

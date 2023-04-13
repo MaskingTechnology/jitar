@@ -55,6 +55,6 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
         const nextHandler = this.#getNextHandler(fqn, version, args, headers, index + 1);
 
-        return async () => { return next.handle(fqn, version, args, headers, nextHandler); }
+        return async () => { return next.handle(fqn, version, args, headers, nextHandler); };
     }
 }

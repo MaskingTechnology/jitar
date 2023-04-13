@@ -72,4 +72,4 @@ class TestFileManager implements FileManager
     }
 }
 
-export { TestFileManager }
+export { TestFileManager };

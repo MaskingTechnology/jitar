@@ -9,6 +9,6 @@ const GATEWAY = GATEWAYS.HEALTH;
 const MONITORS =
 {
     HEALTH: new NodeMonitor(GATEWAY, 100)
-}
+};
 
-export { MONITORS, GATEWAY, NODES }
+export { MONITORS, GATEWAY, NODES };
