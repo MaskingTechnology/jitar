@@ -9,7 +9,7 @@ export default class ServerOptionsReader
 {
     static async read(): Promise<ServerOptions>
     {
-        const args: object = yargs(process.argv).argv
+        const args: object = yargs(process.argv).argv;
         const options = await DataConverter.convert<ServerOptions>(ServerOptions, args);
 
         return options;
