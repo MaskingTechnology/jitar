@@ -3,7 +3,7 @@ import { ReflectionModule } from '@jitar/reflection';
 
 export default class Module
 {
-    #filename: string
+    #filename: string;
     #code: string;
     #content: ReflectionModule;
 
@@ -15,7 +15,7 @@ export default class Module
     }
 
     get filename() { return this.#filename; }
-    
+
     get code() { return this.#code; }
 
     get content() { return this.#content; }

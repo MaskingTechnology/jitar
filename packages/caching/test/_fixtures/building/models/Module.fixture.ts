@@ -24,6 +24,6 @@ const MODULES =
     GET_PRODUCTS_V1: createModule('./product/getProducts_v1.js'),
     ORDER_MODELS: createModule('./order/models.js'),
     PRODUCT_MODELS: createModule('./product/models.js')
-}
+};
 
-export { MODULES }
+export { MODULES };

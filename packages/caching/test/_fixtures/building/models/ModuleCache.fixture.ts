@@ -12,6 +12,6 @@ const MODULE_CACHES =
     GET_PRODUCTS_V1: new ModuleCache(MODULES.GET_PRODUCTS_V1, SEGMENT_MODULES.GET_PRODUCTS_V1),
     ORDER_MODELS: new ModuleCache(MODULES.ORDER_MODELS, undefined),
     PRODUCT_MODELS: new ModuleCache(MODULES.PRODUCT_MODELS, undefined)
-}
+};
 
-export { MODULE_CACHES }
+export { MODULE_CACHES };

@@ -2,7 +2,7 @@
 const Keyword =
 {
     DEFAULT: 'default'
-}
+};
 
 Object.freeze(Keyword);
 

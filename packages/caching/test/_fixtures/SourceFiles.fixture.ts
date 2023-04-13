@@ -117,13 +117,13 @@ const SOURCE_FILES =
     './product/getProducts.js': GET_PRODUCTS,
     './product/getProducts_v1.js': GET_PRODUCTS_V1,
     './product/models.js': PRODUCT_MODELS
-}
+};
 
 const SOURCE_SEGMENT_FILENAMES =
 [
     './order.segment.json',
     './product.segment.json'
-]
+];
 
 const SOURCE_MODULE_FILENAMES =
 [
@@ -133,6 +133,6 @@ const SOURCE_MODULE_FILENAMES =
     './product/getProducts.js',
     './product/getProducts_v1.js',
     './product/models.js'
-]
+];
 
-export { SOURCE_FILES, SOURCE_SEGMENT_FILENAMES, SOURCE_MODULE_FILENAMES }
+export { SOURCE_FILES, SOURCE_SEGMENT_FILENAMES, SOURCE_MODULE_FILENAMES };

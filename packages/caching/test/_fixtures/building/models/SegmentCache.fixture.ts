@@ -31,6 +31,6 @@ const SEGMENT_CACHES =
 {
     ORDER,
     PRODUCT
-}
+};
 
-export { SEGMENT_CACHES }
+export { SEGMENT_CACHES };
