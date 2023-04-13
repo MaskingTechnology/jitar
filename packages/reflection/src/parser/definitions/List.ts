@@ -5,7 +5,7 @@ const List =
 {
     OPEN: Punctuation.LEFT_BRACKET,
     CLOSE: Punctuation.RIGHT_BRACKET
-}
+};
 
 function isList(value: string): boolean
 {

@@ -40,7 +40,7 @@ export default class ReflectionClass extends ReflectionMember
     {
         const members = new Map<string, ReflectionDeclaration | ReflectionGetter>();
 
-        this.getters.forEach(getter => { members.set(getter.name, getter) });
+        this.getters.forEach(getter => { members.set(getter.name, getter); });
         this.declarations.forEach(declaration => { if(declaration.isPublic) members.set(declaration.name, declaration); });
 
         return [...members.values()];
@@ -50,7 +50,7 @@ export default class ReflectionClass extends ReflectionMember
     {
         const members = new Map<string, ReflectionDeclaration | ReflectionSetter>();
 
-        this.setters.forEach(setter => { members.set(setter.name, setter) });
+        this.setters.forEach(setter => { members.set(setter.name, setter); });
         this.declarations.forEach(declaration => { if(declaration.isPublic) members.set(declaration.name, declaration); });
 
         return [...members.values()];

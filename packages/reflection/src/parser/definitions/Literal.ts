@@ -4,7 +4,7 @@ const Literal =
     SINGLE: '\'',
     DOUBLE: '"',
     BACKTICK: '`'
-}
+};
 
 const Literals = Object.values(Literal);
 

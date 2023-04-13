@@ -5,7 +5,7 @@ const Scope =
 {
     OPEN: Punctuation.LEFT_BRACE,
     CLOSE: Punctuation.RIGHT_BRACE
-}
+};
 
 function isScope(value: string): boolean
 {

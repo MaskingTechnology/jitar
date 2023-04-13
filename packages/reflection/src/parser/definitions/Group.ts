@@ -5,7 +5,7 @@ const Group =
 {
     OPEN: Punctuation.LEFT_PARENTHESIS,
     CLOSE: Punctuation.RIGHT_PARENTHESIS
-}
+};
 
 function isGroup(value: string): boolean
 {

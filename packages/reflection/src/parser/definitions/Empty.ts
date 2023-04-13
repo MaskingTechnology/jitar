@@ -4,7 +4,7 @@ const Empty =
     UNDEFINED: undefined,
     NULL: null,
     STRING: ''
-}
+};
 
 const Empties = Object.values(Empty) as unknown[];
 

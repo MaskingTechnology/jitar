@@ -7,7 +7,7 @@ const VALUES =
     EXPRESSION_GROUP: '(a + b) * c',
     IF_ELSE: 'if (true) { return "value1"; } else { return "value2"; }',
     TRY_CATCH_FINALLY: 'try { sum(1, 2); } catch (error) { console.error(error); } finally { console.log("finally"); }'
-}
+};
 
 const IMPORTS =
 {
@@ -20,7 +20,7 @@ const IMPORTS =
     IMPORT_DEFAULT_MEMBER_AS: "import name, { member as alias } from 'module'",
     IMPORT_MULTIPLE_MEMBERS_AS: "import { name, member as alias } from 'module'",
     IMPORT_DYNAMIC: "import('module')",
-}
+};
 
 const EXPORTS =
 {
@@ -35,7 +35,7 @@ const EXPORTS =
     EXPORT_ASYNC_FUNCTION_DECLARATION: "export async function name() {}",
     REEXPORT_ALL: "export * from 'module'",
     REEXPORT_MEMBER: "export { member } from 'module'",
-}
+};
 
 const DECLARATIONS =
 {
@@ -50,7 +50,7 @@ const DECLARATIONS =
     REGEX: "const regex = /regex/g;",
     DESTRUCTURING_ARRAY: "const [value1, value2 = true] = array;",
     DESTRUCTURING_OBJECT: "const {key1, key2 = false} = object;"
-}
+};
 
 const FUNCTIONS =
 {
@@ -74,7 +74,7 @@ const FUNCTIONS =
     DESTRUCTURING_REST_PARAMETERS: "function name({ param1, param2 }, [ param3, ...param4 ]) {}",
     SIMPLE_BODY: "function name() { return 'value'; }",
     BLOCK_BODY: "function name() { if (true) { return 'value'; } }",
-}
+};
 
 const CLASSES =
 {
@@ -127,7 +127,7 @@ const CLASSES =
 
     static async *generator3() { yield 1; }
 }`
-}
+};
 
 const MODULES =
 {
@@ -189,6 +189,6 @@ export { name, peter };
     
     export { name, peter }
 `
-}
+};
 
-export { VALUES, IMPORTS, EXPORTS, DECLARATIONS, FUNCTIONS, CLASSES, MODULES }
+export { VALUES, IMPORTS, EXPORTS, DECLARATIONS, FUNCTIONS, CLASSES, MODULES };
