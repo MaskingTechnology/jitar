@@ -17,6 +17,6 @@
         "semi": ["error", "always"],
         "eol-last": ["error", "always"],
         "brace-style": ["error", "allman", { "allowSingleLine": true }],
-        "jitar/no-empty-first-line": "error"
+        "jitar/empty-first-line": "error"
     }
 }

@@ -12,14 +12,13 @@ module.exports = {
   },
 
   rules: {
-      'no-empty-first-line': {
+      'empty-first-line': {
           create: function (context) {
   
             return {
                 Program: function (node) {
                     const sourceCode = context.getSourceCode();
                     const firstToken = sourceCode.getFirstToken(node);
-    
                     
                     if (firstToken === null)
                     {
