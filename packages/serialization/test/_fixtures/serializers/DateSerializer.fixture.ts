@@ -14,4 +14,4 @@ export {
     fixedDate,
     serializedFixedDate,
     nonObject, nonDate, notSerialized, invalidName, invalidDateValue, invalidDateString
-}
+};

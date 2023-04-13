@@ -56,4 +56,4 @@ class StringSerializer extends ValueSerializer
 export {
     FirstSerializer, SecondSerializer,
     NumberSerializer, StringSerializer
-}
+};

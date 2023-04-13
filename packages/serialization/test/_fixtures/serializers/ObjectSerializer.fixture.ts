@@ -18,4 +18,4 @@ export {
     parent,
     emptyObject, mixedObject, nestedObject,
     nonObject, specificObject
-}
+};

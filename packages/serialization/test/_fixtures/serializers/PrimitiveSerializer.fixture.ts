@@ -6,4 +6,4 @@ const nullValue = null;
 const undefinedValue = undefined;
 const objectValue = {};
 
-export { numberValue, boolValue, stringValue, nullValue, undefinedValue, objectValue }
+export { numberValue, boolValue, stringValue, nullValue, undefinedValue, objectValue };
