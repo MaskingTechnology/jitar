@@ -1,8 +1,8 @@
 
-import { LitElement, css, html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
-import litLogo from './assets/lit.svg'
-import jitarLogo from './assets/jitar.svg'
+import { LitElement, css, html } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
+import litLogo from './assets/lit.svg';
+import jitarLogo from './assets/jitar.svg';
 import { sayHello } from './shared/sayHello';
 
 @customElement('my-element')
@@ -27,7 +27,7 @@ export class MyElement extends LitElement
         <a href="https://jitar.dev" target="_blank"><img src=${jitarLogo} class="logo jitar" alt="Jitar logo" /></a>
       </div>
       <div><h1>${this.message}</h1></div>
-    `
+    `;
   }
 
   static styles = css`
@@ -58,7 +58,7 @@ export class MyElement extends LitElement
       font-size: 3.2em;
       line-height: 1.1;
     }
-  `
+  `;
 }
 
 declare global
