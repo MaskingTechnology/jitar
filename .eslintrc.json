@@ -1,9 +1,10 @@
 {
     "root": true,
-    "ignorePatterns": ["**/dist/**/*", "**/node_modules/**/*","**/coverage/**/*"],
+    "ignorePatterns": ["**/dist/**/*", "**/node_modules/**/*","**/coverage/**/*", "**/*config*"],
     "parser": "@typescript-eslint/parser",
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "eslint-plugin-jitar"
     ],
     "extends": [
         "eslint:recommended",
@@ -15,6 +16,7 @@
         "@typescript-eslint/ban-types": "off",
         "semi": ["error", "always"],
         "eol-last": ["error", "always"],
-        "brace-style": ["error", "allman", { "allowSingleLine": true }]
+        "brace-style": ["error", "allman", { "allowSingleLine": true }],
+        "jitar/no-empty-first-line": "error"
     }
 }
