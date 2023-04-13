@@ -13,6 +13,7 @@
         "packages/runtime",
         "packages/serialization",
         "packages/server-nodejs",
+        "eslint-plugin",
         "examples/1-basic/1-hello-world",
         "examples/1-basic/2-segmentation",
         "examples/1-basic/3-load-balancing",
@@ -44,7 +45,7 @@
         "@vitest/coverage-c8": "^0.30.0",
         "degit": "^2.8.4",
         "eslint": "^8.38.0",
-        "eslint-plugin-jitar": "./eslint-plugin",
+        "eslint-plugin-jitar": "0.0.1",
         "lerna": "^6.6.1",
         "vite": "^4.2.1",
         "vitest": "^0.30.0"
