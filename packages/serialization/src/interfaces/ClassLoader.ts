@@ -1,7 +1,9 @@
 
 import Loadable from '../types/Loadable.js';
 
-export default interface ClassLoader
+interface ClassLoader
 {
     loadClass(loadable: Loadable): Promise<Function>;
 }
+
+export default ClassLoader;

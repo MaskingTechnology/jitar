@@ -122,4 +122,4 @@ export {
     dataClass, constructedClass, nestedClass, privateClass,
     serializedDataClass, serializedConstructedClass, serializedNestedClass, serializedPrivateClass, serializedInvalidClass, serializedUnserializableClass,
     nonObject, nonClassObject, notSerialized, invalidName, invalidArgs, invalidFields
-}
+};

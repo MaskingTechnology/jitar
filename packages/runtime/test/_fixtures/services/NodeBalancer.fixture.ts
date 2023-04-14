@@ -6,7 +6,7 @@ const NODES =
 {
     FIRST: new LocalNode(),
     SECOND: new LocalNode()
-}
+};
 
 const filledBalancer = new NodeBalancer();
 filledBalancer.addNode(NODES.FIRST);
@@ -16,6 +16,6 @@ const BALANCERS =
 {
     FILLED: filledBalancer,
     EMPTY: new NodeBalancer()
-}
+};
 
-export { BALANCERS, NODES }
+export { BALANCERS, NODES };

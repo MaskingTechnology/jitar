@@ -150,7 +150,7 @@ const CACHE_FILES =
     './product/getProducts_v1.local.js': GET_PRODUCTS_LOCAL_V1,
     './product/getProducts_v1.remote.js': GET_PRODUCTS_REMOTE_V1,
     './product/models.local.js': PRODUCT_MODELS_LOCAL
-}
+};
 
 const CACHE_SEGMENT_FILENAMES =
 [
@@ -178,6 +178,6 @@ const CACHE_MODULE_FILENAMES =
     './product/getProducts_v1.remote.js',
     './product/models.js',
     './product/models.local.js',
-]
+];
 
-export { CACHE_FILES, CACHE_SEGMENT_FILENAMES, CACHE_MODULE_FILENAMES }
+export { CACHE_FILES, CACHE_SEGMENT_FILENAMES, CACHE_MODULE_FILENAMES };

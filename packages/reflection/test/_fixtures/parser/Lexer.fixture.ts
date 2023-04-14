@@ -14,6 +14,6 @@ const CODE =
     REGEX_RESULT: `return /[\\"]['"]/g;`,
     REGEX_ARGUMENT: `doSomething(/[\\"]['"]/g)`,
     MINIFIED: 'return`foo`;identifier1=identifier2'
-}
+};
 
 export { CODE };

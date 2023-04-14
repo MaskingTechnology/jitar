@@ -1,15 +1,15 @@
 <script lang="ts">
   
-  import svelteLogo from './assets/svelte.svg';
-  import jitarLogo from './assets/jitar.svg';
-  import { sayHello } from './shared/sayHello';
+  import svelteLogo from './assets/svelte.svg'
+  import jitarLogo from './assets/jitar.svg'
+  import { sayHello } from './shared/sayHello'
 
   async function runComponent()
   {
-      return await sayHello('Vite + Svelte + Jitar');
+      return await sayHello('Vite + Svelte + Jitar')
   }
 
-  const promise = runComponent();
+  const promise = runComponent()
 
 </script>
 

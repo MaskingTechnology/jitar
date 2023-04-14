@@ -18,7 +18,7 @@ export default class AssetsController
         this.#indexFile = indexFile;
         this.#logger = logger;
 
-        app.get('*', (request: Request, response: Response) => { this.#getContent(request, response) })
+        app.get('*', (request: Request, response: Response) => { this.#getContent(request, response); });
     }
 
     async #getContent(request: Request, response: Response): Promise<void>

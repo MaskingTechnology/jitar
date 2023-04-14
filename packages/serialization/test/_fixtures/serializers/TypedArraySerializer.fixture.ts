@@ -57,4 +57,4 @@ export {
     viewUint16, viewInt8, viewBigInt64,
     serializedViewUint16, serializedViewInt8, serializedViewBigInt64,
     nonObject, plainObject, notSerialized, invalidName, invalidType, invalidBytes
-}
+};

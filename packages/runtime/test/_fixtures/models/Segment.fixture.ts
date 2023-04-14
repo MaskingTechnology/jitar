@@ -22,7 +22,7 @@ const SEGMENTS =
         .addProcedure(PROCEDURES.FOURTH)
         .addProcedure(PROCEDURES.FIFTH)
         .addProcedure(PROCEDURES.SIXTH)
-}
+};
 
 Object.freeze(SEGMENTS);
 
@@ -31,6 +31,6 @@ const SEGMENT_FILES =
     GENERAL: ['private.js', 'public.js', 'parameters.js', 'broken.js', 'context.js', 'versioned.js'],
     FIRST: ['first.js', 'second.js', 'third.js'],
     SECOND: ['fourth.js', 'fifth.js', 'sixth.js']
-}
+};
 
-export { SEGMENTS, SEGMENT_FILES }
+export { SEGMENTS, SEGMENT_FILES };

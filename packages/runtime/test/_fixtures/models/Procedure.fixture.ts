@@ -36,8 +36,8 @@ const PROCEDURES =
         .addImplementation(IMPLEMENTATIONS.FIFTH),
     SIXTH: new Procedure('sixth')
         .addImplementation(IMPLEMENTATIONS.SIXTH)
-}
+};
 
 Object.freeze(PROCEDURES);
 
-export { PROCEDURES }
+export { PROCEDURES };

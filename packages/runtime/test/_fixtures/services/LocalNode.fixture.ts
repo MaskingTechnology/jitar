@@ -29,8 +29,8 @@ const NODES =
     SECOND: secondNode,
     GOOD: goodNode,
     BAD: badNode
-}
+};
 
 setRuntime(singleNode);
 
-export { NODES }
+export { NODES };

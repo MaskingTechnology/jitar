@@ -1,21 +1,20 @@
-
 import { LitElement, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import litLogo from './assets/lit.svg'
 import jitarLogo from './assets/jitar.svg'
-import { sayHello } from './shared/sayHello';
+import { sayHello } from './shared/sayHello'
 
 @customElement('my-element')
 export class MyElement extends LitElement
 {
   @property({ type: String })
-  message = '';
+  message = ''
 
   constructor()
   {
-    super();
+    super()
 
-    sayHello('Vite + Lit + Jitar').then((message: string) => this.message = message);
+    sayHello('Vite + Lit + Jitar').then((message: string) => this.message = message)
   }
 
   render()

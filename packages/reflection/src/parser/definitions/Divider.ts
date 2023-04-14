@@ -6,7 +6,7 @@ const Divider =
     SCOPE: Punctuation.COLON,
     SEPARATOR: Punctuation.COMMA,
     TERMINATOR: Punctuation.SEMICOLON
-}
+};
 
 const Divisions = Object.values(Divider);
 

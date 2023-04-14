@@ -21,6 +21,6 @@ const SEGMENT_IMPLEMENTATIONS =
     SEARCH_PRODUCTS: new SegmentImplementation('$2', 'searchProducts', 'public', '0.0.0', SEARCH_PRODUCTS),
     GET_PRODUCTS_V1: new SegmentImplementation('$3', 'default', 'private', '1.0.0', GET_PRODUCTS),
     SEARCH_PRODUCTS_V1: new SegmentImplementation('$4', 'searchProducts', 'public', '1.0.0', SEARCH_PRODUCTS_V1)
-}
+};
 
-export { SEGMENT_IMPLEMENTATIONS }
+export { SEGMENT_IMPLEMENTATIONS };

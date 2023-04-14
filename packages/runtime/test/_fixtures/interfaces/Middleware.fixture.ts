@@ -47,6 +47,6 @@ const MIDDLEWARES =
     FIRST: new FirstMiddleware(),
     SECOND: new SecondMiddleware(),
     THIRD: new ThirdMiddleware()
-}
+};
 
-export { MIDDLEWARES }
+export { MIDDLEWARES };

@@ -37,4 +37,4 @@ export {
     serializedPlainError, serializedEvalError, serializedRangeError, serializedReferenceError, serializedSyntaxError, serializedTypeError, serializedURIError,
     customError, otherClass,
     notSerialized, invalidName, invalidType
-}
+};

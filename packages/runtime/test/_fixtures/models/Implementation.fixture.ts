@@ -1,10 +1,10 @@
 
-import { AccessLevel } from '../../../src/definitions/AccessLevel'
-import Implementation from '../../../src/models/Implementation'
-import Version from '../../../src/models/Version'
+import { AccessLevel } from '../../../src/definitions/AccessLevel';
+import Implementation from '../../../src/models/Implementation';
+import Version from '../../../src/models/Version';
 
-import { EXECUTABLES } from './Executable.fixture'
-import { PARAMETERS } from './Parameter.fixture'
+import { EXECUTABLES } from './Executable.fixture';
+import { PARAMETERS } from './Parameter.fixture';
 
 const IMPLEMENTATIONS =
 {
@@ -27,8 +27,8 @@ const IMPLEMENTATIONS =
     FOURTH: new Implementation(Version.DEFAULT, AccessLevel.PUBLIC, [], EXECUTABLES.FOURTH),
     FIFTH: new Implementation(Version.DEFAULT, AccessLevel.PRIVATE, [], EXECUTABLES.FIFTH),
     SIXTH: new Implementation(Version.DEFAULT, AccessLevel.PUBLIC, [], EXECUTABLES.SIXTH)
-}
+};
 
 Object.freeze(IMPLEMENTATIONS);
 
-export { IMPLEMENTATIONS }
+export { IMPLEMENTATIONS };

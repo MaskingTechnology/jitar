@@ -7,4 +7,4 @@ export default defineConfig({
     svelte(),
     jitar('src', 'shared', 'http://localhost:3000')
   ],
-})
+});

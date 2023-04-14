@@ -26,4 +26,4 @@ export {
     emptySet, mixedSet, nestedSet,
     serializedEmptySet, serializedMixedSet, serializedNestedSet,
     nonObject, nonSet, notSerialized, invalidName, invalidValues
-}
+};

@@ -10,8 +10,8 @@ const VERSIONS =
     LESSER: new Version(1, 1, 3),
     MAJOR: new Version(1, 0, 0),
     MAJOR_MINOR: new Version(1, 2, 0)
-}
+};
 
 Object.freeze(VERSIONS);
 
-export { VERSIONS }
+export { VERSIONS };

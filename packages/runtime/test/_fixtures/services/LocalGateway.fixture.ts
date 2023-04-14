@@ -21,6 +21,6 @@ const GATEWAYS =
     STANDALONE: standaloneGateway,
     DISTRIBUTED: distributedGateway,
     HEALTH: healthGateway
-}
+};
 
-export { GATEWAYS, GATEWAY_URL }
+export { GATEWAYS, GATEWAY_URL };

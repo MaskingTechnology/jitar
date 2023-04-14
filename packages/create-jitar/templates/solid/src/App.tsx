@@ -1,16 +1,15 @@
-
-import solidjslogo from './logo.svg';
-import jitarLogo from './assets/jitar.svg';
-import type { Component } from 'solid-js';
-import { createResource } from 'solid-js';
-import { sayHello } from './shared/sayHello';
+import solidjslogo from './logo.svg'
+import jitarLogo from './assets/jitar.svg'
+import type { Component } from 'solid-js'
+import { createResource } from 'solid-js'
+import { sayHello } from './shared/sayHello'
 
 const sayHelloResource = async () => {
-  return await sayHello('Vite + Solid + Jitar');
+  return await sayHello('Vite + Solid + Jitar')
 }
 
 const App: Component = () => {
-  const [message] = createResource(sayHelloResource);
+  const [message] = createResource(sayHelloResource)
 
   return (
     <>
@@ -28,4 +27,4 @@ const App: Component = () => {
   );
 };
 
-export default App;
+export default App

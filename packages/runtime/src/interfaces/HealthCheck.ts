@@ -1,5 +1,7 @@
 
-export default interface HealthCheck
+interface HealthCheck
 {
     isHealthy(): Promise<boolean>;
 }
+
+export default HealthCheck;
