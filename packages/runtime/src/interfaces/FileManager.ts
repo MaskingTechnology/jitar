@@ -1,7 +1,7 @@
 
 import File from '../models/File.js';
 
-export default interface FileManager
+interface FileManager
 {
     getRootLocation(): string;
 
@@ -20,4 +20,6 @@ export default interface FileManager
     delete(filename: string): Promise<void>;
 
     filter(pattern: string): Promise<string[]>;
-} /* eslint semi: 0 */ //conflicts with TypeScript linter
+}
+
+export default FileManager;

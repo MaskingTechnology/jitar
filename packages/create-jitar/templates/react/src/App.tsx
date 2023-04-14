@@ -1,10 +1,9 @@
+import './App.css'
+import reactLogo from './assets/react.svg'
+import jitarLogo from './assets/jitar.svg'
+import { sayHello } from './shared/sayHello'
 
-import './App.css';
-import reactLogo from './assets/react.svg';
-import jitarLogo from './assets/jitar.svg';
-import { sayHello } from './shared/sayHello';
-
-const message = await sayHello('Vite + React + Jitar');
+const message = await sayHello('Vite + React + Jitar')
 
 function App()
 {
@@ -24,4 +23,4 @@ function App()
   )
 }
 
-export default App;
+export default App

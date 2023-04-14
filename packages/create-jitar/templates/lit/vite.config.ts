@@ -1,6 +1,6 @@
-import { resolve } from 'path';
-import { defineConfig } from 'vite';
-import jitar from '@jitar/plugin-vite';
+import { resolve } from 'path'
+import { defineConfig } from 'vite'
+import jitar from '@jitar/plugin-vite'
 
 export default defineConfig(({ mode }) =>
 {
@@ -21,4 +21,4 @@ export default defineConfig(({ mode }) =>
       },
     },
   };
-});
+})

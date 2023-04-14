@@ -13,7 +13,7 @@
         "packages/runtime",
         "packages/serialization",
         "packages/server-nodejs",
-        "eslint-plugin",
+        "tools/eslint-plugin",
         "examples/1-basic/1-hello-world",
         "examples/1-basic/2-segmentation",
         "examples/1-basic/3-load-balancing",

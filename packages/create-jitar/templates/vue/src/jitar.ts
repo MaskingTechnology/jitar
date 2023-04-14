@@ -1,6 +1,5 @@
-// src/jitar.ts
-import { startServer } from 'jitar';
+import { startServer } from 'jitar'
 
-const moduleImporter = async (specifier: string) => import(specifier);
+const moduleImporter = async (specifier: string) => import(specifier)
 
-startServer(moduleImporter);
+startServer(moduleImporter)

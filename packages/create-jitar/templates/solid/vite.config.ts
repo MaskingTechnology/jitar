@@ -1,7 +1,6 @@
-
-import { defineConfig } from 'vite';
-import solidPlugin from 'vite-plugin-solid';
-import jitar from '@jitar/plugin-vite';
+import { defineConfig } from 'vite'
+import solidPlugin from 'vite-plugin-solid'
+import jitar from '@jitar/plugin-vite'
 
 export default defineConfig({
   plugins: [
@@ -11,4 +10,4 @@ export default defineConfig({
   build: {
     target: 'esnext',
   }
-});
+})
