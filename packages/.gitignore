@@ -1,5 +1,6 @@
 coverage
 dist
+lib
 cache
 node_modules
 **/*.tgz
