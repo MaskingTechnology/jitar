@@ -4,7 +4,7 @@
 
 import ModuleLoader from '../utils/ModuleLoader.js';
 
-let _loader: Function = ModuleLoader.import;
+let _loader: Function = (name: string) => ModuleLoader.import(name);
 
 export function setDependencyLoader(loader: Function): void
 {
