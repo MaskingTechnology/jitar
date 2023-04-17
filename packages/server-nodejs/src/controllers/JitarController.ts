@@ -1,5 +1,4 @@
 
-import { Controller } from '@overnightjs/core';
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -12,7 +11,6 @@ const runtimeLocation = path.join(fileLocation, '../../../runtime/dist');
 const reflectionLocation = path.join(fileLocation, '../../../reflection/dist');
 const serializationLocation = path.join(fileLocation, '../../../serialization/dist');
 
-@Controller('')
 export default class JitarController
 {
     constructor(app: express.Application)

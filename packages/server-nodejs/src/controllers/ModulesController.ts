@@ -1,6 +1,5 @@
 
-import { Controller, Get, Post } from '@overnightjs/core';
-import { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
 import { ClientIdHelper, LocalRepository, Proxy } from '@jitar/runtime';
@@ -8,23 +7,26 @@ import { Serializer } from '@jitar/serialization';
 
 const clientIdHelper = new ClientIdHelper();
 
-@Controller('modules')
 export default class ModulesController
 {
     #repository: LocalRepository | Proxy;
     #serializer: Serializer;
     #logger: Logger<unknown>;
 
-    constructor(repository: LocalRepository | Proxy, serializer: Serializer, logger: Logger<unknown>)
+    constructor(app: express.Application, repository: LocalRepository | Proxy, serializer: Serializer, logger: Logger<unknown>)
     {
         this.#repository = repository;
         this.#serializer = serializer;
         this.#logger = logger;
+
+        app.post('/modules', (request: Request, response: Response) => { this.registerClient(request, response); });
+        app.get('/modules/:clientId/*', (request: Request, response: Response) => { this.getModule(request, response); });
     }
 
-    @Post()
     async registerClient(request: Request, response: Response): Promise<Response>
     {
+        this.#logger.info('Register client');
+
         if ((request.body instanceof Array) === false)
         {
             // TODO: Throw error.
@@ -39,9 +41,10 @@ export default class ModulesController
         return response.status(200).send(clientId);
     }
 
-    @Get(':clientId/*')
     async getModule(request: Request, response: Response): Promise<Response>
     {
+        this.#logger.info(`Get module for -> '${request.params.clientId}'`);
+
         const clientId = request.params.clientId;
 
         if (typeof clientId !== 'string' || clientIdHelper.validate(clientId) === false)

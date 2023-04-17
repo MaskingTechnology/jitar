@@ -1,6 +1,5 @@
 
-import { Server as OvernightServer } from '@overnightjs/core';
-import bodyParser from 'body-parser';
+import express, { Express } from 'express';
 import { Logger } from 'tslog';
 
 import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime, RemoteClassLoader } from '@jitar/runtime';
@@ -36,20 +35,22 @@ const STARTUP_MESSAGE = `
   By Masking Technology (masking.tech)
 `;
 
-export default class JitarServer extends OvernightServer
+export default class JitarServer
 {
+    #app: Express;
     #runtime?: Runtime;
     #serializer: Serializer;
 
     constructor()
     {
-        super(false);
-
         this.#serializer = SerializerBuilder.build(new RemoteClassLoader());
 
-        this.app.disable('x-powered-by');
-        this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({ extended: true }));
+        this.#app = express();
+
+        this.#app.use(express.json());
+        this.#app.use(express.urlencoded({ extended: true }));
+
+        this.#app.disable('x-powered-by');
     }
 
     async start(): Promise<void>
@@ -89,8 +90,8 @@ export default class JitarServer extends OvernightServer
         {
             throw new RuntimeNotAvailable();
         }
-        
-        if ( ! (this.#runtime instanceof ProcedureRuntime))
+
+        if (!(this.#runtime instanceof ProcedureRuntime))
         {
             throw new MiddlewareNotSupported();
         }
@@ -128,42 +129,42 @@ export default class JitarServer extends OvernightServer
 
     #addStandAloneControllers(proxy: Proxy, logger: Logger<unknown>, index: string): void
     {
-        super.addControllers(new HealthController(proxy, logger));
-        super.addControllers(new JitarController(this.app));
-        super.addControllers(new ModulesController(proxy, this.#serializer, logger));
-        super.addControllers(new ProceduresController(proxy, logger));
-        super.addControllers(new RPCController(proxy, this.#serializer, true, logger));
-        super.addControllers(new AssetsController(this.app, proxy, index, logger));
+        new HealthController(this.#app, proxy, logger);
+        new JitarController(this.#app);
+        new ModulesController(this.#app, proxy, this.#serializer, logger);
+        new ProceduresController(this.#app, proxy, logger);
+        new RPCController(this.#app, proxy, this.#serializer, true, logger);
+        new AssetsController(this.#app, proxy, index, logger);
     }
 
     #addRepositoryControllers(repository: LocalRepository, logger: Logger<unknown>, index: string): void
     {
-        super.addControllers(new JitarController(this.app));
-        super.addControllers(new ModulesController(repository, this.#serializer, logger));
-        super.addControllers(new AssetsController(this.app, repository, index, logger));
+        new JitarController(this.#app);
+        new ModulesController(this.#app, repository, this.#serializer, logger);
+        new AssetsController(this.#app, repository, index, logger);
     }
 
     #addGatewayControllers(gateway: LocalGateway, logger: Logger<unknown>): void
     {
-        super.addControllers(new NodesController(gateway, logger));
-        super.addControllers(new ProceduresController(gateway, logger));
-        super.addControllers(new RPCController(gateway, this.#serializer, false, logger));
+        new NodesController(this.#app, gateway, logger);
+        new ProceduresController(this.#app, gateway, logger);
+        new RPCController(this.#app, gateway, this.#serializer, false, logger);
     }
 
     #addNodeControllers(node: LocalNode, logger: Logger<unknown>): void
     {
-        super.addControllers(new HealthController(node, logger));
-        super.addControllers(new ProceduresController(node, logger));
-        super.addControllers(new RPCController(node, this.#serializer, true, logger));
+        new HealthController(this.#app, node, logger);
+        new ProceduresController(this.#app, node, logger);
+        new RPCController(this.#app, node, this.#serializer, true, logger);
     }
 
     #addProxyControllers(proxy: Proxy, logger: Logger<unknown>): void
     {
-        super.addControllers(new ProxyController(this.app, proxy, logger));
+        new ProxyController(this.#app, proxy, logger);
     }
 
     async #startServer(port: string): Promise<void>
     {
-        return new Promise(resolve => { this.app.listen(port, resolve); });
+        return new Promise(resolve => { this.#app.listen(port, resolve); });
     }
 }
