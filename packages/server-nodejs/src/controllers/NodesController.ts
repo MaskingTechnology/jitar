@@ -4,7 +4,7 @@ import { Logger } from 'tslog';
 
 import { LocalGateway, RemoteNode } from '@jitar/runtime';
 
-import NodeDto from '../models/NodeDto.js';
+import NodeDto, { schema as nodeDtoSchema } from '../models/NodeDto.js';
 import DataConverter from '../utils/DataConverter.js';
 
 export default class NodesController
@@ -34,7 +34,7 @@ export default class NodesController
     {
         try
         {
-            const nodeDto = await DataConverter.convert(NodeDto, request.body);
+            const nodeDto = DataConverter.convert<NodeDto>(nodeDtoSchema, request.body);
             const node = new RemoteNode(nodeDto.url, nodeDto.procedureNames);
 
             this.#gateway.addNode(node);

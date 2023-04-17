@@ -1,19 +1,17 @@
 
 import { readFileSync } from 'fs';
 
-import RuntimeConfiguration from '../configuration/RuntimeConfiguration.js';
+import RuntimeConfiguration, { schema as RuntimeSchema } from '../configuration/RuntimeConfiguration.js';
 
 import DataConverter from './DataConverter.js';
 
 export default class RuntimeConfigurationLoader
 {
-    static async load(filename: string): Promise<RuntimeConfiguration>
+    static load(filename: string): RuntimeConfiguration
     {
         const plainContents = readFileSync(filename, 'utf-8');
         const parsedContents = JSON.parse(plainContents);
 
-        const configuration = await DataConverter.convert<RuntimeConfiguration>(RuntimeConfiguration, parsedContents);
-
-        return configuration;
+        return DataConverter.convert<RuntimeConfiguration>(RuntimeSchema, parsedContents);
     }
 }

@@ -57,8 +57,8 @@ export default class JitarServer
     {
         console.log(STARTUP_MESSAGE);
 
-        const options = await ServerOptionsReader.read();
-        const configuration = await RuntimeConfigurationLoader.load(options.config);
+        const options = ServerOptionsReader.read();
+        const configuration = RuntimeConfigurationLoader.load(options.config);
         const runtime = await RuntimeConfigurator.configure(configuration);
 
         const logger = LogBuilder.build(options.loglevel);

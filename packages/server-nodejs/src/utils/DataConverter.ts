@@ -1,15 +1,10 @@
 
-import { ClassConstructor, plainToClass } from 'class-transformer';
-import { validateOrReject } from 'class-validator';
+import { z } from 'zod';
 
 export default class DataConverter
 {
-    static async convert<Type extends Object>(targetClass: ClassConstructor<Type>, dataObject: object): Promise<Type>
+    static convert<Type extends Object>(schema: z.ZodSchema, dataObject: object): Type
     {
-        const createdObject: Type = plainToClass(targetClass, dataObject);
-
-        await validateOrReject(createdObject);
-
-        return createdObject;
+        return schema.parse(dataObject);
     }
 }

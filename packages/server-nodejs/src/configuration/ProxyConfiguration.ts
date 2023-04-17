@@ -1,16 +1,22 @@
 
-import { IsUrl, IsOptional } from 'class-validator';
+import { z } from 'zod';
+
+export const schema = z.object({
+    node: z.string().url().optional(),
+    gateway: z.string().url().optional(),
+    repository: z.string().url().optional()
+}).strict().transform((value) => new ProxyConfiguration(value.node, value.gateway, value.repository));
 
 export default class ProxyConfiguration
 {
-    @IsUrl()
-    @IsOptional()
     node?: string;
-
-    @IsUrl()
-    @IsOptional()
     gateway?: string;
-
-    @IsUrl()
     repository?: string;
+
+    constructor(node?: string, gateway?: string, repository?: string)
+    {
+        this.node = node;
+        this.gateway = gateway;
+        this.repository = repository;
+    }
 }

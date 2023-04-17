@@ -1,16 +1,20 @@
 
-import { Contains, IsEnum, IsOptional, IsString } from 'class-validator';
+import { z } from 'zod';
 import { LogLevel } from '../utils/LogBuilder.js';
+
+export const schema = z.object({
+    loglevel: z.nativeEnum(LogLevel).optional(),
+    config: z.string().endsWith('.json').optional()
+}).transform((value) => new ServerOptions(value.loglevel, value.config));
 
 export default class ServerOptions
 {
-    @IsString()
-    @IsOptional()
-    @IsEnum(LogLevel)
     loglevel = 'info';
-
-    @IsString()
-    @Contains('.json')
-    @IsOptional()
     config = 'config.json';
+
+    constructor(loglevel = 'info', config = 'config.json')
+    {
+        this.loglevel = loglevel;
+        this.config = config;
+    }
 }

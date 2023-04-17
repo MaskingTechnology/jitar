@@ -1,16 +1,16 @@
 
 import yargs from 'yargs';
 
-import ServerOptions from '../configuration/ServerOptions.js';
+import ServerOptions, { schema as serverOptionsSchema } from '../configuration/ServerOptions.js';
 
 import DataConverter from './DataConverter.js';
 
 export default class ServerOptionsReader
 {
-    static async read(): Promise<ServerOptions>
+    static read(): ServerOptions
     {
         const args: object = yargs(process.argv).argv;
-        const options = await DataConverter.convert<ServerOptions>(ServerOptions, args);
+        const options = DataConverter.convert<ServerOptions>(serverOptionsSchema, args);
 
         return options;
     }
