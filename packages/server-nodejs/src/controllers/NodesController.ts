@@ -1,6 +1,5 @@
 
-import { Controller, Get, Post } from '@overnightjs/core';
-import { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
 import { LocalGateway, RemoteNode } from '@jitar/runtime';
@@ -8,19 +7,20 @@ import { LocalGateway, RemoteNode } from '@jitar/runtime';
 import NodeDto from '../models/NodeDto.js';
 import DataConverter from '../utils/DataConverter.js';
 
-@Controller('nodes')
 export default class NodesController
 {
     #gateway: LocalGateway;
     #logger: Logger<unknown>;
 
-    constructor(gateway: LocalGateway, logger: Logger<unknown>)
+    constructor(app: express.Application, gateway: LocalGateway, logger: Logger<unknown>)
     {
         this.#gateway = gateway;
         this.#logger = logger;
+
+        app.get('/nodes', (request: Request, response: Response) => { this.getNodes(request, response); });
+        app.post('/nodes', (request: Request, response: Response) => { this.add(request, response); });
     }
 
-    @Get()
     async getNodes(request: Request, response: Response): Promise<Response>
     {
         const nodes = this.#gateway.nodes.map(node => { return { url: node.url, procedureNames: node.getProcedureNames() }; });
@@ -30,7 +30,6 @@ export default class NodesController
         return response.status(200).send(nodes);
     }
 
-    @Post()
     async add(request: Request, response: Response): Promise<Response>
     {
         try

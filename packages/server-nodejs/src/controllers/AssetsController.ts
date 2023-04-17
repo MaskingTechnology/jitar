@@ -1,11 +1,9 @@
 
-import { Controller } from '@overnightjs/core';
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
 import { FileNotFound, LocalRepository, Proxy } from '@jitar/runtime';
 
-@Controller('')
 export default class AssetsController
 {
     #repository: LocalRepository | Proxy;

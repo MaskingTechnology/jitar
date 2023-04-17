@@ -1,6 +1,5 @@
 
-import { Controller, Get, Options, Post } from '@overnightjs/core';
-import { Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
 import { Version, VersionParser, ProcedureRuntime } from '@jitar/runtime';
@@ -12,7 +11,6 @@ const RPC_PARAMETERS = ['version', 'serialize'];
 const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
 const CORS_MAX_AGE = 86400;
 
-@Controller('rpc')
 export default class RPCController
 {
     #runtime: ProcedureRuntime;
@@ -20,12 +18,16 @@ export default class RPCController
     #useSerializer: boolean;
     #logger: Logger<unknown>;
 
-    constructor(runtime: ProcedureRuntime, serializer: Serializer, useSerializer: boolean, logger: Logger<unknown>)
+    constructor(app: express.Application, runtime: ProcedureRuntime, serializer: Serializer, useSerializer: boolean, logger: Logger<unknown>)
     {
         this.#runtime = runtime;
         this.#serializer = serializer;
         this.#useSerializer = useSerializer;
         this.#logger = logger;
+
+        app.get('/rpc/*', (request: Request, response: Response) => { this.runGet(request, response); });
+        app.post('/rpc/*', (request: Request, response: Response) => { this.runPost(request, response); });
+        app.options('/rpc/*', (request: Request, response: Response) => { this.runOptions(request, response); });
 
         this.#showProcedureInfo();
     }
@@ -44,7 +46,6 @@ export default class RPCController
         this.#logger.info('Registered RPC entries', procedureNames);
     }
 
-    @Get('*')
     async runGet(request: Request, response: Response): Promise<Response>
     {
         const fqn = this.#extractFqn(request);
@@ -56,19 +57,17 @@ export default class RPCController
         return this.#run(fqn, version, args, headers, response, serialize);
     }
 
-    @Post('*')
     async runPost(request: Request, response: Response): Promise<Response>
     {
         const fqn = this.#extractFqn(request);
         const version = this.#extractVersion(request);
-        const args = await this.#extractBodyArguments(request);
+        const args = this.#extractBodyArguments(request);
         const headers = this.#extractHeaders(request);
         const serialize = this.#extractSerialize(request);
 
         return this.#run(fqn, version, args, headers, response, serialize);
     }
 
-    @Options('*')
     async runOptions(request: Request, response: Response): Promise<Response>
     {
         return this.#setCors(response);
@@ -76,7 +75,7 @@ export default class RPCController
 
     #extractFqn(request: Request): string
     {
-        return request.path.substring(1);
+        return request.path.substring(5);
     }
 
     #extractVersion(request: Request): Version
@@ -111,7 +110,7 @@ export default class RPCController
         return args;
     }
 
-    async #extractBodyArguments(request: Request): Promise<Record<string, unknown>>
+    #extractBodyArguments(request: Request): Record<string, unknown>
     {
         return request.body;
     }
