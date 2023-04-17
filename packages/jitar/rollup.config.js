@@ -1,21 +1,40 @@
 import json from '@rollup/plugin-json';
 import terser from '@rollup/plugin-terser';
-import dts from "rollup-plugin-dts";
 import { nodeResolve } from '@rollup/plugin-node-resolve';
-import globals from 'rollup-plugin-node-globals';
-import builtins from 'rollup-plugin-node-builtins';
+import typescript from '@rollup/plugin-typescript';
+import dts from "rollup-plugin-dts";
 
 export default [
 	{
 		input: 'dist/client.js',
-		output: [
-			{
-				file: 'lib/client.js',
-				format: 'module',
-				plugins: [terser()]
-			}
+		output: {
+			banner: '/* Jitar client v0.4.0 | (c) Masking Technology B.V. | https://github.com/MaskingTechnology/jitar/blob/main/LICENCE */',
+			file: 'lib/client.js',
+			format: 'module',
+			plugins: [terser()]
+		},
+		plugins: [typescript(), json(), nodeResolve()]
+	},
+    {
+		external: [
+			'class-transformer',
+			'class-validator',
+			'express',
+			'express-http-proxy',
+			'fs-extra',
+			'glob-promise',
+			'mime-types',
+			'tslog',
+			'yargs'
 		],
-		plugins: [json(), nodeResolve()]
+		input: 'dist/server.js',
+		output: {
+			banner: '/* Jitar server v0.4.0 | (c) Masking Technology B.V. | https://github.com/MaskingTechnology/jitar/blob/main/LICENCE */',
+			file: 'lib/server.js',
+			format: 'module',
+			plugins: [terser()]
+		},
+		plugins: [typescript(), json(), nodeResolve()]
 	},
 	{
 		input: 'dist/client.d.ts',
@@ -25,6 +44,16 @@ export default [
 				format: 'module'
 			}
 		],
-		plugins: [dts()]
+		plugins: [typescript(), dts()]
+	},
+	{
+		input: 'dist/server.d.ts',
+		output: [
+			{
+				file: 'lib/server.d.ts',
+				format: 'module'
+			}
+		],
+		plugins: [typescript(), dts()]
 	}
 ]
