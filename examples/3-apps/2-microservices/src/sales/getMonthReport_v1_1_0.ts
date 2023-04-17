@@ -1,7 +1,7 @@
 
-import getOrders from '../orders/getOrders_v0_0_0.js';
-import createStatistics from './createStatistics_v1_0_0.js';
-import formatReport from '../dtp/formatReport_v1_1_0.js';
+import getOrders from '../orders/getOrders_v0_0_0';
+import createStatistics from './createStatistics_v1_0_0';
+import formatReport from '../dtp/formatReport_v1_1_0';
 
 export default async function getMonthReport(year: number, month: number): Promise<string>
 {

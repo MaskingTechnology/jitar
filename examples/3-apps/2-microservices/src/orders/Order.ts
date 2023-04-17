@@ -1,6 +1,6 @@
 
-import Customer from '../customers/Customer.js';
-import OrderLine from './OrderLine.js';
+import Customer from '../customers/Customer';
+import OrderLine from './OrderLine';
 
 export default class Order
 {

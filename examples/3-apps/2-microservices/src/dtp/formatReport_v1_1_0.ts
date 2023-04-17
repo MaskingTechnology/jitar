@@ -1,5 +1,5 @@
 
-import Statistics from '../sales/Statistics.js';
+import Statistics from '../sales/Statistics';
 
 const months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
 

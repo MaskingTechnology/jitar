@@ -1,7 +1,7 @@
 
-import getCollection from '../../common/database/getCollection.js';
+import getCollection from '../../common/database/getCollection';
 
-import Contact from '../models/Contact.js';
+import Contact from '../models/Contact';
 
 export default async function getContacts(): Promise<Contact[]>
 {

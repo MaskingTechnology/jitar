@@ -1,7 +1,8 @@
 
+// With .js extension
 const NO_SYSTEM_IMPORTS =
 `import './path/to/file.js';
-import component from '/path/to/component.js;';
+import component from '/path/to/component.js';
 import { component1, component2 } from '../path/to/components.js';
 `;
 
@@ -25,18 +26,26 @@ const HAS_IMPORT_NO_SEMICOLON = `import { runProcedure } from 'jitar'`;
 
 const HAS_IMPORT_NO_SEMICOLON_RESULT = `const { runProcedure } = await __getDependency('jitar');`;
 
+// Without .js extension
 const HAS_MIXED_IMPORTS =
+`import component from './path/to/component';
+import os from 'os';
+import { runProcedure } from 'jitar';
+import main, { some as other } from 'library';
+`;
+
+const HAS_MIXED_IMPORTS_RESULT_APP =
 `import component from './path/to/component.js';
 import os from 'os';
 import { runProcedure } from 'jitar';
 import main, { some as other } from 'library';
 `;
 
-const HAS_MIXED_IMPORTS_RESULT =
+const HAS_MIXED_IMPORTS_RESULT_ALL =
 `import component from './path/to/component.js';
 const os = await __getDependency('os');
 const { runProcedure } = await __getDependency('jitar');
-const { default: main, some: other } = await __getDependency('library');
+const { default : main, some : other } = await __getDependency('library');
 `;
 
 const HAS_DYNAMIC_IMPORTS =
@@ -77,7 +86,7 @@ const OUTPUTS =
     NO_SYSTEM_IMPORTS_RESULT,
     HAS_SYSTEM_IMPORTS_RESULT,
     HAS_IMPORT_NO_SEMICOLON_RESULT,
-    HAS_MIXED_IMPORTS_RESULT,
+    HAS_MIXED_IMPORTS_RESULT_APP, HAS_MIXED_IMPORTS_RESULT_ALL,
     HAS_DYNAMIC_IMPORTS_RESULT,
     HAS_IMPORTS_AND_CONTENT_RESULT
 };

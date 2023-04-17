@@ -1,10 +1,10 @@
 
-import getCollection from '../../common/database/getCollection.js';
-import createId from '../../common/database/createId.js';
+import getCollection from '../../common/database/getCollection';
+import createId from '../../common/database/createId';
 
-import Contact from '../models/Contact.js';
+import Contact from '../models/Contact';
 
-import getContact from './getContact.js';
+import getContact from './getContact';
 
 export default async function updateContact(id: string, name: string, address: string, phone: string, email: string): Promise<Contact | undefined>
 {

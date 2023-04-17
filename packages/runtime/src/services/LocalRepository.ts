@@ -98,6 +98,8 @@ export default class LocalRepository extends Repository
         // original imports to prevent import issues while loading the
         // module in the local repository.
 
+        filename = ModuleLoader.assureExtension(filename);
+
         const location = this.#fileManager.getAbsoluteLocation(filename);
 
         return ModuleLoader.import(location);

@@ -1,6 +1,6 @@
 
-import Header from './common/views/Header.js';
-import ContactPage from './contact/views/ContactPage.js';
+import Header from './common/views/Header';
+import ContactPage from './contact/views/ContactPage';
 
 export function App(props: any)
 {

@@ -1,5 +1,5 @@
 
-import Person from './Person.js';
+import Person from './Person';
 
 export default async function sayHi(person: Person): Promise<string>
 {

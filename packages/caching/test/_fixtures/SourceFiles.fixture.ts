@@ -1,4 +1,5 @@
 
+// With .js extension
 const ORDER_SEGMENT = `
 {
     "./order/createOrder.js":
@@ -13,14 +14,15 @@ const ORDER_SEGMENT = `
 }
 `;
 
+// Without .js extension
 const PRODUCT_SEGMENT = `
 {
-    "./product/getProducts.js":
+    "./product/getProducts":
     {
         "default": { "access": "private" },
         "searchProducts": { "access": "public" }
     },
-    "./product/getProducts_v1.js":
+    "./product/getProducts_v1":
     {
         "default": { "access": "private", "version": "1.0.0" },
         "searchProducts": { "access": "public", "version": "1.0.0" }

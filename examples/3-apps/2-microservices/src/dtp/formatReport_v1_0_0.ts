@@ -1,5 +1,5 @@
 
-import Statistics from '../sales/Statistics.js';
+import Statistics from '../sales/Statistics';
 
 export default async function formatReport(statistics: Statistics): Promise<string>
 {

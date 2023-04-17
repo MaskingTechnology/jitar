@@ -1,9 +1,9 @@
 
-import Order from './Order.js';
-import OrderLine from './OrderLine.js';
+import Order from './Order';
+import OrderLine from './OrderLine';
 
-import customers from '../customers/customers.js';
-import products from '../products/products.js';
+import customers from '../customers/customers';
+import products from '../products/products';
 
 const orders =
     [

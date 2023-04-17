@@ -1,7 +1,7 @@
 
 import { MongoClient } from 'mongodb';
 
-import DatabaseError from './DatabaseError.js';
+import DatabaseError from './DatabaseError';
 
 let client: MongoClient;
 
