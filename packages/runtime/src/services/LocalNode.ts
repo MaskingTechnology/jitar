@@ -100,7 +100,7 @@ export default class LocalNode extends Node
         this.#clientId = await repository.registerClient(segmentNames);
 
         setRuntime(this);
-        setDependencyLoader(ModuleLoader.import);
+        setDependencyLoader((name: string) => ModuleLoader.import(name));
 
         const moduleLocation = await repository.getModuleLocation(this.#clientId);
 
