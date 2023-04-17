@@ -6,6 +6,8 @@ import ModuleImporter from '../types/ModuleImporter.js';
 
 import UrlRewriter from './UrlRewriter.js';
 
+const NON_SYSTEM_INDICATORS = ['.', '/', 'http:', 'https:'];
+
 let _baseUrl: string | undefined;
 let _import = async (name: string): Promise<Module> => { return import(name); };
 
@@ -21,9 +23,19 @@ export default class ModuleLoader
         _import = importer;
     }
 
+    static assureExtension(specifier: string): string
+    {
+        if (this.#isSystemModule(specifier))
+        {
+            return specifier;
+        }
+
+        return specifier.endsWith('.js') ? specifier : `${specifier}.js`;
+    }
+
     static async load(specifier: string): Promise<Module>
     {
-        let url = specifier;
+        let url = this.assureExtension(specifier);
         
         if (url.startsWith('/jitar'))
         {
@@ -60,5 +72,10 @@ export default class ModuleLoader
 
             throw new ModuleNotLoaded(relative, message);
         }
+    }
+
+    static #isSystemModule(specifier: string): boolean
+    {
+        return NON_SYSTEM_INDICATORS.some((indicator: string) => specifier.startsWith(indicator)) === false;
     }
 }
