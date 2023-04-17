@@ -38,7 +38,6 @@ const STARTUP_MESSAGE = `
 export default class JitarServer
 {
     #app: Express;
-    //#router: express.Router;
     #runtime?: Runtime;
     #serializer: Serializer;
 
@@ -47,9 +46,7 @@ export default class JitarServer
         this.#serializer = SerializerBuilder.build(new RemoteClassLoader());
 
         this.#app = express();
-        //this.#router = express.Router();
 
-        //this.#app.use(this.#router);
         this.#app.use(express.json());
         this.#app.use(express.urlencoded({ extended: true }));
 
