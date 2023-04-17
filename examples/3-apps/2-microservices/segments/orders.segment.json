@@ -1,5 +1,5 @@
 {
-    "orders/getOrders_v0_0_0.js": {
+    "orders/getOrders_v0_0_0": {
         "default": {
             "access": "public"
         }

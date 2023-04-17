@@ -1,5 +1,5 @@
 
-import Product from '../products/Product.js';
+import Product from '../products/Product';
 
 export default class OrderLine
 {

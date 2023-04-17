@@ -1,6 +1,6 @@
 
-import Order from '../orders/Order.js';
-import Statistics from './Statistics.js';
+import Order from '../orders/Order';
+import Statistics from './Statistics';
 
 export default async function createStatistics(orders: Order[]): Promise<Statistics>
 {

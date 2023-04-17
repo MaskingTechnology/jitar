@@ -1,10 +1,10 @@
 {
-    "./greetings/sayHello.js": {
+    "./greetings/sayHello": {
         "default": {
             "access": "public"
         }
     },
-    "./greetings/sayHello_v1_0_0.js": {
+    "./greetings/sayHello_v1_0_0": {
         "default": {
             "access": "public",
             "version": "1.0.0"

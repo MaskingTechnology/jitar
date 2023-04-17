@@ -1,13 +1,13 @@
 
-import ContactForm from './ContactForm.js';
-import ContactList from './ContactList.js';
+import ContactForm from './ContactForm';
+import ContactList from './ContactList';
 
-import Contact from '../models/Contact.js';
+import Contact from '../models/Contact';
 
-import getContacts from '../actions/getContacts.js';
-import createContact from '../actions/createContact.js';
-import updateContact from '../actions/updateContact.js';
-import deleteContact from '../actions/deleteContact.js';
+import getContacts from '../actions/getContacts';
+import createContact from '../actions/createContact';
+import updateContact from '../actions/updateContact';
+import deleteContact from '../actions/deleteContact';
 
 export default function ContactPage(props: any)
 {

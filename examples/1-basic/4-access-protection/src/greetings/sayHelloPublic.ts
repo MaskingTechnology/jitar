@@ -1,5 +1,5 @@
 
-import sayHello from './sayHello.js';
+import sayHello from './sayHello';
 
 export default async function sayHelloPublic(firstName: string): Promise<string>
 {
