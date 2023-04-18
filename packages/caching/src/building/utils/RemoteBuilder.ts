@@ -17,31 +17,42 @@ export default class RemoteBuilder
         {
             for (const implementation of procedure.implementations)
             {
-                if (implementation.access !== AccessLevel.PUBLIC)
-                {
-                    continue;
-                }
-
                 const asDefault = implementation.importKey === Keyword.DEFAULT;
 
-                code += this.#createRemoteCode(procedure.fqn, implementation, asDefault);
+                code += implementation.access === AccessLevel.PRIVATE
+                    ? this.#createPrivateCode(procedure.fqn, implementation, asDefault)
+                    : this.#createPublicCode(procedure.fqn, implementation, asDefault);
             }
         }
 
         return code.trim();
     }
 
-    #createRemoteCode(fqn: string, implementation: SegmentImplementation, asDefault: boolean): string
+    #createPrivateCode(fqn: string, implementation: SegmentImplementation, asDefault: boolean): string
     {
-        const name = implementation.executable.name;
+        // Private procedures are not accessible from the outside.
+        // Therefore we need to throw an error when they are called.
+
         const version = implementation.version;
-        const parameters = this.#createParameters(implementation.executable.parameters);
-        const argumentz = this.#createArguments(implementation.executable.parameters);
 
-        const functionName = `\nexport ${asDefault ? `${Keyword.DEFAULT} ` : ''}async function ${name}(${parameters})`;
-        const functionBody = `return __runProcedure('${fqn}', '${version}', { ${argumentz} }, this)`;
+        const declaration = this.#createDeclaration(implementation, asDefault);
+        const body = `throw new ProcedureNotAccessible('${fqn}', '${version}');`;
 
-        return `${functionName} {\n\t${functionBody}\n}\n`;
+        return this.#createFunction(declaration, body);
+    }
+
+    #createPublicCode(fqn: string, implementation: SegmentImplementation, asDefault: boolean): string
+    {
+        // Public procedures are accessible from the outside.
+        // Therefore we need to create a remote implementation.
+
+        const version = implementation.version;
+        const args = this.#createArguments(implementation.executable.parameters);
+
+        const declaration = this.#createDeclaration(implementation, asDefault);
+        const body = `return __runProcedure('${fqn}', '${version}', { ${args} }, this);`;
+
+        return this.#createFunction(declaration, body);
     }
 
     #createParameters(parameters: ReflectionParameter[]): string
@@ -103,5 +114,18 @@ export default class RemoteBuilder
         const value = key.startsWith('...') ? key.substring(3) : key;
 
         return `'${key}': ${value}`;
+    }
+
+    #createDeclaration(implementation: SegmentImplementation, asDefault: boolean): string
+    {
+        const name = implementation.executable.name;
+        const parameters = this.#createParameters(implementation.executable.parameters);
+
+        return `\nexport ${asDefault ? `${Keyword.DEFAULT} ` : ''}async function ${name}(${parameters})`;
+    }
+
+    #createFunction(declaration: string, body: string): string
+    {
+        return `${declaration} {\n\t${body}\n}\n`;
     }
 }
