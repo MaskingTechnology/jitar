@@ -1,7 +1,0 @@
-{
-    "orders/getOrders_v0_0_0": {
-        "default": {
-            "access": "public"
-        }
-    }
-}

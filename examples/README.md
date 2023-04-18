@@ -48,4 +48,3 @@ The following examples combine the basic and advanced features. They demonstrate
 applications using Jitar.
 
 1. [Contact list](3-apps/1-contact-list/README.md) - Example of a full stack application build with React, MongoDB and Jitar.
-1. [Microservices](3-apps/2-microservices/README.md) - Demonstrates how to setup a microservice architecture using Jitar.
