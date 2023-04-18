@@ -48,7 +48,10 @@ export async function createOrderLine(item)
     return 'order line';
 }`;
 
-const CREATE_ORDER_REMOTE = ``;
+const CREATE_ORDER_REMOTE =
+`export default async function createOrder(items) {
+\tthrow new ProcedureNotAccessible('order/createOrder', '0.0.0');
+}`;
 
 const STORE_ORDER_LOCAL =
 `const mysql = await __getDependency('mysql');
@@ -67,11 +70,11 @@ export async function v1_0_0(...orders)
 
 const STORE_ORDER_REMOTE =
 `export async function v0_0_0(order) {
-\treturn __runProcedure('order/storeOrder', '0.0.0', { 'order': order }, this)
+\treturn __runProcedure('order/storeOrder', '0.0.0', { 'order': order }, this);
 }
 
 export async function v1_0_0(...orders) {
-\treturn __runProcedure('order/storeOrder', '1.0.0', { '...orders': orders }, this)
+\treturn __runProcedure('order/storeOrder', '1.0.0', { '...orders': orders }, this);
 }`;
 
 const ORDER_MODELS_LOCAL =
@@ -101,8 +104,12 @@ export async function searchProducts({query, sort})
 }`;
 
 const GET_PRODUCTS_REMOTE =
-`export async function searchProducts({ query , sort }) {
-\treturn __runProcedure('product/searchProducts', '0.0.0', { 'query': query, 'sort': sort }, this)
+`export default async function getProducts(id) {
+\tthrow new ProcedureNotAccessible('product/getProducts', '0.0.0');
+}
+
+export async function searchProducts({ query , sort }) {
+\treturn __runProcedure('product/searchProducts', '0.0.0', { 'query': query, 'sort': sort }, this);
 }`;
 
 const GET_PRODUCTS_LOCAL_V1 =
@@ -125,8 +132,12 @@ export async function searchProducts([query, sort])
 }`;
 
 const GET_PRODUCTS_REMOTE_V1 =
-`export async function searchProducts([ query , sort ]) {
-\treturn __runProcedure('product/searchProducts', '1.0.0', { 'query': query, 'sort': sort }, this)
+`export default async function getProducts(id) {
+\tthrow new ProcedureNotAccessible('product/getProducts', '1.0.0');
+}
+
+export async function searchProducts([ query , sort ]) {
+\treturn __runProcedure('product/searchProducts', '1.0.0', { 'query': query, 'sort': sort }, this);
 }`;
 
 const PRODUCT_MODELS_LOCAL =
