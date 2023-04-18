@@ -26,7 +26,7 @@
         "examples/2-advanced/2-run-procedure",
         "examples/2-advanced/3-health-checks",
         "examples/2-advanced/4-middleware",
-        "examples/3-apps/1-full-stack",
+        "examples/3-apps/1-contact-list",
         "examples/3-apps/2-microservices"
     ],
     "scripts": {
