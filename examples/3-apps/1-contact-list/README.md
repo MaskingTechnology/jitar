@@ -1,7 +1,7 @@
 
 # Jitar | Contact list
 
-This example contact list application is build with build with React, MongoDB and Jitar (ReMoJi stack).
+This example contact list application is build with React, MongoDB and Jitar (ReMoJi stack).
 It includes frontend and backend components and a database for storing contacts.
 
 If you want to create a new application with the same setup, you can use the following command.
@@ -53,7 +53,7 @@ Note that the Jitar instance needs to run beside Vite, otherwise the backend com
 
 ## Running in production
 
-To run the application in production mode, we need four terminal sessions to start the repository, gateway, and node and proxy (as webserver) separately. The starting order is of importance.
+To run the application in production mode, we need four terminal sessions to start the repository, gateway, node and proxy (as webserver) separately. The starting order is of importance.
 
 **Repository** (terminal 1)
 ```
@@ -75,4 +75,4 @@ npm run node
 npm run proxy
 ```
 
-Now open the following URL in your browser ``http://localhost:8080``
+Now open the following URL in your browser `http://localhost:8080`

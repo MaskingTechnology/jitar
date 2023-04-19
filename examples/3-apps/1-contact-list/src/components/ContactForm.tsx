@@ -4,7 +4,7 @@ import Contact from '../shared/contact/Contact';
 type ContactFormProps =
 {
     contact?: Contact;
-    submitAction: (id: string, name: string, address: string, phone: string, email: string) => void;
+    submitAction: (name: string, address: string, phone: string, email: string) => void;
 };
 
 export default function ContactForm(props: ContactFormProps)
@@ -18,14 +18,13 @@ export default function ContactForm(props: ContactFormProps)
 
         const form = event.target;
         
-        submitAction('', form.name.value, form.address.value, form.phone.value, form.email.value);
+        submitAction(form.name.value, form.address.value, form.phone.value, form.email.value);
 
         form.reset();
     }
 
     return (
         <form onSubmit={handleSubmit} className='p-3 border bg-light'>
-            <input type="hidden" name="id" value={contact?.id} />
             <div className="mb-3">
                 <label htmlFor="name" className="form-label">Full name</label>
                 <input type="text" className="form-control" name="name" id="name" />
