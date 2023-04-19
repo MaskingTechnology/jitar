@@ -105,10 +105,4 @@ nav .social li a:hover
         /* Improve the visual hierarchy of the navigation */
         font-size: 0.8em;
     }
-
-    nav .menu li
-    {
-        /* Hide the menu items */
-        display: none;
-    }
 }
