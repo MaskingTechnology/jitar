@@ -1,10 +1,10 @@
 {
-    "./greetings/sayHi.js": {
+    "./greetings/sayHi": {
         "default": {
             "access": "public"
         }
     },
-    "./greetings/sayBoth.js": {
+    "./greetings/sayBoth": {
         "default": {
             "access": "public"
         }
