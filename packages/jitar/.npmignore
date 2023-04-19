@@ -1,6 +1,7 @@
 coverage
 src
 test
+dist/dts
 node_modules
 .eslintignore
 .eslintrc

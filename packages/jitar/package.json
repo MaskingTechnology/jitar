@@ -5,7 +5,7 @@
     "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
     "license": "MIT",
     "type": "module",
-    "types": "./lib/index.d.ts",
+    "types": "./dist/lib.d.ts",
     "sideEffects": true,
     "exports": {
         ".": "./lib/server.js",
@@ -13,7 +13,8 @@
     },
     "scripts": {
         "lint": "eslint . --ext .ts",
-        "build": "tsc -p tsconfig.json",
+        "validate": "tsc -p tsconfig.json --noEmit",
+        "build": "rollup -c",
         "clean": "rm -rf dist lib",
         "release": "npm run clean && npm run build && npm publish"
     },

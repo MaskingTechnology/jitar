@@ -7,10 +7,10 @@ import dts from 'rollup-plugin-dts';
 
 export default [
 	{
-		input: 'dist/client.js',
+		input: 'src/client.ts',
 		output: {
 			banner: '/* Jitar client v0.4.0 | (c) Masking Technology B.V. | https://github.com/MaskingTechnology/jitar/blob/main/LICENCE */',
-			file: 'lib/client.js',
+			file: 'dist/client.js',
 			format: 'module',
 			plugins: [terser()]
 		},
@@ -29,18 +29,26 @@ export default [
 			'yargs',
 			'zod'
 		],
-		input: 'dist/lib.js',
+		input: 'src/server.ts',
 		output: {
 			banner: '/* Jitar server v0.4.0 | (c) Masking Technology B.V. | https://github.com/MaskingTechnology/jitar/blob/main/LICENCE */',
-			file: 'lib/server.js',
+			file: 'dist/server.js',
 			format: 'module',
 			plugins: [terser()]
 		},
-		plugins: [typescript(), json(), nodeResolve()]
+		plugins: [typescript({
+			tsconfig: './tsconfig.json',
+			declaration: true,
+			declarationDir: './dist/dts',
+			outDir: './dist',
+			rootDir: './src'
+		  }), json(), nodeResolve()]
 	},
 	{
-		input: './lib/dist/dts/lib.d.ts',
-		output: [{ file: 'lib/index.d.ts', format: 'es' }],
-		plugins: [dts()],
+		input: './dist/dts/lib.d.ts',
+	 	output: [{ file: 'dist/lib.d.ts', format: 'module' }],
+	 	plugins: [dts({
+			respectExternal: true
+		})],
 	},
 ]

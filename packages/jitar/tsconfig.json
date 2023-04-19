@@ -4,8 +4,6 @@
     "module": "ESNext",
     "rootDir": "./src/",
     "moduleResolution": "node",
-    "declaration": true,
-    "declarationDir": "./dist/dts",
     "outDir": "./dist",
     "removeComments": true,
     "esModuleInterop": true,
