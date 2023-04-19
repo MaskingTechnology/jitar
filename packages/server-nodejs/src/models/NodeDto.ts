@@ -1,11 +1,22 @@
 
-import { ArrayNotEmpty, IsUrl } from 'class-validator';
+import { z } from 'zod';
+
+export const nodeDtoSchema = z
+    .object({
+        url: z.string().url(),
+        procedureNames: z.array(z.string()).optional()
+    })
+    .strict()
+    .transform((value) => new NodeDto(value.url, value.procedureNames));
 
 export default class NodeDto
 {
-    @IsUrl()
-    url = '';
+    url: string;
+    procedureNames: string[];
 
-    @ArrayNotEmpty()
-    procedureNames: string[] = [];
+    constructor(url: string, procedureNames: string[] = [])
+    {
+        this.url = url;
+        this.procedureNames = procedureNames;
+    }
 }
