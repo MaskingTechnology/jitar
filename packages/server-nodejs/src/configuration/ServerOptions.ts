@@ -2,10 +2,12 @@
 import { z } from 'zod';
 import { LogLevel } from '../utils/LogBuilder.js';
 
-export const schema = z.object({
-    loglevel: z.nativeEnum(LogLevel).optional(),
-    config: z.string().endsWith('.json').optional()
-}).transform((value) => new ServerOptions(value.loglevel, value.config));
+export const schema = z
+    .object({
+        loglevel: z.nativeEnum(LogLevel).optional(),
+        config: z.string().endsWith('.json').optional()
+    })
+    .transform((value) => new ServerOptions(value.loglevel, value.config));
 
 export default class ServerOptions
 {

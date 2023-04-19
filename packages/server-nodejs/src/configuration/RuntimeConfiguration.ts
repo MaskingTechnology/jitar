@@ -7,14 +7,17 @@ import ProxyConfiguration, { schema as proxySchema } from './ProxyConfiguration.
 import RepositoryConfiguration, { schema as repositorySchema } from './RepositoryConfiguration.js';
 import StandaloneConfiguration, { schema as standaloneSchema } from './StandaloneConfiguration.js';
 
-export const schema = z.object({
-    url: z.string().optional(),
-    standalone: standaloneSchema.optional(),
-    repository: repositorySchema.optional(),
-    gateway: gatewaySchema.optional(),
-    node: nodeSchema.optional(),
-    proxy: proxySchema.optional(),
-}).strict().transform((value) => new RuntimeConfiguration(value.url, value.standalone, value.repository, value.gateway, value.node, value.proxy));
+export const schema = z
+    .object({
+        url: z.string().optional(),
+        standalone: standaloneSchema.optional(),
+        repository: repositorySchema.optional(),
+        gateway: gatewaySchema.optional(),
+        node: nodeSchema.optional(),
+        proxy: proxySchema.optional(),
+    })
+    .strict()
+    .transform((value) => new RuntimeConfiguration(value.url, value.standalone, value.repository, value.gateway, value.node, value.proxy));
 
 export default class RuntimeConfiguration
 {

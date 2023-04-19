@@ -1,13 +1,16 @@
 
 import { z } from 'zod';
 
-export const schema = z.object({
-    source: z.string().optional(),
-    cache: z.string().optional(),
-    index: z.string().optional(),
-    segments: z.array(z.string()).optional(),
-    assets: z.array(z.string()).optional()
-}).strict().transform((value) => new StandaloneConfiguration(value.source, value.cache, value.index, value.segments, value.assets));
+export const schema = z
+    .object({
+        source: z.string().optional(),
+        cache: z.string().optional(),
+        index: z.string().optional(),
+        segments: z.array(z.string()).optional(),
+        assets: z.array(z.string()).optional()
+    })
+    .strict()
+    .transform((value) => new StandaloneConfiguration(value.source, value.cache, value.index, value.segments, value.assets));
 
 export default class StandaloneConfiguration
 {
