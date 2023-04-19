@@ -28,7 +28,8 @@
         "glob-promise": "6.0.2",
         "mime-types": "^2.1.35",
         "tslog": "^4.8.2",
-        "yargs": "^17.7.1"
+        "yargs": "^17.7.1",
+        "zod": "^3.21.4"
     },
     "engines": {
         "node": ">=18.7"

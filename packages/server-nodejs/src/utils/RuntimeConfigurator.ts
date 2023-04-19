@@ -13,7 +13,6 @@ import ProxyConfiguration from '../configuration/ProxyConfiguration.js';
 
 import RuntimeDefaults from '../definitions/RuntimeDefaults.js';
 
-import MissingConfigurationValue from '../errors/MissingConfigurationValue.js';
 import UnknownRuntimeMode from '../errors/UnknownRuntimeMode.js';
 
 export default class RuntimeConfigurator
@@ -78,25 +77,14 @@ export default class RuntimeConfigurator
 
     static async #configureProxy(url: string, configuration: ProxyConfiguration): Promise<Proxy>
     {
-        const repository = this.#getRemoteRepository(configuration.repository);
-
-        if (repository === undefined)
-        {
-            throw new MissingConfigurationValue('proxy.repository');
-        }
-
-        const gateway = this.#getRemoteGateway(configuration.gateway);
+        const repository = this.#getRemoteRepository(configuration.repository) as RemoteRepository;
+        const gateway = this.#getRemoteGateway(configuration.gateway) as RemoteGateway;
 
         const node = configuration.node !== undefined
             ? new RemoteNode(configuration.node, [])
             : undefined;
 
         const runner = gateway ?? node;
-
-        if (runner === undefined)
-        {
-            throw new MissingConfigurationValue('proxy.gateway or proxy.node');
-        }
 
         return this.#buildProxy(url, repository, runner);
     }

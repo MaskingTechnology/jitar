@@ -8,12 +8,7 @@
 
 export default async function sayBoth(firstName: string, lastName: string): Promise<string>
 {
-    // TODO: remove the @ts-ignore comments when the runProcedure hook is added to the Jitar type definitions.
-    
-    // @ts-ignore
     const hiMessage = await __runProcedure('greetings/sayHi', '0.0.0', { 'firstName': firstName });
-
-    // @ts-ignore
     const helloMessage = await __runProcedure('greetings/sayHello', '0.0.0', { 'firstName': firstName, 'lastName': lastName });
 
     return `${hiMessage}\n${helloMessage}`;
