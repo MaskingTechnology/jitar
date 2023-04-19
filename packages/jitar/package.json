@@ -5,20 +5,29 @@
     "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
     "license": "MIT",
     "type": "module",
-    "types": "dist/lib.d.ts",
+    "types": "./lib/index.d.ts",
     "sideEffects": true,
     "exports": {
-        ".": "./dist/lib.js"
+        ".": "./lib/server.js",
+        "./client": "./lib/client.js"
     },
     "scripts": {
         "lint": "eslint . --ext .ts",
         "build": "tsc -p tsconfig.json",
-        "clean": "rm -rf dist build",
+        "clean": "rm -rf dist lib",
         "release": "npm run clean && npm run build && npm publish"
     },
     "dependencies": {
         "@jitar/runtime": "^0.4.0",
-        "@jitar/server-nodejs": "^0.4.0"
+        "@jitar/server-nodejs": "^0.4.0",
+        "express": "^4.18.2",
+        "express-http-proxy": "^1.6.3",
+        "fs-extra": "^11.1.1",
+        "glob-promise": "6.0.2",
+        "mime-types": "^2.1.35",
+        "tslog": "^4.8.2",
+        "yargs": "^17.7.1",
+        "zod": "^3.21.4"
     },
     "engines": {
         "node": ">=18.7"

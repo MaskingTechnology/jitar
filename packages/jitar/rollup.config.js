@@ -1,8 +1,9 @@
+
 import json from '@rollup/plugin-json';
 import terser from '@rollup/plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
-import dts from "rollup-plugin-dts";
+import dts from 'rollup-plugin-dts';
 
 export default [
 	{
@@ -25,9 +26,10 @@ export default [
 			'glob-promise',
 			'mime-types',
 			'tslog',
-			'yargs'
+			'yargs',
+			'zod'
 		],
-		input: 'dist/server.js',
+		input: 'dist/lib.js',
 		output: {
 			banner: '/* Jitar server v0.4.0 | (c) Masking Technology B.V. | https://github.com/MaskingTechnology/jitar/blob/main/LICENCE */',
 			file: 'lib/server.js',
@@ -37,23 +39,8 @@ export default [
 		plugins: [typescript(), json(), nodeResolve()]
 	},
 	{
-		input: 'dist/client.d.ts',
-		output: [
-			{
-				file: 'lib/client.d.ts',
-				format: 'module'
-			}
-		],
-		plugins: [typescript(), dts()]
+		input: './lib/dist/dts/lib.d.ts',
+		output: [{ file: 'lib/index.d.ts', format: 'es' }],
+		plugins: [dts()],
 	},
-	{
-		input: 'dist/server.d.ts',
-		output: [
-			{
-				file: 'lib/server.d.ts',
-				format: 'module'
-			}
-		],
-		plugins: [typescript(), dts()]
-	}
 ]
