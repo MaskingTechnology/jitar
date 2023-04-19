@@ -16,7 +16,6 @@
 
 #introduction .explainer .title
 {
-    padding: 0.5em 2em;
     flex-grow: 0;
     flex-shrink: 0;
     font-size: 1.1em;
@@ -34,29 +33,23 @@
 {
     flex-grow: 1;
     flex-shrink: 1;
-    padding-top: 16px;
 }
 
 #introduction .explainer .jitar
 {
     flex-grow: 0;
     flex-shrink: 0;
-    width: 190px;
 }
 
 #introduction .explainer .jitar .title
 {
     background-color: var(--swatch-color-blue-5);
     color: var(--swatch-color-white);
-    margin: 0 30px;
 }
 
 #introduction .explainer .jitar .flow
 {
-    background-image: url('../../images/introduction/flow-vertical.svg');
-    background-position: center top;
     background-repeat: no-repeat;
-    height: 100%;
 }
 
 /*
@@ -74,6 +67,34 @@
     {
         flex-direction: column;
     }
+
+    #introduction .explainer .title
+    {
+        padding: 0.5em 2em;
+    }
+
+    #introduction .explainer .client,
+    #introduction .explainer .server
+    {
+        padding-top: 16px;
+    }
+
+    #introduction .explainer .jitar
+    {
+        width: 190px;
+    }
+
+    #introduction .explainer .jitar .title
+    {
+        margin: 0 30px;
+    }
+
+    #introduction .explainer .jitar .flow
+    {
+        background-image: url('../../images/introduction/flow-vertical.svg');
+        background-position: center top;
+        background-size: 190px 160px;
+    }
 }
 
 /*
@@ -90,6 +111,24 @@
     #introduction .explainer .part
     {
         flex-direction: row;
+    }
+
+    #introduction .explainer .title
+    {
+        writing-mode: vertical-lr;
+        padding: 2em 0.5em;
+    }
+
+    #introduction .explainer .jitar
+    {
+        height: 110px;
+    }
+
+    #introduction .explainer .jitar .flow
+    {
+        background-image: url('../../images/introduction/flow-horizontal.svg');
+        background-position: left top;
+        background-size: 1170px 110px;
     }
 }
 
