@@ -26,8 +26,7 @@
         "examples/2-advanced/2-run-procedure",
         "examples/2-advanced/3-health-checks",
         "examples/2-advanced/4-middleware",
-        "examples/3-apps/1-full-stack",
-        "examples/3-apps/2-microservices"
+        "examples/3-apps/1-contact-list"
     ],
     "scripts": {
         "build": "npm run build --workspace=packages/reflection --workspace=packages/serialization --workspace=packages/runtime --workspace=packages/caching --workspace=packages/server-nodejs --workspace=packages/jitar --workspace=packages/create-jitar --workspace=packages/plugin-vite --if-present",

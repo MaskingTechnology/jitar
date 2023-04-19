@@ -1,8 +1,8 @@
 
 import { ReflectionFunction, ReflectionModule, Reflector } from '@jitar/reflection';
 import { FileManager } from '@jitar/runtime';
-import FunctionNotAsync from './errors/FunctionNotAsync.js';
 
+import FunctionNotAsync from './errors/FunctionNotAsync.js';
 import InvalidSegmentFilename from './errors/InvalidSegmentFilename.js';
 import MissingModuleExport from './errors/MissingModuleExport.js';
 import SegmentFileNotLoaded from './errors/SegmentFileNotLoaded.js';
@@ -77,7 +77,8 @@ export default class SegmentReader
 
         for (const [filename, moduleImports] of Object.entries(definition))
         {
-            const absoluteFilename = this.#fileManager.getAbsoluteLocation(filename);
+            const fullFilename = filename.endsWith('.js') ? filename : `${filename}.js`;
+            const absoluteFilename = this.#fileManager.getAbsoluteLocation(fullFilename);
             const module = await this.#createSegmentModule(absoluteFilename, moduleImports, idGenerator);
 
             modules.push(module);

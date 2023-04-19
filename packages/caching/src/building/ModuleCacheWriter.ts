@@ -32,13 +32,14 @@ export default class ModuleCacheWriter
     async #writeOriginal(cache: ModuleCache): Promise<void>
     {
         // The original module files will be loaded in standalone mode.
-        // These only require the addition of the source locations.
-        // All imports can be left alone because they will always resolve.
+        // These require the rewrite of application imports (assure they end with .js)
+        // and the addition of the source locations.
 
+        const importCode = this.#rewriteApplicationImports(cache.module);
         const sourceCode = this.#createSourceCode(cache.module);
 
         const filename = cache.module.filename;
-        const code = `${cache.module.code}\n${sourceCode}`;
+        const code = `${importCode}\n${sourceCode}`;
 
         return this.#fileManager.write(filename, code.trim());
     }
@@ -48,7 +49,7 @@ export default class ModuleCacheWriter
         // The local module files will be loaded in distributed mode.
         // These require both the rewrite of imports and the addition of the source locations.
 
-        const importCode = this.#rewriteImports(cache.module);
+        const importCode = this.#rewriteAllImports(cache.module);
         const sourceCode = this.#createSourceCode(cache.module);
 
         const filename = convertToLocalFilename(cache.module.filename);
@@ -57,9 +58,14 @@ export default class ModuleCacheWriter
         return this.#fileManager.write(filename, code.trim());
     }
 
-    #rewriteImports(module: Module): string
+    #rewriteApplicationImports(module: Module): string
     {
-        return importRewriter.rewrite(module.code);
+        return importRewriter.rewrite(module.code, false);
+    }
+
+    #rewriteAllImports(module: Module): string
+    {
+        return importRewriter.rewrite(module.code, true);
     }
 
     #createSourceCode(module: Module): string

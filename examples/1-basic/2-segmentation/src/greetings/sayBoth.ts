@@ -6,8 +6,8 @@
  * remote procedure call.
  */
 
-import sayHi from './sayHi.js';
-import sayHello from './sayHello.js';
+import sayHi from './sayHi';
+import sayHello from './sayHello';
 
 export default async function sayBoth(firstName: string, lastName: string): Promise<string>
 {
