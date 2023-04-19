@@ -16,31 +16,31 @@ Then type the name of the project and select the frontend framework you want.
 
 For running the example, Docker is required for setting up MongoDB.
 
-1 Install all dependencies by running the following command from the root directory of the example.
+1\. Install all dependencies by running the following command from the root directory of the example.
 
 ```
 npm install
 ```
 
-2 Build the application from the same directory.
+2\. Build the application from the same directory.
 
 ```
 npm run build
 ```
 
-3 Start MongoDB with docker-compose.
+3\. Start MongoDB with docker-compose.
 
 ```
 docker-compose up
 ```
 
-4 Start Jitar in development mode with the following command.
+4\. Start Jitar in development mode with the following command.
 
 ```
 npm run standalone
 ```
 
-5 Open the following URL in your browser `http://localhost:3000`
+5\. Open the following URL in your browser `http://localhost:3000`
 
 The example uses our Vite plugin. To run Vite in dev mode (for HMR) use the following command.
 
