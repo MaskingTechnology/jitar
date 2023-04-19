@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es2022",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "es2022",
+    "target": "ESNext",
+    "module": "ESNext",
     "rootDir": "./src/",
     "moduleResolution": "node",
     "declaration": true,
