@@ -1,0 +1,114 @@
+
+nav
+{
+    align-content: space-around;
+    align-items: flex-end;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 0;
+    gap: 1.6em;
+    height: 3.5em;
+    justify-content: center;
+    padding: 0 1em;
+}
+
+nav a.logo
+{
+    color: var(--swatch-color-white);
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 2.0em;
+    font-weight: var(--font-weight-semi-bold);
+}
+
+nav .menu
+{
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 1.1em;
+    font-weight: var(--font-weight-extra-light);
+    gap: 1.6em;
+    justify-content: flex-start;
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 0.35em 0;
+}
+
+nav .menu li a
+{
+    color: var(--swatch-color-white);
+}
+
+nav .menu li a:hover
+{
+    color: var(--swatch-color-blue-1);
+}
+
+nav .social
+{
+    display: flex;
+    flex-direction: row;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 1.5em;
+    gap: 0.5em;
+    justify-content: flex-start;
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 0.1em 0;
+}
+
+nav .social li a
+{
+    color: var(--swatch-color-white);
+}
+
+nav .social li a:hover
+{
+    color: var(--swatch-color-blue-1);
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (min-width: 1200px)
+{
+    
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (max-width: 1200px)
+{
+    
+}
+
+/*
+ *  Medium (table / phone) layout
+ */
+@media (max-width: 795px)
+{
+    
+}
+
+/*
+ *  Small (phone) layout
+ */
+@media (max-width: 560px)
+{
+    nav
+    {
+        /* Improve the visual hierarchy of the navigation */
+        font-size: 0.8em;
+    }
+
+    nav .menu li
+    {
+        /* Hide the menu items */
+        display: none;
+    }
+}

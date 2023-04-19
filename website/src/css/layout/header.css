@@ -1,0 +1,74 @@
+
+header
+{
+    align-items: stretch;
+    /* Background image is responsive */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 560px;
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (min-width: 1200px)
+{
+    header
+    {
+        /* Add the illustration to the header, with the breaker on top */
+        background-image: url('../../images/layout/breaker-top.svg'), url('../../images/hero/illustration.svg');
+        background-position: center 470px, 612px 50px;
+        background-repeat: repeat-x, no-repeat;
+        background-size: auto 90px, auto 510px;
+    }
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (max-width: 1200px)
+{
+    header
+    {
+        /* Add the illustration to the header, with the breaker on top */
+        background-image: url('../../images/layout/breaker-top.svg'), url('../../images/hero/illustration.svg');
+        background-position: center bottom, 612px 50px;
+        background-repeat: repeat-x, no-repeat;
+        background-size: auto 90px, auto 510px;
+    }
+}
+
+/*
+ *  Medium (table / phone) layout
+ */
+@media (max-width: 795px)
+{
+    header
+    {
+        /* Replace the illustration with the stars */
+        background-image: url('../../images/layout/breaker-top.svg'), url('../../images/hero/stars.svg');
+        background-position: center bottom, right -30px top 100px;
+        background-repeat: repeat-x, no-repeat;
+        background-size: auto 90px, auto 200px;
+    }
+}
+
+/*
+ *  Small (phone) layout
+ */
+@media (max-width: 560px)
+{
+    header
+    {
+        /* Make the header dynamic in height */
+        height: 100vw;
+
+        /* Remove the stars from the header */
+        background-image: url('../images/layout/breaker-top.svg');
+        background-position: center bottom;
+        background-repeat: repeat-x;
+        background-size: auto 12vw;
+    }
+}

@@ -1,0 +1,106 @@
+
+#gettingstarted .steps
+{
+    text-align: left;
+}
+
+#gettingstarted .step
+{
+    align-content: stretch;
+    align-items: stretch;
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+    margin-bottom: 2.5em;
+}
+
+#gettingstarted .step .number
+{
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+#gettingstarted .step .number .content
+{
+    background-color: var(--swatch-color-blue-5);
+    border-radius: 50%;
+    color: var(--swatch-color-white);
+    font-size: 1.1em;
+    font-weight: var(--font-weight-bold);
+    padding: 0.5em 1.0em;
+}
+
+#gettingstarted .step .description
+{
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+#gettingstarted .step .description h3
+{
+    font-size: 1.1em;
+    font-weight: var(--font-weight-bold);
+    margin: 0;
+}
+
+#gettingstarted .step .description strong
+{
+    font-weight: var(--font-weight-semi-bold);
+}
+
+#gettingstarted .step .example
+{
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 570px;
+}
+
+#gettingstarted .step .example .window
+{
+    margin-top: 1em;
+}
+
+#gettingstarted .step .example .window:first-child
+{
+    margin-top: 0;
+}
+
+#gettingstarted .step .example .title
+{
+    background-color: var(--swatch-color-gray-4);
+    color: var(--swatch-color-gray-1);
+    padding: 0.5em;
+    text-align: center;
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (min-width: 1200px)
+{
+    
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (max-width: 1200px)
+{
+    
+}
+
+/*
+ *  Medium (table / phone) layout
+ */
+@media (max-width: 795px)
+{
+    
+}
+
+/*
+ *  Small (phone) layout
+ */
+@media (max-width: 560px)
+{
+    
+}

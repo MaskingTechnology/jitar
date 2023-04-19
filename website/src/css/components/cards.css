@@ -1,0 +1,194 @@
+
+.cards
+{
+    display: grid;
+    /* Grid gap, cols and rows are responsive */
+    margin: 2em 0;
+    width: 100%;
+}
+
+.card
+{
+    background-color: var(--swatch-color-white);
+    margin: 0;
+}
+
+.cards-horizontal .card
+{
+    border-left: 0.5em solid var(--swatch-color-red-3);
+    display: grid;
+    gap: 1em;
+    grid-template-columns: 20% auto;
+    grid-template-rows: auto auto;
+    padding: 1.7em 1.0em;
+    text-align: left;
+}
+
+.cards-vertical .card
+{
+    align-items: center;
+    border: 1px solid var(--swatch-color-white);
+    border-top: 0.5em solid var(--swatch-color-red-3);
+    display: flex;
+    gap: 2em;
+    flex-direction: column;
+    padding: 2.0em 1.0em;
+    text-align: center;
+}
+
+.cards-horizontal .card img
+{
+    grid-row: span 2;
+    width: 100%;
+}
+
+.cards-vertical .card img
+{
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 6em;
+}
+
+.card h2
+{
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 1.3em;
+    font-weight: var(--font-weight-medium);
+    margin: 0;
+}
+
+.card p
+{
+    flex-grow: 1;
+    flex-shrink: 1;
+    font-size: 1.0em;
+    font-weight: var(--font-weight-light);
+    margin: 0;
+}
+
+.card a
+{
+    background-color: transparent;
+    border: 1px solid var(--swatch-color-gray-3);
+    border-radius: 2em;
+    color: var(--swatch-color-red-3);
+    display: inline-block;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 0.9em;
+    font-weight: var(--font-weight-light);
+    padding: 0.5em 0;
+    text-align: center;
+    width: 12em;
+}
+
+.card a:hover
+{
+    background-color: var(--swatch-color-gray-1);
+    border: 1px solid var(--swatch-color-gray-3);
+    color: var(--swatch-color-red-3);
+}
+
+.card.inactive
+{
+    background-color: transparent;
+    border: 1px dashed var(--swatch-color-gray-3);
+}
+
+.cards-horizontal .card.inactive
+{
+    border-left: 0.5em solid var(--swatch-color-gray-3);
+}
+
+.cards-vertical .card.inactive
+{
+    border-top: 0.5em solid var(--swatch-color-gray-3);
+}
+
+.card.inactive a
+{
+    background-color: var(--swatch-color-red-3);
+    border: 1px solid var(--swatch-color-red-3);
+    color: var(--swatch-color-white);
+}
+
+.card.inactive a:hover
+{
+    background-color: var(--swatch-color-red-2);
+    border: 1px solid var(--swatch-color-red-2);
+    color: var(--swatch-color-white);
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (min-width: 1200px)
+{
+    .cards-horizontal
+    {
+        /* Place feature cards in three columns */
+        gap: 2em;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto auto;
+    }
+
+    .cards-vertical
+    {
+        /* Place feature cards in four columns */
+        gap: 2em;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto auto;
+    }
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (max-width: 1200px)
+{
+    .cards-vertical
+    {
+        /* Place feature cards in three columns */
+        gap: 2vw;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto auto auto;
+    }
+}
+
+/*
+ *  Medium (table / phone) layout
+ */
+@media (max-width: 795px)
+{
+    .cards-vertical
+    {
+        /* Place feature cards in two columns */
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto auto auto auto;
+    }
+}
+
+/*
+ *  Small (phone) layout
+ */
+@media (max-width: 560px)
+{
+    .cards-vertical
+    {
+        /* Improve the readability */
+        font-size: 1.1em;
+        
+        /* Place feature cards in a single column */
+        gap: 1em;
+        grid-template-columns: auto;
+        grid-template-rows: auto auto auto auto auto auto auto auto;
+    }
+
+    .card
+    {
+        /* Improve the spacing and readability */
+        gap: 2.0em;
+        padding: 2.0em 2.5em;
+    }
+}

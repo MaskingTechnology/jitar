@@ -1,0 +1,215 @@
+
+#hero
+{
+    align-items: left;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    gap: 2.2em;
+    justify-content: center;
+    padding: 0 0 0 4em;
+}
+
+#hero :is(h1, p)
+{
+    margin: 0;
+    padding: 0;
+}
+
+#hero h1
+{
+    font-size: 4.3em;
+    font-weight: var(--font-weight-bold);
+    line-height: 1.1em;
+}
+
+#hero span
+{
+    display: inline-block;
+}
+
+#hero .line
+{
+    display: flex;
+    flex-direction: row;
+    gap: 0.2em;
+}
+
+#hero .distributed
+{
+    color: var(--swatch-color-white);
+}
+
+#hero .runtime
+{
+    color: var(--swatch-color-blue-6);
+}
+
+#hero .runtime::before
+{
+    background-color: var(--swatch-color-blue-4);
+    content: '';
+    height: 1.1em;
+    margin: 0.02em 0 0 -0.28em;
+    position: absolute;
+    transform: rotate(2.5deg);
+    width: 4.9em;
+    z-index: -1;
+}
+
+#hero .for
+{
+    color: var(--swatch-color-blue-2);
+    font-size: 1.1em;
+    font-weight: var(--font-weight-light);
+    margin: 1.15em 0.6em 0 1.7em;
+    vertical-align: top;
+}
+
+#hero .languages
+{
+    align-items: flex-start;
+    background-image: url('../../images/hero/scribble.svg');
+    background-position: center 2.1em;
+    background-repeat: no-repeat;
+    background-size: auto 2.5em;
+    display: inline-flex;
+    flex-direction: row;
+    gap: 0.45em;
+    height: 4.1em;
+    margin: 1em 0 0 0;
+    vertical-align: top;
+}
+
+#hero .language
+{
+    border-radius: 0.35em;
+    color: var(--swatch-color-blue-5);
+    font-size: 1.0em;
+    font-weight: var(--font-weight-semi-bold);
+    padding: 0.5em 0.3em 0.01em 0.55em;
+}
+
+#hero .languages .javascript
+{
+    background-color: var(--swatch-color-yellow);
+}
+
+#hero .languages .typescript
+{
+    background-color: var(--swatch-color-blue-3);
+}
+
+#hero .slogan
+{
+    color: var(--swatch-color-blue-1);
+    font-size: 1.4em;
+    font-weight: var(--font-weight-extra-light);
+}
+
+#hero .underline
+{
+    text-decoration: underline;
+}
+
+#hero .colorize
+{
+    color: var(--swatch-color-yellow);
+}
+
+#hero .actions
+{
+    align-items: flex-start;
+    display: flex;
+    flex-direction: row;
+    gap: 0.8em;
+    justify-content: flex-start;
+}
+
+#hero .action
+{
+    border-radius: 3em;
+    color: var(--swatch-color-white);
+    display: inline-block;
+    padding: 0.6em;
+    text-align: center;
+    text-transform: uppercase;
+    width: 12em;
+}
+
+#hero .action-primary
+{
+    background-color: var(--swatch-color-red-3);
+    border: 1px solid var(--swatch-color-red-3);
+    font-size: 0.9em;
+    font-weight: var(--font-weight-normal);
+    transition: var(--transition-hover-animation);
+}
+
+#hero .action-primary:hover
+{
+    background-color: var(--swatch-color-red-2);
+    border: 1px solid var(--swatch-color-red-2);
+}
+
+#hero .action-secondary
+{
+    background-color: transparent;
+    border: 1px solid var(--swatch-color-blue-1);
+    font-size: 0.8em;
+    font-weight: var(--font-weight-extra-light);
+    transition: var(--transition-hover-animation);
+}
+
+#hero .action-secondary:hover
+{
+    background-color: var(--swatch-color-blue-5);
+    border: 1px solid var(--swatch-color-white);
+}
+
+#hero .icon-github
+{
+    display: inline-block;
+    font-size: 1.2em;
+    margin: 0 0.6em 0 0;
+    vertical-align: middle;
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (min-width: 1200px)
+{
+    
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (max-width: 1200px)
+{
+    
+}
+
+/*
+ *  Medium (table / phone) layout
+ */
+@media (max-width: 795px)
+{
+    
+}
+
+/*
+ *  Small (phone) layout
+ */
+@media (max-width: 560px)
+{
+    #hero
+    {
+        /* Center and scale the hero section to fit the view */
+        align-items: center;
+        padding: 0;
+        font-size: 3vw;
+    }
+}

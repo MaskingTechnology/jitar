@@ -1,0 +1,36 @@
+
+:root
+{
+    --swatch-color-white: #ffffff;
+
+    --swatch-color-gray-1: #f3f3f3;
+    --swatch-color-gray-2: #d9d9d9;
+    --swatch-color-gray-3: #b7b7b7;
+    --swatch-color-gray-4: #434343;
+    --swatch-color-gray-5: #1e1e1e;
+
+    --swatch-color-blue-1: #cfe2f3;
+    --swatch-color-blue-2: #9fc5e8;
+    --swatch-color-blue-3: #6d9eeb;
+    --swatch-color-blue-4: #3d85c6;
+    --swatch-color-blue-5: #1c4587;
+    --swatch-color-blue-6: #073763;
+
+    --swatch-color-red-1: #dd7e6b;
+    --swatch-color-red-2: #cc0000;
+    --swatch-color-red-3: #a61c00;
+
+    --swatch-color-yellow: #f1c232;
+    
+    --font-family-text: 'Poppins', sans-serif;
+    --font-family-code: 'Courier New', monospace;
+
+    --font-weight-extra-light: 200;
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semi-bold: 600;
+    --font-weight-bold: 700;
+    
+    --transition-hover-animation: all .2s ease-in-out;
+}

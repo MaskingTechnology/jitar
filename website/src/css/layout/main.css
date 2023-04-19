@@ -1,0 +1,76 @@
+
+main
+{
+    padding: 4em 2em;
+    text-align: center;
+}
+
+main h1
+{
+    color: var(--swatch-color-gray-5);
+    font-size: 1.8em;
+    font-weight: var(--font-weight-normal);
+    margin: 0 0 2em 0;
+    width: 100%;
+}
+
+main h2
+{
+    color: var(--swatch-color-gray-5);
+    font-size: 1.5em;
+    font-weight: var(--font-weight-extra-light);
+    margin: 3em 0;
+    width: 100%;
+}
+
+main h2 .bold
+{
+    font-weight: var(--font-weight-normal);
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (min-width: 1200px)
+{
+    
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (max-width: 1200px)
+{
+    main hr
+    {
+        /* Hide the (useless) ruler and use it as a spacer */
+        border: 0px;
+        margin: 2em 0;
+    }
+}
+
+/*
+ *  Medium (table / phone) layout
+ */
+@media (max-width: 795px)
+{
+    
+}
+
+/*
+ *  Small (phone) layout
+ */
+@media (max-width: 560px)
+{
+    main
+    {
+        /* Use less padding to save space */
+        padding: 2em 1.2em;
+    }
+
+    main hr
+    {
+        /* use less ruler spacing */
+        margin: 1.5em 0;
+    }
+}

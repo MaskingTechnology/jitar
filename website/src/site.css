@@ -1,4 +1,17 @@
+@import url('css/vars.css');
 @import url('css/layout.css');
-@import url('css/syntax.css');
+
+@import url('css/layout/header.css');
+@import url('css/layout/main.css');
+@import url('css/layout/footer.css');
+
+@import url('css/components/cards.css');
+@import url('css/components/code.css');
+@import url('css/components/hero.css');
+@import url('css/components/nav.css');
+
+@import url('css/sections/getingstarted.css');
+@import url('css/sections/introduction.css');
+
 @import url('fonts/poppins/font.css');
 @import url('fonts/social-icons/font.css');

@@ -27,8 +27,6 @@
         <link rel="icon" type="image/png" href="images/icon.png" />
         <link rel="stylesheet" href="site.css">
 
-        <script type="module" src="site.js"></script>
-
     </head>
 
     <body>
@@ -40,9 +38,6 @@
                 <nav>
                     <a href="/" class="logo">Jitar</a>
                     <ul class="menu">
-                        <li><a href="#introduction">Introduction</a></li>
-                        <li><a href="#benefits">Benefits</a></li>
-                        <li><a href="#features">Features</a></li>
                         <li><a href="https://docs.jitar.dev" target="_blank">Docs</a></li>
                     </ul>
                     <ul class="social">
@@ -67,8 +62,8 @@
                         </div>
                     </div>
                     <div class="slogan">
-                        Chop <span class="monolithic">monolithic</span> applications into <span class="micros">micros</span><br />
-                        without touching a single line of code.
+                        <span class="colorize">Automate</span> all <span class="underline">end-to-end</span> communication.<br />
+                        Type-safe, configurable and extendable.
                     </div>
                     <div class="actions">
                         <a href="https://docs.jitar.dev/02_getting_started.html" target="_blank" class="action action-primary">Get started</a>
@@ -81,98 +76,60 @@
             <main>
                 
                 <section id="introduction">
-                    <article>
-                        <h1>Introduction</h1>
-                        <p>
-                            Jitar is a full-stack JavaScript runtime for small to large web applications.
-                            It lets you build monolithic applications and run them spread out over multiple servers and web browsers.
-                            Jitar takes care of the inner communication, so you don't have to build any API.
-                        </p>
-                        <p>
-                            Jitar runs on top of Node.js and in any modern web browser.
-                            It has strong support for <a href="https://www.typescriptlang.org/" target="_blank">TypeScript</a>.
-                            You can use the frameworks you already love at the front- and back-end because it's only a runtime.
-                        </p>
-                        <p>
-                            More detailed information about <a href="https://docs.jitar.dev/01_introduction.html#how-it-works" target="_blank">how it works</a>
-                            and the <a href="https://docs.jitar.dev/01_introduction.html#philosophy" target="_blank">philosophy</a> behind it can be found
-                            in the <a href="https://docs.jitar.dev" target="_blank">docs</a>.
-                        </p>
-                    </article>
-                    <article tab-component>
-                        <div class="files">
-                            <div class="filename selected" tab-handle="file1">client.ts</div>
-                            <div class="filename" tab-handle="file2">server.ts</div>
-                            <div class="filename" tab-handle="file3">server.segment.json</div>
+                    <h1>
+                        Call your server functions directly.<br />
+                        Jitar takes care of the rest.
+                    </h1>
+                    <div class="explainer">
+                        <div class="part client">
+                            <div class="title">Client</div>
+                            <div class="content code">
+                                <span class="keyword">import</span> sayHello <span class="keyword">from</span> <span class="string">'./sayHello'</span>;<br /><br />
+                                <span class="keyword">const</span> message = <span class="keyword">await</span> sayHello(<span class="string">'Jitar'</span>);<br /><br />
+                                console.log(message); <span class="comment">// Hello Jitar!</span>
+                            </div>
                         </div>
-                        <div class="content">
-                            <code class="language-ts highlighter-rouge highlight selected" tab-content="file1">
-                                <span class="c1">// Import components like it's a monolith</span><br>
-                                <span class="k">import</span> <span class="p">{</span> <span class="nx">storePerson</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./server</span><span class="dl">'</span><span class="p">;</span><br>
-                                <span class="k">import</span> <span class="p">{</span> <span class="nx">Person</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./Person</span><span class="dl">'</span><span class="p">;</span><br>
-                                <br>
-                                <span class="k">async</span> <span class="kd">function</span> <span class="nx">createPerson</span><span class="p">(</span><span class="nx">name</span><span class="p">:</span> <span class="kr">string</span><span class="p">,</span> <span class="nx">age</span><span class="p">:</span> <span class="kr">number</span><span class="p">)</span><br>
-                                <span class="p">{</span><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="c1">// Use components typesafe with Intellisense support</span><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="c1">// and exchange (complex) data objects between them</span><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="kd">const</span> <span class="nx">person</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">age</span><span class="p">);</span><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="k">await</span> <span class="nx">storePerson</span><span class="p">(</span><span class="nx">person</span><span class="p">);</span><br>
-                                <span class="p">}</span><br>
-                                <br>
-                                <span class="k">export</span> <span class="p">{</span> <span class="nx">createPerson</span> <span class="p">}</span>
-                            </code>
-                            <code class="language-ts highlighter-rouge highlight" tab-content="file2">
-                                <span class="c1">// Use any library or framework you want</span><br>
-                                <span class="k">import</span> <span class="p">{</span> <span class="nx">MongoClient</span> <span class="k">as</span> <span class="nx">MC</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">mongodb</span><span class="dl">'</span><span class="p">;</span><br>
-                                <span class="k">import</span> <span class="p">{</span> <span class="nx">Person</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">'</span><span class="s1">./Person</span><span class="dl">'</span><span class="p">;</span><br>
-                                <br>
-                                <span class="k">async</span> <span class="kd">function</span> <span class="nx">storePerson</span><span class="p">(</span><span class="nx">person</span><span class="p">:</span> <span class="nx">Person</span><span class="p">)</span><br>
-                                <span class="p">{</span><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="kd">const</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">MC</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DB_STRING</span><span class="p">);</span><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="k">await</span> <span class="nx">client</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="dl">'</span><span class="s1">my_app</span><span class="dl">'</span><span class="p">)</span><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">.</span><span class="nx">collection</span><span class="p">(</span><span class="dl">'</span><span class="s1">people</span><span class="dl">'</span><span class="p">)</span><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="p">.</span><span class="nx">insertOne</span><span class="p">({</span> <span class="na">name</span><span class="p">:</span> <span class="nx">person</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span> <span class="na">age</span><span class="p">:</span> <span class="nx">person</span><span class="p">.</span><span class="nx">age</span> <span class="p">});</span><br>
-                                <span class="p">}</span><br>
-                                <br>
-                                <span class="k">export</span> <span class="p">{</span> <span class="nx">storePerson</span> <span class="p">}</span>
-                            </code>
-                            <code class="language-ts highlighter-rouge highlight" tab-content="file3">
-                                <span class="c1">/* Split applications with configuration */</span><br>
-                                <span class="p">{</span><span class="w"><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"server.js"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"storePerson"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"access"</span><span class="p">:</span><span class="w"> </span><span class="s2">"public"</span><span class="p">,</span><span class="w"> </span><span class="c1">/* Control access */</span><span class="w"><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="w"> </span><span class="c1">/* Control versions */</span><span class="w"><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="p">},</span><span class="w"><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"deletePerson"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"access"</span><span class="p">:</span><span class="w"> </span><span class="s2">"public"</span><span class="p">,</span><span class="w"><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0.0"</span><span class="w"><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="p">}</span><span class="w"><br>
-                                &nbsp;&nbsp;&nbsp;&nbsp;</span><span class="p">}</span><span class="w"><br>
-                                </span><span class="p">}</span><span class="w"><br>
-                                </span>
-                            </code>
+                        <div class="part jitar">
+                            <div class="title">Jitar</div>
+                            <div class="content flow"></div>
                         </div>
-                    </article>
+                        <div class="part server">
+                            <div class="title">Server</div>
+                            <div class="content code">
+                                <span class="keyword">async</span> <span class="keyword">function</span> sayHello(name: <span class="keyword">string</span>) {<br />
+                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">`Hello <span class="keyword">${<span class="normal">name</span>}</span>!`</span>;<br />
+                                 }<br /><br />
+                                 <span class="keyword">export</span> <span class="keyword">default</span> sayHello;
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
-                <hr>
-
                 <section id="benefits">
-                    <h1>Benefits</h1>
-                    <p>
-                        Developers are at the heart of every application. Jitar is designed to make their lives easier and more productive.
-                    </p>
-                    <div class="cards">
+                    <h2>
+                        <span class="bold">Developers</span> are at the heart of every application.<br />
+                        Jitar makes your life <span class="bold">easier and more productive</span>.
+                    </h2>
+                    <div class="cards cards-horizontal">
                         <div class="card">
                             <img src="images/benefits/api-automation.svg" alt="API automation">
                             <h2>API automation</h2>
                             <p>Automates all client-server communication.</p>
                         </div>
                         <div class="card">
+                            <img src="images/benefits/type-safety.svg" alt="E2E type-safety">
+                            <h2>E2E type-safety</h2>
+                            <p>Reduces programming and refactoring errors.</p>
+                        </div>
+                        <div class="card">
                             <img src="images/benefits/configuration-only.svg" alt="Configuration only">
                             <h2>Configuration only</h2>
                             <p>Keeping the code clean, simple and focussed.</p>
+                        </div>
+                        <div class="card">
+                            <img src="images/benefits/intellisense.svg" alt="E2E Intellisense">
+                            <h2>E2E Intellisense</h2>
+                            <p>Speeds up developing full-stack apps.</p>
                         </div>
                         <div class="card">
                             <img src="images/benefits/platform-agnostic.svg" alt="Platform agnostic">
@@ -184,74 +141,161 @@
                             <h2>Framework agnostic</h2>
                             <p>Works with every frontend and backend framework.</p>
                         </div>
-                        <div class="card">
-                            <img src="images/benefits/type-safety.svg" alt="E2E type-safety">
-                            <h2>E2E type-safety</h2>
-                            <p>Reduces programming and refactoring errors.</p>
+                        
+                    </div>
+                </section>
+
+                <section id="gettingstarted">
+                    <h2>
+                        <span class="bold">Getting started</span> with Jitar is as easy as pie.<br />
+                        It only takes a <span class="bold">few simple steps</span>.
+                    </h2>
+                    <div class="steps">
+                        <div class="step">
+                            <div class="number">
+                                <div class="content">1</div>
+                            </div>
+                            <div class="description">
+                                <h3>Create new project</h3>
+                                <p>Start fast with our creator and pick one of our templates for Vue, React, SolidJS, LIT, Svelte or Jitar only.</p>
+                            </div>
+                            <div class="example">
+                                <div class="window">
+                                    <div class="title">Terminal</div>
+                                    <div class="content code">
+                                        npm create jitar@latest -- --template react
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="card">
-                            <img src="images/benefits/intellisense.svg" alt="E2E Intellisense">
-                            <h2>E2E Intellisense</h2>
-                            <p>Speeds up developing highly scalable apps.</p>
+                        <div class="step">
+                            <div class="number">
+                                <div class="content">2</div>
+                            </div>
+                            <div class="description">
+                                <h3>Add your functions</h3>
+                                <p>Write functions and export them like you are used to. Just make sure they are asy</p>
+                                <p>Import and call your functions like they're on the same side.</p>
+                                <p><strong>Note</strong> that all types are checked and autocomplete is fully available.</p>
+                            </div>
+                            <div class="example">
+                                <div class="window">
+                                    <div class="title">src/shared/sum.ts</div>
+                                    <div class="content code">
+                                        <span class="keyword">async</span> <span class="keyword">function</span> sum(...numbers: <span class="keyword">number</span>[]) { <span class="comment">/* … */</span> }<br /><br />
+                                        <span class="keyword">export</span> <span class="keyword">default</span> sum;
+                                    </div>
+                                </div>
+                                <div class="window">
+                                    <div class="title">src/shared/calculator.ts</div>
+                                    <div class="content code">
+                                        <span class="keyword">import</span> sum <span class="keyword">from</span> <span class="string">'./sum'</span>;<br /><br />
+                                        <span class="keyword">const</span> result = <span class="keyword">await</span> sum(2, 3);
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="number">
+                                <div class="content">3</div>
+                            </div>
+                            <div class="description">
+                                <h3>Configure what runs on the server</h3>
+                                <p>Add the exported functions to a server segment configuration file.</p>
+                                <p><strong>Don't forget</strong> to make them public, otherwise they can't be accessed!</p>
+                            </div>
+                            <div class="example">
+                                <div class="window">
+                                    <div class="title">server.segment.json</div>
+                                    <div class="content code">
+                                        {<br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">"./shared/sum"</span>: {<br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">"default"</span>: { <span class="keyword">"access"</span>: <span class="string">"public"</span> }<br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;}<br />
+                                        }                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="number">
+                                <div class="content">4</div>
+                            </div>
+                            <div class="description">
+                                <h3>Run your application</h3>
+                                <p>Jitar will create an RPC endpoint for each public function that will be used by any client that calls a function automatically.</p>
+                                <p>You can also call the function yourself with any HTTP client using the RPC API. Easy, right?</p>
+                            </div>
+                            <div class="example">
+                                <div class="window">
+                                    <div class="title">Terminal</div>
+                                    <div class="content code">
+                                        &gt; npm run jitar<br />
+                                        INFO - Registered RPC entries [<br />
+                                        &nbsp;&nbsp;<span class="string">'shared/sum'</span><br />
+                                        ]<br />
+                                        INFO - Server started and listening at port 3000<br />
+                                        INFO - Ran procedure -&gt; sum (v0.0.0)<br />
+                                        
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                <hr>
-
                 <section id="features">
-                    <h1>Features</h1>
-                    <p>
-                        The main feature is writing monolithic applications that scale in any form and closes the gap between front- and back-end.
-                        It doesn't matter if a component is placed on one of the servers or the web browser. Jitar will make it work using its powerful runtime features.
-                    </p>
-                    <div class="cards">
+                    <h2>
+                        <span class="bold">Build a monolith</span>, deploy as microservices.<br />
+                        Jitar provides powerful features to <span class="bold">scale endlessly</span>.
+                    </h2>
+                    <div class="cards cards-vertical">
                         <div class="card">
                             <img src="images/features/segmentation.svg" alt="Segmentation">
                             <h2>Segmentation</h2>
-                            <p>Applications are broken down into servable segment packages.</p>
+                            <p>Breaks downs applications into deployable packages.</p>
                             <a href="https://docs.jitar.dev/04_basic_features.html#segmentation" target="_blank">Learn more</a>
                         </div>
                         <div class="card">
                             <img src="images/features/orchestration.svg" alt="Orchestration">
                             <h2>Orchestration</h2>
-                            <p>Procedures always run, no matter the segment they're placed in.</p>
+                            <p>Coordinates running segmented procedures.</p>
                             <a href="https://docs.jitar.dev/04_basic_features.html#orchestration" target="_blank">Learn more</a>
                         </div>
                         <div class="card">
                             <img src="images/features/load-balancing.svg" alt="Load balancing">
                             <h2>Load balancing</h2>
-                            <p>Segments that are served by multiple servers are balanced automatically.</p>
+                            <p>Balances the execution of procedures automatically.</p>
                             <a href="https://docs.jitar.dev/04_basic_features.html#load-balancing" target="_blank">Learn more</a>
                         </div>
                         <div class="card">
                             <img src="images/features/access-protection.svg" alt="Access protection">
                             <h2>Access protection</h2>
-                            <p>Private procedures are only available within its own segment.</p>
+                            <p>Protects the access to private procedures.</p>
                             <a href="https://docs.jitar.dev/04_basic_features.html#access-protection" target="_blank">Learn more</a>
-                        </div>
-                        <div class="card">
-                            <img src="images/features/multi-version.svg" alt="Multi-version">
-                            <h2>Multi-version</h2>
-                            <p>Procedures are versioned to support backwards compatibility.</p>
-                            <a href="https://docs.jitar.dev/04_basic_features.html#multi-version" target="_blank">Learn more</a>
                         </div>
                         <div class="card">
                             <img src="images/features/transportation.svg" alt="Transportation">
                             <h2>Transportation</h2>
-                            <p>Data gets (de)serialized automatically when shared between segments.</p>
+                            <p>(de)serializes data automatically.</p>
                             <a href="https://docs.jitar.dev/04_basic_features.html#data-transportation" target="_blank">Learn more</a>
                         </div>
                         <div class="card">
-                            <img src="images/features/rpc-calls.svg" alt="RPC calls">
-                            <h2>RPC calls</h2>
-                            <p>Public procedures can be called from any external system.</p>
+                            <img src="images/features/multi-version.svg" alt="Multi-version">
+                            <h2>Multi-version</h2>
+                            <p>Supports multiple versions of the same procedure.</p>
+                            <a href="https://docs.jitar.dev/04_basic_features.html#multi-version" target="_blank">Learn more</a>
+                        </div>
+                        <div class="card">
+                            <img src="images/features/integration.svg" alt="Integration">
+                            <h2>Integration</h2>
+                            <p>Integrates in any existing landscape.</p>
                             <a href="https://docs.jitar.dev/05_advanced_features.html#apis" target="_blank">Learn more</a>
                         </div>
                         <div class="card inactive">
                             <img src="images/features/and-more.svg" alt="And more ...">
                             <h2>And more ...</h2>
-                            <p>There's also support for health checks, middleware, hooks and more.</p>
+                            <p>Validation, health checks, middleware, hooks, …</p>
                             <a href="https://docs.jitar.dev" target="_blank">Read the docs</a>
                         </div>
                     </div>

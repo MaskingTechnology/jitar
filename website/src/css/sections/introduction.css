@@ -1,0 +1,110 @@
+
+#introduction .explainer
+{
+    align-content: stretch;
+    align-items: stretch;
+    display: flex;
+    width: 100%;
+}
+
+#introduction .explainer .part
+{
+    display: flex;
+    align-content: stretch;
+    align-items: stretch;
+}
+
+#introduction .explainer .title
+{
+    padding: 0.5em 2em;
+    flex-grow: 0;
+    flex-shrink: 0;
+    font-size: 1.1em;
+    font-weight: var(--font-weight-medium);
+}
+
+#introduction .explainer .content
+{
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+#introduction .explainer .client,
+#introduction .explainer .server
+{
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding-top: 16px;
+}
+
+#introduction .explainer .jitar
+{
+    flex-grow: 0;
+    flex-shrink: 0;
+    width: 190px;
+}
+
+#introduction .explainer .jitar .title
+{
+    background-color: var(--swatch-color-blue-5);
+    color: var(--swatch-color-white);
+    margin: 0 30px;
+}
+
+#introduction .explainer .jitar .flow
+{
+    background-image: url('../../images/introduction/flow-vertical.svg');
+    background-position: center top;
+    background-repeat: no-repeat;
+    height: 100%;
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (min-width: 1200px)
+{
+    #introduction .explainer
+    {
+        /* Place the introduction text and code in a row */
+        flex-direction: row;
+    }
+
+    #introduction .explainer .part
+    {
+        flex-direction: column;
+    }
+}
+
+/*
+ *  Large (tablet) layout
+ */
+@media (max-width: 1200px)
+{
+    #introduction .explainer
+    {
+        /* Place the introduction text and code below each other */
+        flex-direction: column;
+    }
+
+    #introduction .explainer .part
+    {
+        flex-direction: row;
+    }
+}
+
+/*
+ *  Medium (table / phone) layout
+ */
+@media (max-width: 795px)
+{
+    
+}
+
+/*
+ *  Small (phone) layout
+ */
+@media (max-width: 560px)
+{
+    
+}
