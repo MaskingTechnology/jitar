@@ -147,6 +147,14 @@
  */
 @media (max-width: 1200px)
 {
+    .cards-horizontal
+    {
+        /* Place feature cards in three columns */
+        gap: 2em;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        grid-template-rows: auto auto auto;
+    }
+
     .cards-vertical
     {
         /* Place feature cards in three columns */
@@ -161,6 +169,14 @@
  */
 @media (max-width: 795px)
 {
+    .cards-horizontal
+    {
+        /* Place feature cards in three columns */
+        gap: 2em;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto auto auto auto auto auto;
+    }
+
     .cards-vertical
     {
         /* Place feature cards in two columns */
