@@ -4,7 +4,7 @@ import { Logger } from 'tslog';
 
 import { LocalGateway, RemoteNode } from '@jitar/runtime';
 
-import NodeDto, { schema as nodeDtoSchema } from '../models/NodeDto.js';
+import NodeDto, { nodeDtoSchema } from '../models/NodeDto.js';
 import DataConverter from '../utils/DataConverter.js';
 
 export default class NodesController

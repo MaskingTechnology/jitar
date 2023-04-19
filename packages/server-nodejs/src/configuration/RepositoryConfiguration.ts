@@ -1,7 +1,7 @@
 
 import { z } from 'zod';
 
-export const schema = z
+export const repositorySchema = z
     .object({
         source: z.string().optional(),
         cache: z.string().optional(),

@@ -1,7 +1,7 @@
 
 import { z } from 'zod';
 
-export const schema = z
+export const proxySchema = z
     .object({
         node: z.string().url().optional(),
         gateway: z.string().url().optional(),

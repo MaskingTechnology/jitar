@@ -1,13 +1,13 @@
 
 import { z } from 'zod';
 
-import GatewayConfiguration, { schema as gatewaySchema } from './GatewayConfiguration.js';
-import NodeConfiguration, { schema as nodeSchema } from './NodeConfiguration.js';
-import ProxyConfiguration, { schema as proxySchema } from './ProxyConfiguration.js';
-import RepositoryConfiguration, { schema as repositorySchema } from './RepositoryConfiguration.js';
-import StandaloneConfiguration, { schema as standaloneSchema } from './StandaloneConfiguration.js';
+import GatewayConfiguration, { gatewaySchema } from './GatewayConfiguration.js';
+import NodeConfiguration, { nodeSchema } from './NodeConfiguration.js';
+import ProxyConfiguration, { proxySchema } from './ProxyConfiguration.js';
+import RepositoryConfiguration, { repositorySchema } from './RepositoryConfiguration.js';
+import StandaloneConfiguration, { standaloneSchema } from './StandaloneConfiguration.js';
 
-export const schema = z
+export const runtimeSchema = z
     .object({
         url: z.string().optional(),
         standalone: standaloneSchema.optional(),

@@ -1,7 +1,7 @@
 
 import { z } from 'zod';
 
-export const schema = z
+export const gatewaySchema = z
     .object({
         monitor: z.number().optional(),
         repository: z.string().url().optional()

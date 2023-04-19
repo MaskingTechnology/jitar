@@ -1,7 +1,7 @@
 
 import yargs from 'yargs';
 
-import ServerOptions, { schema as serverOptionsSchema } from '../configuration/ServerOptions.js';
+import ServerOptions, { serverOptionsSchema } from '../configuration/ServerOptions.js';
 
 import DataConverter from './DataConverter.js';
 

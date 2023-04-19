@@ -1,10 +1,13 @@
 
 import { z } from 'zod';
 
-export const schema = z.object({
-    url: z.string().url(),
-    procedureNames: z.array(z.string()).optional()
-}).strict().transform((value) => new NodeDto(value.url, value.procedureNames));
+export const nodeDtoSchema = z
+    .object({
+        url: z.string().url(),
+        procedureNames: z.array(z.string()).optional()
+    })
+    .strict()
+    .transform((value) => new NodeDto(value.url, value.procedureNames));
 
 export default class NodeDto
 {

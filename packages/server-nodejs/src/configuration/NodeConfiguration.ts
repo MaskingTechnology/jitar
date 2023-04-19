@@ -1,7 +1,7 @@
 
 import { z } from 'zod';
 
-export const schema = z
+export const nodeSchema = z
     .object({
         gateway: z.string().url().optional(),
         repository: z.string().url().optional(),
