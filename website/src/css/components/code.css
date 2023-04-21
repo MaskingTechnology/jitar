@@ -1,0 +1,32 @@
+
+code
+{
+    background-color: var(--swatch-color-gray-5);
+    color: var(--swatch-color-gray-1);
+    display: block;
+    font-family: var(--font-family-code);
+    font-size: 1.0em;
+    line-height: 1.3em;
+    padding: 1.2em;
+    text-align: left;
+}
+
+code .keyword
+{
+    color: var(--swatch-color-blue-3);
+}
+
+code .string
+{
+    color: var(--swatch-color-red-1);
+}
+
+code .comment
+{
+    color: var(--swatch-color-gray-3);
+}
+
+code .normal
+{
+    color: var(--swatch-color-gray-1);
+}
