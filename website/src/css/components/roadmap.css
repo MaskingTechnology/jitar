@@ -84,6 +84,13 @@
         gap: 2em;
     }
 
+    .roadmap .step .number .content
+    {
+        font-size: 1.1em;
+        padding: 0.5em 1.0em;
+        width: 0.6em;
+    }
+
     .roadmap .step .example
     {
         width: 570px;
@@ -96,6 +103,13 @@
     {
         flex-direction: column;
         gap: 1em;
+    }
+
+    .roadmap .step .number .content
+    {
+        font-size: 1.0em;
+        padding: 0.5em 1.0em;
+        width: 0.5em;
     }
 
     .roadmap .step .example

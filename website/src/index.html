@@ -77,18 +77,18 @@
                 
                 <section id="introduction">
                     <h1>
-                        Call your server functions directly.<br />
-                        Jitar takes care of the rest.
+                        <span class="line">Call your server functions directly.</span>
+                        <span class="line">Jitar takes care of the rest.</span>
                     </h1>
                     <div class="explainer">
                         <div class="parts">
                             <div class="part client">
                                 <div class="title">Client</div>
-                                <div class="content code">
+                                <code class="content">
                                     <span class="keyword">import</span> sayHello <span class="keyword">from</span> <span class="string">'./sayHello'</span>;<br /><br />
                                     <span class="keyword">const</span> message = <span class="keyword">await</span> sayHello(<span class="string">'Jitar'</span>);<br /><br />
                                     console.log(message); <span class="comment">// Hello Jitar!</span>
-                                </div>
+                                </code>
                             </div>
                             <div class="part jitar">
                                 <div class="title">Jitar</div>
@@ -96,12 +96,12 @@
                             </div>
                             <div class="part server">
                                 <div class="title">Server</div>
-                                <div class="content code">
+                                <code class="content">
                                     <span class="keyword">async</span> <span class="keyword">function</span> sayHello(name: <span class="keyword">string</span>) {<br />
                                     &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">return</span> <span class="string">`Hello <span class="keyword">${<span class="normal">name</span>}</span>!`</span>;<br />
                                     }<br /><br />
                                     <span class="keyword">export</span> <span class="keyword">default</span> sayHello;
-                                </div>
+                                </code>
                             </div>
                         </div>
                     </div>
@@ -109,38 +109,38 @@
 
                 <section id="benefits">
                     <h2>
-                        <span class="bold">Developers</span> are at the heart of every application.<br />
-                        Jitar makes your life <span class="bold">easier and more productive</span>.
+                        <span class="line"><span class="bold">Developers</span> are at the heart of every application.</span>
+                        <span class="line">Jitar makes your life <span class="bold">easier and more productive</span>.</span>
                     </h2>
                     <div class="cards cards-horizontal">
                         <div class="card">
                             <img src="images/benefits/api-automation.svg" alt="API automation">
-                            <h2>API automation</h2>
+                            <h3>API automation</h3>
                             <p>Automates all client-server communication.</p>
                         </div>
                         <div class="card">
                             <img src="images/benefits/type-safety.svg" alt="E2E type-safety">
-                            <h2>E2E type-safety</h2>
+                            <h3>E2E type-safety</h3>
                             <p>Reduces programming and refactoring errors.</p>
                         </div>
                         <div class="card">
                             <img src="images/benefits/configuration-only.svg" alt="Configuration only">
-                            <h2>Configuration only</h2>
+                            <h3>Configuration only</h3>
                             <p>Keeping the code clean, simple and focussed.</p>
                         </div>
                         <div class="card">
                             <img src="images/benefits/intellisense.svg" alt="E2E Intellisense">
-                            <h2>E2E Intellisense</h2>
+                            <h3>E2E Intellisense</h3>
                             <p>Speeds up developing full-stack apps.</p>
                         </div>
                         <div class="card">
                             <img src="images/benefits/platform-agnostic.svg" alt="Platform agnostic">
-                            <h2>Platform agnostic</h2>
+                            <h3>Platform agnostic</h3>
                             <p>Runs in modern web browsers and on the server.</p>
                         </div>
                         <div class="card">
                             <img src="images/benefits/framework-agnostic.svg" alt="Framework agnostic">
-                            <h2>Framework agnostic</h2>
+                            <h3>Framework agnostic</h3>
                             <p>Works with every frontend and backend framework.</p>
                         </div>
                         
@@ -149,8 +149,8 @@
 
                 <section id="gettingstarted">
                     <h2>
-                        <span class="bold">Getting started</span> with Jitar is as easy as pie.<br />
-                        It only takes a <span class="bold">few simple steps</span>.
+                        <span class="line"><span class="bold">Getting started</span> with Jitar is as easy as pie.</span>
+                        <span class="line">It only takes a <span class="bold">few simple steps</span>.</span>
                     </h2>
                     <div class="roadmap">
                         <div class="step">
@@ -164,9 +164,9 @@
                             <div class="example">
                                 <div class="window">
                                     <div class="title">Terminal</div>
-                                    <div class="content code">
+                                    <code class="content">
                                         npm create jitar@latest -- --template react
-                                    </div>
+                                    </code>
                                 </div>
                             </div>
                         </div>
@@ -183,17 +183,17 @@
                             <div class="example">
                                 <div class="window">
                                     <div class="title">src/shared/sum.ts</div>
-                                    <div class="content code">
+                                    <code class="content">
                                         <span class="keyword">async</span> <span class="keyword">function</span> sum(...numbers: <span class="keyword">number</span>[]) { <span class="comment">/* … */</span> }<br /><br />
                                         <span class="keyword">export</span> <span class="keyword">default</span> sum;
-                                    </div>
+                                    </code>
                                 </div>
                                 <div class="window">
                                     <div class="title">src/shared/calculator.ts</div>
-                                    <div class="content code">
+                                    <code class="content">
                                         <span class="keyword">import</span> sum <span class="keyword">from</span> <span class="string">'./sum'</span>;<br /><br />
                                         <span class="keyword">const</span> result = <span class="keyword">await</span> sum(2, 3);
-                                    </div>
+                                    </code>
                                 </div>
                             </div>
                         </div>
@@ -209,13 +209,13 @@
                             <div class="example">
                                 <div class="window">
                                     <div class="title">server.segment.json</div>
-                                    <div class="content code">
+                                    <code class="content">
                                         {<br />
                                         &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">"./shared/sum"</span>: {<br />
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">"default"</span>: { <span class="keyword">"access"</span>: <span class="string">"public"</span> }<br />
                                         &nbsp;&nbsp;&nbsp;&nbsp;}<br />
                                         }                                        
-                                    </div>
+                                    </code>
                                 </div>
                             </div>
                         </div>
@@ -231,7 +231,7 @@
                             <div class="example">
                                 <div class="window">
                                     <div class="title">Terminal</div>
-                                    <div class="content code">
+                                    <code class="content">
                                         &gt; npm run jitar<br />
                                         INFO - Registered RPC entries [<br />
                                         &nbsp;&nbsp;<span class="string">'shared/sum'</span><br />
@@ -239,7 +239,7 @@
                                         INFO - Server started and listening at port 3000<br />
                                         INFO - Ran procedure -&gt; sum (v0.0.0)<br />
                                         
-                                    </div>
+                                    </code>
                                 </div>
                             </div>
                         </div>
@@ -248,55 +248,55 @@
 
                 <section id="features">
                     <h2>
-                        <span class="bold">Build a monolith</span>, deploy as microservices.<br />
-                        Jitar provides powerful features to <span class="bold">scale endlessly</span>.
+                        <span class="line"><span class="bold">Build a monolith</span>, deploy as microservices.</span>
+                        <span class="line">Jitar provides powerful features to <span class="bold">scale endlessly</span>.</span>
                     </h2>
                     <div class="cards cards-vertical">
                         <div class="card">
                             <img src="images/features/segmentation.svg" alt="Segmentation">
-                            <h2>Segmentation</h2>
+                            <h3>Segmentation</h3>
                             <p>Breaks downs applications into deployable packages.</p>
                             <a href="https://docs.jitar.dev/04_basic_features.html#segmentation" target="_blank">Learn more</a>
                         </div>
                         <div class="card">
                             <img src="images/features/orchestration.svg" alt="Orchestration">
-                            <h2>Orchestration</h2>
+                            <h3>Orchestration</h3>
                             <p>Coordinates running segmented procedures.</p>
                             <a href="https://docs.jitar.dev/04_basic_features.html#orchestration" target="_blank">Learn more</a>
                         </div>
                         <div class="card">
                             <img src="images/features/load-balancing.svg" alt="Load balancing">
-                            <h2>Load balancing</h2>
+                            <h3>Load balancing</h3>
                             <p>Balances the execution of procedures automatically.</p>
                             <a href="https://docs.jitar.dev/04_basic_features.html#load-balancing" target="_blank">Learn more</a>
                         </div>
                         <div class="card">
                             <img src="images/features/access-protection.svg" alt="Access protection">
-                            <h2>Access protection</h2>
+                            <h3>Access protection</h3>
                             <p>Protects the access to private procedures.</p>
                             <a href="https://docs.jitar.dev/04_basic_features.html#access-protection" target="_blank">Learn more</a>
                         </div>
                         <div class="card">
                             <img src="images/features/transportation.svg" alt="Transportation">
-                            <h2>Transportation</h2>
+                            <h3>Transportation</h3>
                             <p>(de)serializes data automatically.</p>
                             <a href="https://docs.jitar.dev/04_basic_features.html#data-transportation" target="_blank">Learn more</a>
                         </div>
                         <div class="card">
                             <img src="images/features/multi-version.svg" alt="Multi-version">
-                            <h2>Multi-version</h2>
+                            <h3>Multi-version</h3>
                             <p>Supports multiple versions of the same procedure.</p>
                             <a href="https://docs.jitar.dev/04_basic_features.html#multi-version" target="_blank">Learn more</a>
                         </div>
                         <div class="card">
                             <img src="images/features/integration.svg" alt="Integration">
-                            <h2>Integration</h2>
+                            <h3>Integration</h3>
                             <p>Integrates in any existing landscape.</p>
                             <a href="https://docs.jitar.dev/05_advanced_features.html#apis" target="_blank">Learn more</a>
                         </div>
                         <div class="card inactive">
                             <img src="images/features/and-more.svg" alt="And more ...">
-                            <h2>And more ...</h2>
+                            <h3>And more ...</h3>
                             <p>Validation, health checks, middleware, hooks, …</p>
                             <a href="https://docs.jitar.dev" target="_blank">Read the docs</a>
                         </div>

@@ -49,7 +49,7 @@
     width: 5em;
 }
 
-.card h2
+.card h3
 {
     flex-grow: 0;
     flex-shrink: 0;
@@ -122,10 +122,14 @@
 
 @media (min-width: 1200px)
 {
+    .cards
+    {
+        gap: 2em;
+    }
+
     .cards-horizontal
     {
         /* Three columns */
-        gap: 2em;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
         grid-template-rows: auto auto;
     }
@@ -133,7 +137,6 @@
     .cards-vertical
     {
         /* Four columns */
-        gap: 2em;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
         grid-template-rows: auto auto;
     }
@@ -141,20 +144,22 @@
 
 @media (max-width: 1200px)
 {
+    .cards
+    {
+        gap: 2vw;
+        grid-template-rows: auto;
+    }
+
     .cards-horizontal
     {
         /* Two columns */
-        gap: 2em;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        grid-template-rows: auto auto auto;
     }
 
     .cards-vertical
     {
         /* Three columns */
-        gap: 2vw;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
-        grid-template-rows: auto auto auto;
     }
 }
 
@@ -163,25 +168,21 @@
     .cards-horizontal
     {
         /* One column */
-        gap: 2em;
         grid-template-columns: minmax(0, 1fr);
-        grid-template-rows: auto auto auto auto auto auto;
     }
 
     .cards-vertical
     {
         /* Two columns */
         grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        grid-template-rows: auto auto auto auto;
     }
 }
 
 @media (max-width: 560px)
 {
-    .cards-vertical
+    .cards
     {
         grid-template-columns: auto;
-        grid-template-rows: auto auto auto auto auto auto auto auto;
     }
 
     .card

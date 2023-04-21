@@ -13,6 +13,11 @@ nav
     padding: 0 1em;
 }
 
+nav a
+{
+    text-decoration: none;
+}
+
 nav a.logo
 {
     color: var(--swatch-color-white);

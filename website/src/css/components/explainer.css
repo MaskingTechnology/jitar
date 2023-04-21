@@ -144,3 +144,11 @@
         width: 100%;
     }
 }
+
+@media (max-width: 560px)
+{
+    .explainer
+    {
+        margin: 0 -1.2em;
+    }
+}

@@ -28,6 +28,12 @@ main h2 .bold
     font-weight: var(--font-weight-normal);
 }
 
+main h1 .line,
+main h2 .line
+{
+    display: block;
+}
+
 main a
 {
     color: var(--swatch-color-red-3);
@@ -46,5 +52,21 @@ main a:hover
     {
         /* Use less padding to save space */
         padding: 2em 1.2em;
+    }
+
+    main h1
+    {
+        font-size: 1.5em;
+    }
+
+    main h2
+    {
+        font-size: 1.3em;
+    }
+
+    main h1 .line,
+    main h2 .line
+    {
+        display: inline;
     }
 }
