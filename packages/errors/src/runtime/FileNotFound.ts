@@ -1,7 +1,9 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import NotFound from './generic/NotFound.js';
+import createSource from '../sourcing.js';
+
+import NotFound from '../generic/NotFound.js';
 
 export default class FileNotFound extends NotFound
 {
@@ -17,4 +19,4 @@ export default class FileNotFound extends NotFound
     get filename() { return this.#filename; }
 }
 
-(FileNotFound as Loadable).source = '/jitar-runtime/errors/FileNotFound.js';
+(FileNotFound as Loadable).source = createSource(import.meta.url);

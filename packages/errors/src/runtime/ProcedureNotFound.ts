@@ -1,7 +1,9 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import NotFound from './generic/NotFound.js';
+import createSource from '../sourcing.js';
+
+import NotFound from '../generic/NotFound.js';
 
 export default class ProcedureNotFound extends NotFound
 {
@@ -17,4 +19,4 @@ export default class ProcedureNotFound extends NotFound
     get fqn() { return this.#fqn; }
 }
 
-(ProcedureNotFound as Loadable).source = '/jitar-runtime/errors/ProcedureNotFound.js';
+(ProcedureNotFound as Loadable).source = createSource(import.meta.url);

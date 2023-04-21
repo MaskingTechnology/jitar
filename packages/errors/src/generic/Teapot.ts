@@ -1,6 +1,8 @@
 
 import { Loadable } from '@jitar/serialization';
 
+import createSource from '../sourcing.js';
+
 export default class Teapot extends Error
 {
     constructor()
@@ -9,4 +11,4 @@ export default class Teapot extends Error
     }
 }
 
-(Teapot as Loadable).source = '/jitar-runtime/errors/generic/Teapot.js';
+(Teapot as Loadable).source = createSource(import.meta.url);

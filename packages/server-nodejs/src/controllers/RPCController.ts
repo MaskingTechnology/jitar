@@ -2,6 +2,7 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
+import { BadRequest, Unauthorized, PaymentRequired, Forbidden, NotFound, Teapot, NotImplemented } from '@jitar/errors';
 import { Version, VersionParser, ProcedureRuntime } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
@@ -10,6 +11,15 @@ import CorsMiddleware from '../middleware/CorsMiddleware.js';
 const RPC_PARAMETERS = ['version', 'serialize'];
 const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
 const CORS_MAX_AGE = 86400;
+
+// Required to work after minification.
+const BAD_REQUEST_NAME = BadRequest.name;
+const UNAUTHORIZED_NAME = Unauthorized.name;
+const PAYMENT_REQUIRED_NAME = PaymentRequired.name;
+const FORBIDDEN_NAME = Forbidden.name;
+const NOT_FOUND_NAME = NotFound.name;
+const TEAPOT_NAME = Teapot.name;
+const NOT_IMPLEMENTED_NAME = NotImplemented.name;
 
 export default class RPCController
 {
@@ -245,13 +255,13 @@ export default class RPCController
 
         const errorClass = (error as Object).constructor as Function;
 
-        if (this.#isClassType(errorClass, 'BadRequest')) return 400;
-        if (this.#isClassType(errorClass, 'Unauthorized')) return 401;
-        if (this.#isClassType(errorClass, 'PaymentRequired')) return 402;
-        if (this.#isClassType(errorClass, 'Forbidden')) return 403;
-        if (this.#isClassType(errorClass, 'NotFound')) return 404;
-        if (this.#isClassType(errorClass, 'Teapot')) return 418;
-        if (this.#isClassType(errorClass, 'NotImplemented')) return 501;
+        if (this.#isClassType(errorClass, BAD_REQUEST_NAME)) return 400;
+        if (this.#isClassType(errorClass, UNAUTHORIZED_NAME)) return 401;
+        if (this.#isClassType(errorClass, PAYMENT_REQUIRED_NAME)) return 402;
+        if (this.#isClassType(errorClass, FORBIDDEN_NAME)) return 403;
+        if (this.#isClassType(errorClass, NOT_FOUND_NAME)) return 404;
+        if (this.#isClassType(errorClass, TEAPOT_NAME)) return 418;
+        if (this.#isClassType(errorClass, NOT_IMPLEMENTED_NAME)) return 501;
 
         return 500;
     }

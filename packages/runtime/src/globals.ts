@@ -1,6 +1,7 @@
 
+import ProcedureNotAccessible from '@jitar/errors';
+
 import { getDependency, runProcedure } from './hooks.js';
-import ProcedureNotAccessible from './errors/ProcedureNotAccessible.js';
 
 declare global
 {
@@ -8,7 +9,7 @@ declare global
     const __runProcedure: typeof runProcedure;
 }
 
-const globals = globalThis as Record<string, unknown>;
+export const globals = globalThis as Record<string, unknown>;
 
 // Available for external use
 globals.__getDependency = getDependency;

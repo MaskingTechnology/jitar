@@ -1,7 +1,9 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import NotFound from './generic/NotFound.js';
+import createSource from '../sourcing.js';
+
+import NotFound from '../generic/NotFound.js';
 
 export default class ImplementationNotFound extends NotFound
 {
@@ -21,4 +23,4 @@ export default class ImplementationNotFound extends NotFound
     get version() { return this.#version; }
 }
 
-(ImplementationNotFound as Loadable).source = '/jitar-runtime/errors/ImplementationNotFound.js';
+(ImplementationNotFound as Loadable).source = createSource(import.meta.url);

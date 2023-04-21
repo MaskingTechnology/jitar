@@ -1,8 +1,9 @@
 
+import { RuntimeNotAvailable } from '@jitar/errors';
+
 import Context from '../models/Context.js';
 import VersionParser from '../utils/VersionParser.js';
 
-import RuntimeNotAvailable from '../errors/RuntimeNotAvailable.js';
 import LocalNode from '../services/LocalNode.js';
 
 let _runtime: LocalNode;

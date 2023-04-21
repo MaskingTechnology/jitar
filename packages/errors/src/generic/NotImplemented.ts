@@ -1,6 +1,8 @@
 
 import { Loadable } from '@jitar/serialization';
 
+import createSource from '../sourcing.js';
+
 export default class NotImplemented extends Error
 {
     constructor(message = 'Not implemented')
@@ -9,4 +11,4 @@ export default class NotImplemented extends Error
     }
 }
 
-(NotImplemented as Loadable).source = '/jitar-runtime/errors/generic/NotImplemented.js';
+(NotImplemented as Loadable).source = createSource(import.meta.url);

@@ -1,6 +1,8 @@
 
 import { Loadable } from '@jitar/serialization';
 
+import createSource from '../sourcing.js';
+
 export default class Unauthorized extends Error
 {
     constructor(message = 'Unauthorized')
@@ -9,4 +11,4 @@ export default class Unauthorized extends Error
     }
 }
 
-(Unauthorized as Loadable).source = '/jitar-runtime/errors/generic/Unauthorized.js';
+(Unauthorized as Loadable).source = createSource(import.meta.url);

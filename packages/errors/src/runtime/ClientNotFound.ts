@@ -1,7 +1,9 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import BadRequest from './generic/BadRequest.js';
+import createSource from '../sourcing.js';
+
+import BadRequest from '../generic/BadRequest.js';
 
 export default class ClientNotFound extends BadRequest
 {
@@ -17,4 +19,4 @@ export default class ClientNotFound extends BadRequest
     get clientId() { return this.#clientId; }
 }
 
-(ClientNotFound as Loadable).source = '/jitar-runtime/errors/ClientNotFound.js';
+(ClientNotFound as Loadable).source = createSource(import.meta.url);

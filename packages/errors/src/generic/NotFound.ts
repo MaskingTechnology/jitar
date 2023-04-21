@@ -1,6 +1,8 @@
 
 import { Loadable } from '@jitar/serialization';
 
+import createSource from '../sourcing.js';
+
 export default class NotFound extends Error
 {
     constructor(message = 'Not found')
@@ -9,4 +11,4 @@ export default class NotFound extends Error
     }
 }
 
-(NotFound as Loadable).source = '/jitar-runtime/errors/generic/NotFound.js';
+(NotFound as Loadable).source = createSource(import.meta.url);

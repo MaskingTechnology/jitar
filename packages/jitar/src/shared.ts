@@ -1,5 +1,6 @@
 
-export {
+export
+{
     HealthCheck,
     Middleware,
     NextHandler,
@@ -11,3 +12,5 @@ export {
     ArrayParameter,
     ObjectParameter
 } from '@jitar/runtime';
+
+export * from './errors.js';

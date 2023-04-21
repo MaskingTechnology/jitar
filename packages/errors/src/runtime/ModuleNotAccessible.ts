@@ -1,7 +1,9 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import Forbidden from './generic/Forbidden.js';
+import createSource from '../sourcing.js';
+
+import Forbidden from '../generic/Forbidden.js';
 
 export default class ModuleNotAccessible extends Forbidden
 {
@@ -17,4 +19,4 @@ export default class ModuleNotAccessible extends Forbidden
     get url() { return this.#url; }
 }
 
-(ModuleNotAccessible as Loadable).source = '/jitar-runtime/errors/ModuleNotAccessible.js';
+(ModuleNotAccessible as Loadable).source = createSource(import.meta.url);

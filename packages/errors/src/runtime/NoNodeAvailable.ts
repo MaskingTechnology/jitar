@@ -1,7 +1,9 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import ServerError from './generic/ServerError.js';
+import createSource from '../sourcing.js';
+
+import ServerError from '../generic/ServerError.js';
 
 export default class NoNodeAvailable extends ServerError
 {
@@ -17,4 +19,4 @@ export default class NoNodeAvailable extends ServerError
     get name() { return this.#name; }
 }
 
-(NoNodeAvailable as Loadable).source = '/jitar-runtime/errors/NoNodeAvailable.js';
+(NoNodeAvailable as Loadable).source = createSource(import.meta.url);

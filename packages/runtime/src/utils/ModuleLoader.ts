@@ -1,6 +1,6 @@
 
-import ModuleNotAccessible from '../errors/ModuleNotAccessible.js';
-import ModuleNotLoaded from '../errors/ModuleNotLoaded.js';
+import { ModuleNotAccessible, ModuleNotLoaded } from '@jitar/errors';
+
 import Module from '../types/Module.js';
 import ModuleImporter from '../types/ModuleImporter.js';
 
@@ -36,10 +36,20 @@ export default class ModuleLoader
     static async load(specifier: string): Promise<Module>
     {
         let url = this.assureExtension(specifier);
-        
+
         if (url.startsWith('/jitar'))
         {
-            url = `../..${url}`;
+            const aaa = import.meta.url.split('/');
+            aaa.pop();
+            const bbb = url.split('/');
+            bbb.shift();
+            bbb.shift();
+
+            url = `${aaa.join('/')}/${bbb.join('/')}`;
+
+            console.log('MODULE LOADER', url);
+
+            return this.#import(url, specifier) as Promise<Module>;
         }
 
         if (_baseUrl !== undefined && url.startsWith(_baseUrl) === false)

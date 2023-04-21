@@ -1,5 +1,6 @@
 
-import NoNodeAvailable from '../errors/NoNodeAvailable.js';
+import { NoNodeAvailable } from '@jitar/errors';
+
 import Version from '../models/Version.js';
 
 import Node from './Node.js';

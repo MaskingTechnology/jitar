@@ -4,7 +4,8 @@ import glob from 'glob-promise';
 import mime from 'mime-types';
 import path from 'path';
 
-import { FileNotFound, FileManager, File } from '@jitar/runtime';
+import { FileManager, File } from '@jitar/runtime';
+import { FileNotFound } from '@jitar/errors';
 
 export default class LocalFileManager implements FileManager
 {
@@ -14,7 +15,7 @@ export default class LocalFileManager implements FileManager
     {
         this.#location = location;
     }
-    
+
     getRootLocation(): string
     {
         return path.resolve(this.#location);

@@ -1,5 +1,6 @@
 
-import InvalidVersionNumber from '../errors/InvalidVersionNumber.js';
+import { InvalidVersionNumber } from '@jitar/errors';
+
 import Version from '../models/Version.js';
 
 export default class VersionParser
@@ -10,7 +11,7 @@ export default class VersionParser
         {
             return Version.DEFAULT;
         }
-        
+
         const parts = number.split('.');
 
         switch (parts.length)

@@ -3,17 +3,6 @@
 export * from './definitions/AccessLevel.js';
 export * from './definitions/Files.js';
 
-// Errors
-export { default as BadRequest } from './errors/generic/BadRequest.js';
-export { default as Forbidden } from './errors/generic/Forbidden.js';
-export { default as NotFound } from './errors/generic/NotFound.js';
-export { default as NotImplemented } from './errors/generic/NotImplemented.js';
-export { default as PaymentRequired } from './errors/generic/PaymentRequired.js';
-export { default as ServerError } from './errors/generic/ServerError.js';
-export { default as Teapot } from './errors/generic/Teapot.js';
-export { default as Unauthorized } from './errors/generic/Unauthorized.js';
-export { default as FileNotFound } from './errors/FileNotFound.js';
-
 // Interfaces
 export { default as FileManager } from './interfaces/FileManager.js';
 export { default as HealthCheck } from './interfaces/HealthCheck.js';

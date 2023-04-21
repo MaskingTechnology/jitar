@@ -1,6 +1,8 @@
 
 import { Loadable } from '@jitar/serialization';
 
+import createSource from '../sourcing.js';
+
 export default class PaymentRequired extends Error
 {
     constructor(message = 'Payment required')
@@ -9,4 +11,4 @@ export default class PaymentRequired extends Error
     }
 }
 
-(PaymentRequired as Loadable).source = '/jitar-runtime/errors/generic/PaymentRequired.js';
+(PaymentRequired as Loadable).source = createSource(import.meta.url);

@@ -1,7 +1,9 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import BadRequest from './generic/BadRequest.js';
+import createSource from '../sourcing.js';
+
+import BadRequest from '../generic/BadRequest.js';
 
 export default class MissingParameterValue extends BadRequest
 {
@@ -17,4 +19,4 @@ export default class MissingParameterValue extends BadRequest
     get parameterName() { return this.#parameterName; }
 }
 
-(MissingParameterValue as Loadable).source = '/jitar-runtime/errors/MissingParameterValue.js';
+(MissingParameterValue as Loadable).source = createSource(import.meta.url);
