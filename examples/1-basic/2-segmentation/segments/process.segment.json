@@ -1,12 +1,12 @@
 {
-    "./greetings/sayHelloPublic": {
+    "./reporting/createStatistics": {
         "default": {
             "access": "public"
         }
     },
-    "./greetings/sayHello": {
+    "./reporting/createReport": {
         "default": {
-            "access": "private"
+            "access": "public"
         }
     }
 }

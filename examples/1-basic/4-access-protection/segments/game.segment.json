@@ -1,12 +1,12 @@
 {
-    "./greetings/sayHi": {
+    "./game/checkSecret": {
         "default": {
             "access": "public"
         }
     },
-    "./greetings/sayBoth": {
+    "./game/getSecret": {
         "default": {
-            "access": "public"
+            "access": "private"
         }
     }
 }

@@ -1,15 +1,37 @@
 
 # Jitar | Segmentation example
 
-This example demonstrates how to split an application into multiple segments and
-run them distributed using the repository, gateway and nodes.
+This example demonstrates how to distribute an application in production.
 
-The application consists of three simple procedures and two segments. All procedures are placed in the
-``src/greetings`` directory. 
+The application is a simple report creation that separates the data from the processing.
 
-Because this example has multiple segment files all the segment files ``(*.segment.json)`` are placed in the ``segments`` directory. The same is done for the configurations, as there are multiple configurations used.
+## Project setup
 
-## Running the example
+**Procedures**
+
+* getData (`src/reporting/getData.ts`)
+* createStatistics (`src/reporting/createStatistics.ts`)
+* createReport (`src/reporting/createReport.ts`)
+
+**Segments**
+
+* Data - contains the *multiply* procedure (`segments/data.segment.json`)
+* Process - contains the *createReport* and *process* procedures (`segments/process.segment.json`)
+
+**Services**
+
+Development
+
+* Standalone - loads both segments (`services/standalone.json`)
+
+Production
+
+* Repository (`services/repository.json`)
+* Gateway (`services/gateway.json`)
+* Node 1 - loads the *data* segment (`services/node1.json`)
+* Node 2 - loads the *process* segment (`services/node2.json`)
+
+## Running the example (production)
 
 Install Jitar by running the following command from the root directory of the example.
 
@@ -23,7 +45,7 @@ Next build the application by running the following command.
 npm run build
 ```
 
-To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importantance.
+To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importance.
 
 **Repository** (terminal 1)
 ```

@@ -3,10 +3,23 @@
 
 This example demonstrates how to protect the access to a procedure.
 
-The application consists of a public and a private procedure. All procedures are placed in the
-``src/greetings`` directory. The segment file ``(default.segment.json)`` is placed in the ``src`` directory.
+The application is a simple game that generates a random secret that needs to be guessed.
+The procedure to get the secret has been made private to ensure it isn't accessible from outside its segment.
 
-The Jitar configuration is specified in the ``jitar.json`` file.
+## Project setup
+
+**Procedures**
+
+* checkSecret (`src/game/checkSecret.ts`)
+* getSecret (`src/game/getSecret.ts`)
+
+**Segments**
+
+* Game - contains all procedures (`segments/game.segment.json`)
+
+**Services**
+
+* Standalone - loads both segments (`services/standalone.json`)
 
 ## Running the example
 
@@ -25,7 +38,7 @@ npm run build
 Then start Jitar with the following command from the same directory.
 
 ```
-npm run start
+npm run standalone
 ```
 
 The ``requests.http`` file contains example requests to call the procedures.

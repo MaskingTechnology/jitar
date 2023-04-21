@@ -1,13 +1,23 @@
 
 # Jitar | Hello World example
 
-This example demonstrates how to create a simple procedure and call it using the RPC API.
+This example demonstrates the simplest Jitar application possible.
+It contains a single backend procedure and does not have a frontend.
+Therefore the procedure needs to be called using the RPC API.
 
-The application contains a simple "Hello World" procedure that returns a string.
-It can be found in the ``src/greetings`` directory. Also the application contains
-the ``src/default.segment.json`` segment file.
+## Project setup
 
-For fireing up Jitar its configuration is specified in the ``jitar.json`` file.
+**Procedures**
+
+* sayHello (`src/sayHello.ts`)
+
+**Segments**
+
+* Default - contains the *sayHello* procedure (`segments/default.segment.json`)
+
+**Services**
+
+* Standalone (`services/standalone.json`)
 
 ## Running the example
 
@@ -26,7 +36,7 @@ npm run build
 Then start Jitar with the following command from the same directory.
 
 ```
-npm run start
+npm run standalone
 ```
 
-The ``requests.http`` file contains example requests to call the procedure.
+The ``requests.http`` file contains example requests to call the procedure with the GET and POST method.

@@ -3,12 +3,35 @@
 
 This example demonstrates how to load balance application segments by running them on multiple nodes.
 
-The application contains the simple procedure from the "Hello World" example.
-It can be found in the ``src/greetings`` directory. 
+The application contains simple calculator tasks that are placed in a single segment.
 
-Because this example has multiple segment files all the segment files ``(*.segment.json)`` are placed in the ``segments`` directory. The same is done for the configurations, as there are multiple configurations used.
+## Project setup
 
-## Running the example
+**Procedures**
+
+* add (`src/calculator/add.ts`)
+* subtract (`src/calculator/subtract.ts`)
+* multiply (`src/calculator/multiply.ts`)
+* divide (`src/calculator/divide.ts`)
+
+**Segments**
+
+* Calculator - contains all procedures (`segments/calculator.segment.json`)
+
+**Services**
+
+Development
+
+* Standalone - loads both segments (`services/standalone.json`)
+
+Production
+
+* Repository (`services/repository.json`)
+* Gateway (`services/gateway.json`)
+* Node 1 - loads the *calculator* segment (`services/node1.json`)
+* Node 2 - loads the *calculator* segment (`services/node2.json`)
+
+## Running the example (load balanced)
 
 Install Jitar by running the following command from the root directory of the example.
 
@@ -45,4 +68,4 @@ npm run node2
 ```
 
 The ``requests.http`` file contains example request to call the procedure.
-Note that the requests are handled round robin by both nodes.
+Note that the requests are handled round robin by both nodes per procedure.

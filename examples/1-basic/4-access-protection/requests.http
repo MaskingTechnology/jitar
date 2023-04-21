@@ -1,10 +1,10 @@
 
 // Run the public function (succeeds)
 
-GET http://localhost:3000/rpc/greetings/sayHelloPublic?firstName=John HTTP/1.1
+GET http://localhost:3000/rpc/game/checkSecret?secret=1234 HTTP/1.1
 
 ###
 
 // Run the private function (fails -> 404)
 
-GET http://localhost:3000/rpc/greetings/sayHello HTTP/1.1
+GET http://localhost:3000/rpc/game/getSecret HTTP/1.1
