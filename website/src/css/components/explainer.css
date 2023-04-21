@@ -1,95 +1,103 @@
 
-#introduction .explainer
+.explainer
+{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.explainer .parts
 {
     align-content: stretch;
     align-items: stretch;
     display: flex;
+    /* Flex direction is responsive */
     width: 100%;
 }
 
-#introduction .explainer .part
+.explainer .parts .part
 {
-    display: flex;
     align-content: stretch;
     align-items: stretch;
+    display: flex;
+    /* Flex direction is responsive */
 }
 
-#introduction .explainer .title
+.explainer .parts .title
 {
     flex-grow: 0;
     flex-shrink: 0;
     font-size: 1.1em;
     font-weight: var(--font-weight-medium);
+    /* Padding is responsive */
 }
 
-#introduction .explainer .content
+.explainer .parts .content
 {
     flex-grow: 1;
     flex-shrink: 1;
 }
 
-#introduction .explainer .client,
-#introduction .explainer .server
+.explainer .parts .client,
+.explainer .parts .server
 {
     flex-grow: 1;
     flex-shrink: 1;
 }
 
-#introduction .explainer .jitar
+.explainer .parts .jitar
 {
     flex-grow: 0;
     flex-shrink: 0;
+    /* Size is responsive */
 }
 
-#introduction .explainer .jitar .title
+.explainer .parts .jitar .title
 {
     background-color: var(--swatch-color-blue-5);
     color: var(--swatch-color-white);
 }
 
-#introduction .explainer .jitar .flow
+.explainer .parts .jitar .flow
 {
+    /* Background image is responsive */
     background-repeat: no-repeat;
 }
 
-/*
- *  Large (tablet) layout
- */
-@media (min-width: 1200px)
+@media (min-width: 1100px)
 {
-    #introduction .explainer
+    .explainer .parts
     {
-        /* Place the introduction text and code in a row */
         flex-direction: row;
     }
 
-    #introduction .explainer .part
+    .explainer .parts .part
     {
         flex-direction: column;
     }
 
-    #introduction .explainer .title
+    .explainer .parts .title
     {
         padding: 0.5em 2em;
     }
 
-    #introduction .explainer .client,
-    #introduction .explainer .server
+    .explainer .parts .client,
+    .explainer .parts .server
     {
         padding-top: 16px;
     }
 
-    #introduction .explainer .jitar
+    .explainer .parts .jitar
     {
         width: 190px;
     }
 
-    #introduction .explainer .jitar .title
+    .explainer .parts .jitar .title
     {
         margin: 0 30px;
     }
 
-    #introduction .explainer .jitar .flow
+    .explainer .parts .jitar .flow
     {
         background-image: url('../../images/introduction/flow-vertical.svg');
         background-position: center top;
@@ -97,34 +105,31 @@
     }
 }
 
-/*
- *  Large (tablet) layout
- */
-@media (max-width: 1200px)
+@media (max-width: 1100px)
 {
-    #introduction .explainer
+    .explainer .parts
     {
-        /* Place the introduction text and code below each other */
         flex-direction: column;
+        width: 650px;
     }
 
-    #introduction .explainer .part
+    .explainer .parts .part
     {
         flex-direction: row;
     }
 
-    #introduction .explainer .title
+    .explainer .parts .title
     {
         writing-mode: vertical-lr;
         padding: 2em 0.5em;
     }
 
-    #introduction .explainer .jitar
+    .explainer .parts .jitar
     {
         height: 110px;
     }
 
-    #introduction .explainer .jitar .flow
+    .explainer .parts .jitar .flow
     {
         background-image: url('../../images/introduction/flow-horizontal.svg');
         background-position: left top;
@@ -132,18 +137,10 @@
     }
 }
 
-/*
- *  Medium (table / phone) layout
- */
-@media (max-width: 795px)
+@media (max-width: 650px)
 {
-    
-}
-
-/*
- *  Small (phone) layout
- */
-@media (max-width: 560px)
-{
-    
+    .explainer .parts
+    {
+        width: 100%;
+    }
 }

@@ -10,9 +10,6 @@ header
     height: 560px;
 }
 
-/*
- *  Large (tablet) layout
- */
 @media (min-width: 1200px)
 {
     header
@@ -25,9 +22,6 @@ header
     }
 }
 
-/*
- *  Large (tablet) layout
- */
 @media (max-width: 1200px)
 {
     header
@@ -40,9 +34,6 @@ header
     }
 }
 
-/*
- *  Medium (table / phone) layout
- */
 @media (max-width: 795px)
 {
     header
@@ -55,9 +46,6 @@ header
     }
 }
 
-/*
- *  Small (phone) layout
- */
 @media (max-width: 560px)
 {
     header
@@ -66,7 +54,7 @@ header
         height: 100vw;
 
         /* Remove the stars from the header */
-        background-image: url('../images/layout/breaker-top.svg');
+        background-image: url('../../images/layout/breaker-top.svg');
         background-position: center bottom;
         background-repeat: repeat-x;
         background-size: auto 12vw;

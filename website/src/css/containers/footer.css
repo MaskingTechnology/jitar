@@ -24,45 +24,20 @@ footer a:hover
     color: var(--swatch-color-white);
 }
 
-/*
- *  Large (tablet) layout
- */
 @media (min-width: 1200px)
 {
     footer
     {
+        /* Make the footer static in height */
         background-size: auto 90px;
     }
 }
 
-/*
- *  Large (tablet) layout
- */
-@media (max-width: 1200px)
-{
-    
-}
-
-/*
- *  Medium (table / phone) layout
- */
 @media (max-width: 795px)
 {
     footer
     {
-        /* Make the footer dynamic in width */
-        background-size: auto 12vw;
-    }
-}
-
-/*
- *  Small (phone) layout
- */
-@media (max-width: 560px)
-{
-    footer
-    {
-        /* Make the background image dynamic in height */
+        /* Make the footer dynamic in height */
         background-size: auto 12vw;
     }
 }

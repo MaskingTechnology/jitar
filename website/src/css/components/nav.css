@@ -71,33 +71,6 @@ nav .social li a:hover
     color: var(--swatch-color-blue-1);
 }
 
-/*
- *  Large (tablet) layout
- */
-@media (min-width: 1200px)
-{
-    
-}
-
-/*
- *  Large (tablet) layout
- */
-@media (max-width: 1200px)
-{
-    
-}
-
-/*
- *  Medium (table / phone) layout
- */
-@media (max-width: 795px)
-{
-    
-}
-
-/*
- *  Small (phone) layout
- */
 @media (max-width: 560px)
 {
     nav
