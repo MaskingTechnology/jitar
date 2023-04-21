@@ -29,6 +29,11 @@
     display: inline-block;
 }
 
+#hero a
+{
+    text-decoration: none;
+}
+
 #hero .line
 {
     display: flex;
