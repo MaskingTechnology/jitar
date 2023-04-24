@@ -17,4 +17,4 @@ export default class MissingParameterValue extends BadRequest
     get parameterName() { return this.#parameterName; }
 }
 
-(MissingParameterValue as Loadable).source = '/jitar-runtime/errors/MissingParameterValue.js';
+(MissingParameterValue as Loadable).source = 'RUNTIME_ERROR_LOCATION';

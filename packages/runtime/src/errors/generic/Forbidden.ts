@@ -9,4 +9,4 @@ export default class Forbidden extends Error
     }
 }
 
-(Forbidden as Loadable).source = '/jitar-runtime/errors/generic/Forbidden.js';
+(Forbidden as Loadable).source = 'RUNTIME_ERROR_LOCATION';

@@ -17,4 +17,4 @@ export default class InvalidVersionNumber extends BadRequest
     get number() { return this.#number; }
 }
 
-(InvalidVersionNumber as Loadable).source = '/jitar-runtime/errors/InvalidVersionNumber.js';
+(InvalidVersionNumber as Loadable).source = 'RUNTIME_ERROR_LOCATION';

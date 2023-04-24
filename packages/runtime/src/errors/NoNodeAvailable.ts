@@ -17,4 +17,4 @@ export default class NoNodeAvailable extends ServerError
     get name() { return this.#name; }
 }
 
-(NoNodeAvailable as Loadable).source = '/jitar-runtime/errors/NoNodeAvailable.js';
+(NoNodeAvailable as Loadable).source = 'RUNTIME_ERROR_LOCATION';

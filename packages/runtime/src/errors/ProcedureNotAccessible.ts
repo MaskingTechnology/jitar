@@ -21,4 +21,4 @@ export default class ProcedureNotAccessible extends Forbidden
     get versionNumber() { return this.#versionNumber; }
 }
 
-(ProcedureNotAccessible as Loadable).source = '/jitar-runtime/errors/ProcedureNotAccessible.js';
+(ProcedureNotAccessible as Loadable).source = 'RUNTIME_ERROR_LOCATION';

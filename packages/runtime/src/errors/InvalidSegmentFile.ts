@@ -17,4 +17,4 @@ export default class InvalidSegmentFile extends ServerError
     get filename() { return this.#filename; }
 }
 
-(InvalidSegmentFile as Loadable).source = '/jitar-runtime/errors/InvalidSegmentFile.js';
+(InvalidSegmentFile as Loadable).source = 'RUNTIME_ERROR_LOCATION';

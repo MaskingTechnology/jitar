@@ -9,6 +9,16 @@ import ReflectionExport from './ReflectionExport.js';
 import ReflectionGenerator from './ReflectionGenerator.js';
 import ReflectionDeclaration from './ReflectionDeclaration.js';
 
+// Required to work after minification.
+const IMPORT_NAME = ReflectionImport.name;
+const EXPORT_NAME = ReflectionExport.name;
+const DECLARATION_NAME = ReflectionDeclaration.name;
+const FUNCTION_NAME = ReflectionFunction.name;
+const GETTER_NAME = ReflectionGetter.name;
+const SETTER_NAME = ReflectionSetter.name;
+const GENERATOR_NAME = ReflectionGenerator.name;
+const CLASS_NAME = ReflectionClass.name;
+
 export default class ReflectionScope
 {
     #members: ReflectionMember[];
@@ -23,21 +33,21 @@ export default class ReflectionScope
 
     get members(): ReflectionMember[] { return this.#members; }
 
-    get imports(): ReflectionImport[] { return this.#members.filter(member => member.constructor.name === 'ReflectionImport') as ReflectionImport[]; }
+    get imports(): ReflectionImport[] { return this.#members.filter(member => member.constructor.name === IMPORT_NAME) as ReflectionImport[]; }
 
-    get exports(): ReflectionExport[] { return this.#members.filter(member => member.constructor.name === 'ReflectionExport') as ReflectionExport[]; }
+    get exports(): ReflectionExport[] { return this.#members.filter(member => member.constructor.name === EXPORT_NAME) as ReflectionExport[]; }
 
-    get declarations(): ReflectionDeclaration[] { return this.#members.filter(member => member.constructor.name === 'ReflectionDeclaration') as ReflectionDeclaration[]; }
+    get declarations(): ReflectionDeclaration[] { return this.#members.filter(member => member.constructor.name === DECLARATION_NAME) as ReflectionDeclaration[]; }
 
-    get functions(): ReflectionFunction[] { return this.#members.filter(member => member.constructor.name === 'ReflectionFunction') as ReflectionFunction[]; }
+    get functions(): ReflectionFunction[] { return this.#members.filter(member => member.constructor.name === FUNCTION_NAME) as ReflectionFunction[]; }
 
-    get getters(): ReflectionGetter[] { return this.#members.filter(member => member.constructor.name === 'ReflectionGetter') as ReflectionGetter[]; }
+    get getters(): ReflectionGetter[] { return this.#members.filter(member => member.constructor.name === GETTER_NAME) as ReflectionGetter[]; }
 
-    get setters(): ReflectionSetter[] { return this.#members.filter(member => member.constructor.name === 'ReflectionSetter') as ReflectionSetter[]; }
+    get setters(): ReflectionSetter[] { return this.#members.filter(member => member.constructor.name === SETTER_NAME) as ReflectionSetter[]; }
 
-    get generators(): ReflectionGenerator[] { return this.#members.filter(member => member.constructor.name === 'ReflectionGenerator') as ReflectionGenerator[]; }
+    get generators(): ReflectionGenerator[] { return this.#members.filter(member => member.constructor.name === GENERATOR_NAME) as ReflectionGenerator[]; }
 
-    get classes(): ReflectionClass[] { return this.#members.filter(member => member.constructor.name === 'ReflectionClass') as ReflectionClass[]; }
+    get classes(): ReflectionClass[] { return this.#members.filter(member => member.constructor.name === CLASS_NAME) as ReflectionClass[]; }
 
     getMember(name: string): ReflectionMember | undefined
     {

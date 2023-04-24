@@ -17,4 +17,4 @@ export default class ModuleNotAccessible extends Forbidden
     get url() { return this.#url; }
 }
 
-(ModuleNotAccessible as Loadable).source = '/jitar-runtime/errors/ModuleNotAccessible.js';
+(ModuleNotAccessible as Loadable).source = 'RUNTIME_ERROR_LOCATION';

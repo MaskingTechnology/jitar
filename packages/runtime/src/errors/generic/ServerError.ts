@@ -9,4 +9,4 @@ export default class ServerError extends Error
     }
 }
 
-(ServerError as Loadable).source = '/jitar-runtime/errors/generic/Teapot.js';
+(ServerError as Loadable).source = 'RUNTIME_ERROR_LOCATION';
