@@ -3,7 +3,7 @@
     "target": "ESNext",
     "module": "ESNext",
     "declaration": true,
-		"declarationDir": "./dist/types",
+    "declarationDir": "./dist/types",
     "rootDir": "./src/",
     "moduleResolution": "node",
     "outDir": "./dist",

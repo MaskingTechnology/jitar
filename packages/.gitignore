@@ -1,7 +1,5 @@
 coverage
-build
 dist
-lib
 cache
 node_modules
 **/*.tgz

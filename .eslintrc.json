@@ -1,6 +1,6 @@
 {
     "root": true,
-    "ignorePatterns": ["**/lib/**/*", "**/dist/**/*", "**/node_modules/**/*","**/coverage/**/*", "**/*config*", "packages/create-jitar/templates/*"],
+    "ignorePatterns": ["**/dist/**/*", "**/node_modules/**/*","**/coverage/**/*", "**/*config*", "packages/create-jitar/templates/*"],
     "parser": "@typescript-eslint/parser",
     "plugins": [
         "@typescript-eslint",

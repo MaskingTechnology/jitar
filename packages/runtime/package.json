@@ -18,8 +18,7 @@
     "release": "npm run clean && npm run build && npm publish"
   },
   "dependencies": {
-    "@jitar/serialization": "^0.4.0",
-    "@jitar/errors": "^0.4.0"
+    "@jitar/serialization": "^0.4.0"
   },
   "repository": {
     "type": "git",
