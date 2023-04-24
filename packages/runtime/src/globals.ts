@@ -1,5 +1,5 @@
 
-import ProcedureNotAccessible from '@jitar/errors';
+import { ProcedureNotAccessible } from '@jitar/errors';
 
 import { getDependency, runProcedure } from './hooks.js';
 
