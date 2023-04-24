@@ -2,8 +2,7 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { BadRequest, Unauthorized, PaymentRequired, Forbidden, NotFound, Teapot, NotImplemented } from '@jitar/errors';
-import { Version, VersionParser, ProcedureRuntime } from '@jitar/runtime';
+import { Version, VersionParser, ProcedureRuntime, BadRequest, Unauthorized, PaymentRequired, Forbidden, NotFound, Teapot, NotImplemented } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
 import CorsMiddleware from '../middleware/CorsMiddleware.js';

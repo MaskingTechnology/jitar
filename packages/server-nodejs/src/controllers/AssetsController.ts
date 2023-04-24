@@ -2,8 +2,7 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { FileNotFound } from '@jitar/errors';
-import { LocalRepository, Proxy } from '@jitar/runtime';
+import { LocalRepository, Proxy, FileNotFound } from '@jitar/runtime';
 
 export default class AssetsController
 {

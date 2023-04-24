@@ -4,8 +4,7 @@ import glob from 'glob-promise';
 import mime from 'mime-types';
 import path from 'path';
 
-import { FileManager, File } from '@jitar/runtime';
-import { FileNotFound } from '@jitar/errors';
+import { FileManager, File, FileNotFound } from '@jitar/runtime';
 
 export default class LocalFileManager implements FileManager
 {
