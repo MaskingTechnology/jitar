@@ -40,17 +40,7 @@ export default class ModuleLoader
 
         if (url.startsWith('/jitar'))
         {
-            const aaa = import.meta.url.split('/');
-            aaa.pop();
-            const bbb = url.split('/');
-            bbb.shift();
-            bbb.shift();
-
-            url = `${aaa.join('/')}/${bbb.join('/')}`;
-
-            console.log('MODULE LOADER', url);
-
-            return this.#import(url, specifier) as Promise<Module>;
+            return this.#import('jitar', 'jitar') as Promise<Module>;
         }
 
         if (_baseUrl !== undefined && url.startsWith(_baseUrl) === false)
