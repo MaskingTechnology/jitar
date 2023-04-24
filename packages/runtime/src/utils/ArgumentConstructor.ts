@@ -35,7 +35,7 @@ export default class ArgumentExtractor
 
     #extractArgumentValue(parameter: Parameter, args: Map<string, unknown>, parent?: Parameter): unknown
     {
-        return parameter.constructor.name === NamedParameter.name
+        return parameter instanceof NamedParameter
             ? this.#extractNamedArgumentValue(parameter as NamedParameter, args, parent)
             : this.#extractDestructedArgumentValue(parameter as DestructuredParameter, args);
     }
@@ -60,7 +60,7 @@ export default class ArgumentExtractor
 
     #extractDestructedArgumentValue(parameter: DestructuredParameter, args: Map<string, unknown>): unknown
     {
-        return parameter.constructor.name === ArrayParameter.name
+        return parameter instanceof ArrayParameter
             ? this.#extractArrayArgumentValue(parameter, args)
             : this.#extractObjectArgumentValue(parameter, args);
     }
@@ -79,7 +79,7 @@ export default class ArgumentExtractor
 
     #extractVariableValues(parameter: DestructuredParameter, args: Map<string, unknown>): Record<string, unknown> | undefined
     {
-        const useIndex = parameter.constructor.name === ArrayParameter.name;
+        const useIndex = parameter instanceof ArrayParameter;
         const values: Record<string, unknown> = {};
         const missingValues: string[] = [];
 
@@ -130,7 +130,7 @@ export default class ArgumentExtractor
         }
 
         return (parent === undefined && value instanceof Array === false)
-            || (parent?.constructor.name === ArrayParameter.name && value instanceof Array === false)
-            || (parent?.constructor.name === ObjectParameter.name && value instanceof Object === false);
+            || (parent instanceof ArrayParameter && value instanceof Array === false)
+            || (parent instanceof ObjectParameter && value instanceof Object === false);
     }
 }
