@@ -1,5 +1,5 @@
 
-import { RuntimeNotAvailable } from '@jitar/errors';
+import RuntimeNotAvailable from '../errors/RuntimeNotAvailable.js';
 
 import Context from '../models/Context.js';
 import VersionParser from '../utils/VersionParser.js';

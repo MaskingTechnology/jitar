@@ -1,8 +1,6 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import createSource from '../sourcing.js';
-
 export default class ServerError extends Error
 {
     constructor(message = 'Server error')
@@ -11,4 +9,4 @@ export default class ServerError extends Error
     }
 }
 
-(ServerError as Loadable).source = createSource(import.meta.url);
+(ServerError as Loadable).source = 'RUNTIME_ERROR_LOCATION';

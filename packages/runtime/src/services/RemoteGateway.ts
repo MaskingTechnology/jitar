@@ -1,5 +1,5 @@
 
-import { NotImplemented } from '@jitar/errors';
+import NotImplemented from '../errors/generic/NotImplemented.js';
 
 import Version from '../models/Version.js';
 

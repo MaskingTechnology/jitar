@@ -1,9 +1,7 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import createSource from '../sourcing.js';
-
-import BadRequest from '../generic/BadRequest.js';
+import BadRequest from './generic/BadRequest.js';
 
 export default class MissingParameterValue extends BadRequest
 {
@@ -19,4 +17,4 @@ export default class MissingParameterValue extends BadRequest
     get parameterName() { return this.#parameterName; }
 }
 
-(MissingParameterValue as Loadable).source = createSource(import.meta.url);
+(MissingParameterValue as Loadable).source = 'RUNTIME_ERROR_LOCATION';

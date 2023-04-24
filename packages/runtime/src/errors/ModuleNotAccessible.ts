@@ -1,9 +1,7 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import createSource from '../sourcing.js';
-
-import Forbidden from '../generic/Forbidden.js';
+import Forbidden from './generic/Forbidden.js';
 
 export default class ModuleNotAccessible extends Forbidden
 {
@@ -19,4 +17,4 @@ export default class ModuleNotAccessible extends Forbidden
     get url() { return this.#url; }
 }
 
-(ModuleNotAccessible as Loadable).source = createSource(import.meta.url);
+(ModuleNotAccessible as Loadable).source = 'RUNTIME_ERROR_LOCATION';

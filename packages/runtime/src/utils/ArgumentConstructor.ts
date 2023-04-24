@@ -1,5 +1,7 @@
 
-import { UnknownParameter, MissingParameterValue, InvalidParameterValue } from '@jitar/errors';
+import UnknownParameter from '../errors/UnknownParameter.js';
+import MissingParameterValue from '../errors/MissingParameterValue.js';
+import InvalidParameterValue from '../errors/InvalidParameterValue.js';
 
 import ArrayParameter from '../models/ArrayParameter.js';
 import DestructuredParameter from '../models/DestructuredParameter.js';
@@ -33,7 +35,7 @@ export default class ArgumentExtractor
 
     #extractArgumentValue(parameter: Parameter, args: Map<string, unknown>, parent?: Parameter): unknown
     {
-        return parameter instanceof NamedParameter
+        return parameter.constructor.name === NamedParameter.name
             ? this.#extractNamedArgumentValue(parameter as NamedParameter, args, parent)
             : this.#extractDestructedArgumentValue(parameter as DestructuredParameter, args);
     }
@@ -58,7 +60,7 @@ export default class ArgumentExtractor
 
     #extractDestructedArgumentValue(parameter: DestructuredParameter, args: Map<string, unknown>): unknown
     {
-        return parameter instanceof ArrayParameter
+        return parameter.constructor.name === ArrayParameter.name
             ? this.#extractArrayArgumentValue(parameter, args)
             : this.#extractObjectArgumentValue(parameter, args);
     }
@@ -77,7 +79,7 @@ export default class ArgumentExtractor
 
     #extractVariableValues(parameter: DestructuredParameter, args: Map<string, unknown>): Record<string, unknown> | undefined
     {
-        const useIndex = parameter instanceof ArrayParameter;
+        const useIndex = parameter.constructor.name === ArrayParameter.name;
         const values: Record<string, unknown> = {};
         const missingValues: string[] = [];
 
@@ -128,7 +130,7 @@ export default class ArgumentExtractor
         }
 
         return (parent === undefined && value instanceof Array === false)
-            || (parent instanceof ArrayParameter && value instanceof Array === false)
-            || (parent instanceof ObjectParameter && value instanceof Object === false);
+            || (parent?.constructor.name === ArrayParameter.name && value instanceof Array === false)
+            || (parent?.constructor.name === ObjectParameter.name && value instanceof Object === false);
     }
 }

@@ -1,8 +1,6 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import createSource from '../sourcing.js';
-
 export default class Forbidden extends Error
 {
     constructor(message = 'Forbidden')
@@ -11,4 +9,4 @@ export default class Forbidden extends Error
     }
 }
 
-(Forbidden as Loadable).source = createSource(import.meta.url);
+(Forbidden as Loadable).source = 'RUNTIME_ERROR_LOCATION';

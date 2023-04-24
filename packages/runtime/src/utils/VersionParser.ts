@@ -1,5 +1,5 @@
 
-import { InvalidVersionNumber } from '@jitar/errors';
+import InvalidVersionNumber from '../errors/InvalidVersionNumber.js';
 
 import Version from '../models/Version.js';
 

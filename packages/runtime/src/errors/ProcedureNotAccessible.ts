@@ -1,9 +1,7 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import createSource from '../sourcing.js';
-
-import Forbidden from '../generic/Forbidden.js';
+import Forbidden from './generic/Forbidden.js';
 
 export default class ProcedureNotAccessible extends Forbidden
 {
@@ -23,4 +21,4 @@ export default class ProcedureNotAccessible extends Forbidden
     get versionNumber() { return this.#versionNumber; }
 }
 
-(ProcedureNotAccessible as Loadable).source = createSource(import.meta.url);
+(ProcedureNotAccessible as Loadable).source = 'RUNTIME_ERROR_LOCATION';

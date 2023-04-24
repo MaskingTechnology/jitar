@@ -7,7 +7,6 @@
     "workspaces": [
         "packages/caching",
         "packages/create-jitar",
-        "packages/errors",
         "packages/jitar",
         "packages/plugin-vite",
         "packages/reflection",

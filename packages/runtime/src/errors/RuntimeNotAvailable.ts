@@ -1,9 +1,7 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import createSource from '../sourcing.js';
-
-import ServerError from '../generic/ServerError.js';
+import ServerError from './generic/ServerError.js';
 
 export default class RuntimeNotAvailable extends ServerError
 {
@@ -13,4 +11,4 @@ export default class RuntimeNotAvailable extends ServerError
     }
 }
 
-(RuntimeNotAvailable as Loadable).source = createSource(import.meta.url);
+(RuntimeNotAvailable as Loadable).source = 'RUNTIME_ERROR_LOCATION';

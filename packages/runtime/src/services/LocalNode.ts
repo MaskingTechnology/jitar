@@ -1,7 +1,9 @@
 
-import { ImplementationNotFound, ProcedureNotFound, RepositoryNotAvailable } from '@jitar/errors';
-
 import { createNodeFilename } from '../definitions/Files.js';
+
+import ImplementationNotFound from '../errors/ImplementationNotFound.js';
+import ProcedureNotFound from '../errors/ProcedureNotFound.js';
+import RepositoryNotAvailable from '../errors/RepositoryNotAvailable.js';
 
 import Context from '../models/Context.js';
 import Procedure from '../models/Procedure.js';

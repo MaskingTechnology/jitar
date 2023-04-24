@@ -3,6 +3,35 @@
 export * from './definitions/AccessLevel.js';
 export * from './definitions/Files.js';
 
+// Generic errors
+export { default as BadRequest } from './errors/generic/BadRequest.js';
+export { default as Forbidden } from './errors/generic/Forbidden.js';
+export { default as NotFound } from './errors/generic/NotFound.js';
+export { default as NotImplemented } from './errors/generic/NotImplemented.js';
+export { default as PaymentRequired } from './errors/generic/PaymentRequired.js';
+export { default as ServerError } from './errors/generic/ServerError.js';
+export { default as Teapot } from './errors/generic/Teapot.js';
+export { default as Unauthorized } from './errors/generic/Unauthorized.js';
+
+// Runtime errors
+export { default as ClientNotFound } from './errors/ClientNotFound.js';
+export { default as FileNotFound } from './errors/FileNotFound.js';
+export { default as ImplementationNotFound } from './errors/ImplementationNotFound.js';
+export { default as InvalidClientId } from './errors/InvalidClientId.js';
+export { default as InvalidParameterValue } from './errors/InvalidParameterValue.js';
+export { default as InvalidSegmentFile } from './errors/InvalidSegmentFile.js';
+export { default as InvalidVersionNumber } from './errors/InvalidVersionNumber.js';
+export { default as MissingParameterValue } from './errors/MissingParameterValue.js';
+export { default as ModuleNotAccessible } from './errors/ModuleNotAccessible.js';
+export { default as ModuleNotLoaded } from './errors/ModuleNotLoaded.js';
+export { default as NoNodeAvailable } from './errors/NoNodeAvailable.js';
+export { default as ProcedureNotAccessible } from './errors/ProcedureNotAccessible.js';
+export { default as ProcedureNotFound } from './errors/ProcedureNotFound.js';
+export { default as RepositoryNotAvailable } from './errors/RepositoryNotAvailable.js';
+export { default as RuntimeNotAvailable } from './errors/RuntimeNotAvailable.js';
+export { default as SegmentNotFound } from './errors/SegmentNotFound.js';
+export { default as UnknownParameter } from './errors/UnknownParameter.js';
+
 // Interfaces
 export { default as FileManager } from './interfaces/FileManager.js';
 export { default as HealthCheck } from './interfaces/HealthCheck.js';

@@ -1,9 +1,7 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import createSource from '../sourcing.js';
-
-import ServerError from '../generic/ServerError.js';
+import ServerError from './generic/ServerError.js';
 
 export default class ModuleNotLoaded extends ServerError
 {
@@ -23,4 +21,4 @@ export default class ModuleNotLoaded extends ServerError
     get reason() { return this.#reason; }
 }
 
-(ModuleNotLoaded as Loadable).source = createSource(import.meta.url);
+(ModuleNotLoaded as Loadable).source = 'RUNTIME_ERROR_LOCATION';

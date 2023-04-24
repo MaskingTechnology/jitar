@@ -1,9 +1,7 @@
 
 import { Loadable } from '@jitar/serialization';
 
-import createSource from '../sourcing.js';
-
-import ServerError from '../generic/ServerError.js';
+import ServerError from './generic/ServerError.js';
 
 export default class SegmentNotFound extends ServerError
 {
@@ -19,4 +17,4 @@ export default class SegmentNotFound extends ServerError
     get source() { return this.#source; }
 }
 
-(SegmentNotFound as Loadable).source = createSource(import.meta.url);
+(SegmentNotFound as Loadable).source = 'RUNTIME_ERROR_LOCATION';
