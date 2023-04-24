@@ -1,10 +1,5 @@
-coverage
 src
-test
-dist/dts
-node_modules
-.eslintignore
-.eslintrc
-vite.config.ts
+dist/types
 tsconfig.json
+rollup.config.js
 *.tgz

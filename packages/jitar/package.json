@@ -8,14 +8,15 @@
     "types": "./dist/lib.d.ts",
     "sideEffects": true,
     "exports": {
-        ".": "./dist/server.js",
+        ".": "./dist/lib.js",
+        "./server": "./dist/server.js",
         "./client": "./dist/client.js"
     },
     "scripts": {
         "lint": "eslint . --ext .ts",
         "validate": "tsc -p tsconfig.json --noEmit",
-        "build": "rollup -c",
-        "clean": "rm -rf dist lib",
+        "build": "npm run clean && rollup -c",
+        "clean": "rm -rf dist",
         "release": "npm run clean && npm run build && npm publish"
     },
     "dependencies": {

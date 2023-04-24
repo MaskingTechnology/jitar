@@ -1,4 +1,41 @@
 
-export { startClient, getClient } from '@jitar/runtime';
-
-export * from './shared.js';
+export
+{
+    HealthCheck,
+    Middleware,
+    NextHandler,
+    Segment,
+    Procedure,
+    Implementation,
+    Version,
+    NamedParameter,
+    ArrayParameter,
+    ObjectParameter,
+    BadRequest,
+    Forbidden,
+    NotFound,
+    NotImplemented,
+    PaymentRequired,
+    ServerError,
+    Teapot,
+    Unauthorized,
+    ClientNotFound,
+    FileNotFound,
+    ImplementationNotFound,
+    InvalidClientId,
+    InvalidParameterValue,
+    InvalidSegmentFile,
+    InvalidVersionNumber,
+    MissingParameterValue,
+    ModuleNotAccessible,
+    ModuleNotLoaded,
+    NoNodeAvailable,
+    ProcedureNotAccessible,
+    ProcedureNotFound,
+    RepositoryNotAvailable,
+    RuntimeNotAvailable,
+    SegmentNotFound,
+    UnknownParameter,
+    startClient,
+    getClient
+} from '@jitar/runtime';
