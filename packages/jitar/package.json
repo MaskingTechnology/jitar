@@ -8,8 +8,8 @@
     "types": "./dist/lib.d.ts",
     "sideEffects": true,
     "exports": {
-        ".": "./lib/server.js",
-        "./client": "./lib/client.js"
+        ".": "./dist/server.js",
+        "./client": "./dist/client.js"
     },
     "scripts": {
         "lint": "eslint . --ext .ts",

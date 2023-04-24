@@ -13,4 +13,4 @@ export
     ObjectParameter
 } from '@jitar/runtime';
 
-export * from './errors.js';
+export * from '@jitar/errors';
