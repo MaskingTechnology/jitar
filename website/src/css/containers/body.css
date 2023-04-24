@@ -1,0 +1,56 @@
+
+body
+{
+    /* Align items is responsive */
+    background-color: var(--swatch-color-gray-1);
+    /* Background image is responsive */
+    color: var(--swatch-color-gray-4);
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-family-text);
+    font-weight: var(--font-weight-light);
+    font-size: 16px;
+    margin: 0;
+    max-width: 100%;
+    padding: 0;
+    width: 100%;
+}
+
+@media (min-width: 1200px)
+{
+    body
+    {
+        /* Center the container on the page with a fixed with */
+        align-items: center;
+
+        /* Add both the header and the breaker images to the background */
+        background-image: url('../../images/layout/breaker-top.svg'), url('../../images/layout/header.svg');
+        background-repeat: repeat-x, repeat-x;
+        background-position: center 470px, left top;
+        background-size: auto 90px, 1264px auto;
+    }
+}
+
+@media (max-width: 1200px)
+{
+    body
+    {
+        /* We don't have enough space to center the container, so start left from here */
+        align-items: flex-start;
+
+        /* Remove the breaker from the background (the breaker from the header is used from here) */
+        background-image: url('../../images/layout/header.svg');
+        background-repeat: repeat-x;
+        background-position: left top;
+        background-size: 1264px auto;
+    }
+}
+
+@media (max-width: 560px)
+{
+    body
+    {
+        /* Make the background image dynamic in height */
+        background-size: auto 100vw;
+    }
+}

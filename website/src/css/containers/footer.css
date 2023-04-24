@@ -1,0 +1,43 @@
+
+footer
+{
+    background-color: var(--swatch-color-red-3);
+    background-image: url('../../images/layout/breaker-bottom.svg');
+    background-position: center 0;
+    background-repeat: repeat-x;
+    /* Background size is responsive */
+    color: var(--swatch-color-white);
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding: 5.0em 0 4.0em 0;
+    text-align: center;
+    width: 100%;
+}
+
+footer a
+{
+    color: var(--swatch-color-white);
+}
+
+footer a:hover
+{
+    color: var(--swatch-color-white);
+}
+
+@media (min-width: 1200px)
+{
+    footer
+    {
+        /* Make the footer static in height */
+        background-size: auto 90px;
+    }
+}
+
+@media (max-width: 795px)
+{
+    footer
+    {
+        /* Make the footer dynamic in height */
+        background-size: auto 12vw;
+    }
+}

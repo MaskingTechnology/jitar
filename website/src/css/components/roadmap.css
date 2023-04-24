@@ -1,0 +1,119 @@
+
+.roadmap
+{
+    display: flex;
+    flex-direction: column;
+    gap: 2em;
+    text-align: left;
+}
+
+.roadmap .step
+{
+    align-content: stretch;
+    align-items: stretch;
+    display: flex;
+}
+
+.roadmap .step .number
+{
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.roadmap .step .number .content
+{
+    background-color: var(--swatch-color-blue-5);
+    border-radius: 50%;
+    color: var(--swatch-color-white);
+    display: inline-block;
+    font-size: 1.1em;
+    font-weight: var(--font-weight-bold);
+    padding: 0.5em 1.0em;
+    text-align: center;
+    width: 0.6em;
+}
+
+.roadmap .step .description
+{
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.roadmap .step .description h3
+{
+    font-size: 1.1em;
+    font-weight: var(--font-weight-bold);
+    margin: 0;
+}
+
+.roadmap .step .description strong
+{
+    font-weight: var(--font-weight-semi-bold);
+}
+
+.roadmap .step .example
+{
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.roadmap .step .example .window
+{
+    margin-top: 1em;
+    text-align: left;
+}
+
+.roadmap .step .example .window:first-child
+{
+    margin-top: 0;
+}
+
+.roadmap .step .example .title
+{
+    background-color: var(--swatch-color-gray-4);
+    color: var(--swatch-color-gray-1);
+    padding: 0.5em;
+    text-align: center;
+}
+
+@media (min-width: 1050px)
+{
+    .roadmap .step
+    {
+        flex-direction: row;
+        gap: 2em;
+    }
+
+    .roadmap .step .number .content
+    {
+        font-size: 1.1em;
+        padding: 0.5em 1.0em;
+        width: 0.6em;
+    }
+
+    .roadmap .step .example
+    {
+        width: 570px;
+    }
+}
+
+@media (max-width: 1050px)
+{
+    .roadmap .step
+    {
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    .roadmap .step .number .content
+    {
+        font-size: 1.0em;
+        padding: 0.5em 1.0em;
+        width: 0.5em;
+    }
+
+    .roadmap .step .example
+    {
+        width: 100%;
+    }
+}
