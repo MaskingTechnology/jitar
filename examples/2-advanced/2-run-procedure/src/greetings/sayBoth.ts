@@ -6,12 +6,10 @@
  * Note 2: Using this hook breaks the IntelliSense support and will make your application dependent on Jitar.
  */
 
-import { runProcedure } from 'jitar';
-
 export default async function sayBoth(firstName: string, lastName: string): Promise<string>
 {
-    const hiMessage = await runProcedure('greetings/sayHi', '0.0.0', { 'firstName': firstName });
-    const helloMessage = await runProcedure('greetings/sayHello', '0.0.0', { 'firstName': firstName, 'lastName': lastName });
+    const hiMessage = await __runProcedure('greetings/sayHi', '0.0.0', { 'firstName': firstName });
+    const helloMessage = await __runProcedure('greetings/sayHello', '0.0.0', { 'firstName': firstName, 'lastName': lastName });
 
     return `${hiMessage}\n${helloMessage}`;
 }

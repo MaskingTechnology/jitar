@@ -25,7 +25,7 @@ const TEMPLATES = Frameworks.map(
 
 const renameFiles: Record<string, string | undefined> = {
     _gitignore: '.gitignore'
-}
+};
 
 const defaultTargetDir = 'jitar-project';
 
@@ -53,7 +53,7 @@ async function execute()
                     initial: defaultTargetDir,
                     onState: (state) =>
                     {
-                        targetDir = formatTargetDir(state.value) || defaultTargetDir
+                        targetDir = formatTargetDir(state.value) || defaultTargetDir;
                     },
                 },
                 {
@@ -71,9 +71,9 @@ async function execute()
                     {
                         if (overwrite === false)
                         {
-                            throw new Error(red('✖') + ' Operation cancelled')
+                            throw new Error(red('✖') + ' Operation cancelled');
                         }
-                        return null
+                        return null;
                     },
                     name: 'overwriteChecker',
                     message: reset('Please enter to continue...')
@@ -99,11 +99,11 @@ async function execute()
                     initial: 0,
                     choices: Frameworks.map((framework) =>
                     {
-                        const frameworkColor = framework.color
+                        const frameworkColor = framework.color;
                         return {
                             title: frameworkColor(framework.display || framework.name),
                             value: framework,
-                        }
+                        };
                     }),
                 }
             ],
@@ -113,7 +113,7 @@ async function execute()
                     throw new Error(red('✖') + ' Operation cancelled');
                 },
             },
-        )
+        );
     }
     catch (cancelled: unknown)
     {
@@ -190,12 +190,12 @@ async function execute()
             console.log('  yarn');
             console.log('  yarn build');
             console.log('  yarn jitar');
-            break
+            break;
         default:
             console.log(`  ${pkgManager} install`);
             console.log(`  ${pkgManager} run build`);
             console.log(`  ${pkgManager} run jitar`);
-            break
+            break;
     }
 
     console.log();
@@ -298,7 +298,7 @@ function pkgFromUserAgent(userAgent: string | undefined)
     return {
         name: pkgSpecArr[0],
         version: pkgSpecArr[1],
-    }
+    };
 }
 
 execute().catch((e) =>

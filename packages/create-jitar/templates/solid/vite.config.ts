@@ -1,7 +1,6 @@
-
-import { defineConfig } from 'vite';
-import solidPlugin from 'vite-plugin-solid';
-import jitar from 'jitar-vite-plugin'
+import { defineConfig } from 'vite'
+import solidPlugin from 'vite-plugin-solid'
+import jitar from '@jitar/plugin-vite'
 
 export default defineConfig({
   plugins: [

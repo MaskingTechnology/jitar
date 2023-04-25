@@ -1,0 +1,22 @@
+{
+    "root": true,
+    "ignorePatterns": ["**/dist/**/*", "**/node_modules/**/*","**/coverage/**/*", "**/*config*", "packages/create-jitar/templates/*"],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint",
+        "eslint-plugin-jitar"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "rules":
+    {
+        "@typescript-eslint/ban-types": "off",
+        "semi": ["error", "always"],
+        "eol-last": ["error", "always"],
+        "brace-style": ["error", "allman", { "allowSingleLine": true }],
+        "jitar/empty-first-line": "error"
+    }
+}

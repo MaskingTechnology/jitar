@@ -1,13 +1,22 @@
+import { useEffect, useState } from 'react'
 
-import './App.css';
-import reactLogo from './assets/react.svg';
-import jitarLogo from './assets/jitar.svg';
-import { sayHello } from './shared/sayHello';
+import './App.css'
+import reactLogo from './assets/react.svg'
+import jitarLogo from './assets/jitar.svg'
 
-const message = await sayHello('Vite + React + Jitar');
+import { sayHello } from './shared/sayHello'
 
 function App()
 {
+  const [message, setMessage] = useState<string>('Loading...');
+
+  const getMessage = () =>
+  {
+    sayHello('Vite + React + Jitar').then(message => setMessage(message));
+  }
+
+  useEffect(getMessage, []);
+
   return (
     <div className="App">
       <a href="https://vitejs.dev" target="_blank">
@@ -24,4 +33,4 @@ function App()
   )
 }
 
-export default App;
+export default App

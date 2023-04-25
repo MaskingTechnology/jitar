@@ -1,17 +1,17 @@
 {
-    "./greetings/sayBoth.js": {
+    "./greetings/sayBoth": {
         "default": {
             "access": "public",
             "version": "0.0.0"
         }
     },
-    "./greetings/sayHi.js": {
+    "./greetings/sayHi": {
         "default": {
             "access": "private",
             "version": "0.0.0"
         }
     },
-    "./greetings/sayHello.js": {
+    "./greetings/sayHello": {
         "default": {
             "access": "private",
             "version": "0.0.0"

@@ -10,6 +10,6 @@
         "node2": "node --experimental-network-imports dist/start.js --config=conf/node2.json"
     },
     "dependencies": {
-        "jitar-nodejs-server": "^0.3.4"
+        "jitar": "^0.4.0"
     }
 }

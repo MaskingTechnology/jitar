@@ -7,9 +7,9 @@
  * in the constructor or can be set using a setter. Otherwise,
  * their value will get lost in the transportation process.
  * 
- * If a class is transported between segments, it doens't have
- * to be added to a segment file. All unssegmented components
- * are concidered as sharable.
+ * If a class is transported between segments, it doesn't have
+ * to be added to a segment file. All unsegmented components
+ * are considered as sharable.
  */
 
 export default class Person

@@ -1,5 +1,5 @@
 {
-    "./greetings/sayHello.js": {
+    "./greetings/sayHello": {
         "default": {
             "access": "public"
         }
