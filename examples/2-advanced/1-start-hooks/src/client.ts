@@ -1,5 +1,6 @@
 
-import { startClient } from 'jitar';
+// @ts-ignore
+import { startClient } from '/jitar/client.js';
 
 const client = await startClient('client');
 

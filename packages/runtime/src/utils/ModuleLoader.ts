@@ -40,7 +40,9 @@ export default class ModuleLoader
 
         if (url.startsWith('/jitar'))
         {
-            return this.#import('jitar', 'jitar') as Promise<Module>;
+            specifier = 'JITAR_LIBRARY_NAME';
+            
+            return this.#import(specifier, specifier) as Promise<Module>;
         }
 
         if (_baseUrl !== undefined && url.startsWith(_baseUrl) === false)
