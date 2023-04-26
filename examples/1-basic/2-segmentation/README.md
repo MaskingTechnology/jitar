@@ -15,7 +15,7 @@ The application is a simple report creation that separates the data from the pro
 
 **Segments**
 
-* Data - contains the *multiply* procedure (`segments/data.segment.json`)
+* Data - contains the *getData* procedure (`segments/data.segment.json`)
 * Process - contains the *createReport* and *process* procedures (`segments/process.segment.json`)
 
 **Services**

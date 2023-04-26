@@ -22,7 +22,7 @@ The application contains simple calculator tasks that are placed in a single seg
 
 Development
 
-* Standalone - loads both segments (`services/standalone.json`)
+* Standalone - loads the *calculator* segment (`services/standalone.json`)
 
 Production
 
