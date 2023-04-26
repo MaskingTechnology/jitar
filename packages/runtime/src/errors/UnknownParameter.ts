@@ -17,4 +17,4 @@ export default class UnknownParameter extends BadRequest
     get parameterName() { return this.#parameterName; }
 }
 
-(UnknownParameter as Loadable).source = '/jitar-runtime/errors/UnknownParameter.js';
+(UnknownParameter as Loadable).source = 'RUNTIME_ERROR_LOCATION';

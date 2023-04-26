@@ -1,0 +1,72 @@
+
+main
+{
+    padding: 4em 2em;
+    text-align: center;
+}
+
+main h1
+{
+    color: var(--swatch-color-gray-5);
+    font-size: 1.8em;
+    font-weight: var(--font-weight-normal);
+    margin: 0 0 2em 0;
+    width: 100%;
+}
+
+main h2
+{
+    color: var(--swatch-color-gray-5);
+    font-size: 1.5em;
+    font-weight: var(--font-weight-extra-light);
+    margin: 3em 0;
+    width: 100%;
+}
+
+main h2 .bold
+{
+    font-weight: var(--font-weight-normal);
+}
+
+main h1 .line,
+main h2 .line
+{
+    display: block;
+}
+
+main a
+{
+    color: var(--swatch-color-red-3);
+    text-decoration: none;
+    transition: var(--transition-hover-animation);
+}
+
+main a:hover
+{
+    color: var(--swatch-color-red-2);
+}
+
+@media (max-width: 560px)
+{
+    main
+    {
+        /* Use less padding to save space */
+        padding: 2em 1.2em;
+    }
+
+    main h1
+    {
+        font-size: 1.5em;
+    }
+
+    main h2
+    {
+        font-size: 1.3em;
+    }
+
+    main h1 .line,
+    main h2 .line
+    {
+        display: inline;
+    }
+}

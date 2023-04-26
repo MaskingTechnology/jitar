@@ -11,4 +11,4 @@ export default class RepositoryNotAvailable extends ServerError
     }
 }
 
-(RepositoryNotAvailable as Loadable).source = '/jitar-runtime/errors/RepositoryNotAvailable.js';
+(RepositoryNotAvailable as Loadable).source = 'RUNTIME_ERROR_LOCATION';

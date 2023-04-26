@@ -2,6 +2,7 @@
 import UnknownParameter from '../errors/UnknownParameter.js';
 import MissingParameterValue from '../errors/MissingParameterValue.js';
 import InvalidParameterValue from '../errors/InvalidParameterValue.js';
+
 import ArrayParameter from '../models/ArrayParameter.js';
 import DestructuredParameter from '../models/DestructuredParameter.js';
 import NamedParameter from '../models/NamedParameter.js';
@@ -18,7 +19,7 @@ export default class ArgumentExtractor
         for (const parameter of parameters)
         {
             const value = this.#extractArgumentValue(parameter, argsCopy);
-            
+
             values.push(value);
         }
 
@@ -35,8 +36,8 @@ export default class ArgumentExtractor
     #extractArgumentValue(parameter: Parameter, args: Map<string, unknown>, parent?: Parameter): unknown
     {
         return parameter instanceof NamedParameter
-                ? this.#extractNamedArgumentValue(parameter as NamedParameter, args, parent)
-                : this.#extractDestructedArgumentValue(parameter as DestructuredParameter, args);
+            ? this.#extractNamedArgumentValue(parameter as NamedParameter, args, parent)
+            : this.#extractDestructedArgumentValue(parameter as DestructuredParameter, args);
     }
 
     #extractNamedArgumentValue(parameter: NamedParameter, args: Map<string, unknown>, parent?: Parameter): unknown
@@ -98,7 +99,7 @@ export default class ArgumentExtractor
             {
                 missingValues.push(variable.name);
             }
-            
+
             values[key] = value;
         }
 

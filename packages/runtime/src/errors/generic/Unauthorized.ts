@@ -9,4 +9,4 @@ export default class Unauthorized extends Error
     }
 }
 
-(Unauthorized as Loadable).source = '/jitar-runtime/errors/generic/Unauthorized.js';
+(Unauthorized as Loadable).source = 'RUNTIME_ERROR_LOCATION';
