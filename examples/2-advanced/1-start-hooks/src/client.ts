@@ -2,7 +2,7 @@
 // @ts-ignore
 import { startClient } from '/jitar/client.js';
 
-const client = await startClient('client');
+const client = await startClient(document.location.origin, ['client']);
 
 // We need to import the sayHello component with the Jitar client.
 // This enables the segmentation of the application.
