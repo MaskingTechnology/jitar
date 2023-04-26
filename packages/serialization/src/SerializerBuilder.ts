@@ -10,6 +10,7 @@ import ObjectSerializer from './serializers/ObjectSerializer.js';
 import PrimitiveSerializer from './serializers/PrimitiveSerializer.js';
 import SetSerializer from './serializers/SetSerializer.js';
 import TypedArraySerializer from './serializers/TypedArraySerializer.js';
+import UrlSerializer from './serializers/UrlSerializer.js';
 import DefaultClassLoader from './DefaultClassLoader.js';
 
 const defaultClassLoader = new DefaultClassLoader();
@@ -23,6 +24,7 @@ export default class SerializerBuilder
         serializer.addSerializer(new ObjectSerializer());
         serializer.addSerializer(new ClassSerializer(loader));
         serializer.addSerializer(new ErrorSerializer());
+        serializer.addSerializer(new UrlSerializer());
         serializer.addSerializer(new DateSerializer());
         serializer.addSerializer(new SetSerializer());
         serializer.addSerializer(new MapSerializer());
