@@ -6,16 +6,14 @@ import RemoteRepository from './services/RemoteRepository.js';
 let client: LocalNode | undefined = undefined;
 const resolvers: ((value: LocalNode) => void)[] = [];
 
-export async function startClient(...segmentFiles: string[]): Promise<LocalNode>
+export async function startClient(remoteUrl: string, segmentNames: string[] = []): Promise<LocalNode>
 {
-    const remoteUrl = document.location.origin;
-
     const node = new LocalNode();
     const gateway = new RemoteGateway(remoteUrl);
     const repository = new RemoteRepository(remoteUrl);
 
     await node.setGateway(gateway);
-    await node.setRepository(repository, segmentFiles);
+    await node.setRepository(repository, segmentNames);
 
     client = node;
 
