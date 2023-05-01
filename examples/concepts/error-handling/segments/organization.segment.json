@@ -1,5 +1,5 @@
 {
-    "./greetings/sayBoth": {
+    "./organization/getContactList": {
         "default": {
             "access": "public",
             "version": "0.0.0"

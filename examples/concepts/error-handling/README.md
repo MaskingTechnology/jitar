@@ -1,13 +1,34 @@
 
-# Jitar | Error Handling example
+# Jitar | Custom Error Handling example
 
-This example demonstrates how the Jitar error handling works.
-It based on the [Data Transportation example](../6-data-transportation/README.md).
+This example demonstrates how custom errors are supported.
 
-The application consists of three simple procedures, a data model class and two segments.
-The procedures and the model are placed in the ``src/greetings`` directory.
+The application contains a custom error and procedures to handle it.
 
-Because this example has multiple segment files all the segment files ``(*.segment.json)`` are placed in the ``segments`` directory. The same is done for the configurations, as there are multiple configurations used.
+## Project setup
+
+**Procedures**
+
+* getContacts (`src/contact/getContacts.ts`)
+* getContactList (`src/organization/getContactList.ts`)
+
+**Segments**
+
+* Contact - contains all procedures (`segments/contact.segment.json`)
+* Organization - contains all procedures (`segments/organization.segment.json`)
+
+**Services**
+
+Development
+
+* Standalone - loads the *contact* and *organization* segments (`services/standalone.json`)
+
+Production
+
+* Repository (`services/repository.json`)
+* Gateway (`services/gateway.json`)
+* Node 1 - loads the *contact* segment (`services/node1.json`)
+* Node 2 - loads the *organization* segment (`services/node2.json`)
 
 ## Running the example
 

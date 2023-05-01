@@ -1,5 +1,5 @@
 {
-    "./greetings/sayHello": {
+    "./contact/getContacts": {
         "default": {
             "access": "public",
             "version": "0.0.0"
