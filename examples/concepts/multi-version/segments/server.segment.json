@@ -1,0 +1,24 @@
+{
+    "./employee/getDetails": {
+        "getEmployeeDetails": {
+            "access": "public"
+        },
+        "getEmployeeDetailsV2": {
+            "as": "getEmployeeDetails",
+            "access": "public",
+            "version": "1.0.0"
+        }
+    },
+    "./organization/getDetails": {
+        "default": {
+            "access": "public"
+        }
+    },
+    "./organization/getDetailsV2": {
+        "default": {
+            "as": "getOrganizationDetails",
+            "access": "public",
+            "version": "1.0.0"
+        }
+    }
+}

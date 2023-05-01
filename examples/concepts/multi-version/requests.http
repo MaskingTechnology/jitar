@@ -1,16 +1,22 @@
 
-// Say hello without specifying a version (uses the default version)
+// Get the employee details without any version (defaults to version 0.0.0)
 
-GET http://localhost:3000/rpc/greetings/sayHello?name=John HTTP/1.1
-
-###
-
-// Say hello with the first version 0.0.0
-
-GET http://localhost:3000/rpc/greetings/sayHello?version=0.0.0&name=Jane HTTP/1.1
+GET http://localhost:3000/rpc/employee/getEmployeeDetails?id=1 HTTP/1.1
 
 ###
 
-// Say hello with the second version 1.0.0
+// Get the employee details with version 1.0.0
 
-GET http://localhost:3000/rpc/greetings/sayHello?version=1.0.0&firstName=Jim&lastName=Doe HTTP/1.1
+GET http://localhost:3000/rpc/employee/getEmployeeDetails?version=1.0.0&id=1 HTTP/1.1
+
+###
+
+// Get the organization details with version 0.0.0
+
+GET http://localhost:3000/rpc/organization/getOrganizationDetails?version=0.0.0&id=2 HTTP/1.1
+
+###
+
+// Get the organization details with version 1.0.0
+
+GET http://localhost:3000/rpc/organization/getOrganizationDetails?version=1.0.0&id=2 HTTP/1.1
