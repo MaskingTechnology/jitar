@@ -1,4 +1,4 @@
 
-// Say hi and hello (from both segments)
+// Say hello to a person
 
-GET http://localhost:3000/rpc/greetings/sayBoth?firstName=Jim&lastName=Doe HTTP/1.1
+GET http://localhost:3000/rpc/greetings/sayHello?firstName=Jim&lastName=Doe HTTP/1.1

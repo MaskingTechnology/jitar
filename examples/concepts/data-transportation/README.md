@@ -3,10 +3,36 @@
 
 This example demonstrates how data is transported between segments.
 
-The application consists of three simple procedures, a data model class and two segments.
-The procedures and the model are placed in the ``src/greetings`` directory.
+The application consists of two simple procedures, a data model class and two segments. The object created on one segment is passed to the other segment.
 
-Because this example has multiple segment files all the segment files ``(*.segment.json)`` are placed in the ``segments`` directory. The same is done for the configurations, as there are multiple configurations used.
+## Project setup
+
+**Procedures**
+
+* createPerson (`src/person/createPerson.ts`)
+* sayHello (`src/person/sayHello.ts`)
+
+**Data model**
+
+* Person (`src/person/Person.ts`)
+
+**Segments**
+
+* Data - contains the createPerson procedure and the data model (`segments/data.segment.json`)
+* Greeting - contains the sayHello procedure (`segments/greeting.segment.json`)
+
+**Services**
+
+For development
+
+* Standalone - loads both segments (`services/data.json`, `services/greeting.json`)
+
+For production
+
+* Repository (`services/repository.json`)
+* Gateway (`services/gateway.json`)
+* Node 1 - loads the *greeting* segment (`services/node1.json`)
+* Node 2 - loads the *data* segment (`services/node2.json`)
 
 ## Running the example
 
@@ -44,4 +70,4 @@ npm run node1
 npm run node2
 ```
 
-The ``requests.http`` file contains example requests to call the procedures.
+The ``requests.http`` file contains example requests to call the procedures. Note that the Person object is created on the *data* segment and then passed to the *greeting* segment to say hello.
