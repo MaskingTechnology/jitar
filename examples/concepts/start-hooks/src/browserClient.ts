@@ -1,11 +1,13 @@
 
+// This is the browser client entry point. It uses the `startClient` function
+// to start a Jitar client. Note that the differences between this starter and
+// the Node.js starter.
+
 // @ts-ignore
 import { startClient } from '/jitar/client.js';
 
 const client = await startClient(document.location.origin, ['client']);
 
-// We need to import the sayHello component with the Jitar client.
-// This enables the segmentation of the application.
 const { default: sayBoth } = await client.import('./greetings/sayBoth') as any;
 
 const message = await sayBoth('John', 'Doe');

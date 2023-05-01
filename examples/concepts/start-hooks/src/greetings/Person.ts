@@ -14,5 +14,5 @@ export default class Person
 
     get lastName() { return this.#lastName; }
 
-    get fullName() { return `${this.#firstName} ${this.#lastName}`; }
+    get fullName() { return `${this.#lastName} ${this.#firstName}`; }
 }
