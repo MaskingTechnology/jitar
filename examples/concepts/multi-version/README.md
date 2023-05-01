@@ -20,7 +20,7 @@ The application is a simple application that returns information about a person 
 
 **Services**
 
-* Standalone - loads the Server segment (`services/standalone.json`)
+* Standalone - loads the *Server* segment (`services/standalone.json`)
 
 ## Running the example
 

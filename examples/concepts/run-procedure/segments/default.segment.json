@@ -1,20 +1,19 @@
 {
-    "./greetings/sayBoth": {
+    "./app/getContactOverview": {
         "default": {
             "access": "public",
             "version": "0.0.0"
         }
     },
-    "./greetings/sayHi": {
+    "./contact/printContactInformation": {
         "default": {
             "access": "private",
             "version": "0.0.0"
-        }
-    },
-    "./greetings/sayHello": {
-        "default": {
+        },
+        "printContactInformationV2": {
+            "as": "printContactInformation",
             "access": "private",
-            "version": "0.0.0"
+            "version": "1.0.0"
         }
     }
 }
