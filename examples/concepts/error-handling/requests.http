@@ -1,4 +1,10 @@
 
 // The database error is caught and printed to the console.
 
-GET http://localhost:3000/rpc/organization/getContactList?organizationId=1 HTTP/1.1
+GET http://localhost:3000/rpc/sales/getData HTTP/1.1
+
+###
+
+//
+
+GET http://localhost:3000/rpc/sales/exportData HTTP/1.1

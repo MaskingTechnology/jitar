@@ -6,25 +6,25 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc",
-    "standalone": "node --experimental-network-imports dist/jitar.js --config=./conf/dev.json",
-    "repo": "node --experimental-network-imports dist/jitar.js --config=./conf/repo.json",
-    "gateway": "node --experimental-network-imports dist/jitar.js --config=./conf/gateway.json",
-    "node": "node --experimental-network-imports dist/jitar.js --config=./conf/node.json",
-    "proxy": "node --experimental-network-imports dist/jitar.js --config=./conf/proxy.json",
+    "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json",
+    "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
+    "gateway": "node --experimental-network-imports dist/jitar.js --config=services/gateway.json",
+    "node": "node --experimental-network-imports dist/jitar.js --config=services/node.json",
+    "proxy": "node --experimental-network-imports dist/jitar.js --config=services/proxy.json",
     "preview": "vite preview"
   },
   "dependencies": {
     "jitar": "^0.4.0",
-    "mongodb": "^5.1.0",
+    "mongodb": "^5.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@jitar/plugin-vite": "^0.4.0",
-    "@types/react": "^18.0.28",
-    "@types/react-dom": "^18.0.11",
-    "@vitejs/plugin-react": "^3.1.0",
-    "typescript": "^4.9.5",
-    "vite": "^4.1.4"
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.1",
+    "@vitejs/plugin-react": "^4.0.0",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.4"
   }
 }

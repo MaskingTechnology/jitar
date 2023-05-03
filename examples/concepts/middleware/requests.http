@@ -1,7 +1,2 @@
 
-POST http://localhost:3000/rpc/greetings/sayHello HTTP/1.1
-content-type: application/json
-
-{
-    "name": "Jane"
-}
+GET http://localhost:3000/rpc/ping HTTP/1.1

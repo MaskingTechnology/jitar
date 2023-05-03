@@ -1,8 +1,8 @@
 
 /*
- * This an simple example procedure that returns a string.
+ * This an simple example function that returns a string.
  *
- * Parameters can be mandatory or optional. They will be checked when calling the procedure.
+ * Parameters can be mandatory or optional. They will be checked when calling the function.
  * 
  * Important note:
  * All functions have to be async functions in order to be able to split applications.

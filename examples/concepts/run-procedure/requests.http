@@ -1,4 +1,0 @@
-
-// Run the procedure 
-
-GET http://localhost:3000/rpc/app/getContactOverview HTTP/1.1

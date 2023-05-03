@@ -19,7 +19,7 @@ The procedure to get the secret has been made private to ensure it isn't accessi
 
 **Services**
 
-* Standalone - loads both segments (`services/standalone.json`)
+* Standalone - loads the segment (`services/standalone.json`)
 
 ## Running the example
 
