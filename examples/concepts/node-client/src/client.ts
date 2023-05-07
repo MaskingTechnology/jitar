@@ -1,5 +1,5 @@
 
-import { startClient, Version } from 'jitar';
+import { startClient } from 'jitar';
 
 const client = await startClient('http://127.0.0.1:3000', ['client']);
 

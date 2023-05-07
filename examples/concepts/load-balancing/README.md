@@ -33,37 +33,41 @@ Production
 
 ## Running the example (load balanced)
 
-Install Jitar by running the following command from the root directory of the example.
+1\. Install Jitar by running the following command from the root directory of the example.
 
-```
+```bash
 npm install
 ```
 
-Next build the application by running the following command.
+2\. Next build the application by running the following command.
 
-```
+```bash
 npm run build
 ```
 
 To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importantance.
 
 **Repository** (terminal 1)
-```
+
+```bash
 npm run repo
 ```
 
 **Gateway** (terminal 2)
-```
+
+```bash
 npm run gateway
 ```
 
 **Node 1** (terminal 3)
-```
+
+```bash
 npm run node1
 ```
 
 **Node 2** (terminal 4)
-```
+
+```bash
 npm run node2
 ```
 

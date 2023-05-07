@@ -3,19 +3,23 @@
 
 This example demonstrates how custom errors are supported.
 
-The application contains a custom error and procedures to handle it.
+The application contains a procedure to get data from a database and a procedure to export the data.
 
 ## Project setup
 
 **Procedures**
 
-* getContacts (`src/contact/getContacts.ts`)
-* getContactList (`src/organization/getContactList.ts`)
+* getData (`src/sales/getData.ts`)
+* exportData (`src/sales/exportData.ts`)
+
+**Data model**
+
+* DatabaseError (`src/sales/DatabaseError.ts`)
 
 **Segments**
 
-* Contact - contains all procedures (`segments/contact.segment.json`)
-* Organization - contains all procedures (`segments/organization.segment.json`)
+* Data - contains the *data* procedures (`segments/data.segment.json`)
+* Process - contains the *process* procedures (`segments/process.segment.json`)
 
 **Services**
 
@@ -27,43 +31,47 @@ Production
 
 * Repository (`services/repository.json`)
 * Gateway (`services/gateway.json`)
-* Node 1 - loads the *contact* segment (`services/node1.json`)
-* Node 2 - loads the *organization* segment (`services/node2.json`)
+* Data - loads the *contact* segment (`services/node1.json`)
+* Process - loads the *organization* segment (`services/node2.json`)
 
 ## Running the example
 
-Install Jitar by running the following command from the root directory of the example.
+1\. Install Jitar by running the following command from the root directory of the example.
 
-```
+```bash
 npm install
 ```
 
-Next build the application by running the following command.
+2\. Next build the application by running the following command.
 
-```
+```bash
 npm run build
 ```
 
 To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importantance.
 
 **Repository** (terminal 1)
-```
+
+```bash
 npm run repo
 ```
 
 **Gateway** (terminal 2)
-```
+
+```bash
 npm run gateway
 ```
 
-**Hi segment** (terminal 3)
-```
-npm run node1
+**Data segment** (terminal 3)
+
+```bash
+npm run data
 ```
 
-**Hello segment** (terminal 4)
-```
-npm run node2
+**Process segment** (terminal 4)
+
+```bash
+npm run process
 ```
 
 The ``requests.http`` file contains example requests to call the procedures.

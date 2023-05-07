@@ -1,4 +1,4 @@
 
-// Say hello to a person
+// Register John Doe for an account
 
 GET http://localhost:3000/rpc/helpdesk/register?firstName=John&lastName=Doe HTTP/1.1

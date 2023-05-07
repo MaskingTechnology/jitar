@@ -1,7 +1,7 @@
 
 # Jitar | Start Hooks example
 
-This example demonstrates how the client and server start hooks work.
+This example demonstrates how the node client and server start hooks work.
 
 The client start hook can be used to start any client (browser or Node), and the server start hook can be used to start the Node server.
 
@@ -9,45 +9,42 @@ The client start hook can be used to start any client (browser or Node), and the
 
 **Procedures**
 
-* sayBoth (`src/greetings/sayBoth.ts`)
-* sayHello (`src/greetings/sayHello.ts`)
-* sayHi (`src/greetings/sayHi.ts`)
+* getLuckyNumber (`src/getLuckyNumber.ts`)
 
 **Segments**
 
-* Server - contains the *server* procedures (`segments/server.segment.json`)
 * Client - contains the *client* procedures (`segments/client.segment.json`)
 
 **Services**
 
-* Standalone - loads the *Server* segments (`services/standalone.json`)
+* Standalone - loads no segments (`services/standalone.json`)
 
 ## Running the example
 
-Install Jitar by running the following command from the root directory of the example.
+1\. Install Jitar by running the following command from the root directory of the example.
 
-```
+```bash
 npm install
 ```
 
-Next build the application by running the following command.
+2\. Next build the application by running the following command.
 
-```
+```bash
 npm run build
 ```
 
-To start Jitar we need two terminal sessions to start the repository and the node client. The starting order is of importantance.
+To start Jitar we need two terminal sessions to start the server and the node client. The starting order is of importantance.
 
 **Standalone** (terminal 1)
-```
+
+```bash
 npm run standalone
 ```
 
 **Node client** (terminal 2)
-```
+
+```bash
 npm run client
 ```
 
-Now open the following URL in your browser `http://localhost:3000`.
-
-Both clients show the same result. The browser client as an alert, and the Node client in the terminal.
+The lucky number is printed to the console.

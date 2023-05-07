@@ -15,8 +15,8 @@ The application is a simple report creation that separates the data from the pro
 
 **Segments**
 
-* Data - contains the *getData* procedure (`segments/data.segment.json`)
-* Process - contains the *createReport* and *process* procedures (`segments/process.segment.json`)
+* Data - contains the *data* procedure (`segments/data.segment.json`)
+* Process - contains the *process* procedures (`segments/process.segment.json`)
 
 **Services**
 
@@ -28,42 +28,46 @@ Production
 
 * Repository (`services/repository.json`)
 * Gateway (`services/gateway.json`)
-* Node 1 - loads the *data* segment (`services/node1.json`)
-* Node 2 - loads the *process* segment (`services/node2.json`)
+* Data - loads the *data* segment (`services/data.json`)
+* Process - loads the *process* segment (`services/process.json`)
 
 ## Running the example (production)
 
-Install Jitar by running the following command from the root directory of the example.
+1\. Install Jitar by running the following command from the root directory of the example.
 
-```
+```bash
 npm install
 ```
 
-Next build the application by running the following command.
+2\. Next build the application by running the following command.
 
-```
+```bash
 npm run build
 ```
 
 To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importance.
 
 **Repository** (terminal 1)
-```
+
+```bash
 npm run repo
 ```
 
 **Gateway** (terminal 2)
-```
+
+```bash
 npm run gateway
 ```
 
-**Hi segment** (terminal 3)
-```
-npm run node1
+**Data segment** (terminal 3)
+
+```bash
+npm run data
 ```
 
-**Hello segment** (terminal 4)
-```
+**Process segment** (terminal 4)
+
+```bash
 npm run node2
 ```
 

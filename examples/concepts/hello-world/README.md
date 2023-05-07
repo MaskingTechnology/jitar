@@ -2,8 +2,6 @@
 # Jitar | Hello World example
 
 This example demonstrates the simplest Jitar application possible.
-It contains a single backend procedure and does not have a frontend.
-Therefore the procedure needs to be called using the RPC API.
 
 ## Project setup
 
@@ -21,21 +19,21 @@ Therefore the procedure needs to be called using the RPC API.
 
 ## Running the example
 
-Install Jitar by running the following command from the root directory of the example.
+1\. Install Jitar by running the following command from the root directory of the example.
 
-```
+```bash
 npm install
 ```
 
-Next build the application by running the following command.
+2\. Next build the application by running the following command.
 
-```
+```bash
 npm run build
 ```
 
-Then start Jitar with the following command from the same directory.
+3\. Then start Jitar with the following command from the same directory.
 
-```
+```bash
 npm run standalone
 ```
 

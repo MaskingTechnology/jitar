@@ -15,29 +15,29 @@ The procedure to get the secret has been made private to ensure it isn't accessi
 
 **Segments**
 
-* Game - contains all procedures (`segments/game.segment.json`)
+* Game - contains the *game* procedures (`segments/game.segment.json`)
 
 **Services**
 
-* Standalone - loads the segment (`services/standalone.json`)
+* Standalone - loads all segments (`services/standalone.json`)
 
 ## Running the example
 
-Install Jitar by running the following command from the root directory of the example.
+1\. Install Jitar by running the following command from the root directory of the example.
 
-```
+```bash
 npm install
 ```
 
-Next build the application by running the following command.
+2\. Next build the application by running the following command.
 
-```
+```bash
 npm run build
 ```
 
-Then start Jitar with the following command from the same directory.
+3\. Then start Jitar with the following command from the same directory.
 
-```
+```bash
 npm run standalone
 ```
 

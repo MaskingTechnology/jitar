@@ -3,71 +3,76 @@
 
 This example demonstrates how data is transported between segments.
 
-The application consists of two simple procedures, a data model class and two segments. The object created on one segment is passed to the other segment.
+The application simulates a helpdesk where a person can register for an account.
 
 ## Project setup
 
 **Procedures**
 
-* createPerson (`src/person/createPerson.ts`)
-* sayHello (`src/person/sayHello.ts`)
+* createAccount (`src/account/createAccount.ts`)
+* register (`src/helpdesk/register.ts`)
 
 **Data model**
 
-* Person (`src/person/Person.ts`)
+* Account (`src/account/Account.ts`)
+* Registration (`src/helpdesk/Registration.ts`)
 
 **Segments**
 
-* Data - contains the createPerson procedure and the data model (`segments/data.segment.json`)
-* Greeting - contains the sayHello procedure (`segments/greeting.segment.json`)
+* Account - contains the *account* procedures (`segments/account.segment.json`)
+* Helpdesk - contains the *helpdesk* procedures (`segments/greeting.segment.json`)
 
 **Services**
 
 For development
 
-* Standalone - loads both segments (`services/data.json`, `services/greeting.json`)
+* Standalone - loads all segments (`services/data.json`, `services/greeting.json`)
 
 For production
 
 * Repository (`services/repository.json`)
 * Gateway (`services/gateway.json`)
-* Node 1 - loads the *greeting* segment (`services/node1.json`)
-* Node 2 - loads the *data* segment (`services/node2.json`)
+* Account - loads the *account* segment (`services/account.json`)
+* Helpdesk - loads the *helpdesk* segment (`services/helpdesk.json`)
 
 ## Running the example
 
-Install Jitar by running the following command from the root directory of the example.
+1\. Install Jitar by running the following command from the root directory of the example.
 
-```
+```bash
 npm install
 ```
 
-Next build the application by running the following command.
+2.\ Next build the application by running the following command.
 
-```
+```bash
 npm run build
 ```
 
 To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importantance.
 
 **Repository** (terminal 1)
-```
+
+```bash
 npm run repo
 ```
 
 **Gateway** (terminal 2)
-```
+
+```bash
 npm run gateway
 ```
 
-**Hi segment** (terminal 3)
-```
-npm run node1
+**Account segment** (terminal 3)
+
+```bash
+npm run account
 ```
 
-**Hello segment** (terminal 4)
-```
-npm run node2
+**Helpdesk segment** (terminal 4)
+
+```bash
+npm run helpdesk
 ```
 
-The ``requests.http`` file contains example requests to call the procedures. Note that the Person object is created on the *data* segment and then passed to the *greeting* segment to say hello.
+The ``requests.http`` file contains example request to call the procedures. Note that the Account object is created on the *account* segment.
