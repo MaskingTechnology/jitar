@@ -35,7 +35,7 @@
   "dependencies": {
     "minimist": "^1.2.8",
     "prompts": "^2.4.2",
-    "kolorist": "1.7.0"
+    "kolorist": "1.8.0"
   },
   "repository": {
     "type": "git",
