@@ -5,7 +5,7 @@ This example demonstrates the simplest Jitar application possible.
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * sayHello (`src/sayHello.ts`)
 

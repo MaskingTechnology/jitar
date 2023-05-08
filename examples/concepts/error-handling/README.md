@@ -7,7 +7,7 @@ The application contains a procedure to get data from a database and a procedure
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * getData (`src/sales/getData.ts`)
 * exportData (`src/sales/exportData.ts`)

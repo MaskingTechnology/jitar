@@ -7,7 +7,7 @@ The application implements a simple logging middleware.
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * ping (`src/ping.ts`)
 

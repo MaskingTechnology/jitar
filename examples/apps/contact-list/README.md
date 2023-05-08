@@ -2,11 +2,11 @@
 # Jitar | Contact list
 
 This example contact list application is build with React, MongoDB and Jitar (ReMoJi stack).
-It includes frontend and backend components and a database for storing contacts.
+It includes frontend and backend functions and a database for storing contacts.
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * createId (`src/shared/common/createId.ts`)
 * getCollection (`src/shared/common/getCollection.ts`)
@@ -22,7 +22,7 @@ It includes frontend and backend components and a database for storing contacts.
 
 **Segments**
 
-* Server - contains all *shared* procedures (`segments/server.segment.json`)
+* Server - contains all *shared* functions (`segments/server.segment.json`)
 
 **Services**
 

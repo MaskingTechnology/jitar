@@ -7,7 +7,7 @@ The application returns two different versions of an employee.
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * getEmployee (`src/getEmployee.ts`)
 * getEmployeeV2 (`src/getEmployee.ts`)

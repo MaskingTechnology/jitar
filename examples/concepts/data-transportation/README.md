@@ -7,7 +7,7 @@ The application simulates a helpdesk where a person can register for an account.
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * createAccount (`src/account/createAccount.ts`)
 * register (`src/helpdesk/register.ts`)

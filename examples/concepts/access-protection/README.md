@@ -8,7 +8,7 @@ The procedure to get the secret has been made private to ensure it isn't accessi
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * checkSecret (`src/game/checkSecret.ts`)
 * getSecret (`src/game/getSecret.ts`)

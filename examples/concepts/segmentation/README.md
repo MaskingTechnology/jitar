@@ -7,7 +7,7 @@ The application is a simple report creation that separates the data from the pro
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * getData (`src/reporting/getData.ts`)
 * createStatistics (`src/reporting/createStatistics.ts`)
@@ -68,7 +68,7 @@ npm run data
 **Process segment** (terminal 4)
 
 ```bash
-npm run node2
+npm run process
 ```
 
 The ``requests.http`` file contains example requests to call the procedures.

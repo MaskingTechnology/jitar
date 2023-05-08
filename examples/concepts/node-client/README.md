@@ -7,7 +7,7 @@ The client start hook can be used to start any client (browser or Node), and the
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * getLuckyNumber (`src/getLuckyNumber.ts`)
 

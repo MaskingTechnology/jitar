@@ -7,7 +7,7 @@ The application contains simple calculator tasks that are placed in a single seg
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * add (`src/calculator/add.ts`)
 * subtract (`src/calculator/subtract.ts`)

@@ -5,7 +5,7 @@ This example demonstrates how to create heath checks and request the health of a
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * DatabaseHealthCheck (`src/DatabaseHealthCheck.ts`)
 

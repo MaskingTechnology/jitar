@@ -7,7 +7,7 @@ The application contains a single procedure that returns the weather forecast. T
 
 ## Project setup
 
-**Procedures**
+**Functions**
 
 * getWeatherForecast (`src/getWeatherForecase.ts`)
 
