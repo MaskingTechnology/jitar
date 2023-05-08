@@ -1,4 +1,4 @@
 dist
-cache
+.jitar
 node_modules
 package-lock.json
