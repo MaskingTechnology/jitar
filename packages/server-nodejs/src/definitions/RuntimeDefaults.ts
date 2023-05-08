@@ -3,7 +3,7 @@ enum RuntimeDefaults
 {
     URL = 'http://localhost:3000',
     SOURCE = './src',
-    CACHE = './cache',
+    CACHE = './.jitar',
     INDEX = 'index.html'
 }
 
