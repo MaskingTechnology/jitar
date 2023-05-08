@@ -22,7 +22,7 @@
     "@jitar/reflection": "^0.4.0"
   },
   "peerDependencies": {
-    "vite": "^4.1.4"
+    "vite": "^4.3.5"
   },
   "repository": {
     "type": "git",

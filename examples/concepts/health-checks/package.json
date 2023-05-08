@@ -1,0 +1,12 @@
+{
+    "name": "jitar-health-checks-example",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "tsc",
+        "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json"
+    },
+    "dependencies": {
+        "jitar": "^0.4.0"
+    }
+}

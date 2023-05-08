@@ -1,0 +1,22 @@
+{
+    "./calculator/add": {
+        "default": {
+            "access": "public"
+        }
+    },
+    "./calculator/divide": {
+        "default": {
+            "access": "public"
+        }
+    },
+    "./calculator/multiply": {
+        "default": {
+            "access": "public"
+        }
+    },
+    "./calculator/subtract": {
+        "default": {
+            "access": "public"
+        }
+    }
+}

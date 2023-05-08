@@ -1,0 +1,7 @@
+{
+    "./reporting/getData": {
+        "default": {
+            "access": "public"
+        }
+    }
+}

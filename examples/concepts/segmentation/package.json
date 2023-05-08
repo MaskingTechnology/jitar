@@ -1,0 +1,16 @@
+{
+    "name": "jitar-segmentation-example",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "tsc",
+        "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json",
+        "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
+        "gateway": "node --experimental-network-imports dist/jitar.js --config=services/gateway.json",
+        "data": "node --experimental-network-imports dist/jitar.js --config=services/data.json",
+        "process": "node --experimental-network-imports dist/jitar.js --config=services/process.json"
+    },
+    "dependencies": {
+        "jitar": "^0.4.0"
+    }
+}

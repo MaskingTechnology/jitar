@@ -1,0 +1,10 @@
+
+// Get the employee with version 1.0.0
+
+GET http://localhost:3000/rpc/getEmployee?version=1.0.0&id=1 HTTP/1.1
+
+###
+
+// Get the employee with version 2.0.0
+
+GET http://localhost:3000/rpc/getEmployee?version=2.0.0&uuid=f507cf82-ca51-4a42-8c20-ce5c7c42a77e HTTP/1.1

@@ -1,0 +1,12 @@
+{
+    "./reporting/createStatistics": {
+        "default": {
+            "access": "public"
+        }
+    },
+    "./reporting/createReport": {
+        "default": {
+            "access": "public"
+        }
+    }
+}
