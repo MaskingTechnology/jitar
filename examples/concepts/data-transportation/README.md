@@ -4,6 +4,7 @@
 This example demonstrates how data is transported between segments.
 
 The application simulates a helpdesk where a person can register for an account.
+It contains a registration process that creates and transports a data object.
 
 ## Project setup
 
@@ -12,7 +13,7 @@ The application simulates a helpdesk where a person can register for an account.
 * createAccount (`src/account/createAccount.ts`)
 * register (`src/helpdesk/register.ts`)
 
-**Data model**
+**Data models**
 
 * Account (`src/account/Account.ts`)
 * Registration (`src/helpdesk/Registration.ts`)
@@ -26,7 +27,7 @@ The application simulates a helpdesk where a person can register for an account.
 
 For development
 
-* Standalone - loads all segments (`services/data.json`, `services/greeting.json`)
+* Standalone - loads all segments (`services/standalone.json`)
 
 For production
 
@@ -49,7 +50,7 @@ npm install
 npm run build
 ```
 
-To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importantance.
+To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importance.
 
 **Repository** (terminal 1)
 

@@ -16,7 +16,7 @@ export default async function exportData(): Promise<string>
     {
         if (error instanceof DatabaseError)
         {
-            console.log(`Database error occured`);
+            console.log(`Database error occurred`);
         }
 
         return 'Failed, see log for details';

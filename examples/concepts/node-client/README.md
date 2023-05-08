@@ -1,9 +1,10 @@
 
 # Jitar | Start Hooks example
 
-This example demonstrates how the node client and server start hooks work.
+This example demonstrates how to set up a node client.
 
-The client start hook can be used to start any client (browser or Node), and the server start hook can be used to start the Node server.
+The application draws a random lucky number.
+The client connects to the Jitar server and gets a number.
 
 ## Project setup
 
@@ -33,7 +34,7 @@ npm install
 npm run build
 ```
 
-To start Jitar we need two terminal sessions to start the server and the node client. The starting order is of importantance.
+To start Jitar we need two terminal sessions to start the server and the node client. The starting order is of importance.
 
 **Standalone** (terminal 1)
 

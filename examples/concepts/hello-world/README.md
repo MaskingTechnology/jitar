@@ -3,6 +3,8 @@
 
 This example demonstrates the simplest Jitar application possible.
 
+The application says hello to the given name.
+
 ## Project setup
 
 **Functions**

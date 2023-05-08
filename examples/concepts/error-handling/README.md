@@ -3,7 +3,8 @@
 
 This example demonstrates how custom errors are supported.
 
-The application contains a procedure to get data from a database and a procedure to export the data.
+The application is a simple setup for exporting sales data.
+Getting the data results into an error that is caught when trying to export it.
 
 ## Project setup
 

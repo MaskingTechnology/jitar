@@ -4,6 +4,7 @@
 This example demonstrates how to load balance application segments by running them on multiple nodes.
 
 The application contains simple calculator tasks that are placed in a single segment.
+Each of its functions can be used independently.
 
 ## Project setup
 
@@ -45,7 +46,7 @@ npm install
 npm run build
 ```
 
-To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importantance.
+To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importance.
 
 **Repository** (terminal 1)
 

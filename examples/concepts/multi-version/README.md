@@ -3,7 +3,8 @@
 
 This example demonstrates how to create multiple versions for a procedure and how to register them as versioned procedures in a segment.
 
-The application returns two different versions of an employee.
+The application holds two different versions of an employee.
+Both versions can be requested independently.
 
 ## Project setup
 

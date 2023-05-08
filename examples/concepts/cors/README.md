@@ -3,13 +3,16 @@
 
 This example demonstrates how to enable CORS.
 
-The application contains a single procedure that returns the weather forecast. The index.html file contains a simple form that calls the procedure and displays the result.
+The application shows a fake weather forecast app.
+The procedure is called by an external client (index.html) using Jitar's RPC API.
+For serving the HTML file we've created a simple web server.
+Because Jitar and the web server both run on a different port, a CORS rule is required to make this work.
 
 ## Project setup
 
 **Functions**
 
-* getWeatherForecast (`src/getWeatherForecase.ts`)
+* getWeatherForecast (`src/getWeatherForecast.ts`)
 
 **Segments**
 
@@ -35,7 +38,7 @@ npm install
 npm run build
 ```
 
-3\. Start a simple HTTP server from the same directory.
+3\. Start web server from the same directory.
 
 ```bash
 npm run client

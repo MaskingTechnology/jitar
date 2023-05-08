@@ -3,9 +3,11 @@
 
 This example demonstrates how to create heath checks and request the health of a service.
 
+There is no application for this example, only a health check that is registered at the Jitar server.
+
 ## Project setup
 
-**Functions**
+**Health checks**
 
 * DatabaseHealthCheck (`src/DatabaseHealthCheck.ts`)
 
