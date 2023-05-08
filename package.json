@@ -23,9 +23,8 @@
         "examples/concepts/load-balancing",
         "examples/concepts/middleware",
         "examples/concepts/multi-version",
-        "examples/concepts/run-procedure",
+        "examples/concepts/node-client",
         "examples/concepts/segmentation",
-        "examples/concepts/start-hooks",
         "examples/apps/contact-list"
     ],
     "scripts": {

@@ -1,14 +1,14 @@
 {
-    "name": "jitar-only",
+    "name": "jitar-only-starter",
     "type": "module",
     "private": true,
     "scripts": {
         "build": "tsc -p tsconfig.json",
-        "repo": "node --experimental-network-imports dist/start.js --config=conf/repo.json",
-        "gateway": "node --experimental-network-imports dist/start.js --config=conf/gateway.json",
-        "node1": "node --experimental-network-imports dist/start.js --config=conf/node1.json",
-        "node2": "node --experimental-network-imports dist/start.js --config=conf/node2.json",
-        "jitar": "node --experimental-network-imports dist/start.js --config=conf/jitar.json"
+        "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
+        "gateway": "node --experimental-network-imports dist/jitar.js --config=services/gateway.json",
+        "hi": "node --experimental-network-imports dist/jitar.js --config=services/hi.json",
+        "hello": "node --experimental-network-imports dist/jitar.js --config=services/hello.json",
+        "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json"
     },
     "dependencies": {
         "jitar": "^0.4.0"

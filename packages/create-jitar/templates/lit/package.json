@@ -1,5 +1,5 @@
 {
-  "name": "4-lit",
+  "name": "jitar-lit-starter",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -15,15 +15,15 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc",
-    "jitar": "node --experimental-network-imports dist/jitar.js --config=conf/jitar.json"
+    "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json"
   },
   "dependencies": {
     "jitar": "^0.4.0",
-    "lit": "^2.6.1"
+    "lit": "^2.7.4"
   },
   "devDependencies": {
     "@jitar/plugin-vite": "^0.4.0",
-    "typescript": "^5.0.3",
-    "vite": "^4.2.1"
+    "typescript": "^5.0.4",
+    "vite": "^4.3.5"
   }
 }
