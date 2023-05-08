@@ -1,12 +1,12 @@
 {
-  "name": "jitar-react",
+  "name": "jitar-react-starter",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc",
-    "jitar": "node --experimental-network-imports dist/jitar.js --config=conf/jitar.json",
+    "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -16,10 +16,10 @@
   },
   "devDependencies": {
     "@jitar/plugin-vite": "^0.4.0",
-    "@types/react": "^18.0.32",
-    "@types/react-dom": "^18.0.11",
-    "@vitejs/plugin-react": "^3.1.0",
-    "typescript": "^5.0.3",
-    "vite": "^4.2.1"
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "@vitejs/plugin-react": "^4.0.0",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.5"
   }
 }

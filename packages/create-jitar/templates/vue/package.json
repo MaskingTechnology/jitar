@@ -1,5 +1,5 @@
 {
-  "name": "jitar-vue-example",
+  "name": "jitar-vue-starter",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build && vue-tsc --noEmit && tsc",
     "preview": "vite preview",
-    "jitar": "node --experimental-network-imports dist/jitar.js --config=conf/jitar.json"
+    "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json"
   },
   "dependencies": {
     "jitar": "^0.4.0",
@@ -15,9 +15,9 @@
   },
   "devDependencies": {
     "@jitar/plugin-vite": "^0.4.0",
-    "@vitejs/plugin-vue": "^4.1.0",
-    "typescript": "^5.0.3",
-    "vite": "^4.2.1",
-    "vue-tsc": "^1.2.0"
+    "@vitejs/plugin-vue": "^4.2.1",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.5",
+    "vue-tsc": "^1.6.4"
   }
 }

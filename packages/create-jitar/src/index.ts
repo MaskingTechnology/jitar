@@ -168,11 +168,11 @@ async function execute()
 
     if (template === 'lit')
     {
-        const config = JSON.parse(fs.readFileSync(path.join(templateDir, `conf/jitar.json`), 'utf-8'));
+        const config = JSON.parse(fs.readFileSync(path.join(templateDir, `services/standalone.json`), 'utf-8'));
 
         config.standalone.assets.push(`${getProjectName()}.js`);
 
-        write(root, templateDir, 'conf/jitar.json', JSON.stringify(config, null, 2) + '\n');
+        write(root, templateDir, 'services/standalone.json', JSON.stringify(config, null, 2) + '\n');
     }
 
     const cdProjectName = path.relative(cwd, root);
