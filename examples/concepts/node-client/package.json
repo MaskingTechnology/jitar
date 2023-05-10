@@ -1,0 +1,13 @@
+{
+    "name": "jitar-node-client-example",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "tsc",
+        "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json",
+        "client": "node --experimental-network-imports --no-warnings dist/client.js"
+    },
+    "dependencies": {
+        "jitar": "^0.4.0"
+    }
+}

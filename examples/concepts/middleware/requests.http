@@ -1,0 +1,4 @@
+
+// Execute the procedure and check the terminal
+
+GET http://localhost:3000/rpc/ping HTTP/1.1
