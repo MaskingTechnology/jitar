@@ -13,16 +13,24 @@ export const repositorySchema = z
 
 export default class RepositoryConfiguration
 {
-    source?: string;
-    cache?: string;
-    index?: string;
-    assets?: string[];
+    #source?: string;
+    #cache?: string;
+    #index?: string;
+    #assets?: string[];
 
     constructor(source?: string, cache?: string, index?: string, assets?: string[])
     {
-        this.source = source;
-        this.cache = cache;
-        this.index = index;
-        this.assets = assets;
+        this.#source = source;
+        this.#cache = cache;
+        this.#index = index;
+        this.#assets = assets;
     }
+
+    get source() { return this.#source; }
+
+    get cache() { return this.#cache; }
+
+    get index() { return this.#index; }
+
+    get assets() { return this.#assets; }
 }

@@ -11,12 +11,16 @@ export const gatewaySchema = z
 
 export default class GatewayConfiguration
 {
-    monitor?: number;
-    repository?: string;
+    #monitor?: number;
+    #repository?: string;
 
     constructor(monitor?: number, repository?: string)
     {
-        this.monitor = monitor;
-        this.repository = repository;
+        this.#monitor = monitor;
+        this.#repository = repository;
     }
+
+    get monitor() { return this.#monitor; }
+
+    get repository() { return this.#repository; }
 }

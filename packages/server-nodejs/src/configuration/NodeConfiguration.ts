@@ -12,14 +12,20 @@ export const nodeSchema = z
 
 export default class NodeConfiguration
 {
-    gateway?: string;
-    repository?: string;
-    segments: string[];
+    #gateway?: string;
+    #repository?: string;
+    #segments: string[];
 
     constructor(gateway: string | undefined, repository: string | undefined, segments: string[])
     {
-        this.gateway = gateway;
-        this.repository = repository;
-        this.segments = segments;
+        this.#gateway = gateway;
+        this.#repository = repository;
+        this.#segments = segments;
     }
+
+    get gateway() { return this.#gateway; }
+
+    get repository() { return this.#repository; }
+
+    get segments() { return this.#segments; }
 }
