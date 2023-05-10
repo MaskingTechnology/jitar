@@ -22,6 +22,7 @@ Please join our [Discord community](https://discord.gg/Bqwy8azp5R) for feature r
 * Monitoring (metrics)
 * Data type validation on RPC calls
 * Adapters
+* Output log statements to file
 * Complete CORS support (e.g. Access-Control-Allow-Credentials, Access-Control-Expose-Headers, ...)
 * Support for different load balancing strategies (e.g. weighted round-robin, least connections, ...)
 * (more to come ...)
