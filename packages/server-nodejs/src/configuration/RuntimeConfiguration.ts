@@ -21,20 +21,32 @@ export const runtimeSchema = z
 
 export default class RuntimeConfiguration
 {
-    url?: string;
-    standalone?: StandaloneConfiguration;
-    repository?: RepositoryConfiguration;
-    gateway?: GatewayConfiguration;
-    node?: NodeConfiguration;
-    proxy?: ProxyConfiguration;
+    #url?: string;
+    #standalone?: StandaloneConfiguration;
+    #repository?: RepositoryConfiguration;
+    #gateway?: GatewayConfiguration;
+    #node?: NodeConfiguration;
+    #proxy?: ProxyConfiguration;
 
     constructor(url?: string, standalone?: StandaloneConfiguration, repository?: RepositoryConfiguration, gateway?: GatewayConfiguration, node?: NodeConfiguration, proxy?: ProxyConfiguration)
     {
-        this.url = url;
-        this.standalone = standalone;
-        this.repository = repository;
-        this.gateway = gateway;
-        this.node = node;
-        this.proxy = proxy;
+        this.#url = url;
+        this.#standalone = standalone;
+        this.#repository = repository;
+        this.#gateway = gateway;
+        this.#node = node;
+        this.#proxy = proxy;
     }
+
+    get url() { return this.#url; }
+
+    get standalone() { return this.#standalone; }
+
+    get repository() { return this.#repository; }
+
+    get gateway() { return this.#gateway; }
+
+    get node() { return this.#node; }
+
+    get proxy() { return this.#proxy; }
 }
