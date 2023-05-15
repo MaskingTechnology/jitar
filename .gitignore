@@ -1,3 +1,4 @@
 .vscode
+.vitepress
 node_modules
 **/*.tgz
