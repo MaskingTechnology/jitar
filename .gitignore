@@ -1,4 +1,5 @@
 .vscode
-.vitepress
+docs/.vitepress/dist
+docs/.vitepress/cache
 node_modules
 **/*.tgz
