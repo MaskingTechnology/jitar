@@ -6,8 +6,8 @@ prev:
     link: /fundamentals/runtime-services/gateway
 
 next:
-    text: Standalone
-    link: /fundamentals/runtime-services/standalone
+    text: Writing functions
+    link: /develop/writing-functions
 
 ---
 

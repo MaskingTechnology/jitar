@@ -34,9 +34,9 @@ export default defineConfig({
           { text: 'Application structure', link: 'develop/application-structure' },
           { text: 'Writing functions', link: 'develop/writing-functions' },
           { text: 'Data sharing', link: 'develop/data-sharing' },
+          { text: 'Error handling', link: 'develop/error-handling' },
           { text: 'State management', link: 'develop/state-management' },
           { text: 'Data consistency', link: 'develop/data-consistency' },
-          { text: 'Error handling', link: 'develop/error-handling' },
           { text: 'Middleware', link: 'develop/middleware' },
           { text: 'Validation', link: 'develop/validation' },
           { text: 'Security', link: 'develop/security' },
@@ -74,18 +74,46 @@ export default defineConfig({
       },
       {
         text: 'TUTORIALS',
+        items: [
+          { text: 'Build a full-stack app', link: 'tutorials/build-a-full-stack-app' },
+          { text: 'Build for scale', link: 'tutorials/build-for-scale' },
+          { text: 'Integration with other apps', link: 'tutorials/integration-with-other-apps' },
+          { text: 'Dynamically switch version', link: 'tutorials/dynamically-switch-version' },
+          { text: 'Creating a cluster', link: 'tutorials/creating-a-cluster' },
+          { text: 'Add Jitar to an existing project', link: 'tutorials/add-jitar-to-an-existing-project' },
+          { text: 'Migrate away from Jitar', link: 'tutorials/migrate-away-from-jitar' }
+        ]
       },
       {
         text: 'LEFTOVERS',
+        items: [
+          { text: 'REST API\s', link: 'leftovers/rest-apis' },
+          { text: 'Caching', link: 'leftovers/caching' }
+        ]
       },
       {
         text: 'COMPARIZATIONS',
+        items: [
+          { text: 'Jitar vs. Meteor', link: 'comparizations/jitar-vs-meteor' },
+          { text: 'Jitar vs. tRPC', link: 'comparizations/jitar-vs-trpc' },
+          { text: 'Jitar vs. Service Weaver', link: 'comparizations/jitar-vs-service-weaver' },
+          { text: 'Jitar vs. Next.js', link: 'comparizations/jitar-vs-nextjs' }
+        ]
       },
       {
         text: 'COMMUNITY',
+        items: [
+          { text: 'Get help', link: 'community/get-help' },
+          { text: 'Give feedback', link: 'community/give-feedback' },
+          { text: 'Contribute', link: 'community/contribute' }
+        ]
       },
       {
         text: 'ABOUT',
+        items: [
+          { text: 'Our goal', link: 'about/our-goal' },
+          { text: 'Our team', link: 'about/our-team' }
+        ]
       }
     ],
 
