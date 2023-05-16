@@ -6,12 +6,11 @@ export default defineConfig({
   lang: 'en-US',
   title: "Jitar",
   description: "Documentation",
+  head: [
+    ['link', { rel: 'icon', type: 'image/png', href: '/icon.png' }]
+  ],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-
-    nav: [
-      { text: 'Docs', link: 'introduction/what-is-jitar' }
-    ],
     outline: [2, 3],
     sidebar: [
       {
