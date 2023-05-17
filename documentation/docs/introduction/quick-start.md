@@ -127,8 +127,8 @@ npm run standalone
 ```
 
 ## What's next?
-Congratulations, you now know the basics of Jitar! Check out our tutorial on [building full-stack apps](#) to continue learning on using Jitar for real-world applications.
+Congratulations, you now know the basics of Jitar! Check out our tutorial on [building full-stack apps](../tutorials/build-a-full-stack-app) to continue learning on using Jitar for real-world applications.
 
 For more detailed information on the Jitar concepts you can check out the [fundamentals section](../fundamentals/overview.md).
 
-If you're more interested in building and deploying great scalable applications, check out the [develop](#) and [deploy](#) section.
+If you're more interested in building and deploying great scalable applications, check out the [develop](../develop/application-structure) and [deploy](../deploy/segmentation) section.
