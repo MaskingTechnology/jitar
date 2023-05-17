@@ -12,3 +12,7 @@ next:
 ---
 
 # Security
+aaa
+
+## Authentication and authorization
+bbb
