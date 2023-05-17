@@ -122,8 +122,8 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: '/https://github.com/MaskingTechnology/jitar' },
-      { icon: 'discord', link: '/https://discord.gg/Bqwy8azp5R' }
+      { icon: 'github', link: 'https://github.com/MaskingTechnology/jitar' },
+      { icon: 'discord', link: 'https://discord.gg/Bqwy8azp5R' }
     ],
 
     footer: {

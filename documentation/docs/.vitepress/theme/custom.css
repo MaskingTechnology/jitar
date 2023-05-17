@@ -156,31 +156,62 @@ Jitar colors
     background-color: #1c4587;
 }
 
-/* Work around for styling components without creating custom components*/
-.VPNavBar.has-sidebar .content-body[data-v-cf6e7c5e] {
-    background-color: #1c4587;
-    /*height: var(--vp-nav-height)*/;
+.VPNav .VPNavBar {
+    top: 1px;
 }
 
-.title[data-v-55e263fd] {
+/* Work around for styling components without creating custom components */
+.VPNavBar.has-sidebar .container .content .content-body {
+    background-color: #1c4587;
+}
+
+.VPNavBar.has-sidebar .container .title {
     color: #ffffff;
     font-size: 32px;
 }
 
-.VPNavBarMenuLink[data-v-094e56d3] {
-    color: #ffffff;
+.VPNavBar.has-sidebar .container .title :hover {
+    opacity: 1;
 }
 
-.VPNavBarMenuLink[data-v-094e56d3]:hover {
-    color: #ffffff;
-}
-
-.VPSocialLink[data-v-7c5ccdb4] > svg
-{
+.VPNavBar.has-sidebar .container .content .content-body .VPSocialLinks .VPSocialLink > svg{
     fill: #ffffff;
     opacity: 0.8;
 }
 
-.VPNavBar[data-v-cf6e7c5e] {
-    top: 1px;
+/* Tablet size extra menu */
+.VPFlyout.VPNavBarExtra.extra .button .icon{
+    fill: #ffffff;
+}
+
+.VPSocialLinks.social-links-list .VPSocialLink > svg {
+    fill: rgb(67, 67, 67);
+}
+
+.dark .VPSocialLinks.social-links-list .VPSocialLink > svg {
+    fill: #ffffff;
+    opacity: 0.8;
+}
+
+/* Our team*/
+.VPTeamMembersItem.small {
+    border-radius: 0;
+    border-top: 7px solid var(--vp-c-brand);
+}
+
+.VPTeamMembersItem.small .profile {
+    background-color: #ffffff;
+}
+
+.VPTeamMembersItem.small .profile .data .links .VPSocialLinks .VPSocialLink > svg {
+    fill:rgb(67, 67, 67);
+}
+
+.dark .VPTeamMembersItem.small .profile {
+    background-color: #000000;
+}
+
+.dark .VPTeamMembersItem.small .profile .data .links .VPSocialLinks .VPSocialLink > svg {
+    fill: #ffffff;
+    opacity: 0.8;
 }
