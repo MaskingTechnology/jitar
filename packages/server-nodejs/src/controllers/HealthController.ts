@@ -34,6 +34,8 @@ export default class HealthController
 
         this.#logger.debug('Got health status');
 
+        response.setHeader('Content-Type', 'text/plain');
+
         return response.status(200).send(healthy);
     }
 }
