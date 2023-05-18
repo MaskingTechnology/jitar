@@ -57,10 +57,10 @@ export{ sayHello as default, sayHi };
 ```
 
 ### Async
-Functions need to be asynchronous in order to become distributable. The caller of the function does not know about its physical location. It might be locally available, but can also be on another server. Making a function asynchronous ensures that it can be run, no matter where the function resides. The async keyword is mandatory. Jitar will throw a `FunctionNotAsync` error if you try to distribute or replicate a non-async function.
+Functions need to be asynchronous in order to become distributable. The caller of the function does not know about its physical location. It might be locally available, but can also be on another server. Making a function asynchronous ensures that it can be run, no matter where the function resides. The `async` keyword is mandatory. Jitar will throw a `FunctionNotAsync` error if you try to distribute or replicate a non-async function.
 
 ### Parameters
-Functions take any type of argument that can be (de)serialized.
+Functions take any type of argument that [can be (de)serialized](../develop/data-sharing.md#automatic-deserialization).
 
 Rest parameters are supported:
 
@@ -75,7 +75,7 @@ async function sayHello({ name }: Person): Promise<string> { /* … */ }
 ```
 
 ### Return value
-Functions can return any value that can be (de)serialized.
+Functions can return any value that [can be (de)serialized](../develop/data-sharing.md#automatic-deserialization).
 
 ### Arrow functions
 Arrow functions are supported, but come with an important limitation. Jitar uses the function's `this` to pass context information (headers) for creating remote calls. Array functions do not have a `this` and can't provide any context.
@@ -250,8 +250,8 @@ Now we have a separate module file per version that can be registered in the seg
 Jitar groups functions by name and registers them by version. In this case both functions are available for use and are called with a specific version.
 
 ::: tip
- When registering the same version multiple times, Jitar will provide …
- :::
+When registering the same version multiple times, Jitar will provide …
+:::
 
 ### Aliases
 By default the import names are used for registering functions. In some cases you might want to expose a function under an alias name. A common use case is to create unique names in case multiple modules have equal exports or when combining multiple versions in a single module file. For example combining the sayHello functions:
@@ -269,7 +269,7 @@ export async function sayHelloV2(first: string, last: string): Promise<string>
 }
 ```
 
-In this case both versions are in the same file, but to make them unique they both need to have a different name. Using the as property we can provide the alias.
+In this case both versions are in the same file, but to make them unique they both need to have a different name. Using the `as` property we can provide the alias.
 
 ```json
 {

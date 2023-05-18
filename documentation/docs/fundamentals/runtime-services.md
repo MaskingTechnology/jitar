@@ -19,7 +19,7 @@ In this section you'll learn the available service types, what they do, when to 
 ## Basic configuration
 When bootstrapping a Jitar instance, the configuration file for a service is loaded. Every Jitar instance can only run one service type at the time.
 
-At the start of Jitar, a configuration file is loaded  … Every Jitar instance can only run one service type at the time.
+At the start of Jitar, a configuration file is loaded … Every Jitar instance can only run one service type at the time.
 
 ```json
 {
@@ -41,7 +41,7 @@ The repository keeps track of every client and their segments. When a client req
 Besides serving modules to clients, it also serves application assets like images, documents, etc.. To protect the access to the application files, assets need to be whitelisted. This can be done per file, or by using glob patterns. For example the pattern `assets/**/*` whitelists all files and subfolder files in the assets folder.
 
 ### Caching
-All application files are served from a cache folder created by Jitar. This folder contains a copy of the application with additional generated files like segmentation information, remote module implementations and more. Detailed information can be found in the caching section.
+All application files are served from a cache folder created by Jitar. This folder contains a copy of the application with additional generated files like segmentation information, remote module implementations and more. Detailed information can be found in the [caching section](../leftovers/caching.md).
 
 ### Configuration properties
 The following configuration properties are available:
@@ -119,7 +119,7 @@ If a function is available on multiple nodes, the gateway will automatically bal
 The availability of nodes is actively monitored. If a node cannot be reached or replies to have [an unhealthy state](../monitor/health.md), it will be removed from the gateway.
 
 ### Caching
-There aren't any caching options yet, but we are planning on implementing them. Please let us know if you need this, it will help us prioritize our work!
+There aren't any caching options yet, but we are planning on implementing them. Please [let us know](../community/contribute.md) if you need this, it will help us prioritize our work!
 
 ### Configuration properties
 The following configuration properties are available:
@@ -147,7 +147,7 @@ This service is used for creating a cluster and is only useful when working with
 The proxy acts as an intermediary between clients and a Jitar cluster. It's a single point of access for both the [repository](#repository) and [gateway](#gateway) / [node](#node) services.
 
 ### Request forwarding
-The single purpose of the proxy is to forward requests to the right service. RPC requests are forwarded to the gateway or node service (depending on the configuration). Other requests are forwarded to the repository.
+The single purpose of the proxy is to forward requests to the right service. RPC requests are forwarded to the [gateway] or [node](#node) service (depending on the configuration). Other requests are forwarded to the repository.
 
 ### Configuration properties
 The following configuration properties are available:
@@ -160,8 +160,8 @@ A full configuration example looks like this:
 
 ```json
 {
-    "url": "http://repo.example.com:3000",
-    "gateway":
+    "url": "http://proxy.example.com:3000",
+    "proxy":
     {
        "gateway": "http://gateway.example.com:3000",
        "repository": "http://repository.example.com:3000"
@@ -190,7 +190,7 @@ A full configuration example looks like this:
 
 ```json
 {
-    "url": "http://repository.example.com:3000",
+    "url": "http://standalone.example.com:3000",
     "standalone":
     {
         "source": "./src",
