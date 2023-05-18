@@ -10,7 +10,9 @@ class FirstMiddleware implements Middleware
         headers.set('first', 'yes');
         headers.set('last', '1');
 
-        return '1';
+        const result = await next();
+
+        return '1' + result;
     }
 }
 
@@ -24,7 +26,7 @@ class SecondMiddleware implements Middleware
 
         const result = await next();
 
-        return result + '2';
+        return '2' + result;
     }
 }
 
@@ -36,9 +38,7 @@ class ThirdMiddleware implements Middleware
         headers.set('third', 'yes');
         headers.set('last', '3');
 
-        const result = await next();
-
-        return result + '3';
+        return '3';
     }
 }
 

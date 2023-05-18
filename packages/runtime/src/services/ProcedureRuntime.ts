@@ -15,7 +15,7 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
     {
         super(url);
 
-        this.addMiddleware(new ProcedureRunner(this));
+        this.#middlewares.push(new ProcedureRunner(this));
     }
 
     abstract getProcedureNames(): string[];
@@ -26,7 +26,12 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
     addMiddleware(middleware: Middleware)
     {
-        this.#middlewares.push(middleware);
+        // We want to add the middleware before the ProcedureRunner because
+        // it is the last middleware that needs to be called.
+
+        const index = this.#middlewares.length - 1;
+
+        this.#middlewares.splice(index, 0, middleware);
     }
 
     getMiddleware(type: Function): Middleware | undefined
@@ -43,9 +48,7 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
     #getNextHandler(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, index: number): NextHandler
     {
-        // Reverse the index so that the first middleware added is the last one to be called
-        const indexFromEnd = this.#middlewares.length - index - 1;
-        const next = this.#middlewares[indexFromEnd];
+        const next = this.#middlewares[index];
 
         if (next === undefined)
         {
