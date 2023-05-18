@@ -12,7 +12,7 @@ export const serverOptionsSchema = z
 export default class ServerOptions
 {
     #config: string;
-    #loglevel?: string;
+    #loglevel: string;
 
     constructor(config: string, loglevel = 'info')
     {
