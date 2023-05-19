@@ -87,7 +87,7 @@ The following configuration properties are available:
 
 * gateway - url of the gateway (optional, in case no gateway is used).
 * repository - url of the repository (required).
-s* egments - list of segment names to load (optional, loads all segments by default).
+* segments - list of segment names to load (optional, loads all segments by default).
 
 A full configuration example looks like this:
 
@@ -205,4 +205,4 @@ A full configuration example looks like this:
 This service is useful in both development and production environments. It's ideal for development because it only requires a single instance no matter the deployment requirements. In production it's the most simple deployment option for applications that do benefit from being distributed or replicated yet.
 
 ## More information
-In the deploy section you can find practical examples for combining these services to [create a cluster](../tutorials/creating-a-cluster.md) and set up [load balancing](../deploy/load-balancing.md).
+In the deploy section you can find practical examples for combining these services to [create a cluster](../guides/creating-a-cluster.md) and set up [load balancing](../deploy/load-balancing.md).

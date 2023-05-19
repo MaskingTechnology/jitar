@@ -37,7 +37,9 @@ export async function test(): Promise<void>
 
     console.log(person);
 }
+```
 
+```ts
 // modify.ts
 import { Person } from './Person';
 
@@ -85,7 +87,9 @@ export async function test(): Promise<void>
     // problem solved
     console.log(person);
 }
+```
 
+```ts
 // modify.ts
 
 import { Person } from './Person';
@@ -153,7 +157,9 @@ export async function test(): Promise<void>
 
     console.log(person);
 }
+```
 
+```ts
 // modify.ts
 
 import { Person } from './Person';

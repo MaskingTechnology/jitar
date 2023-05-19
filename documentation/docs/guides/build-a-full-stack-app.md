@@ -7,7 +7,7 @@ prev:
 
 next:
     text: Build for scale
-    link: /tutorials/build-for-scale
+    link: /guides/build-for-scale
 
 ---
 

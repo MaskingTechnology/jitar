@@ -33,6 +33,7 @@ export default defineConfig({
         items: [
           { text: 'Application structure', link: '/develop/application-structure' },
           { text: 'Writing functions', link: '/develop/writing-functions' },
+          { text: 'Creating segments', link: '/develop/creating-segments' },
           { text: 'Data sharing', link: '/develop/data-sharing' },
           { text: 'Error handling', link: '/develop/error-handling' },
           { text: 'State management', link: '/develop/state-management' },
@@ -73,15 +74,15 @@ export default defineConfig({
         ]
       },
       {
-        text: 'TUTORIALS',
+        text: 'GUIDES',
         items: [
-          { text: 'Build a full-stack app', link: '/tutorials/build-a-full-stack-app' },
-          { text: 'Build for scale', link: '/tutorials/build-for-scale' },
-          { text: 'Integration with other apps', link: '/tutorials/integration-with-other-apps' },
-          { text: 'Dynamically switch version', link: '/tutorials/dynamically-switch-version' },
-          { text: 'Creating a cluster', link: '/tutorials/creating-a-cluster' },
-          { text: 'Add Jitar to an existing project', link: '/tutorials/add-jitar-to-an-existing-project' },
-          { text: 'Migrate away from Jitar', link: '/tutorials/migrate-away-from-jitar' }
+          { text: 'Build a full-stack app', link: '/guides/build-a-full-stack-app' },
+          { text: 'Build for scale', link: '/guides/build-for-scale' },
+          { text: 'Integration with other apps', link: '/guides/integration-with-other-apps' },
+          { text: 'Dynamically switch version', link: '/guides/dynamically-switch-version' },
+          { text: 'Creating a cluster', link: '/guides/creating-a-cluster' },
+          { text: 'Add Jitar to an existing project', link: '/guides/add-jitar-to-an-existing-project' },
+          { text: 'Migrate away from Jitar', link: '/guides/migrate-away-from-jitar' }
         ]
       },
       {

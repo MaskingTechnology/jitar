@@ -7,7 +7,7 @@ prev:
 
 next:
     text: Build a full-stack app
-    link: /tutorials/build-a-full-stack-app
+    link: /guides/build-a-full-stack-app
 
 ---
 

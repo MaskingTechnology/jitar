@@ -3,11 +3,11 @@ layout: doc
 
 prev:
     text: Creating a cluster
-    link: /tutorials/creating-a-cluster
+    link: /guides/creating-a-cluster
 
 next:
     text: Migrate away from Jitar
-    link: /tutorials/migrate-away-from-jitar
+    link: /guides/migrate-away-from-jitar
 
 ---
 

@@ -3,11 +3,11 @@ layout: doc
 
 prev:
     text: Build for scale
-    link: /tutorials/build-for-scale
+    link: /guides/build-for-scale
 
 next:
     text: Dynamically switch version
-    link: /tutorials/dynamically-switch-version
+    link: /guides/dynamically-switch-version
 
 ---
 

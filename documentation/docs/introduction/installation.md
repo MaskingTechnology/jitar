@@ -38,4 +38,4 @@ For existing projects Jitar can be added as additional dependency by running the
 npm install --save jitar
 ```
 
-For integrating Jitar in your project you can follow [our tutorial](../tutorials/add-jitar-to-an-existing-project).
+For integrating Jitar in your project you can follow [our tutorial](../guides/add-jitar-to-an-existing-project).

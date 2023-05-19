@@ -301,4 +301,4 @@ Shared means that you don't have any access control, so these modules can be loa
 ### More information
 If you want to know more about setting up an application, you can take a look at the [app structure section](../develop/application-structure.md).
 
-For further learning on how to write your functions for scale, we've created a [build for scale tutorial](../tutorials/build-for-scale.md).
+For further learning on how to write your functions for scale, we've created a [build for scale tutorial](../guides/build-for-scale.md).

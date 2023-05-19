@@ -3,7 +3,7 @@ layout: doc
 
 prev:
     text: Migrate away from Jitar
-    link: /tutorials/migrate-away-from-jitar
+    link: /guides/migrate-away-from-jitar
 
 next:
     text: Caching

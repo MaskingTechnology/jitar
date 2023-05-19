@@ -6,8 +6,8 @@ prev:
     link: /develop/application-structure
 
 next:
-    text: Data sharing
-    link: /develop/data-sharing
+    text: Creating segments
+    link: /develop/creating-segments
 
 ---
 
