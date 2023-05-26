@@ -17,7 +17,11 @@ Free yourself from the burden of building and maintaining APIs. Jitar is the mis
 
 # How it works
 
-Call your server functions directly. Jitar takes care of the rest.
+Building scalable applications is hard. It requires breaking an application into independently deployable pieces, like microservices. The boundaries of these pieces are sensitive to change and aren't always clear. Developing endpoints and requests to arrange the communication between them brings a lot of overhead.
+
+Jitar is designed to solve these problems. It makes the boundaries configurable so you can change them painlessly at any time and eliminates the overhead by automating the end-to-end communication.
+
+For breaking applications into distributable pieces, Jitar uses a segmentation system. A segment defines what functions need to be deployed together. Jitar connects these segments by creating RPC endpoints and requests under the hood.
 
 # Key benefits
 
@@ -63,13 +67,11 @@ Getting started with Jitar is as easy as pie. It only takes a few simple steps.
 
 # Documentation
 
-Full documentation is online available at [docs.jitar.dev](https://docs.jitar.dev).
+Full documentation is available at [docs.jitar.dev](https://docs.jitar.dev).
 
 Please join our [Discord community](https://discord.gg/Bqwy8azp5R) for questions and discussions.
 
 # Publications
-
-Background stories
 
 * [How I Speed Up Full-stack Development by Not Building APIs](https://medium.com/better-programming/how-i-speed-up-full-stack-development-by-not-building-apis-7f768335bec6)
 * [How I Split a Monolith Into Microservices Without Refactoring](https://medium.com/better-programming/how-i-split-a-monolith-into-microservices-without-refactoring-5d76924c34c2)
