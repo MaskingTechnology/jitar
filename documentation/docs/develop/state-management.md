@@ -12,6 +12,7 @@ next:
 ---
 
 # State management
+
 Jitar does not require any specifics for state management. The same options apply as for any client-server or distributed application.
 
 We do recommend keeping your application as stateless as possible. What this means depends on the type of application, but most applications need at least a bit of state. For example, if a user logs in an access token needs to be stored.

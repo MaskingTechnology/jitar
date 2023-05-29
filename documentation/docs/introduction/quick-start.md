@@ -6,14 +6,16 @@ prev:
     link: /introduction/installation
 
 next:
-    text: Fundamentals
-    link: /fundamentals/overview
+    text: Building blocks
+    link: /fundamentals/building-blocks
 ---
 
 # Quick start
+
 In this short guide, you'll learn Jitar's key concepts and experience the setup process. We'll start with creating a new project followed by a step-by-step explanation of the concepts.
 
 ## 1. Create a new project
+
 The fastest way to get started is creating a new project with our CLI tool. We'll use the React template in this section, but you can also use one of our other templates: vue, svelte, solidjs, lit or jitar-only. Also, we use jitar-react as the project name, but feel free to use any other name.
 
 ```bash
@@ -34,10 +36,11 @@ Done. Now run:
 Now you should be able to access the application on [http://localhost:3000](http://localhost:3000){target="_blank"}
 
 ## 2. Add your functions
-Functions are the main building blocks of Jitar applications. The created application already has one in the src/shared folder, so let's take a look.
+
+Functions are the main building blocks of Jitar applications. The created application already has one in the `src/shared` folder, so let's take a look.
 
 ```ts
-//src/shared/sayHello.ts
+// src/shared/sayHello.ts
 export async function sayHello(name: string): Promise<string>
 {
     return `Hello, ${name}!`
@@ -47,24 +50,31 @@ export async function sayHello(name: string): Promise<string>
 
 Looks like a normal function, right? The `async` might seem unnecessary, but is actually an important addition. The caller of the function does not know about its location. The function might be locally available, but can also be on another server. Making a function `async` ensures that it can be run, no matter where it resides.
 
-Functions can be imported and called like any normal async function. Jitar will automatically provide a remote implementation if the function is not locally available.
+Functions can be imported and called like any normal async function.
 
 ```ts
-//src/App.tsx
+// src/App.tsx
 /* other imports */
 
-import { sayHello } from './shared/sayHello'
+import { sayHello } from './shared/sayHello';
 
-function App() { /* … */}
+const message = await sayHello('World');
+
+function App() { /* … */ }
 ```
 
-Besides functions there are more useful building blocks. You can find out more in the [fundamentals section](../fundamentals/overview.md).
+Jitar will automatically provide a remote implementation if the function is not locally available.
+
+::: info
+Besides functions there are more useful building blocks. You can find out more in the [FUNDAMENTALS section](../fundamentals/building-blocks.md).
+:::
 
 ## 3. Configure what runs on the server
+
 To tell Jitar if a function runs on the client or the server, the application is split into groups of modules, called segments. Each segment has its own configuration file. In the project we can find one in the `segments` folder.
 
 ```json
-//segments/default.segment.json
+// segments/default.segment.json
 {
     "./shared/sayHello": { "sayHello": { "access": "public" } }
 }
@@ -76,15 +86,18 @@ Segment configurations work like the JavaScript module system. In this case we e
 
 *Try yourself:* remove the function from the configuration and restart the application. Note that the client doesn't make a call to the server anymore.
 
-More detailed information about [segmentation](../fundamentals/overview.md#segments) can be found in the fundamentals section.
+::: info
+More detailed information about segments can be found in the [FUNDAMENtALS section](../fundamentals/building-blocks.md#segments).
+:::
 
 ## 4. Run your application
+
 Applications can be run in a single Jitar instance for development and multiple distributed Jitar instances in production.
 
 Jitar provides multiple types of services that can be configured to fit your needs at any time. In the project we can find a configuration in the `services` folder for a single instance setup.
 
 ```json
-//services/standalone.json
+// services/standalone.json
 {
     "url": "http://127.0.0.1:3000",
     "standalone":
@@ -97,7 +110,7 @@ Jitar provides multiple types of services that can be configured to fit your nee
 
 Jitar creates segment bundles and local and remote implementations required to run the application in any setup. To boost performance the output will be cached. By default the cache will be stored in the `.jitar` folder, but you can configure another folder if desired.
 
-Jitar also acts like a web server to serve the frontend components. By default it serves the index.html file when no specific file is requested, but you can configure another file. For security reasons, all assets must be specified in order to become accessible.
+Jitar also acts like a web server to serve the frontend components. By default it serves the `index.html` file when no specific file is requested, but you can configure another file. For [security reasons](../develop/security.md#file-access-protection), all assets must be specified in order to become accessible.
 
 The configuration needs to be supplied when starting a Jitar instance. To start Jitar, a simple bootstrapper script is required that starts a server.
 
@@ -110,7 +123,7 @@ const moduleImporter = async (specifier: string) => import(specifier)
 startServer(moduleImporter)
 ```
 
-This script can be extended by adding middleware and health checks to the server when needed.
+This script can be extended by adding [middleware](../develop/middleware.md) and [health checks](../deploy/health-checks.md) to the server when needed.
 
 With everything in place we can run the application with the following command.
 
@@ -118,7 +131,9 @@ With everything in place we can run the application with the following command.
 node --experimental-network-imports dist/jitar.js --config=services/standalone.json
 ```
 
+:::info
 Node needs the `--experimental-network-imports` flag in order to import functions and other components from a remote location.
+:::
 
 The project provides a script containing the command in the `package.json` file, so we can also start Jitar like this:
 
@@ -127,8 +142,9 @@ npm run standalone
 ```
 
 ## What's next?
-Congratulations, you now know the basics of Jitar! Check out our tutorial on [building full-stack apps](../guides/build-a-full-stack-app) to continue learning on using Jitar for real-world applications.
 
-For more detailed information on the Jitar concepts you can check out the [fundamentals section](../fundamentals/overview.md).
+Congratulations, you now know the basics of Jitar! Check out the FUNDAMENTALS section for more information on the [building blocks](../fundamentals/building-blocks.md) for building applications and the [runtime services](../fundamentals/runtime-services.md) for running them.
 
-If you're more interested in building and deploying great scalable applications, check out the [develop](../develop/application-structure) and [deploy](../deploy/segmentation) section.
+If you want to learn how to build great applications with Jitar, you can check out the [DEVELOP section](../develop/application-structure.md).
+
+More information on the deploying Jitar applications can be found in the [DEPLOY section](../deploy/segmentation.md) section.

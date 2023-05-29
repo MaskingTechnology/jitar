@@ -12,14 +12,18 @@ next:
 ---
 
 # Middleware
-Middleware provides a way to hook into Jitars communication system. It allows you to add additional logic to incoming and outgoing requests. Common use cases are adding authentication and logging to applications.
+
+Middleware provides a way to hook into Jitars automated communication system. It allows you to add additional logic to incoming and outgoing requests. Common use cases are adding authentication and logging to applications.
 
 In this section you'll learn how to create and add your own middleware.
 
+
 ## Creating middleware
-Any middleware required to implement Jitars Middleware interface. This interface has a single function to handle the request:
+
+Any middleware required to implement Jitars Middleware interface. This interface has a single function to handle the request.
 
 ```ts
+// src/MyMiddleware.ts
 import { Middleware, Version, NextHandler } from 'jitar';
 
 export default class MyMiddleware implements Middleware
@@ -42,9 +46,11 @@ The `fqn`, `version` and `next` parameters are immutable, so only the args and h
 Because all middleware is chained, the next parameter must always be called. This function does not take any arguments, all the arguments will be provided automatically. Note that the handle function is async so it can return a promise.
 
 ## Adding middleware
-Middleware needs to be registered at the start of a Jitar server:
+
+Middleware needs to be registered at the start of a Jitar server.
 
 ```ts
+// src/standalone.ts
 import { startServer } from 'jitar';
 import MyMiddleware from './MyMiddleware';
 
@@ -58,6 +64,6 @@ It's only useful to add middleware to a node, gateway, proxy and standalone serv
 
 It's likely that the different services require different middleware. For example, you might want to add authentication middleware to the gateway and authorization middleware to the node. In this case each service needs its own starter script containing their specific middleware.
 
-::: tip 
+::: info 
 Middleware is executed in the order of registration. This means that the middleware that is added first is called first.
 :::

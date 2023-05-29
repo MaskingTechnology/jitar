@@ -12,7 +12,8 @@ next:
 ---
 
 # Assets
-Assets like images, documents, etc. can be placed in any location inside the source folder. By default all assets are protected. To make them accessible they must be whitelisted in the [repository configuration](../fundamentals/runtime-services.md#repository).
+
+Assets like images, documents, etc. can be placed in any location inside the source folder. By default all assets are protected. To make them accessible they must be whitelisted in the [repository configuration](../fundamentals/runtime-services.md#configuration-properties).
 
 ```json
 {

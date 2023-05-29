@@ -12,6 +12,7 @@ next:
 ---
 
 # Data sharing
+
 Jitar makes sharing data between segments easy. But there is one thing to take into account. You'll learn all about it in this section.
 
 ::: info 
@@ -19,13 +20,14 @@ Most of what you're learning here is not Jitar specific and applies to building 
 :::
 
 ## Automatic (de)serialization
-All parameters and return values are (de)serialized automatically for remote functions. Jitar provides a powerful (de)serializer that is able to transport any (complex) data type. By default all built-in JavaScript objects are supported like maps, sets, dates, etc. There's also support for custom classes.
+
+All parameters and return values are (de)serialized automatically for remote functions. Jitar provides a [powerful (de)serializer](../internals/data-serialization) that is able to transport any (complex) data type. By default all built-in JavaScript objects are supported like maps, sets, dates, etc. There's also support for custom classes.
 
 ## Using objects
-When working with objects it's important to know that the other end always receives a copy of the object, and not the actual object itself. If you don't take this into account the application behaves differently in a distributed setup. Take for example the following setup:
+When working with objects it's important to know that the other end always receives a copy of the object, and not the actual object itself. If you don't take this into account the application behaves differently in a distributed setup. Take for example the following setup.
 
 ```ts
-// test.ts
+// src/test.ts
 import { Person } from './Person'; // type definition
 import { modify } from './modify';
 
@@ -40,7 +42,7 @@ export async function test(): Promise<void>
 ```
 
 ```ts
-// modify.ts
+// src/modify.ts
 import { Person } from './Person';
 
 export async function modify(person: Person): Promise<void>
@@ -49,18 +51,18 @@ export async function modify(person: Person): Promise<void>
 }
 ```
 
-When running this example with both functions on the same end, the console shows the following result:
+When running this example with both functions on the same end, the console shows the following result.
 
-```ts
+```bash
 {
    name: "Tarzan",
    age: 42
 }
 ```
 
-But if we run the same example with both functions on another end, the console shows something else:
+But if we run the same example with both functions on another end, the console shows something else.
 
-```ts
+```bash
 {
    name: "John Doe",
    age: 42
@@ -72,7 +74,7 @@ As you can see, the data hasn't been modified. This is because the modify functi
 The solution is simple. By always returning the modified data and use this as a replacement on the other end we can avoid this situation:
 
 ```ts
-// test.ts
+// src/test.ts
 import { Person } from './Person';
 import { modify } from './modify';
 
@@ -90,8 +92,7 @@ export async function test(): Promise<void>
 ```
 
 ```ts
-// modify.ts
-
+// src/modify.ts
 import { Person } from './Person';
 
 export async function modify(person: Person): Promise<Person>
@@ -105,11 +106,13 @@ export async function modify(person: Person): Promise<Person>
 Running the updated example shows that we now get the correct result.
 
 ## Adding immutability
+
 Although the solution above is simple, it's quite error prone. A better approach is to use immutable objects. These types of objects can not be changed after creation, forcing creating a new object for every modification.
 
-For creating immutable objects we prefer to use classes that use a constructor for setting the values, and add getter functions for reading the values. For example:
+For creating immutable objects we prefer to use classes that use a constructor for setting the values, and add getter functions for reading the values. For example.
 
 ```ts
+// src/Person.ts
 export class Person
 {
     #name: string;
@@ -140,11 +143,10 @@ Jitar understands this construction and will use the getter functions for readin
 The constructor parameter names, and the getter / setter function names must match the field names. Otherwise Jitar won't be able to map the values.
 :::
 
-Using the class in our example looks like this:
+Using the class in our example looks like this.
 
 ```ts
-// test.ts
-
+// src/test.ts
 import { Person } from './Person';
 import { modify } from './modify';
 
@@ -160,8 +162,7 @@ export async function test(): Promise<void>
 ```
 
 ```ts
-// modify.ts
-
+// src/modify.ts
 import { Person } from './Person';
 
 export async function modify(person: Person): Promise<Person>

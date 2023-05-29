@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Health checks
-    link: /deploy/health-checks
+    text: RPC API checks
+    link: /integrate/rpc-api
 
 next:
     text: Logging
@@ -11,4 +11,6 @@ next:
 
 ---
 
-# CORS
+# Vite plugin
+
+

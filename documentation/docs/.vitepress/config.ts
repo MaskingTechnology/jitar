@@ -24,7 +24,7 @@ export default defineConfig({
       {
         text: 'FUNDAMENTALS',
         items: [
-          { text: 'Overview', link: '/fundamentals/overview' },
+          { text: 'Building blocks', link: '/fundamentals/building-blocks' },
           { text: 'Runtime services', link: '/fundamentals/runtime-services' }
         ]
       },
@@ -33,7 +33,6 @@ export default defineConfig({
         items: [
           { text: 'Application structure', link: '/develop/application-structure' },
           { text: 'Writing functions', link: '/develop/writing-functions' },
-          { text: 'Creating segments', link: '/develop/creating-segments' },
           { text: 'Data sharing', link: '/develop/data-sharing' },
           { text: 'Error handling', link: '/develop/error-handling' },
           { text: 'State management', link: '/develop/state-management' },
@@ -42,19 +41,23 @@ export default defineConfig({
           { text: 'Validation', link: '/develop/validation' },
           { text: 'Security', link: '/develop/security' },
           { text: 'Assets', link: '/develop/assets' },
-          { text: 'Debugging', link: '/develop/debugging' },
-          { text: 'Integration', link: '/develop/integration' }
+          { text: 'Debugging', link: '/develop/debugging' }
         ]
       },
       {
         text: 'DEPLOY',
         items: [
           { text: 'Segmentation', link: '/deploy/segmentation' },
-          { text: 'Customization', link: '/deploy/customization' },
           { text: 'Environments', link: '/deploy/environments' },
           { text: 'Load balancing', link: '/deploy/load-balancing' },
-          { text: 'Health checks', link: '/deploy/health-checks' },
-          { text: 'CORS', link: '/deploy/cors' }
+          { text: 'Health checks', link: '/deploy/health-checks' }
+        ]
+      },
+      {
+        text: 'INTEGRATE',
+        items: [
+          { text: 'RPC API', link: '/integrate/rpc-api' },
+          { text: 'VITE plugin', link: '/integrate/vite-plugin' }
         ]
       },
       {
