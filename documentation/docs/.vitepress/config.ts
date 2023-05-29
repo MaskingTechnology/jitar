@@ -65,8 +65,8 @@ export default defineConfig({
         items: [
           { text: 'Logging', link: '/monitor/logging' },
           { text: 'Health', link: '/monitor/health' },
-          { text: 'Nodes', link: '/monitor/nodes' },
-          { text: 'Procedures', link: '/monitor/procedures' }
+          { text: 'Procedures', link: '/monitor/procedures' },
+          { text: 'Nodes', link: '/monitor/nodes' }
         ]
       },
       {

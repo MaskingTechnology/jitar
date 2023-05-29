@@ -315,3 +315,24 @@ export default PersonNotFound extends NotFound
     get id(): string { return this.#id; }
 }
 ```
+
+## CORS
+
+Depending on the external application, CORS headers might be required to allow the connection. Jitar provides a CORS middleware implementation that you can use out-of-the-box.
+
+```ts
+import { startServer, CorsMiddleware } from 'jitar';
+
+const moduleImporter = async (specifier: string) => import(specifier);
+
+const origin = 'https://example.com';
+const headers = 'X-Custom-Header-1, X-Custom-Header-2';
+const cors = new CorsMiddleware(origin, headers);
+
+const server = await startServer(moduleImporter);
+server.addMiddleware(cors);
+```
+
+Only a single origin is supported. If you need a multi-domain setup you can provide a * (wildcard). The allowed headers are specified in a comma-separated list. You can also use a * (wildcard) to allow all. By default the CORS middleware will use a wildcard for the domain and headers if not specified.
+
+The values for the allowed method are fixed to GET and POST, as these are the only methods the RPC API exposes.
