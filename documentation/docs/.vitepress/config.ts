@@ -70,38 +70,26 @@ export default defineConfig({
         ]
       },
       {
-        text: 'EXAMPLES',
-        items: [
-          { text: 'Concepts', link: '/examples/concepts' },
-          { text: 'Apps', link: '/examples/apps' }
-        ]
-      },
-      {
         text: 'GUIDES',
         items: [
-          { text: 'Build a full-stack app', link: '/guides/build-a-full-stack-app' },
-          { text: 'Build for scale', link: '/guides/build-for-scale' },
-          { text: 'Integration with other apps', link: '/guides/integration-with-other-apps' },
-          { text: 'Dynamically switch version', link: '/guides/dynamically-switch-version' },
           { text: 'Creating a cluster', link: '/guides/creating-a-cluster' },
           { text: 'Add Jitar to an existing project', link: '/guides/add-jitar-to-an-existing-project' },
           { text: 'Migrate away from Jitar', link: '/guides/migrate-away-from-jitar' }
         ]
       },
       {
-        text: 'LEFTOVERS',
+        text: 'INTERNALS',
         items: [
-          { text: 'REST API\s', link: '/leftovers/rest-apis' },
-          { text: 'Caching', link: '/leftovers/caching' }
+          { text: 'Caching', link: '/internals/caching' },
+          { text: 'Data serialization', link: '/internals/data-serialization' },
+          { text: 'Reflection', link: '/internals/reflection' }
         ]
       },
       {
-        text: 'COMPARIZATIONS',
+        text: 'EXAMPLES',
         items: [
-          { text: 'Jitar vs. Meteor', link: '/comparizations/jitar-vs-meteor' },
-          { text: 'Jitar vs. tRPC', link: '/comparizations/jitar-vs-trpc' },
-          { text: 'Jitar vs. Service Weaver', link: '/comparizations/jitar-vs-service-weaver' },
-          { text: 'Jitar vs. Next.js', link: '/comparizations/jitar-vs-nextjs' }
+          { text: 'Concepts', link: '/examples/concepts' },
+          { text: 'Apps', link: '/examples/apps' }
         ]
       },
       {

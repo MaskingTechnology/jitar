@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Gateway
-    link: /fundamentals/runtime-services/gateway
+    text: Runtime services
+    link: /fundamentals/runtime-services
 
 next:
     text: Writing functions

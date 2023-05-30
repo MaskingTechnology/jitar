@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Dynamically switch version
-    link: /guides/dynamically-switch-version
+    text: Node monitoring
+    link: /monitor/nodes
 
 next:
     text: Add Jitar to an existing project

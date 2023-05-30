@@ -6,8 +6,8 @@ prev:
     link: /develop/application-structure
 
 next:
-    text: Creating segments
-    link: /develop/creating-segments
+    text: Data sharing
+    link: /develop/data-sharing
 
 ---
 
@@ -48,7 +48,7 @@ Functions need to be asynchronous in order to become distributable. The caller o
 
 ### Parameters
 
-Functions take any type of argument that can be [(de)serialized](./data-sharing.md#automatic-deserialization).
+Functions take any type of argument that can be [(de)serialized](./data-sharing.md#automatic-de-serialization).
 
 Rest parameters are supported.
 
@@ -63,12 +63,12 @@ async function sayHello({ name }: Person): Promise<string> { /* … */ }
 ```
 
 :::warning
-Nested parameter destructuring is on the [known limitations](../internals/data-serialization#known-issues) list and will be supported in future versions.
+Nested parameter destructuring is on the [known limitations](../internals/reflection#known-limitations) list and will be supported in future versions.
 :::
 
 ### Return value
 
-Functions can return any value that can be [(de)serialized](./data-sharing.md#automatic-deserialization).
+Functions can return any value that can be [(de)serialized](./data-sharing.md#automatic-de-serialization).
 
 ### Arrow functions
 

@@ -2,7 +2,7 @@
 layout: doc
 
 prev:
-    text: RPC API checks
+    text: RPC API
     link: /integrate/rpc-api
 
 next:
@@ -13,7 +13,7 @@ next:
 
 # Vite plugin
 
-For easy integration with popular frontend frameworks like React, Angular, Vue, etc. we provide a plugin for [Vite](https://vitejs.dev/).
+For easy integration with popular frontend frameworks like React, Angular, Vue, etc. we provide a plugin for [Vite](https://vitejs.dev/){target="_blank"}.
 
 Note: we also provide a creator app with templates for the most used frameworks. We recommend checking this out first before using this plugin. More information can be found in [our quick start](../introduction/quick-start).
 

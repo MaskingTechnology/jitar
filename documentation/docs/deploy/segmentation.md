@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Integration
-    link: /develop/Integration
+    text: Debugging
+    link: /develop/debugging
 
 next:
     text: Environments
@@ -102,7 +102,7 @@ To protect the access to public functions [authentication and authorization](../
 
 ### Versioning
 
-Jitar generates an endpoint for each public function. These endpoints are used for automating the internal communication, but can also be used by external applications with [our RPC API](../integration/rpc-api). To control the implementation of breaking changes in external applications, Jitar supports providing multiple versions of functions.
+Jitar generates an endpoint for each public function. These endpoints are used for automating the internal communication, but can also be used by external applications with [our RPC API](../integrate/rpc-api). To control the implementation of breaking changes in external applications, Jitar supports providing multiple versions of functions.
 
 For example, if we need to update our sayHello function to split the name parameter into a separate first and last parameter, we can implement it like this.
 

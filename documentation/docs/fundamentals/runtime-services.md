@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Overview
-    link: /fundamentals/overview
+    text: Building blocks
+    link: /fundamentals/building-blocks
 
 next:
     text: Application structure
@@ -170,7 +170,7 @@ The proxy acts as an intermediary between clients and a Jitar cluster. It's a si
 
 ### Request forwarding
 
-The single purpose of the proxy is to forward requests to the right service. RPC requests are forwarded to the [gateway] or [node](#node) service (depending on the configuration). Other requests are forwarded to the repository.
+The single purpose of the proxy is to forward requests to the right service. RPC requests are forwarded to the [gateway](#gateway) or [node](#node) service (depending on the configuration). Other requests are forwarded to the repository.
 
 ### Configuration properties
 

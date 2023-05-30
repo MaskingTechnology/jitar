@@ -108,7 +108,7 @@ GET http://localhost:3000/rpc/shared/sayHello?name=John&city=Rome HTTP/1.1
 ```
 
 :::warning
-Nested parameter destructuring is on the [known limitations list](../internals/data-serialization#known-limitations) and will be supported in future versions.
+Nested parameter destructuring is on the [known limitations list](../internals/reflection#known-limitations) and will be supported in future versions.
 :::
 
 ### Rest parameters
