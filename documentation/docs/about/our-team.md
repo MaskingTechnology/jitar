@@ -1,5 +1,6 @@
 ---
 layout: page
+title: Our team
 ---
 
 <script setup>
@@ -13,7 +14,7 @@ const members = [
   {
     avatar: 'https://github.com/petermasking.png',
     name: 'Peter van Vliet',
-    desc: 'An experienced full stack developer with many years of experience. He’s built many applications in many different languages, with many different frameworks.',
+    desc: 'Experienced full stack architect. Done with building APIs for the wrong reasons.',
     title: 'Creator',
     links: [
       { icon: 'github', link: 'https://github.com/petermasking' },
@@ -24,7 +25,7 @@ const members = [
     avatar: 'https://github.com/BasMasking.png',
     name: 'Bas Meeuwissen',
     title: 'Co-author',
-    desc: 'An experienced low-code developer with many years of experience on the pega platform. He’s worked for some of the larger corporations in the Netherlands and is used to building for scale.',
+    desc: 'Experienced low-code architect. Knows the true meaning of automation.',
     links: [
       { icon: 'github', link: 'https://github.com/BasMasking' },
       { icon: 'linkedin', link: 'https://www.linkedin.com/in/basmeeuwissen/' }
@@ -34,7 +35,7 @@ const members = [
     avatar: 'https://github.com/JohnatMasking.png',
     name: 'John Meeuwissen',
     title: 'QA',
-    desc: 'An experienced integration specialist..',
+    desc: 'Experienced integration specialist. Yoda like testing and breaking skills.',
     links: [
       { icon: 'github', link: 'https://github.com/JohnatMasking' },
       { icon: 'linkedin', link: 'https://www.linkedin.com/in/john-meeuwissen-0a880a9/' }

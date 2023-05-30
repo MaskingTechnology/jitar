@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Health
-    link: /monitor/health
+    text: Procedures
+    link: /monitor/procedures
 
 next:
     text: Creating a cluster
@@ -30,5 +30,5 @@ This returns a list of registered nodes. Per node the url and procedure names (F
             “procedure2”
         ]
     }
-}
+]
 ```

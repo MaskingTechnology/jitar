@@ -10,6 +10,7 @@ next:
 ---
 
 # Our goal
+
 Do you know where you will end at the start of a new application? We neither.
 
 Change is the only constant, and it haunts the software industry for decades. We think that applications should be able to change without making extensive modifications and regression testing. That is our goal.

@@ -6,9 +6,17 @@ prev:
     link: /examples/concepts
 
 next:
-    text: Build a full-stack app
-    link: /guides/build-a-full-stack-app
+    text: Get help
+    link: /community/get-help
 
 ---
 
 # App examples
+
+These examples show some demo applications.
+
+## Contact list
+
+We have built a contact application as full stack example. The app is built with React, MongoDB and Jitar (ReMoJi stack).
+
+[View in repository](https://github.com/MaskingTechnology/jitar/tree/main/examples/apps/contact-list){target="_blank"}
