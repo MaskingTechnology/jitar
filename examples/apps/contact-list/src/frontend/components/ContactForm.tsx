@@ -1,5 +1,5 @@
 
-import Contact from '../shared/contact/Contact';
+import Contact from '../../shared/contact/Contact';
 
 type ContactFormProps =
 {
