@@ -1,26 +1,34 @@
 
 # Changelog
 
-## 0.4.0 (July 1, 2023)
+## 0.4.0 (May 31, 2023)
+
+The 0.4.0 release is a major release that focussed on improving the internal structure for improved maintainability, testability, etc.. We also added some new features and fixed some bugs.
+
+The old packages are still available, but marked as deprecated. We recommend to migrate to the new package structure. See the [migration guide](migrations/migrate-from-0.3.x-to-0.4.0.md) for more information.
+
+Restructures:
+- \[[`b1dd13d`](https://github.com/MaskingTechnology/jitar/commit/b1dd13d)] `caching`: split from runtime and moved to the `@jitar/caching` package [petermasking](https://github.com/MaskingTechnology/jitar/pull/209)
+- \[[`045debe`](https://github.com/MaskingTechnology/jitar/commit/045debe)] `reflection`: split from runtime, added static code analysis and moved to the `@jitar/reflection` package [petermasking](https://github.com/MaskingTechnology/jitar/pull/161)
+- \[[`71f6bfb`](https://github.com/MaskingTechnology/jitar/commit/71f6bfb)] `serialization`: split from runtime, added extensibility and moved to the `@jitar/serialization` package [petermasking](https://github.com/MaskingTechnology/jitar/pull/193)
+- \[[`d50885c`](https://github.com/MaskingTechnology/jitar/commit/d50885c)] `runtime`: pulled out the caching, serialization and reflection and renamed package to `@jitar/runtime` [petermasking](https://github.com/MaskingTechnology/jitar/pull/216)
+- \[[`9cf7b85`](https://github.com/MaskingTechnology/jitar/commit/9cf7b85)] `server`: integrated the new packages and moved to the `@jitar/server-nodejs` package [petermasking](https://github.com/MaskingTechnology/jitar/pull/226)
+- \[[`a583b2e`](https://github.com/MaskingTechnology/jitar/commit/a583b2e)] `jitar`: integrated all new packages [petermasking](https://github.com/MaskingTechnology/jitar/pull/229)
+- \[[`88af5a7`](https://github.com/MaskingTechnology/jitar/commit/88af5a7)] `server`: removed experimental decorators  [basmasking](https://github.com/MaskingTechnology/jitar/pull/259)
+- \[[`bb23970`](https://github.com/MaskingTechnology/jitar/commit/bb23970)] `server`: removed OvernightJS  [basmasking](https://github.com/MaskingTechnology/jitar/pull/252)
 
 New features:
-- \[[`b1dd13d`](https://github.com/MaskingTechnology/jitar/commit/b1dd13d)] `caching`: created package [petermasking](https://github.com/MaskingTechnology/jitar/pull/209)
 - \[[`5deb4cf`](https://github.com/MaskingTechnology/jitar/commit/5deb4cf)] `creator`: created package [basmasking](https://github.com/MaskingTechnology/jitar/pull/212)
-- \[[`a583b2e`](https://github.com/MaskingTechnology/jitar/commit/a583b2e)] `jitar`: refactored jitar  [petermasking](https://github.com/MaskingTechnology/jitar/pull/229)
 - \[[`f399cca`](https://github.com/MaskingTechnology/jitar/commit/f399cca)] `reflection`: destructuring support [petermasking](https://github.com/MaskingTechnology/jitar/pull/211)
-- \[[`b4d0bdb`](https://github.com/MaskingTechnology/jitar/commit/b4d0bdb)] `runtime`: added support for node clients  [petermasking](https://github.com/MaskingTechnology/jitar/pull/294)
+- \[[`b4d0bdb`](https://github.com/MaskingTechnology/jitar/commit/b4d0bdb)] `runtime`: reversed middleware execution order  [petermasking](https://github.com/MaskingTechnology/jitar/pull/294)
 - \[[`e02c19a`](https://github.com/MaskingTechnology/jitar/commit/e02c19a)] `runtime`: added support for node clients  [petermasking](https://github.com/MaskingTechnology/jitar/pull/265)
 - \[[`ec31062`](https://github.com/MaskingTechnology/jitar/commit/ec31062)] `runtime`: removed the need of import maps  [petermasking](https://github.com/MaskingTechnology/jitar/pull/263)
 - \[[`48be7c9`](https://github.com/MaskingTechnology/jitar/commit/48be7c9)] `runtime`: added global runtime types  [petermasking](https://github.com/MaskingTechnology/jitar/pull/258)
 - \[[`7777b6d`](https://github.com/MaskingTechnology/jitar/commit/7777b6d)] `runtime`: import file without extension  [petermasking](https://github.com/MaskingTechnology/jitar/pull/254)
-- \[[`d50885c`](https://github.com/MaskingTechnology/jitar/commit/d50885c)] `runtime`: pulled out the caching and reflection [petermasking](https://github.com/MaskingTechnology/jitar/pull/216)
 - \[[`a1b6f1e`](https://github.com/MaskingTechnology/jitar/commit/a1b6f1e)] `serialization`: added url serializer  [basmasking](https://github.com/MaskingTechnology/jitar/pull/262)
 - \[[`38accc9`](https://github.com/MaskingTechnology/jitar/commit/38accc9)] `server`: changed default source location [basmasking](https://github.com/MaskingTechnology/jitar/pull/297)
 - \[[`dcca01d`](https://github.com/MaskingTechnology/jitar/commit/dcca01d)] `server`: the --config flag is now mandatory when staring a Jitar instance  [basmasking](https://github.com/MaskingTechnology/jitar/pull/288)
 - \[[`050d1a0`](https://github.com/MaskingTechnology/jitar/commit/050d1a0)] `server`: default cache location to .jitar folder  [basmasking](https://github.com/MaskingTechnology/jitar/pull/281)
-- \[[`88af5a7`](https://github.com/MaskingTechnology/jitar/commit/88af5a7)] `server`: removed experimental decorators  [basmasking](https://github.com/MaskingTechnology/jitar/pull/259)
-- \[[`bb23970`](https://github.com/MaskingTechnology/jitar/commit/bb23970)] `server`: removed OvernightJS  [basmasking](https://github.com/MaskingTechnology/jitar/pull/252)
-- \[[`9cf7b85`](https://github.com/MaskingTechnology/jitar/commit/9cf7b85)] `server`: integrated the new packages [petermasking](https://github.com/MaskingTechnology/jitar/pull/226)
 
 Bugs:
 - \[[`3b171ba`](https://github.com/MaskingTechnology/jitar/commit/3b171ba)] `runtime`: updated the linter configuration [petermasking](https://github.com/MaskingTechnology/jitar/pull/251)
