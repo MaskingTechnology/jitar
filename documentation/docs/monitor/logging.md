@@ -41,7 +41,7 @@ The info level will output all info, warn and error messages. The info level con
 * Client registration
 * Module retrieval
 * Node registration / retrieval
-* ‘Got procedure names’
+* Registered procedure names
 * Forward message
 * RPC registration / execution
 

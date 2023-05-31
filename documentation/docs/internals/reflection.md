@@ -6,7 +6,7 @@ prev:
     link: /internals/data-serialization
 
 next:
-    text: Examples
+    text: Concept examples
     link: /examples/concepts
 
 ---

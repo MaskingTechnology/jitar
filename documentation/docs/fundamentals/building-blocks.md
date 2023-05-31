@@ -37,9 +37,9 @@ If you're already familiar with writing async functions, this shouldn't be anyth
 
 To ensure your application can be broken into segments and keeps working after distribution, the following rules apply to segmented functions:
 
-1. Need to be async (require the async keyword);
-1. Must be exported (named or as default);
-1. Must be stateless / pure (don't depend on global values);
+1. Need to be async (require the async keyword)
+1. Must be exported (named or as default)
+1. Must be stateless / pure (don't depend on global values)
 
 As long as you follow these rules, all will be fine. One thing to keep in mind is that arrow functions are supported, but can only be safely used in a non-distributed context. Meaning that the function does not call another function that might be in another segment. Besides that, we don't like to mix styles and recommend writing normal functions in any case.
 

@@ -14,4 +14,4 @@ Jitar is still in early development. Not all features are (fully) developed yet,
 :::
 
 ## We love feedback!
-Jitar and its documentation, examples and website are a work in progress. We are constantly improving them. If you have any feedback, please let us know by [creating an issue](https://github.com/MaskingTechnology/jitar/issues), or [starting a discussion](https://github.com/MaskingTechnology/jitar/discussions).
+Jitar and its documentation, examples and website are a work in progress. We are constantly improving them. If you have any feedback, please let us know by [creating an issue](https://github.com/MaskingTechnology/jitar/issues/new), or [starting a discussion](https://github.com/MaskingTechnology/jitar/discussions).
