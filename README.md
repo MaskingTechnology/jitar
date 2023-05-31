@@ -2,7 +2,6 @@
 
 <img width="1102" alt="explainer" src="https://github.com/MaskingTechnology/jitar/assets/108156553/2129b4cc-a32c-497e-b69d-d5670a66d7aa">
 
-
 Welcome to [Jitar](https://jitar.dev), a runtime that automates all end-to-end communication for your JavaScript and TypeScript applications. You can call your server functions directly, Jitar takes care of the rest.
 
 In contrast to any framework-like solution, there is no trace of Jitar in the application code. Jitar breaks up your application as configured on the go, so you can build your application as a monolith and deploy it as microservices.

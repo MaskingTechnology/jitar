@@ -62,13 +62,13 @@ npm run gateway
 **Data segment** (terminal 3)
 
 ```bash
-npm run data
+npm run node-data
 ```
 
 **Process segment** (terminal 4)
 
 ```bash
-npm run process
+npm run node-process
 ```
 
 The ``requests.http`` file contains example requests to call the procedures.

@@ -1,0 +1,8 @@
+@import url(https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap);
+
+:root
+{
+    --vp-font-family-base: Poppins, sans-serif;
+    --vp-font-family-mono: courier-new, monospace;
+}
+
