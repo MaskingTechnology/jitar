@@ -1,6 +1,8 @@
 
 # Jitar - Distributed runtime
 
+![Jitar logo](https://jitar.dev/images/icon.png)
+
 Welcome to [Jitar](https://jitar.dev), a full-stack JavaScript runtime for small to large web applications. It lets you to build monolithic applications and run them spread out over multiple servers and web browsers. Jitar takes care of the inner communication, so you don't have to build any API.
 
 Jitar is an abbreviation of **just-in-time architecture**, a flexible architecture style for building future-proof applications. Its intent is to close the gap between front- and back-end and provide a more cost efficient and flexible alternative to the microservice and serverless architecture (function as a service) types. With Jitar, applications can start as a monolith and be broken into smaller distributable pieces. It reduces the need for up-front architectural design and simplifies orchestration and deployment.

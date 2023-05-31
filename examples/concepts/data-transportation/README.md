@@ -67,13 +67,13 @@ npm run gateway
 **Account segment** (terminal 3)
 
 ```bash
-npm run account
+npm run node-account
 ```
 
 **Helpdesk segment** (terminal 4)
 
 ```bash
-npm run helpdesk
+npm run node-helpdesk
 ```
 
 The ``requests.http`` file contains example request to call the procedures. Note that the Account object is created on the *account* segment.
