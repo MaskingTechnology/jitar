@@ -65,7 +65,7 @@ function App() { /* … */ }
 
 Jitar will automatically provide a remote implementation if the function is not locally available.
 
-::: info
+::: info ADDITIONAL INFO
 Besides functions there are more useful building blocks. You can find out more in the [FUNDAMENTALS section](../fundamentals/building-blocks.md).
 :::
 
@@ -86,7 +86,7 @@ Segment configurations work like the JavaScript module system. In this case we e
 
 *Try yourself:* remove the function from the configuration and restart the application. Note that the client doesn't make a call to the server anymore.
 
-::: info
+::: info ADDITIONAL INFO
 More detailed information about segments can be found in the [FUNDAMENtALS section](../fundamentals/building-blocks.md#segments).
 :::
 
@@ -131,7 +131,7 @@ With everything in place we can run the application with the following command.
 node --experimental-network-imports dist/jitar.js --config=services/standalone.json
 ```
 
-:::info
+::: info NOTE
 Node needs the `--experimental-network-imports` flag in order to import functions and other components from a remote location.
 :::
 

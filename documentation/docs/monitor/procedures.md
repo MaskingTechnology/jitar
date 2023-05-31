@@ -21,7 +21,7 @@ GET http://proxy.example.com:3000/procedures HTTP/1.1
 
 The API returns a list of procedure names (FQNs) that are registered with this service.
 
-```json
+``` json
 [
     “procedure1”,
     “procedure2”

@@ -64,6 +64,6 @@ It's only useful to add middleware to a node, gateway, proxy and standalone serv
 
 It's likely that the different services require different middleware. For example, you might want to add authentication middleware to the gateway and authorization middleware to the node. In this case each service needs its own starter script containing their specific middleware.
 
-::: info 
+::: warning KEEP IN MIND 
 Middleware is executed in the order of registration. This means that the middleware that is added first is called first.
 :::

@@ -86,7 +86,7 @@ A node loads application segments and runs its functions on request.
 
 A node can load one or multiple segments, making it very easy to combine application pieces that have to be scaled yet. This strategy can save you a lot on hosting costs!
 
-::: tip
+::: warning KEEP IN MIND
 Like any other service, a node runs on the server. Keep this in mind when creating and selecting the segments.
 :::
 

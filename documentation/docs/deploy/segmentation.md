@@ -32,7 +32,7 @@ Jitar uses the configuration filename for identifying segments. There is no mand
 
 Segments are named, and their names are derived from the filename. Everything that is in front of the `.segment.json` extension is used as the name. So for the filename `default.segment.json` the segment is named 'default'.
 
-::: info
+::: info NOTE
 Although there is no mandatory location for these files, we always place them in a segment folder in the root directory of the project. We've done this for all our projects and examples and made finding them very easy.
 :::
 
@@ -58,7 +58,7 @@ A segment file works like the JavaScript module system. It defines what to impor
 
 A segment can contain zero to an unlimited number of modules. For each module needs to be configured what to import.
 
-::: warning
+::: warning IMPORTANT
 All imported functions must be async. Jitar will throw a `FunctionNotAsync` error if you try to import a non-async function.
 :::
 
@@ -96,7 +96,7 @@ Segments enable deploying application pieces on different servers. This requires
 
 By default a function has private access. This means that the function can only be called within its own segment, and can not be called from outside. Functions that need to be accessible from outside need to have the public access level.
 
-::: tip
+::: tip PRO TIP
 To protect the access to public functions [authentication and authorization](../develop/security.md#authentication-and-authorization) needs be applied.
 :::
 
@@ -131,7 +131,7 @@ Now we have a separate module file per version that can be registered in the seg
 
 Jitar groups functions by name and registers them by version. In this case both functions are available for use and are called with a specific version.
 
-::: warning
+::: warning IMPORTANT
 When registering the same version multiple times, Jitar will execute the first registered function.
 :::
 

@@ -15,7 +15,7 @@ next:
 
 Jitar makes sharing data between segments easy. But there is one thing to take into account. You'll learn all about it in this section.
 
-::: info 
+::: info NOTE
 Most of what you're learning here is not Jitar specific and applies to building distributed systems in general.
 :::
 
@@ -133,13 +133,13 @@ export class Person
 
 Note that the `#` makes the fields private. Private fields are not discoverable, readable and writable from outside the class scope.
 
-::: warning 
+::: warning IMPORTANT
 Do not use TypeScript's private keyword, but always use `#` instead.
 :::
 
 Jitar understands this construction and will use the getter functions for reading the value, and the constructor for creating the instance. If a field can't be set using the constructor it tries to find a setter function in case the field is private.
 
-::: warning
+::: warning IMPORTANT
 The constructor parameter names, and the getter / setter function names must match the field names. Otherwise Jitar won't be able to map the values.
 :::
 

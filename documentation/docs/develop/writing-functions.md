@@ -62,7 +62,7 @@ And parameter destructuring is supported.
 async function sayHello({ name }: Person): Promise<string> { /* … */ }
 ```
 
-:::warning
+::: warning IMPORTANT
 Nested parameter destructuring is on the [known limitations](../internals/reflection#known-limitations) list and will be supported in future versions.
 :::
 
@@ -106,7 +106,7 @@ Because the `sayHello` function is `async` we need to `await` it here.
 
 In case the `sayHello` function is placed on another server, the example file will import a remote implementation of the function that is created by Jitar. This is why we need to make sure our function is `async`.
 
-::: info
+::: info NOTE
 Imports do not require an extension. Jitar makes sure that all your imports work at runtime.
 :::
 

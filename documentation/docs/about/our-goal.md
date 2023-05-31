@@ -2,10 +2,12 @@
 layout: doc
 
 prev:
-    false
+    text: Contribute
+    link: /community/contribute
 
 next:
-    false
+    text: Our team
+    link: /about/our-team
 
 ---
 

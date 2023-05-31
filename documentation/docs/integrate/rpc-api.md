@@ -107,7 +107,7 @@ In the end, the function only has two parameters: name and city. When making a R
 GET http://localhost:3000/rpc/shared/sayHello?name=John&city=Rome HTTP/1.1
 ```
 
-:::warning
+::: warning IMPORTANT
 Nested parameter destructuring is on the [known limitations list](../internals/reflection#known-limitations) and will be supported in future versions.
 :::
 
@@ -292,7 +292,7 @@ export default PersonNotFound extends NotFound
 }
 ```
 
-:::warning
+::: warning KEEP IN MIND
 Using Jitar errors in your application will lock you in. Therefore we recommend creating your own set of errors based on the Jitar errors and use these in your application. If you want to migrate away from Jitar you only need to update your errors.
 :::
 
