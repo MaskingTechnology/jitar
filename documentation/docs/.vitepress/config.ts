@@ -5,6 +5,10 @@ export default defineConfig({
   lang: 'en-US',
   title: "Jitar",
   description: "Documentation",
+  ignoreDeadLinks: [
+    // ignore all localhost links
+    /^https?:\/\/localhost/
+  ],
   head: [
     ['link', { rel: 'icon', type: 'image/png', href: '/icon.png' }]
   ],
