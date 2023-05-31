@@ -189,12 +189,12 @@ async function execute()
         case 'yarn':
             console.log('  yarn');
             console.log('  yarn build');
-            console.log('  yarn jitar');
+            console.log('  yarn standalone');
             break;
         default:
             console.log(`  ${pkgManager} install`);
             console.log(`  ${pkgManager} run build`);
-            console.log(`  ${pkgManager} run jitar`);
+            console.log(`  ${pkgManager} run standalone`);
             break;
     }
 
