@@ -16,7 +16,7 @@
     "build": "tsc -p tsconfig.json",
     "lint": "eslint . --ext .ts",
     "clean": "rm -rf dist build",
-    "release": "npm run clean && npm run build && npm publish"
+    "release": "npm run clean && npm run build && npm publish --access public"
   },
   "dependencies": {
     "@jitar/reflection": "^0.4.0"

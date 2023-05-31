@@ -15,7 +15,7 @@
         "lint": "eslint . --ext .ts",
         "build": "tsc -p tsconfig.json",
         "clean": "rm -rf dist build",
-        "release": "npm run clean && npm run build && npm publish"
+        "release": "npm run clean && npm run build && npm publish --access public"
     },
     "dependencies": {
         "@jitar/caching": "^0.4.0",
