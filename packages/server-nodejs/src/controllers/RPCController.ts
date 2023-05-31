@@ -168,7 +168,7 @@ export default class RPCController
 
             const result = await this.#runtime.handle(fqn, version, argsMap, headers);
 
-            this.#logger.info(`Ran procedure -> ${fqn} (${version.toString()})`);
+            this.#logger.info(`Ran procedure -> ${fqn} (v${version.toString()})`);
 
             this.#setResponseHeaders(response, headers);
 
@@ -182,7 +182,7 @@ export default class RPCController
             const message = error instanceof Error ? error.message : String(error);
             const errorData = serialize ? error : message;
 
-            this.#logger.error(`Failed to run procedure -> ${fqn} (${version.toString()}) | ${message}`);
+            this.#logger.error(`Failed to run procedure -> ${fqn} (v${version.toString()}) | ${message}`);
 
             return this.#createErrorResponse(error, errorData, response, serialize);
         }
@@ -209,10 +209,11 @@ export default class RPCController
     {
         const content = await this.#createResponseContent(result, serialize);
         const contentType = this.#createResponseContentType(content);
+        const responseContent = contentType === 'text/plain' ? String(content) : content;
 
         response.setHeader('Content-Type', contentType);
 
-        return response.status(200).send(content);
+        return response.status(200).send(responseContent);
     }
 
     async #createErrorResponse(error: unknown, errorData: unknown, response: Response, serialize: boolean): Promise<Response>

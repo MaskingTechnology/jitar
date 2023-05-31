@@ -33,14 +33,20 @@ export const proxySchema = z
 
 export default class ProxyConfiguration
 {
-    node?: string;
-    gateway?: string;
-    repository: string;
+    #node?: string;
+    #gateway?: string;
+    #repository: string;
 
     constructor(node: string | undefined, gateway: string | undefined, repository: string)
     {
-        this.node = node;
-        this.gateway = gateway;
-        this.repository = repository;
+        this.#node = node;
+        this.#gateway = gateway;
+        this.#repository = repository;
     }
+
+    get node() { return this.#node; }
+
+    get gateway() { return this.#gateway; }
+
+    get repository() { return this.#repository; }
 }

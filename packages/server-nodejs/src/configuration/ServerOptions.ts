@@ -5,18 +5,22 @@ import { LogLevel } from '../utils/LogBuilder.js';
 export const serverOptionsSchema = z
     .object({
         loglevel: z.nativeEnum(LogLevel).optional(),
-        config: z.string().endsWith('.json').optional()
+        config: z.string().endsWith('.json')
     })
-    .transform((value) => new ServerOptions(value.loglevel, value.config));
+    .transform((value) => new ServerOptions(value.config, value.loglevel));
 
 export default class ServerOptions
 {
-    loglevel = 'info';
-    config = 'config.json';
+    #config: string;
+    #loglevel: string;
 
-    constructor(loglevel = 'info', config = 'config.json')
+    constructor(config: string, loglevel = 'info')
     {
-        this.loglevel = loglevel;
-        this.config = config;
+        this.#config = config;
+        this.#loglevel = loglevel;
     }
+
+    get config() { return this.#config; }
+
+    get loglevel() { return this.#loglevel; }
 }

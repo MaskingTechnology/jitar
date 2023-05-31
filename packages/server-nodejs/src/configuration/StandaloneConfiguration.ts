@@ -14,18 +14,28 @@ export const standaloneSchema = z
 
 export default class StandaloneConfiguration
 {
-    source?: string;
-    cache?: string;
-    index?: string;
-    segments?: string[];
-    assets?: string[];
+    #source?: string;
+    #cache?: string;
+    #index?: string;
+    #segments?: string[];
+    #assets?: string[];
 
     constructor(source?: string, cache?: string, index?: string, segments?: string[], assets?: string[])
     {
-        this.source = source;
-        this.cache = cache;
-        this.index = index;
-        this.segments = segments;
-        this.assets = assets;
+        this.#source = source;
+        this.#cache = cache;
+        this.#index = index;
+        this.#segments = segments;
+        this.#assets = assets;
     }
+
+    get source() { return this.#source; }
+
+    get cache() { return this.#cache; }
+
+    get index() { return this.#index; }
+
+    get segments() { return this.#segments; }
+
+    get assets() { return this.#assets; }
 }
