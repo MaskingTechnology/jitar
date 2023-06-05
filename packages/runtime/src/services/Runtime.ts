@@ -36,13 +36,13 @@ export default abstract class Runtime
 
     async getHealth(): Promise<Map<string, boolean>>
     {
-        const keys = this.#healthChecks.keys();
-        const promises: Promise<[string, boolean]>[] = [];
+        const promises: Promise<{ name: string, isHealthy: boolean }>[] = [];
 
-        for (const [name, healthCheck] of this.#healthChecks.entries())
+        for (const [name, healthCheck] of this.#healthChecks)
         {
             const promise = healthCheck.isHealthy()
-                .then(result => [name, result] as [string, boolean]);
+                .then(result => ({ name, isHealthy: result }))
+                .catch(() => ({ name, isHealthy: false }));
 
             promises.push(promise);
         }
@@ -52,23 +52,10 @@ export default abstract class Runtime
         return Promise.allSettled(promises)
             .then(results => results.forEach(result =>
             {
-                if (result.status === 'fulfilled')
-                {
-                    const [name, value] = result.value;
-                    healthChecks.set(name, value);
-                }
-            }
-            ))
-            .then(() => 
-            {
-                for (const key of keys)
-                {
-                    if (!healthChecks.has(key))
-                    {
-                        healthChecks.set(key, false);
-                    }
-                }
-            })
+                result.status === 'fulfilled'
+                    ? healthChecks.set(result.value.name, result.value.isHealthy)
+                    : healthChecks.set(result.reason.name, false);
+            }))
             .then(() => healthChecks);
     }
 }
