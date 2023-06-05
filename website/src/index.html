@@ -62,7 +62,7 @@
                     </div>
                     <div class="slogan">
                         <span class="colorize">Automate</span> all <span class="underline">end-to-end</span> communication.<br />
-                        Type-safe, configurable and extendable.
+                        Type-safe and configurable, without lock-in.
                     </div>
                     <div class="actions">
                         <a href="https://docs.jitar.dev/introduction/quick-start.html" target="_blank" class="action action-primary">Get started</a>
@@ -125,12 +125,12 @@
                         <div class="card">
                             <img src="images/benefits/configuration-only.svg" alt="Configuration only">
                             <h3>Configuration only</h3>
-                            <p>Keeping the code clean, simple and focussed.</p>
+                            <p>Allows for moving functions without refactoring.</p>
                         </div>
                         <div class="card">
-                            <img src="images/benefits/intellisense.svg" alt="E2E Intellisense">
-                            <h3>E2E Intellisense</h3>
-                            <p>Speeds up developing full-stack apps.</p>
+                            <img src="images/benefits/no-lock-in.svg" alt="No vendor lock-in">
+                            <h3>No vendor lock-in</h3>
+                            <p>Makes applications more future-proof..</p>
                         </div>
                         <div class="card">
                             <img src="images/benefits/platform-agnostic.svg" alt="Platform agnostic">
@@ -164,7 +164,7 @@
                                 <div class="window">
                                     <div class="title">Terminal</div>
                                     <code class="content">
-                                        npm create jitar@latest -- --template react
+                                        npm create jitar@latest
                                     </code>
                                 </div>
                             </div>
@@ -176,22 +176,22 @@
                             <div class="description">
                                 <h3>Add your functions</h3>
                                 <p>Write functions and export them like you are used to. Just make sure they are async.</p>
-                                <p>Import and call your functions like they're on the same side.</p>
-                                <p><strong>Note</strong> that all types are checked and autocomplete is fully available.</p>
+                                <p>Import and call your functions like they're on the same end.</p>
+                                <p><strong>Note</strong> that type checking and autocomplete are fully available.</p>
                             </div>
                             <div class="example">
                                 <div class="window">
-                                    <div class="title">src/shared/sum.ts</div>
+                                    <div class="title">src/shared/sayHello.ts</div>
                                     <code class="content">
-                                        <span class="keyword">async</span> <span class="keyword">function</span> sum(...numbers: <span class="keyword">number</span>[]) { <span class="comment">/* … */</span> }<br /><br />
-                                        <span class="keyword">export</span> <span class="keyword">default</span> sum;
+                                        <span class="keyword">async</span> <span class="keyword">function</span> sayHello(name: <span class="keyword">string</span>) { <span class="comment">/* … */</span> }<br /><br />
+                                        <span class="keyword">export</span> <span class="keyword">default</span> sayHello;
                                     </code>
                                 </div>
                                 <div class="window">
-                                    <div class="title">src/shared/calculator.ts</div>
+                                    <div class="title">src/shared/greeter.ts</div>
                                     <code class="content">
-                                        <span class="keyword">import</span> sum <span class="keyword">from</span> <span class="string">'./sum'</span>;<br /><br />
-                                        <span class="keyword">const</span> result = <span class="keyword">await</span> sum(2, 3);
+                                        <span class="keyword">import</span> sayHello <span class="keyword">from</span> <span class="string">'./sayHello'</span>;<br /><br />
+                                        <span class="keyword">const</span> message = <span class="keyword">await</span> sayHello(<span class="string">'Jitar'</span>);
                                     </code>
                                 </div>
                             </div>
@@ -203,14 +203,14 @@
                             <div class="description">
                                 <h3>Configure what runs on the server</h3>
                                 <p>Add the exported functions to a server segment configuration file.</p>
-                                <p><strong>Don't forget</strong> to make them public, otherwise they can't be accessed!</p>
+                                <p>They need to be made public, otherwise the access is protected.</p>
                             </div>
                             <div class="example">
                                 <div class="window">
                                     <div class="title">server.segment.json</div>
                                     <code class="content">
                                         {<br />
-                                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">"./shared/sum"</span>: {<br />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">"./shared/sayHello"</span>: {<br />
                                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">"default"</span>: { <span class="keyword">"access"</span>: <span class="string">"public"</span> }<br />
                                         &nbsp;&nbsp;&nbsp;&nbsp;}<br />
                                         }                                        
@@ -224,8 +224,8 @@
                             </div>
                             <div class="description">
                                 <h3>Run your application</h3>
-                                <p>Jitar will create an RPC endpoint for each public function that will be used by any client that calls a function automatically.</p>
-                                <p>You can also call the function yourself with any HTTP client using the RPC API. Easy, right?</p>
+                                <p>Jitar creates an RPC endpoint for every public function. Clients will automatically start using them.</p>
+                                <p>You can also our RPC API to call your functions from external application and HTTP clients. Easy, right?</p>
                             </div>
                             <div class="example">
                                 <div class="window">
@@ -300,6 +300,10 @@
                             <a href="https://docs.jitar.dev" target="_blank">Read the docs</a>
                         </div>
                     </div>
+                </section>
+
+                <section id="help">
+
                 </section>
 
             </main>
