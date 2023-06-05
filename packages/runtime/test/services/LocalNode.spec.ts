@@ -12,9 +12,9 @@ describe('services/LocalNode', () =>
 {
     describe('.isHealthy()', () =>
     {
-        it('should be healthy', () =>
+        it('should be healthy', async () =>
         {
-            const healthy = node.isHealthy();
+            const healthy = await node.isHealthy();
 
             expect(healthy).toBeTruthy();
         });
