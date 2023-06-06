@@ -30,8 +30,8 @@
     border: 1px solid var(--swatch-color-white);
     border-top: 0.5em solid var(--swatch-color-red-3);
     display: flex;
-    gap: 2em;
     flex-direction: column;
+    gap: 2em;
     padding: 2.0em 1.0em;
     text-align: center;
 }
@@ -67,27 +67,12 @@
     margin: 0;
 }
 
-.card a
+.card .button
 {
-    background-color: transparent;
-    border: 1px solid var(--swatch-color-gray-3);
-    border-radius: 2em;
-    color: var(--swatch-color-red-3);
-    display: inline-block;
     flex-grow: 0;
     flex-shrink: 0;
-    font-size: 0.9em;
-    font-weight: var(--font-weight-light);
     padding: 0.5em 0;
-    text-align: center;
     width: 12em;
-}
-
-.card a:hover
-{
-    background-color: var(--swatch-color-gray-1);
-    border: 1px solid var(--swatch-color-gray-3);
-    color: var(--swatch-color-red-3);
 }
 
 .card.inactive
@@ -104,20 +89,6 @@
 .cards-vertical .card.inactive
 {
     border-top: 0.5em solid var(--swatch-color-gray-3);
-}
-
-.card.inactive a
-{
-    background-color: var(--swatch-color-red-3);
-    border: 1px solid var(--swatch-color-red-3);
-    color: var(--swatch-color-white);
-}
-
-.card.inactive a:hover
-{
-    background-color: var(--swatch-color-red-2);
-    border: 1px solid var(--swatch-color-red-2);
-    color: var(--swatch-color-white);
 }
 
 @media (min-width: 1200px)

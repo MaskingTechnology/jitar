@@ -1,9 +1,11 @@
 @import url('css/vars.css');
 @import url('css/layout.css');
 
+@import url('css/components/buttons.css');
 @import url('css/components/cards.css');
 @import url('css/components/code.css');
 @import url('css/components/explainer.css');
+@import url('css/components/grow.css');
 @import url('css/components/hero.css');
 @import url('css/components/nav.css');
 @import url('css/components/roadmap.css');
