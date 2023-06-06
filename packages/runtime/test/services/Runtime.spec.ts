@@ -9,7 +9,7 @@ const errorRuntime = RUNTIMES.ERROR;
 
 describe('services/Runtime', () =>
 {
-    describe('.isHealthy', () =>
+    describe('.isHealthy()', () =>
     {
         it('is unhealth with exception', async () =>
         {
@@ -33,7 +33,7 @@ describe('services/Runtime', () =>
         });
     });
 
-    describe('.getHealth', () =>
+    describe('.getHealth()', () =>
     {
         it('is unhealth with exception', async () =>
         {
