@@ -33,7 +33,7 @@ export default class DatabaseHealthCheck implements HealthCheck
 } 
 ```
 
-To prevent the health checks from blocking the monitoring, each health check should be non-blocking and cannot throw an error yet.
+To prevent the health checks from blocking the monitoring, each health check should be non-blocking, i.e. handle timeouts themselves.
 
 ## Adding health checks
 
