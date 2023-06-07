@@ -16,11 +16,19 @@ badRuntime.addHealthCheck('bad', HEALTH_CHECKS.BAD);
 const errorRuntime = new TestRuntime();
 errorRuntime.addHealthCheck('error', HEALTH_CHECKS.ERROR);
 
+const timeoutRuntime = new TestRuntime();
+timeoutRuntime.addHealthCheck('timedOut', HEALTH_CHECKS.TIMEDOUT);
+
+const inTimeRuntime = new TestRuntime();
+inTimeRuntime.addHealthCheck('inTime', HEALTH_CHECKS.INTIME);
+
 const RUNTIMES =
 {
     GOOD: goodRuntime,
     BAD: badRuntime,
-    ERROR: errorRuntime
+    ERROR: errorRuntime,
+    TIMEDOUT: timeoutRuntime,
+    INTIME: inTimeRuntime
 };
 
 export { RUNTIMES };

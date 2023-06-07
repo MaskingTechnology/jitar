@@ -16,7 +16,7 @@ export default class DatabaseHealthCheck implements HealthCheck
 {
     async isHealthy(): Promise<boolean>
     {
-        await delay(200);
+        await delay(10000);
 
         return true;
     }

@@ -24,7 +24,7 @@ export default abstract class Runtime
 
         for (const healthCheck of this.#healthChecks.values())
         {
-            const promise = healthCheck.isHealthy();
+            const promise = this.#executeHealthCheck(healthCheck);
 
             promises.push(promise);
         }
@@ -40,7 +40,7 @@ export default abstract class Runtime
 
         for (const [name, healthCheck] of this.#healthChecks)
         {
-            const promise = healthCheck.isHealthy()
+            const promise = this.#executeHealthCheck(healthCheck)
                 .then(result => ({ name, isHealthy: result }))
                 .catch(() => ({ name, isHealthy: false }));
 
@@ -57,5 +57,23 @@ export default abstract class Runtime
                     : healthChecks.set(result.reason.name, false);
             }))
             .then(() => healthChecks);
+    }
+
+    async #executeHealthCheck(healthCheck: HealthCheck): Promise<boolean>
+    {
+        const health = healthCheck.isHealthy();
+        const milliseconds = healthCheck.timeout;
+
+        if (milliseconds === undefined)
+        {
+            return health;
+        }
+
+        const timeout = new Promise((resolve) => 
+        {
+            setTimeout(resolve, milliseconds);
+        }).then(() => false);
+
+        return Promise.race([timeout, health]);
     }
 }
