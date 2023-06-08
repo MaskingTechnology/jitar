@@ -75,7 +75,7 @@ describe('services/Runtime', () =>
             expect(result).toBeTruthy();
         });
 
-        it('is unhealthy with timedOut health check', async () =>
+        it('is unhealthy with timed out health check', async () =>
         {
             const health = await timeoutRuntime.getHealth();
             const result = health.get('timedOut');

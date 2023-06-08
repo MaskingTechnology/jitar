@@ -14,15 +14,11 @@ import { HealthCheck } from 'jitar';
 
 export default class DatabaseHealthCheck implements HealthCheck
 {
+    get timeout() { return undefined; }
+
     async isHealthy(): Promise<boolean>
     {
-        await delay(200);
-
+        // Check database connection
         return true;
     }
-}
-
-function delay(ms: number)
-{
-    return new Promise(resolve => setTimeout(resolve, ms));
 }
