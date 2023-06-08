@@ -51,7 +51,7 @@ describe('services/Runtime', () =>
 
     describe('.getHealth()', () =>
     {
-        it('should get false state when error occurs', async () =>
+        it('should get a false state when an error occurs', async () =>
         {
             const health = await errorRuntime.getHealth();
             const result = health.get('error');
