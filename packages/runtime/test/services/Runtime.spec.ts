@@ -13,7 +13,7 @@ describe('services/Runtime', () =>
 {
     describe('.isHealthy()', () =>
     {
-        it('should be unhealthy when error occurs', async () =>
+        it('should be unhealthy when an error occurs', async () =>
         {
             const isHealthy = await errorRuntime.isHealthy();
 
