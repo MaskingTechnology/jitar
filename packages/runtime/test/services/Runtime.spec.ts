@@ -67,7 +67,7 @@ describe('services/Runtime', () =>
             expect(result).toBeFalsy();
         });
 
-        it('should get true state with a good health check', async () =>
+        it('should get a true state with a good health check', async () =>
         {
             const health = await goodRuntime.getHealth();
             const result = health.get('good');
