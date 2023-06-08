@@ -6,7 +6,7 @@ import { RUNTIMES } from '../_fixtures/services/Runtime.fixture';
 const goodRuntime = RUNTIMES.GOOD;
 const badRuntime = RUNTIMES.BAD;
 const errorRuntime = RUNTIMES.ERROR;
-const timeoutRuntime = RUNTIMES.TIMEDOUT;
+const timedOutRuntime = RUNTIMES.TIMEDOUT;
 const inTimeRuntime = RUNTIMES.INTIME;
 
 describe('services/Runtime', () =>
@@ -34,14 +34,14 @@ describe('services/Runtime', () =>
             expect(isHealthy).toBeTruthy();
         });
 
-        it('is unhealthy with timeout health check', async () =>
+        it('is unhealthy with timed out health check', async () =>
         {
-            const isHealthy = await timeoutRuntime.isHealthy();
+            const isHealthy = await timedOutRuntime.isHealthy();
 
             expect(isHealthy).toBeFalsy();
         });
 
-        it('is healthy with inTime health check', async () =>
+        it('is healthy with in time health check', async () =>
         {
             const isHealthy = await inTimeRuntime.isHealthy();
 
@@ -77,7 +77,7 @@ describe('services/Runtime', () =>
 
         it('is unhealthy with timed out health check', async () =>
         {
-            const health = await timeoutRuntime.getHealth();
+            const health = await timedOutRuntime.getHealth();
             const result = health.get('timedOut');
 
             expect(result).toBeFalsy();
