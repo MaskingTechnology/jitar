@@ -13,35 +13,35 @@ describe('services/Runtime', () =>
 {
     describe('.isHealthy()', () =>
     {
-        it('is unhealth with exception', async () =>
+        it('should be unhealthy when error occurs', async () =>
         {
             const isHealthy = await errorRuntime.isHealthy();
 
             expect(isHealthy).toBeFalsy();
         });
 
-        it('is unhealth with bad health check', async () =>
+        it('should be unhealthy with a bad health check', async () =>
         {
             const isHealthy = await badRuntime.isHealthy();
 
             expect(isHealthy).toBeFalsy();
         });
 
-        it('is healthy with good health check', async () =>
+        it('should be healthy with a good health check', async () =>
         {
             const isHealthy = await goodRuntime.isHealthy();
 
             expect(isHealthy).toBeTruthy();
         });
 
-        it('is unhealthy with timed out health check', async () =>
+        it('should be unhealthy with a timed out health check', async () =>
         {
             const isHealthy = await timedOutRuntime.isHealthy();
 
             expect(isHealthy).toBeFalsy();
         });
 
-        it('is healthy with in time health check', async () =>
+        it('should be healthy with an in time health check', async () =>
         {
             const isHealthy = await inTimeRuntime.isHealthy();
 
@@ -51,7 +51,7 @@ describe('services/Runtime', () =>
 
     describe('.getHealth()', () =>
     {
-        it('is unhealth with exception', async () =>
+        it('should get false state when error occurs', async () =>
         {
             const health = await errorRuntime.getHealth();
             const result = health.get('error');
@@ -59,7 +59,7 @@ describe('services/Runtime', () =>
             expect(result).toBeFalsy();
         });
 
-        it('is unhealth with bad health check', async () =>
+        it('should get false state with a bad health check', async () =>
         {
             const health = await badRuntime.getHealth();
             const result = health.get('bad');
@@ -67,7 +67,7 @@ describe('services/Runtime', () =>
             expect(result).toBeFalsy();
         });
 
-        it('is healthy with good health check', async () =>
+        it('should get true state with a good health check', async () =>
         {
             const health = await goodRuntime.getHealth();
             const result = health.get('good');
@@ -75,7 +75,7 @@ describe('services/Runtime', () =>
             expect(result).toBeTruthy();
         });
 
-        it('is unhealthy with timed out health check', async () =>
+        it('should get false state with a timed out health check', async () =>
         {
             const health = await timedOutRuntime.getHealth();
             const result = health.get('timedOut');
@@ -83,7 +83,7 @@ describe('services/Runtime', () =>
             expect(result).toBeFalsy();
         });
 
-        it('is healthy with in time health check', async () =>
+        it('should get true state with an in time health check', async () =>
         {
             const health = await inTimeRuntime.getHealth();
             const result = health.get('inTime');
