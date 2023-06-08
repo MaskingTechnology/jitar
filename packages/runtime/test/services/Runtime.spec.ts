@@ -83,7 +83,7 @@ describe('services/Runtime', () =>
             expect(result).toBeFalsy();
         });
 
-        it('should get true state with an in time health check', async () =>
+        it('should get a true state with an in time health check', async () =>
         {
             const health = await inTimeRuntime.getHealth();
             const result = health.get('inTime');
