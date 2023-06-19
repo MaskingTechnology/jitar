@@ -1,6 +1,7 @@
 
-import { startServer } from 'jitar';
+import { buildServer } from 'jitar';
 
 const moduleImporter = async (specifier: string) => import(specifier);
 
-startServer(moduleImporter);
+const server = await buildServer(moduleImporter);
+server.start();
