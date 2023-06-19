@@ -39,18 +39,33 @@ The health check interface requires you to implement the `timeout` getter. If a 
 
 ## Adding health checks
 
-A health check needs to be added to the service that has the connection to the database. For this we need to create a custom starter, just like we do for [adding middleware](../develop/middleware#adding-middleware).
+A health check needs to be added to the service that has the connection to the database. We need to update the starter script to register the health check at the server level, and use configuration to determine the actual instance that will get the health check.
 
 ```ts
-// node.ts
-import { startServer } from 'jitar';
+// jitar.ts
+import { buildServer } from 'jitar';
 
 import DatabaseHealthCheck from './health/DatabaseHealthCheck.js';
 
 const moduleImporter = async (specifier: string) => import(specifier);
 
-const server = await startServer(moduleImporter);
-server.addHealthCheck('database', new DatabaseHealthCheck());
+const server = await buildServer(moduleImporter);
+server.registerHealthCheck('database', new DatabaseHealthCheck());
+server.start();
+```
+
+The configuration of the gateway needs to be updated to include the health check.
+
+```json
+// services/gateway.json
+{
+    "url": "http://localhost:3000",
+    "healthChecks": ["database"],
+    "gateway":
+    {
+        // ...
+    }
+}
 ```
 
 Once added, the gateway will trigger the check automatically. You can also check yourself using the health API. More information on this can be found in the [MONITOR section](../monitor/health).
