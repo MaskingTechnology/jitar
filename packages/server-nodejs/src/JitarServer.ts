@@ -5,6 +5,8 @@ import { Logger } from 'tslog';
 import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime, RemoteClassLoader } from '@jitar/runtime';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
+import ServerOptions from './configuration/ServerOptions.js';
+
 import RuntimeConfigurationLoader from './utils/RuntimeConfigurationLoader.js';
 import RuntimeConfigurator from './utils/RuntimeConfigurator.js';
 import ServerOptionsReader from './utils/ServerOptionsReader.js';
@@ -21,6 +23,8 @@ import RPCController from './controllers/RPCController.js';
 import RuntimeConfiguration from './configuration/RuntimeConfiguration.js';
 import RuntimeDefaults from './definitions/RuntimeDefaults.js';
 
+import UnknownHealthCheck from './errors/UnknownHealthCheck.js';
+import DuplicateHealthCheck from './errors/DuplicateHealthCheck.js';
 import RuntimeNotAvailable from './errors/RuntimeNotAvailable.js';
 import MiddlewareNotSupported from './errors/MiddlewareNotSupported.js';
 import LogBuilder from './utils/LogBuilder.js';
@@ -41,6 +45,12 @@ export default class JitarServer
     #runtime?: Runtime;
     #serializer: Serializer;
 
+    #options: ServerOptions;
+    #configuration: RuntimeConfiguration;
+    #url?: URL;
+
+    #registeredHealthChecks: Map<string, HealthCheck> = new Map();
+
     constructor()
     {
         this.#serializer = SerializerBuilder.build(new RemoteClassLoader());
@@ -51,37 +61,49 @@ export default class JitarServer
         this.#app.use(express.urlencoded({ extended: true }));
 
         this.#app.disable('x-powered-by');
+
+        this.#options = ServerOptionsReader.read();
+        this.#configuration = RuntimeConfigurationLoader.load(this.#options.config);
+    }
+
+    async build(): Promise<void>
+    {
+        const runtime = await RuntimeConfigurator.configure(this.#configuration);
+
+        const logger = LogBuilder.build(this.#options.loglevel);
+
+        this.#addControllers(this.#configuration, runtime, logger);
+
+        this.#url = new URL(this.#configuration.url ?? RuntimeDefaults.URL);
+
+        this.#runtime = runtime;
     }
 
     async start(): Promise<void>
     {
         console.log(STARTUP_MESSAGE);
 
-        const options = ServerOptionsReader.read();
-        const configuration = RuntimeConfigurationLoader.load(options.config);
-        const runtime = await RuntimeConfigurator.configure(configuration);
-
-        const logger = LogBuilder.build(options.loglevel);
-
-        this.#addControllers(configuration, runtime, logger);
-
-        const url = new URL(configuration.url ?? RuntimeDefaults.URL);
-
-        await this.#startServer(url.port);
-
-        this.#runtime = runtime;
-
-        logger.info(`Server started and listening at port ${url.port}`);
-    }
-
-    addHealthCheck(name: string, healthCheck: HealthCheck): void
-    {
-        if (this.#runtime === undefined)
+        if (this.#url === undefined)
         {
-            throw new RuntimeNotAvailable();
+            throw new Error('URL is undefined');
         }
 
-        this.#runtime.addHealthCheck(name, healthCheck);
+        this.#addHealthChecks();
+
+        await this.#startServer(this.#url.port);
+
+        const logger = LogBuilder.build(this.#options.loglevel);
+        logger.info(`Server started and listening at port ${this.#url.port}`);
+    }
+
+    registerHealthCheck(name: string, healthCheck: HealthCheck): void
+    {
+        if (this.#registeredHealthChecks.has(name))
+        {
+            throw new DuplicateHealthCheck(name);
+        }
+
+        this.#registeredHealthChecks.set(name, healthCheck);
     }
 
     addMiddleware(middleware: Middleware): void
@@ -97,6 +119,31 @@ export default class JitarServer
         }
 
         this.#runtime.addMiddleware(middleware);
+    }
+
+    #addHealthChecks(): void
+    {
+        if (this.#runtime === undefined)
+        {
+            throw new RuntimeNotAvailable();
+        }
+
+        if (this.#configuration.healthChecks === undefined)
+        {
+            return;
+        }
+
+        for (const name of this.#configuration.healthChecks)
+        {
+            const healthCheck = this.#registeredHealthChecks.get(name);
+
+            if (healthCheck === undefined)
+            {
+                throw new UnknownHealthCheck(name);
+            }
+
+            this.#runtime.addHealthCheck(name, healthCheck);
+        }
     }
 
     #addControllers(configuration: RuntimeConfiguration, runtime: Runtime, logger: Logger<unknown>): void
