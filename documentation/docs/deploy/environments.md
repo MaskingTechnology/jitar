@@ -33,13 +33,14 @@ And a standalone starter script that adds all middleware used by the application
 
 ```ts
 // src/standalone.ts
-import { startServer } from 'jitar';
+import { buildServer } from 'jitar';
 
 const moduleImporter = async (specifier: string) => import(specifier);
 
-const server = await startServer(moduleImporter);
+const server = await buildServer(moduleImporter);
 server.addMiddleware(/* first */);
 server.addMiddleware(/* second */);
+server.start();
 /* … */
 ```
 
