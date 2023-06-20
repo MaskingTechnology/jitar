@@ -47,7 +47,7 @@ export default class JitarServer
 
     #options: ServerOptions;
     #configuration: RuntimeConfiguration;
-    #url?: URL;
+    #logger: Logger;
 
     #registeredHealthChecks: Map<string, HealthCheck> = new Map();
 
@@ -64,36 +64,31 @@ export default class JitarServer
 
         this.#options = ServerOptionsReader.read();
         this.#configuration = RuntimeConfigurationLoader.load(this.#options.config);
+        this.#logger = LogBuilder.build(this.#options.loglevel);
     }
 
     async build(): Promise<void>
     {
-        const runtime = await RuntimeConfigurator.configure(this.#configuration);
+        this.#runtime = await RuntimeConfigurator.configure(this.#configuration);
 
-        const logger = LogBuilder.build(this.#options.loglevel);
 
-        this.#addControllers(this.#configuration, runtime, logger);
+        this.#addControllers(this.#configuration, this.#runtime, this.#logger);
 
-        this.#url = new URL(this.#configuration.url ?? RuntimeDefaults.URL);
 
-        this.#runtime = runtime;
     }
 
     async start(): Promise<void>
     {
         console.log(STARTUP_MESSAGE);
 
-        if (this.#url === undefined)
-        {
-            throw new Error('URL is undefined');
-        }
+        const url = new URL(configuration.url ?? RuntimeDefaults.URL);
 
         this.#addHealthChecks();
 
-        await this.#startServer(this.#url.port);
+        await this.#startServer(url.port);
 
         const logger = LogBuilder.build(this.#options.loglevel);
-        logger.info(`Server started and listening at port ${this.#url.port}`);
+        logger.info(`Server started and listening at port ${url.port}`);
     }
 
     registerHealthCheck(name: string, healthCheck: HealthCheck): void
