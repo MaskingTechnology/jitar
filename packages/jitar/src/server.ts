@@ -1,2 +1,2 @@
 
-export { startServer, CorsMiddleware } from '@jitar/server-nodejs';
+export { buildServer, CorsMiddleware } from '@jitar/server-nodejs';

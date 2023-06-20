@@ -51,13 +51,14 @@ Middleware needs to be registered at the start of a Jitar server.
 
 ```ts
 // src/standalone.ts
-import { startServer } from 'jitar';
+import { buildServer } from 'jitar';
 import MyMiddleware from './MyMiddleware';
 
 const moduleImporter = async (specifier: string) => import(specifier);
 
-const server = await startServer(moduleImporter);
+const server = await buildServer(moduleImporter);
 server.addMiddleware(new LoggingMiddleware());
+server.start();
 ```
 
 It's only useful to add middleware to a node, gateway, proxy and standalone service because they are actively involved with the communication system. Adding middleware to a repository service won't result in an error, but doesn't have any effect either.

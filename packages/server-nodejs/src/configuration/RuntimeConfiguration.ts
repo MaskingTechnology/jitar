@@ -10,6 +10,7 @@ import StandaloneConfiguration, { standaloneSchema } from './StandaloneConfigura
 export const runtimeSchema = z
     .object({
         url: z.string().optional(),
+        healthChecks: z.array(z.string()).optional(),
         standalone: standaloneSchema.optional(),
         repository: repositorySchema.optional(),
         gateway: gatewaySchema.optional(),
@@ -17,20 +18,22 @@ export const runtimeSchema = z
         proxy: proxySchema.optional(),
     })
     .strict()
-    .transform((value) => new RuntimeConfiguration(value.url, value.standalone, value.repository, value.gateway, value.node, value.proxy));
+    .transform((value) => new RuntimeConfiguration(value.url, value.healthChecks, value.standalone, value.repository, value.gateway, value.node, value.proxy));
 
 export default class RuntimeConfiguration
 {
     #url?: string;
+    #healthChecks?: string[];
     #standalone?: StandaloneConfiguration;
     #repository?: RepositoryConfiguration;
     #gateway?: GatewayConfiguration;
     #node?: NodeConfiguration;
     #proxy?: ProxyConfiguration;
 
-    constructor(url?: string, standalone?: StandaloneConfiguration, repository?: RepositoryConfiguration, gateway?: GatewayConfiguration, node?: NodeConfiguration, proxy?: ProxyConfiguration)
+    constructor(url?: string, healthChecks?: string[], standalone?: StandaloneConfiguration, repository?: RepositoryConfiguration, gateway?: GatewayConfiguration, node?: NodeConfiguration, proxy?: ProxyConfiguration)
     {
         this.#url = url;
+        this.#healthChecks = healthChecks;
         this.#standalone = standalone;
         this.#repository = repository;
         this.#gateway = gateway;
@@ -39,6 +42,8 @@ export default class RuntimeConfiguration
     }
 
     get url() { return this.#url; }
+
+    get healthChecks() { return this.#healthChecks; }
 
     get standalone() { return this.#standalone; }
 
