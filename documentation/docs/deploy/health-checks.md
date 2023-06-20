@@ -26,6 +26,8 @@ import { pingDatabase } from '../common/utils;
 
 export default class DatabaseHealthCheck implements HealthCheck
 {
+    get timeout() { return undefined; }
+
     async isHealthy(): Promise<boolean>
     {
         return pingDatabase();
@@ -33,7 +35,7 @@ export default class DatabaseHealthCheck implements HealthCheck
 } 
 ```
 
-To prevent the health checks from blocking the monitoring, each health check should be non-blocking and cannot throw an error yet.
+The health check interface requires you to implement the `timeout` getter. If a timeout is not required, return `undefined`. Otherwise set the time in milliseconds for the health check to be considered unhealthy.
 
 ## Adding health checks
 
