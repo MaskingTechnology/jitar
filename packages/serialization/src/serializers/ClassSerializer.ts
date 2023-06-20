@@ -32,7 +32,7 @@ export default class ClassSerializer extends ValueSerializer
     canDeserialize(value: unknown): boolean
     {
         const object = value as SerializedClass;
-        
+
         return object instanceof Object
             && object.serialized === true
             && typeof object.name === 'string'
@@ -74,7 +74,7 @@ export default class ClassSerializer extends ValueSerializer
             const objectValue = model.canRead(name)
                 ? await this.serializeOther((object as FlexObject)[name])
                 : undefined;
-            
+
             args.push(objectValue);
         }
 
@@ -115,7 +115,7 @@ export default class ClassSerializer extends ValueSerializer
             throw new InvalidClass(object.name);
         }
 
-        const args = await Promise.all(object.args.map(async (value) => await this.deserializeOther(value)));
+        const args = await Promise.all(object.args.map(async (value) => this.deserializeOther(value)));
 
         const instance = reflector.createInstance(clazz as Function, args) as SerializableObject;
 

@@ -12,7 +12,7 @@ export default class ArraySerializer extends ValueSerializer
     {
         return value instanceof Array;
     }
-    
+
     async serialize(array: unknown[]): Promise<unknown[]>
     {
         const values: unknown[] = [];
@@ -27,6 +27,6 @@ export default class ArraySerializer extends ValueSerializer
 
     async deserialize(array: unknown[]): Promise<unknown[]>
     {
-        return await Promise.all(array.map(async (value) => await this.deserializeOther(value)));
+        return Promise.all(array.map(async (value) => this.deserializeOther(value)));
     }
 }

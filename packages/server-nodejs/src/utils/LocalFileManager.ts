@@ -90,7 +90,7 @@ export default class LocalFileManager implements FileManager
     {
         const location = this.getAbsoluteLocation('./');
 
-        return await glob(`${location}/${pattern}`);
+        return glob(`${location}/${pattern}`);
     }
 
     async getNodeSegmentFiles(): Promise<string[]>

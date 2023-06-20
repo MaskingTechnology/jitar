@@ -18,7 +18,7 @@ export default class NodeMonitor
 
     start(): void
     {
-        this.#interval = setInterval(async () => await this.#monitor(), this.#frequency);
+        this.#interval = setInterval(async () => this.#monitor(), this.#frequency);
     }
 
     stop(): void
@@ -34,7 +34,7 @@ export default class NodeMonitor
     async #monitor(): Promise<void>
     {
         const nodes = this.#gateway.nodes;
-        const promises = nodes.map(async (node: Node) => await this.#monitorNode(node));
+        const promises = nodes.map(async (node: Node) => this.#monitorNode(node));
 
         await Promise.all(promises);
     }
