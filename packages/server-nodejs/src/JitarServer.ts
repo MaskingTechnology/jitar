@@ -5,6 +5,8 @@ import { Logger } from 'tslog';
 import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime, RemoteClassLoader } from '@jitar/runtime';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
+import ServerOptions from './configuration/ServerOptions.js';
+
 import RuntimeConfigurationLoader from './utils/RuntimeConfigurationLoader.js';
 import RuntimeConfigurator from './utils/RuntimeConfigurator.js';
 import ServerOptionsReader from './utils/ServerOptionsReader.js';
@@ -21,6 +23,8 @@ import RPCController from './controllers/RPCController.js';
 import RuntimeConfiguration from './configuration/RuntimeConfiguration.js';
 import RuntimeDefaults from './definitions/RuntimeDefaults.js';
 
+import UnknownHealthCheck from './errors/UnknownHealthCheck.js';
+import DuplicateHealthCheck from './errors/DuplicateHealthCheck.js';
 import RuntimeNotAvailable from './errors/RuntimeNotAvailable.js';
 import MiddlewareNotSupported from './errors/MiddlewareNotSupported.js';
 import LogBuilder from './utils/LogBuilder.js';
@@ -41,6 +45,12 @@ export default class JitarServer
     #runtime?: Runtime;
     #serializer: Serializer;
 
+    #options: ServerOptions;
+    #configuration: RuntimeConfiguration;
+    #logger: Logger<unknown>;
+
+    #registeredHealthChecks: Map<string, HealthCheck> = new Map();
+
     constructor()
     {
         this.#serializer = SerializerBuilder.build(new RemoteClassLoader());
@@ -51,37 +61,39 @@ export default class JitarServer
         this.#app.use(express.urlencoded({ extended: true }));
 
         this.#app.disable('x-powered-by');
+
+        this.#options = ServerOptionsReader.read();
+        this.#configuration = RuntimeConfigurationLoader.load(this.#options.config);
+        this.#logger = LogBuilder.build(this.#options.loglevel);
+    }
+
+    async build(): Promise<void>
+    {
+        this.#runtime = await RuntimeConfigurator.configure(this.#configuration);
+        this.#addControllers();
     }
 
     async start(): Promise<void>
     {
         console.log(STARTUP_MESSAGE);
 
-        const options = ServerOptionsReader.read();
-        const configuration = RuntimeConfigurationLoader.load(options.config);
-        const runtime = await RuntimeConfigurator.configure(configuration);
+        const url = new URL(this.#configuration.url ?? RuntimeDefaults.URL);
 
-        const logger = LogBuilder.build(options.loglevel);
-
-        this.#addControllers(configuration, runtime, logger);
-
-        const url = new URL(configuration.url ?? RuntimeDefaults.URL);
+        this.#addHealthChecks();
 
         await this.#startServer(url.port);
 
-        this.#runtime = runtime;
-
-        logger.info(`Server started and listening at port ${url.port}`);
+        this.#logger.info(`Server started and listening at port ${url.port}`);
     }
 
-    addHealthCheck(name: string, healthCheck: HealthCheck): void
+    registerHealthCheck(name: string, healthCheck: HealthCheck): void
     {
-        if (this.#runtime === undefined)
+        if (this.#registeredHealthChecks.has(name))
         {
-            throw new RuntimeNotAvailable();
+            throw new DuplicateHealthCheck(name);
         }
 
-        this.#runtime.addHealthCheck(name, healthCheck);
+        this.#registeredHealthChecks.set(name, healthCheck);
     }
 
     addMiddleware(middleware: Middleware): void
@@ -99,68 +111,93 @@ export default class JitarServer
         this.#runtime.addMiddleware(middleware);
     }
 
-    #addControllers(configuration: RuntimeConfiguration, runtime: Runtime, logger: Logger<unknown>): void
+    #addHealthChecks(): void
     {
-        if (configuration.standalone !== undefined && runtime instanceof Proxy)
+        if (this.#runtime === undefined)
         {
-            const index = configuration.standalone.index ?? RuntimeDefaults.INDEX;
+            throw new RuntimeNotAvailable();
+        }
 
-            this.#addStandAloneControllers(runtime, logger, index);
-        }
-        else if (configuration.repository !== undefined && runtime instanceof LocalRepository)
+        if (this.#configuration.healthChecks === undefined)
         {
-            const index = configuration.repository.index ?? RuntimeDefaults.INDEX;
+            return;
+        }
 
-            this.#addRepositoryControllers(runtime, logger, index);
-        }
-        else if (configuration.gateway !== undefined && runtime instanceof LocalGateway)
+        for (const name of this.#configuration.healthChecks)
         {
-            this.#addGatewayControllers(runtime, logger);
-        }
-        else if (configuration.node !== undefined && runtime instanceof LocalNode)
-        {
-            this.#addNodeControllers(runtime, logger);
-        }
-        else if (configuration.proxy !== undefined && runtime instanceof Proxy)
-        {
-            this.#addProxyControllers(runtime, logger);
+            const healthCheck = this.#registeredHealthChecks.get(name);
+
+            if (healthCheck === undefined)
+            {
+                throw new UnknownHealthCheck(name);
+            }
+
+            this.#runtime.addHealthCheck(name, healthCheck);
         }
     }
 
-    #addStandAloneControllers(proxy: Proxy, logger: Logger<unknown>, index: string): void
+    #addControllers(): void
     {
-        new HealthController(this.#app, proxy, logger);
+        if (this.#configuration.standalone !== undefined && this.#runtime instanceof Proxy)
+        {
+            const index = this.#configuration.standalone.index ?? RuntimeDefaults.INDEX;
+
+            this.#addStandAloneControllers(this.#runtime, index);
+        }
+        else if (this.#configuration.repository !== undefined && this.#runtime instanceof LocalRepository)
+        {
+            const index = this.#configuration.repository.index ?? RuntimeDefaults.INDEX;
+
+            this.#addRepositoryControllers(this.#runtime, index);
+        }
+        else if (this.#configuration.gateway !== undefined && this.#runtime instanceof LocalGateway)
+        {
+            this.#addGatewayControllers(this.#runtime);
+        }
+        else if (this.#configuration.node !== undefined && this.#runtime instanceof LocalNode)
+        {
+            this.#addNodeControllers(this.#runtime);
+        }
+        else if (this.#configuration.proxy !== undefined && this.#runtime instanceof Proxy)
+        {
+            this.#addProxyControllers(this.#runtime);
+        }
+    }
+
+    #addStandAloneControllers(proxy: Proxy, index: string): void
+    {
+        new HealthController(this.#app, proxy, this.#logger);
         new JitarController(this.#app);
-        new ModulesController(this.#app, proxy, this.#serializer, logger);
-        new ProceduresController(this.#app, proxy, logger);
-        new RPCController(this.#app, proxy, this.#serializer, true, logger);
-        new AssetsController(this.#app, proxy, index, logger);
+        new ModulesController(this.#app, proxy, this.#serializer, this.#logger);
+        new ProceduresController(this.#app, proxy, this.#logger);
+        new RPCController(this.#app, proxy, this.#serializer, true, this.#logger);
+        new AssetsController(this.#app, proxy, index, this.#logger);
     }
 
-    #addRepositoryControllers(repository: LocalRepository, logger: Logger<unknown>, index: string): void
+    #addRepositoryControllers(repository: LocalRepository, index: string): void
     {
         new JitarController(this.#app);
-        new ModulesController(this.#app, repository, this.#serializer, logger);
-        new AssetsController(this.#app, repository, index, logger);
+        new ModulesController(this.#app, repository, this.#serializer, this.#logger);
+        new AssetsController(this.#app, repository, index, this.#logger);
     }
 
-    #addGatewayControllers(gateway: LocalGateway, logger: Logger<unknown>): void
+    #addGatewayControllers(gateway: LocalGateway): void
     {
-        new NodesController(this.#app, gateway, logger);
-        new ProceduresController(this.#app, gateway, logger);
-        new RPCController(this.#app, gateway, this.#serializer, false, logger);
+        new NodesController(this.#app, gateway, this.#logger);
+        new ProceduresController(this.#app, gateway, this.#logger);
+        new RPCController(this.#app, gateway, this.#serializer, false, this.#logger);
     }
 
-    #addNodeControllers(node: LocalNode, logger: Logger<unknown>): void
+    #addNodeControllers(node: LocalNode): void
     {
-        new HealthController(this.#app, node, logger);
-        new ProceduresController(this.#app, node, logger);
-        new RPCController(this.#app, node, this.#serializer, true, logger);
+        new HealthController(this.#app, node, this.#logger);
+        new ProceduresController(this.#app, node, this.#logger);
+        new RPCController(this.#app, node, this.#serializer, true, this.#logger);
     }
 
-    #addProxyControllers(proxy: Proxy, logger: Logger<unknown>): void
+    #addProxyControllers(proxy: Proxy): void
     {
-        new ProxyController(this.#app, proxy, logger);
+        new ProxyController(this.#app, proxy, this.#logger);
     }
 
     async #startServer(port: string): Promise<void>
