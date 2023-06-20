@@ -116,11 +116,12 @@ The configuration needs to be supplied when starting a Jitar instance. To start 
 
 ```ts
 //src/jitar.ts
-import { startServer } from 'jitar'
+import { buildServer } from 'jitar';
 
-const moduleImporter = async (specifier: string) => import(specifier)
+const moduleImporter = async (specifier: string) => import(specifier);
 
-startServer(moduleImporter)
+const server = buildServer(moduleImporter);
+server.start();
 ```
 
 This script can be extended by adding [middleware](../develop/middleware.md) and [health checks](../deploy/health-checks.md) to the server when needed.

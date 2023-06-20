@@ -1,6 +1,8 @@
 
 interface HealthCheck
 {
+    get timeout(): number | undefined;
+
     isHealthy(): Promise<boolean>;
 }
 

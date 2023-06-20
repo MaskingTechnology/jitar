@@ -14,6 +14,8 @@ import { HealthCheck } from 'jitar';
 
 export default class DatabaseHealthCheck implements HealthCheck
 {
+    get timeout() { return undefined; }
+
     async isHealthy(): Promise<boolean>
     {
         // Check database connection
