@@ -47,7 +47,7 @@ export default class JitarServer
 
     #options: ServerOptions;
     #configuration: RuntimeConfiguration;
-    #logger: Logger;
+    #logger: Logger<unknown>;
 
     #registeredHealthChecks: Map<string, HealthCheck> = new Map();
 
@@ -70,18 +70,14 @@ export default class JitarServer
     async build(): Promise<void>
     {
         this.#runtime = await RuntimeConfigurator.configure(this.#configuration);
-
-
         this.#addControllers(this.#configuration, this.#runtime, this.#logger);
-
-
     }
 
     async start(): Promise<void>
     {
         console.log(STARTUP_MESSAGE);
 
-        const url = new URL(configuration.url ?? RuntimeDefaults.URL);
+        const url = new URL(this.#configuration.url ?? RuntimeDefaults.URL);
 
         this.#addHealthChecks();
 
