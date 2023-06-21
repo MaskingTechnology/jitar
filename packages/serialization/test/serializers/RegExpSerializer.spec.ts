@@ -28,10 +28,10 @@ describe('serializers/RegExpSerializer', () =>
         it('should tell it cannot serialize others', () =>
         {
             const supportsNonObject = serializer.canSerialize(nonObject);
-            const supportsNonDate = serializer.canSerialize(nonRegExp);
+            const supportsNonRegExp = serializer.canSerialize(nonRegExp);
 
             expect(supportsNonObject).toBeFalsy();
-            expect(supportsNonDate).toBeFalsy();
+            expect(supportsNonRegExp).toBeFalsy();
         });
     });
 
@@ -39,9 +39,9 @@ describe('serializers/RegExpSerializer', () =>
     {
         it('should tell it can deserialize an regular expression', () =>
         {
-            const supportsDate = serializer.canDeserialize(serializedValidRegExp);
+            const supportsRegExp = serializer.canDeserialize(serializedValidRegExp);
 
-            expect(supportsDate).toBeTruthy();
+            expect(supportsRegExp).toBeTruthy();
         });
 
         it('should tell it cannot deserialize others', () =>
@@ -64,9 +64,9 @@ describe('serializers/RegExpSerializer', () =>
     {
         it('should serialize a regular expression', async () =>
         {
-            const resultFixedRegExp = await serializer.serialize(validRegExp);
+            const resultValidRegExp = await serializer.serialize(validRegExp);
 
-            expect(resultFixedRegExp).toStrictEqual(serializedValidRegExp);
+            expect(resultValidRegExp).toStrictEqual(serializedValidRegExp);
         });
     });
 
@@ -74,9 +74,9 @@ describe('serializers/RegExpSerializer', () =>
     {
         it('should deserialize a regular expression', async () =>
         {
-            const resultFixedRegExp = await serializer.deserialize(serializedValidRegExp);
+            const resultValidRegExp = await serializer.deserialize(serializedValidRegExp);
 
-            expect(resultFixedRegExp).toStrictEqual(validRegExp);
+            expect(resultValidRegExp).toStrictEqual(validRegExp);
         });
 
         it('should not deserialize a regular expression with invalid source', async () =>
