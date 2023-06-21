@@ -10,7 +10,7 @@ const invalidName = { serialized: true, name: 'Map', source: 'w+', flags: 'gi' }
 const invalidRegExpSource = { serialized: true, name: 'Date', source: true, flags: 'g' };
 const invalidRegExpFlag = { serialized: true, name: 'Date', source: 'w+', flags: true };
 const serializedInvalidRegExpSource = { serialized: true, name: 'Date', source: 'sel/\\', flags: 'g' };
-const SerializedInvalidRegExpFlag = { serialized: true, name: 'Date', source: 'w+', flags: 'true' };
+const serializedInvalidRegExpFlag = { serialized: true, name: 'Date', source: 'w+', flags: 'true' };
 
 export
 {
