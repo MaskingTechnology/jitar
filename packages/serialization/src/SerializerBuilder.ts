@@ -2,12 +2,14 @@
 import Serializer from './Serializer.js';
 import ClassLoader from './interfaces/ClassLoader.js';
 import ArraySerializer from './serializers/ArraySerializer.js';
+import BigIntSerializer from './serializers/BigIntSerializer.js';
 import ClassSerializer from './serializers/ClassSerializer.js';
 import DateSerializer from './serializers/DateSerializer.js';
 import ErrorSerializer from './serializers/ErrorSerializer.js';
 import MapSerializer from './serializers/MapSerializer.js';
 import ObjectSerializer from './serializers/ObjectSerializer.js';
 import PrimitiveSerializer from './serializers/PrimitiveSerializer.js';
+import RegExpSerializer from './serializers/RegExpSerializer.js';
 import SetSerializer from './serializers/SetSerializer.js';
 import TypedArraySerializer from './serializers/TypedArraySerializer.js';
 import UrlSerializer from './serializers/UrlSerializer.js';
@@ -24,6 +26,8 @@ export default class SerializerBuilder
         serializer.addSerializer(new ObjectSerializer());
         serializer.addSerializer(new ClassSerializer(loader));
         serializer.addSerializer(new ErrorSerializer());
+        serializer.addSerializer(new RegExpSerializer());
+        serializer.addSerializer(new BigIntSerializer());
         serializer.addSerializer(new UrlSerializer());
         serializer.addSerializer(new DateSerializer());
         serializer.addSerializer(new SetSerializer());

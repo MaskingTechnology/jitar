@@ -6,7 +6,7 @@ import InvalidUrlString from '../../src/serializers/errors/InvalidUrlString';
 
 import
 {
-    validURL,
+    validUrl,
     serializedValidUrl,
     nonObject, nonUrl, notSerialized, invalidName, invalidUrlValue, invalidUrlString
 } from '../_fixtures/serializers/UrlSerializer.fixture';
@@ -19,18 +19,18 @@ describe('serializers/UrlSerializer', () =>
     {
         it('should tell it can serialize an url', () =>
         {
-            const supportsDate = serializer.canSerialize(validURL);
+            const supportsUrl = serializer.canSerialize(validUrl);
 
-            expect(supportsDate).toBeTruthy();
+            expect(supportsUrl).toBeTruthy();
         });
 
         it('should tell it cannot serialize others', () =>
         {
             const supportsNonObject = serializer.canSerialize(nonObject);
-            const supportsNonDate = serializer.canSerialize(nonUrl);
+            const supportsNonUrl = serializer.canSerialize(nonUrl);
 
             expect(supportsNonObject).toBeFalsy();
-            expect(supportsNonDate).toBeFalsy();
+            expect(supportsNonUrl).toBeFalsy();
         });
     });
 
@@ -38,9 +38,9 @@ describe('serializers/UrlSerializer', () =>
     {
         it('should tell it can deserialize an url', () =>
         {
-            const supportsDate = serializer.canDeserialize(serializedValidUrl);
+            const supportsUrl = serializer.canDeserialize(serializedValidUrl);
 
-            expect(supportsDate).toBeTruthy();
+            expect(supportsUrl).toBeTruthy();
         });
 
         it('should tell it cannot deserialize others', () =>
@@ -48,12 +48,12 @@ describe('serializers/UrlSerializer', () =>
             const supportsNonObject = serializer.canDeserialize(nonObject);
             const supportsNotSerialized = serializer.canDeserialize(notSerialized);
             const supportsInvalidName = serializer.canDeserialize(invalidName);
-            const supportsInvalidDateValue = serializer.canDeserialize(invalidUrlValue);
+            const supportsInvalidUrlValue = serializer.canDeserialize(invalidUrlValue);
 
             expect(supportsNonObject).toBeFalsy();
             expect(supportsNotSerialized).toBeFalsy();
             expect(supportsInvalidName).toBeFalsy();
-            expect(supportsInvalidDateValue).toBeFalsy();
+            expect(supportsInvalidUrlValue).toBeFalsy();
         });
     });
 
@@ -61,9 +61,9 @@ describe('serializers/UrlSerializer', () =>
     {
         it('should serialize a url', async () =>
         {
-            const resultFixedDate = await serializer.serialize(validURL);
+            const resultValidUrl = await serializer.serialize(validUrl);
 
-            expect(resultFixedDate).toStrictEqual(serializedValidUrl);
+            expect(resultValidUrl).toStrictEqual(serializedValidUrl);
         });
     });
 
@@ -71,9 +71,9 @@ describe('serializers/UrlSerializer', () =>
     {
         it('should deserialize an url', async () =>
         {
-            const resultFixedDate = await serializer.deserialize(serializedValidUrl);
+            const resultValidUrl = await serializer.deserialize(serializedValidUrl);
 
-            expect(resultFixedDate).toStrictEqual(validURL);
+            expect(resultValidUrl).toStrictEqual(validUrl);
         });
 
         it('should not deserialize an url with an invalid url string', async () =>
