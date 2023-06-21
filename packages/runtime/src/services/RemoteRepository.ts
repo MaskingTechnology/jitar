@@ -13,7 +13,7 @@ export default class RemoteRepository extends Repository
     {
         super(url);
 
-        this.#remote = new Remote(url, true);
+        this.#remote = new Remote(url);
     }
 
     registerClient(segmentFiles: string[]): Promise<string>

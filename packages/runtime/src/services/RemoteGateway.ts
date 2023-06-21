@@ -15,7 +15,7 @@ export default class RemoteGateway extends Gateway
     {
         super(url);
 
-        this.#remote = new Remote(url, true);
+        this.#remote = new Remote(url);
     }
 
     getProcedureNames(): string[]

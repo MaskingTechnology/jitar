@@ -13,7 +13,7 @@ export default class RemoteNode extends Node
     {
         super(url);
 
-        this.#remote = new Remote(url, false);
+        this.#remote = new Remote(url);
 
         this.registerProcedures(procedureNames);
     }
