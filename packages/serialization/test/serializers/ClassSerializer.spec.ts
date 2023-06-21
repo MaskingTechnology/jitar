@@ -6,12 +6,13 @@ import InvalidClass from '../../src/errors/InvalidClass';
 
 import ClassSerializer from '../../src/serializers/ClassSerializer';
 
-import {
-    parent, classLoader,
-    dataClass, constructedClass, nestedClass, privateClass,
-    serializedDataClass, serializedConstructedClass, serializedNestedClass, serializedPrivateClass, serializedInvalidClass, serializedUnserializableClass,
-    nonObject, nonClassObject, notSerialized, invalidName, invalidArgs, invalidFields
-} from '../_fixtures/serializers/ClassSerializer.fixture';
+import
+    {
+        parent, classLoader,
+        dataClass, constructedClass, nestedClass, privateClass,
+        serializedDataClass, serializedConstructedClass, serializedNestedClass, serializedPrivateClass, serializedInvalidClass, serializedUnserializableClass,
+        nonObject, nonClassObject, notSerialized, invalidName, invalidArgs, invalidFields
+    } from '../_fixtures/serializers/ClassSerializer.fixture';
 
 const serializer = new ClassSerializer(classLoader);
 serializer.parent = parent;
@@ -31,7 +32,7 @@ describe('serializers/ClassSerializer', () =>
         {
             const supportsNonObject = serializer.canSerialize(nonObject);
             const supportsNonClassObject = serializer.canSerialize(nonClassObject);
-            
+
             expect(supportsNonObject).toBeFalsy();
             expect(supportsNonClassObject).toBeFalsy();
         });
@@ -96,14 +97,14 @@ describe('serializers/ClassSerializer', () =>
 
         it('should not deserialize invalid objects', async () =>
         {
-            const deserialize = async () => await serializer.deserialize(serializedInvalidClass);
+            const deserialize = async () => serializer.deserialize(serializedInvalidClass);
 
             expect(deserialize).rejects.toStrictEqual(new ClassNotFound('Invalid'));
         });
 
         it('should not deserialize non-function instances', async () =>
         {
-            const deserialize = async () => await serializer.deserialize(serializedUnserializableClass);
+            const deserialize = async () => serializer.deserialize(serializedUnserializableClass);
 
             expect(deserialize).rejects.toStrictEqual(new InvalidClass('Infinity'));
         });

@@ -28,11 +28,11 @@ export default class ApplicationCacheWriter
 
     async #writeSegmentCache(segments: SegmentCache[]): Promise<void>
     {
-        return Promise.all(segments.map(async (segment) => await this.#segmentWriter.write(segment))).then(() => undefined);
+        return Promise.all(segments.map(async (segment) => this.#segmentWriter.write(segment))).then(() => undefined);
     }
 
     async #writeModuleCache(modules: ModuleCache[]): Promise<void>
     {
-        return Promise.all(modules.map(async (module) => await this.#moduleWriter.write(module))).then(() => undefined);
+        return Promise.all(modules.map(async (module) => this.#moduleWriter.write(module))).then(() => undefined);
     }
 }

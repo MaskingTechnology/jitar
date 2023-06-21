@@ -15,14 +15,14 @@ describe('services/LocalRepository', () =>
     {
         it('should not accept an invalid client id', () =>
         {
-            const run = async () => await repository.loadModule('INVALID', '/some/file');
+            const run = async () => repository.loadModule('INVALID', '/some/file');
 
             expect(run).rejects.toEqual(new InvalidClientId('INVALID'));
         });
 
         it('should not accept an unknown client id', () =>
         {
-            const run = async () => await repository.loadModule('CLIENT_9999', '/some/file');
+            const run = async () => repository.loadModule('CLIENT_9999', '/some/file');
 
             expect(run).rejects.toEqual(new ClientNotFound('CLIENT_9999'));
         });
@@ -57,7 +57,7 @@ describe('services/LocalRepository', () =>
 
         it('should not return a private asset', async () =>
         {
-            const run = async () => await repository.loadAsset('style.css');
+            const run = async () => repository.loadAsset('style.css');
 
             expect(run).rejects.toEqual(new FileNotFound('style.css'));
         });

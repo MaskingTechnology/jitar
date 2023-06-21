@@ -122,7 +122,7 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
                 return code;
             }
 
-            return await createImportCode(code, id, jitarFullPath, jitarPath);
+            return createImportCode(code, id, jitarFullPath, jitarPath);
         },
 
         transformIndexHtml(html)

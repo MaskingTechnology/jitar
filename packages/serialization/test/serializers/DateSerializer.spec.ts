@@ -4,11 +4,12 @@ import { describe, expect, it } from 'vitest';
 import DateSerializer from '../../src/serializers/DateSerializer';
 import InvalidDateString from '../../src/serializers/errors/InvalidDateString';
 
-import {
-    fixedDate,
-    serializedFixedDate,
-    nonObject, nonDate, notSerialized, invalidName, invalidDateValue, invalidDateString
-} from '../_fixtures/serializers/DateSerializer.fixture';
+import
+    {
+        fixedDate,
+        serializedFixedDate,
+        nonObject, nonDate, notSerialized, invalidName, invalidDateValue, invalidDateString
+    } from '../_fixtures/serializers/DateSerializer.fixture';
 
 const serializer = new DateSerializer();
 
@@ -77,7 +78,7 @@ describe('serializers/DateSerializer', () =>
 
         it('should not deserialize a date with an invalid date string', async () =>
         {
-            const deserialize = async () => await serializer.deserialize(invalidDateString);
+            const deserialize = async () => serializer.deserialize(invalidDateString);
 
             expect(deserialize).rejects.toStrictEqual(new InvalidDateString('hello'));
         });

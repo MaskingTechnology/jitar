@@ -78,7 +78,7 @@ describe('serializers/UrlSerializer', () =>
 
         it('should not deserialize an url with an invalid url string', async () =>
         {
-            const deserialize = async () => await serializer.deserialize(invalidUrlString);
+            const deserialize = async () => serializer.deserialize(invalidUrlString);
 
             expect(deserialize).rejects.toStrictEqual(new InvalidUrlString('example'));
         });
