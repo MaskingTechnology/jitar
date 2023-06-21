@@ -17,5 +17,5 @@ export
     validRegExp,
     serializedValidRegExp,
     nonObject, nonRegExp, notSerialized, invalidName, invalidRegExpSource, invalidRegExpFlag,
-    serializedInvalidRegExpSource, SerializedInvalidRegExpFlag
+    serializedInvalidRegExpSource, serializedInvalidRegExpFlag
 };

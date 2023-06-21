@@ -9,7 +9,7 @@ import
     validRegExp,
     serializedValidRegExp,
     nonObject, nonRegExp, notSerialized, invalidName, invalidRegExpSource, invalidRegExpFlag,
-    serializedInvalidRegExpSource, SerializedInvalidRegExpFlag
+    serializedInvalidRegExpSource, serializedInvalidRegExpFlag
 } from '../_fixtures/serializers/RegExpSerializer.fixture';
 
 const serializer = new RegExpSerializer();
@@ -88,7 +88,7 @@ describe('serializers/RegExpSerializer', () =>
 
         it('should not deserialize a regular expression with invalid flag', async () =>
         {
-            const deserialize = async () => await serializer.deserialize(SerializedInvalidRegExpFlag);
+            const deserialize = async () => await serializer.deserialize(serializedInvalidRegExpFlag);
 
             expect(deserialize).rejects.toStrictEqual(new InvalidRegExp('w+', true));
         });
