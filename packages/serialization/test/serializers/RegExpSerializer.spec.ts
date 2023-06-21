@@ -81,14 +81,14 @@ describe('serializers/RegExpSerializer', () =>
 
         it('should not deserialize a regular expression with invalid source', async () =>
         {
-            const deserialize = async () => await serializer.deserialize(serializedInvalidRegExpSource);
+            const deserialize = async () => serializer.deserialize(serializedInvalidRegExpSource);
 
             expect(deserialize).rejects.toStrictEqual(new InvalidRegExp('sel/\\', 'g'));
         });
 
         it('should not deserialize a regular expression with invalid flag', async () =>
         {
-            const deserialize = async () => await serializer.deserialize(serializedInvalidRegExpFlag);
+            const deserialize = async () => serializer.deserialize(serializedInvalidRegExpFlag);
 
             expect(deserialize).rejects.toStrictEqual(new InvalidRegExp('w+', true));
         });
