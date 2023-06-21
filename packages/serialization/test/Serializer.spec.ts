@@ -5,10 +5,11 @@ import Serializer from '../src/Serializer';
 import NoSerializerFound from '../src/errors/NoSerializerFound';
 import NoDeserializerFound from '../src/errors/NoDeserializerFound';
 
-import {
-    FirstSerializer, SecondSerializer,
-    NumberSerializer, StringSerializer
-} from './_fixtures/Serializer.fixture';
+import
+    {
+        FirstSerializer, SecondSerializer,
+        NumberSerializer, StringSerializer
+    } from './_fixtures/Serializer.fixture';
 
 const overrideSerializer = new Serializer();
 overrideSerializer.addSerializer(new FirstSerializer());
@@ -40,7 +41,7 @@ describe('Serializer', () =>
 
         it('should throw error when no applicable serializer is found', async () =>
         {
-            const serialize = async () => await typeSerializer.serialize(true);
+            const serialize = async () => typeSerializer.serialize(true);
 
             expect(serialize).rejects.toStrictEqual(new NoSerializerFound('boolean'));
         });
@@ -66,7 +67,7 @@ describe('Serializer', () =>
 
         it('should throw error when no applicable deserializer is found', async () =>
         {
-            const deserialize = async () => await typeSerializer.deserialize(true);
+            const deserialize = async () => typeSerializer.deserialize(true);
 
             expect(deserialize).rejects.toStrictEqual(new NoDeserializerFound('boolean'));
         });

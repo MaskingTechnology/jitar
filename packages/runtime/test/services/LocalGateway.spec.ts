@@ -69,7 +69,7 @@ describe('services/LocalGateway', () =>
 
         it('should not run a non-existing procedure', async () =>
         {
-            const run = async () => await gateway.run('nonExisting', Version.DEFAULT, new Map(), new Map());
+            const run = async () => gateway.run('nonExisting', Version.DEFAULT, new Map(), new Map());
 
             expect(run).rejects.toEqual(new ProcedureNotFound('nonExisting'));
         });

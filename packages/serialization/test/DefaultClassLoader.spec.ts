@@ -5,11 +5,12 @@ import DefaultClassLoader from '../src/DefaultClassLoader';
 import ClassNotFound from '../src/errors/ClassNotFound';
 import InvalidClass from '../src/errors/InvalidClass';
 
-import { 
-    Person, Customer,
-    personLoadable, customerLoadable, primitiveLoadable,
-    nonexistingLoadable, invalidLoadable
-} from './_fixtures/DefaultClassLoader.fixture';
+import
+    {
+        Person, Customer,
+        personLoadable, customerLoadable, primitiveLoadable,
+        nonexistingLoadable, invalidLoadable
+    } from './_fixtures/DefaultClassLoader.fixture';
 
 const loader = new DefaultClassLoader();
 
@@ -28,21 +29,21 @@ describe('DefaultClassLoader', () =>
 
         it('should not load non-class types', async () =>
         {
-            const loadClass = async () => await loader.loadClass(primitiveLoadable);
+            const loadClass = async () => loader.loadClass(primitiveLoadable);
 
             expect(loadClass).rejects.toStrictEqual(new InvalidClass('primitive'));
         });
 
         it('should not load non-existing classes', async () =>
         {
-            const loadClass = async () => await loader.loadClass(nonexistingLoadable);
+            const loadClass = async () => loader.loadClass(nonexistingLoadable);
 
             expect(loadClass).rejects.toStrictEqual(new ClassNotFound('nonexisting'));
         });
 
         it('should not load from invalid sources', async () =>
         {
-            const loadClass = async () => await loader.loadClass(invalidLoadable);
+            const loadClass = async () => loader.loadClass(invalidLoadable);
 
             expect(loadClass).rejects.toStrictEqual(new ClassNotFound('invalid'));
         });

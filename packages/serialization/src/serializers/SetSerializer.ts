@@ -16,9 +16,9 @@ export default class SetSerializer extends ValueSerializer
         return set instanceof Object
             && set.serialized === true
             && set.name === 'Set'
-            && set.values instanceof Array; 
+            && set.values instanceof Array;
     }
-    
+
     async serialize(set: Set<unknown>): Promise<SerializedSet>
     {
         const values: unknown[] = [];
@@ -33,7 +33,7 @@ export default class SetSerializer extends ValueSerializer
 
     async deserialize(object: SerializedSet): Promise<Set<unknown>>
     {
-        const values = await Promise.all(object.values.map(async (value: unknown) => await this.deserializeOther(value)));
+        const values = await Promise.all(object.values.map(async (value: unknown) => this.deserializeOther(value)));
 
         return new Set([...values]);
     }

@@ -29,11 +29,11 @@ export default class ApplicationReader
 
     async #readSegments(segmentFiles: string[]): Promise<Segment[]>
     {
-        return Promise.all(segmentFiles.map(async (segmentFile) => await this.#segmentReader.read(segmentFile)));
+        return Promise.all(segmentFiles.map(async (segmentFile) => this.#segmentReader.read(segmentFile)));
     }
 
     async #readModules(moduleFiles: string[]): Promise<Module[]>
     {
-        return Promise.all(moduleFiles.map(async (moduleFile) => await this.#moduleReader.read(moduleFile)));
+        return Promise.all(moduleFiles.map(async (moduleFile) => this.#moduleReader.read(moduleFile)));
     }
 }

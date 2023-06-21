@@ -31,7 +31,7 @@ describe('services/LocalGateway', () =>
     {
         it('should throw a node not available error', async () =>
         {
-            const run = async () => await emptyBalancer.run('nonExisting', Version.DEFAULT, new Map(), new Map());
+            const run = async () => emptyBalancer.run('nonExisting', Version.DEFAULT, new Map(), new Map());
 
             expect(run).rejects.toEqual(new NoNodeAvailable('nonExisting'));
         });
