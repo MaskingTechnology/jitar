@@ -3,7 +3,7 @@ import express, { Express } from 'express';
 import { Logger } from 'tslog';
 
 import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime, RemoteClassLoader } from '@jitar/runtime';
-import { Serializer, SerializerBuilder } from '@jitar/serialization';
+import { ClassLoader, Serializer, SerializerBuilder, ValueSerializer } from '@jitar/serialization';
 
 import ServerOptions from './configuration/ServerOptions.js';
 
@@ -44,6 +44,7 @@ export default class JitarServer
     #app: Express;
     #runtime?: Runtime;
     #serializer: Serializer;
+    #classLoader: ClassLoader;
 
     #options: ServerOptions;
     #configuration: RuntimeConfiguration;
@@ -53,7 +54,8 @@ export default class JitarServer
 
     constructor()
     {
-        this.#serializer = SerializerBuilder.build(new RemoteClassLoader());
+        this.#classLoader = new RemoteClassLoader();
+        this.#serializer = SerializerBuilder.build(this.#classLoader);
 
         this.#app = express();
 
@@ -65,6 +67,11 @@ export default class JitarServer
         this.#options = ServerOptionsReader.read();
         this.#configuration = RuntimeConfigurationLoader.load(this.#options.config);
         this.#logger = LogBuilder.build(this.#options.loglevel);
+    }
+
+    get classLoader(): ClassLoader
+    {
+        return this.#classLoader;
     }
 
     async build(): Promise<void>
@@ -94,6 +101,11 @@ export default class JitarServer
         }
 
         this.#registeredHealthChecks.set(name, healthCheck);
+    }
+
+    addSerializer(serializer: ValueSerializer): void
+    {
+        this.#serializer.addSerializer(serializer);
     }
 
     addMiddleware(middleware: Middleware): void

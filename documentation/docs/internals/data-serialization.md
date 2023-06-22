@@ -25,13 +25,27 @@ We try to support all JavaScript built-in types. Currently we support:
 * Objects (plain and class instances)
 * Collections (Array, Map and Set)
 * Data buffers (Typed Arrays)
-* Others (Date and URL)
-
-And we have planned to add support for:
-
-* Big integers
-* Regular expressions
+* Others (BigInt, Date, RegExp and URL)
 
 ## Adding your own
 
-The serialization package is open for implementing your own serializers in case  your application has special (de)serialization needs. Jitar currently does not support adding custom serializers, but will be supported in future versions.
+The serialization package is open for implementing your own serializers in case your application has special (de)serialization needs. This can be done by creating a custom serializer and adding it to the server. Documentation how to build a custom serializer can be found in the [readme](https://github.com/MaskingTechnology/jitar/blob/main/packages/serialization/README.md){target="_blank"} of the serialization package.
+
+```ts
+//src/jitar.ts
+import { buildServer } from 'jitar';
+
+import CustomSerializer from './CustomSerializer.js';
+
+const moduleImporter = async (specifier: string) => import(specifier);
+
+const server = await buildServer(moduleImporter);
+server.addSerializer(new CustomSerializer());
+server.start();
+```
+
+Jitar uses a default class loader. If you need the class loader in your custom serializer you can get it from the server instance.
+
+```ts
+const classLoader = server.classLoader;
+```
