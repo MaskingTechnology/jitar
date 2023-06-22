@@ -25,9 +25,7 @@ We try to support all JavaScript built-in types. Currently we support:
 * Objects (plain and class instances)
 * Collections (Array, Map and Set)
 * Data buffers (Typed Arrays)
-* Big integers
-* Regular expressions
-* Others (Date and URL)
+* Others (BigInt, Date, RegExp and URL)
 
 ## Adding your own
 
