@@ -170,7 +170,7 @@ export default class JitarServer
         new JitarController(this.#app);
         new ModulesController(this.#app, proxy, this.#serializer, this.#logger);
         new ProceduresController(this.#app, proxy, this.#logger);
-        new RPCController(this.#app, proxy, this.#serializer, true, this.#logger);
+        new RPCController(this.#app, proxy, this.#serializer, this.#logger);
         new AssetsController(this.#app, proxy, index, this.#logger);
     }
 
@@ -185,14 +185,14 @@ export default class JitarServer
     {
         new NodesController(this.#app, gateway, this.#logger);
         new ProceduresController(this.#app, gateway, this.#logger);
-        new RPCController(this.#app, gateway, this.#serializer, false, this.#logger);
+        new RPCController(this.#app, gateway, this.#serializer, this.#logger);
     }
 
     #addNodeControllers(node: LocalNode): void
     {
         new HealthController(this.#app, node, this.#logger);
         new ProceduresController(this.#app, node, this.#logger);
-        new RPCController(this.#app, node, this.#serializer, true, this.#logger);
+        new RPCController(this.#app, node, this.#serializer, this.#logger);
     }
 
     #addProxyControllers(proxy: Proxy): void

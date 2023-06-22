@@ -15,13 +15,11 @@ const defaultSerializer = SerializerBuilder.build(remoteClassLoader);
 export default class Remote
 {
     #url: string;
-    #useSerializer: boolean;
     #serializer: Serializer;
 
-    constructor(url: string, useSerializer: boolean, serializer: Serializer = defaultSerializer)
+    constructor(url: string, serializer: Serializer = defaultSerializer)
     {
         this.#url = url;
-        this.#useSerializer = useSerializer;
         this.#serializer = serializer;
     }
 
@@ -109,7 +107,7 @@ export default class Remote
         const headersObject = Object.fromEntries(headers);
 
         const url = `${this.#url}/rpc/${fqn}?version=${versionString}&serialize=true`;
-        const body = await this.#createRequestBody(argsObject, this.#useSerializer);
+        const body = await this.#createRequestBody(argsObject);
         const options =
         {
             method: 'POST',
@@ -119,7 +117,7 @@ export default class Remote
 
         const response = await this.#callRemote(url, options, 200);
 
-        return this.#createResponseResult(response, this.#useSerializer);
+        return this.#createResponseResult(response);
     }
 
     async #callRemote(url: string, options: object, expectedStatus: number): Promise<Response>
@@ -128,7 +126,7 @@ export default class Remote
 
         if (response.status !== expectedStatus)
         {
-            const error = await this.#createResponseResult(response, true);
+            const error = await this.#createResponseResult(response);
 
             throw error;
         }
@@ -136,22 +134,18 @@ export default class Remote
         return response;
     }
 
-    async #createRequestBody(body: unknown, serialize: boolean): Promise<string>
+    async #createRequestBody(body: unknown): Promise<string>
     {
-        const data = serialize
-            ? await this.#serializer.serialize(body)
-            : body;
-
+        const data = await this.#serializer.serialize(body);
+        
         return JSON.stringify(data);
     }
 
-    async #createResponseResult(response: Response, serialize: boolean): Promise<unknown>
+    async #createResponseResult(response: Response): Promise<unknown>
     {
         const result = await this.#getResponseResult(response);
 
-        return serialize
-            ? this.#serializer.deserialize(result)
-            : result;
+        return this.#serializer.deserialize(result);
     }
 
     #getResponseResult(response: Response): Promise<unknown>

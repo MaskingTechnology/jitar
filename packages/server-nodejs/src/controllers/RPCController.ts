@@ -24,14 +24,12 @@ export default class RPCController
 {
     #runtime: ProcedureRuntime;
     #serializer: Serializer;
-    #useSerializer: boolean;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, runtime: ProcedureRuntime, serializer: Serializer, useSerializer: boolean, logger: Logger<unknown>)
+    constructor(app: express.Application, runtime: ProcedureRuntime, serializer: Serializer, logger: Logger<unknown>)
     {
         this.#runtime = runtime;
         this.#serializer = serializer;
-        this.#useSerializer = useSerializer;
         this.#logger = logger;
 
         app.get('/rpc/*', (request: Request, response: Response) => { this.runGet(request, response); });
@@ -159,12 +157,8 @@ export default class RPCController
 
         try
         {
-            if (this.#useSerializer)
-            {
-                args = await this.#serializer.deserialize(args) as Record<string, unknown>;
-            }
-
-            const argsMap = new Map<string, unknown>(Object.entries(args));
+            const deserializedArgs = await this.#serializer.deserialize(args) as Record<string, unknown>;
+            const argsMap = new Map<string, unknown>(Object.entries(deserializedArgs));
 
             const result = await this.#runtime.handle(fqn, version, argsMap, headers);
 
@@ -172,7 +166,7 @@ export default class RPCController
 
             this.#setResponseHeaders(response, headers);
 
-            return this.#createResultResponse(result, response, this.#useSerializer && serialize);
+            return this.#createResultResponse(result, response, serialize);
         }
         catch (error: unknown)
         {
