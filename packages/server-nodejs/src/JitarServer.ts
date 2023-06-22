@@ -44,7 +44,7 @@ export default class JitarServer
     #app: Express;
     #runtime?: Runtime;
     #serializer: Serializer;
-    #classLoader: ClassLoader
+    #classLoader: ClassLoader;
 
     #options: ServerOptions;
     #configuration: RuntimeConfiguration;
