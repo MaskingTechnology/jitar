@@ -67,6 +67,8 @@ export default class JitarServer
         this.#options = ServerOptionsReader.read();
         this.#configuration = RuntimeConfigurationLoader.load(this.#options.config);
         this.#logger = LogBuilder.build(this.#options.loglevel);
+
+        this.#printStartupMessage();
     }
 
     get classLoader(): ClassLoader
@@ -82,8 +84,6 @@ export default class JitarServer
 
     async start(): Promise<void>
     {
-        console.log(STARTUP_MESSAGE);
-
         const url = new URL(this.#configuration.url ?? RuntimeDefaults.URL);
 
         this.#addHealthChecks();
@@ -215,5 +215,10 @@ export default class JitarServer
     async #startServer(port: string): Promise<void>
     {
         return new Promise(resolve => { this.#app.listen(port, resolve); });
+    }
+
+    #printStartupMessage(): void
+    {
+        console.log(STARTUP_MESSAGE);
     }
 }

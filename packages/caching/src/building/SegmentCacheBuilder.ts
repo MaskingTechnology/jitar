@@ -1,4 +1,5 @@
 
+import DuplicateImplementation from './errors/DuplicateImplementation.js';
 import Segment from './models/Segment.js';
 import SegmentCache from './models/SegmentCache.js';
 import SegmentImplementation from './models/SegmentImplementation.js';
@@ -12,6 +13,8 @@ export default class SegmentCacheBuilder
         const files = this.#extractFiles(segment);
         const imports = this.#createImports(segment);
         const procedures = this.#mergeProcedures(segment);
+
+        this.#validateProcedures(procedures);
 
         return new SegmentCache(segment.name, files, imports, procedures);
     }
@@ -68,11 +71,36 @@ export default class SegmentCacheBuilder
                 }
 
                 const procedureCopy = new SegmentProcedure(procedure.fqn, [...procedure.implementations]);
-                
+
                 procedures.set(procedure.fqn, procedureCopy);
             }
         }
 
         return [...procedures.values()];
+    }
+
+    #validateProcedures(procedures: SegmentProcedure[]): void
+    {
+        for (const procedure of procedures)
+        {
+            this.#checkForDuplicateImplementations(procedure);
+        }
+    }
+
+    #checkForDuplicateImplementations(procedure: SegmentProcedure): void
+    {
+        for (const implementation of procedure.implementations)
+        {
+            const duplicate = procedure.implementations.find(other => 
+            {
+                return other.id !== implementation.id
+                    && other.version === implementation.version;
+            });
+
+            if (duplicate !== undefined)
+            {
+                throw new DuplicateImplementation(procedure.fqn, implementation.version);
+            }
+        }
     }
 }
