@@ -36,9 +36,9 @@ describe('building/SegmentCacheBuilder', () =>
 
         it('should throw an error if the procedure contain a duplicate implementation', () =>
         {
-            const segment = SEGMENTS.DUPLICATE;
+            const run = () => segmentCacheBuilder.build(SEGMENTS.DUPLICATE);
 
-            expect(() => segmentCacheBuilder.build(segment)).toThrowError(new DuplicateImplementation('order/storeOrder', '0.0.0'));
+            expect(run).toThrowError(new DuplicateImplementation('order/storeOrder', '0.0.0'));
         });
     });
 });

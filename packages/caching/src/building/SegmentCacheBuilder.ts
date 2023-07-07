@@ -91,13 +91,13 @@ export default class SegmentCacheBuilder
     {
         for (const implementation of procedure.implementations)
         {
-            const duplidate = procedure.implementations.find(other => 
+            const duplicate = procedure.implementations.find(other => 
             {
-                return other.id !== implementation.id &&
-                    other.version === implementation.version;
+                return other.id !== implementation.id
+                    && other.version === implementation.version;
             });
 
-            if (duplidate !== undefined)
+            if (duplicate !== undefined)
             {
                 throw new DuplicateImplementation(procedure.fqn, implementation.version);
             }
