@@ -10,6 +10,8 @@ import { moduleImporter } from '../_fixtures/utils/ModuleLoader.fixture';
 ModuleLoader.setImporter(moduleImporter);
 ModuleLoader.setBaseUrl('/root/app/');
 
+const PUBLIC_APP_PATH = './public/app.js';
+
 describe('utils/ModuleLoader', () =>
 {
     describe('.assureExtension(specifier)', () =>
@@ -18,14 +20,14 @@ describe('utils/ModuleLoader', () =>
         {
             const specifier = ModuleLoader.assureExtension('./public/app');
 
-            expect(specifier).toBe('./public/app.js');
+            expect(specifier).toBe(PUBLIC_APP_PATH);
         });
 
         it('should not add the .js extension to an application import that already has the extension', () =>
         {
-            const specifier = ModuleLoader.assureExtension('./public/app.js');
+            const specifier = ModuleLoader.assureExtension(PUBLIC_APP_PATH);
 
-            expect(specifier).toBe('./public/app.js');
+            expect(specifier).toBe(PUBLIC_APP_PATH);
         });
 
         it('should not add the .js extension to a system import', () =>
@@ -40,7 +42,7 @@ describe('utils/ModuleLoader', () =>
     {
         it('should load an existing specifier from the base URL', async () =>
         {
-            const module = await ModuleLoader.load('./public/app.js');
+            const module = await ModuleLoader.load(PUBLIC_APP_PATH);
 
             expect(module.default).toBeInstanceOf(Function);
         });

@@ -10,7 +10,9 @@ export default class ModuleNotLoaded extends ServerError
 
     constructor(url: string, reason?: string)
     {
-        super(`Module '${url}' could not be loaded${reason !== undefined ? ` | ${reason}` : ''}`);
+        const postfix = reason !== undefined ? ` | ${reason}` : '';
+
+        super(`Module '${url}' could not be loaded${postfix}`);
 
         this.#url = url;
         this.#reason = reason;

@@ -10,8 +10,6 @@ export default class ServerOptionsReader
     static read(): ServerOptions
     {
         const args: object = yargs(process.argv).argv;
-        const options = DataConverter.convert<ServerOptions>(serverOptionsSchema, args);
-
-        return options;
+        return DataConverter.convert<ServerOptions>(serverOptionsSchema, args);
     }
 }
