@@ -121,7 +121,9 @@ export default class RemoteBuilder
         const name = implementation.executable.name;
         const parameters = this.#createParameters(implementation.executable.parameters);
 
-        return `\nexport ${asDefault ? `${Keyword.DEFAULT} ` : ''}async function ${name}(${parameters})`;
+        return asDefault
+            ? `\nexport ${Keyword.DEFAULT} async function ${name}(${parameters})`
+            : `\nexport async function ${name}(${parameters})`;
     }
 
     #createFunction(declaration: string, body: string): string

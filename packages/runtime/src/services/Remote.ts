@@ -12,6 +12,8 @@ import Node from './Node.js';
 const remoteClassLoader = new RemoteClassLoader();
 const defaultSerializer = SerializerBuilder.build(remoteClassLoader);
 
+const APPLICATION_JSON = 'application/json';
+
 export default class Remote
 {
     #url: string;
@@ -29,14 +31,13 @@ export default class Remote
         const options =
         {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': APPLICATION_JSON },
             body: JSON.stringify(segmentFiles)
         };
 
         const response = await this.#callRemote(url, options, 200);
-        const clientId = await response.text();
 
-        return clientId;
+        return response.text();
     }
 
     async loadFile(filename: string): Promise<File>
@@ -91,7 +92,7 @@ export default class Remote
         const options =
         {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': APPLICATION_JSON },
             body: JSON.stringify(body)
         };
 
@@ -100,7 +101,7 @@ export default class Remote
 
     async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
     {
-        headers.set('content-type', 'application/json');
+        headers.set('content-type', APPLICATION_JSON);
 
         const versionString = version.toString();
         const argsObject = Object.fromEntries(args);
@@ -126,9 +127,7 @@ export default class Remote
 
         if (response.status !== expectedStatus)
         {
-            const error = await this.#createResponseResult(response);
-
-            throw error;
+            throw await this.#createResponseResult(response);
         }
 
         return response;

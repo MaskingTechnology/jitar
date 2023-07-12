@@ -29,6 +29,7 @@ const renameFiles: Record<string, string | undefined> = {
 
 const defaultTargetDir = 'jitar-project';
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 async function execute()
 {
     const argTargetDir = formatTargetDir(argv._[0]);
@@ -181,21 +182,24 @@ async function execute()
 
     if (root !== cwd)
     {
-        console.log(`  cd ${cdProjectName.includes(' ') ? `"${cdProjectName}"` : cdProjectName}`);
+        const projectName = cdProjectName.includes(' ')
+            ? `"${cdProjectName}"`
+            : cdProjectName;
+
+        console.log(`  cd ${projectName}`);
     }
 
-    switch (pkgManager)
+    if (pkgManager === 'yarn')
     {
-        case 'yarn':
-            console.log('  yarn');
-            console.log('  yarn build');
-            console.log('  yarn standalone');
-            break;
-        default:
-            console.log(`  ${pkgManager} install`);
-            console.log(`  ${pkgManager} run build`);
-            console.log(`  ${pkgManager} run standalone`);
-            break;
+        console.log('  yarn');
+        console.log('  yarn build');
+        console.log('  yarn standalone');
+    }
+    else
+    {
+        console.log(`  ${pkgManager} install`);
+        console.log(`  ${pkgManager} run build`);
+        console.log(`  ${pkgManager} run standalone`);
     }
 
     console.log();

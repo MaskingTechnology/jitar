@@ -6,6 +6,7 @@ import DuplicateImplementation from '../../src/building/errors/DuplicateImplemen
 
 import { INPUT, OUTPUT } from '../_fixtures/building/SegmentCacheBuilder.fixture';
 import { SEGMENTS } from '../_fixtures/building/models/Segment.fixture';
+import { CONSTANTS } from '../_fixtures/Constants.fixture';
 
 const segmentCacheBuilder = new SegmentCacheBuilder();
 
@@ -38,7 +39,7 @@ describe('building/SegmentCacheBuilder', () =>
         {
             const run = () => segmentCacheBuilder.build(SEGMENTS.DUPLICATE);
 
-            expect(run).toThrowError(new DuplicateImplementation('order/storeOrder', '0.0.0'));
+            expect(run).toThrowError(new DuplicateImplementation(CONSTANTS.STORE_ORDER_FQN, '0.0.0'));
         });
     });
 });

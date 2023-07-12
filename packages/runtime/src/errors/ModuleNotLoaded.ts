@@ -10,6 +10,7 @@ export default class ModuleNotLoaded extends ServerError
 
     constructor(url: string, reason?: string)
     {
+        //eslint-disable-next-line sonarjs/no-nested-template-literals
         super(`Module '${url}' could not be loaded${reason !== undefined ? ` | ${reason}` : ''}`);
 
         this.#url = url;

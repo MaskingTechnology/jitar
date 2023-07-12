@@ -21,6 +21,8 @@ export default class ReflectionExport extends ReflectionMember
 
     toString(): string
     {
-        return `export { ${this.#members.join(', ')} }${this.#from ? ` from '${this.#from}'` : ''}`;
+        return this.#from
+            ? `export { ${this.#members.join(', ')} } from '${this.#from}'`
+            : `export { ${this.#members.join(', ')} }`;
     }
 }
