@@ -26,7 +26,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: '**/package-lock.json'
         
-      - run: rm -rf ./home/runner/work/jitar/jitar/node_modules
-      - run: npm install
+      - run: npm install @nrwl/nx-linux-x64-gnu
+      - run: npm ci
       - run: npx lerna run lint,test --scope=@jitar/reflection --scope=@jitar/serialization --scope=@jitar/runtime --scope=@jitar/caching --scope=@jitar/server-nodejs --scope=jitar --scope=create-jitar --scope=@jitar/plugin-vite
