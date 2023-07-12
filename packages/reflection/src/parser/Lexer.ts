@@ -20,7 +20,7 @@ const ESCAPE_CHAR = '\\';
 
 export default class Lexer
 {
-    tokenize(code: string, omitWhitespace = true, omitComments = true): TokenList
+    tokenize(code: string): TokenList
     {
         const charList = new CharList(code);
         const tokens: Token[] = [];
@@ -35,15 +35,9 @@ export default class Lexer
             {
                 break;
             }
-            else if (omitWhitespace && token.isType(TokenType.WHITESPACE))
+            else if (token.isType(TokenType.WHITESPACE) || token.isType(TokenType.COMMENT))
             {
-                charList.step(); // Skip the whitespace
-
-                continue;
-            }
-            else if (omitComments && token.isType(TokenType.COMMENT))
-            {
-                charList.step(); // Skip the comment
+                charList.step(); // Skip the token
 
                 continue;
             }

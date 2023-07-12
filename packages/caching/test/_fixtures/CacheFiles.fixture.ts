@@ -1,4 +1,6 @@
 
+import { CONSTANTS } from '../_fixtures/Constants.fixture';
+
 const ORDER_SEGMENT_REPOSITORY = `export const files = [
 \t"order/createOrder.js",
 \t"order/storeOrder.js"
@@ -50,7 +52,7 @@ export async function createOrderLine(item)
 
 const CREATE_ORDER_REMOTE =
 `export default async function createOrder(items) {
-\tthrow new ProcedureNotAccessible('order/createOrder', '0.0.0');
+\tthrow new ProcedureNotAccessible('${CONSTANTS.CREATE_ORDER_FQN}', '0.0.0');
 }`;
 
 const STORE_ORDER_LOCAL =
@@ -70,11 +72,11 @@ export async function v1_0_0(...orders)
 
 const STORE_ORDER_REMOTE =
 `export async function v0_0_0(order) {
-\treturn __runProcedure('order/storeOrder', '0.0.0', { 'order': order }, this);
+\treturn __runProcedure('${CONSTANTS.STORE_ORDER_FQN}', '0.0.0', { 'order': order }, this);
 }
 
 export async function v1_0_0(...orders) {
-\treturn __runProcedure('order/storeOrder', '1.0.0', { '...orders': orders }, this);
+\treturn __runProcedure('${CONSTANTS.STORE_ORDER_FQN}', '1.0.0', { '...orders': orders }, this);
 }`;
 
 const ORDER_MODELS_LOCAL =
@@ -105,11 +107,11 @@ export async function searchProducts({query, sort})
 
 const GET_PRODUCTS_REMOTE =
 `export default async function getProducts(id) {
-\tthrow new ProcedureNotAccessible('product/getProducts', '0.0.0');
+\tthrow new ProcedureNotAccessible('${CONSTANTS.GET_PRODUCTS_FQN}', '0.0.0');
 }
 
 export async function searchProducts({ query , sort }) {
-\treturn __runProcedure('product/searchProducts', '0.0.0', { 'query': query, 'sort': sort }, this);
+\treturn __runProcedure('${CONSTANTS.SEARCH_PRODUCTS_FQN}', '0.0.0', { 'query': query, 'sort': sort }, this);
 }`;
 
 const GET_PRODUCTS_LOCAL_V1 =
@@ -133,11 +135,11 @@ export async function searchProducts([query, sort])
 
 const GET_PRODUCTS_REMOTE_V1 =
 `export default async function getProducts(id) {
-\tthrow new ProcedureNotAccessible('product/getProducts', '1.0.0');
+\tthrow new ProcedureNotAccessible('${CONSTANTS.GET_PRODUCTS_FQN}', '1.0.0');
 }
 
 export async function searchProducts([ query , sort ]) {
-\treturn __runProcedure('product/searchProducts', '1.0.0', { 'query': query, 'sort': sort }, this);
+\treturn __runProcedure('${CONSTANTS.SEARCH_PRODUCTS_FQN}', '1.0.0', { 'query': query, 'sort': sort }, this);
 }`;
 
 const PRODUCT_MODELS_LOCAL =

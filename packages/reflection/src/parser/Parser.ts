@@ -162,6 +162,7 @@ export default class Parser
         return new ReflectionScope(members);
     }
 
+    // eslint-disable-next-line sonarjs/cognitive-complexity
     #parseNext(tokenList: TokenList, isAsync = false): ReflectionMember | ReflectionValue | undefined
     {
         const token = tokenList.current;

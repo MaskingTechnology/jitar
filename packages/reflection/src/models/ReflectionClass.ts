@@ -146,6 +146,8 @@ export default class ReflectionClass extends ReflectionMember
 
     toString(): string
     {
-        return `class ${this.name}${this.#parentName !== undefined ? ` extends ${this.#parentName}` : ''} { ${this.#scope.toString()} }`;
+        const infix = this.#parentName !== undefined ? ` extends ${this.#parentName}` : '';
+
+        return `class ${this.name}${infix} { ${this.#scope.toString()} }`;
     }
 }

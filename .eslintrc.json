@@ -2,14 +2,19 @@
     "root": true,
     "ignorePatterns": ["**/dist/**/*", "**/node_modules/**/*","**/coverage/**/*", "**/*config*", "packages/create-jitar/templates/*"],
     "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "project": "./packages/**/tsconfig.json"
+    },
     "plugins": [
         "@typescript-eslint",
-        "eslint-plugin-jitar"
+        "eslint-plugin-jitar",
+        "sonarjs"
     ],
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
+        "plugin:sonarjs/recommended"
     ],
     "rules":
     {
