@@ -17,8 +17,6 @@ export default class Proxy extends ProcedureRuntime
 
         this.#repository = repository;
         this.#runner = runner;
-
-        this.addMiddleware(new ProcedureRunner(this));
     }
 
     get repository() { return this.#repository; }
