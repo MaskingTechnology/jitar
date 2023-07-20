@@ -3,7 +3,6 @@ import File from '../models/File.js';
 import Version from '../models/Version.js';
 
 import Repository from './Repository.js';
-import ProcedureRunner from './ProcedureRunner.js';
 import ProcedureRuntime from './ProcedureRuntime.js';
 
 export default class Proxy extends ProcedureRuntime
