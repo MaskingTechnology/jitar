@@ -1,6 +1,30 @@
 
 # Changelog
 
+## 0.4.1 (July 20, 2023)
+
+The 0.4.1 release contains some improvements for the health checks and the serialization support. We have also addressed some bugs and improved the build pipeline. The starter script has been changed in this release. Please read the [migration guide](migrations/migrate-from-0.4.0-to-0.4.1.md) for more information.
+
+New features:
+- \[[`dd49361`](https://github.com/MaskingTechnology/jitar/commit/dd49361)] `serialization`: regexp serialization support [basmasking](https://github.com/MaskingTechnology/jitar/pull/319)
+- \[[`2d54f39`](https://github.com/MaskingTechnology/jitar/commit/2d54f39)] `serialization`: added bigint support [basmasking](https://github.com/MaskingTechnology/jitar/pull/322)
+- \[[`36901fa`](https://github.com/MaskingTechnology/jitar/commit/36901fa)] `runtime`: execute health checks in parallel [basmasking](#)
+- \[[`3332a6d`](https://github.com/MaskingTechnology/jitar/commit/3332a6d)] `runtime`: handle exceptions from health checks [basmasking](https://github.com/MaskingTechnology/jitar/pull/312)
+- \[[`b58bc84`](https://github.com/MaskingTechnology/jitar/commit/b58bc84)] `runtime`: added timeout option to health checks [basmasking](https://github.com/MaskingTechnology/jitar/pull/316)
+- \[[`ace16a2`](https://github.com/MaskingTechnology/jitar/commit/ace16a2)] `runtime`: configure active health checks [basmasking](https://github.com/MaskingTechnology/jitar/pull/317)
+- \[[`5b100c8`](https://github.com/MaskingTechnology/jitar/commit/5b100c8)] `server`: custom serializers support [basmasking](https://github.com/MaskingTechnology/jitar/pull/325)
+
+Bugs:
+- \[[`a9af34e`](https://github.com/MaskingTechnology/jitar/commit/a9af34e)] `runtime`: functions can be registered twice [basmasking](https://github.com/MaskingTechnology/jitar/pull/326)
+- \[[`2f2f254`](https://github.com/MaskingTechnology/jitar/commit/2f2f254)] `runtime`: middleware not executed properly [petermasking](https://github.com/MaskingTechnology/jitar/pull/342)
+- \[[`6e444a0`](https://github.com/MaskingTechnology/jitar/commit/6e444a0)] `server`: incorrect serialization control at the gateway [petermasking](https://github.com/MaskingTechnology/jitar/pull/324)
+
+Chores:
+- \[[`46bebfe`](https://github.com/MaskingTechnology/jitar/commit/46bebfe)] `build`: update linter to eliminate returns of await in async functions [basmasking](https://github.com/MaskingTechnology/jitar/pull/318)
+- \[[`fe28dbe`](https://github.com/MaskingTechnology/jitar/commit/fe28dbe)] `build`: migrate to lerna 7 [basmasking](https://github.com/MaskingTechnology/jitar/pull/321)
+- \[[`5c9754e`](https://github.com/MaskingTechnology/jitar/commit/5c9754e)] `build`: added sonarjs for linting [basmasking](https://github.com/MaskingTechnology/jitar/pull/339)
+- \[[`3c829fc`](https://github.com/MaskingTechnology/jitar/commit/3c829fc)] `packaging`: moved @jitar dependencies to devDependencies for jitar  [basmasking](#)
+
 ## 0.4.0 (May 31, 2023)
 
 The 0.4.0 release is a major release that focussed on improving the internal structure for improved maintainability, testability, etc.. We also added some new features and fixed some bugs.
