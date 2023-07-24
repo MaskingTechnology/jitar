@@ -45,7 +45,7 @@ import { buildServer } from 'jitar';
 const moduleImporter = async (specifier: string) => import(specifier);
 
 const server = await buildServer(moduleImporter);
-server.addHealthCheck('ipd', new IDPHealthCheck());
+server.addHealthCheck('idp', new IDPHealthCheck());
 server.start();
 
 // --------------------------------------------------------
@@ -72,7 +72,7 @@ const moduleImporter = async (specifier: string) => import(specifier);
 const server = await startServer(moduleImporter);
 
 // All health checks can be added in the same script
-server.addHealthCheck('ipd', new IDPHealthCheck());
+server.addHealthCheck('idp', new IDPHealthCheck());
 server.addHealthCheck('database', new DatabaseHealthCheck());
 
 server.start();
