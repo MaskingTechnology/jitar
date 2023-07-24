@@ -11,7 +11,7 @@
     "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json"
   },
   "devDependencies": {
-    "@jitar/plugin-vite": "^0.4.0",
+    "@jitar/plugin-vite": "^0.4.1",
     "@sveltejs/vite-plugin-svelte": "^2.2.0",
     "@tsconfig/svelte": "^4.0.1",
     "svelte": "^3.59.0",
@@ -21,6 +21,6 @@
     "vite": "^4.3.5"
   },
   "dependencies": {
-    "jitar": "^0.4.0"
+    "jitar": "^0.4.1"
   }
 }
