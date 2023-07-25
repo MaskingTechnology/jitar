@@ -1,8 +1,0 @@
-coverage
-src
-test
-node_modules
-.eslintignore
-.eslintrc
-tsconfig.json
-*.tgz

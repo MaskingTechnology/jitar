@@ -11,6 +11,7 @@
         ".": "./dist/lib.js",
         "./server.js": "./dist/server.js"
     },
+    "files": ["CHANGELOG.md", "README.md", "dist"],
     "scripts": {
         "lint": "eslint . --ext .ts",
         "build": "tsc -p tsconfig.json",

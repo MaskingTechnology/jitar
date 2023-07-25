@@ -12,6 +12,7 @@
         "./server": "./dist/server.js",
         "./client": "./dist/client.js"
     },
+    "files": ["CHANGELOG.md", "README.md", "dist", "!dist/types"],
     "scripts": {
         "lint": "eslint . --ext .ts",
         "validate": "tsc -p tsconfig.json --noEmit",
