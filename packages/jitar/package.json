@@ -1,6 +1,6 @@
 {
     "name": "jitar",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "description": "Distributed runtime for JavaScript and TypeScript to chop monolithic applications into micros.",
     "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
     "license": "MIT",
@@ -12,6 +12,7 @@
         "./server": "./dist/server.js",
         "./client": "./dist/client.js"
     },
+    "files": ["CHANGELOG.md", "README.md", "dist", "!dist/types"],
     "scripts": {
         "lint": "eslint . --ext .ts",
         "validate": "tsc -p tsconfig.json --noEmit",
@@ -30,8 +31,8 @@
         "zod": "^3.21.4"
     },
     "devDependencies": {
-        "@jitar/runtime": "^0.4.0",
-        "@jitar/server-nodejs": "^0.4.0"
+        "@jitar/runtime": "^0.4.1",
+        "@jitar/server-nodejs": "^0.4.1"
     },
     "engines": {
         "node": ">=18.7"

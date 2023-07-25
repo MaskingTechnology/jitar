@@ -10,11 +10,11 @@
     "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json"
   },
   "dependencies": {
-    "jitar": "^0.4.0",
+    "jitar": "^0.4.1",
     "vue": "^3.2.47"
   },
   "devDependencies": {
-    "@jitar/plugin-vite": "^0.4.0",
+    "@jitar/plugin-vite": "^0.4.1",
     "@vitejs/plugin-vue": "^4.2.1",
     "typescript": "^5.0.4",
     "vite": "^4.3.5",

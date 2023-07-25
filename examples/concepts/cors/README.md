@@ -38,7 +38,17 @@ npm install
 npm run build
 ```
 
-3\. Start web server from the same directory.
+3\. Start the server and client from the same directory.
+
+For this we need two terminal sessions. The starting order is not of importance for this example.
+
+**Server** (terminal 1)
+
+```bash
+npm run standalone
+```
+
+**Client** (terminal 2)
 
 ```bash
 npm run client

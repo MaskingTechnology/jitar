@@ -22,7 +22,7 @@ Jitar provides an interface you have to implement in order to add a custom check
 ```ts
 // src/health/DatabaseHealthCheck.ts
 import { HealthCheck } from 'jitar';
-import { pingDatabase } from '../common/utils;
+import { pingDatabase } from '../common/utils';
 
 export default class DatabaseHealthCheck implements HealthCheck
 {

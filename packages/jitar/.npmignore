@@ -1,7 +1,0 @@
-src
-dist/types
-tsconfig.json
-rollup.config.js
-rollup.definitions.js
-vite.config.ts
-*.tgz

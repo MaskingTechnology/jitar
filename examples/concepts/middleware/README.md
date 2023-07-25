@@ -36,7 +36,7 @@ npm run build
 3\. Then start Jitar with the following command from the same directory.
 
 ```bash
-npm run start
+npm run standalone
 ```
 
 The ``requests.http`` file contains an example request to call the procedure.
