@@ -2,7 +2,7 @@
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
 import File from '../models/File.js';
-import Version from '../models/Version.js';
+import Request from '../models/Request.js';
 import Module from '../types/Module.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
 import RemoteClassLoader from '../utils/RemoteClassLoader.js';
@@ -98,15 +98,15 @@ export default class Remote
         await this.#callRemote(url, options, 201);
     }
 
-    async run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    async run(request: Request): Promise<unknown>
     {
-        headers.set('content-type', APPLICATION_JSON);
+        request.setHeader('content-type', APPLICATION_JSON);
 
-        const versionString = version.toString();
-        const argsObject = Object.fromEntries(args);
-        const headersObject = Object.fromEntries(headers);
+        const versionString = request.version.toString();
+        const argsObject = Object.fromEntries(request.args);
+        const headersObject = Object.fromEntries(request.headers);
 
-        const url = `${this.#url}/rpc/${fqn}?version=${versionString}&serialize=true`;
+        const url = `${this.#url}/rpc/${request.fqn}?version=${versionString}&serialize=true`;
         const body = await this.#createRequestBody(argsObject);
         const options =
         {

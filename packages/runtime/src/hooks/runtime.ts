@@ -1,7 +1,7 @@
 
 import RuntimeNotAvailable from '../errors/RuntimeNotAvailable.js';
 
-import Context from '../models/Context.js';
+import Request from '../models/Request.js';
 import VersionParser from '../utils/VersionParser.js';
 
 import LocalNode from '../services/LocalNode.js';
@@ -13,7 +13,7 @@ export function setRuntime(runtime: LocalNode): void
     _runtime = runtime;
 }
 
-export async function runProcedure(fqn: string, versionNumber: string, args: object, context?: object): Promise<unknown>
+export async function runProcedure(fqn: string, versionNumber: string, args: object, sourceRequest?: Request): Promise<unknown>
 {
     if (_runtime === undefined)
     {
@@ -22,7 +22,9 @@ export async function runProcedure(fqn: string, versionNumber: string, args: obj
 
     const version = VersionParser.parse(versionNumber);
     const argsMap = new Map<string, unknown>(Object.entries(args));
-    const headersMap = context instanceof Context ? context.headers : new Map();
+    const headersMap = sourceRequest instanceof Request ? sourceRequest.headers : new Map();
 
-    return _runtime.run(fqn, version, argsMap, headersMap);
+    const targetRequest = new Request(fqn, version, argsMap, headersMap);
+
+    return _runtime.run(targetRequest);
 }

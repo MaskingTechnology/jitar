@@ -1,7 +1,7 @@
 
 import NoNodeAvailable from '../errors/NoNodeAvailable.js';
 
-import Version from '../models/Version.js';
+import Request from '../models/Request.js';
 
 import Node from './Node.js';
 
@@ -47,15 +47,15 @@ export default class NodeBalancer
         return this.#nodes[this.#currentIndex++];
     }
 
-    run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    run(request: Request): Promise<unknown>
     {
         const node = this.getNextNode();
 
         if (node === undefined)
         {
-            throw new NoNodeAvailable(fqn);
+            throw new NoNodeAvailable(request.fqn);
         }
 
-        return node.run(fqn, version, args, headers);
+        return node.run(request);
     }
 }

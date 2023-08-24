@@ -1,7 +1,8 @@
 
 import ProcedureNotFound from '../errors/ProcedureNotFound.js';
 
-import Version from '../models/Version.js';
+import Request from '../models/Request.js';
+
 import ModuleLoader from '../utils/ModuleLoader.js';
 
 import Gateway from './Gateway.js';
@@ -92,15 +93,15 @@ export default class LocalGateway extends Gateway
         return balancer;
     }
 
-    run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    run(request: Request): Promise<unknown>
     {
-        const balancer = this.#getBalancer(fqn);
+        const balancer = this.#getBalancer(request.fqn);
 
         if (balancer === undefined)
         {
-            throw new ProcedureNotFound(fqn);
+            throw new ProcedureNotFound(request.fqn);
         }
 
-        return balancer.run(fqn, version, args, headers);
+        return balancer.run(request);
     }
 }

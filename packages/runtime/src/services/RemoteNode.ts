@@ -1,5 +1,5 @@
 
-import Version from '../models/Version.js';
+import Request from '../models/Request.js';
 
 import Node from './Node.js';
 import Remote from './Remote.js';
@@ -43,8 +43,8 @@ export default class RemoteNode extends Node
         return this.#remote.getHealth();
     }
 
-    run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    run(request: Request): Promise<unknown>
     {
-        return this.#remote.run(fqn, version, args, headers);
+        return this.#remote.run(request);
     }
 }
