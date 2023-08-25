@@ -44,11 +44,11 @@ To prevent the access of server modules from any client, make sure that all modu
 The easiest way to add auth to your application is [using middleware](./middleware). We recommend separating the implementation of the authentication and authorization process. This enables allocating these tasks to different services in a distributed setup. Our typical setup looks like this.
 
 ```ts
-import { Middleware, Version, NextHandler } from 'jitar';
+import { Middleware, Request, NextHandler } from 'jitar';
 
 export default class Authentication implements Middleware
 {
-    async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: NextHandler): Promise<unknown>
+    async handle(request: Request, next: NextHandler): Promise<unknown>
     {
         // Get Authorization header
         // Authenticate the user
@@ -60,11 +60,11 @@ export default class Authentication implements Middleware
 In a distributed setup we register this middleware at the [gateway service](../fundamentals/runtime-services.md#gateway) to make sure a node only gets called when the user is authenticated. The authorization may depend on attributes gathered during the execution of the function. Therefore we add the authorization middleware to the [node service](../fundamentals/runtime-services#node).
 
 ```ts
-import { Middleware, Version, NextHandler } from 'jitar';
+import { Middleware, Request, NextHandler } from 'jitar';
 
 export default class Authorization implements Middleware
 {
-    async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: NextHandler): Promise<unknown>
+    async handle(request: Request, next: NextHandler): Promise<unknown>
     {
         // Get user info from the args (remove if needed)
         // Authorize the user (RBAC, ABAC, …)
