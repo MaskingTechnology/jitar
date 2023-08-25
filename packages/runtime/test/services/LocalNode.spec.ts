@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 
 import ProcedureNotFound from '../../src/errors/ProcedureNotFound';
+import Request from '../../src/models/Request';
 import Version from '../../src/models/Version';
 
 import { NODES } from '../_fixtures/services/LocalNode.fixture';
@@ -52,28 +53,32 @@ describe('services/LocalNode', () =>
     {
         it('should run a public procedure that calls a private procedure on the same segment', async () =>
         {
-            const result = await node.run('second', Version.DEFAULT, new Map(), new Map());
+            const request = new Request('second', Version.DEFAULT, new Map(), new Map());
+            const result = await node.run(request);
 
             expect(result).toBe('first');
         });
 
         it('should run a public procedure that calls a private procedure on another segment', async () =>
         {
-            const result = await node.run('sixth', Version.DEFAULT, new Map(), new Map());
+            const request = new Request('sixth', Version.DEFAULT, new Map(), new Map());
+            const result = await node.run(request);
 
             expect(result).toBe('first');
         });
 
         it('should run a public procedure that calls a public procedure on another segment', async () =>
         {
-            const result = await node.run('third', Version.DEFAULT, new Map(), new Map());
+            const request = new Request('third', Version.DEFAULT, new Map(), new Map());
+            const result = await node.run(request);
 
             expect(result).toBe('fourth');
         });
 
         it('should not run a non-existing procedure', async () =>
         {
-            const run = async () => node.run('nonExisting', Version.DEFAULT, new Map(), new Map());
+            const request = new Request('nonExisting', Version.DEFAULT, new Map(), new Map());
+            const run = async () => node.run(request);
 
             expect(run).rejects.toEqual(new ProcedureNotFound('nonExisting'));
         });

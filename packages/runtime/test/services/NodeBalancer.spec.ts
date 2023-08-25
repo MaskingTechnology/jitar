@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 
 import NoNodeAvailable from '../../src/errors/NoNodeAvailable';
+import Request from '../../src/models/Request';
 import Version from '../../src/models/Version';
 
 import { BALANCERS, NODES } from '../_fixtures/services/NodeBalancer.fixture';
@@ -31,7 +32,8 @@ describe('services/LocalGateway', () =>
     {
         it('should throw a node not available error', async () =>
         {
-            const run = async () => emptyBalancer.run('nonExisting', Version.DEFAULT, new Map(), new Map());
+            const request = new Request('nonExisting', Version.DEFAULT, new Map(), new Map());
+            const run = async () => emptyBalancer.run(request);
 
             expect(run).rejects.toEqual(new NoNodeAvailable('nonExisting'));
         });

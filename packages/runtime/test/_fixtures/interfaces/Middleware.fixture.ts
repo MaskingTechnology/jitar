@@ -1,14 +1,14 @@
 
-import Version from '../../../src/models/Version';
+import Request from '../../../src/models/Request';
 import Middleware from '../../../src/interfaces/Middleware';
 
 class FirstMiddleware implements Middleware
 {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: () => Promise<unknown>): Promise<unknown>
+    async handle(request: Request, next: () => Promise<unknown>): Promise<unknown>
     {
-        headers.set('first', 'yes');
-        headers.set('last', '1');
+        request.setHeader('first', 'yes');
+        request.setHeader('last', '1');
 
         const result = await next();
 
@@ -19,10 +19,10 @@ class FirstMiddleware implements Middleware
 class SecondMiddleware implements Middleware
 {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: () => Promise<unknown>): Promise<unknown>
+    async handle(request: Request, next: () => Promise<unknown>): Promise<unknown>
     {
-        headers.set('second', 'yes');
-        headers.set('last', '2');
+        request.setHeader('second', 'yes');
+        request.setHeader('last', '2');
 
         const result = await next();
 
@@ -33,10 +33,10 @@ class SecondMiddleware implements Middleware
 class ThirdMiddleware implements Middleware
 {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: () => Promise<unknown>): Promise<unknown>
+    async handle(request: Request, next: () => Promise<unknown>): Promise<unknown>
     {
-        headers.set('third', 'yes');
-        headers.set('last', '3');
+        request.setHeader('third', 'yes');
+        request.setHeader('last', '3');
 
         return '3';
     }

@@ -24,6 +24,21 @@ export default class Request
 
     get headers() { return this.#headers; }
 
+    setArgument(name: string, value: unknown)
+    {
+        this.#args.set(name, value);
+    }
+
+    getArgument(name: string): unknown
+    {
+        return this.#args.get(name);
+    }
+
+    removeArgument(name: string)
+    {
+        this.#args.delete(name);
+    }
+
     clearHeaders()
     {
         this.#headers.clear();
@@ -32,5 +47,15 @@ export default class Request
     setHeader(name: string, value: string)
     {
         this.#headers.set(name, value);
+    }
+
+    getHeader(name: string): string | undefined
+    {
+        return this.#headers.get(name);
+    }
+
+    removeHeader(name: string)
+    {
+        this.#headers.delete(name);
     }
 }

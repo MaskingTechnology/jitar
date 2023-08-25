@@ -1,6 +1,7 @@
 
 import { describe, expect, it } from 'vitest';
 
+import Request from '../../src/models/Request';
 import Version from '../../src/models/Version';
 
 import { RUNTIMES } from '../_fixtures/services/ProcedureRuntime.fixture';
@@ -16,7 +17,8 @@ describe('services/ProcedureRuntime', () =>
             const args = new Map();
             const headers = new Map();
 
-            const result = await runtime.handle('test', new Version(1, 0, 0), args, headers);
+            const request = new Request('test', new Version(1, 0, 0), args, headers);
+            const result = await runtime.handle(request);
 
             expect(result).toBe('123');
             expect(headers.get('first')).toBe('yes');

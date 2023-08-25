@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 
 import ProcedureNotFound from '../../src/errors/ProcedureNotFound';
+import Request from '../../src/models/Request';
 import Version from '../../src/models/Version';
 
 import { GATEWAYS, GATEWAY_URL } from '../_fixtures/services/LocalGateway.fixture';
@@ -55,21 +56,24 @@ describe('services/LocalGateway', () =>
     {
         it('should find and run a procedure from a node', async () =>
         {
-            const firstResult = await gateway.run('second', Version.DEFAULT, new Map(), new Map());
+            const request = new Request('second', Version.DEFAULT, new Map(), new Map());
+            const firstResult = await gateway.run(request);
 
             expect(firstResult).toBe('first');
         });
 
         it('should find and run a procedure from a node that calls a procedure on another node', async () =>
         {
-            const result = await gateway.run('third', Version.DEFAULT, new Map(), new Map());
+            const request = new Request('third', Version.DEFAULT, new Map(), new Map());
+            const result = await gateway.run(request);
 
             expect(result).toBe('fourth');
         });
 
         it('should not run a non-existing procedure', async () =>
         {
-            const run = async () => gateway.run('nonExisting', Version.DEFAULT, new Map(), new Map());
+            const request = new Request('nonExisting', Version.DEFAULT, new Map(), new Map());
+            const run = async () => gateway.run(request);
 
             expect(run).rejects.toEqual(new ProcedureNotFound('nonExisting'));
         });
