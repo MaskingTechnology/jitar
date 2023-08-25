@@ -4,6 +4,7 @@ export
     HealthCheck,
     Middleware,
     NextHandler,
+    Request,
     Segment,
     Procedure,
     Implementation,
