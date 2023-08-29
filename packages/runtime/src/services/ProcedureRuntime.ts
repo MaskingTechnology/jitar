@@ -1,8 +1,10 @@
 
 import Middleware from '../interfaces/Middleware.js';
 import Runner from '../interfaces/Runner.js';
+
 import Request from '../models/Request.js';
-import Version from '../models/Version.js';
+import Response from '../models/Response.js';
+
 import NextHandler from '../types/NextHandler.js';
 
 import Runtime from './Runtime.js';
@@ -23,7 +25,7 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
     abstract hasProcedure(name: string): boolean;
 
-    abstract run(request: Request): Promise<unknown>;
+    abstract run(request: Request): Promise<Response>;
 
     addMiddleware(middleware: Middleware)
     {
@@ -40,7 +42,7 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
         return this.#middlewares.find(middleware => middleware instanceof type);
     }
 
-    handle(request: Request): Promise<unknown>
+    handle(request: Request): Promise<Response>
     {
         const startHandler = this.#getNextHandler(request, 0);
 
@@ -53,8 +55,7 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
         if (next === undefined)
         {
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            return async () => {};
+            return async () => new Response();
         }
 
         const nextHandler = this.#getNextHandler(request, index + 1);

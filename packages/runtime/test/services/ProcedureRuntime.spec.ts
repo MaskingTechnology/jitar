@@ -18,9 +18,9 @@ describe('services/ProcedureRuntime', () =>
             const headers = new Map();
 
             const request = new Request('test', new Version(1, 0, 0), args, headers);
-            const result = await runtime.handle(request);
+            const response = await runtime.handle(request);
 
-            expect(result).toBe('123');
+            expect(response.result).toBe('123');
             expect(headers.get('first')).toBe('yes');
             expect(headers.get('second')).toBe('yes');
             expect(headers.get('third')).toBe('yes');

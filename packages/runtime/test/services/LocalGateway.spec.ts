@@ -57,17 +57,17 @@ describe('services/LocalGateway', () =>
         it('should find and run a procedure from a node', async () =>
         {
             const request = new Request('second', Version.DEFAULT, new Map(), new Map());
-            const firstResult = await gateway.run(request);
+            const response = await gateway.run(request);
 
-            expect(firstResult).toBe('first');
+            expect(response.result).toBe('first');
         });
 
         it('should find and run a procedure from a node that calls a procedure on another node', async () =>
         {
             const request = new Request('third', Version.DEFAULT, new Map(), new Map());
-            const result = await gateway.run(request);
+            const response = await gateway.run(request);
 
-            expect(result).toBe('fourth');
+            expect(response.result).toBe('fourth');
         });
 
         it('should not run a non-existing procedure', async () =>

@@ -7,6 +7,7 @@ import RepositoryNotAvailable from '../errors/RepositoryNotAvailable.js';
 
 import Procedure from '../models/Procedure.js';
 import Request from '../models/Request.js';
+import Response from '../models/Response.js';
 import Segment from '../models/Segment.js';
 import Module from '../types/Module.js';
 import ArgumentConstructor from '../utils/ArgumentConstructor.js';
@@ -125,7 +126,7 @@ export default class LocalNode extends Node
         return this.#repository.importModule(this.#clientId, url);
     }
 
-    run(request: Request): Promise<unknown>
+    run(request: Request): Promise<Response>
     {
         const procedure = this.#getProcedure(request.fqn);
 
@@ -134,7 +135,7 @@ export default class LocalNode extends Node
             : this.#runProcedure(procedure, request);
     }
 
-    #runGateway(request: Request): Promise<unknown>
+    #runGateway(request: Request): Promise<Response>
     {
         if (this.#gateway === undefined)
         {
@@ -144,7 +145,7 @@ export default class LocalNode extends Node
         return this.#gateway.run(request);
     }
 
-    #runProcedure(procedure: Procedure, request: Request): Promise<unknown>
+    async #runProcedure(procedure: Procedure, request: Request): Promise<Response>
     {
         const implementation = procedure.getImplementation(request.version);
 
@@ -155,6 +156,8 @@ export default class LocalNode extends Node
 
         const values: unknown[] = this.#argumentConstructor.extract(implementation.parameters, request.args);
 
-        return implementation.executable.call(request, ...values);
+        const result = await implementation.executable.call(request, ...values);
+
+        return new Response(result);
     }
 }

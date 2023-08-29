@@ -2,6 +2,7 @@
 import ProcedureNotFound from '../errors/ProcedureNotFound.js';
 
 import Request from '../models/Request.js';
+import Response from '../models/Response.js';
 
 import ModuleLoader from '../utils/ModuleLoader.js';
 
@@ -93,7 +94,7 @@ export default class LocalGateway extends Gateway
         return balancer;
     }
 
-    run(request: Request): Promise<unknown>
+    run(request: Request): Promise<Response>
     {
         const balancer = this.#getBalancer(request.fqn);
 

@@ -160,14 +160,14 @@ export default class RPCController
             const deserializedArgs = await this.#serializer.deserialize(args) as Record<string, unknown>;
             const argsMap = new Map<string, unknown>(Object.entries(deserializedArgs));
 
-            const request = new JitarRequest(fqn, version, argsMap, headers);
-            const result = await this.#runtime.handle(request);
+            const runtimeRequest = new JitarRequest(fqn, version, argsMap, headers);
+            const runtimeResponse = await this.#runtime.handle(runtimeRequest);
 
             this.#logger.info(`Ran procedure -> ${fqn} (v${version.toString()})`);
 
-            this.#setResponseHeaders(response, headers);
+            this.#setResponseHeaders(response, runtimeResponse.headers);
 
-            return this.#createResultResponse(result, response, serialize);
+            return this.#createResultResponse(runtimeResponse.result, response, serialize);
         }
         catch (error: unknown)
         {

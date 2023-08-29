@@ -2,6 +2,7 @@
 import NotImplemented from '../errors/generic/NotImplemented.js';
 
 import Request from '../models/Request.js';
+import Response from '../models/Response.js';
 
 import Gateway from './Gateway.js';
 import Node from './Node.js';
@@ -34,7 +35,7 @@ export default class RemoteGateway extends Gateway
         return this.#remote.addNode(node);
     }
 
-    run(request: Request): Promise<unknown>
+    run(request: Request): Promise<Response>
     {
         return this.#remote.run(request);
     }

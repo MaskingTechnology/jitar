@@ -1,5 +1,6 @@
 
 import Request from '../models/Request.js';
+import Response from '../models/Response.js';
 
 import Node from './Node.js';
 import Remote from './Remote.js';
@@ -43,7 +44,7 @@ export default class RemoteNode extends Node
         return this.#remote.getHealth();
     }
 
-    run(request: Request): Promise<unknown>
+    run(request: Request): Promise<Response>
     {
         return this.#remote.run(request);
     }

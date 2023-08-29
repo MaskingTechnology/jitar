@@ -6,11 +6,11 @@
  * Middleware is executed in the reversed order it is registered.
  */
 
-import { Middleware, Request, NextHandler } from 'jitar';
+import { Middleware, Request, Response, NextHandler } from 'jitar';
 
 export default class LoggingMiddleware implements Middleware
 {
-    async handle(request: Request, next: NextHandler): Promise<unknown>
+    async handle(request: Request, next: NextHandler): Promise<Response>
     {
         // Modify the request here (e.g. add a header)
 

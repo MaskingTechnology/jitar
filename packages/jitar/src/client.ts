@@ -5,6 +5,7 @@ export
     Middleware,
     NextHandler,
     Request,
+    Response,
     Segment,
     Procedure,
     Implementation,

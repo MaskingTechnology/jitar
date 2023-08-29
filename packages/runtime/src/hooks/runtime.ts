@@ -25,6 +25,7 @@ export async function runProcedure(fqn: string, versionNumber: string, args: obj
     const headersMap = sourceRequest instanceof Request ? sourceRequest.headers : new Map();
 
     const targetRequest = new Request(fqn, version, argsMap, headersMap);
+    const targetResponse = await _runtime.run(targetRequest);
 
-    return _runtime.run(targetRequest);
+    return targetResponse.result;
 }

@@ -2,6 +2,7 @@
 import NoNodeAvailable from '../errors/NoNodeAvailable.js';
 
 import Request from '../models/Request.js';
+import Response from '../models/Response.js';
 
 import Node from './Node.js';
 
@@ -47,7 +48,7 @@ export default class NodeBalancer
         return this.#nodes[this.#currentIndex++];
     }
 
-    run(request: Request): Promise<unknown>
+    run(request: Request): Promise<Response>
     {
         const node = this.getNextNode();
 

@@ -1,6 +1,7 @@
 
 import File from '../models/File.js';
 import Request from '../models/Request.js';
+import Response from '../models/Response.js';
 
 import Repository from './Repository.js';
 import ProcedureRuntime from './ProcedureRuntime.js';
@@ -49,7 +50,7 @@ export default class Proxy extends ProcedureRuntime
         return this.#repository.loadModule(clientId, filename);
     }
 
-    run(request: Request): Promise<unknown>
+    run(request: Request): Promise<Response>
     {
         return this.#runner.run(request);
     }

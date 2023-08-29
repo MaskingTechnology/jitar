@@ -54,25 +54,25 @@ describe('services/LocalNode', () =>
         it('should run a public procedure that calls a private procedure on the same segment', async () =>
         {
             const request = new Request('second', Version.DEFAULT, new Map(), new Map());
-            const result = await node.run(request);
+            const response = await node.run(request);
 
-            expect(result).toBe('first');
+            expect(response.result).toBe('first');
         });
 
         it('should run a public procedure that calls a private procedure on another segment', async () =>
         {
             const request = new Request('sixth', Version.DEFAULT, new Map(), new Map());
-            const result = await node.run(request);
+            const response = await node.run(request);
 
-            expect(result).toBe('first');
+            expect(response.result).toBe('first');
         });
 
         it('should run a public procedure that calls a public procedure on another segment', async () =>
         {
             const request = new Request('third', Version.DEFAULT, new Map(), new Map());
-            const result = await node.run(request);
+            const response = await node.run(request);
 
-            expect(result).toBe('fourth');
+            expect(response.result).toBe('fourth');
         });
 
         it('should not run a non-existing procedure', async () =>

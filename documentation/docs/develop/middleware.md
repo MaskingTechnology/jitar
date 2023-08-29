@@ -24,19 +24,19 @@ Any middleware required to implement Jitars Middleware interface. This interface
 
 ```ts
 // src/MyMiddleware.ts
-import { Middleware, Request, NextHandler } from 'jitar';
+import { Middleware, Request, Response, NextHandler } from 'jitar';
 
 export default class MyMiddleware implements Middleware
 {
-    async handle(request: Request, next: NextHandler): Promise<unknown>
+    async handle(request: Request, next: NextHandler): Promise<Response>
     {
         // Modify the request (args and headers) here
 
-        const result = await next();
+        const response = await next();
 
         // Modify the response (result) here
 
-        return result;
+        return response;
     }
 }
 ```

@@ -3,7 +3,10 @@ import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
 import File from '../models/File.js';
 import Request from '../models/Request.js';
+import { default as ResultResponse } from '../models/Response.js';
+
 import Module from '../types/Module.js';
+
 import ModuleLoader from '../utils/ModuleLoader.js';
 import RemoteClassLoader from '../utils/RemoteClassLoader.js';
 
@@ -98,7 +101,7 @@ export default class Remote
         await this.#callRemote(url, options, 201);
     }
 
-    async run(request: Request): Promise<unknown>
+    async run(request: Request): Promise<ResultResponse>
     {
         request.setHeader('content-type', APPLICATION_JSON);
 
@@ -116,8 +119,9 @@ export default class Remote
         };
 
         const response = await this.#callRemote(url, options, 200);
+        const result = await this.#createResponseResult(response);
 
-        return this.#createResponseResult(response);
+        return new ResultResponse(result);
     }
 
     async #callRemote(url: string, options: object, expectedStatus: number): Promise<Response>
