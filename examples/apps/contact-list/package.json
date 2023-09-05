@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "jitar": "^0.4.1",
-    "mongodb": "^5.7.0",
+    "mongodb": "^6.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
