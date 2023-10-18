@@ -1,6 +1,10 @@
 
 # Changelog
 
+## 0.4.2 (October 18, 2023)
+
+The release doesn't contain any new functionality or bug fixes. The dependencies have been updated to fix some security issues.
+
 ## 0.4.1 (July 24, 2023)
 
 The 0.4.1 release contains some improvements for the health checks and the serialization support. We have also addressed some bugs and improved the build pipeline. The starter script has been changed in this release. Please read the [migration guide](migrations/migrate-from-0.4.0-to-0.4.1.md) for more information.

@@ -30,12 +30,12 @@
     "lint": "eslint . --ext .ts",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist build",
-    "release": "npm run clean && npm run build && npm publish"
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
+    "kolorist": "^1.8.0",
     "minimist": "^1.2.8",
-    "prompts": "^2.4.2",
-    "kolorist": "^1.8.0"
+    "prompts": "^2.4.2"
   },
   "repository": {
     "type": "git",
