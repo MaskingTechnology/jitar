@@ -16,14 +16,14 @@
     "lint": "eslint . --ext .ts",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist",
-    "release": "npm run clean && npm run build && npm publish --access public"
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
     "@jitar/serialization": "^0.4.1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MaskingTechnology/jitar"
+    "url": "git+https://github.com/MaskingTechnology/jitar.git"
   },
   "bugs": {
     "url": "https://github.com/MaskingTechnology/jitar/issues"

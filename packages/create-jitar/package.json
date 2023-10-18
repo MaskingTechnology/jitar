@@ -30,7 +30,7 @@
     "lint": "eslint . --ext .ts",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist build",
-    "release": "npm run clean && npm run build && npm publish"
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
     "minimist": "^1.2.8",
