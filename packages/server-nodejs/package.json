@@ -12,6 +12,9 @@
         "./server.js": "./dist/server.js"
     },
     "files": ["CHANGELOG.md", "README.md", "dist"],
+    "publishConfig": {
+        "access": "public"
+      },
     "scripts": {
         "lint": "eslint . --ext .ts",
         "build": "tsc -p tsconfig.json",

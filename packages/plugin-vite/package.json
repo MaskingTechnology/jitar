@@ -19,6 +19,9 @@
     "clean": "rm -rf dist build",
     "prepublishOnly": "npm run clean && npm run build"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@jitar/reflection": "^0.4.1"
   },

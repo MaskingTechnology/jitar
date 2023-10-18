@@ -10,6 +10,9 @@
     ".": "./dist/lib.js"
   },
   "files": ["CHANGELOG.md", "README.md", "dist"],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "vitest run",
     "test-coverage": "vitest run --coverage",
