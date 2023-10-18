@@ -28,7 +28,7 @@
         "mime-types": "^2.1.35",
         "tslog": "^4.9.2",
         "yargs": "^17.7.2",
-        "zod": "^3.22.2"
+        "zod": "^3.22.4"
     },
     "devDependencies": {
         "@jitar/runtime": "^0.4.1",
