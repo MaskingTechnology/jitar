@@ -1,6 +1,6 @@
 {
     "name": "@jitar/server-nodejs",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "description": "NodeJS server implementation for Jitar.",
     "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
     "license": "MIT",
@@ -11,10 +11,14 @@
         ".": "./dist/lib.js",
         "./server.js": "./dist/server.js"
     },
-    "files": ["CHANGELOG.md", "README.md", "dist"],
+    "files": [
+        "CHANGELOG.md",
+        "README.md",
+        "dist"
+    ],
     "publishConfig": {
         "access": "public"
-      },
+    },
     "scripts": {
         "lint": "eslint . --ext .ts",
         "build": "tsc -p tsconfig.json",
@@ -22,8 +26,8 @@
         "prepublishOnly": "npm run clean && npm run build"
     },
     "dependencies": {
-        "@jitar/caching": "^0.4.1",
-        "@jitar/runtime": "^0.4.1",
+        "@jitar/caching": "^0.4.2",
+        "@jitar/runtime": "^0.4.2",
         "express": "^4.18.2",
         "express-http-proxy": "^2.0.0",
         "fs-extra": "^11.1.1",
