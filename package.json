@@ -32,7 +32,7 @@
     "lint": "npm run lint --workspace=packages/reflection --workspace=packages/serialization --workspace=packages/runtime --workspace=packages/caching --workspace=packages/server-nodejs --workspace=packages/jitar --workspace=packages/create-jitar --workspace=packages/plugin-vite --if-present",
     "test": "npm run test --workspace=packages/reflection --workspace=packages/serialization --workspace=packages/runtime --workspace=packages/caching --workspace=packages/server-nodejs --workspace=packages/jitar --workspace=packages/create-jitar --workspace=packages/plugin-vite --if-present",
     "changelog": "auto-changelog --template changelog.hbs -p -u --commit-limit false --hide-empty-releases true",
-    "changelog-debug": "auto-changelog --template changelog-template.hbs -p --template json --output changelog-data.json"
+    "changelog-debug": "auto-changelog --template changelog.hbs -p --template json --output changelog-data.json"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.2.3",
