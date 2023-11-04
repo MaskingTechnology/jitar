@@ -6,28 +6,28 @@
     merges
     heading='### Features'
     message='feat(?:(\(\w+\))|):'}}
-  * \[[{{id}}]({.href}})] {{commit.subject}}
+  * \[[{{id}}]({{href}})] {{commit.subject}} by {{commit.author}}
   {{/commit-list}}
 
   {{#commit-list
     merges
     heading='### Fixes'
     message='(bug(?:(\(\w+\))|):)|(fix(?:(\(\w+\))|):)'}}
-  * \[[{{id}}]({.href}})] {{commit.subject}}
+  * \[[{{id}}]({{href}})] {{commit.subject}} by {{commit.author}}
   {{/commit-list}}
 
   {{#commit-list
     merges
     heading='### Chores'
     message='(chore(?:(\(\w+\))|):)|(build(?:(\(\w+\))|):)|(npm(?:(\(\w+\))|):)'}}
-  * \[[{{id}}]({.href}})] {{commit.subject}}
+  * \[[{{id}}]({{href}})] {{commit.subject}} by {{commit.author}}
   {{/commit-list}}
 
   {{#commit-list
     merges
     heading='### Other'
     exclude='(feat(?:(\(\w+\))|):)|(chore(?:(\(\w+\))|):)|(build(?:(\(\w+\))|):)|(npm(?:(\(\w+\))|):)|(fix(?:(\(\w+\))|):)|(bug(?:(\(\w+\))|):)'}}
-  * \[[{{id}}]({.href}})] {{commit.subject}}
+  * \[[{{id}}]({{href}})] {{commit.subject}} by {{commit.author}}
   {{/commit-list}}
 
 {{/each}}
