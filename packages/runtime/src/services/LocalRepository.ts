@@ -76,7 +76,7 @@ export default class LocalRepository extends Repository
         return this.#fileManager.getRootLocation();
     }
 
-    loadModule(clientId: string, filename: string): Promise<File>
+    readModule(clientId: string, filename: string): Promise<File>
     {
         this.#validateClientId(clientId);
 
@@ -93,7 +93,7 @@ export default class LocalRepository extends Repository
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    importModule(clientId: string, filename: string): Promise<Module>
+    loadModule(clientId: string, filename: string): Promise<Module>
     {
         // This function loads the original module file containing the
         // original imports to prevent import issues while loading the

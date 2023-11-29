@@ -31,12 +31,12 @@ export default class RemoteRepository extends Repository
         return `${this.url}/modules/${clientId}`;
     }
 
-    async loadModule(clientId: string, filename: string): Promise<File>
+    async readModule(clientId: string, filename: string): Promise<File>
     {
         return this.#remote.loadFile(`modules/${clientId}/${filename}`);
     }
 
-    async importModule(clientId: string, filename: string): Promise<Module>
+    async loadModule(clientId: string, filename: string): Promise<Module>
     {
         return this.#remote.importFile(`modules/${clientId}/${filename}`);
     }

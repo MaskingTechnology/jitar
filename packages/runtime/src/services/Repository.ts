@@ -12,7 +12,7 @@ export default abstract class Repository extends Runtime
 
     abstract getModuleLocation(clientId: string): Promise<string>;
 
-    abstract loadModule(clientId: string, filename: string): Promise<File>;
+    abstract readModule(clientId: string, filename: string): Promise<File>;
 
-    abstract importModule(clientId: string, filename: string): Promise<Module>;
+    abstract loadModule(clientId: string, filename: string): Promise<Module>;
 }
