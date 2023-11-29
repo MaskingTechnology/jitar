@@ -10,6 +10,8 @@ import StandaloneConfiguration, { standaloneSchema } from './StandaloneConfigura
 export const runtimeSchema = z
     .object({
         url: z.string().optional(),
+        setUp: z.string().optional(),
+        tearDown: z.string().optional(),
         healthChecks: z.array(z.string()).optional(),
         standalone: standaloneSchema.optional(),
         repository: repositorySchema.optional(),
@@ -18,11 +20,13 @@ export const runtimeSchema = z
         proxy: proxySchema.optional(),
     })
     .strict()
-    .transform((value) => new RuntimeConfiguration(value.url, value.healthChecks, value.standalone, value.repository, value.gateway, value.node, value.proxy));
+    .transform((value) => new RuntimeConfiguration(value.url, value.setUp, value.tearDown, value.healthChecks, value.standalone, value.repository, value.gateway, value.node, value.proxy));
 
 export default class RuntimeConfiguration
 {
     #url?: string;
+    #setUp?: string;
+    #tearDown?: string;
     #healthChecks?: string[];
     #standalone?: StandaloneConfiguration;
     #repository?: RepositoryConfiguration;
@@ -30,9 +34,11 @@ export default class RuntimeConfiguration
     #node?: NodeConfiguration;
     #proxy?: ProxyConfiguration;
 
-    constructor(url?: string, healthChecks?: string[], standalone?: StandaloneConfiguration, repository?: RepositoryConfiguration, gateway?: GatewayConfiguration, node?: NodeConfiguration, proxy?: ProxyConfiguration)
+    constructor(url?: string, setUp?: string, tearDown?: string, healthChecks?: string[], standalone?: StandaloneConfiguration, repository?: RepositoryConfiguration, gateway?: GatewayConfiguration, node?: NodeConfiguration, proxy?: ProxyConfiguration)
     {
         this.#url = url;
+        this.#setUp = setUp;
+        this.#tearDown = tearDown;
         this.#healthChecks = healthChecks;
         this.#standalone = standalone;
         this.#repository = repository;
@@ -42,6 +48,10 @@ export default class RuntimeConfiguration
     }
 
     get url() { return this.#url; }
+
+    get setUp() { return this.#setUp; }
+
+    get tearDown() { return this.#tearDown; }
 
     get healthChecks() { return this.#healthChecks; }
 
