@@ -8,6 +8,12 @@ class Database
     #client?: MongoClient;
     #database?: Db;
 
+    get connected(): boolean
+    {
+        return this.#client !== undefined
+            && this.#database !== undefined;
+    }
+
     connect(connectionString: string, database: string): void
     {
         try
@@ -18,6 +24,26 @@ class Database
         catch (error: unknown)
         {
             throw new DatabaseError('Connection failed');
+        }
+    }
+
+    async disconnect(): Promise<void>
+    {
+        if (this.#client === undefined)
+        {
+            throw new DatabaseError('Database not connected');
+        }
+
+        try
+        {
+            await this.#client.close();
+
+            this.#database = undefined;
+            this.#client = undefined;
+        }
+        catch (error: unknown)
+        {
+            throw new DatabaseError('Disconnection failed');
         }
     }
 

@@ -1,6 +1,7 @@
 {
     "url": "http://127.0.0.1:3000",
     "setUp": "./setUpNode",
+    "tearDown": "./tearDownNode",
     "standalone":
     {
         "assets": [ "index.html", "main.js", "App.js", "vite.svg", "assets/**/*" ]
