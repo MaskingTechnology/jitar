@@ -29,7 +29,7 @@ export DatabaseError extends Error
 ```
 
 ```ts
-// src/account/storeAccount.ts
+// src/domain/account/storeAccount.ts
 import { Account } from './Account';
 import { DatabaseError } from '../DatabaseError';
 
@@ -40,7 +40,7 @@ export async function storeAccount(account: Account): Promise<void>
 ```
 
 ```ts
-// src/account/createAccount.ts
+// src/domain/account/createAccount.ts
 import { Account } from './Account';
 import { storeAccount } from './storeAccount';
 import { DatabaseError } from '../DatabaseError';

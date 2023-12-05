@@ -40,7 +40,7 @@ Now you should be able to access the application on [http://localhost:3000](http
 Functions are the main building blocks of Jitar applications. The created application already has one in the `src/shared` folder, so let's take a look.
 
 ```ts
-// src/shared/sayHello.ts
+// src/domain/sayHello.ts
 export async function sayHello(name: string): Promise<string>
 {
     return `Hello, ${name}!`
@@ -56,7 +56,7 @@ Functions can be imported and called like any normal async function.
 // src/App.tsx
 /* other imports */
 
-import { sayHello } from './shared/sayHello';
+import { sayHello } from './domain/sayHello';
 
 const message = await sayHello('World');
 
@@ -76,13 +76,13 @@ To tell Jitar if a function runs on the client or the server, the application is
 ```json
 // segments/default.segment.json
 {
-    "./shared/sayHello": { "sayHello": { "access": "public" } }
+    "./domain/sayHello": { "sayHello": { "access": "public" } }
 }
 ```
 
 Segments are named, and their names are stored in the filename. In this case the segment is called ‘default’. The rest of the filename makes it a detectable segment configuration, because Jitar scans the project to find them.
 
-Segment configurations work like the JavaScript module system. In this case we export the `sayHello` function from `./shared/sayHello` module file. Additionally we set the access level to public so it can be called from the client. The configuration can be extended by simply adding functions.
+Segment configurations work like the JavaScript module system. In this case we export the `sayHello` function from `./domain/sayHello` module file. Additionally we set the access level to public so it can be called from the client. The configuration can be extended by simply adding functions.
 
 *Try yourself:* remove the function from the configuration and restart the application. Note that the client doesn't make a call to the server anymore.
 

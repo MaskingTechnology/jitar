@@ -17,7 +17,7 @@ Segments are used to break applications down into distributable pieces. A segmen
 
 ```json
 {
-    "./shared/sayHello":
+    "./domain/sayHello":
     {
         "sayHello": {  "access": "public" }
     }
@@ -68,7 +68,7 @@ The import names must correspond with the export names in the module. You can al
 
 ```json
 {
-    "./shared/sayHello":
+    "./domain/sayHello":
     {
         "default": { "access": "public" },
         "another": { "access": "public" },
@@ -86,7 +86,7 @@ Segments enable deploying application pieces on different servers. This requires
 
 ```json
 {
-    "./shared/secret":
+    "./domain/secret":
     {
         "getSecret": { "access": "private" },
         "useSecret": { "access": "public" }
@@ -107,7 +107,7 @@ Jitar generates an endpoint for each public function. These endpoints are used f
 For example, if we need to update our sayHello function to split the name parameter into a separate first and last parameter, we can implement it like this.
 
 ```ts
-// src/shared/sayHelloV2.ts
+// src/domain/sayHelloV2.ts
 export async function sayHello(first: string, last: string): Promise<string>
 {
     return `Hello, ${first} ${last}!`;
@@ -118,11 +118,11 @@ Now we have a separate module file per version that can be registered in the seg
 
 ```json
 {
-    "./shared/sayHello":
+    "./domain/sayHello":
     {
         "sayHello": { "access": "public", "version": "1.0.0" }
     },
-     "./shared/sayHelloV2":
+     "./domain/sayHelloV2":
     {
         "sayHello": { "access": "public", "version": "2.0.0" }
     }
@@ -140,7 +140,7 @@ When registering the same version multiple times, Jitar will execute the first r
 By default the import names are used for registering functions. In some cases you might want to expose a function under an alias name. A common use case is to create unique names in case multiple modules have equal exports or when combining multiple versions in a single module file. For example combining the sayHello functions.
 
 ```ts
-// src/shared/sayHello.ts
+// src/domain/sayHello.ts
 export async function sayHello(name: string): Promise<string>
 {
     return `Hello, ${name}!`;
@@ -156,7 +156,7 @@ In this case both versions are in the same file, but to make them unique they bo
 
 ```json
 {
-    "./shared/sayHello":
+    "./domain/sayHello":
     {
         "sayHello": { "access": "public", "version": "1.0.0" },
         "sayHelloV2": { "access": "public", "version": "2.0.0", "as": "sayHello" }
