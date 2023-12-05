@@ -1,6 +1,6 @@
 {
     "name": "jitar",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "description": "Distributed runtime for JavaScript and TypeScript to chop monolithic applications into micros.",
     "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
     "license": "MIT",
@@ -12,34 +12,39 @@
         "./server": "./dist/server.js",
         "./client": "./dist/client.js"
     },
-    "files": ["CHANGELOG.md", "README.md", "dist", "!dist/types"],
+    "files": [
+        "CHANGELOG.md",
+        "README.md",
+        "dist",
+        "!dist/types"
+    ],
     "scripts": {
         "lint": "eslint . --ext .ts",
         "validate": "tsc -p tsconfig.json --noEmit",
         "build": "npm run clean && rollup -c",
         "clean": "rm -rf dist",
-        "release": "npm run clean && npm run build && npm publish"
+        "prepublishOnly": "npm run clean && npm run build"
     },
     "dependencies": {
         "express": "^4.18.2",
-        "express-http-proxy": "^1.6.3",
+        "express-http-proxy": "^2.0.0",
         "fs-extra": "^11.1.1",
-        "glob-promise": "6.0.3",
+        "glob-promise": "6.0.5",
         "mime-types": "^2.1.35",
-        "tslog": "^4.8.2",
+        "tslog": "^4.9.2",
         "yargs": "^17.7.2",
-        "zod": "^3.21.4"
+        "zod": "^3.22.4"
     },
     "devDependencies": {
-        "@jitar/runtime": "^0.4.1",
-        "@jitar/server-nodejs": "^0.4.1"
+        "@jitar/runtime": "^0.4.2",
+        "@jitar/server-nodejs": "^0.4.2"
     },
     "engines": {
         "node": ">=18.7"
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/MaskingTechnology/jitar"
+        "url": "git+https://github.com/MaskingTechnology/jitar.git"
     },
     "bugs": {
         "url": "https://github.com/MaskingTechnology/jitar/issues"
