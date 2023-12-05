@@ -16,12 +16,12 @@ export default class Response
 
     get headers() { return this.#headers; }
 
-    clearHeaders()
+    clearHeaders(): void
     {
         this.#headers.clear();
     }
     
-    setHeader(name: string, value: string)
+    setHeader(name: string, value: string): void
     {
         this.#headers.set(name, value);
     }
@@ -31,7 +31,7 @@ export default class Response
         return this.#headers.get(name);
     }
 
-    removeHeader(name: string)
+    removeHeader(name: string): void
     {
         this.#headers.delete(name);
     }

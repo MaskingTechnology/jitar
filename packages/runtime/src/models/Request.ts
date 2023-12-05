@@ -34,17 +34,17 @@ export default class Request
         return this.#args.get(name);
     }
 
-    removeArgument(name: string)
+    removeArgument(name: string): void
     {
         this.#args.delete(name);
     }
 
-    clearHeaders()
+    clearHeaders(): void
     {
         this.#headers.clear();
     }
 
-    setHeader(name: string, value: string)
+    setHeader(name: string, value: string): void
     {
         this.#headers.set(name, value);
     }
@@ -54,7 +54,7 @@ export default class Request
         return this.#headers.get(name);
     }
 
-    removeHeader(name: string)
+    removeHeader(name: string): void
     {
         this.#headers.delete(name);
     }

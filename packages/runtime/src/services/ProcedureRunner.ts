@@ -18,10 +18,6 @@ export default class ProcedureRunner implements Middleware
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async handle(request: Request, next: NextHandler): Promise<Response>
     {
-        const result = await this.#runner.run(request);
-
-        request.clearHeaders();
-
-        return result;
+        return this.#runner.run(request);
     }
 }
