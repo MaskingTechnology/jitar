@@ -24,7 +24,7 @@ export default class Request
 
     get headers() { return this.#headers; }
 
-    setArgument(name: string, value: unknown)
+    setArgument(name: string, value: unknown): void
     {
         this.#args.set(name, value);
     }
