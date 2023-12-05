@@ -38,44 +38,49 @@ Depending on the frameworks you're using you might need to add more folders. For
 
 ## Source
 
-The `src` folder contains all application code. Our typical structure looks like this.
+The `src` folder contains all application code. Our typical (full-stack) structure looks like this.
 
 ```txt
 src
-├─ concept 1
-│  ├─ function1.ts
-│  ├─ function2.ts
-│  └─ model1.ts
-├─ concept 2
-│  ├─ function3_v1.ts
-│  └─ function3_v2.ts
+├─ domain
+│  ├─ concept1
+│  ├─ concept2
+│  ├─ ...
+├─ webui
+│  ├─ components
+│  ├─ layouts
+│  ├─ pages
+├─ assets
+│  ├─ downloads
+│  ├─ images
+│  ├─ ...
+├─ integrations
+│  ├─ database
+│  ├─ notifications
+│  ├─ ...
 └─ jitar.ts
 ```
 
-We use the following rules for this structure:
+Each folder has it's own responsibility:
 
-* folder per concept - we prefer using business concepts like 'account' or 'company';
+* domain - contains all business domain logic;
+* webui - contains all web ui elements;
+* assets - contains all assets used by the domain and webui;
+* integrations - contains all integrations with external systems.
+
+For maintainability reasons its important to get the dependencies right. We use the following rules:
+
+* domain - depends on assets and integrations;
+* webui - depends on assets, domain and integrations.
+
+For setting up the domain, we use the following rules:
+
+* folder per concept - we prefer using business domain concepts like 'account' or 'company';
 * [function](../fundamentals/building-blocks#functions) per file - we use corresponding filenames with the function name like 'searchAccounts'' or 'createMonthReport';
 * [data model](./data-sharing) per file - use corresponding filenames with the model names like 'Account' or 'MonthReport';
 * [version](../deploy/segmentation#versioning) per file - both functions and models, we add the version number at the end of the filename.
 
 A concept folder can be split into multiple subfolders. We do this for larger applications, but we always try to keep the structure as flat as possible to avoid complexity.
-
-For applications with a frontend we like to separate the frontend components from the rest. This makes migrating to another (version of the) framework less painful for applications that outlive their framework (we've been there). In this case we commonly use the following structure.
-
-```txt
-src
-├─ shared
-│  ├─ concept1
-│  ├─ concept2
-├─ frontend
-│  ├─ components
-│  ├─ layouts
-│  ├─ pages
-└─ jitar.ts
-```
-
-Make sure the frontend components import the shared components, and not the other way around.
 
 ## Tests
 
@@ -83,13 +88,23 @@ The `test` folder contains all application tests. We always mimic the source fol
 
 ```txt
 test
-├─ concept 1
-│  ├─ function1.spec.ts
-│  ├─ function2.spec.ts
-│  └─ model1.ts
-└─ concept 2
-   ├─ function3_v1.spec.ts
-   └─ function3_v2.spec.ts
+├─ domain
+│  ├─ concept1
+│  ├─ concept2
+│  ├─ ...
+├─ webui
+│  ├─ components
+│  ├─ layouts
+│  ├─ pages
+├─ assets
+│  ├─ downloads
+│  ├─ images
+│  ├─ ...
+├─ integrations
+│  ├─ database
+│  ├─ notifications
+│  ├─ ...
+└─ jitar.ts
 ```
 
 By keeping a 1-on-1 relation with the source files makes it easy to find the associated tests.
