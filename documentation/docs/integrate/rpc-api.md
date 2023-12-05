@@ -92,7 +92,7 @@ GET http://localhost:3000/rpc/domain/sayHello HTTP/1.1
 Functions can have destructured parameters.
 
 ```ts
-import Person from './Person';
+import { Person } from './Person';
 
 // src/domain/sayHello.ts
 export async function sayHello({ name, city }: Person): Promise<string>

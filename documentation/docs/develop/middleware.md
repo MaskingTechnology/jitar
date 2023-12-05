@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Data consistency
-    link: /develop/data-consistency
+    text: Set up and tear down
+    link: /develop/setup-and-teardown
 
 next:
     text: Validation
