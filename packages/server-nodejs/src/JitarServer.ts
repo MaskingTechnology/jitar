@@ -266,7 +266,7 @@ export default class JitarServer
             return;
         }
 
-        return new Promise(resolve => { this.#server?.close(() => resolve); });
+        return new Promise(resolve => { this.#server?.close(() => resolve()); });
     }
 
     #printStartupMessage(): void
