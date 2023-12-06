@@ -19,6 +19,15 @@ export default class RuntimeConfigurator
 {
     static async configure(configuration: RuntimeConfiguration): Promise<Runtime>
     {
+        const runtime = await this.configureService(configuration);
+
+        await this.#addHealthChecks(runtime, configuration);
+
+        return runtime;
+    }
+
+    static async configureService(configuration: RuntimeConfiguration): Promise<Runtime>
+    {
         const url = configuration.url ?? RuntimeDefaults.URL;
 
         if (configuration.standalone !== undefined) return this.#configureStandAlone(url, configuration.standalone);
@@ -196,5 +205,18 @@ export default class RuntimeConfigurator
         return url !== undefined
             ? new RemoteGateway(url)
             : undefined;
+    }
+
+    static async #addHealthChecks(runtime: Runtime, configuration: RuntimeConfiguration): Promise<void>
+    {
+        if (configuration.healthChecks === undefined)
+        {
+            return;
+        }
+
+        for (const url of configuration.healthChecks)
+        {
+            await runtime.importHealthCheck(url);
+        }
     }
 }
