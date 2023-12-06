@@ -1,7 +1,8 @@
 
 import NotImplemented from '../errors/generic/NotImplemented.js';
 
-import Version from '../models/Version.js';
+import Request from '../models/Request.js';
+import Response from '../models/Response.js';
 
 import Gateway from './Gateway.js';
 import Node from './Node.js';
@@ -34,8 +35,8 @@ export default class RemoteGateway extends Gateway
         return this.#remote.addNode(node);
     }
 
-    run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    run(request: Request): Promise<Response>
     {
-        return this.#remote.run(fqn, version, args, headers);
+        return this.#remote.run(request);
     }
 }

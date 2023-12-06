@@ -1,8 +1,8 @@
 
-import express, { Request, Response } from 'express';
+import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import { Logger } from 'tslog';
 
-import { Version, VersionParser, ProcedureRuntime, BadRequest, Unauthorized, PaymentRequired, Forbidden, NotFound, Teapot, NotImplemented } from '@jitar/runtime';
+import { Request as JitarRequest, Version, VersionParser, ProcedureRuntime, BadRequest, Unauthorized, PaymentRequired, Forbidden, NotFound, Teapot, NotImplemented } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
 import CorsMiddleware from '../middleware/CorsMiddleware.js';
@@ -32,9 +32,9 @@ export default class RPCController
         this.#serializer = serializer;
         this.#logger = logger;
 
-        app.get('/rpc/*', (request: Request, response: Response) => { this.runGet(request, response); });
-        app.post('/rpc/*', (request: Request, response: Response) => { this.runPost(request, response); });
-        app.options('/rpc/*', (request: Request, response: Response) => { this.runOptions(request, response); });
+        app.get('/rpc/*', (request: ExpressRequest, response: ExpressResponse) => { this.runGet(request, response); });
+        app.post('/rpc/*', (request: ExpressRequest, response: ExpressResponse) => { this.runPost(request, response); });
+        app.options('/rpc/*', (request: ExpressRequest, response: ExpressResponse) => { this.runOptions(request, response); });
 
         this.#showProcedureInfo();
     }
@@ -53,7 +53,7 @@ export default class RPCController
         this.#logger.info('Registered RPC entries', procedureNames);
     }
 
-    async runGet(request: Request, response: Response): Promise<Response>
+    async runGet(request: ExpressRequest, response: ExpressResponse): Promise<ExpressResponse>
     {
         const fqn = this.#extractFqn(request);
         const version = this.#extractVersion(request);
@@ -64,7 +64,7 @@ export default class RPCController
         return this.#run(fqn, version, args, headers, response, serialize);
     }
 
-    async runPost(request: Request, response: Response): Promise<Response>
+    async runPost(request: ExpressRequest, response: ExpressResponse): Promise<ExpressResponse>
     {
         const fqn = this.#extractFqn(request);
         const version = this.#extractVersion(request);
@@ -75,29 +75,29 @@ export default class RPCController
         return this.#run(fqn, version, args, headers, response, serialize);
     }
 
-    async runOptions(request: Request, response: Response): Promise<Response>
+    async runOptions(request: ExpressRequest, response: ExpressResponse): Promise<ExpressResponse>
     {
         return this.#setCors(response);
     }
 
-    #extractFqn(request: Request): string
+    #extractFqn(request: ExpressRequest): string
     {
         return request.path.substring(5);
     }
 
-    #extractVersion(request: Request): Version
+    #extractVersion(request: ExpressRequest): Version
     {
         return request.query.version !== undefined
             ? VersionParser.parse(request.query.version.toString())
             : Version.DEFAULT;
     }
 
-    #extractSerialize(request: Request): boolean
+    #extractSerialize(request: ExpressRequest): boolean
     {
         return request.query.serialize === 'true';
     }
 
-    #extractQueryArguments(request: Request): Record<string, unknown>
+    #extractQueryArguments(request: ExpressRequest): Record<string, unknown>
     {
         const args: Record<string, unknown> = {};
 
@@ -117,12 +117,12 @@ export default class RPCController
         return args;
     }
 
-    #extractBodyArguments(request: Request): Record<string, unknown>
+    #extractBodyArguments(request: ExpressRequest): Record<string, unknown>
     {
         return request.body;
     }
 
-    #extractHeaders(request: Request): Map<string, string>
+    #extractHeaders(request: ExpressRequest): Map<string, string>
     {
         const headers = new Map<string, string>();
 
@@ -147,7 +147,7 @@ export default class RPCController
         return headers;
     }
 
-    async #run(fqn: string, version: Version, args: Record<string, unknown>, headers: Map<string, string>, response: Response, serialize: boolean): Promise<Response>
+    async #run(fqn: string, version: Version, args: Record<string, unknown>, headers: Map<string, string>, response: ExpressResponse, serialize: boolean): Promise<ExpressResponse>
     {
         if (this.#runtime.hasProcedure(fqn) === false)
         {
@@ -160,13 +160,14 @@ export default class RPCController
             const deserializedArgs = await this.#serializer.deserialize(args) as Record<string, unknown>;
             const argsMap = new Map<string, unknown>(Object.entries(deserializedArgs));
 
-            const result = await this.#runtime.handle(fqn, version, argsMap, headers);
+            const runtimeRequest = new JitarRequest(fqn, version, argsMap, headers);
+            const runtimeResponse = await this.#runtime.handle(runtimeRequest);
 
             this.#logger.info(`Ran procedure -> ${fqn} (v${version.toString()})`);
 
-            this.#setResponseHeaders(response, headers);
+            this.#setResponseHeaders(response, runtimeResponse.headers);
 
-            return this.#createResultResponse(result, response, serialize);
+            return this.#createResultResponse(runtimeResponse.result, response, serialize);
         }
         catch (error: unknown)
         {
@@ -182,7 +183,7 @@ export default class RPCController
         }
     }
 
-    async #setCors(response: Response): Promise<Response>
+    async #setCors(response: ExpressResponse): Promise<ExpressResponse>
     {
         const cors = this.#runtime.getMiddleware(CorsMiddleware) as CorsMiddleware;
 
@@ -199,7 +200,7 @@ export default class RPCController
         return response.status(204).send();
     }
 
-    async #createResultResponse(result: unknown, response: Response, serialize: boolean): Promise<Response>
+    async #createResultResponse(result: unknown, response: ExpressResponse, serialize: boolean): Promise<ExpressResponse>
     {
         const content = await this.#createResponseContent(result, serialize);
         const contentType = this.#createResponseContentType(content);
@@ -210,7 +211,7 @@ export default class RPCController
         return response.status(200).send(responseContent);
     }
 
-    async #createErrorResponse(error: unknown, errorData: unknown, response: Response, serialize: boolean): Promise<Response>
+    async #createErrorResponse(error: unknown, errorData: unknown, response: ExpressResponse, serialize: boolean): Promise<ExpressResponse>
     {
         const content = await this.#createResponseContent(errorData, serialize);
         const contentType = this.#createResponseContentType(content);
@@ -235,7 +236,7 @@ export default class RPCController
             : 'text/plain';
     }
 
-    #setResponseHeaders(response: Response, headers: Map<string, string>): void
+    #setResponseHeaders(response: ExpressResponse, headers: Map<string, string>): void
     {
         headers.forEach((value, key) => response.setHeader(key, value));
     }

@@ -44,6 +44,8 @@ export { default as Implementation } from './models/Implementation.js';
 export { default as NamedParameter } from './models/NamedParameter.js';
 export { default as ObjectParameter } from './models/ObjectParameter.js';
 export { default as Procedure } from './models/Procedure.js';
+export { default as Request } from './models/Request.js';
+export { default as Response } from './models/Response.js';
 export { default as Segment } from './models/Segment.js';
 export { default as Version } from './models/Version.js';
 
