@@ -3,14 +3,14 @@
 
 This example demonstrates how to construct and deconstruct a Jitar application.
 
-The application creates and filles a database before the server starts.
-When the application gest shut down, the database gets cleared.
+The application creates and fills a database before the server starts.
+When the application gets shut down, the database gets cleared.
 
 ## Project setup
 
 **Functions**
 
-* sayHello (`src/getData.ts`)
+* getData (`src/getData.ts`)
 
 **Segments**
 
@@ -28,7 +28,7 @@ When the application gest shut down, the database gets cleared.
 npm install
 ```
 
-2\. Next build the application by running the following command.
+2\. Next, build the application by running the following command.
 
 ```bash
 npm run build
@@ -40,4 +40,4 @@ npm run build
 npm run standalone
 ```
 
-The ``requests.http`` file contains an example requests to call the procedure.
+The ``requests.http`` file contains an example request to call the procedure.

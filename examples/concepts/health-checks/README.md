@@ -27,7 +27,7 @@ There is no application for this example, only a health check that is registered
 npm install
 ```
 
-2\. Next build the application by running the following command.
+2\. Next, build the application by running the following command.
 
 ```bash
 npm run build
