@@ -58,7 +58,7 @@ export default class ModulesController
 
         try
         {
-            const file = await this.#repository.loadModule(clientId, filename);
+            const file = await this.#repository.readModule(clientId, filename);
 
             this.#logger.info(`Got module -> '${filename}' (${clientId})`);
 

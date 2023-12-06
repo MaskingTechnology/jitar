@@ -43,7 +43,7 @@ Production
 npm install
 ```
 
-2\. Next build the application by running the following command.
+2\. Next, build the application by running the following command.
 
 ```bash
 npm run build

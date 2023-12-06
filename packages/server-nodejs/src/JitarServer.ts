@@ -1,5 +1,6 @@
 
 import express, { Express } from 'express';
+import { Server } from 'http';
 import { Logger } from 'tslog';
 
 import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime, RemoteClassLoader } from '@jitar/runtime';
@@ -42,6 +43,8 @@ const STARTUP_MESSAGE = `
 export default class JitarServer
 {
     #app: Express;
+    #server?: Server;
+
     #runtime?: Runtime;
     #serializer: Serializer;
     #classLoader: ClassLoader;
@@ -88,9 +91,18 @@ export default class JitarServer
 
         this.#addHealthChecks();
 
+        await this.#startApplication();
         await this.#startServer(url.port);
 
         this.#logger.info(`Server started and listening at port ${url.port}`);
+    }
+
+    async stop(): Promise<void>
+    {
+        await this.#stopServer();
+        await this.#stopApplication();
+
+        this.#logger.info('Server stopped');
     }
 
     registerHealthCheck(name: string, healthCheck: HealthCheck): void
@@ -110,25 +122,19 @@ export default class JitarServer
 
     addMiddleware(middleware: Middleware): void
     {
-        if (this.#runtime === undefined)
-        {
-            throw new RuntimeNotAvailable();
-        }
+        const runtime = this.#getRuntime();
 
-        if (!(this.#runtime instanceof ProcedureRuntime))
+        if (!(runtime instanceof ProcedureRuntime))
         {
             throw new MiddlewareNotSupported();
         }
 
-        this.#runtime.addMiddleware(middleware);
+        runtime.addMiddleware(middleware);
     }
 
     #addHealthChecks(): void
     {
-        if (this.#runtime === undefined)
-        {
-            throw new RuntimeNotAvailable();
-        }
+        const runtime = this.#getRuntime();
 
         if (this.#configuration.healthChecks === undefined)
         {
@@ -144,8 +150,18 @@ export default class JitarServer
                 throw new UnknownHealthCheck(name);
             }
 
-            this.#runtime.addHealthCheck(name, healthCheck);
+            runtime.addHealthCheck(name, healthCheck);
         }
+    }
+
+    #getRuntime(): Runtime
+    {
+        if (this.#runtime === undefined)
+        {
+            throw new RuntimeNotAvailable();
+        }
+
+        return this.#runtime;
     }
 
     #addControllers(): void
@@ -212,9 +228,45 @@ export default class JitarServer
         new ProxyController(this.#app, proxy, this.#logger);
     }
 
+    async #startApplication(): Promise<void>
+    {
+        const runtime = this.#getRuntime();
+        const setUpScript = this.#configuration.setUp;
+
+        if (setUpScript === undefined)
+        {
+            return;
+        }
+
+        await runtime.import(setUpScript);
+    }
+
+    async #stopApplication(): Promise<void>
+    {
+        const runtime = this.#getRuntime();
+        const tearDownScript = this.#configuration.tearDown;
+
+        if (tearDownScript === undefined)
+        {
+            return;
+        }
+
+        await runtime.import(tearDownScript);
+    }
+
     async #startServer(port: string): Promise<void>
     {
-        return new Promise(resolve => { this.#app.listen(port, resolve); });
+        return new Promise(resolve => { this.#server = this.#app.listen(port, resolve); });
+    }
+
+    async #stopServer(): Promise<void>
+    {
+        if (this.#server === undefined)
+        {
+            return;
+        }
+
+        return new Promise(resolve => { this.#server?.close(() => resolve()); });
     }
 
     #printStartupMessage(): void

@@ -1,9 +1,5 @@
 {
-    "./shared/common/createId": { "default": { "access": "private" } },
-    "./shared/common/getCollection": { "default": { "access": "private" } },
-    "./shared/common/getDatabase": { "default": { "access": "private" } },
-
-    "./shared/contact/createContact": { "default": { "access": "public" } },
-    "./shared/contact/deleteContact": { "default": { "access": "public" } },
-    "./shared/contact/getContacts": { "default": { "access": "public" } }
+    "./domain/contact/createContact": { "default": { "access": "public" } },
+    "./domain/contact/deleteContact": { "default": { "access": "public" } },
+    "./domain/contact/getContacts": { "default": { "access": "public" } }
 }

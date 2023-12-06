@@ -24,7 +24,7 @@ In this section you'll learn about using functions and creating segments to crea
 Plain functions are used as primary building blocks for applications. Let's see how a simple function looks like.
 
 ```ts
-// src/shared/sayHello.ts
+// src/domain/sayHello.ts
 export async function sayHello(name: string): Promise<string>
 {
     return `Hello, ${name}!`;
@@ -53,7 +53,7 @@ Every function has a unique name used for internal and external identification. 
 { location relative to the source folder }/{ function name}
 ```
 
-For the simple sayHello function the FQN of this function is `shared/sayHello`. Note that there is no leading / in the name.
+For the simple sayHello function the FQN of this function is `domain/sayHello`. Note that there is no leading / in the name.
 
 ## Segments
 
@@ -64,7 +64,7 @@ For the definition of a segment, JSON files are used with the '.segment.json' ex
 ```json
 // default.segment.json
 {
-    "./shared/sayHello":
+    "./domain/sayHello":
     {
         "sayHello":
         {
@@ -85,7 +85,7 @@ This configuration connects very well with the JavaScript module system. It incl
 1. Version number per function (optional, default 0.0.0)
 1. Alternative name (optional, default the name of the function)
 
-The example configuration exposes the `sayHello` function from the `./shared/sayHello` module file. The function has public access, meaning that it's accessible from other segments. Both the version and as properties have the default value, so these can optionally be removed.
+The example configuration exposes the `sayHello` function from the `./domain/sayHello` module file. The function has public access, meaning that it's accessible from other segments. Both the version and as properties have the default value, so these can optionally be removed.
 
 More in depth information on segments and the configuration can be found in the [DEPLOY section](../deploy/segmentation).
 

@@ -29,7 +29,7 @@ The procedure to get the secret has been made private to ensure it isn't accessi
 npm install
 ```
 
-2\. Next build the application by running the following command.
+2\. Next, build the application by running the following command.
 
 ```bash
 npm run build

@@ -12,7 +12,6 @@ import Segment from '../models/Segment.js';
 import Module from '../types/Module.js';
 import ArgumentConstructor from '../utils/ArgumentConstructor.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
-import UrlRewriter from '../utils/UrlRewriter.js';
 
 import Gateway from './Gateway.js';
 import LocalGateway from './LocalGateway.js';
@@ -111,19 +110,14 @@ export default class LocalNode extends Node
         this.#repository = repository;
     }
 
-    import(url: string, base?: string): Promise<Module>
+    import(url: string): Promise<Module>
     {
         if (this.#repository === undefined)
         {
             throw new RepositoryNotAvailable();
         }
 
-        if (base !== undefined)
-        {
-            url = UrlRewriter.addBase(url, base);
-        }
-
-        return this.#repository.importModule(this.#clientId, url);
+        return this.#repository.loadModule(this.#clientId, url);
     }
 
     run(request: Request): Promise<Response>

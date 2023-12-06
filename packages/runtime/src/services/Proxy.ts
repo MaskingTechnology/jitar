@@ -45,9 +45,9 @@ export default class Proxy extends ProcedureRuntime
         return this.#repository.registerClient(segmentFiles);
     }
 
-    loadModule(clientId: string, filename: string): Promise<File>
+    readModule(clientId: string, filename: string): Promise<File>
     {
-        return this.#repository.loadModule(clientId, filename);
+        return this.#repository.readModule(clientId, filename);
     }
 
     run(request: Request): Promise<Response>

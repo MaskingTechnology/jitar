@@ -6,8 +6,8 @@ prev:
     link: /develop/state-management
 
 next:
-    text: Middleware
-    link: /develop/middleware
+    text: Set up and tear down
+    link: /develop/setup-and-teardown
 
 ---
 
