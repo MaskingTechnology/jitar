@@ -7,11 +7,11 @@ class Database
 {
     #client?: MongoClient;
     #database?: Db;
+    #connected = false;
 
     get connected(): boolean
     {
-        return this.#client !== undefined
-            && this.#database !== undefined;
+        return this.#connected;
     }
 
     connect(connectionString: string, database: string): void
@@ -19,6 +19,13 @@ class Database
         try
         {
             this.#client = new MongoClient(connectionString);
+
+            this.#client.on('open', () => { this.#connected = true; });
+            this.#client.on('close', () => { this.#connected = false; });
+            
+            this.#client.on('serverHeartbeatSucceeded', () => { this.#connected = true; });
+            this.#client.on('serverHeartbeatFailed', () => { this.#connected = false; });
+
             this.#database = this.#client.db(database);
         }
         catch (error: unknown)
@@ -38,6 +45,7 @@ class Database
         {
             await this.#client.close();
 
+            this.#connected = false;
             this.#database = undefined;
             this.#client = undefined;
         }

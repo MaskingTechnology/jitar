@@ -17,10 +17,10 @@ const secondNode = new LocalNode();
 secondNode.addSegment(SEGMENTS.SECOND);
 
 const goodNode = new LocalNode();
-goodNode.addHealthCheck('good', HEALTH_CHECKS.GOOD);
+goodNode.addHealthCheck(HEALTH_CHECKS.GOOD);
 
 const badNode = new LocalNode();
-badNode.addHealthCheck('bad', HEALTH_CHECKS.BAD);
+badNode.addHealthCheck(HEALTH_CHECKS.BAD);
 
 const NODES =
 {

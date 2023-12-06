@@ -17,55 +17,45 @@ The [gateway service](../fundamentals/runtime-services#gateway) determines if a 
 
 ## Creating health checks
 
-Jitar provides an interface you have to implement in order to add a custom check to a service. Let's look at a simple database check example:
+Jitar provides an interface you have to implement in order to add a custom check to a service. Only health check instances can be registered. Each instance needs to be exported as default in a separate module file. Let's look at a simple database check example:
 
 ```ts
-// src/health/DatabaseHealthCheck.ts
+// src/databaseHealthCheck.ts
 import { HealthCheck } from 'jitar';
-import { pingDatabase } from '../common/utils';
 
 export default class DatabaseHealthCheck implements HealthCheck
 {
+    get name() { return 'database'; }
+
     get timeout() { return undefined; }
 
     async isHealthy(): Promise<boolean>
     {
-        return pingDatabase();
+        /* check status here */
     }
-} 
+}
+
+const instance = new DatabaseHealthCheck();
+
+export default instance;
 ```
 
-The health check interface requires you to implement the `timeout` getter. If a timeout is not required, return `undefined`. Otherwise set the time in milliseconds for the health check to be considered unhealthy.
+The health check interface requires you to implement the `name` and  `timeout` getter. The name is used for its registration, and needs to be unique. The timeout specifies the time in milliseconds that the service waits before checking for the health again. If a timeout is not required, return `undefined`. Otherwise set the time in milliseconds.
 
 ## Adding health checks
 
-A health check needs to be added to the service that has the connection to the database. We need to update the starter script to register the health check at the server level, and use configuration to determine the actual instance that will get the health check.
-
-```ts
-// jitar.ts
-import { buildServer } from 'jitar';
-
-import DatabaseHealthCheck from './health/DatabaseHealthCheck.js';
-
-const moduleImporter = async (specifier: string) => import(specifier);
-
-const server = await buildServer(moduleImporter);
-server.registerHealthCheck('database', new DatabaseHealthCheck());
-server.start();
-```
-
-The configuration of the gateway needs to be updated to include the health check.
+A health check needs to be added to the service that has the connection to the database. This is done by registering the health check module file in the service configuration.
 
 ```json
-// services/gateway.json
+// services/node.json
 {
     "url": "http://localhost:3000",
-    "healthChecks": ["database"],
-    "gateway":
+    "healthChecks": ["./databaseHealthCheck"],
+    "node":
     {
         // ...
     }
 }
 ```
 
-Once added, the gateway will trigger the check automatically. You can also check yourself using the health API. More information on this can be found in the [MONITOR section](../monitor/health).
+Once added, the node will trigger the check automatically. You can also check yourself using the health API. More information on this can be found in the [MONITOR section](../monitor/health).

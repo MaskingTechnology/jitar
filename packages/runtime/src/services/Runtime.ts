@@ -1,4 +1,5 @@
 
+import InvalidHealthCheck from '../errors/InvalidHealthCheck.js';
 import HealthCheck from '../interfaces/HealthCheck.js';
 import Module from '../types/Module.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
@@ -20,9 +21,22 @@ export default abstract class Runtime
         return ModuleLoader.load(url);
     }
 
-    addHealthCheck(name: string, healthCheck: HealthCheck): void
+    async importHealthCheck(url: string): Promise<void>
     {
-        this.#healthChecks.set(name, healthCheck);
+        const module = await this.import(url);
+        const healthCheck = module.default as HealthCheck;
+
+        if (healthCheck?.isHealthy === undefined)
+        {
+            throw new InvalidHealthCheck(url);
+        }
+
+        this.addHealthCheck(healthCheck as HealthCheck);
+    }
+
+    addHealthCheck(healthCheck: HealthCheck): void
+    {
+        this.#healthChecks.set(healthCheck.name, healthCheck);
     }
 
     async isHealthy(): Promise<boolean>

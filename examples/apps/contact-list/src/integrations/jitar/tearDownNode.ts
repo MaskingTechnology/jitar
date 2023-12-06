@@ -1,5 +1,5 @@
 
-import Database from './integrations/database/Database';
+import Database from '../database/Database';
 
 await Database.disconnect();
 

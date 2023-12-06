@@ -3,6 +3,8 @@ import HealthCheck from '../../../src/interfaces/HealthCheck';
 
 class HealthyCheck implements HealthCheck
 {
+    get name() { return 'good'; }
+
     get timeout() { return undefined; }
 
     async isHealthy(): Promise<boolean> { return true; }
@@ -10,6 +12,8 @@ class HealthyCheck implements HealthCheck
 
 class UnhealthyCheck implements HealthCheck
 {
+    get name() { return 'bad'; }
+
     get timeout() { return undefined; }
 
     async isHealthy(): Promise<boolean> { return false; }
@@ -17,6 +21,8 @@ class UnhealthyCheck implements HealthCheck
 
 class ErrorHealthCheck implements HealthCheck
 {
+    get name() { return 'error'; }
+
     get timeout() { return undefined; }
 
     async isHealthy(): Promise<boolean> { throw new Error('ErrorHealthCheck'); }
@@ -24,6 +30,8 @@ class ErrorHealthCheck implements HealthCheck
 
 class TimedOutHealthCheck implements HealthCheck
 {
+    get name() { return 'timedOut'; }
+
     get timeout() { return 50; }
 
     async isHealthy(): Promise<boolean>
@@ -37,6 +45,8 @@ class TimedOutHealthCheck implements HealthCheck
 
 class InTimeHealthCheck implements HealthCheck
 {
+    get name() { return 'inTime'; }
+    
     get timeout() { return 5000; }
 
     async isHealthy(): Promise<boolean>

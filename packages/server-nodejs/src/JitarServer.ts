@@ -3,7 +3,7 @@ import express, { Express } from 'express';
 import { Server } from 'http';
 import { Logger } from 'tslog';
 
-import { HealthCheck, LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime, RemoteClassLoader } from '@jitar/runtime';
+import { LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime, RemoteClassLoader } from '@jitar/runtime';
 import { ClassLoader, Serializer, SerializerBuilder, ValueSerializer } from '@jitar/serialization';
 
 import ServerOptions from './configuration/ServerOptions.js';
@@ -24,8 +24,6 @@ import RPCController from './controllers/RPCController.js';
 import RuntimeConfiguration from './configuration/RuntimeConfiguration.js';
 import RuntimeDefaults from './definitions/RuntimeDefaults.js';
 
-import UnknownHealthCheck from './errors/UnknownHealthCheck.js';
-import DuplicateHealthCheck from './errors/DuplicateHealthCheck.js';
 import RuntimeNotAvailable from './errors/RuntimeNotAvailable.js';
 import MiddlewareNotSupported from './errors/MiddlewareNotSupported.js';
 import LogBuilder from './utils/LogBuilder.js';
@@ -52,8 +50,6 @@ export default class JitarServer
     #options: ServerOptions;
     #configuration: RuntimeConfiguration;
     #logger: Logger<unknown>;
-
-    #registeredHealthChecks: Map<string, HealthCheck> = new Map();
 
     constructor()
     {
@@ -89,8 +85,6 @@ export default class JitarServer
     {
         const url = new URL(this.#configuration.url ?? RuntimeDefaults.URL);
 
-        this.#addHealthChecks();
-
         await this.#startApplication();
         await this.#startServer(url.port);
 
@@ -103,16 +97,6 @@ export default class JitarServer
         await this.#stopApplication();
 
         this.#logger.info('Server stopped');
-    }
-
-    registerHealthCheck(name: string, healthCheck: HealthCheck): void
-    {
-        if (this.#registeredHealthChecks.has(name))
-        {
-            throw new DuplicateHealthCheck(name);
-        }
-
-        this.#registeredHealthChecks.set(name, healthCheck);
     }
 
     addSerializer(serializer: ValueSerializer): void
@@ -130,28 +114,6 @@ export default class JitarServer
         }
 
         runtime.addMiddleware(middleware);
-    }
-
-    #addHealthChecks(): void
-    {
-        const runtime = this.#getRuntime();
-
-        if (this.#configuration.healthChecks === undefined)
-        {
-            return;
-        }
-
-        for (const name of this.#configuration.healthChecks)
-        {
-            const healthCheck = this.#registeredHealthChecks.get(name);
-
-            if (healthCheck === undefined)
-            {
-                throw new UnknownHealthCheck(name);
-            }
-
-            runtime.addHealthCheck(name, healthCheck);
-        }
     }
 
     #getRuntime(): Runtime

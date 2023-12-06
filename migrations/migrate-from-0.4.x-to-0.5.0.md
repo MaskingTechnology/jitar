@@ -2,6 +2,85 @@
 
 The 0.5 version of Jitar introduces some breaking changes. All changes are described here, with instructions how to adopt them.
 
+## Health checks
+
+Working with health checks that need to access application resources had a few limitations.
+To overcome these, we've made breaking changes to the health check implementation.
+
+Let's look at the current implementation first. Health checks are instantiated and registered at the server.
+
+```ts
+// src/jitar.ts
+import { startServer, HealthCheck } from 'jitar';
+
+class DatabaseHealthCheck implements HealthCheck
+{
+    get timeout() { return undefined; }
+
+    async isHealthy(): Promise<boolean> { /* ... */ }
+}
+
+const server = await startServer(moduleImporter);
+server.addHealthCheck('database', new DatabaseHealthCheck()); // Registered here
+server.start();
+```
+
+Next, they are activated by name in the service configuration like this:
+
+```json
+{
+    "url": "http://127.0.0.1:3000",
+    "healthChecks": ["database"],
+    "standalone": {}
+}
+```
+
+This way, health checks can be registered once, en activated for multiple services.
+We still love that idea, but registering all health checks in a single bootstrap file wasn't pretty.
+
+So, we've changed the way of registering. There's no need for registering health checks at the server anymore.
+
+```ts
+// src/jitar.ts
+import { startServer, HealthCheck } from 'jitar';
+
+const server = await startServer(moduleImporter);
+server.start(); // Look ma, no health checks!
+```
+
+Instead, health checks are registered (and activated) in the service configuration.
+This is done by importing modules containing a health check instance.
+
+```json
+{
+    "url": "http://127.0.0.1:3000",
+    "healthChecks": ["./databaseHealthCheck"],
+    "standalone": {}
+}
+```
+
+The health check module must export an instance of the `HealthCheck` interface as default value.
+Because the health check's isn't registered by name in the configuration, a name property has been added to the `HealthCheck` interface. An example health check instance module looks like this.
+
+```ts
+// src/databaseHealthCheck.ts
+class DatabaseHealthCheck implements HealthCheck
+{
+    get name() { return 'database'; } // New required property!
+
+    get timeout() { return undefined; }
+    
+    async isHealthy(): Promise<boolean> { /* ... */ }
+}
+
+const instance = new DatabaseHealthCheck();
+export default instance;
+```
+
+In this example the health check class and instance are separated. This is good practice to enable reusability of the health checks. For simple cases, the class and instance can be defined in the same module file.
+
+More information on health checks can be found in the [documentation](https://docs.jitar.dev/deploy/health-checks.html).
+
 ## Middleware
 
 We've updated our middleware model to be more clean and extendable.
