@@ -8,19 +8,19 @@ class TestRuntime extends Runtime
 }
 
 const goodRuntime = new TestRuntime();
-goodRuntime.addHealthCheck('good', HEALTH_CHECKS.GOOD);
+goodRuntime.addHealthCheck(HEALTH_CHECKS.GOOD);
 
 const badRuntime = new TestRuntime();
-badRuntime.addHealthCheck('bad', HEALTH_CHECKS.BAD);
+badRuntime.addHealthCheck(HEALTH_CHECKS.BAD);
 
 const errorRuntime = new TestRuntime();
-errorRuntime.addHealthCheck('error', HEALTH_CHECKS.ERROR);
+errorRuntime.addHealthCheck(HEALTH_CHECKS.ERROR);
 
 const timeoutRuntime = new TestRuntime();
-timeoutRuntime.addHealthCheck('timedOut', HEALTH_CHECKS.TIMEDOUT);
+timeoutRuntime.addHealthCheck(HEALTH_CHECKS.TIMEDOUT);
 
 const inTimeRuntime = new TestRuntime();
-inTimeRuntime.addHealthCheck('inTime', HEALTH_CHECKS.INTIME);
+inTimeRuntime.addHealthCheck(HEALTH_CHECKS.INTIME);
 
 const RUNTIMES =
 {
