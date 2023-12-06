@@ -1,5 +1,7 @@
 {
     "url": "http://127.0.0.1:3001",
+    "setUp": "./setUpNode",
+    "tearDown": "./tearDownNode",
     "node":
     {
         "gateway": "http://127.0.0.1:3000",

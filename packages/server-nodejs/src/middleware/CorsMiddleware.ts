@@ -1,5 +1,5 @@
 
-import { Middleware, NextHandler, Version } from '@jitar/runtime';
+import { Middleware, NextHandler, Request, Response } from '@jitar/runtime';
 
 export default class CorsMiddleware implements Middleware
 {
@@ -19,19 +19,19 @@ export default class CorsMiddleware implements Middleware
 
     get allowHeaders() { return this.#allowHeaders; }
 
-    async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: NextHandler): Promise<unknown>
+    async handle(request: Request, next: NextHandler): Promise<Response>
     {
-        const result = await next();
+        const response = await next();
 
-        this.#setHeaders(headers);
+        this.#setHeaders(response);
 
-        return result;
+        return response;
     }
 
-    #setHeaders(headers: Map<string, string>): void
+    #setHeaders(response: Response): void
     {
-        headers.set('Access-Control-Allow-Origin', this.#allowOrigin);
-        headers.set('Access-Control-Allow-Methods', this.#allowMethods);
-        headers.set('Access-Control-Allow-Headers', this.#allowHeaders);
+        response.setHeader('Access-Control-Allow-Origin', this.#allowOrigin);
+        response.setHeader('Access-Control-Allow-Methods', this.#allowMethods);
+        response.setHeader('Access-Control-Allow-Headers', this.#allowHeaders);
     }
 }

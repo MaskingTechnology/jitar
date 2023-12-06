@@ -2,7 +2,7 @@
   
   import svelteLogo from './assets/svelte.svg'
   import jitarLogo from './assets/jitar.svg'
-  import { sayHello } from './shared/sayHello'
+  import { sayHello } from './domain/sayHello'
 
   async function runComponent()
   {

@@ -26,6 +26,8 @@ Configurations are placed in JSON files. The basic structure looks like this.
 ```json
 {
     "url": "SERVICE_URL",
+    "setUp": "SET_UP_SCRIPT",
+    "tearDown": "TEAR_DOWN_SCRIPT",
     "SERVICE_TYPE":
     {
         "PROPERTY_1": "…",
@@ -33,6 +35,13 @@ Configurations are placed in JSON files. The basic structure looks like this.
     }
 }
 ```
+
+There are four properties at root level:
+
+* url - service url containing protocol, address and port (e.g. `http://service.example.com:3000`).
+* setUp - optional [set up script](../develop/setup-and-teardown.md) that gets executed on startup (e.g. `./setUp`).
+* tearDown - optional [tear down script](../develop/setup-and-teardown.md) that gets executed on shutdown (e.g. `./tearDown`).
+* SERVICE_TYPE - configuration of the specific service (differs per type).
 
 An instance can only run one type of service. Each service has its own configuration properties. All types and their properties are explained next.
 

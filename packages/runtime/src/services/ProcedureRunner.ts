@@ -1,6 +1,7 @@
 
 import Middleware from '../interfaces/Middleware.js';
-import Version from '../models/Version.js';
+import Request from '../models/Request.js';
+import Response from '../models/Response.js';
 import NextHandler from '../types/NextHandler.js';
 
 import ProcedureRuntime from './ProcedureRuntime.js';
@@ -15,12 +16,8 @@ export default class ProcedureRunner implements Middleware
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: NextHandler): Promise<unknown>
+    async handle(request: Request, next: NextHandler): Promise<Response>
     {
-        const result = await this.#runner.run(fqn, version, args, headers);
-
-        headers.clear();
-
-        return result;
+        return this.#runner.run(request);
     }
 }

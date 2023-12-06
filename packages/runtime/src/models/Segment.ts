@@ -32,7 +32,7 @@ export default class Segment
         return this.#procedures.get(fqn);
     }
 
-    getPublicProcedures()
+    getPublicProcedures(): Procedure[]
     {
         const procedures = [...this.#procedures.values()];
 

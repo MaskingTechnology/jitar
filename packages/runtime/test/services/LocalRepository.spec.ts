@@ -11,39 +11,39 @@ const repository = REPOSITORIES.DEFAULT;
 
 describe('services/LocalRepository', () =>
 {
-    describe('.loadModule(clientId, filename)', () =>
+    describe('.readModule(clientId, filename)', () =>
     {
         it('should not accept an invalid client id', () =>
         {
-            const run = async () => repository.loadModule('INVALID', '/some/file');
+            const run = async () => repository.readModule('INVALID', '/some/file');
 
             expect(run).rejects.toEqual(new InvalidClientId('INVALID'));
         });
 
         it('should not accept an unknown client id', () =>
         {
-            const run = async () => repository.loadModule('CLIENT_9999', '/some/file');
+            const run = async () => repository.readModule('CLIENT_9999', '/some/file');
 
             expect(run).rejects.toEqual(new ClientNotFound('CLIENT_9999'));
         });
 
         it('should return an unsegmented module file', async () =>
         {
-            const result = await repository.loadModule(CLIENT.id, REPOSITORY_FILES.UNSEGMENTED);
+            const result = await repository.readModule(CLIENT.id, REPOSITORY_FILES.UNSEGMENTED);
 
             expect(result.content.toString()).toContain('private()');
         });
 
         it('should return the actual module file', async () =>
         {
-            const result = await repository.loadModule(CLIENT.id, REPOSITORY_FILES.LOCAL);
+            const result = await repository.readModule(CLIENT.id, REPOSITORY_FILES.LOCAL);
 
             expect(result.content).toContain('first()');
         });
 
         it('should return a remote module file', async () =>
         {
-            const result = await repository.loadModule(CLIENT.id, REPOSITORY_FILES.REMOTE);
+            const result = await repository.readModule(CLIENT.id, REPOSITORY_FILES.REMOTE);
 
             expect(result.content.toString()).toContain('fourth()');
         });

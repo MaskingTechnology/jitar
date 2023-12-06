@@ -1,13 +1,13 @@
 
 import { useEffect, useState } from 'react';
 
-import ContactForm from '../components/ContactForm';
-import ContactList from '../components/ContactList';
+import ContactForm from '../components/contact/ContactForm';
+import ContactList from '../components/contact/ContactList';
 
-import Contact from '../../shared/contact/Contact';
-import getContacts from '../../shared/contact/getContacts';
-import createContact from '../../shared/contact/createContact';
-import deleteContact from '../../shared/contact/deleteContact';
+import Contact from '../../domain/contact/Contact';
+import getContacts from '../../domain/contact/getContacts';
+import createContact from '../../domain/contact/createContact';
+import deleteContact from '../../domain/contact/deleteContact';
 
 export default function ContactPage()
 {

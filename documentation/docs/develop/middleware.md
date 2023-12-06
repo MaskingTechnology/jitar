@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Data consistency
-    link: /develop/data-consistency
+    text: Set up and tear down
+    link: /develop/setup-and-teardown
 
 next:
     text: Validation
@@ -17,31 +17,59 @@ Middleware provides a way to hook into Jitars automated communication system. It
 
 In this section you'll learn how to create and add your own middleware.
 
-
 ## Creating middleware
 
 Any middleware required to implement Jitars Middleware interface. This interface has a single function to handle the request.
 
 ```ts
 // src/MyMiddleware.ts
-import { Middleware, Version, NextHandler } from 'jitar';
+import { Middleware, Request, Response, NextHandler } from 'jitar';
 
 export default class MyMiddleware implements Middleware
 {
-    async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: NextHandler): Promise<unknown>
+    async handle(request: Request, next: NextHandler): Promise<Response>
     {
         // Modify the request (args and headers) here
 
-        const result = await next();
+        const response = await next();
 
-        // Modify the response (result) here
+        // Modify the response (result and headers) here
 
-        return result;
+        return response;
     }
 }
 ```
 
-The `fqn`, `version` and `next` parameters are immutable, so only the args and headers can be modified. The args provide the procedure arguments. The headers contain the HTTP-headers that provide meta-information like authentication.
+The `request` parameter contains all request information including the arguments and headers. It has the following interface.
+
+```ts
+/* Properties */
+const fqn = request.fqn; // readonly
+const version = request.version; // readonly
+
+/* Arguments */
+request.setArgument('authenticator', authenticator);
+const authenticator = request.getArgument('authenticator');
+request.removeArgument('authenticator');
+
+/* Headers */
+request.setHeader('X-My-Header', 'value');
+const myHeader = request.getHeader('X-My-Header');
+request.removeHeader('X-My-Header');
+```
+
+The `response` contains besides the actual value the response headers. It has the following interface.
+
+```ts
+/* Properties */
+const result = response.result;
+response.result = newResult;
+
+/* Headers */
+response.setHeader('X-My-Header', 'value');
+const myHeader = response.getHeader('X-My-Header');
+response.removeHeader('X-My-Header');
+```
 
 Because all middleware is chained, the next parameter must always be called. This function does not take any arguments, all the arguments will be provided automatically. Note that the handle function is async so it can return a promise.
 

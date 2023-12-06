@@ -26,7 +26,7 @@ GET http://{ server address }/rpc/{ FQN }?{ parameters } HTTP/1.1
 Let's see how this works for the following simple [function](../fundamentals/building-blocks#functions).
 
 ```ts
-// src/shared/sayHello.ts
+// src/domain/sayHello.ts
 export async function sayHello(name: string): Promise<string>
 {
     return `Hello, ${name}!`;
@@ -37,7 +37,7 @@ That is added to a [segment configuration](../fundamentals/building-blocks#segme
 
 ```json
 {
-    "./shared/sayHello":
+    "./domain/sayHello":
     {
         "sayHello": {  "access": "public" }
     }
@@ -47,15 +47,15 @@ That is added to a [segment configuration](../fundamentals/building-blocks#segme
 After starting Jitar we can call the function with the following HTTP request.
 
 ```http
-GET http://localhost:3000/rpc/shared/sayHello?name=John HTTP/1.1
+GET http://localhost:3000/rpc/domain/sayHello?name=John HTTP/1.1
 ```
 
-The function's [fully qualified function name (FQN)](../fundamentals/building-blocks#fully-qualified-name-fqn) is in this case `shared/sayHello`. At the start of Jitar all registered RPC entries are listed, so you can always find the FQN you need.
+The function's [fully qualified function name (FQN)](../fundamentals/building-blocks#fully-qualified-name-fqn) is in this case `domain/sayHello`. At the start of Jitar all registered RPC entries are listed, so you can always find the FQN you need.
 
 In the query string you can set the function parameter values by name. For functions that take more complex data as parameter values the POST method can be used.
 
 ```http
-POST http://example.com:3000/rpc/shared/sayHello HTTP/1.1
+POST http://example.com:3000/rpc/domain/sayHello HTTP/1.1
 content-type: application/json
 
 {
@@ -74,7 +74,7 @@ Functions parameters can have many forms. Jitar has support for the following op
 Parameters with a default value are considered optional:
 
 ```ts
-// src/shared/sayHello.ts
+// src/domain/sayHello.ts
 export async function sayHello(name = 'World'): Promise<string>
 {
     return `Hello, ${name}!`;
@@ -84,7 +84,7 @@ export async function sayHello(name = 'World'): Promise<string>
 This function can be called without a value for the name parameter.
 
 ```http
-GET http://localhost:3000/rpc/shared/sayHello HTTP/1.1
+GET http://localhost:3000/rpc/domain/sayHello HTTP/1.1
 ```
 
 ### Destructured parameters
@@ -92,9 +92,9 @@ GET http://localhost:3000/rpc/shared/sayHello HTTP/1.1
 Functions can have destructured parameters.
 
 ```ts
-import Person from './Person';
+import { Person } from './Person';
 
-// src/shared/sayHello.ts
+// src/domain/sayHello.ts
 export async function sayHello({ name, city }: Person): Promise<string>
 {
     return `Hello, ${name} from ${city}!`;
@@ -104,7 +104,7 @@ export async function sayHello({ name, city }: Person): Promise<string>
 In the end, the function only has two parameters: name and city. When making a RPC call, these are the parameter values that need to be provided.
 
 ```http
-GET http://localhost:3000/rpc/shared/sayHello?name=John&city=Rome HTTP/1.1
+GET http://localhost:3000/rpc/domain/sayHello?name=John&city=Rome HTTP/1.1
 ```
 
 ::: warning IMPORTANT
@@ -116,7 +116,7 @@ Nested parameter destructuring is on the [known limitations list](../internals/r
 Functions can use the rest operator.
 
 ```ts
-// src/shared/sayHello.ts
+// src/domain/sayHello.ts
 export async function sayHello(...names: string[]): Promise<string>
 {
     return `Hello, ${names.join(', ')}!`;
@@ -126,7 +126,7 @@ export async function sayHello(...names: string[]): Promise<string>
 RPC calls require the exact name of a parameter. In this case we also need to add the rest operator and provide an array with the values. In order to send the array we need to use the POST method.
 
 ```http
-POST http://example.com:3000/rpc/shared/sayHello HTTP/1.1
+POST http://example.com:3000/rpc/domain/sayHello HTTP/1.1
 content-type: application/json
 
 {
@@ -139,7 +139,7 @@ content-type: application/json
 Functions can use built-in and custom class parameters. For example this function that takes a custom Person class instance.
 
 ```ts
-// src/shared/sayHello.ts
+// src/domain/sayHello.ts
 import { Person } from './Person';
 
 export async function sayHello(person: Person): Promise<string>
@@ -151,7 +151,7 @@ export async function sayHello(person: Person): Promise<string>
 The Person class looks like this.
 
 ```ts
-// src/shared/Person.ts
+// src/domain/Person.ts
 export class Person
 {
     #name: string;
@@ -171,7 +171,7 @@ export class Person
 This class is immutable, so it can only be constructed with constructor arguments. To call this function we need to provide all information required to construct the instance.
 
 ```http
-POST http://example.com:3000/rpc/shared/sayHello?serialize=true HTTP/1.1
+POST http://example.com:3000/rpc/domain/sayHello?serialize=true HTTP/1.1
 content-type: application/json
 
 {
@@ -179,7 +179,7 @@ content-type: application/json
     {
         "serialized": true,
         "name": "Person",
-        "source": "shared/Person.js",
+        "source": "domain/Person.js",
         "args": ["John", 42],
         "fields": { }
     }
@@ -209,7 +209,7 @@ GET http://localhost:3000/rpc/person/getPerson?serialize={true | false} HTTP/1.1
 For plain objects the result will be the same in both cases, but for class instances with private fields it makes a big difference. For example returning an instance of the following class.
 
 ```ts
-// src/shared/Person.ts
+// src/domain/Person.ts
 export class Person
 {
     #name: string;
@@ -240,7 +240,7 @@ With the serializer the response looks very different.
 {
     "serialized": true,
     "name": "Person",
-    "source": "shared/Person.js",
+    "source": "domain/Person.js",
      "args": ["John", 42],
     "fields": { }
 }

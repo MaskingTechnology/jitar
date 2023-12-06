@@ -1,5 +1,7 @@
 
 import HealthCheck from '../interfaces/HealthCheck.js';
+import Module from '../types/Module.js';
+import ModuleLoader from '../utils/ModuleLoader.js';
 
 export default abstract class Runtime
 {
@@ -12,6 +14,11 @@ export default abstract class Runtime
     }
 
     get url() { return this.#url; }
+
+    async import(url: string): Promise<Module>
+    {
+        return ModuleLoader.load(url);
+    }
 
     addHealthCheck(name: string, healthCheck: HealthCheck): void
     {

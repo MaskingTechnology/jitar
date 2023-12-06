@@ -1,6 +1,7 @@
 
 import File from '../models/File.js';
-import Version from '../models/Version.js';
+import Request from '../models/Request.js';
+import Response from '../models/Response.js';
 
 import Repository from './Repository.js';
 import ProcedureRuntime from './ProcedureRuntime.js';
@@ -44,13 +45,13 @@ export default class Proxy extends ProcedureRuntime
         return this.#repository.registerClient(segmentFiles);
     }
 
-    loadModule(clientId: string, filename: string): Promise<File>
+    readModule(clientId: string, filename: string): Promise<File>
     {
-        return this.#repository.loadModule(clientId, filename);
+        return this.#repository.readModule(clientId, filename);
     }
 
-    run(name: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    run(request: Request): Promise<Response>
     {
-        return this.#runner.run(name, version, args, headers);
+        return this.#runner.run(request);
     }
 }

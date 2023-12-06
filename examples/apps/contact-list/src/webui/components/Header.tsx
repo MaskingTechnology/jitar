@@ -1,5 +1,5 @@
 
-export default function Header(props: any)
+export default function Header()
 {
   return (
     <header className='p-4 text-left bg-white'>

@@ -85,7 +85,7 @@ This example works with the default Jitar setup, but will break when using [midd
 Functions can be imported and called as if they are locally available.
 
 ```ts
-// src/shared/example.ts
+// src/domain/example.ts
 import { sayHello } from './sayHello';
 
 export async function example(): Promise<void>
@@ -95,7 +95,7 @@ export async function example(): Promise<void>
     console.log(message);
 }
 
-// src/shared/sayHello.ts
+// src/domain/sayHello.ts
 export async function sayHello(name: string): Promise<string>
 {
     return `Hello, ${name}!`;

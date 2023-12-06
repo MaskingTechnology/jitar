@@ -28,7 +28,7 @@ The client connects to the Jitar server and gets a number.
 npm install
 ```
 
-2\. Next build the application by running the following command.
+2\. Next, build the application by running the following command.
 
 ```bash
 npm run build

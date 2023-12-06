@@ -42,7 +42,7 @@ export default defineConfig({
 The plugin takes 4 arguments:
 
 1. srcPath - The path to the app source files. In most cases this is the `src` folder.
-1. jitarPath - The path to the source files used by Jitar. This path is relative to the source root. We like to use `shared` (which points to `src/shared`), * but feel free to use something else.
+1. jitarPath - The path to the source files used by Jitar. This path is relative to the source root. We like to use `domain` (which points to `src/domain`), * but feel free to use something else.
 1. jitarUrl - The URL of the Jitar instance. Jitar uses by default `http://localhost:3000`, but can be configured differently in the Jitar config.
 1. segments - The segments to use for the client app. This is an array of strings. The default is an empty array.
 

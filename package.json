@@ -15,6 +15,7 @@
     "packages/server-nodejs",
     "tools/eslint-plugin",
     "examples/concepts/access-protection",
+    "examples/concepts/construction",
     "examples/concepts/cors",
     "examples/concepts/data-transportation",
     "examples/concepts/error-handling",
