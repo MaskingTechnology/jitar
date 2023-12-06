@@ -51,7 +51,7 @@ A health check needs to be added to the service that has the connection to the d
 {
     "url": "http://localhost:3000",
     "healthChecks": ["./databaseHealthCheck"],
-    "gateway":
+    "node":
     {
         // ...
     }
