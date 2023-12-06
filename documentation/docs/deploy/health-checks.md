@@ -47,7 +47,7 @@ The health check interface requires you to implement the `name` and  `timeout` g
 A health check needs to be added to the service that has the connection to the database. This is done by registering the health check module file in the service configuration.
 
 ```json
-// services/gateway.json
+// services/node.json
 {
     "url": "http://localhost:3000",
     "healthChecks": ["./databaseHealthCheck"],
@@ -58,4 +58,4 @@ A health check needs to be added to the service that has the connection to the d
 }
 ```
 
-Once added, the gateway will trigger the check automatically. You can also check yourself using the health API. More information on this can be found in the [MONITOR section](../monitor/health).
+Once added, the node will trigger the check automatically. You can also check yourself using the health API. More information on this can be found in the [MONITOR section](../monitor/health).
