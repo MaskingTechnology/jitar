@@ -1,5 +1,5 @@
 
-import Database from './integrations/database/Database';
+import Database from '../database/Database';
 
 Database.connect('mongodb://root:example@localhost:27017', 'react-mongodb');
 

@@ -1,7 +1,8 @@
 {
     "url": "http://127.0.0.1:3001",
-    "setUp": "./setUpNode",
-    "tearDown": "./tearDownNode",
+    "setUp": "./integrations/jitar/setUpNode",
+    "tearDown": "./integrations/jitar/tearDownNode",
+    "healthChecks": ["./integrations/jitar/databaseHealthCheck"],
     "node":
     {
         "gateway": "http://127.0.0.1:3000",
