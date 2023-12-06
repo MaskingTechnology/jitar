@@ -68,7 +68,7 @@ Each folder has it's own responsibility:
 * assets - contains all assets used by the domain and webui;
 * integrations - contains all integrations with external systems.
 
-For maintainability reasons its important to get the dependencies right. We use the following rules:
+For maintainability reasons it's important to get the dependencies right. We use the following rules:
 
 * domain - depends on assets and integrations;
 * webui - depends on assets, domain and integrations.
