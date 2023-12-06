@@ -2,7 +2,7 @@ import solidjslogo from './logo.svg'
 import jitarLogo from './assets/jitar.svg'
 import type { Component } from 'solid-js'
 import { createResource } from 'solid-js'
-import { sayHello } from './shared/sayHello'
+import { sayHello } from './domain/sayHello'
 
 const sayHelloResource = async () => {
   return await sayHello('Vite + Solid + Jitar')

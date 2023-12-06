@@ -6,7 +6,7 @@ export default defineConfig(({ mode }) =>
 {
   return {
     plugins: [
-      jitar('src', 'shared', 'http://localhost:3000')
+      jitar('src', 'domain', 'http://localhost:3000')
     ],
     build: {
       lib: {

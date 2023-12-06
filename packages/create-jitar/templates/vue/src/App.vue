@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { ref } from 'vue';
-import { sayHello } from './shared/sayHello';
+import { sayHello } from './domain/sayHello';
 
 const message = ref('');
 
