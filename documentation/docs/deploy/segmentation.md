@@ -24,7 +24,7 @@ Segments are used to break applications down into distributable pieces. A segmen
 }
 ```
 
-This example includes the `sayHello` function from the `shared/sayHello.ts` module file. Now let's decompose the configuration file and dive into the details.
+This example includes the `sayHello` function from the `domain/sayHello.ts` module file. Now let's decompose the configuration file and dive into the details.
 
 ### Naming and placement
 

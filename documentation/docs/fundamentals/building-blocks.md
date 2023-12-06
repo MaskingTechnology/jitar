@@ -53,7 +53,7 @@ Every function has a unique name used for internal and external identification. 
 { location relative to the source folder }/{ function name}
 ```
 
-For the simple sayHello function the FQN of this function is `shared/sayHello`. Note that there is no leading / in the name.
+For the simple sayHello function the FQN of this function is `domain/sayHello`. Note that there is no leading / in the name.
 
 ## Segments
 

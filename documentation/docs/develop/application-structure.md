@@ -76,7 +76,7 @@ For maintainability reasons its important to get the dependencies right. We use 
 For setting up the domain, we use the following rules:
 
 * folder per concept - we prefer using business domain concepts like 'account' or 'company';
-* [function](../fundamentals/building-blocks#functions) per file - we use corresponding filenames with the function name like 'searchAccounts'' or 'createMonthReport';
+* [function](../fundamentals/building-blocks#functions) per file - we use corresponding filenames with the function name like 'searchAccounts' or 'createMonthReport';
 * [data model](./data-sharing) per file - use corresponding filenames with the model names like 'Account' or 'MonthReport';
 * [version](../deploy/segmentation#versioning) per file - both functions and models, we add the version number at the end of the filename.
 

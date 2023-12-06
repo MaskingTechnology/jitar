@@ -50,7 +50,7 @@ After starting Jitar we can call the function with the following HTTP request.
 GET http://localhost:3000/rpc/domain/sayHello?name=John HTTP/1.1
 ```
 
-The function's [fully qualified function name (FQN)](../fundamentals/building-blocks#fully-qualified-name-fqn) is in this case `shared/sayHello`. At the start of Jitar all registered RPC entries are listed, so you can always find the FQN you need.
+The function's [fully qualified function name (FQN)](../fundamentals/building-blocks#fully-qualified-name-fqn) is in this case `domain/sayHello`. At the start of Jitar all registered RPC entries are listed, so you can always find the FQN you need.
 
 In the query string you can set the function parameter values by name. For functions that take more complex data as parameter values the POST method can be used.
 
@@ -179,7 +179,7 @@ content-type: application/json
     {
         "serialized": true,
         "name": "Person",
-        "source": "shared/Person.js",
+        "source": "domain/Person.js",
         "args": ["John", 42],
         "fields": { }
     }
@@ -240,7 +240,7 @@ With the serializer the response looks very different.
 {
     "serialized": true,
     "name": "Person",
-    "source": "shared/Person.js",
+    "source": "domain/Person.js",
      "args": ["John", 42],
     "fields": { }
 }

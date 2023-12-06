@@ -14,7 +14,7 @@ next:
 # Set up and tear down
 
 Before an application starts or stops, you might want to do some additional things like connecting and disconnecting the database.
-For this, Jitar provides hooks for executing set-up and tear-down scripts.
+For this, Jitar provides hooks for executing set up and tear down scripts.
 
 The scripts can be configured per service in its configuration.
 Adding both scripts to a standalone configuration looks like this:
@@ -40,7 +40,7 @@ import { Database } from './integrations/database/Database';
 await Database.connect(process.env.DB_CONN_STRING);
 ```
 
-All it does is importing it's dependencies and performing all actions required.
+All it does is importing dependencies and performing all actions required.
 
 ::: warning IMPORTANT
 The set up script is executed before the service starts. If the script fails, Jitar will exit.

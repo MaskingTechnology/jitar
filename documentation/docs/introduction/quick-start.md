@@ -37,7 +37,7 @@ Now you should be able to access the application on [http://localhost:3000](http
 
 ## 2. Add your functions
 
-Functions are the main building blocks of Jitar applications. The created application already has one in the `src/shared` folder, so let's take a look.
+Functions are the main building blocks of Jitar applications. The created application already has one in the `src/domain` folder, so let's take a look.
 
 ```ts
 // src/domain/sayHello.ts
