@@ -1,11 +1,12 @@
 
-import Version from '../models/Version.js';
+import Request from '../models/Request.js';
+import Response from '../models/Response.js';
 
 import NextHandler from '../types/NextHandler.js';
 
 interface Middleware
 {
-    handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: NextHandler): Promise<unknown>;
+    handle(request: Request, next: NextHandler): Promise<Response>;
 }
 
 export default Middleware;

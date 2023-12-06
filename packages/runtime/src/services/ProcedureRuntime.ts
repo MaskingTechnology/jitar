@@ -1,7 +1,10 @@
 
 import Middleware from '../interfaces/Middleware.js';
 import Runner from '../interfaces/Runner.js';
-import Version from '../models/Version.js';
+
+import Request from '../models/Request.js';
+import Response from '../models/Response.js';
+
 import NextHandler from '../types/NextHandler.js';
 
 import Runtime from './Runtime.js';
@@ -22,7 +25,7 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
     abstract hasProcedure(name: string): boolean;
 
-    abstract run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>;
+    abstract run(request: Request): Promise<Response>;
 
     addMiddleware(middleware: Middleware)
     {
@@ -39,25 +42,24 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
         return this.#middlewares.find(middleware => middleware instanceof type);
     }
 
-    handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>
+    handle(request: Request): Promise<Response>
     {
-        const startHandler = this.#getNextHandler(fqn, version, args, headers, 0);
+        const startHandler = this.#getNextHandler(request, 0);
 
         return startHandler();
     }
 
-    #getNextHandler(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, index: number): NextHandler
+    #getNextHandler(request: Request, index: number): NextHandler
     {
         const next = this.#middlewares[index];
 
         if (next === undefined)
         {
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            return async () => {};
+            return async () => new Response();
         }
 
-        const nextHandler = this.#getNextHandler(fqn, version, args, headers, index + 1);
+        const nextHandler = this.#getNextHandler(request, index + 1);
 
-        return async () => { return next.handle(fqn, version, args, headers, nextHandler); };
+        return async () => { return next.handle(request, nextHandler); };
     }
 }

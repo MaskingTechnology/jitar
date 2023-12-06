@@ -1,9 +1,10 @@
 
-import Version from '../models/Version.js';
+import Request from '../models/Request.js';
+import Response from '../models/Response.js';
 
 interface Runner
 {
-    run(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>): Promise<unknown>;
+    run(request: Request): Promise<Response>;
 }
 
 export default Runner;
