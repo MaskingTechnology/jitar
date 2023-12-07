@@ -19,10 +19,10 @@ In this section you'll learn how to create and add your own middleware.
 
 ## Creating middleware
 
-Any middleware required to implement Jitars Middleware interface. This interface has a single function to handle the request.
+Jitar provides an interface you have to implement in order to add a middleware to a service. Only middleware instances can be registered. Each instance needs to be exported as default in a separate module file. Let's look at a simple example:
 
 ```ts
-// src/MyMiddleware.ts
+// src/myMiddleware.ts
 import { Middleware, Request, Response, NextHandler } from 'jitar';
 
 export default class MyMiddleware implements Middleware
@@ -38,6 +38,10 @@ export default class MyMiddleware implements Middleware
         return response;
     }
 }
+
+const instance = new MyMiddleware();
+
+export default instance;
 ```
 
 The `request` parameter contains all request information including the arguments and headers. It has the following interface.
@@ -75,23 +79,22 @@ Because all middleware is chained, the next parameter must always be called. Thi
 
 ## Adding middleware
 
-Middleware needs to be registered at the start of a Jitar server.
+Middleware needs to be added to a service. This is done by registering the middleware module file in the service configuration.
 
-```ts
-// src/standalone.ts
-import { buildServer } from 'jitar';
-import MyMiddleware from './MyMiddleware';
-
-const moduleImporter = async (specifier: string) => import(specifier);
-
-const server = await buildServer(moduleImporter);
-server.addMiddleware(new LoggingMiddleware());
-server.start();
+```json
+// services/node.json
+{
+    "url": "http://localhost:3000",
+    "node":
+    {
+        "middlewares": ["./myMiddleware"]
+    }
+}
 ```
 
 It's only useful to add middleware to a node, gateway, proxy and standalone service because they are actively involved with the communication system. Adding middleware to a repository service won't result in an error, but doesn't have any effect either.
 
-It's likely that the different services require different middleware. For example, you might want to add authentication middleware to the gateway and authorization middleware to the node. In this case each service needs its own starter script containing their specific middleware.
+It's likely that the different services require different middleware. For example, you might want to add authentication middleware to the gateway and authorization middleware to the node.
 
 ::: warning KEEP IN MIND 
 Middleware is executed in the order of registration. This means that the middleware that is added first is called first.

@@ -321,18 +321,17 @@ export default PersonNotFound extends NotFound
 Depending on the external application, CORS headers might be required to allow the connection. Jitar provides a CORS middleware implementation that you can use out-of-the-box.
 
 ```ts
-import { buildServer, CorsMiddleware } from 'jitar';
-
-const moduleImporter = async (specifier: string) => import(specifier);
+// src/handleCors.ts
+import { CorsMiddleware } from 'jitar';
 
 const origin = 'https://example.com';
 const headers = 'X-Custom-Header-1, X-Custom-Header-2';
 const cors = new CorsMiddleware(origin, headers);
 
-const server = await buildServer(moduleImporter);
-server.addMiddleware(cors);
-server.start();
+export default cors;
 ```
+
+This CORS handler needs to registered to a service in order to work. More information on this can be found in the [middleware](../develop/middleware#adding-middleware) section of the develop guide.
 
 Only a single origin is supported. If you need a multi-domain setup you can provide a * (wildcard). The allowed headers are specified in a comma-separated list. You can also use a * (wildcard) to allow all. By default the CORS middleware will use a wildcard for the domain and headers if not specified.
 
