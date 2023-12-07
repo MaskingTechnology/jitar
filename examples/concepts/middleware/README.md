@@ -17,7 +17,7 @@ The application implements a simple logging middleware.
 
 **Services**
 
-* Standalone (`src/services/standalone.json`)
+* Standalone - contains the logging middleware (`src/services/standalone.json`)
 
 ## Running the example
 
