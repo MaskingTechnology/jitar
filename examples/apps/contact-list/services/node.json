@@ -7,6 +7,7 @@
     {
         "gateway": "http://127.0.0.1:3000",
         "repository": "http://127.0.0.1:2999",
-        "segments": [ "server" ]
+        "segments": [ "server" ],
+        "middlewares": ["./integrations/jitar/requestLogger"]
     }
 }
