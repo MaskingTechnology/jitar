@@ -1,10 +1,11 @@
 
-import { Runtime, LocalRepository, LocalGateway, LocalNode, RemoteRepository, RemoteGateway, RemoteNode, NodeMonitor, Proxy, Repository, Gateway, Node } from '@jitar/runtime';
+import { Runtime, LocalRepository, LocalGateway, LocalNode, RemoteRepository, RemoteGateway, RemoteNode, NodeMonitor, Proxy, Repository, Gateway, Node, ProcedureRuntime } from '@jitar/runtime';
 import { CacheManager } from '@jitar/caching';
 
 import LocalFileManager from './LocalFileManager.js';
 
 import RuntimeConfiguration from '../configuration/RuntimeConfiguration.js';
+import ProcedureRuntimeConfiguration from '../configuration/ProcedureRuntimeConfiguration.js';
 import StandaloneConfiguration from '../configuration/StandaloneConfiguration.js';
 import RepositoryConfiguration from '../configuration/RepositoryConfiguration.js';
 import GatewayConfiguration from '../configuration/GatewayConfiguration.js';
@@ -53,8 +54,11 @@ export default class RuntimeConfigurator
 
         const repository = await this.#buildRepository(url, cacheLocation, assetFilePatterns);
         const node = await this.#buildNode(url, segmentNames, repository);
+        const proxy = await this.#buildProxy(url, repository, node);
 
-        return this.#buildProxy(url, repository, node);
+        await this.#addMiddlewares(proxy, configuration);
+
+        return proxy;
     }
 
     static async #configureRepository(url: string, configuration: RepositoryConfiguration): Promise<LocalRepository>
@@ -64,14 +68,18 @@ export default class RuntimeConfigurator
         const assetFilePatterns = configuration.assets ?? [];
 
         await this.#buildCache(sourceLocation, cacheLocation);
+        
         return this.#buildRepository(url, cacheLocation, assetFilePatterns);
     }
 
     static async #configureGateway(url: string, configuration: GatewayConfiguration): Promise<LocalGateway>
     {
         const repository = this.#getRemoteRepository(configuration.repository);
+        const gateway = await this.#buildGateway(url, configuration.monitor, repository);
 
-        return this.#buildGateway(url, configuration.monitor, repository);
+        await this.#addMiddlewares(gateway, configuration);
+
+        return gateway;
     }
 
     static async #configureNode(url: string, configuration: NodeConfiguration): Promise<LocalNode>
@@ -80,8 +88,11 @@ export default class RuntimeConfigurator
 
         const repository = this.#getRemoteRepository(configuration.repository);
         const gateway = this.#getRemoteGateway(configuration.gateway);
+        const node = await this.#buildNode(url, segmentNames, repository, gateway);
 
-        return this.#buildNode(url, segmentNames, repository, gateway);
+        await this.#addMiddlewares(node, configuration);
+
+        return node;
     }
 
     static async #configureProxy(url: string, configuration: ProxyConfiguration): Promise<Proxy>
@@ -95,7 +106,11 @@ export default class RuntimeConfigurator
 
         const runner = gateway ?? node;
 
-        return this.#buildProxy(url, repository, runner);
+        const proxy = await this.#buildProxy(url, repository, runner);
+
+        await this.#addMiddlewares(proxy, configuration);
+
+        return proxy;
     }
 
     static async #buildCache(sourceLocation: string, cacheLocation: string): Promise<void>
@@ -217,6 +232,19 @@ export default class RuntimeConfigurator
         for (const url of configuration.healthChecks)
         {
             await runtime.importHealthCheck(url);
+        }
+    }
+
+    static async #addMiddlewares(runtime: ProcedureRuntime, configuration: ProcedureRuntimeConfiguration): Promise<void>
+    {
+        if (configuration.middlewares === undefined)
+        {
+            return;
+        }
+
+        for (const url of configuration.middlewares)
+        {
+            await runtime.importMiddleware(url);
         }
     }
 }

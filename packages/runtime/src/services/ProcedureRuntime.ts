@@ -1,4 +1,6 @@
 
+import InvalidMiddleware from '../errors/InvalidMiddleware.js';
+
 import Middleware from '../interfaces/Middleware.js';
 import Runner from '../interfaces/Runner.js';
 
@@ -26,6 +28,19 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
     abstract hasProcedure(name: string): boolean;
 
     abstract run(request: Request): Promise<Response>;
+
+    async importMiddleware(url: string): Promise<void>
+    {
+        const module = await this.import(url);
+        const middleware = module.default as Middleware;
+
+        if (middleware?.handle === undefined)
+        {
+            throw new InvalidMiddleware(url);
+        }
+
+        this.addMiddleware(middleware);
+    }
 
     addMiddleware(middleware: Middleware)
     {
