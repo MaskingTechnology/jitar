@@ -22,7 +22,7 @@ Because Jitar and the web server both run on a different port, a CORS rule is re
 
 Development
 
-* Standalone - loads all segments (`services/standalone.json`)
+* Standalone - loads all segments and the CORS middleware (`services/standalone.json`)
 
 ## Running the example
 

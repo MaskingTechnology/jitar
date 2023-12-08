@@ -7,7 +7,9 @@ The 0.5 version of Jitar introduces some breaking changes. All changes are descr
 Working with health checks that need to access application resources had a few limitations.
 To overcome these, we've made breaking changes to the health check implementation.
 
-Let's look at the current implementation first. Health checks are instantiated and registered at the server.
+### Old situation
+
+Let's look at the 'old' implementation first. Health checks are instantiated and registered at the server.
 
 ```ts
 // src/jitar.ts
@@ -38,11 +40,13 @@ Next, they are activated by name in the service configuration like this:
 This way, health checks can be registered once, en activated for multiple services.
 We still love that idea, but registering all health checks in a single bootstrap file wasn't pretty.
 
-So, we've changed the way of registering. There's no need for registering health checks at the server anymore.
+### New situation
+
+We've changed the way of registering in a way there's no need for registering health checks at the server anymore.
 
 ```ts
 // src/jitar.ts
-import { startServer, HealthCheck } from 'jitar';
+import { startServer } from 'jitar';
 
 const server = await startServer(moduleImporter);
 server.start(); // Look ma, no health checks!
@@ -83,29 +87,57 @@ More information on health checks can be found in the [documentation](https://do
 
 ## Middleware
 
-We've updated our middleware model to be more clean and extendable.
+The middleware implementation has the same limitations as the health checks, and fixed the same way. Also, we've updated our middleware model to be more clean and extendable.
 
-Let's look at the 'old' implementation first.
+### Old situation
+
+Let's look at the 'old' implementation again first.
 
 ```ts
-import { Middleware, Version, NextHandler } from 'jitar';
+// src/jitar.ts
+import { startServer, Middleware, Version, NextHandler } from 'jitar';
 
 export default class MyMiddleware implements Middleware
 {
     async handle(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, next: NextHandler): Promise<unknown>
     {
-        // Modify the request (args and headers) here
+        /* ... */
+    }
+}
 
-        const result = await next();
+const server = await startServer(moduleImporter);
+server.addMiddleware(new MyMiddleware()); // Registered here
+server.start();
+```
 
-        // Modify the response (result) here
+### New situation
 
-        return result;
+First, we've changed the way of registering in a way there's no need for registering middleware at the server anymore.
+
+```ts
+// src/jitar.ts
+import { startServer } from 'jitar';
+
+const server = await startServer(moduleImporter);
+server.start(); // Look ma, no middleware!
+```
+
+Instead, middleware gets registered in the service configuration.
+This is also done by importing modules containing a middleware instance.
+
+```json
+{
+    "url": "http://127.0.0.1:3000",
+    "standalone":
+    {
+        "middlewares": ["./myMiddleware"]
     }
 }
 ```
 
-The `handle` function in this implementation takes a lot of arguments that we've combined in a `Request` object.
+The middleware module must export an instance of the `Middleware` interface as default value. This interface has been modified as well.
+
+The `handle` function in the old implementation takes a lot of arguments that we've combined in a `Request` object.
 This makes it simpler to create middleware, and the `handle` function looks a lot cleaner.
 
 Also, manipulating the response headers wasn't very clear in this implementation because they were combined with the request headers.
@@ -114,9 +146,10 @@ Therefore we've created a `Response` object that combines the response value and
 The new implementation looks as follows.
 
 ```ts
+// src/myMiddleware.ts
 import { Middleware, Request, Response, NextHandler } from 'jitar';
 
-export default class MyMiddleware implements Middleware
+class MyMiddleware implements Middleware
 {
     async handle(request: Request, next: NextHandler): Promise<Response>
     {
@@ -129,6 +162,9 @@ export default class MyMiddleware implements Middleware
         return response;
     }
 }
+
+const instance = new MyMiddleware();
+export default instance;
 ```
 
 The `Request` has the following interface.

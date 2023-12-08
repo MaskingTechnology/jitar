@@ -17,7 +17,7 @@ export const runtimeSchema = z
         repository: repositorySchema.optional(),
         gateway: gatewaySchema.optional(),
         node: nodeSchema.optional(),
-        proxy: proxySchema.optional(),
+        proxy: proxySchema.optional()
     })
     .strict()
     .transform((value) => new RuntimeConfiguration(value.url, value.setUp, value.tearDown, value.healthChecks, value.standalone, value.repository, value.gateway, value.node, value.proxy));

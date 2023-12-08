@@ -112,6 +112,7 @@ The following configuration properties are available:
 * gateway - url of the gateway (optional, in case no gateway is used).
 * repository - url of the repository (required).
 * segments - list of segment names to load (optional, loads all segments by default).
+* middleware - list of [middleware modules](../develop/middleware.md) to load (optional).
 
 A full configuration example looks like this:
 
@@ -122,7 +123,8 @@ A full configuration example looks like this:
     {
         "gateway": "http://gateway.example.com:3000",
         "repository": "http://repository.example.com:3000",
-        "segments": ["segment1", "segment2"]
+        "segments": ["segment1", "segment2"],
+        "middleware": ["./middleware1", "./middleware2"]
     }
 }
 ```
@@ -156,7 +158,8 @@ There aren't any caching options yet, but we are planning on implementing them. 
 The following configuration properties are available:
 
 * repository - url of the repository (required).
-* monitor - node monitoring interval in milliseconds (optional, default `5000`)
+* monitor - node monitoring interval in milliseconds (optional, default `5000`).
+* middleware - list of [middleware modules](../develop/middleware.md) to load (optional).
 
 A full configuration example looks like this:
 
@@ -166,7 +169,8 @@ A full configuration example looks like this:
     "gateway":
     {
         "repository": "http://repository.example.com:3000",
-        "monitor": 5000
+        "monitor": 5000,
+        "middleware": ["./middleware1", "./middleware2"]
     }
 }
 ```
@@ -190,6 +194,7 @@ The following configuration properties are available:
 * gateway - url of the gateway (optional if node property set).
 * node - url of the node (optional if gateway property set).
 * repository - url of the repository (required).
+* middleware - list of [middleware modules](../develop/middleware.md) to load (optional).
 
 A full configuration example looks like this:
 
@@ -198,8 +203,9 @@ A full configuration example looks like this:
     "url": "http://proxy.example.com:3000",
     "proxy":
     {
-       "gateway": "http://gateway.example.com:3000",
-       "repository": "http://repository.example.com:3000"
+        "gateway": "http://gateway.example.com:3000",
+        "repository": "http://repository.example.com:3000",
+        "middleware": ["./middleware1", "./middleware2"]
     }
 }
 ```
@@ -223,6 +229,7 @@ The standalone service has the same configuration properties as the repository s
 * cache - location of the application cache (optional, default `./.jitar`).
 * index - file to serve when accessed by a web browser (optional, default `index.html`).
 * assets - list of whitelisted assets (optional, default `undefined`).
+* middleware - list of [middleware modules](../develop/middleware.md) to load (optional).
 
 A full configuration example looks like this:
 
@@ -234,7 +241,8 @@ A full configuration example looks like this:
         "source": "./src",
         "cache": "./.jitar",
         "index": "index.html",
-        "assets": ["*.html", "*.js", "*.css", "assets/**/*"]
+        "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
+        "middleware": ["./middleware1", "./middleware2"]
     }
 }
 ```

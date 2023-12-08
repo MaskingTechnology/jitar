@@ -3,7 +3,7 @@ import express, { Express } from 'express';
 import { Server } from 'http';
 import { Logger } from 'tslog';
 
-import { LocalGateway, LocalNode, LocalRepository, Middleware, ProcedureRuntime, Proxy, Runtime, RemoteClassLoader } from '@jitar/runtime';
+import { LocalGateway, LocalNode, LocalRepository, Proxy, Runtime, RemoteClassLoader } from '@jitar/runtime';
 import { ClassLoader, Serializer, SerializerBuilder, ValueSerializer } from '@jitar/serialization';
 
 import ServerOptions from './configuration/ServerOptions.js';
@@ -25,7 +25,6 @@ import RuntimeConfiguration from './configuration/RuntimeConfiguration.js';
 import RuntimeDefaults from './definitions/RuntimeDefaults.js';
 
 import RuntimeNotAvailable from './errors/RuntimeNotAvailable.js';
-import MiddlewareNotSupported from './errors/MiddlewareNotSupported.js';
 import LogBuilder from './utils/LogBuilder.js';
 
 const STARTUP_MESSAGE = `
@@ -102,18 +101,6 @@ export default class JitarServer
     addSerializer(serializer: ValueSerializer): void
     {
         this.#serializer.addSerializer(serializer);
-    }
-
-    addMiddleware(middleware: Middleware): void
-    {
-        const runtime = this.#getRuntime();
-
-        if (!(runtime instanceof ProcedureRuntime))
-        {
-            throw new MiddlewareNotSupported();
-        }
-
-        runtime.addMiddleware(middleware);
     }
 
     #getRuntime(): Runtime
