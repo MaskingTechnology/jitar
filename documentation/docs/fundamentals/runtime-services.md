@@ -203,8 +203,8 @@ A full configuration example looks like this:
     "url": "http://proxy.example.com:3000",
     "proxy":
     {
-       "gateway": "http://gateway.example.com:3000",
-       "repository": "http://repository.example.com:3000",
+        "gateway": "http://gateway.example.com:3000",
+        "repository": "http://repository.example.com:3000",
         "middleware": ["./middleware1", "./middleware2"]
     }
 }

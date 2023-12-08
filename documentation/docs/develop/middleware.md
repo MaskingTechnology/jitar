@@ -92,7 +92,7 @@ Middleware needs to be added to a service. This is done by registering the middl
 }
 ```
 
-It's only useful to add middleware to a node, gateway, proxy and standalone service because they are actively involved with the communication system. Adding middleware to a repository service won't result in an error, but doesn't have any effect either.
+Middleware can only be added to a node, gateway, proxy and standalone service because they are actively involved with the communication system.
 
 It's likely that the different services require different middleware. For example, you might want to add authentication middleware to the gateway and authorization middleware to the node.
 
