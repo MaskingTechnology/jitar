@@ -1,0 +1,15 @@
+{
+    "name": "jitar-overrides-example",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json",
+        "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
+        "gateway": "node --experimental-network-imports dist/jitar.js --config=services/gateway.json",
+        "node": "node --experimental-network-imports dist/jitar.js --config=services/node.json"
+    },
+    "dependencies": {
+        "jitar": "^0.4.1"
+    }
+}
