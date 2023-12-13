@@ -71,11 +71,11 @@ export default class RuntimeBuilder
         return this;
     }
 
-    override(...files: Record<string, string>[]): this
+    override(...mappings: Record<string, string>[]): this
     {
-        for (const file of files)
+        for (const map of mappings)
         {
-            for (const [key, value] of Object.entries(file))
+            for (const [key, value] of Object.entries(map))
             {
                 this.#overrides.set(key, value);
             }

@@ -10,7 +10,7 @@ export const repositorySchema = z
         overrides: z.record(z.string(), z.string()).optional(),
     })
     .strict()
-    .transform((value) => new RepositoryConfiguration(value.source, value.cache, value.index, value.assets));
+    .transform((value) => new RepositoryConfiguration(value.source, value.cache, value.index, value.assets, value.overrides));
 
 export default class RepositoryConfiguration
 {

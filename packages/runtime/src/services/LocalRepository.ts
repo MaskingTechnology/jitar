@@ -57,6 +57,8 @@ export default class LocalRepository extends Repository
         await super.start();
 
         await this.#loadSegments();
+
+        this.#translateOverrides();
     }
 
     stop(): Promise<void>
@@ -195,17 +197,38 @@ export default class LocalRepository extends Repository
     #getModuleFilename(name: string): string
     {
         let filename = ModuleLoader.assureExtension(name);
+        filename = this.#fileManager.getAbsoluteLocation(filename);
 
         if (isSegmentFilename(filename) === false)
         {
+            filename = this.#getOverriddenFilename(filename);
             filename = convertToLocalFilename(filename);
         }
 
-        return this.#fileManager.getAbsoluteLocation(filename);
+        return filename;
+    }
 
-        // const override = this.#overrides.get(filename);
+    #translateOverrides(): void
+    {
+        const translatedOverrides = new Map<string, string>();
 
-        // return override !== undefined ? override : filename;
+        for (const [key, value] of this.#overrides)
+        {
+            const extensionKey = ModuleLoader.assureExtension(key);
+            const extensionValue = ModuleLoader.assureExtension(value);
+
+            const translatedKey = this.#fileManager.getAbsoluteLocation(extensionKey);
+            const translatedValue = this.#fileManager.getAbsoluteLocation(extensionValue);
+
+            translatedOverrides.set(translatedKey, translatedValue);
+        }
+
+        this.#overrides = translatedOverrides;
+    }
+
+    #getOverriddenFilename(filename: string): string
+    {
+        return this.#overrides.get(filename) ?? filename;
     }
 
     #readFile(filename: string): Promise<File>

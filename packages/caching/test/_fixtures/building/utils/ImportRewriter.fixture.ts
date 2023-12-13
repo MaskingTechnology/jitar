@@ -7,9 +7,9 @@ import { component1, component2 } from '../path/to/components.js';
 `;
 
 const APPLICATION_IMPORTS_RESULT =
-`await __import("/components/path/to/file.js", "application");
-const component = await __import("/components/path/to/component.js", "application");
-const { component1, component2 } = await __import("/path/to/components.js", "application");
+`await __import("./components/path/to/file.js", "application");
+const component = await __import("./components/path/to/component.js", "application");
+const { component1, component2 } = await __import("./path/to/components.js", "application");
 `;
 
 const RUNTIME_IMPORTS =
@@ -39,7 +39,7 @@ import main, { some as other } from 'library';
 `;
 
 const MIXED_IMPORTS_RESULT =
-`const component = await __import("/components/path/to/component.js", "application");
+`const component = await __import("./components/path/to/component.js", "application");
 const os = await __import("os", "runtime");
 const { runProcedure } = await __import("jitar", "runtime");
 const { default : main, some : other } = await __import("library", "runtime");
@@ -51,7 +51,7 @@ const os = await import('os');
 `;
 
 const DYNAMIC_IMPORTS_RESULT =
-`const component = await __import("/components/path/to/component.js", "application");
+`const component = await __import("./components/path/to/component.js", "application");
 const os = await import('os');
 `;
 
@@ -91,6 +91,6 @@ const OUTPUTS =
     IMPORTS_AND_CONTENT_RESULT
 };
 
-const SOURCE_FILE = '/components/test.js';
+const SOURCE_FILE = './components/test.js';
 
 export { INPUTS, OUTPUTS, SOURCE_FILE };

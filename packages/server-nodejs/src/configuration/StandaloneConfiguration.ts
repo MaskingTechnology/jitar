@@ -2,6 +2,7 @@
 import { z } from 'zod';
 
 import ProcedureRuntimeConfiguration from './ProcedureRuntimeConfiguration';
+import { override } from 'prompts';
 
 export const standaloneSchema = z
     .object({
@@ -14,7 +15,7 @@ export const standaloneSchema = z
         overrides: z.record(z.string(), z.string()).optional(),
     })
     .strict()
-    .transform((value) => new StandaloneConfiguration(value.source, value.cache, value.index, value.segments, value.assets, value.middlewares));
+    .transform((value) => new StandaloneConfiguration(value.source, value.cache, value.index, value.segments, value.assets, value.middlewares, value.overrides));
 
 export default class StandaloneConfiguration extends ProcedureRuntimeConfiguration
 {

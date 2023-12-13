@@ -133,12 +133,19 @@ export default class ImportRewriter
 
     #ensureRoot(filename: string): string
     {
-        if (filename.startsWith('//'))
+        if (filename.startsWith('./'))
         {
-            return filename.substring(1);
+            return filename;
         }
 
-        return filename.startsWith('/') ? filename : `/${filename}`;
+        if (filename.startsWith('//'))
+        {
+            filename = filename.substring(1);
+        }
+
+        return filename.startsWith('/')
+            ? `.${filename}`
+            : `./${filename}`;
     }
 
     #ensureExtension(filename: string): string

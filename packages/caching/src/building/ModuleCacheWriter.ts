@@ -52,7 +52,7 @@ export default class ModuleCacheWriter
         const filename = module.filename;
         const classes = module.content.exportedClasses;
         const classNames = classes.map(clazz => clazz.name);
-        const sourceCode = classNames.map(className => `${className}.source = "/${filename}";`);
+        const sourceCode = classNames.map(className => `${className}.source = "./${filename}";`);
 
         return sourceCode.join('\n');
     }
