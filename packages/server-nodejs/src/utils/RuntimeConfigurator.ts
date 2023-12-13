@@ -1,5 +1,5 @@
 
-import { Runtime, RuntimeBuilder, LocalRepository, LocalGateway, LocalNode, NodeMonitor, Proxy, Standalone } from '@jitar/runtime';
+import { Runtime, RuntimeBuilder, LocalRepository, LocalGateway, LocalNode, NodeMonitor, Proxy, Standalone, FileManager } from '@jitar/runtime';
 import { CacheManager } from '@jitar/caching';
 
 import LocalFileManager from './LocalFileManager.js';
@@ -42,7 +42,7 @@ export default class RuntimeConfigurator
         await this.#buildCache(sourceLocation, cacheLocation);
 
         const segmentNames = configuration.segments === undefined
-            ? await this.#getSegmentNames(cacheLocation)
+            ? await this.#getNodeSegmentNames(fileManager)
             : configuration.segments;
 
         const assets = configuration.assets !== undefined
@@ -69,10 +69,7 @@ export default class RuntimeConfigurator
 
         await this.#buildCache(sourceLocation, cacheLocation);
 
-        const segmentFilenames = await fileManager.getRepositorySegmentFiles();
-        const segmentNames = segmentFilenames.map(filename => this.#extractSegmentName(filename));
-
-        await this.#buildCache(sourceLocation, cacheLocation);
+        const segmentNames = await this.#getRepositorySegmentNames(fileManager);
 
         const assets = configuration.assets !== undefined
             ? await fileManager.getAssetFiles(configuration.assets)
@@ -152,10 +149,16 @@ export default class RuntimeConfigurator
         await cacheManager.build();
     }
 
-    static async #getSegmentNames(cacheLocation: string): Promise<string[]>
+    static async #getNodeSegmentNames(fileManager: LocalFileManager): Promise<string[]>
     {
-        const fileManager = new LocalFileManager(cacheLocation);
         const segmentFilenames = await fileManager.getNodeSegmentFiles();
+
+        return segmentFilenames.map(filename => this.#extractSegmentName(filename));
+    }
+
+    static async #getRepositorySegmentNames(fileManager: LocalFileManager): Promise<string[]>
+    {
+        const segmentFilenames = await fileManager.getRepositorySegmentFiles();
 
         return segmentFilenames.map(filename => this.#extractSegmentName(filename));
     }

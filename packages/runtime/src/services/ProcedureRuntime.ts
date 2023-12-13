@@ -40,9 +40,9 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
     async start(): Promise<void>
     {
-        await super.start();
-
         await this.#repository.start();
+
+        await super.start();
 
         await this.#importMiddlewares();
     }
