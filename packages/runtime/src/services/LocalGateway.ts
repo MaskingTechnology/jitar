@@ -33,16 +33,6 @@ export default class LocalGateway extends Gateway
         return procedureNames.includes(fqn);
     }
 
-    start(): Promise<void>
-    {
-        return this.repository.start();
-    }
-
-    stop(): Promise<void>
-    {
-        return this.repository.stop();
-    }
-
     async addNode(node: Node): Promise<void>
     {
         this.#nodes.add(node);

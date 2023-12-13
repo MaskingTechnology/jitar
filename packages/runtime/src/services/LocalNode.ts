@@ -19,20 +19,49 @@ import { setRuntime } from '../hooks.js';
 
 export default class LocalNode extends Node
 {
-    #segmentNames: string[];
-    #argumentConstructor: ArgumentConstructor;
-    #segments: Map<string, Segment> = new Map();
     #gateway?: Gateway;
+    #argumentConstructor: ArgumentConstructor;
 
-    constructor(segmentNames: string[], repository: Repository, gateway?: Gateway, url?: string, argumentConstructor = new ArgumentConstructor())
+    #segmentNames: Set<string> = new Set();
+    #segments: Map<string, Segment> = new Map();
+
+    constructor(repository: Repository, gateway?: Gateway, url?: string, argumentConstructor = new ArgumentConstructor())
     {
         super(repository, url);
 
-        this.#segmentNames = segmentNames;
         this.#gateway = gateway;
         this.#argumentConstructor = argumentConstructor;
 
         setRuntime(this);
+    }
+
+    set segmentNames(names: Set<string>)
+    {
+        this.#segmentNames = names;
+    }
+
+    async start(): Promise<void>
+    {
+        await super.start();
+
+        await this.#loadSegments();
+
+        if (this.#gateway !== undefined)
+        {
+            await this.#gateway.start();
+        }
+    }
+
+    async stop(): Promise<void>
+    {
+        this.#unloadSegments();
+        
+        if (this.#gateway !== undefined)
+        {
+            await this.#gateway.stop();
+        }
+
+        await super.stop();
     }
 
     getProcedureNames(): string[]
@@ -52,15 +81,6 @@ export default class LocalNode extends Node
         return [...names.values()];
     }
 
-    async loadSegment(name: string): Promise<void>
-    {
-        const filename = createNodeFilename(name);
-        const module = await this.import(filename, ExecutionScopes.APPLICATION);
-        const segment = module.segment as Segment;
-
-        this.addSegment(segment);
-    }
-
     addSegment(segment: Segment): void
     {
         this.#segments.set(segment.id, segment);
@@ -71,30 +91,6 @@ export default class LocalNode extends Node
         const procedureNames = this.getProcedureNames();
 
         return procedureNames.includes(fqn);
-    }
-
-    async start(): Promise<void>
-    {
-        await this.repository.start();
-
-        await this.#loadSegments();
-
-        if (this.#gateway !== undefined)
-        {
-            await this.#gateway.start();
-        }
-    }
-
-    async stop(): Promise<void>
-    {
-        await this.repository.stop();
-        
-        this.#unloadSegments();
-        
-        if (this.#gateway !== undefined)
-        {
-            await this.#gateway.stop();
-        }
     }
 
     run(request: Request): Promise<Response>
@@ -110,8 +106,17 @@ export default class LocalNode extends Node
     {
         for (const segmentName of this.#segmentNames)
         {
-            await this.loadSegment(segmentName);
+            await this.#loadSegment(segmentName);
         }
+    }
+
+    async #loadSegment(name: string): Promise<void>
+    {
+        const filename = createNodeFilename(name);
+        const module = await this.import(filename, ExecutionScopes.APPLICATION);
+        const segment = module.segment as Segment;
+
+        this.addSegment(segment);
     }
 
     #unloadSegments(): void

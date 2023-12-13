@@ -7,7 +7,9 @@ import { SEGMENT_FILES } from '../models/Segment.fixture';
 
 const CLIENT = { id: '' };
 
-const defaultRepository = new LocalRepository(new TestFileManager(), [], ['index.html'], new Map());
+const defaultRepository = new LocalRepository(new TestFileManager());
+defaultRepository.assets = new Set(['index.html']);
+
 await defaultRepository.registerSegment('first', SEGMENT_FILES.FIRST);
 await defaultRepository.registerSegment('second', SEGMENT_FILES.SECOND);
 await defaultRepository.registerClient(['first']).then(clientId => CLIENT.id = clientId);

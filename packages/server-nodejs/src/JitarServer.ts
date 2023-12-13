@@ -3,7 +3,7 @@ import express, { Express } from 'express';
 import { Server } from 'http';
 import { Logger } from 'tslog';
 
-import { LocalGateway, LocalNode, LocalRepository, Proxy, Runtime, RemoteClassLoader, ExecutionScopes, ProcedureRuntime, Standalone } from '@jitar/runtime';
+import { LocalGateway, LocalNode, LocalRepository, Proxy, Runtime, RemoteClassLoader, ExecutionScopes, Standalone } from '@jitar/runtime';
 import { ClassLoader, Serializer, SerializerBuilder, ValueSerializer } from '@jitar/serialization';
 
 import ServerOptions from './configuration/ServerOptions.js';

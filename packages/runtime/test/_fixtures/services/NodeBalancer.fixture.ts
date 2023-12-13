@@ -6,8 +6,8 @@ import { REPOSITORIES } from './LocalRepository.fixture';
 
 const NODES =
 {
-    FIRST: new LocalNode([], REPOSITORIES.DUMMY),
-    SECOND: new LocalNode([], REPOSITORIES.DUMMY)
+    FIRST: new LocalNode(REPOSITORIES.DUMMY),
+    SECOND: new LocalNode(REPOSITORIES.DUMMY)
 };
 
 const filledBalancer = new NodeBalancer();

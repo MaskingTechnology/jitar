@@ -11,23 +11,21 @@ export default class RemoteNode extends Node
     #remote: Remote;
     #procedureNames: Set<string> = new Set();
 
-    constructor(procedureNames: string[], url: string)
+    constructor(url: string)
     {
         super(new DummyRepository(), url);
 
         this.#remote = new Remote(url);
+    }
 
-        this.registerProcedures(procedureNames);
+    set procedureNames(names: Set<string>)
+    {
+        this.#procedureNames = names;
     }
 
     getProcedureNames(): string[]
     {
         return [...this.#procedureNames.values()];
-    }
-
-    registerProcedures(procedureNames: string[]): void
-    {
-        procedureNames.forEach(procedureName => this.#procedureNames.add(procedureName));
     }
 
     hasProcedure(name: string): boolean
@@ -44,10 +42,6 @@ export default class RemoteNode extends Node
     {
         return this.#remote.getHealth();
     }
-
-    async start(): Promise<void> { }
-
-    async stop(): Promise<void> { }
 
     run(request: Request): Promise<Response>
     {

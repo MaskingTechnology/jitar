@@ -9,7 +9,7 @@ import Repository from './Repository.js';
 export default class RemoteRepository extends Repository
 {
     #remote: Remote;
-    #segmentNames: string[] = [];
+    #segmentNames: Set<string> = new Set();
     
     constructor(url: string)
     {
@@ -18,19 +18,19 @@ export default class RemoteRepository extends Repository
         this.#remote = new Remote(url);
     }
 
-    get segmentNames(): string[] { return this.#segmentNames; }
+    get segmentNames(): string[] { return [...this.#segmentNames.values()]; }
 
-    set segmentNames(segmentNames: string[]) { this.#segmentNames = segmentNames; }
+    set segmentNames(segmentNames: Set<string>) { this.#segmentNames = segmentNames; }
 
     async start(): Promise<void>
     {
-        const clientId = await this.registerClient(this.#segmentNames);
+        const clientId = await this.registerClient(this.segmentNames);
         const baseUrl = this.#getModuleBaseUrl(clientId);
         
         ModuleLoader.setBaseUrl(baseUrl);
-    }
 
-    async stop(): Promise<void> { }
+        await super.start();
+    }
 
     registerClient(segmentFiles: string[]): Promise<string>
     {

@@ -27,15 +27,13 @@ export default class RemoteGateway extends Gateway
 
     async start(): Promise<void>
     {
-        if (this.#node === undefined)
+        await super.start();
+        
+        if (this.#node !== undefined)
         {
-            return;
+            await this.addNode(this.#node);
         }
-
-        return this.addNode(this.#node);
     }
-
-    async stop(): Promise<void> { }
 
     getProcedureNames(): string[]
     {

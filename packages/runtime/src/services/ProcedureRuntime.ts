@@ -19,6 +19,7 @@ import Runtime from './Runtime.js';
 export default abstract class ProcedureRuntime extends Runtime implements Runner
 {
     #repository: Repository;
+    #middlewareFiles: Set<string> = new Set();
     #middlewares: Middleware[] = [];
 
     constructor(repository: Repository, url?: string)
@@ -32,6 +33,29 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
     get repository() { return this.#repository; }
 
+    set middlewareFiles(filenames: Set<string>)
+    {
+        this.#middlewareFiles = filenames;
+    }
+
+    async start(): Promise<void>
+    {
+        await super.start();
+
+        await this.#repository.start();
+
+        await this.#importMiddlewares();
+    }
+
+    async stop(): Promise<void>
+    {
+        this.#clearMiddlewares();
+
+        await this.#repository.stop();
+
+        await super.stop();
+    }
+
     abstract getProcedureNames(): string[];
 
     abstract hasProcedure(name: string): boolean;
@@ -41,19 +65,6 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
     import(url: string, scope: ExecutionScope): Promise<Module>
     {
         return this.#repository.import(url, scope);
-    }
-
-    async importMiddleware(url: string): Promise<void>
-    {
-        const module = await this.import(url, ExecutionScopes.APPLICATION);
-        const middleware = module.default as Middleware;
-
-        if (middleware?.handle === undefined)
-        {
-            throw new InvalidMiddleware(url);
-        }
-
-        this.addMiddleware(middleware);
     }
 
     addMiddleware(middleware: Middleware)
@@ -90,5 +101,31 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
         const nextHandler = this.#getNextHandler(request, index + 1);
 
         return async () => { return next.handle(request, nextHandler); };
+    }
+
+    async #importMiddlewares(): Promise<void>
+    {
+        for (const url of this.#middlewareFiles)
+        {
+            await this.#importMiddleware(url);
+        }
+    }
+
+    async #importMiddleware(url: string): Promise<void>
+    {
+        const module = await this.import(url, ExecutionScopes.APPLICATION);
+        const middleware = module.default as Middleware;
+
+        if (middleware?.handle === undefined)
+        {
+            throw new InvalidMiddleware(url);
+        }
+
+        this.addMiddleware(middleware);
+    }
+
+    #clearMiddlewares(): void
+    {
+        this.#middlewares = [];
     }
 }

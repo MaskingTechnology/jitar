@@ -7,6 +7,7 @@ import Module from '../types/Module.js';
 export default abstract class Runtime
 {
     #url?: string;
+    #healthCheckFiles: Set<string> = new Set();
     #healthChecks: Map<string, HealthCheck> = new Map();
 
     constructor(url?: string)
@@ -16,23 +17,21 @@ export default abstract class Runtime
 
     get url() { return this.#url; }
 
+    set healthCheckFiles(filenames: Set<string>)
+    {
+        this.#healthCheckFiles = filenames;
+    }
+
     abstract import(url: string, scope: ExecutionScope): Promise<Module>;
 
-    abstract start(): Promise<void>;
-
-    abstract stop(): Promise<void>;
-
-    async importHealthCheck(url: string): Promise<void>
+    start(): Promise<void>
     {
-        const module = await this.import(url, ExecutionScopes.APPLICATION);
-        const healthCheck = module.default as HealthCheck;
+        return this.#importHealthChecks();
+    }
 
-        if (healthCheck?.isHealthy === undefined)
-        {
-            throw new InvalidHealthCheck(url);
-        }
-
-        this.addHealthCheck(healthCheck as HealthCheck);
+    async stop(): Promise<void>
+    {
+        this.#clearHealthChecks();
     }
 
     addHealthCheck(healthCheck: HealthCheck): void
@@ -79,6 +78,32 @@ export default abstract class Runtime
                     : healthChecks.set(result.reason.name, false);
             }))
             .then(() => healthChecks);
+    }
+
+    async #importHealthChecks(): Promise<void>
+    {
+        for (const filename of this.#healthCheckFiles)
+        {
+            await this.#importHealthCheck(filename);
+        }
+    }
+
+    async #importHealthCheck(url: string): Promise<void>
+    {
+        const module = await this.import(url, ExecutionScopes.APPLICATION);
+        const healthCheck = module.default as HealthCheck;
+
+        if (healthCheck?.isHealthy === undefined)
+        {
+            throw new InvalidHealthCheck(url);
+        }
+
+        this.addHealthCheck(healthCheck as HealthCheck);
+    }
+
+    #clearHealthChecks(): void
+    {
+        this.#healthChecks.clear();
     }
 
     async #executeHealthCheck(healthCheck: HealthCheck): Promise<boolean>

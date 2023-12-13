@@ -51,7 +51,6 @@ export { default as Segment } from './models/Segment.js';
 export { default as Version } from './models/Version.js';
 
 // Services
-export { default as DummyRepository } from './services/DummyRepository.js';
 export { default as Gateway } from './services/Gateway.js';
 export { default as LocalGateway } from './services/LocalGateway.js';
 export { default as LocalNode } from './services/LocalNode.js';
@@ -79,6 +78,6 @@ export { default as RemoteClassLoader } from './utils/RemoteClassLoader.js';
 export { default as VersionParser } from './utils/VersionParser.js';
 
 // Root
+export { default as RuntimeBuilder } from './RuntimeBuilder.js';
 export * from './client.js';
-
 import './globals.js';

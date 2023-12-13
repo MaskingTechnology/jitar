@@ -24,31 +24,47 @@ export default class LocalRepository extends Repository
     #segments: Map<string, string> = new Map();
     #clients: Map<string, string[]> = new Map();
 
-    #segmentNames: string[];
-    #assets: string[];
-    #overrides: Map<string, string>;
+    #segmentNames: Set<string> = new Set();
+    #assets: Set<string> = new Set();
+    #overrides: Map<string, string> = new Map();
 
-    constructor(fileManager: FileManager, segmentNames: string[], assets: string[], overrides: Map<string, string>, url?: string)
+    constructor(fileManager: FileManager, url?: string)
     {
         super(url);
 
         this.#fileManager = fileManager;
-        this.#segmentNames = segmentNames;
-        this.#assets = assets;
-        this.#overrides = overrides;
 
         ModuleLoader.setBaseUrl(fileManager.getRootLocation());
     }
 
-    start(): Promise<void>
+    set segmentNames(names: Set<string>)
     {
-        return this.#loadSegments();
+        this.#segmentNames = new Set(names);
     }
 
-    async stop(): Promise<void>
+    set assets(patterns: Set<string>)
+    {
+        this.#assets = patterns;
+    }
+
+    set overrides(overrides: Map<string, string>)
+    {
+        this.#overrides = overrides;
+    }
+
+    async start(): Promise<void>
+    {
+        await super.start();
+
+        await this.#loadSegments();
+    }
+
+    stop(): Promise<void>
     {
         this.#unregisterClients();
         this.#unloadSegments();
+
+        return super.stop();
     }
 
     async #loadSegments(): Promise<void>
@@ -100,7 +116,7 @@ export default class LocalRepository extends Repository
 
     readAsset(filename: string): Promise<File>
     {
-        if (this.#assets.includes(filename) === false)
+        if (this.#assets.has(filename) === false)
         {
             throw new FileNotFound(filename);
         }

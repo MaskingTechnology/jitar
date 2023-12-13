@@ -23,14 +23,16 @@ export default class Proxy extends ProcedureRuntime
 
     async start(): Promise<void>
     {
-        await this.repository.start();
+        await super.start();
+
         await this.#runner.start();
     }
 
     async stop(): Promise<void>
     {
         await this.#runner.stop();
-        await this.repository.stop();
+
+        await super.stop();
     }
 
     getProcedureNames(): string[] 
