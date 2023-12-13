@@ -1,5 +1,5 @@
 
-import { Runtime, LocalRepository, LocalGateway, LocalNode, RemoteRepository, RemoteGateway, RemoteNode, NodeMonitor, Proxy, Repository, Gateway, Node, ProcedureRuntime } from '@jitar/runtime';
+import { Runtime, LocalRepository, LocalGateway, LocalNode, RemoteRepository, RemoteGateway, RemoteNode, NodeMonitor, Proxy, Standalone, Repository, Gateway, ProcedureRuntime, DummyRepository } from '@jitar/runtime';
 import { CacheManager } from '@jitar/caching';
 
 import LocalFileManager from './LocalFileManager.js';
@@ -40,11 +40,12 @@ export default class RuntimeConfigurator
         throw new UnknownRuntimeMode();
     }
 
-    static async #configureStandAlone(url: string, configuration: StandaloneConfiguration): Promise<Proxy>
+    static async #configureStandAlone(url: string, configuration: StandaloneConfiguration): Promise<Standalone>
     {
         const sourceLocation = configuration.source ?? RuntimeDefaults.SOURCE;
         const cacheLocation = configuration.cache ?? RuntimeDefaults.CACHE;
         const assetFilePatterns = configuration.assets;
+        const overriddenFiles = configuration.overrides;
 
         await this.#buildCache(sourceLocation, cacheLocation);
 
@@ -52,30 +53,31 @@ export default class RuntimeConfigurator
             ? await this.#getSegmentNames(cacheLocation)
             : configuration.segments;
 
-        const repository = await this.#buildRepository(url, cacheLocation, assetFilePatterns);
-        const node = await this.#buildNode(url, segmentNames, repository);
-        const proxy = await this.#buildProxy(url, repository, node);
+        const repository = await this.#buildRepository(url, cacheLocation, assetFilePatterns, overriddenFiles);
+        const node = await this.#buildNode(segmentNames, repository, undefined, url);
+        const standalone = await this.#buildStandalone(repository, node, url);
 
-        await this.#addMiddlewares(proxy, configuration);
+        await this.#addMiddlewares(standalone, configuration);
 
-        return proxy;
+        return standalone;
     }
 
     static async #configureRepository(url: string, configuration: RepositoryConfiguration): Promise<LocalRepository>
     {
         const sourceLocation = configuration.source ?? RuntimeDefaults.SOURCE;
         const cacheLocation = configuration.cache ?? RuntimeDefaults.CACHE;
-        const assetFilePatterns = configuration.assets ?? [];
+        const assetFilePatterns = configuration.assets;
+        const overriddenFiles = configuration.overrides;
 
         await this.#buildCache(sourceLocation, cacheLocation);
         
-        return this.#buildRepository(url, cacheLocation, assetFilePatterns);
+        return this.#buildRepository(url, cacheLocation, assetFilePatterns, overriddenFiles);
     }
 
     static async #configureGateway(url: string, configuration: GatewayConfiguration): Promise<LocalGateway>
     {
         const repository = this.#getRemoteRepository(configuration.repository);
-        const gateway = await this.#buildGateway(url, configuration.monitor, repository);
+        const gateway = await this.#buildGateway(repository, url, configuration.monitor);
 
         await this.#addMiddlewares(gateway, configuration);
 
@@ -88,7 +90,17 @@ export default class RuntimeConfigurator
 
         const repository = this.#getRemoteRepository(configuration.repository);
         const gateway = this.#getRemoteGateway(configuration.gateway);
-        const node = await this.#buildNode(url, segmentNames, repository, gateway);
+        const node = await this.#buildNode(segmentNames, repository, gateway, url);
+
+        if (repository instanceof RemoteRepository)
+        {
+            repository.segmentNames = segmentNames;
+        }
+
+        if (gateway instanceof RemoteGateway)
+        {
+            gateway.node = node;
+        }
 
         await this.#addMiddlewares(node, configuration);
 
@@ -101,12 +113,12 @@ export default class RuntimeConfigurator
         const gateway = this.#getRemoteGateway(configuration.gateway) as RemoteGateway;
 
         const node = configuration.node !== undefined
-            ? new RemoteNode(configuration.node, [])
+            ? new RemoteNode([], configuration.node)
             : undefined;
 
         const runner = gateway ?? node;
 
-        const proxy = await this.#buildProxy(url, repository, runner);
+        const proxy = await this.#buildProxy(repository, runner, url);
 
         await this.#addMiddlewares(proxy, configuration);
 
@@ -141,36 +153,27 @@ export default class RuntimeConfigurator
         return name.substring(0, endIndex);
     }
 
-    static async #buildRepository(url: string | undefined, cacheLocation: string, assetFilePatterns?: string[]): Promise<LocalRepository>
+    static async #buildRepository(url: string | undefined, cacheLocation: string, assetFilePatterns?: string[], overriddenFiles?: Record<string, string>): Promise<LocalRepository>
     {
         const fileManager = new LocalFileManager(cacheLocation);
 
-        const assetFiles = assetFilePatterns !== undefined
+        const assets = assetFilePatterns !== undefined
             ? await fileManager.getAssetFiles(assetFilePatterns)
             : [];
 
-        const repository = new LocalRepository(fileManager, assetFiles, url);
-
+        const overrides = overriddenFiles !== undefined
+            ? this.#mapOverriddenFiles(overriddenFiles, fileManager)
+            : new Map();
+        
         const segmentFilenames = await fileManager.getRepositorySegmentFiles();
         const segmentNames = segmentFilenames.map(filename => this.#extractSegmentName(filename));
 
-        for (const name of segmentNames)
-        {
-            await repository.loadSegment(name);
-        }
-
-        return repository;
+        return new LocalRepository(fileManager, segmentNames, assets, overrides, url);
     }
 
-    static async #buildGateway(url?: string, monitorInterval?: number, repository?: Repository): Promise<LocalGateway>
+    static async #buildGateway(repository: Repository, url?: string, monitorInterval?: number): Promise<LocalGateway>
     {
-        const gateway = new LocalGateway(url);
-
-        if (repository !== undefined)
-        {
-            await gateway.setBaseUrl(repository);
-        }
-
+        const gateway = new LocalGateway(repository, url);
         const monitor = new NodeMonitor(gateway, monitorInterval);
 
         monitor.start();
@@ -178,41 +181,26 @@ export default class RuntimeConfigurator
         return gateway;
     }
 
-    static async #buildNode(url: string | undefined, segmentNames: string[], repository?: Repository, gateway?: Gateway): Promise<LocalNode>
+    static async #buildNode(segmentNames: string[], repository: Repository, gateway?: Gateway, url?: string): Promise<LocalNode>
     {
-        const node = new LocalNode(url);
-
-        if (repository !== undefined)
-        {
-            await node.setRepository(repository, segmentNames);
-        }
-
-        for (const segmentName of segmentNames)
-        {
-            await node.loadSegment(segmentName);
-        }
-
-        // All segments have to be loaded before a node
-        // can be registered at the gateway
-
-        if (gateway !== undefined)
-        {
-            node.setGateway(gateway);
-        }
-
-        return node;
+        return new LocalNode(segmentNames, repository, gateway, url);
     }
 
-    static async #buildProxy(url: string | undefined, repository: Repository, runner: Gateway | Node): Promise<Proxy>
+    static async #buildProxy(repository: RemoteRepository, runner: RemoteGateway | RemoteNode, url?: string): Promise<Proxy>
     {
         return new Proxy(repository, runner, url);
     }
 
-    static #getRemoteRepository(url?: string): RemoteRepository | undefined
+    static async #buildStandalone(repository: LocalRepository, node: LocalNode, url?: string): Promise<Standalone>
+    {
+        return new Standalone(repository, node, url);
+    }
+
+    static #getRemoteRepository(url?: string): RemoteRepository | DummyRepository
     {
         return url !== undefined
             ? new RemoteRepository(url)
-            : undefined;
+            : new DummyRepository();
     }
 
     static #getRemoteGateway(url?: string): RemoteGateway | undefined
@@ -220,6 +208,21 @@ export default class RuntimeConfigurator
         return url !== undefined
             ? new RemoteGateway(url)
             : undefined;
+    }
+
+    static #mapOverriddenFiles(overriddenFiles: Record<string, string>, fileManager: LocalFileManager): Map<string, string>
+    {
+        const overrides = new Map<string, string>();
+
+        for (const [key, value] of Object.entries(overriddenFiles))
+        {
+            const filename = fileManager.getRelativeLocation(key);
+            const override = fileManager.getRelativeLocation(value);
+
+            overrides.set(filename, override);
+        }
+
+        return overrides;
     }
 
     static async #addHealthChecks(runtime: Runtime, configuration: RuntimeConfiguration): Promise<void>

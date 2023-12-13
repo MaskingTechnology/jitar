@@ -77,7 +77,7 @@ async function createImportCode(code: string, id: string, jitarFullPath: string,
 
     return 'const jitar = await import(/* @vite-ignore */`/jitar/client.js`);\n'
         + 'const client = await jitar.getClient();\n'
-        + `const module = await client.import('./${jitarPath}${relativeId}');\n`
+        + `const module = await client.import('/${jitarPath}${relativeId}');\n`
         + importCode
         + exportCode;
 }

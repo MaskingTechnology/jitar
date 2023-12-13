@@ -1,4 +1,6 @@
 
+import { ExecutionScope, ExecutionScopes } from '../definitions/ExecutionScope.js';
+
 import InvalidMiddleware from '../errors/InvalidMiddleware.js';
 
 import Middleware from '../interfaces/Middleware.js';
@@ -7,21 +9,28 @@ import Runner from '../interfaces/Runner.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
+import Module from '../types/Module.js';
 import NextHandler from '../types/NextHandler.js';
 
-import Runtime from './Runtime.js';
 import ProcedureRunner from './ProcedureRunner.js';
+import Repository from './Repository.js';
+import Runtime from './Runtime.js';
 
 export default abstract class ProcedureRuntime extends Runtime implements Runner
 {
+    #repository: Repository;
     #middlewares: Middleware[] = [];
 
-    constructor(url?: string)
+    constructor(repository: Repository, url?: string)
     {
         super(url);
 
+        this.#repository = repository;
+
         this.#middlewares.push(new ProcedureRunner(this));
     }
+
+    get repository() { return this.#repository; }
 
     abstract getProcedureNames(): string[];
 
@@ -29,9 +38,14 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
     abstract run(request: Request): Promise<Response>;
 
+    import(url: string, scope: ExecutionScope): Promise<Module>
+    {
+        return this.#repository.import(url, scope);
+    }
+
     async importMiddleware(url: string): Promise<void>
     {
-        const module = await this.import(url);
+        const module = await this.import(url, ExecutionScopes.APPLICATION);
         const middleware = module.default as Middleware;
 
         if (middleware?.handle === undefined)

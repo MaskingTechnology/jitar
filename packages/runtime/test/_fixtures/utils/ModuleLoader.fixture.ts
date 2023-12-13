@@ -1,12 +1,12 @@
 
 const moduleImporter = async (specifier: string) =>
 {
-    if (specifier === '/root/app/public/app.js')
+    switch (specifier)
     {
-        // eslint-disable-next-line @typescript-eslint/no-empty-function
-        return { default: function app() {} };
+        case '/root/app/public/app.js': return { default: function app() {} };
+        case 'jitar': return { default: class Jitar {} };
     }
-
+    
     throw Error('Not found');
 };
 

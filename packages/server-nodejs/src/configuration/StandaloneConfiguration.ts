@@ -10,7 +10,8 @@ export const standaloneSchema = z
         index: z.string().optional(),
         segments: z.array(z.string()).optional(),
         assets: z.array(z.string()).optional(),
-        middlewares: z.array(z.string()).optional()
+        middlewares: z.array(z.string()).optional(),
+        overrides: z.record(z.string(), z.string()).optional(),
     })
     .strict()
     .transform((value) => new StandaloneConfiguration(value.source, value.cache, value.index, value.segments, value.assets, value.middlewares));
@@ -22,8 +23,9 @@ export default class StandaloneConfiguration extends ProcedureRuntimeConfigurati
     #index?: string;
     #segments?: string[];
     #assets?: string[];
+    #overrides?: Record<string, string>;
 
-    constructor(source?: string, cache?: string, index?: string, segments?: string[], assets?: string[], middlewares?: string[])
+    constructor(source?: string, cache?: string, index?: string, segments?: string[], assets?: string[], middlewares?: string[], overrides?: Record<string, string>)
     {
         super(middlewares);
 
@@ -32,6 +34,7 @@ export default class StandaloneConfiguration extends ProcedureRuntimeConfigurati
         this.#index = index;
         this.#segments = segments;
         this.#assets = assets;
+        this.#overrides = overrides;
     }
 
     get source() { return this.#source; }
@@ -43,4 +46,6 @@ export default class StandaloneConfiguration extends ProcedureRuntimeConfigurati
     get segments() { return this.#segments; }
 
     get assets() { return this.#assets; }
+
+    get overrides() { return this.#overrides; }
 }

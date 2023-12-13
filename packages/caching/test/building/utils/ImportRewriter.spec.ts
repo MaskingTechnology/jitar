@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import ImportRewriter from '../../../src/building/utils/ImportRewriter';
 
-import { INPUTS, OUTPUTS } from '../../_fixtures/building/utils/ImportRewriter.fixture';
+import { INPUTS, OUTPUTS, SOURCE_FILE } from '../../_fixtures/building/utils/ImportRewriter.fixture';
 
 const importRewriter = new ImportRewriter();
 
@@ -11,53 +11,46 @@ describe('building/utils/ImportRewriter', () =>
 {
     describe('.rewrite(module)', () =>
     {
-        it('should not rewrite non-system imports', () =>
+        it('should rewrite application imports', () =>
         {
-            const result = importRewriter.rewrite(INPUTS.NO_SYSTEM_IMPORTS, true);
+            const result = importRewriter.rewrite(INPUTS.APPLICATION_IMPORTS, SOURCE_FILE);
 
-            expect(result).toBe(OUTPUTS.NO_SYSTEM_IMPORTS_RESULT);
+            expect(result).toBe(OUTPUTS.APPLICATION_IMPORTS_RESULT);
         });
 
-        it('should rewrite all system imports', () =>
+        it('should rewrite runtime imports', () =>
         {
-            const result = importRewriter.rewrite(INPUTS.HAS_SYSTEM_IMPORTS, true);
+            const result = importRewriter.rewrite(INPUTS.RUNTIME_IMPORTS, SOURCE_FILE);
 
-            expect(result).toBe(OUTPUTS.HAS_SYSTEM_IMPORTS_RESULT);
+            expect(result).toBe(OUTPUTS.RUNTIME_IMPORTS_RESULT);
         });
 
-        it('should rewrite all imports without semicolon', () =>
+        it('should rewrite imports without closing semicolon', () =>
         {
-            const result = importRewriter.rewrite(INPUTS.HAS_IMPORT_NO_SEMICOLON, true);
+            const result = importRewriter.rewrite(INPUTS.IMPORT_WITHOUT_SEMICOLON, SOURCE_FILE);
 
-            expect(result).toBe(OUTPUTS.HAS_IMPORT_NO_SEMICOLON_RESULT);
+            expect(result).toBe(OUTPUTS.IMPORT_WITHOUT_SEMICOLON_RESULT);
         });
 
-        it('should rewrite application imports only', () =>
+        it('should rewrite application and runtime imports', () =>
         {
-            const result = importRewriter.rewrite(INPUTS.HAS_MIXED_IMPORTS, false);
+            const result = importRewriter.rewrite(INPUTS.MIXED_IMPORTS, SOURCE_FILE);
 
-            expect(result).toBe(OUTPUTS.HAS_MIXED_IMPORTS_RESULT_APP);
-        });
-
-        it('should rewrite application and system imports', () =>
-        {
-            const result = importRewriter.rewrite(INPUTS.HAS_MIXED_IMPORTS, true);
-
-            expect(result).toBe(OUTPUTS.HAS_MIXED_IMPORTS_RESULT_ALL);
+            expect(result).toBe(OUTPUTS.MIXED_IMPORTS_RESULT);
         });
 
         it('should not rewrite dynamic imports', () =>
         {
-            const result = importRewriter.rewrite(INPUTS.HAS_DYNAMIC_IMPORTS, true);
+            const result = importRewriter.rewrite(INPUTS.DYNAMIC_IMPORTS, SOURCE_FILE);
 
-            expect(result).toBe(OUTPUTS.HAS_DYNAMIC_IMPORTS_RESULT);
+            expect(result).toBe(OUTPUTS.DYNAMIC_IMPORTS_RESULT);
         });
 
         it('should not modify any content', () =>
         {
-            const result = importRewriter.rewrite(INPUTS.HAS_IMPORTS_AND_CONTENT, true);
+            const result = importRewriter.rewrite(INPUTS.IMPORTS_AND_CONTENT, SOURCE_FILE);
 
-            expect(result).toBe(OUTPUTS.HAS_IMPORTS_AND_CONTENT_RESULT);
+            expect(result).toBe(OUTPUTS.IMPORTS_AND_CONTENT_RESULT);
         });
     });
 });

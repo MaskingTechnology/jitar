@@ -3,39 +3,38 @@ import File from '../models/File.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
-import RemoteGateway from './RemoteGateway.js';
-import RemoteNode from './RemoteNode.js';
-import RemoteRepository from './RemoteRepository.js';
+import LocalNode from './LocalNode.js';
+import LocalRepository from './LocalRepository.js';
 import ProcedureRuntime from './ProcedureRuntime.js';
 
-export default class Proxy extends ProcedureRuntime
+export default class Standalone extends ProcedureRuntime
 {
-    #runner: RemoteGateway | RemoteNode;
+    #node: LocalNode;
 
-    constructor(repository: RemoteRepository, runner: RemoteGateway | RemoteNode, url?: string)
+    constructor(repository: LocalRepository, node: LocalNode, url?: string)
     {
         super(repository, url);
 
-        this.#runner = runner;
+        this.#node = node;
     }
 
-    get runner() { return this.#runner; }
+    get node() { return this.#node; }
 
     async start(): Promise<void>
     {
-        await this.repository.start();
-        await this.#runner.start();
+        // The node will start the repository
+        await this.#node.start();
     }
 
     async stop(): Promise<void>
     {
-        await this.#runner.stop();
-        await this.repository.stop();
+        // The node will stop the repository
+        await this.#node.stop();
     }
 
     getProcedureNames(): string[] 
     {
-        return this.#runner.getProcedureNames();
+        return this.#node.getProcedureNames();
     }
 
     hasProcedure(fqn: string): boolean
@@ -62,6 +61,6 @@ export default class Proxy extends ProcedureRuntime
 
     run(request: Request): Promise<Response>
     {
-        return this.#runner.run(request);
+        return this.#node.run(request);
     }
 }

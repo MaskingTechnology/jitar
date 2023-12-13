@@ -47,7 +47,7 @@ export default class SegmentCacheBuilder
 
     #createImportMember(implementation: SegmentImplementation): string
     {
-        return `${implementation.importKey} as ${implementation.id}`;
+        return `${implementation.importKey} : ${implementation.id}`;
     }
 
     #mergeProcedures(segment: Segment): SegmentProcedure[]

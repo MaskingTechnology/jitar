@@ -23,25 +23,9 @@ export default class ModuleCacheWriter
     async write(cache: ModuleCache): Promise<void>
     {
         return Promise.all([
-            this.#writeOriginal(cache),
             this.#writeLocal(cache),
             this.#writeRemote(cache)
         ]).then(() => undefined);
-    }
-
-    async #writeOriginal(cache: ModuleCache): Promise<void>
-    {
-        // The original module files will be loaded in standalone mode.
-        // These require the rewrite of application imports (assure they end with .js)
-        // and the addition of the source locations.
-
-        const importCode = this.#rewriteApplicationImports(cache.module);
-        const sourceCode = this.#createSourceCode(cache.module);
-
-        const filename = cache.module.filename;
-        const code = `${importCode}\n${sourceCode}`;
-
-        return this.#fileManager.write(filename, code.trim());
     }
 
     async #writeLocal(cache: ModuleCache): Promise<void>
@@ -58,14 +42,9 @@ export default class ModuleCacheWriter
         return this.#fileManager.write(filename, code.trim());
     }
 
-    #rewriteApplicationImports(module: Module): string
-    {
-        return importRewriter.rewrite(module.code, false);
-    }
-
     #rewriteAllImports(module: Module): string
     {
-        return importRewriter.rewrite(module.code, true);
+        return importRewriter.rewrite(module.code, module.filename);
     }
 
     #createSourceCode(module: Module): string
@@ -73,7 +52,7 @@ export default class ModuleCacheWriter
         const filename = module.filename;
         const classes = module.content.exportedClasses;
         const classNames = classes.map(clazz => clazz.name);
-        const sourceCode = classNames.map(className => `${className}.source = "${filename}";`);
+        const sourceCode = classNames.map(className => `${className}.source = "/${filename}";`);
 
         return sourceCode.join('\n');
     }

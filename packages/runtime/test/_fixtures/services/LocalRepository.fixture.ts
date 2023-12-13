@@ -1,4 +1,5 @@
 
+import DummyRepository from '../../../src/services/DummyRepository';
 import LocalRepository from '../../../src/services/LocalRepository';
 
 import { TestFileManager } from '../interfaces/FileManager.fixture';
@@ -6,14 +7,17 @@ import { SEGMENT_FILES } from '../models/Segment.fixture';
 
 const CLIENT = { id: '' };
 
-const defaultRepository = new LocalRepository(new TestFileManager(), ['index.html']);
+const defaultRepository = new LocalRepository(new TestFileManager(), [], ['index.html'], new Map());
 await defaultRepository.registerSegment('first', SEGMENT_FILES.FIRST);
 await defaultRepository.registerSegment('second', SEGMENT_FILES.SECOND);
 await defaultRepository.registerClient(['first']).then(clientId => CLIENT.id = clientId);
 
+const dummyRepository = new DummyRepository();
+
 const REPOSITORIES =
 {
-    DEFAULT: defaultRepository
+    DEFAULT: defaultRepository,
+    DUMMY: dummyRepository
 };
 
 Object.freeze(REPOSITORIES);

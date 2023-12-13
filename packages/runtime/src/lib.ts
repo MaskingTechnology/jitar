@@ -2,6 +2,7 @@
 // Definitions
 export * from './definitions/AccessLevel.js';
 export * from './definitions/Files.js';
+export * from './definitions/ExecutionScope.js';
 
 // Generic errors
 export { default as BadRequest } from './errors/generic/BadRequest.js';
@@ -50,6 +51,7 @@ export { default as Segment } from './models/Segment.js';
 export { default as Version } from './models/Version.js';
 
 // Services
+export { default as DummyRepository } from './services/DummyRepository.js';
 export { default as Gateway } from './services/Gateway.js';
 export { default as LocalGateway } from './services/LocalGateway.js';
 export { default as LocalNode } from './services/LocalNode.js';
@@ -64,6 +66,7 @@ export { default as RemoteGateway } from './services/RemoteGateway.js';
 export { default as RemoteRepository } from './services/RemoteRepository.js';
 export { default as Repository } from './services/Repository.js';
 export { default as Runtime } from './services/Runtime.js';
+export { default as Standalone } from './services/Standalone.js';
 
 // Types
 export { default as NextHandler } from './types/NextHandler.js';

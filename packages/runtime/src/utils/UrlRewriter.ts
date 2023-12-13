@@ -3,35 +3,20 @@ export default class UrlRewriter
 {
     static addBase(url: string, base: string): string
     {
-        url = this.#ensureStartsWithoutSlash(url);
-        base = this.#assureEndWithSlash(base);
+        const joined = `${base}/${url}`;
+        const parts = joined.split('://');
 
-        return this.#translateRelativeParts(`${base}${url}`);
+        const protocol = parts.length > 1 ? `${parts[0]}://` : '';
+        const path = parts.length > 1 ? parts[1] : parts[0];
+        
+        const translatedPath = this.#translateRelativePath(path);
+
+        return `${protocol}${translatedPath}`;
     }
 
-    static #ensureStartsWithoutSlash(url: string): string
+    static #translateRelativePath(path: string)
     {
-        if (url.startsWith('/'))
-        {
-            return url.substring(1);
-        }
-
-        return url;
-    }
-
-    static #assureEndWithSlash(base: string): string
-    {
-        if (base.endsWith('/'))
-        {
-            return base;
-        }
-
-        return `${base}/`;
-    }
-
-    static #translateRelativeParts(url: string)
-    {
-        const parts = url.split('/');
+        const parts = path.split('/');
         const translated = [];
 
         translated.push(parts[0]);
@@ -40,15 +25,11 @@ export default class UrlRewriter
         {
             const part = parts[index].trim();
 
-            if (part === '.')
+            switch (part)
             {
-                continue;
-            }
-            else if (part === '..')
-            {
-                translated.pop();
-
-                continue;
+                case '': continue;
+                case '.': continue;
+                case '..': translated.pop(); continue;
             }
 
             translated.push(part);

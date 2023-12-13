@@ -1,10 +1,21 @@
 
+import { ExecutionScope } from '../../../src/definitions/ExecutionScope';
 import Runtime from '../../../src/services/Runtime';
+import Module from '../../../src/types/Module';
+
 import { HEALTH_CHECKS } from '../interfaces/HealthCheck.fixture';
 
 class TestRuntime extends Runtime
 {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    async import(url: string, scope: ExecutionScope): Promise<Module>
+    {
+        return {};
+    }
 
+    async start(): Promise<void> { }
+
+    async stop(): Promise<void> { }
 }
 
 const goodRuntime = new TestRuntime();

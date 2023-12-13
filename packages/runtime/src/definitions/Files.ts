@@ -21,12 +21,12 @@ function convertToRemoteFilename(filename: string): string
 
 function createNodeFilename(name: string): string
 {
-    return `${name}.segment.node.js`;
+    return `./${name}.segment.node.js`;
 }
 
 function createRepositoryFilename(name: string): string
 {
-    return `${name}.segment.repository.js`;
+    return `./${name}.segment.repository.js`;
 }
 
 function isSegmentFilename(filename: string): boolean

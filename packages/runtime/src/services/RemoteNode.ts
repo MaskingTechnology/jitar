@@ -2,6 +2,7 @@
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
+import DummyRepository from './DummyRepository.js';
 import Node from './Node.js';
 import Remote from './Remote.js';
 
@@ -10,9 +11,9 @@ export default class RemoteNode extends Node
     #remote: Remote;
     #procedureNames: Set<string> = new Set();
 
-    constructor(url: string, procedureNames: string[])
+    constructor(procedureNames: string[], url: string)
     {
-        super(url);
+        super(new DummyRepository(), url);
 
         this.#remote = new Remote(url);
 
@@ -43,6 +44,10 @@ export default class RemoteNode extends Node
     {
         return this.#remote.getHealth();
     }
+
+    async start(): Promise<void> { }
+
+    async stop(): Promise<void> { }
 
     run(request: Request): Promise<Response>
     {

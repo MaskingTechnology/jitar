@@ -24,18 +24,13 @@ export default class ModuleLoader
         _import = importer;
     }
 
-    static assureExtension(specifier: string): string
+    static async load(specifier: string): Promise<Module>
     {
         if (this.#isSystemModule(specifier))
         {
-            return specifier;
+            return this.#import(specifier, specifier);
         }
 
-        return specifier.endsWith('.js') ? specifier : `${specifier}.js`;
-    }
-
-    static async load(specifier: string): Promise<Module>
-    {
         let url = this.assureExtension(specifier);
 
         if (url.startsWith('/jitar'))
@@ -55,15 +50,20 @@ export default class ModuleLoader
             }
         }
 
-        return this.#import(url, specifier) as Promise<Module>;
+        return this.#import(url, specifier);
     }
 
-    static async import(specifier: string): Promise<Module>
+    static assureExtension(specifier: string): string
     {
-        return this.#import(specifier, specifier);
+        return specifier.endsWith('.js') ? specifier : `${specifier}.js`;
     }
 
-    static async #import(absolute: string, relative: string)
+    static #isSystemModule(specifier: string): boolean
+    {
+        return NON_SYSTEM_INDICATORS.some((indicator: string) => specifier.startsWith(indicator)) === false;
+    }
+
+    static async #import(absolute: string, relative: string): Promise<Module>
     {
         try
         {
@@ -75,10 +75,5 @@ export default class ModuleLoader
 
             throw new ModuleNotLoaded(relative, message);
         }
-    }
-
-    static #isSystemModule(specifier: string): boolean
-    {
-        return NON_SYSTEM_INDICATORS.some((indicator: string) => specifier.startsWith(indicator)) === false;
     }
 }

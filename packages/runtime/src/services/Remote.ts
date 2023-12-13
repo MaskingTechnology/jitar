@@ -5,9 +5,6 @@ import File from '../models/File.js';
 import Request from '../models/Request.js';
 import { default as ResultResponse } from '../models/Response.js';
 
-import Module from '../types/Module.js';
-
-import ModuleLoader from '../utils/ModuleLoader.js';
 import RemoteClassLoader from '../utils/RemoteClassLoader.js';
 
 import Node from './Node.js';
@@ -52,13 +49,6 @@ export default class Remote
         const content = await response.text();
 
         return new File(filename, type, content);
-    }
-
-    importFile(filename: string): Promise<Module>
-    {
-        const url = `${this.#url}/${filename}`;
-
-        return ModuleLoader.load(url);
     }
 
     async isHealthy(): Promise<boolean>

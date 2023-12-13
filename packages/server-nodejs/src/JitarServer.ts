@@ -3,7 +3,7 @@ import express, { Express } from 'express';
 import { Server } from 'http';
 import { Logger } from 'tslog';
 
-import { LocalGateway, LocalNode, LocalRepository, Proxy, Runtime, RemoteClassLoader } from '@jitar/runtime';
+import { LocalGateway, LocalNode, LocalRepository, Proxy, Runtime, RemoteClassLoader, ExecutionScopes, ProcedureRuntime, Standalone } from '@jitar/runtime';
 import { ClassLoader, Serializer, SerializerBuilder, ValueSerializer } from '@jitar/serialization';
 
 import ServerOptions from './configuration/ServerOptions.js';
@@ -87,6 +87,8 @@ export default class JitarServer
         await this.#startApplication();
         await this.#startServer(url.port);
 
+        this.#printProcedureInfo();
+
         this.#logger.info(`Server started and listening at port ${url.port}`);
     }
 
@@ -115,7 +117,7 @@ export default class JitarServer
 
     #addControllers(): void
     {
-        if (this.#configuration.standalone !== undefined && this.#runtime instanceof Proxy)
+        if (this.#configuration.standalone !== undefined && this.#runtime instanceof Standalone)
         {
             const index = this.#configuration.standalone.index ?? RuntimeDefaults.INDEX;
 
@@ -141,14 +143,14 @@ export default class JitarServer
         }
     }
 
-    #addStandAloneControllers(proxy: Proxy, index: string): void
+    #addStandAloneControllers(standalone: Standalone, index: string): void
     {
-        new HealthController(this.#app, proxy, this.#logger);
+        new HealthController(this.#app, standalone, this.#logger);
         new JitarController(this.#app);
-        new ModulesController(this.#app, proxy, this.#serializer, this.#logger);
-        new ProceduresController(this.#app, proxy, this.#logger);
-        new RPCController(this.#app, proxy, this.#serializer, this.#logger);
-        new AssetsController(this.#app, proxy, index, this.#logger);
+        new ModulesController(this.#app, standalone, this.#serializer, this.#logger);
+        new ProceduresController(this.#app, standalone, this.#logger);
+        new RPCController(this.#app, standalone, this.#serializer, this.#logger);
+        new AssetsController(this.#app, standalone, index, this.#logger);
     }
 
     #addRepositoryControllers(repository: LocalRepository, index: string): void
@@ -180,6 +182,9 @@ export default class JitarServer
     async #startApplication(): Promise<void>
     {
         const runtime = this.#getRuntime();
+
+        await runtime.start();
+
         const setUpScript = this.#configuration.setUp;
 
         if (setUpScript === undefined)
@@ -187,12 +192,15 @@ export default class JitarServer
             return;
         }
 
-        await runtime.import(setUpScript);
+        await runtime.import(setUpScript, ExecutionScopes.APPLICATION);
     }
 
     async #stopApplication(): Promise<void>
     {
         const runtime = this.#getRuntime();
+
+        await runtime.stop();
+
         const tearDownScript = this.#configuration.tearDown;
 
         if (tearDownScript === undefined)
@@ -200,19 +208,24 @@ export default class JitarServer
             return;
         }
 
-        await runtime.import(tearDownScript);
+        await runtime.import(tearDownScript, ExecutionScopes.APPLICATION);
     }
 
-    async #startServer(port: string): Promise<void>
+    #startServer(port: string): Promise<void>
     {
+        if (this.#server !== undefined)
+        {
+            return Promise.resolve();
+        }
+
         return new Promise(resolve => { this.#server = this.#app.listen(port, resolve); });
     }
 
-    async #stopServer(): Promise<void>
+    #stopServer(): Promise<void>
     {
         if (this.#server === undefined)
         {
-            return;
+            return Promise.resolve();
         }
 
         return new Promise(resolve => { this.#server?.close(() => resolve()); });
@@ -221,5 +234,26 @@ export default class JitarServer
     #printStartupMessage(): void
     {
         console.log(STARTUP_MESSAGE);
+    }
+
+    #printProcedureInfo()
+    {
+        const runtime = this.#getRuntime() as LocalNode;
+
+        if (runtime instanceof LocalNode === false)
+        {
+            return;
+        }
+
+        const procedureNames = runtime.getProcedureNames();
+
+        if (procedureNames.length === 0)
+        {
+            return;
+        }
+
+        procedureNames.sort();
+
+        this.#logger.info('Registered RPC entries', procedureNames);
     }
 }

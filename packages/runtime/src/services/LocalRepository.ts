@@ -18,20 +18,48 @@ const clientIdHelper = new ClientIdHelper();
 
 export default class LocalRepository extends Repository
 {
+    // All filenames used here are relative to the root location.
+
     #fileManager: FileManager;
     #segments: Map<string, string> = new Map();
     #clients: Map<string, string[]> = new Map();
-    #assets: string[];
 
-    constructor(fileManager: FileManager, assets: string[], url?: string)
+    #segmentNames: string[];
+    #assets: string[];
+    #overrides: Map<string, string>;
+
+    constructor(fileManager: FileManager, segmentNames: string[], assets: string[], overrides: Map<string, string>, url?: string)
     {
         super(url);
 
         this.#fileManager = fileManager;
+        this.#segmentNames = segmentNames;
         this.#assets = assets;
+        this.#overrides = overrides;
+
+        ModuleLoader.setBaseUrl(fileManager.getRootLocation());
     }
 
-    async loadSegment(name: string): Promise<void>
+    start(): Promise<void>
+    {
+        return this.#loadSegments();
+    }
+
+    async stop(): Promise<void>
+    {
+        this.#unregisterClients();
+        this.#unloadSegments();
+    }
+
+    async #loadSegments(): Promise<void>
+    {
+        for (const name of this.#segmentNames)
+        {
+            await this.#loadSegment(name);
+        }
+    }
+
+    async #loadSegment(name: string): Promise<void>
     {
         const filename = `./${createRepositoryFilename(name)}`;
         const location = this.#fileManager.getAbsoluteLocation(filename);
@@ -46,9 +74,14 @@ export default class LocalRepository extends Repository
         this.registerSegment(name, files);
     }
 
-    async registerSegment(name: string, files: string[]): Promise<void>
+    #unloadSegments(): void
     {
-        files.forEach((file: string) => this.#segments.set(file, name));
+        this.#segments.clear();
+    }
+
+    async registerSegment(name: string, filenames: string[]): Promise<void>
+    {
+        filenames.forEach((filename: string) => this.#segments.set(filename, name));
     }
 
     async registerClient(segmentFilenames: string[]): Promise<string>
@@ -60,53 +93,47 @@ export default class LocalRepository extends Repository
         return clientId;
     }
 
-    loadAsset(filename: string): Promise<File>
+    #unregisterClients(): void
+    {
+        this.#clients.clear();
+    }
+
+    readAsset(filename: string): Promise<File>
     {
         if (this.#assets.includes(filename) === false)
         {
             throw new FileNotFound(filename);
         }
 
+        //filename = this.#getAssignedFilename(filename);
+
         return this.#readFile(filename);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async getModuleLocation(clientId: string): Promise<string>
+    readModule(name: string, clientId: string): Promise<File>
     {
-        return this.#fileManager.getRootLocation();
-    }
+        clientId = this.#validateClientId(clientId);
 
-    readModule(clientId: string, filename: string): Promise<File>
-    {
-        this.#validateClientId(clientId);
-
-        const segmentFilename = this.#segments.get(filename);
+        const segmentFilename = this.#segments.get(name);
 
         if (segmentFilename === undefined)
         {
-            return this.#getNodeModule(filename);
+            return this.#readNodeModule(name);
         }
 
         return this.#hasClientSegmentFile(clientId, segmentFilename)
-            ? this.#getNodeModule(filename)
-            : this.#getRemoteModule(filename);
+            ? this.#readNodeModule(name)
+            : this.#readRemoteModule(name);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    loadModule(clientId: string, filename: string): Promise<Module>
+    loadModule(name: string): Promise<Module>
     {
-        // This function loads the original module file containing the
-        // original imports to prevent import issues while loading the
-        // module in the local repository.
+        const filename = this.#getModuleFilename(name);
 
-        filename = ModuleLoader.assureExtension(filename);
-
-        const location = this.#fileManager.getAbsoluteLocation(filename);
-
-        return ModuleLoader.import(location);
+        return ModuleLoader.load(filename);
     }
 
-    #validateClientId(clientId: string): void
+    #validateClientId(clientId: string): string
     {
         if (clientIdHelper.validate(clientId) === false)
         {
@@ -117,6 +144,8 @@ export default class LocalRepository extends Repository
         {
             throw new ClientNotFound(clientId);
         }
+
+        return clientId;
     }
 
     #hasClientSegmentFile(clientId: string, segmentFilename: string): boolean
@@ -131,27 +160,36 @@ export default class LocalRepository extends Repository
         return clientSegmentFiles.some(clientSegmentFilename => segmentFilename.endsWith(clientSegmentFilename));
     }
 
-    async #getNodeModule(filename: string): Promise<File>
+    async #readNodeModule(name: string): Promise<File>
     {
-        // This function loads the node module file containing the rewritten
-        // imports to prevent import issues while loading the module from
-        // a remote repository.
-
-        const localFilename = isSegmentFilename(filename) ? filename : convertToLocalFilename(filename);
-        const file = await this.#readFile(localFilename);
+        const filename = this.#getModuleFilename(name);
+        const file = await this.#readFile(filename);
         const code = file.content.toString();
 
         return new File(filename, 'application/javascript', code);
     }
 
-    #getRemoteModule(filename: string): Promise<File>
+    #readRemoteModule(name: string): Promise<File>
     {
-        // This function loads the remote module file containing the rewritten
-        // implementation for each function to execute them on another node.
-
-        const remoteFilename = convertToRemoteFilename(filename);
+        const remoteFilename = convertToRemoteFilename(name);
 
         return this.#readFile(remoteFilename);
+    }
+
+    #getModuleFilename(name: string): string
+    {
+        let filename = ModuleLoader.assureExtension(name);
+
+        if (isSegmentFilename(filename) === false)
+        {
+            filename = convertToLocalFilename(filename);
+        }
+
+        return this.#fileManager.getAbsoluteLocation(filename);
+
+        // const override = this.#overrides.get(filename);
+
+        // return override !== undefined ? override : filename;
     }
 
     #readFile(filename: string): Promise<File>

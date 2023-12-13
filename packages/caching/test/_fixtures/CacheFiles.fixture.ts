@@ -7,9 +7,9 @@ const ORDER_SEGMENT_REPOSITORY = `export const files = [
 ];`;
 
 const ORDER_SEGMENT_NODE = 
-`import { default as $1 } from "./order/createOrder.js";
-import { v0_0_0 as $2, v1_0_0 as $3 } from "./order/storeOrder.js";
-const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __getDependency("jitar");
+`const { default : $1 } = await __import("./order/createOrder.js", "application", false);
+const { v0_0_0 : $2, v1_0_0 : $3 } = await __import("./order/storeOrder.js", "application", false);
+const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __import("jitar", "runtime", false);
 export const segment = new Segment("order")
 \t.addProcedure(new Procedure("order/createOrder")
 \t\t.addImplementation(new Implementation(new Version(0, 0, 0), "private", [new NamedParameter("items", false)], $1))
@@ -24,9 +24,9 @@ const PRODUCT_SEGMENT_REPOSITORY = `export const files = [
 ];`;
 
 const PRODUCT_SEGMENT_NODE = 
-`import { default as $1, searchProducts as $2 } from "./product/getProducts.js";
-import { default as $3, searchProducts as $4 } from "./product/getProducts_v1.js";
-const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __getDependency("jitar");
+`const { default : $1, searchProducts : $2 } = await __import("./product/getProducts.js", "application", false);
+const { default : $3, searchProducts : $4 } = await __import("./product/getProducts_v1.js", "application", false);
+const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __import("jitar", "runtime", false);
 export const segment = new Segment("product")
 \t.addProcedure(new Procedure("product/getProducts")
 \t\t.addImplementation(new Implementation(new Version(0, 0, 0), "private", [new NamedParameter("id", false)], $1))
@@ -38,7 +38,7 @@ export const segment = new Segment("product")
 \t)`;
 
 const CREATE_ORDER_LOCAL =
-`import { Order, OrderLine } from './models';
+`const { Order, OrderLine } = await __import("/order/models.js", "application");
 
 export default async function createOrder(items)
 {
@@ -56,9 +56,9 @@ const CREATE_ORDER_REMOTE =
 }`;
 
 const STORE_ORDER_LOCAL =
-`const mysql = await __getDependency('mysql');
-const createId = await __getDependency('uuid');
-import { Order } from './models';
+`const mysql = await __import("mysql", "runtime");
+const createId = await __import("uuid", "runtime");
+const { Order } = await __import("/order/models.js", "application");
 
 export async function v0_0_0(order)
 {
@@ -72,23 +72,23 @@ export async function v1_0_0(...orders)
 
 const STORE_ORDER_REMOTE =
 `export async function v0_0_0(order) {
-\treturn __runProcedure('${CONSTANTS.STORE_ORDER_FQN}', '0.0.0', { 'order': order }, this);
+\treturn __run('${CONSTANTS.STORE_ORDER_FQN}', '0.0.0', { 'order': order }, this);
 }
 
 export async function v1_0_0(...orders) {
-\treturn __runProcedure('${CONSTANTS.STORE_ORDER_FQN}', '1.0.0', { '...orders': orders }, this);
+\treturn __run('${CONSTANTS.STORE_ORDER_FQN}', '1.0.0', { '...orders': orders }, this);
 }`;
 
 const ORDER_MODELS_LOCAL =
 `export class Order {}
 export class OrderLine {}
 
-Order.source = "order/models.js";
-OrderLine.source = "order/models.js";`;
+Order.source = "/order/models.js";
+OrderLine.source = "/order/models.js";`;
 
 const GET_PRODUCTS_LOCAL =
-`const mongodb = await __getDependency('mongodb');
-import { Product } from './models';
+`const mongodb = await __import("mongodb", "runtime");
+const { Product } = await __import("/product/models.js", "application");
 
 export default async function getProducts(id)
 {
@@ -111,12 +111,12 @@ const GET_PRODUCTS_REMOTE =
 }
 
 export async function searchProducts({ query , sort }) {
-\treturn __runProcedure('${CONSTANTS.SEARCH_PRODUCTS_FQN}', '0.0.0', { 'query': query, 'sort': sort }, this);
+\treturn __run('${CONSTANTS.SEARCH_PRODUCTS_FQN}', '0.0.0', { 'query': query, 'sort': sort }, this);
 }`;
 
 const GET_PRODUCTS_LOCAL_V1 =
-`const mongodb = await __getDependency('mongodb');
-import { Product } from './models';
+`const mongodb = await __import("mongodb", "runtime");
+const { Product } = await __import("/product/models.js", "application");
 
 export default async function getProducts(id)
 {
@@ -139,13 +139,13 @@ const GET_PRODUCTS_REMOTE_V1 =
 }
 
 export async function searchProducts([ query , sort ]) {
-\treturn __runProcedure('${CONSTANTS.SEARCH_PRODUCTS_FQN}', '1.0.0', { 'query': query, 'sort': sort }, this);
+\treturn __run('${CONSTANTS.SEARCH_PRODUCTS_FQN}', '1.0.0', { 'query': query, 'sort': sort }, this);
 }`;
 
 const PRODUCT_MODELS_LOCAL =
 `export class Product {}
 
-Product.source = "product/models.js";`;
+Product.source = "/product/models.js";`;
 
 const CACHE_FILES =
 {
@@ -175,21 +175,15 @@ const CACHE_SEGMENT_FILENAMES =
 
 const CACHE_MODULE_FILENAMES =
 [
-    './order/createOrder.js',
     './order/createOrder.local.js',
     './order/createOrder.remote.js',
-    './order/storeOrder.js',
     './order/storeOrder.local.js',
     './order/storeOrder.remote.js',
-    './order/models.js',
     './order/models.local.js',
-    './product/getProducts.js',
     './product/getProducts.local.js',
     './product/getProducts.remote.js',
-    './product/getProducts_v1.js',
     './product/getProducts_v1.local.js',
     './product/getProducts_v1.remote.js',
-    './product/models.js',
     './product/models.local.js',
 ];
 

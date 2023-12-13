@@ -2,18 +2,18 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { ClientIdHelper, LocalRepository, Proxy } from '@jitar/runtime';
+import { ClientIdHelper, LocalRepository, Standalone } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
 const clientIdHelper = new ClientIdHelper();
 
 export default class ModulesController
 {
-    #repository: LocalRepository | Proxy;
+    #repository: LocalRepository | Standalone;
     #serializer: Serializer;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, repository: LocalRepository | Proxy, serializer: Serializer, logger: Logger<unknown>)
+    constructor(app: express.Application, repository: LocalRepository | Standalone, serializer: Serializer, logger: Logger<unknown>)
     {
         this.#repository = repository;
         this.#serializer = serializer;
@@ -58,7 +58,7 @@ export default class ModulesController
 
         try
         {
-            const file = await this.#repository.readModule(clientId, filename);
+            const file = await this.#repository.readModule(filename, clientId);
 
             this.#logger.info(`Got module -> '${filename}' (${clientId})`);
 

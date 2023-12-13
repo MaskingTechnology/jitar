@@ -4,6 +4,7 @@ import NotImplemented from '../errors/generic/NotImplemented.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
+import DummyRepository from './DummyRepository.js';
 import Gateway from './Gateway.js';
 import Node from './Node.js';
 import Remote from './Remote.js';
@@ -11,13 +12,30 @@ import Remote from './Remote.js';
 export default class RemoteGateway extends Gateway
 {
     #remote: Remote;
+    #node?: Node;
 
     constructor(url: string)
     {
-        super(url);
+        super(new DummyRepository(), url);
 
         this.#remote = new Remote(url);
     }
+
+    get node() { return this.#node; }
+
+    set node(node: Node | undefined) { this.#node = node; }
+
+    async start(): Promise<void>
+    {
+        if (this.#node === undefined)
+        {
+            return;
+        }
+
+        return this.addNode(this.#node);
+    }
+
+    async stop(): Promise<void> { }
 
     getProcedureNames(): string[]
     {
