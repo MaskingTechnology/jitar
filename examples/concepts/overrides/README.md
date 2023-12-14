@@ -15,7 +15,7 @@ The application overrides sayHello module with the sayBye module.
 
 **Segments**
 
-* Default - contains the *sayHello* procedure (`segments/default.segment.json`)
+* Default - contains the *sayHello* and *saySomething* procedure (`segments/default.segment.json`)
 
 **Services**
 
