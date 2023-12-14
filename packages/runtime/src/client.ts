@@ -10,7 +10,7 @@ export async function startClient(remoteUrl: string, segmentNames: string[] = []
 {
     const repository = new RemoteRepository(remoteUrl);
     const gateway = new RemoteGateway(remoteUrl);
-    
+
     const node = new LocalNode(repository, gateway);
     node.segmentNames = new Set(segmentNames);
     
@@ -19,6 +19,7 @@ export async function startClient(remoteUrl: string, segmentNames: string[] = []
     client = node;
 
     resolvers.forEach((resolve) => resolve(node));
+    resolvers.length = 0;
 
     return node;
 }

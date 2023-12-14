@@ -55,6 +55,15 @@ export default class ImportRewriter
         return `const ${members} = await __import("${from}", "${scope}");`;
     }
 
+    #rewriteImportFrom(dependency: ReflectionImport, filename: string): string
+    {
+        const from = dependency.from.substring(1, dependency.from.length - 1);
+
+        return this.#isApplicationModule(dependency)
+            ? this.#mergeFilenames(filename, from)
+            : from;
+    }
+
     #rewriteImportMembers(dependency: ReflectionImport): string
     {
         if (this.#mustUseAs(dependency))
@@ -67,47 +76,23 @@ export default class ImportRewriter
         return `{ ${members.join(', ')} }`;
     }
 
-    #rewriteImportFrom(dependency: ReflectionImport, filename: string): string
+    #mergeFilenames(sourceFilename: string, importFilename: string): string
     {
-        const from = dependency.from.substring(1, dependency.from.length - 1);
+        const sourcePath = this.#extractFilepath(sourceFilename);
 
-        if (APPLICATION_MODULE_INDICATORS.some(indicator => from.startsWith(indicator)))
-        {
-            const sourcePath = this.#extractPath(filename);
-            const relativeFrom = `${sourcePath}/${from}`;
-            const translatedFrom = this.#translateRelativeFilename(relativeFrom);
-            const rootFrom = this.#ensureRoot(translatedFrom);
+        const concatenated = `${sourcePath}/${importFilename}`;
+        const translated = this.#translateFilename(concatenated);
+        const rooted = this.#ensureRoot(translated);
 
-            return this.#ensureExtension(rootFrom);
-        }
-        
-        return from;
+        return this.#ensureExtension(rooted);
     }
 
-    #mustUseAs(dependency: ReflectionImport): boolean
-    {
-        return this.#doesImportAll(dependency)
-            || this.#doesImportDefault(dependency);
-    }
-
-    #doesImportAll(dependency: ReflectionImport): boolean
-    {
-        return dependency.members.length === 1
-            && dependency.members[0].name === '*';
-    }
-
-    #doesImportDefault(dependency: ReflectionImport): boolean
-    {
-        return dependency.members.length === 1
-            && dependency.members[0].name === Keyword.DEFAULT;
-    }
-
-    #extractPath(filename: string)
+    #extractFilepath(filename: string)
     {
         return filename.split('/').slice(0, -1).join('/');
     }
 
-    #translateRelativeFilename(filename: string)
+    #translateFilename(filename: string)
     {
         const parts = filename.split('/');
         const translated = [];
@@ -143,13 +128,29 @@ export default class ImportRewriter
             filename = filename.substring(1);
         }
 
-        return filename.startsWith('/')
-            ? `.${filename}`
-            : `./${filename}`;
+        return filename.startsWith('/') ? `.${filename}` : `./${filename}`;
     }
 
     #ensureExtension(filename: string): string
     {
         return filename.endsWith('.js') ? filename : `${filename}.js`;
+    }
+
+    #mustUseAs(dependency: ReflectionImport): boolean
+    {
+        return this.#doesImportAll(dependency)
+            || this.#doesImportDefault(dependency);
+    }
+
+    #doesImportAll(dependency: ReflectionImport): boolean
+    {
+        return dependency.members.length === 1
+            && dependency.members[0].name === '*';
+    }
+
+    #doesImportDefault(dependency: ReflectionImport): boolean
+    {
+        return dependency.members.length === 1
+            && dependency.members[0].name === Keyword.DEFAULT;
     }
 }

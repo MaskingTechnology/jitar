@@ -39,7 +39,7 @@ describe('utils/ModuleLoader', () =>
         {
             const run = () => ModuleLoader.load('./public/non-existing.js');
 
-            expect(run).rejects.toEqual(new ModuleNotLoaded('./public/non-existing.js', 'Not found'));
+            expect(run).rejects.toEqual(new ModuleNotLoaded('public/non-existing.js', 'Not found'));
         });
 
         it('should not allow URLs outside the base URL', () =>

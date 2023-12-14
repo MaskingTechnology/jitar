@@ -238,9 +238,10 @@ export default class JitarServer
 
     #printProcedureInfo()
     {
-        const runtime = this.#getRuntime() as LocalNode;
+        const runtime = this.#getRuntime() as LocalNode | Standalone;
 
-        if (runtime instanceof LocalNode === false)
+        if (runtime instanceof LocalNode === false
+         && runtime instanceof Standalone === false)
         {
             return;
         }

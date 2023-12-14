@@ -29,7 +29,7 @@ export default class ModulesController
 
         if ((request.body instanceof Array) === false)
         {
-            // TODO: Throw error.
+            return response.status(400).send('Invalid segment file list.');
         }
 
         const segmentFiles = request.body as string[];

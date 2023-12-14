@@ -1,8 +1,6 @@
 
-import { Runtime, RuntimeBuilder, LocalRepository, LocalGateway, LocalNode, NodeMonitor, Proxy, Standalone, FileManager } from '@jitar/runtime';
+import { Runtime, RuntimeBuilder, LocalRepository, LocalGateway, LocalNode, NodeMonitor, Proxy, Standalone } from '@jitar/runtime';
 import { CacheManager } from '@jitar/caching';
-
-import LocalFileManager from './LocalFileManager.js';
 
 import RuntimeConfiguration from '../configuration/RuntimeConfiguration.js';
 import StandaloneConfiguration from '../configuration/StandaloneConfiguration.js';
@@ -14,6 +12,8 @@ import ProxyConfiguration from '../configuration/ProxyConfiguration.js';
 import RuntimeDefaults from '../definitions/RuntimeDefaults.js';
 
 import UnknownRuntimeMode from '../errors/UnknownRuntimeMode.js';
+
+import LocalFileManager from './LocalFileManager.js';
 
 export default class RuntimeConfigurator
 {

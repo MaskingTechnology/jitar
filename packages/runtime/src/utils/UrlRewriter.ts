@@ -3,20 +3,35 @@ export default class UrlRewriter
 {
     static addBase(url: string, base: string): string
     {
+        if (url.startsWith(base))
+        {
+            return url;
+        }
+
         const joined = `${base}/${url}`;
         const parts = joined.split('://');
 
         const protocol = parts.length > 1 ? `${parts[0]}://` : '';
-        const path = parts.length > 1 ? parts[1] : parts[0];
+        const address = parts.length > 1 ? parts[1] : parts[0];
         
-        const translatedPath = this.#translateRelativePath(path);
+        const translatedAddress = this.#translateAddress(address);
 
-        return `${protocol}${translatedPath}`;
+        return `${protocol}${translatedAddress}`;
     }
 
-    static #translateRelativePath(path: string)
+    static removeBase(url: string, base: string): string
     {
-        const parts = path.split('/');
+        if (url.startsWith(base) === false)
+        {
+            return url;
+        }
+
+        return url.substring(base.length);
+    }
+
+    static #translateAddress(address: string)
+    {
+        const parts = address.split('/');
         const translated = [];
 
         translated.push(parts[0]);

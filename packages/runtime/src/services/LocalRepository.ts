@@ -79,14 +79,14 @@ export default class LocalRepository extends Repository
 
     async #loadSegment(name: string): Promise<void>
     {
-        const filename = `./${createRepositoryFilename(name)}`;
-        const location = this.#fileManager.getAbsoluteLocation(filename);
-        const module = await ModuleLoader.load(location);
+        const relativeFilename = `./${createRepositoryFilename(name)}`;
+        const absoluteFilename = this.#fileManager.getAbsoluteLocation(relativeFilename);
+        const module = await ModuleLoader.load(absoluteFilename);
         const files = module.files as string[];
 
         if (files === undefined)
         {
-            throw new InvalidSegmentFile(location);
+            throw new InvalidSegmentFile(absoluteFilename);
         }
 
         this.registerSegment(name, files);
@@ -100,6 +100,24 @@ export default class LocalRepository extends Repository
     async registerSegment(name: string, filenames: string[]): Promise<void>
     {
         filenames.forEach((filename: string) => this.#segments.set(filename, name));
+    }
+
+    #translateOverrides(): void
+    {
+        const translated = new Map<string, string>();
+
+        for (const [targetName, destinationName] of this.#overrides)
+        {
+            const relativeTargetFilename = ModuleLoader.assureExtension(targetName);
+            const relativeDestinationFilename = ModuleLoader.assureExtension(destinationName);
+
+            const absoluteTargetFilename = this.#fileManager.getAbsoluteLocation(relativeTargetFilename);
+            const absoluteDestinationFilename = this.#fileManager.getAbsoluteLocation(relativeDestinationFilename);
+
+            translated.set(absoluteTargetFilename, absoluteDestinationFilename);
+        }
+
+        this.#overrides = translated;
     }
 
     async registerClient(segmentFilenames: string[]): Promise<string>
@@ -122,8 +140,6 @@ export default class LocalRepository extends Repository
         {
             throw new FileNotFound(filename);
         }
-
-        //filename = this.#getAssignedFilename(filename);
 
         return this.#readFile(filename);
     }
@@ -196,37 +212,20 @@ export default class LocalRepository extends Repository
 
     #getModuleFilename(name: string): string
     {
-        let filename = ModuleLoader.assureExtension(name);
-        filename = this.#fileManager.getAbsoluteLocation(filename);
+        const relativeFilename = ModuleLoader.assureExtension(name);
+        const absoluteFilename = this.#fileManager.getAbsoluteLocation(relativeFilename);
 
-        if (isSegmentFilename(filename) === false)
+        if (isSegmentFilename(absoluteFilename))
         {
-            filename = this.#getOverriddenFilename(filename);
-            filename = convertToLocalFilename(filename);
+            return absoluteFilename;
         }
 
-        return filename;
+        const assignedFilename = this.#getAssignedFilename(absoluteFilename);
+
+        return convertToLocalFilename(assignedFilename);
     }
 
-    #translateOverrides(): void
-    {
-        const translatedOverrides = new Map<string, string>();
-
-        for (const [key, value] of this.#overrides)
-        {
-            const extensionKey = ModuleLoader.assureExtension(key);
-            const extensionValue = ModuleLoader.assureExtension(value);
-
-            const translatedKey = this.#fileManager.getAbsoluteLocation(extensionKey);
-            const translatedValue = this.#fileManager.getAbsoluteLocation(extensionValue);
-
-            translatedOverrides.set(translatedKey, translatedValue);
-        }
-
-        this.#overrides = translatedOverrides;
-    }
-
-    #getOverriddenFilename(filename: string): string
+    #getAssignedFilename(filename: string): string
     {
         return this.#overrides.get(filename) ?? filename;
     }
