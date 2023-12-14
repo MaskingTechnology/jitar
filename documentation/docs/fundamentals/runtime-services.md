@@ -69,6 +69,7 @@ The following configuration properties are available:
 * cache - location of the application cache (optional, default `./.jitar`).
 * index - file to serve when accessed by a web browser (optional, default `index.html`).
 * assets - list of whitelisted assets (optional, default `undefined`).
+* overrides - map with import overrides (optional, default `undefined`).
 
 A full configuration example looks like this.
 
@@ -80,7 +81,8 @@ A full configuration example looks like this.
         "source": "./src",
         "cache": "./.jitar",
         "index": "index.html",
-        "assets": ["*.html", "*.js", "*.css", "assets/**/*"]
+        "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
+        "overrides": { "./my-module": "./alternative-module" }
     }
 }
 ```
