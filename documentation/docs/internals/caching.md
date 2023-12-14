@@ -33,9 +33,9 @@ The second contains the actual segment model that holds a full description for a
 
 ```js
 // {segment name}.segment.node.js
-import { default as $1 } from "./file1.js";
-import { a as $2, b as $3 } from "./file2.js";
-const { Segment, /* more */} = await __import("jitar");
+const { default : $1 } = await __import("./file1.js", "application", false);
+const { a : $2, b : $3 } = await __import("./file2.js", "application", false);
+const { Segment, /* more */} = await __import("jitar", "runtime", false);
 export const segment = new Segment("default")
     .addProcedure(...)
    // …
@@ -61,17 +61,17 @@ The first generated cache file is a copy of the original file with a few modific
 
 ```js
 // file1.local.js
-const fs = await __import('fs');
-import { a, b } from './file2.js';
+const fs = await __import("fs", "runtime");
+const { a, b } = await __import("./file2.js", "application");
 
 export async function function1(param1) { /* … */ }
 
 export class Class1 { /* … */ }
 
-Class1.source = "file1.js"
+Class1.source = "./file1.js"
 ```
 
-In this file, all external imports (dependencies) are rewritten to load them via the module loader provided in the Jitar starter file. Also, all classes are sourced to make them remotely loadable by [the serializer](./data-serialization).
+In this file, all imports are rewritten to load them via Jitar runtime. All external imports (dependencies) are loaded at the runtime level with the module loader provided in the Jitar starter file. The application imports are loaded by the [repository service](../fundamentals/runtime-services#repository). Also, all classes are sourced to make them remotely loadable by [the serializer](./data-serialization).
 
 The second contains the remote implementation of the segmented functions.
 
