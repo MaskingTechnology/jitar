@@ -25,6 +25,7 @@
     "examples/concepts/middleware",
     "examples/concepts/multi-version",
     "examples/concepts/node-client",
+    "examples/concepts/overrides",
     "examples/concepts/segmentation",
     "examples/apps/contact-list"
   ],

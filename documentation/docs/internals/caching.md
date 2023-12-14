@@ -35,7 +35,7 @@ The second contains the actual segment model that holds a full description for a
 // {segment name}.segment.node.js
 import { default as $1 } from "./file1.js";
 import { a as $2, b as $3 } from "./file2.js";
-const { Segment, /* more */} = await __getDependency("jitar");
+const { Segment, /* more */} = await __import("jitar");
 export const segment = new Segment("default")
     .addProcedure(...)
    // …
@@ -61,7 +61,7 @@ The first generated cache file is a copy of the original file with a few modific
 
 ```js
 // file1.local.js
-const fs = await __getDependency('fs');
+const fs = await __import('fs');
 import { a, b } from './file2.js';
 
 export async function function1(param1) { /* … */ }
@@ -78,7 +78,7 @@ The second contains the remote implementation of the segmented functions.
 ```js
 // file1.remote.js
 export async function function1(param1) {
-    return __runProcedure('function1', '0.0.0', { 'param1': param1 }, this);
+    return __run('function1', '0.0.0', { 'param1': param1 }, this);
 }
 ```
 

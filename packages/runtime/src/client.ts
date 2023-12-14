@@ -11,14 +11,16 @@ export async function startClient(remoteUrl: string, segmentNames: string[] = []
     const repository = new RemoteRepository(remoteUrl);
     const gateway = new RemoteGateway(remoteUrl);
     
-    client = new LocalNode(repository, gateway);
-    client.segmentNames = new Set(segmentNames);
+    const node = new LocalNode(repository, gateway);
+    node.segmentNames = new Set(segmentNames);
     
-    await client.start();
+    await node.start();
     
-    resolvers.forEach((resolve) => resolve(client as LocalNode));
+    client = node;
 
-    return client;
+    resolvers.forEach((resolve) => resolve(node));
+
+    return node;
 }
 
 export async function getClient(): Promise<LocalNode>
