@@ -5,7 +5,7 @@ The 0.5 version of Jitar introduces some breaking changes to the health checks a
 ## Health checks
 
 The health check implementation came with a limitation: it couldn't access application resources.
-To overcome this, we've made a breaking changes to the health check registration.
+To overcome this, we've made a breaking change to the health check registration.
 
 ### Old situation
 
