@@ -35,6 +35,8 @@ The following examples focus on one particular concept at a time. The examples a
 1. [Health checks](concepts/health-checks/README.md) - Demonstrates how to use health checks.
 1. [Middleware](concepts/middleware/README.md) - Demonstrates how to use middleware.
 1. [Cors](concepts/cors/README.md) - Demonstrates how to enable cors.
+1. [Construction](concepts/construction/README.md) - Demonstrates how to use a set up and tear down scripts.
+1. [Overrides](concepts/overrides/README.md) - Demonstrates how to use import overrides.
 
 ## Application examples
 
