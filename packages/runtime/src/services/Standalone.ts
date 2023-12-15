@@ -24,12 +24,16 @@ export default class Standalone extends ProcedureRuntime
     {
         // The node will start the repository
         await this.#node.start();
+
+        await super.start();
     }
 
     async stop(): Promise<void>
     {
         // The node will stop the repository
         await this.#node.stop();
+
+        await super.stop();
     }
 
     getProcedureNames(): string[] 
