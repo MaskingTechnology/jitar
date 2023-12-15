@@ -8,6 +8,6 @@
         "client": "node --experimental-network-imports --no-warnings dist/client.js"
     },
     "dependencies": {
-        "jitar": "^0.4.1"
+        "jitar": "^0.5.0"
     }
 }
