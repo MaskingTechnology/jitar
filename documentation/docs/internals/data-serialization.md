@@ -34,14 +34,19 @@ The serialization package is open for implementing your own serializers in case 
 ```ts
 //src/jitar.ts
 import { buildServer } from 'jitar';
-
 import CustomSerializer from './CustomSerializer.js';
 
 const moduleImporter = async (specifier: string) => import(specifier);
 
 const server = await buildServer(moduleImporter);
+
 server.addSerializer(new CustomSerializer());
+
+process.on('SIGINT', async () => server.stop());
+
 server.start();
+
+
 ```
 
 Jitar uses a default class loader. If you need the class loader in your custom serializer you can get it from the server instance.

@@ -71,7 +71,7 @@ export class Class1 { /* … */ }
 Class1.source = "./file1.js"
 ```
 
-In this file, all imports are rewritten to load them via Jitar runtime. All external imports (dependencies) are loaded at the runtime level with the module loader provided in the Jitar starter file. The application imports are loaded by the [repository service](../fundamentals/runtime-services#repository). Also, all classes are sourced to make them remotely loadable by [the serializer](./data-serialization).
+In this file, all imports are rewritten to load them via Jitar runtime. All external imports (dependencies) are loaded at the runtime level with the module loader provided in the Jitar bootstrapper file. The application imports are loaded by the [repository service](../fundamentals/runtime-services#repository). Also, all classes are sourced to make them remotely loadable by [the serializer](./data-serialization).
 
 The second contains the remote implementation of the segmented functions.
 

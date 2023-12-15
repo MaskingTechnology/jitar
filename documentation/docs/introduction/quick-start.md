@@ -119,12 +119,14 @@ The configuration needs to be supplied when starting a Jitar instance. To start 
 import { buildServer } from 'jitar';
 
 const moduleImporter = async (specifier: string) => import(specifier);
+const server = await buildServer(moduleImporter);
 
-const server = buildServer(moduleImporter);
+process.on('SIGINT', async () => server.stop());
+
 server.start();
 ```
 
-This script can be extended by adding [middleware](../develop/middleware.md) and [health checks](../deploy/health-checks.md) to the server when needed.
+This script can be reused for every application running on Jitar.
 
 With everything in place we can run the application with the following command.
 

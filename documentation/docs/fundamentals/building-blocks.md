@@ -50,10 +50,10 @@ More in depth information on writing functions and the rules can be found in the
 Every function has a unique name used for internal and external identification. This name is called a fully qualified name (FQN) and constructed with the location and the name of the function in the following format.
 
 ```txt
-{ location relative to the source folder }/{ function name}
+{ location relative to the source folder }/{ function name }
 ```
 
-For the simple sayHello function the FQN of this function is `domain/sayHello`. Note that there is no leading / in the name.
+For the simple sayHello function the FQN of this function is `domain/sayHello`. **Note** that there is no leading / in the name.
 
 ## Segments
 

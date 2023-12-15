@@ -76,6 +76,8 @@ Because the health check's isn't registered by name in the configuration, a name
 
 ```ts
 // src/DatabaseHealthCheck.ts
+import { HealthCheck } from 'jitar';
+
 export default class DatabaseHealthCheck implements HealthCheck
 {
     constructor(/* ... */) { /* ... */ }

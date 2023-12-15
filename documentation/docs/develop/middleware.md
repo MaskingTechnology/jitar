@@ -15,18 +15,24 @@ next:
 
 Middleware provides a way to hook into Jitars automated communication system. It allows you to add additional logic to incoming and outgoing requests. Common use cases are adding authentication and logging to applications.
 
+::: warning BREAKING CHANGES
+Version 0.5 introduced breaking changes. Please check our [migration guide](https://github.com/MaskingTechnology/jitar/blob/main/migrations/migrate-from-0.4.x-to-0.5.0.md) for more information.
+:::
+
 In this section you'll learn how to create and add your own middleware.
 
 ## Creating middleware
 
-Jitar provides an interface you have to implement in order to add a middleware to a service. Only middleware instances can be registered. Each instance needs to be exported as default in a separate module file. Let's look at a simple example:
+Jitar provides an interface you have to implement in order to add a middleware to a service. Let's look at a simple example:
 
 ```ts
-// src/myMiddleware.ts
+// src/RequestLoggerMiddleware.ts
 import { Middleware, Request, Response, NextHandler } from 'jitar';
 
-export default class MyMiddleware implements Middleware
+export default class RequestLoggerMiddleware implements Middleware
 {
+    constructor(/* ... */) { /* ... */ }
+
     async handle(request: Request, next: NextHandler): Promise<Response>
     {
         // Modify the request (args and headers) here
@@ -38,10 +44,6 @@ export default class MyMiddleware implements Middleware
         return response;
     }
 }
-
-const instance = new MyMiddleware();
-
-export default instance;
 ```
 
 The `request` parameter contains all request information including the arguments and headers. It has the following interface.
@@ -75,11 +77,21 @@ const myHeader = response.getHeader('X-My-Header');
 response.removeHeader('X-My-Header');
 ```
 
-Because all middleware is chained, the next parameter must always be called. This function does not take any arguments, all the arguments will be provided automatically. Note that the handle function is async so it can return a promise.
+Because all middleware is chained, the `next` parameter must always be called. This function does not take any arguments, all the arguments will be provided automatically. Note that the handle function is async so it can return a promise.
 
 ## Adding middleware
 
-Middleware needs to be added to a service. This is done by registering the middleware module file in the service configuration.
+Middleware needs to be registered at the service configuration. Only middleware instances can be registered. Each instance needs to be exported as default in a separate module file like this:
+
+```ts
+// src/defaultRequestLogger.ts
+import RequestLoggerMiddleware from './RequestLoggerMiddleware';
+
+const instance = new RequestLoggerMiddleware(/* ... */);
+export default instance;
+```
+
+We can use this module file for the registration at the service:
 
 ```json
 // services/node.json
@@ -87,14 +99,14 @@ Middleware needs to be added to a service. This is done by registering the middl
     "url": "http://localhost:3000",
     "node":
     {
-        "middlewares": ["./myMiddleware"]
+        "middlewares": ["./defaultRequestLogger"]
     }
 }
 ```
 
-Middleware can only be added to a node, gateway, proxy and standalone service because they are actively involved with the communication system.
+**Note** that middleware can only be added to a node, gateway, proxy and standalone service because they are actively involved with the communication system.
 
-It's likely that the different services require different middleware. For example, you might want to add authentication middleware to the gateway and authorization middleware to the node.
+It's likely that different services require different middleware. For example, you might want to add authentication middleware to the gateway and authorization middleware to the node.
 
 ::: warning KEEP IN MIND 
 Middleware is executed in the order of registration. This means that the middleware that is added first is called first.
