@@ -1,14 +1,13 @@
 
-const AccessLevel =
+const AccessLevels =
 {
     PRIVATE: 'private',
     PUBLIC: 'public'
-};
-
-Object.freeze(AccessLevel);
-
-const AccessLevels = Object.values(AccessLevel);
+} as const;
 
 Object.freeze(AccessLevels);
 
-export { AccessLevel, AccessLevels };
+type Keys = keyof typeof AccessLevels;
+type AccessLevel = typeof AccessLevels[Keys];
+
+export { AccessLevels, AccessLevel };

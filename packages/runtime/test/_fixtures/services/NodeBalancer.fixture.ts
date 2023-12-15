@@ -2,10 +2,12 @@
 import LocalNode from '../../../src/services/LocalNode';
 import NodeBalancer from '../../../src/services/NodeBalancer';
 
+import { REPOSITORIES } from './LocalRepository.fixture';
+
 const NODES =
 {
-    FIRST: new LocalNode(),
-    SECOND: new LocalNode()
+    FIRST: new LocalNode(REPOSITORIES.DUMMY),
+    SECOND: new LocalNode(REPOSITORIES.DUMMY)
 };
 
 const filledBalancer = new NodeBalancer();

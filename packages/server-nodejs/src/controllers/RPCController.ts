@@ -35,22 +35,6 @@ export default class RPCController
         app.get('/rpc/*', (request: ExpressRequest, response: ExpressResponse) => { this.runGet(request, response); });
         app.post('/rpc/*', (request: ExpressRequest, response: ExpressResponse) => { this.runPost(request, response); });
         app.options('/rpc/*', (request: ExpressRequest, response: ExpressResponse) => { this.runOptions(request, response); });
-
-        this.#showProcedureInfo();
-    }
-
-    #showProcedureInfo()
-    {
-        const procedureNames = this.#runtime.getProcedureNames();
-
-        if (procedureNames.length === 0)
-        {
-            return;
-        }
-
-        procedureNames.sort();
-
-        this.#logger.info('Registered RPC entries', procedureNames);
     }
 
     async runGet(request: ExpressRequest, response: ExpressResponse): Promise<ExpressResponse>

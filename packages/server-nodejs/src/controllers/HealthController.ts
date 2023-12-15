@@ -2,14 +2,14 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalNode, Proxy } from '@jitar/runtime';
+import { LocalNode, Standalone } from '@jitar/runtime';
 
 export default class HealthController
 {
-    #node: LocalNode | Proxy;
+    #node: LocalNode | Standalone;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, node: LocalNode | Proxy, logger: Logger<unknown>)
+    constructor(app: express.Application, node: LocalNode | Standalone, logger: Logger<unknown>)
     {
         this.#node = node;
         this.#logger = logger;

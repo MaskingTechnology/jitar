@@ -2,15 +2,15 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalRepository, Proxy, FileNotFound } from '@jitar/runtime';
+import { LocalRepository, Standalone, FileNotFound } from '@jitar/runtime';
 
 export default class AssetsController
 {
-    #repository: LocalRepository | Proxy;
+    #repository: LocalRepository | Standalone;
     #indexFile: string;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, repository: LocalRepository | Proxy, indexFile: string, logger: Logger<unknown>)
+    constructor(app: express.Application, repository: LocalRepository | Standalone, indexFile: string, logger: Logger<unknown>)
     {
         this.#repository = repository;
         this.#indexFile = indexFile;
@@ -28,7 +28,7 @@ export default class AssetsController
 
         try
         {
-            const file = await this.#repository.loadAsset(filename);
+            const file = await this.#repository.readAsset(filename);
 
             response.set('Content-Type', file.type);
             response.set('Content-Length', String(file.size));

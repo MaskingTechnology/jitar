@@ -1,6 +1,6 @@
 
 import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionDestructuredValue, ReflectionField, ReflectionParameter } from '@jitar/reflection';
-import { AccessLevel } from '@jitar/runtime';
+import { AccessLevels } from '@jitar/runtime';
 
 import Keyword from '../definitions/Keyword.js';
 
@@ -19,7 +19,7 @@ export default class RemoteBuilder
             {
                 const asDefault = implementation.importKey === Keyword.DEFAULT;
 
-                code += implementation.access === AccessLevel.PRIVATE
+                code += implementation.access === AccessLevels.PRIVATE
                     ? this.#createPrivateCode(procedure.fqn, implementation, asDefault)
                     : this.#createPublicCode(procedure.fqn, implementation, asDefault);
             }
@@ -50,7 +50,7 @@ export default class RemoteBuilder
         const args = this.#createArguments(implementation.executable.parameters);
 
         const declaration = this.#createDeclaration(implementation, asDefault);
-        const body = `return __runProcedure('${fqn}', '${version}', { ${args} }, this);`;
+        const body = `return __run('${fqn}', '${version}', { ${args} }, this);`;
 
         return this.#createFunction(declaration, body);
     }

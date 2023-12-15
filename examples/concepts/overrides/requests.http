@@ -1,0 +1,10 @@
+
+// Should say bye to John
+
+GET http://localhost:3000/rpc/saySomething?name=John HTTP/1.1
+
+###
+
+// Should also say bye to John
+
+GET http://localhost:3000/rpc/sayHello?name=John HTTP/1.1

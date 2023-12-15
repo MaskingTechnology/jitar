@@ -3,25 +3,37 @@ import File from '../models/File.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
-import Repository from './Repository.js';
+import RemoteGateway from './RemoteGateway.js';
+import RemoteNode from './RemoteNode.js';
+import RemoteRepository from './RemoteRepository.js';
 import ProcedureRuntime from './ProcedureRuntime.js';
 
 export default class Proxy extends ProcedureRuntime
 {
-    #repository: Repository;
-    #runner: ProcedureRuntime;
+    #runner: RemoteGateway | RemoteNode;
 
-    constructor(repository: Repository, runner: ProcedureRuntime, url?: string)
+    constructor(repository: RemoteRepository, runner: RemoteGateway | RemoteNode, url?: string)
     {
-        super(url);
+        super(repository, url);
 
-        this.#repository = repository;
         this.#runner = runner;
     }
 
-    get repository() { return this.#repository; }
-
     get runner() { return this.#runner; }
+
+    async start(): Promise<void>
+    {
+        await super.start();
+
+        await this.#runner.start();
+    }
+
+    async stop(): Promise<void>
+    {
+        await this.#runner.stop();
+
+        await super.stop();
+    }
 
     getProcedureNames(): string[] 
     {
@@ -35,19 +47,19 @@ export default class Proxy extends ProcedureRuntime
         return procedureNames.includes(fqn);
     }
 
-    loadAsset(filename: string): Promise<File>
+    readAsset(filename: string): Promise<File>
     {
-        return this.#repository.loadAsset(filename);
+        return this.repository.readAsset(filename);
     }
 
     registerClient(segmentFiles: string[]): Promise<string>
     {
-        return this.#repository.registerClient(segmentFiles);
+        return this.repository.registerClient(segmentFiles);
     }
 
-    readModule(clientId: string, filename: string): Promise<File>
+    readModule(filename: string, clientId: string): Promise<File>
     {
-        return this.#repository.readModule(clientId, filename);
+        return this.repository.readModule(filename, clientId);
     }
 
     run(request: Request): Promise<Response>

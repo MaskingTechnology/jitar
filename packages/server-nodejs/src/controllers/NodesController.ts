@@ -35,7 +35,9 @@ export default class NodesController
         try
         {
             const nodeDto = DataConverter.convert<NodeDto>(nodeDtoSchema, request.body);
-            const node = new RemoteNode(nodeDto.url, nodeDto.procedureNames);
+
+            const node = new RemoteNode(nodeDto.url);
+            node.procedureNames = new Set(nodeDto.procedureNames);
 
             this.#gateway.addNode(node);
 

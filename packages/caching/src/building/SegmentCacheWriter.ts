@@ -48,7 +48,7 @@ export default class SegmentCacheWriter
 
         for (const { members, from } of imports)
         {
-            codes.push(`import { ${members.join(', ')} } from "./${from}";`);
+            codes.push(`const { ${members.join(', ')} } = await __import("./${from}", "application", false);`);
         }
 
         return codes.join('\n');
@@ -58,7 +58,7 @@ export default class SegmentCacheWriter
     {
         const codes: string[] = [];
         
-        codes.push('const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __getDependency("jitar");');
+        codes.push('const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __import("jitar", "runtime", false);');
         codes.push(`export const segment = new Segment("${name}")`);
 
         for (const procedure of procedures)

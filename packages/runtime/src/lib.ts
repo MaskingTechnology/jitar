@@ -2,6 +2,7 @@
 // Definitions
 export * from './definitions/AccessLevel.js';
 export * from './definitions/Files.js';
+export * from './definitions/ExecutionScope.js';
 
 // Generic errors
 export { default as BadRequest } from './errors/generic/BadRequest.js';
@@ -64,6 +65,7 @@ export { default as RemoteGateway } from './services/RemoteGateway.js';
 export { default as RemoteRepository } from './services/RemoteRepository.js';
 export { default as Repository } from './services/Repository.js';
 export { default as Runtime } from './services/Runtime.js';
+export { default as Standalone } from './services/Standalone.js';
 
 // Types
 export { default as NextHandler } from './types/NextHandler.js';
@@ -76,6 +78,6 @@ export { default as RemoteClassLoader } from './utils/RemoteClassLoader.js';
 export { default as VersionParser } from './utils/VersionParser.js';
 
 // Root
+export { default as RuntimeBuilder } from './RuntimeBuilder.js';
 export * from './client.js';
-
 import './globals.js';

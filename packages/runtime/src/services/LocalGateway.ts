@@ -4,14 +4,9 @@ import ProcedureNotFound from '../errors/ProcedureNotFound.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
-import ModuleLoader from '../utils/ModuleLoader.js';
-
 import Gateway from './Gateway.js';
 import Node from './Node.js';
 import NodeBalancer from './NodeBalancer.js';
-import Repository from './Repository.js';
-
-const NO_SEGMENTS: string[] = [];
 
 export default class LocalGateway extends Gateway
 {
@@ -65,14 +60,6 @@ export default class LocalGateway extends Gateway
 
             balancer.removeNode(node);
         }
-    }
-
-    async setBaseUrl(repository: Repository): Promise<void>
-    {
-        const clientId = await repository.registerClient(NO_SEGMENTS);
-        const moduleLocation = await repository.getModuleLocation(clientId);
-
-        ModuleLoader.setBaseUrl(moduleLocation);
     }
 
     #getBalancer(fqn: string): NodeBalancer | undefined

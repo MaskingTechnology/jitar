@@ -2,6 +2,7 @@
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
+import DummyRepository from './DummyRepository.js';
 import Node from './Node.js';
 import Remote from './Remote.js';
 
@@ -10,23 +11,21 @@ export default class RemoteNode extends Node
     #remote: Remote;
     #procedureNames: Set<string> = new Set();
 
-    constructor(url: string, procedureNames: string[])
+    constructor(url: string)
     {
-        super(url);
+        super(new DummyRepository(), url);
 
         this.#remote = new Remote(url);
+    }
 
-        this.registerProcedures(procedureNames);
+    set procedureNames(names: Set<string>)
+    {
+        this.#procedureNames = names;
     }
 
     getProcedureNames(): string[]
     {
         return [...this.#procedureNames.values()];
-    }
-
-    registerProcedures(procedureNames: string[]): void
-    {
-        procedureNames.forEach(procedureName => this.#procedureNames.add(procedureName));
     }
 
     hasProcedure(name: string): boolean

@@ -1,61 +1,61 @@
 
 // With .js extension
-const NO_SYSTEM_IMPORTS =
+const APPLICATION_IMPORTS =
 `import './path/to/file.js';
 import component from '/path/to/component.js';
 import { component1, component2 } from '../path/to/components.js';
 `;
 
-const NO_SYSTEM_IMPORTS_RESULT = NO_SYSTEM_IMPORTS;
+const APPLICATION_IMPORTS_RESULT =
+`await __import("./components/path/to/file.js", "application");
+const component = await __import("./components/path/to/component.js", "application");
+const { component1, component2 } = await __import("./path/to/components.js", "application");
+`;
 
-const HAS_SYSTEM_IMPORTS =
+const RUNTIME_IMPORTS =
 `import 'polyfills';
 import * as fs from 'fs';
 import component from 'http';
 import { component1, component2 } from 'https';
 `;
 
-const HAS_SYSTEM_IMPORTS_RESULT =
-`await __getDependency('polyfills');
-const fs = await __getDependency('fs');
-const component = await __getDependency('http');
-const { component1, component2 } = await __getDependency('https');
+const RUNTIME_IMPORTS_RESULT =
+`await __import("polyfills", "runtime");
+const fs = await __import("fs", "runtime");
+const component = await __import("http", "runtime");
+const { component1, component2 } = await __import("https", "runtime");
 `;
 
-const HAS_IMPORT_NO_SEMICOLON = `import { runProcedure } from 'jitar'`;
+const IMPORT_WITHOUT_SEMICOLON = `import { runProcedure } from 'jitar'`;
 
-const HAS_IMPORT_NO_SEMICOLON_RESULT = `const { runProcedure } = await __getDependency('jitar');`;
+const IMPORT_WITHOUT_SEMICOLON_RESULT = `const { runProcedure } = await __import("jitar", "runtime");`;
 
 // Without .js extension
-const HAS_MIXED_IMPORTS =
+const MIXED_IMPORTS =
 `import component from './path/to/component';
 import os from 'os';
 import { runProcedure } from 'jitar';
 import main, { some as other } from 'library';
 `;
 
-const HAS_MIXED_IMPORTS_RESULT_APP =
-`import component from './path/to/component.js';
-import os from 'os';
-import { runProcedure } from 'jitar';
-import main, { some as other } from 'library';
+const MIXED_IMPORTS_RESULT =
+`const component = await __import("./components/path/to/component.js", "application");
+const os = await __import("os", "runtime");
+const { runProcedure } = await __import("jitar", "runtime");
+const { default : main, some : other } = await __import("library", "runtime");
 `;
 
-const HAS_MIXED_IMPORTS_RESULT_ALL =
-`import component from './path/to/component.js';
-const os = await __getDependency('os');
-const { runProcedure } = await __getDependency('jitar');
-const { default : main, some : other } = await __getDependency('library');
-`;
-
-const HAS_DYNAMIC_IMPORTS =
+const DYNAMIC_IMPORTS =
 `import component from './path/to/component.js';
 const os = await import('os');
 `;
 
-const HAS_DYNAMIC_IMPORTS_RESULT = HAS_DYNAMIC_IMPORTS;
+const DYNAMIC_IMPORTS_RESULT =
+`const component = await __import("./components/path/to/component.js", "application");
+const os = await import('os');
+`;
 
-const HAS_IMPORTS_AND_CONTENT =
+const IMPORTS_AND_CONTENT =
 `import os from 'os';
 
 export default function test() {}
@@ -63,32 +63,34 @@ export default function test() {}
 import { runProcedure } from 'jitar';
 `;
 
-const HAS_IMPORTS_AND_CONTENT_RESULT =
-`const os = await __getDependency('os');
+const IMPORTS_AND_CONTENT_RESULT =
+`const os = await __import("os", "runtime");
 
 export default function test() {}
 
-const { runProcedure } = await __getDependency('jitar');
+const { runProcedure } = await __import("jitar", "runtime");
 `;
 
 const INPUTS =
 {
-    NO_SYSTEM_IMPORTS,
-    HAS_SYSTEM_IMPORTS,
-    HAS_IMPORT_NO_SEMICOLON,
-    HAS_MIXED_IMPORTS,
-    HAS_DYNAMIC_IMPORTS,
-    HAS_IMPORTS_AND_CONTENT
+    APPLICATION_IMPORTS,
+    RUNTIME_IMPORTS,
+    IMPORT_WITHOUT_SEMICOLON,
+    MIXED_IMPORTS,
+    DYNAMIC_IMPORTS,
+    IMPORTS_AND_CONTENT
 };
 
 const OUTPUTS =
 {
-    NO_SYSTEM_IMPORTS_RESULT,
-    HAS_SYSTEM_IMPORTS_RESULT,
-    HAS_IMPORT_NO_SEMICOLON_RESULT,
-    HAS_MIXED_IMPORTS_RESULT_APP, HAS_MIXED_IMPORTS_RESULT_ALL,
-    HAS_DYNAMIC_IMPORTS_RESULT,
-    HAS_IMPORTS_AND_CONTENT_RESULT
+    APPLICATION_IMPORTS_RESULT,
+    RUNTIME_IMPORTS_RESULT,
+    IMPORT_WITHOUT_SEMICOLON_RESULT,
+    MIXED_IMPORTS_RESULT,
+    DYNAMIC_IMPORTS_RESULT,
+    IMPORTS_AND_CONTENT_RESULT
 };
 
-export { INPUTS, OUTPUTS };
+const SOURCE_FILE = './components/test.js';
+
+export { INPUTS, OUTPUTS, SOURCE_FILE };

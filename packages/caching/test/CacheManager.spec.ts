@@ -20,7 +20,7 @@ describe('CacheManager', () =>
             await cacheManager.build();
 
             const result = fileManager.writtenFiles;
-            expect(result.size).toBe(20);
+            expect(result.size).toBe(14);
         });
     });
 });

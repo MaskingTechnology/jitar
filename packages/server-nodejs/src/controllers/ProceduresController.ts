@@ -2,14 +2,14 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalGateway, LocalNode, Proxy } from '@jitar/runtime';
+import { LocalGateway, LocalNode, Standalone } from '@jitar/runtime';
 
 export default class ProceduresController
 {
-    #runtime: LocalGateway | LocalNode | Proxy;
+    #runtime: LocalGateway | LocalNode | Standalone;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, runtime: LocalGateway | LocalNode | Proxy, logger: Logger<unknown>)
+    constructor(app: express.Application, runtime: LocalGateway | LocalNode | Standalone, logger: Logger<unknown>)
     {
         this.#runtime = runtime;
         this.#logger = logger;

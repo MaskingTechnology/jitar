@@ -43,7 +43,7 @@ function createBootstrapCode(segments: string[]): string
 {
     const segmentString = segments.map(segment => `'${segment}'`).join(', ');
 
-    return `<script type="module">const jitar = await import('/jitar/client.js'); await jitar.startClient(document.location.origin, [${segmentString}]);</script>`;
+    return `<script type="module">const jitar = await import("/jitar/client.js"); await jitar.startClient(document.location.origin, [${segmentString}]);</script>`;
 }
 
 async function createImportCode(code: string, id: string, jitarFullPath: string, jitarPath: string): Promise<string>
@@ -75,9 +75,8 @@ async function createImportCode(code: string, id: string, jitarFullPath: string,
         exportCode += `export { ${functionKeys.join(', ')} };\n`;
     }
 
-    return 'const jitar = await import(/* @vite-ignore */`/jitar/client.js`);\n'
-        + 'const client = await jitar.getClient();\n'
-        + `const module = await client.import('./${jitarPath}${relativeId}');\n`
+    return 'import { getClient } from "/jitar/client.js";\n'
+        + `const module = await (await getClient()).import("./${jitarPath}${relativeId}");\n`
         + importCode
         + exportCode;
 }

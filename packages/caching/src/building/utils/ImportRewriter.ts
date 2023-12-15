@@ -3,83 +3,137 @@ import { ReflectionImport, Reflector } from '@jitar/reflection';
 
 import Keyword from '../definitions/Keyword.js';
 
-const IMPORT_PATTERN = /import\s(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/_-]+)["'\s].*/g;
-const NON_SYSTEM_INDICATORS = ['.', '/', 'http:', 'https:'];
+const IMPORT_PATTERN = /import\s(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/._-]+)["'\s].*/g;
+const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 const reflector = new Reflector();
 
 export default class ImportRewriter
 {
-    rewrite(code: string, includeSystem: boolean): string
+    rewrite(code: string, filename: string): string
     {
-        const replacer = (statement: string) => this.#replaceImport(statement, includeSystem);
+        const replacer = (statement: string) => this.#replaceImport(statement, filename);
 
         return code.replaceAll(IMPORT_PATTERN, replacer);
     }
 
-    #replaceImport(statement: string, includeSystem: boolean): string
+    #replaceImport(statement: string, filename: string): string
     {
         const dependency = reflector.parseImport(statement);
 
-        if (this.#isSystemDependency(dependency))
-        {
-            return includeSystem
-                ? this.#rewriteSystemImport(dependency)
-                : statement;
-        }
-
-        return this.#rewriteApplicationImport(dependency);
+        return this.#isApplicationModule(dependency)
+            ? this.#rewriteApplicationImport(dependency, filename)
+            : this.#rewriteRuntimeImport(dependency, filename);
     }
 
-    #isSystemDependency(dependency: ReflectionImport): boolean
+    #isApplicationModule(dependency: ReflectionImport): boolean
     {
-        return NON_SYSTEM_INDICATORS.some(indicator => dependency.from.startsWith(indicator, 1)) === false;
+        return APPLICATION_MODULE_INDICATORS.some(indicator => dependency.from.startsWith(indicator, 1));
     }
 
-    #rewriteSystemImport(dependency: ReflectionImport): string
+    #rewriteApplicationImport(dependency: ReflectionImport, filename: string): string
+    {
+        return this.#rewriteImport(dependency, 'application', filename);
+    }
+
+    #rewriteRuntimeImport(dependency: ReflectionImport, filename: string): string
+    {
+        return this.#rewriteImport(dependency, 'runtime', filename);
+    }
+
+    #rewriteImport(dependency: ReflectionImport, scope: string, filename: string): string
     {   
-        const from = this.#rewriteImportFrom(dependency);
+        const from = this.#rewriteImportFrom(dependency, filename);
 
         if (dependency.members.length === 0)
         {
-            return `await __getDependency('${from}');`;
+            return `await __import("${from}", "${scope}");`;
         }
 
-        const members = this.#rewriteImportMembers(dependency, ':');
+        const members = this.#rewriteImportMembers(dependency);
 
-        return `const ${members} = await __getDependency('${from}');`;
+        return `const ${members} = await __import("${from}", "${scope}");`;
     }
 
-    #rewriteApplicationImport(dependency: ReflectionImport): string
+    #rewriteImportFrom(dependency: ReflectionImport, filename: string): string
     {
-        const members = this.#rewriteImportMembers(dependency, 'as');
-        const from = this.#rewriteImportFrom(dependency);
+        const from = dependency.from.substring(1, dependency.from.length - 1);
 
-        return `import ${members} from '${from}';`;
+        return this.#isApplicationModule(dependency)
+            ? this.#mergeFilenames(filename, from)
+            : from;
     }
 
-    #rewriteImportMembers(dependency: ReflectionImport, aliasSpecifier: string): string
+    #rewriteImportMembers(dependency: ReflectionImport): string
     {
         if (this.#mustUseAs(dependency))
         {
             return dependency.members[0].as;
         }
 
-        const members = dependency.members.map(member => member.name !== member.as ? `${member.name} ${aliasSpecifier} ${member.as}` : member.name);
+        const members = dependency.members.map(member => member.name !== member.as ? `${member.name} : ${member.as}` : member.name);
 
         return `{ ${members.join(', ')} }`;
     }
 
-    #rewriteImportFrom(dependency: ReflectionImport): string
+    #mergeFilenames(sourceFilename: string, importFilename: string): string
     {
-        const from = dependency.from.substring(1, dependency.from.length - 1);
+        const sourcePath = this.#extractFilepath(sourceFilename);
 
-        if (NON_SYSTEM_INDICATORS.some(indicator => from.startsWith(indicator)))
+        const concatenated = `${sourcePath}/${importFilename}`;
+        const translated = this.#translateFilename(concatenated);
+        const rooted = this.#ensureRoot(translated);
+
+        return this.#ensureExtension(rooted);
+    }
+
+    #extractFilepath(filename: string)
+    {
+        return filename.split('/').slice(0, -1).join('/');
+    }
+
+    #translateFilename(filename: string)
+    {
+        const parts = filename.split('/');
+        const translated = [];
+
+        translated.push(parts[0]);
+
+        for (let index = 1; index < parts.length; index++)
         {
-            return from.endsWith('.js') ? from : `${from}.js`;
+            const part = parts[index].trim();
+
+            switch (part)
+            {
+                case '': continue;
+                case '.': continue;
+                case '..': translated.pop(); continue;
+            }
+
+            translated.push(part);
         }
-        
-        return from;
+
+        return translated.join('/');
+    }
+
+    #ensureRoot(filename: string): string
+    {
+        if (filename.startsWith('./'))
+        {
+            return filename;
+        }
+
+        if (filename.startsWith('//'))
+        {
+            filename = filename.substring(1);
+        }
+
+        return filename.startsWith('/') ? `.${filename}` : `./${filename}`;
+    }
+
+    #ensureExtension(filename: string): string
+    {
+        return filename.endsWith('.js') ? filename : `${filename}.js`;
     }
 
     #mustUseAs(dependency: ReflectionImport): boolean

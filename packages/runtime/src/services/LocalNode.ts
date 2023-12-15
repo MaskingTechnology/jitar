@@ -1,38 +1,67 @@
 
+import { ExecutionScopes } from '../definitions/ExecutionScope.js';
 import { createNodeFilename } from '../definitions/Files.js';
 
 import ImplementationNotFound from '../errors/ImplementationNotFound.js';
 import ProcedureNotFound from '../errors/ProcedureNotFound.js';
-import RepositoryNotAvailable from '../errors/RepositoryNotAvailable.js';
 
 import Procedure from '../models/Procedure.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 import Segment from '../models/Segment.js';
-import Module from '../types/Module.js';
 import ArgumentConstructor from '../utils/ArgumentConstructor.js';
-import ModuleLoader from '../utils/ModuleLoader.js';
 
 import Gateway from './Gateway.js';
-import LocalGateway from './LocalGateway.js';
 import Node from './Node.js';
 import Repository from './Repository.js';
 
-import { setRuntime, setDependencyLoader } from '../hooks.js';
+import { setRuntime } from '../hooks.js';
 
 export default class LocalNode extends Node
 {
-    #argumentConstructor: ArgumentConstructor;
-    #segments: Map<string, Segment> = new Map();
     #gateway?: Gateway;
-    #repository?: Repository;
-    #clientId = '';
+    #argumentConstructor: ArgumentConstructor;
 
-    constructor(url?: string, argumentConstructor = new ArgumentConstructor())
+    #segmentNames: Set<string> = new Set();
+    #segments: Map<string, Segment> = new Map();
+
+    constructor(repository: Repository, gateway?: Gateway, url?: string, argumentConstructor = new ArgumentConstructor())
     {
-        super(url);
+        super(repository, url);
 
+        this.#gateway = gateway;
         this.#argumentConstructor = argumentConstructor;
+
+        setRuntime(this);
+    }
+
+    set segmentNames(names: Set<string>)
+    {
+        this.#segmentNames = names;
+    }
+
+    async start(): Promise<void>
+    {
+        await super.start();
+
+        await this.#loadSegments();
+
+        if (this.#gateway !== undefined)
+        {
+            await this.#gateway.start();
+        }
+    }
+
+    async stop(): Promise<void>
+    {
+        this.#unloadSegments();
+        
+        if (this.#gateway !== undefined)
+        {
+            await this.#gateway.stop();
+        }
+
+        await super.stop();
     }
 
     getProcedureNames(): string[]
@@ -52,15 +81,6 @@ export default class LocalNode extends Node
         return [...names.values()];
     }
 
-    async loadSegment(name: string): Promise<void>
-    {
-        const filename = createNodeFilename(name);
-        const module = await this.import(filename);
-        const segment = module.segment as Segment;
-
-        this.addSegment(segment);
-    }
-
     addSegment(segment: Segment): void
     {
         this.#segments.set(segment.id, segment);
@@ -73,63 +93,38 @@ export default class LocalNode extends Node
         return procedureNames.includes(fqn);
     }
 
-    #getProcedure(fqn: string): Procedure | undefined
-    {
-        for (const segment of this.#segments.values())
-        {
-            if (segment.hasProcedure(fqn))
-            {
-                return segment.getProcedure(fqn);
-            }
-        }
-
-        return undefined;
-    }
-
-    async setGateway(gateway: Gateway): Promise<void>
-    {
-        if (gateway instanceof LocalGateway || this.url !== undefined)
-        {
-            await gateway.addNode(this);
-        }
-
-        this.#gateway = gateway;
-    }
-
-    async setRepository(repository: Repository, segmentNames: string[]): Promise<void>
-    {
-        this.#clientId = await repository.registerClient(segmentNames);
-
-        setRuntime(this);
-        setDependencyLoader((name: string) => ModuleLoader.import(name));
-
-        const moduleLocation = await repository.getModuleLocation(this.#clientId);
-
-        ModuleLoader.setBaseUrl(moduleLocation);
-
-        this.#repository = repository;
-    }
-
-    import(url: string): Promise<Module>
-    {
-        if (this.#repository === undefined)
-        {
-            throw new RepositoryNotAvailable();
-        }
-
-        return this.#repository.loadModule(this.#clientId, url);
-    }
-
     run(request: Request): Promise<Response>
     {
         const procedure = this.#getProcedure(request.fqn);
 
         return procedure === undefined
-            ? this.#runGateway(request)
+            ? this.#useGateway(request)
             : this.#runProcedure(procedure, request);
     }
 
-    #runGateway(request: Request): Promise<Response>
+    async #loadSegments()
+    {
+        for (const segmentName of this.#segmentNames)
+        {
+            await this.#loadSegment(segmentName);
+        }
+    }
+
+    async #loadSegment(name: string): Promise<void>
+    {
+        const filename = createNodeFilename(name);
+        const module = await this.import(filename, ExecutionScopes.APPLICATION);
+        const segment = module.segment as Segment;
+
+        this.addSegment(segment);
+    }
+
+    #unloadSegments(): void
+    {
+        this.#segments.clear();
+    }
+
+    #useGateway(request: Request): Promise<Response>
     {
         if (this.#gateway === undefined)
         {
@@ -153,5 +148,18 @@ export default class LocalNode extends Node
         const result = await implementation.executable.call(request, ...values);
 
         return new Response(result);
+    }
+
+    #getProcedure(fqn: string): Procedure | undefined
+    {
+        for (const segment of this.#segments.values())
+        {
+            if (segment.hasProcedure(fqn))
+            {
+                return segment.getProcedure(fqn);
+            }
+        }
+
+        return undefined;
     }
 }

@@ -5,19 +5,19 @@ import ProcedureRuntimeConfiguration from './ProcedureRuntimeConfiguration';
 
 export const gatewaySchema = z
     .object({
-        monitor: z.number().optional(),
-        repository: z.string().url().optional(),
-        middlewares: z.array(z.string()).optional()
+        repository: z.string().url(),
+        middlewares: z.array(z.string()).optional(),
+        monitor: z.number().optional()
     })
     .strict()
-    .transform((value) => new GatewayConfiguration(value.monitor, value.repository, value.middlewares));
+    .transform((value) => new GatewayConfiguration(value.repository, value.middlewares, value.monitor));
 
 export default class GatewayConfiguration extends ProcedureRuntimeConfiguration
 {
     #monitor?: number;
-    #repository?: string;
+    #repository: string;
 
-    constructor(monitor?: number, repository?: string, middlewares?: string[])
+    constructor(repository: string, middlewares?: string[], monitor?: number)
     {
         super(middlewares);
 

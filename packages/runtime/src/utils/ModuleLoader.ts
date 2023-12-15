@@ -7,9 +7,9 @@ import ModuleImporter from '../types/ModuleImporter.js';
 
 import UrlRewriter from './UrlRewriter.js';
 
-const NON_SYSTEM_INDICATORS = ['.', '/', 'http:', 'https:'];
+const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
-let _baseUrl: string | undefined;
+let _baseUrl: string = '';
 let _import = async (name: string): Promise<Module> => { return import(name); };
 
 export default class ModuleLoader
@@ -24,61 +24,51 @@ export default class ModuleLoader
         _import = importer;
     }
 
-    static assureExtension(specifier: string): string
+    static async load(specifier: string): Promise<Module>
     {
         if (this.#isSystemModule(specifier))
         {
-            return specifier;
+            return this.#import(specifier);
         }
 
+        if (specifier.startsWith('/jitar'))
+        {
+            return this.#import('JITAR_LIBRARY_NAME');
+        }
+
+        const filename = this.assureExtension(specifier);
+        const url = UrlRewriter.addBase(filename, _baseUrl);
+
+        if (url.startsWith(_baseUrl) === false)
+        {
+            throw new ModuleNotAccessible(specifier);
+        }
+
+        return this.#import(url);
+    }
+
+    static assureExtension(specifier: string): string
+    {
         return specifier.endsWith('.js') ? specifier : `${specifier}.js`;
-    }
-
-    static async load(specifier: string): Promise<Module>
-    {
-        let url = this.assureExtension(specifier);
-
-        if (url.startsWith('/jitar'))
-        {
-            specifier = 'JITAR_LIBRARY_NAME';
-            
-            return this.#import(specifier, specifier) as Promise<Module>;
-        }
-
-        if (_baseUrl !== undefined && url.startsWith(_baseUrl) === false)
-        {
-            url = UrlRewriter.addBase(url, _baseUrl);
-
-            if (url.startsWith(_baseUrl) === false)
-            {
-                throw new ModuleNotAccessible(specifier);
-            }
-        }
-
-        return this.#import(url, specifier) as Promise<Module>;
-    }
-
-    static async import(specifier: string): Promise<Module>
-    {
-        return this.#import(specifier, specifier);
-    }
-
-    static async #import(absolute: string, relative: string)
-    {
-        try
-        {
-            return await _import(absolute);
-        }
-        catch (error: unknown)
-        {
-            const message = error instanceof Error ? error.message : String(error);
-
-            throw new ModuleNotLoaded(relative, message);
-        }
     }
 
     static #isSystemModule(specifier: string): boolean
     {
-        return NON_SYSTEM_INDICATORS.some((indicator: string) => specifier.startsWith(indicator)) === false;
+        return APPLICATION_MODULE_INDICATORS.some((indicator: string) => specifier.startsWith(indicator)) === false;
+    }
+
+    static async #import(specifier: string): Promise<Module>
+    {
+        try
+        {
+            return await _import(specifier);
+        }
+        catch (error: unknown)
+        {
+            const safeUrl = UrlRewriter.removeBase(specifier, _baseUrl);
+            const message = error instanceof Error ? error.message : String(error);
+
+            throw new ModuleNotLoaded(safeUrl, message);
+        }
     }
 }

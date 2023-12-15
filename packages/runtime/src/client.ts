@@ -4,20 +4,22 @@ import RemoteGateway from './services/RemoteGateway.js';
 import RemoteRepository from './services/RemoteRepository.js';
 
 let client: LocalNode | undefined = undefined;
-const resolvers: ((value: LocalNode) => void)[] = [];
+const resolvers: ((client: LocalNode) => void)[] = [];
 
 export async function startClient(remoteUrl: string, segmentNames: string[] = []): Promise<LocalNode>
 {
-    const node = new LocalNode();
-    const gateway = new RemoteGateway(remoteUrl);
     const repository = new RemoteRepository(remoteUrl);
+    const gateway = new RemoteGateway(remoteUrl);
 
-    await node.setGateway(gateway);
-    await node.setRepository(repository, segmentNames);
-
+    const node = new LocalNode(repository, gateway);
+    node.segmentNames = new Set(segmentNames);
+    
+    await node.start();
+    
     client = node;
 
     resolvers.forEach((resolve) => resolve(node));
+    resolvers.length = 0;
 
     return node;
 }
