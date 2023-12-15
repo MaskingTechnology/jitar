@@ -1,77 +1,312 @@
+# v0.5.0
+[2023-12-15]
 
-# Changelog
+### Features
 
-## 0.4.2 (October 18, 2023)
+* \[[399](https://github.com/MaskingTechnology/jitar/pull/399)] feat(runtime): import override support (#399) by Peter van Vliet
+* \[[397](https://github.com/MaskingTechnology/jitar/pull/397)] feat(runtime): run middleware in application space (#397) by Peter van Vliet
+* \[[395](https://github.com/MaskingTechnology/jitar/pull/395)] feat(runtime): run health checks in application space (#395) by Peter van Vliet
+* \[[390](https://github.com/MaskingTechnology/jitar/pull/390)] feat(runtime): add support for setting up and tearing down applications (#390) by Peter van Vliet
+* \[[388](https://github.com/MaskingTechnology/jitar/pull/388)] feat(runtime): implemented request response for middleware (#388) by Peter van Vliet
 
-The release doesn't contain any new functionality or bug fixes. The dependencies have been updated to fix some security issues.
+### Chores
 
-## 0.4.1 (July 24, 2023)
+* \[[393](https://github.com/MaskingTechnology/jitar/pull/393)] chore(deps): additional updates december (#393) by Bas Meeuwissen
+* \[[389](https://github.com/MaskingTechnology/jitar/pull/389)] chore(deps): december updates (#389) by Peter van Vliet
+* \[[379](https://github.com/MaskingTechnology/jitar/pull/379)] chore(release): added auto changelog (#379) by Bas Meeuwissen
+* \[[378](https://github.com/MaskingTechnology/jitar/pull/378)] chore(deps): november update (#378) by Bas Meeuwissen
+* \[[371](https://github.com/MaskingTechnology/jitar/pull/371)] chore(pipeline): Added node 21 to config (#371) by Bas Meeuwissen
 
-The 0.4.1 release contains some improvements for the health checks and the serialization support. We have also addressed some bugs and improved the build pipeline. The starter script has been changed in this release. Please read the [migration guide](migrations/migrate-from-0.4.0-to-0.4.1.md) for more information.
+# v0.4.2
+[2023-10-18]
 
-New features:
-- \[[`dd49361`](https://github.com/MaskingTechnology/jitar/commit/dd49361)] `serialization`: regexp serialization support [basmasking](https://github.com/MaskingTechnology/jitar/pull/319)
-- \[[`2d54f39`](https://github.com/MaskingTechnology/jitar/commit/2d54f39)] `serialization`: added bigint support [basmasking](https://github.com/MaskingTechnology/jitar/pull/322)
-- \[[`36901fa`](https://github.com/MaskingTechnology/jitar/commit/36901fa)] `runtime`: execute health checks in parallel [basmasking](#)
-- \[[`3332a6d`](https://github.com/MaskingTechnology/jitar/commit/3332a6d)] `runtime`: handle exceptions from health checks [basmasking](https://github.com/MaskingTechnology/jitar/pull/312)
-- \[[`b58bc84`](https://github.com/MaskingTechnology/jitar/commit/b58bc84)] `runtime`: added timeout option to health checks [basmasking](https://github.com/MaskingTechnology/jitar/pull/316)
-- \[[`ace16a2`](https://github.com/MaskingTechnology/jitar/commit/ace16a2)] `runtime`: configure active health checks [basmasking](https://github.com/MaskingTechnology/jitar/pull/317)
-- \[[`5b100c8`](https://github.com/MaskingTechnology/jitar/commit/5b100c8)] `server`: custom serializers support [basmasking](https://github.com/MaskingTechnology/jitar/pull/325)
+### Chores
 
-Bugs:
-- \[[`a9af34e`](https://github.com/MaskingTechnology/jitar/commit/a9af34e)] `runtime`: functions can be registered twice [basmasking](https://github.com/MaskingTechnology/jitar/pull/326)
-- \[[`2f2f254`](https://github.com/MaskingTechnology/jitar/commit/2f2f254)] `runtime`: middleware not executed properly [petermasking](https://github.com/MaskingTechnology/jitar/pull/342)
-- \[[`6e444a0`](https://github.com/MaskingTechnology/jitar/commit/6e444a0)] `server`: incorrect serialization control at the gateway [petermasking](https://github.com/MaskingTechnology/jitar/pull/324)
+* \[[367](https://github.com/MaskingTechnology/jitar/pull/367)] chore(deps): bump postcss from 8.4.23 to 8.4.31 in /documentation (#367) by dependabot[bot]
+* \[[366](https://github.com/MaskingTechnology/jitar/pull/366)] chore(deps): bumped remaining dependencies (#366) by Bas Meeuwissen
+* \[[365](https://github.com/MaskingTechnology/jitar/pull/365)] chore(deps): october updates (#365) by Peter van Vliet
+* \[[364](https://github.com/MaskingTechnology/jitar/pull/364)] build(deps): bump actions/checkout from 3 to 4 (#364) by dependabot[bot]
+* \[[358](https://github.com/MaskingTechnology/jitar/pull/358)] npm: bump rollup-plugin-dts from 6.0.0 to 6.0.1 (#358) by dependabot[bot]
+* \[[357](https://github.com/MaskingTechnology/jitar/pull/357)] chore(deps): updates september (#357) by Peter van Vliet
+* \[[350](https://github.com/MaskingTechnology/jitar/pull/350)] chore(dependencies): updates (#350) by Peter van Vliet
 
-Chores:
-- \[[`46bebfe`](https://github.com/MaskingTechnology/jitar/commit/46bebfe)] `build`: update linter to eliminate returns of await in async functions [basmasking](https://github.com/MaskingTechnology/jitar/pull/318)
-- \[[`fe28dbe`](https://github.com/MaskingTechnology/jitar/commit/fe28dbe)] `build`: migrate to lerna 7 [basmasking](https://github.com/MaskingTechnology/jitar/pull/321)
-- \[[`5c9754e`](https://github.com/MaskingTechnology/jitar/commit/5c9754e)] `build`: added sonarjs for linting [basmasking](https://github.com/MaskingTechnology/jitar/pull/339)
-- \[[`3c829fc`](https://github.com/MaskingTechnology/jitar/commit/3c829fc)] `packaging`: moved @jitar dependencies to devDependencies for jitar  [basmasking](#)
+# v0.4.1
+[2023-07-25]
 
-## 0.4.0 (May 31, 2023)
+### Features
 
-The 0.4.0 release is a major release that focussed on improving the internal structure for improved maintainability, testability, etc.. We also added some new features and fixed some bugs.
+* \[[325](https://github.com/MaskingTechnology/jitar/pull/325)] feat(server): custom serializers support (#325) by Bas Meeuwissen
+* \[[322](https://github.com/MaskingTechnology/jitar/pull/322)] feat(serialization): added bigint support (#322) by Bas Meeuwissen
+* \[[319](https://github.com/MaskingTechnology/jitar/pull/319)] feat(serialization): regexp serialization support (#319) by Bas Meeuwissen
+* \[[317](https://github.com/MaskingTechnology/jitar/pull/317)] feat(runtime): configure active health checks (#317) by Bas Meeuwissen
+* \[[316](https://github.com/MaskingTechnology/jitar/pull/316)] feat(runtime): added timeout option to health checks (#316) by Bas Meeuwissen
+* \[[312](https://github.com/MaskingTechnology/jitar/pull/312)] feat(runtime): improved health check system (#312) by Bas Meeuwissen
 
-The old packages are still available, but marked as deprecated. We recommend to migrate to the new package structure. See the [migration guide](migrations/migrate-from-0.3.x-to-0.4.0.md) for more information.
+### Fixes
 
-Restructures:
-- \[[`b1dd13d`](https://github.com/MaskingTechnology/jitar/commit/b1dd13d)] `caching`: split from runtime and moved to the `@jitar/caching` package [petermasking](https://github.com/MaskingTechnology/jitar/pull/209)
-- \[[`045debe`](https://github.com/MaskingTechnology/jitar/commit/045debe)] `reflection`: split from runtime, added static code analysis and moved to the `@jitar/reflection` package [petermasking](https://github.com/MaskingTechnology/jitar/pull/161)
-- \[[`71f6bfb`](https://github.com/MaskingTechnology/jitar/commit/71f6bfb)] `serialization`: split from runtime, added extensibility and moved to the `@jitar/serialization` package [petermasking](https://github.com/MaskingTechnology/jitar/pull/193)
-- \[[`d50885c`](https://github.com/MaskingTechnology/jitar/commit/d50885c)] `runtime`: pulled out the caching, serialization and reflection and renamed package to `@jitar/runtime` [petermasking](https://github.com/MaskingTechnology/jitar/pull/216)
-- \[[`9cf7b85`](https://github.com/MaskingTechnology/jitar/commit/9cf7b85)] `server`: integrated the new packages and moved to the `@jitar/server-nodejs` package [petermasking](https://github.com/MaskingTechnology/jitar/pull/226)
-- \[[`a583b2e`](https://github.com/MaskingTechnology/jitar/commit/a583b2e)] `jitar`: integrated all new packages [petermasking](https://github.com/MaskingTechnology/jitar/pull/229)
-- \[[`88af5a7`](https://github.com/MaskingTechnology/jitar/commit/88af5a7)] `server`: removed experimental decorators  [basmasking](https://github.com/MaskingTechnology/jitar/pull/259)
-- \[[`bb23970`](https://github.com/MaskingTechnology/jitar/commit/bb23970)] `server`: removed OvernightJS  [basmasking](https://github.com/MaskingTechnology/jitar/pull/252)
+* \[[342](https://github.com/MaskingTechnology/jitar/pull/342)] bug(runtime): middleware not executed properly (#342) by Peter van Vliet
+* \[[326](https://github.com/MaskingTechnology/jitar/pull/326)] bug(caching): it should not be possible to register a function multiple times (#326) by Bas Meeuwissen
+* \[[324](https://github.com/MaskingTechnology/jitar/pull/324)] bug(server): incorrect serialization control at the gateway (#324) by Peter van Vliet
 
-New features:
-- \[[`5deb4cf`](https://github.com/MaskingTechnology/jitar/commit/5deb4cf)] `creator`: created package [basmasking](https://github.com/MaskingTechnology/jitar/pull/212)
-- \[[`f399cca`](https://github.com/MaskingTechnology/jitar/commit/f399cca)] `reflection`: destructuring support [petermasking](https://github.com/MaskingTechnology/jitar/pull/211)
-- \[[`b4d0bdb`](https://github.com/MaskingTechnology/jitar/commit/b4d0bdb)] `runtime`: reversed middleware execution order  [petermasking](https://github.com/MaskingTechnology/jitar/pull/294)
-- \[[`e02c19a`](https://github.com/MaskingTechnology/jitar/commit/e02c19a)] `runtime`: added support for node clients  [petermasking](https://github.com/MaskingTechnology/jitar/pull/265)
-- \[[`ec31062`](https://github.com/MaskingTechnology/jitar/commit/ec31062)] `runtime`: removed the need of import maps  [petermasking](https://github.com/MaskingTechnology/jitar/pull/263)
-- \[[`48be7c9`](https://github.com/MaskingTechnology/jitar/commit/48be7c9)] `runtime`: added global runtime types  [petermasking](https://github.com/MaskingTechnology/jitar/pull/258)
-- \[[`7777b6d`](https://github.com/MaskingTechnology/jitar/commit/7777b6d)] `runtime`: import file without extension  [petermasking](https://github.com/MaskingTechnology/jitar/pull/254)
-- \[[`a1b6f1e`](https://github.com/MaskingTechnology/jitar/commit/a1b6f1e)] `serialization`: added url serializer  [basmasking](https://github.com/MaskingTechnology/jitar/pull/262)
-- \[[`38accc9`](https://github.com/MaskingTechnology/jitar/commit/38accc9)] `server`: changed default source location [basmasking](https://github.com/MaskingTechnology/jitar/pull/297)
-- \[[`dcca01d`](https://github.com/MaskingTechnology/jitar/commit/dcca01d)] `server`: the --config flag is now mandatory when staring a Jitar instance  [basmasking](https://github.com/MaskingTechnology/jitar/pull/288)
-- \[[`050d1a0`](https://github.com/MaskingTechnology/jitar/commit/050d1a0)] `server`: default cache location to .jitar folder  [basmasking](https://github.com/MaskingTechnology/jitar/pull/281)
+### Chores
 
-Bugs:
-- \[[`3b171ba`](https://github.com/MaskingTechnology/jitar/commit/3b171ba)] `runtime`: updated the linter configuration [petermasking](https://github.com/MaskingTechnology/jitar/pull/251)
-- \[[`7617167`](https://github.com/MaskingTechnology/jitar/commit/7617167)] `security`: secure module loading [petermasking](https://github.com/MaskingTechnology/jitar/pull/243)
-- \[[`86731d9`](https://github.com/MaskingTechnology/jitar/commit/86731d9)] `server`: non-string primitive type response [petermasking](https://github.com/MaskingTechnology/jitar/pull/293)
+* \[[343](https://github.com/MaskingTechnology/jitar/pull/343)] chore: release v0.4.1 (#343) by Bas Meeuwissen
+* \[[339](https://github.com/MaskingTechnology/jitar/pull/339)] chore(build): added sonar for linting (#339) by Bas Meeuwissen
+* \[[336](https://github.com/MaskingTechnology/jitar/pull/336)] chore(deps): bumped dependencies (#336) by Bas Meeuwissen
+* \[[318](https://github.com/MaskingTechnology/jitar/pull/318)] chore(build): update linter to eliminate returns of await in async functions (#318) by Bas Meeuwissen
+* \[[321](https://github.com/MaskingTechnology/jitar/pull/321)] chore(deps): migrate to lerna 7 (#321) by Bas Meeuwissen
+* \[[307](https://github.com/MaskingTechnology/jitar/pull/307)] npm: bump @rollup/plugin-node-resolve from 15.0.2 to 15.1.0 (#307) by dependabot[bot]
+* \[[308](https://github.com/MaskingTechnology/jitar/pull/308)] npm: bump mongodb from 5.4.0 to 5.5.0 (#308) by dependabot[bot]
+* \[[313](https://github.com/MaskingTechnology/jitar/pull/313)] build(deps): bump vite from 4.3.5 to 4.3.9 in /documentation (#313) by dependabot[bot]
+* \[[306](https://github.com/MaskingTechnology/jitar/pull/306)] npm: bump rimraf from 5.0.0 to 5.0.1 (#306) by dependabot[bot]
+* \[[309](https://github.com/MaskingTechnology/jitar/pull/309)] npm: bump @types/react from 18.2.6 to 18.2.7 (#309) by dependabot[bot]
+* \[[310](https://github.com/MaskingTechnology/jitar/pull/310)] npm: bump eslint from 8.40.0 to 8.41.0 (#310) by dependabot[bot]
 
-Chores:
-- \[[`d95c626`](https://github.com/MaskingTechnology/jitar/commit/d95c626)] `build`: added node 20 to ci pipeline [basmasking](https://github.com/MaskingTechnology/jitar/pull/268)
-- \[[`bb4661c`](https://github.com/MaskingTechnology/jitar/commit/bb4661c)] `build`: updated the linter configuration [basmasking](https://github.com/MaskingTechnology/jitar/pull/248)
-- \[[`cc99cd36`](https://github.com/MaskingTechnology/jitar/commit/cc99cd36)] `build`: updated ci configuration [basmasking](https://github.com/MaskingTechnology/jitar/pull/241)
-- \[[`884ad85`](https://github.com/MaskingTechnology/jitar/commit/884ad85)] `creator`: updated starter templates to new conventions [basmasking](https://github.com/MaskingTechnology/jitar/pull/280)
-- \[[`4fc2311`](https://github.com/MaskingTechnology/jitar/commit/4fc2311)] `creator`: removed --experimental-fetch flag [petermasking](https://github.com/MaskingTechnology/jitar/pull/215)
-- \[[`b6a62f9`](https://github.com/MaskingTechnology/jitar/commit/b6a62f9)] `examples`: added new examples (concepts) [basmasking](https://github.com/MaskingTechnology/jitar/pull/277)
-- \[[`bf4d7da`](https://github.com/MaskingTechnology/jitar/commit/bf4d7da)] `examples`: new full-stack example (contact list) [petermasking](https://github.com/MaskingTechnology/jitar/pull/255)
-- \[[`328ffd1`](https://github.com/MaskingTechnology/jitar/commit/328ffd1)] `jitar`: updated the roadmap [petermasking](https://github.com/MaskingTechnology/jitar/pull/247)
-- \[[`d5238cc`](https://github.com/MaskingTechnology/jitar/commit/019ec62)] `packaging`: configure rollup for jitar [basmasking](https://github.com/MaskingTechnology/jitar/pull/261)
-- \[[`61dc57e`](https://github.com/MaskingTechnology/jitar/commit/61dc57e)] `templates`: use react hooks [petermasking](https://github.com/MaskingTechnology/jitar/pull/257)
-- \[[`019ec62`](https://github.com/MaskingTechnology/jitar/commit/019ec62)] `website`: overhaul of the website [petermasking](https://github.com/MaskingTechnology/jitar/pull/260)
+# v0.4.0
+[2023-05-31]
+
+### Features
+
+* \[[297](https://github.com/MaskingTechnology/jitar/pull/297)] feat(server): change default source location (#297) by Bas Meeuwissen
+* \[[288](https://github.com/MaskingTechnology/jitar/pull/288)] feat(server): mandatory configuration (#288) by Bas Meeuwissen
+* \[[281](https://github.com/MaskingTechnology/jitar/pull/281)] feat(server): default cache location to .jitar folder (#281) by Bas Meeuwissen
+* \[[262](https://github.com/MaskingTechnology/jitar/pull/262)] feat(serialization): added the url serializer (#262) by Bas Meeuwissen
+* \[[259](https://github.com/MaskingTechnology/jitar/pull/259)] feat(server): removed experimental decorators (#259) by Bas Meeuwissen
+* \[[258](https://github.com/MaskingTechnology/jitar/pull/258)] feat(packaging): Added global runtime types (#258) by Peter van Vliet
+* \[[254](https://github.com/MaskingTechnology/jitar/pull/254)] feat(dx): import without extension (#254) by Peter van Vliet
+* \[[252](https://github.com/MaskingTechnology/jitar/pull/252)] feat(server): Removed OvernightJS (#252) by Bas Meeuwissen
+* \[[229](https://github.com/MaskingTechnology/jitar/pull/229)] feat: refactor jitar (#229) by Peter van Vliet
+* \[[216](https://github.com/MaskingTechnology/jitar/pull/216)] feat(runtime): implemented new package (#216) by Peter van Vliet
+* \[[209](https://github.com/MaskingTechnology/jitar/pull/209)] feat(caching): separate package (#209) by Peter van Vliet
+* \[[212](https://github.com/MaskingTechnology/jitar/pull/212)] feat: npm creator package (#212) by Bas Meeuwissen
+* \[[211](https://github.com/MaskingTechnology/jitar/pull/211)] feat(reflection): destructuring support (#211) by Peter van Vliet
+* \[[205](https://github.com/MaskingTechnology/jitar/pull/205)] feat(examples): solidjs integration (#205) by Bas Meeuwissen
+
+### Fixes
+
+* \[[293](https://github.com/MaskingTechnology/jitar/pull/293)] fix(server): non-string primitive type response (#293) by Peter van Vliet
+* \[[243](https://github.com/MaskingTechnology/jitar/pull/243)] bug(security): secure module loading (#243) by Peter van Vliet
+
+### Chores
+
+* \[[305](https://github.com/MaskingTechnology/jitar/pull/305)] chore(release): version 0.4.0 (#305) by Bas Meeuwissen
+* \[[304](https://github.com/MaskingTechnology/jitar/pull/304)] chore(docs): improved docs (#304) by Bas Meeuwissen
+* \[[280](https://github.com/MaskingTechnology/jitar/pull/280)] chore(creator): updated the starter templates (#280) by Bas Meeuwissen
+* \[[277](https://github.com/MaskingTechnology/jitar/pull/277)] chore(examples): updated the examples (#277) by Bas Meeuwissen
+* \[[269](https://github.com/MaskingTechnology/jitar/pull/269)] chore(deps): Bumped dependencies (#269) by Bas Meeuwissen
+* \[[268](https://github.com/MaskingTechnology/jitar/pull/268)] chore(build): added node 20 to ci pipeline (#268) by Bas Meeuwissen
+* \[[261](https://github.com/MaskingTechnology/jitar/pull/261)] chore(packaging): configure rollup for jitar (#261) by Bas Meeuwissen
+* \[[260](https://github.com/MaskingTechnology/jitar/pull/260)] chore(website): overhaul website (#260) by Peter van Vliet
+* \[[255](https://github.com/MaskingTechnology/jitar/pull/255)] chore(example): full-stack update (#255) by Peter van Vliet
+* \[[257](https://github.com/MaskingTechnology/jitar/pull/257)] chore(templates): use react hooks (#257) by Peter van Vliet
+* \[[248](https://github.com/MaskingTechnology/jitar/pull/248)] chore(build): update linter configuration (#248) by Bas Meeuwissen
+* \[[241](https://github.com/MaskingTechnology/jitar/pull/241)] chore(build): fix ci configuration(#240) (#241) by Bas Meeuwissen
+* \[[221](https://github.com/MaskingTechnology/jitar/pull/221)] npm: bump vite from 4.1.4 to 4.2.1 (#221) by dependabot[bot]
+* \[[220](https://github.com/MaskingTechnology/jitar/pull/220)] npm: bump @types/prompts from 2.4.3 to 2.4.4 (#220) by dependabot[bot]
+* \[[219](https://github.com/MaskingTechnology/jitar/pull/219)] npm: bump @typescript-eslint/eslint-plugin from 5.54.0 to 5.57.0 (#219) by dependabot[bot]
+* \[[217](https://github.com/MaskingTechnology/jitar/pull/217)] npm: bump @types/react from 18.0.28 to 18.0.31 (#217) by dependabot[bot]
+* \[[218](https://github.com/MaskingTechnology/jitar/pull/218)] npm: bump cpx2 from 4.2.0 to 4.2.2 (#218) by dependabot[bot]
+* \[[215](https://github.com/MaskingTechnology/jitar/pull/215)] chore: removed references to experimental-fetch (#215) by Bas Meeuwissen
+
+### Other
+
+* \[[294](https://github.com/MaskingTechnology/jitar/pull/294)] #290: Reversed the execution order of the middleware (#294) by Peter van Vliet
+* \[[265](https://github.com/MaskingTechnology/jitar/pull/265)] #264: added support for node clients (#265) by Peter van Vliet
+* \[[263](https://github.com/MaskingTechnology/jitar/pull/263)] #233: removed the usage of import maps (#263) by Peter van Vliet
+* \[[251](https://github.com/MaskingTechnology/jitar/pull/251)] #250: Fixed importing modules (#251) by Peter van Vliet
+* \[[247](https://github.com/MaskingTechnology/jitar/pull/247)] #236: Updated the roadmap (links to issues included for version 1.0) (#247) by Peter van Vliet
+* \[[226](https://github.com/MaskingTechnology/jitar/pull/226)] 156 integrate the new packages into the nodejs server (#226) by Peter van Vliet
+
+# v0.3.9
+[2023-03-10]
+
+### Features
+
+* \[[204](https://github.com/MaskingTechnology/jitar/pull/204)] feat(server): preflight requests (#204) by Bas Meeuwissen
+* \[[201](https://github.com/MaskingTechnology/jitar/pull/201)] feat(examples): Lit integration (#201) by Bas Meeuwissen
+* \[[193](https://github.com/MaskingTechnology/jitar/pull/193)] feat(serialization): split from runtime (#193) by Peter van Vliet
+
+### Other
+
+* \[[199](https://github.com/MaskingTechnology/jitar/pull/199)] #198: Added support for dynamic imports (#199) by Peter van Vliet
+
+# v0.3.8
+[2023-03-04]
+
+### Other
+
+* \[[195](https://github.com/MaskingTechnology/jitar/pull/195)] #194: Fixed loading default imports for commonJS modules (#195) by Peter van Vliet
+
+# v0.3.7
+[2023-03-01]
+
+### Fixes
+
+* \[[189](https://github.com/MaskingTechnology/jitar/pull/189)] fix(reflection): Regex with quotes (#189) by Peter van Vliet
+* \[[182](https://github.com/MaskingTechnology/jitar/pull/182)] fix(caching): import commonjs modules (#182) by Peter van Vliet
+
+### Chores
+
+* \[[192](https://github.com/MaskingTechnology/jitar/pull/192)] chore(release): version 037 (#192) by Peter van Vliet
+* \[[190](https://github.com/MaskingTechnology/jitar/pull/190)] chore(deps): dependabot updates (#190) by Peter van Vliet
+
+# v0.3.6
+[2023-02-26]
+
+### Fixes
+
+* \[[180](https://github.com/MaskingTechnology/jitar/pull/180)] fix(reflection): added missing parsing options (#180) by Peter van Vliet
+
+### Chores
+
+* \[[178](https://github.com/MaskingTechnology/jitar/pull/178)] npm: bump mongodb from 4.14.0 to 5.1.0 (#178) by dependabot[bot]
+* \[[176](https://github.com/MaskingTechnology/jitar/pull/176)] npm: bump rimraf from 3.0.2 to 4.1.2 (#176) by dependabot[bot]
+* \[[177](https://github.com/MaskingTechnology/jitar/pull/177)] npm: bump @types/fs-extra from 9.0.13 to 11.0.1 (#177) by dependabot[bot]
+* \[[174](https://github.com/MaskingTechnology/jitar/pull/174)] npm: bump @types/node from 18.14.0 to 18.14.1 (#174) by dependabot[bot]
+
+### Other
+
+* \[[173](https://github.com/MaskingTechnology/jitar/pull/173)] Cleaned dev dependencies from packages (#173) by Bas Meeuwissen
+
+# v0.3.4
+[2023-02-23]
+
+### Features
+
+* \[[168](https://github.com/MaskingTechnology/jitar/pull/168)] feat(jitar): use the advanced reflection library (#168) by Bas Meeuwissen
+* \[[165](https://github.com/MaskingTechnology/jitar/pull/165)] feat(plugin): Enhance the vite plugin (#165) by Peter van Vliet
+* \[[161](https://github.com/MaskingTechnology/jitar/pull/161)] feat(reflection): implemented advanced reflection package (#161) by Peter van Vliet
+
+### Fixes
+
+* \[[169](https://github.com/MaskingTechnology/jitar/pull/169)] fix(reflection): Fails on minified scripts (#169) by Peter van Vliet
+
+### Chores
+
+* \[[171](https://github.com/MaskingTechnology/jitar/pull/171)] chore(release): version 0.3.4 (#171) by Bas Meeuwissen
+* \[[163](https://github.com/MaskingTechnology/jitar/pull/163)] chore(docs): updated readme (#163) by Bas Meeuwissen
+* \[[160](https://github.com/MaskingTechnology/jitar/pull/160)] chore(examples): React and Vue example (#160) by Bas Meeuwissen
+* \[[135](https://github.com/MaskingTechnology/jitar/pull/135)] build(lerna): change monorepo management tooling (#135) by Bas Meeuwissen
+
+### Other
+
+* \[[142](https://github.com/MaskingTechnology/jitar/pull/142)] docs: updated description of unsegmented procedures (#142) by Bas Meeuwissen
+* \[[139](https://github.com/MaskingTechnology/jitar/pull/139)] website: added benefits section (#139) by Peter van Vliet
+* \[[137](https://github.com/MaskingTechnology/jitar/pull/137)] docs(readme): added articles and benefits (#137) by Bas Meeuwissen
+
+# v0.3.3
+[2023-02-13]
+
+### Other
+
+* \[[133](https://github.com/MaskingTechnology/jitar/pull/133)] 132 option to set the allowed cors headers (#133) by Peter van Vliet
+
+# v0.3.2
+[2023-02-10]
+
+# v0.3.1
+[2023-02-08]
+
+### Chores
+
+* \[[119](https://github.com/MaskingTechnology/jitar/pull/119)] npm: bump @types/yargs in /packages/jitar-nodejs-server (#119) by dependabot[bot]
+* \[[122](https://github.com/MaskingTechnology/jitar/pull/122)] npm: bump glob-promise in /packages/jitar-nodejs-server (#122) by dependabot[bot]
+* \[[120](https://github.com/MaskingTechnology/jitar/pull/120)] npm: bump eslint from 8.31.0 to 8.33.0 in /packages/jitar-nodejs-server (#120) by dependabot[bot]
+* \[[123](https://github.com/MaskingTechnology/jitar/pull/123)] npm: bump @typescript-eslint/eslint-plugin in /packages/jitar (#123) by dependabot[bot]
+* \[[124](https://github.com/MaskingTechnology/jitar/pull/124)] npm: bump glob from 8.0.3 to 8.1.0 in /packages/jitar-nodejs-server (#124) by dependabot[bot]
+* \[[121](https://github.com/MaskingTechnology/jitar/pull/121)] npm: bump vite from 4.0.3 to 4.0.4 in /packages/jitar-vite-plugin (#121) by dependabot[bot]
+* \[[125](https://github.com/MaskingTechnology/jitar/pull/125)] npm: bump @typescript-eslint/eslint-plugin (#125) by dependabot[bot]
+
+### Other
+
+* \[[131](https://github.com/MaskingTechnology/jitar/pull/131)] Implemented CORS middleware (#131) by Bas Meeuwissen
+* \[[129](https://github.com/MaskingTechnology/jitar/pull/129)] 128 configure monorepo setup (#129) by Bas Meeuwissen
+
+# v0.3.0
+[2023-01-25]
+
+### Chores
+
+* \[[113](https://github.com/MaskingTechnology/jitar/pull/113)] npm: bump @typescript-eslint/eslint-plugin in /packages/jitar (#113) by dependabot[bot]
+* \[[114](https://github.com/MaskingTechnology/jitar/pull/114)] npm: bump @typescript-eslint/parser in /packages/jitar (#114) by dependabot[bot]
+
+### Other
+
+* \[[117](https://github.com/MaskingTechnology/jitar/pull/117)] 1 implement middleware (#117) by Peter van Vliet
+* \[[118](https://github.com/MaskingTechnology/jitar/pull/118)] 116 extends exceptions to status codes mappings (#118) by Peter van Vliet
+* \[[112](https://github.com/MaskingTechnology/jitar/pull/112)] Dependencies 202301 (#112) by Peter van Vliet
+
+# v0.2.3
+[2022-12-22]
+
+### Other
+
+* \[[101](https://github.com/MaskingTechnology/jitar/pull/101)] Updated changelog (#101) by Bas Meeuwissen
+* \[[99](https://github.com/MaskingTechnology/jitar/pull/99)] Bumped dependencies (#99) by Bas Meeuwissen
+* \[[97](https://github.com/MaskingTechnology/jitar/pull/97)] Updated change logs (#97) by Bas Meeuwissen
+
+# v0.2.2
+[2022-12-16]
+
+### Chores
+
+* \[[89](https://github.com/MaskingTechnology/jitar/pull/89)] npm: bump @typescript-eslint/parser from 5.45.0 to 5.46.1 in /packages/jitar (#89) by dependabot[bot]
+* \[[83](https://github.com/MaskingTechnology/jitar/pull/83)] npm: bump eslint from 8.28.0 to 8.29.0 in /packages/jitar (#83) by dependabot[bot]
+* \[[86](https://github.com/MaskingTechnology/jitar/pull/86)] npm: bump fs-extra in /packages/jitar-nodejs-server (#86) by dependabot[bot]
+
+### Other
+
+* \[[95](https://github.com/MaskingTechnology/jitar/pull/95)] Bumped dependencies (#95) by Bas Meeuwissen
+* \[[93](https://github.com/MaskingTechnology/jitar/pull/93)] #92 implement tslog version 4 (#93) by Bas Meeuwissen
+* \[[75](https://github.com/MaskingTechnology/jitar/pull/75)] Fixed configuration (#75) by Bas Meeuwissen
+
+# v0.2.1
+[2022-12-02]
+
+### Other
+
+* \[[71](https://github.com/MaskingTechnology/jitar/pull/71)] Prepare release december 02 (#71) by Bas Meeuwissen
+* \[[70](https://github.com/MaskingTechnology/jitar/pull/70)] Update 02_getting_started.md (#70) by John Kapolos
+* \[[69](https://github.com/MaskingTechnology/jitar/pull/69)] Fixed error deserialization at gateway (#69) by Bas Meeuwissen
+* \[[66](https://github.com/MaskingTechnology/jitar/pull/66)] Merge pull request #66 from MaskingTechnology/64-implement-deno-server by Peter van Vliet
+* \[[68](https://github.com/MaskingTechnology/jitar/pull/68)] Merge pull request #68 from MaskingTechnology/67-update-examples-for-typescript by Peter van Vliet
+* \[[63](https://github.com/MaskingTechnology/jitar/pull/63)] 62 update configs in the getting started docs (#63) by Peter van Vliet
+
+# v0.2.0
+[2022-11-14]
+
+### Other
+
+* \[[60](https://github.com/MaskingTechnology/jitar/pull/60)] Merge pull request #60 from MaskingTechnology/59-split-jitar-into-packages by Bas Meeuwissen
+* \[[58](https://github.com/MaskingTechnology/jitar/pull/58)] Merge pull request #58 from MaskingTechnology/57-add-support-for-deserializing-dates by Bas Meeuwissen
+* \[[56](https://github.com/MaskingTechnology/jitar/pull/56)] Merge pull request #56 from MaskingTechnology/46-add-support-for-deserializing-binary-data by Peter van Vliet
+
+# v0.1.3
+[2022-11-11]
+
+# v0.1.2
+[2022-11-11]
+
+### Chores
+
+* \[[55](https://github.com/MaskingTechnology/jitar/pull/55)] #49 release 0.1.2 (#55) by Bas Meeuwissen
+
+# v0.1.1
+[2022-10-28]
+
+### Other
+
+* \[[31](https://github.com/MaskingTechnology/jitar/pull/31)] Merge pull request #31 from MaskingTechnology/30-publish-v011 by Peter van Vliet
+* \[[29](https://github.com/MaskingTechnology/jitar/pull/29)] Merge pull request #29 from MaskingTechnology/v0.1.1-info by Bas Meeuwissen
+* \[[28](https://github.com/MaskingTechnology/jitar/pull/28)] Merge pull request #28 from MaskingTechnology/5-make-docs-mobile-friendly by Bas Meeuwissen
+* \[[24](https://github.com/MaskingTechnology/jitar/pull/24)] Merge pull request #24 from MaskingTechnology/23-extend-deserialization-data-validation by Bas Meeuwissen
+* \[[22](https://github.com/MaskingTechnology/jitar/pull/22)] Merge pull request #22 from MaskingTechnology/21-add-client-id-validation-to-modules-controller by Bas Meeuwissen
+* \[[26](https://github.com/MaskingTechnology/jitar/pull/26)] Merge pull request #26 from MaskingTechnology/25-process-website-feedback by Bas Meeuwissen
+* \[[18](https://github.com/MaskingTechnology/jitar/pull/18)] Merge pull request #18 from MaskingTechnology/seo-optimization by Bas Meeuwissen
+* \[[17](https://github.com/MaskingTechnology/jitar/pull/17)] Merge pull request #17 from MaskingTechnology/jitar-#16 by Peter van Vliet
+* \[[15](https://github.com/MaskingTechnology/jitar/pull/15)] Merge pull request #15 from MaskingTechnology/dependencies by Bas Meeuwissen
+* \[[6](https://github.com/MaskingTechnology/jitar/pull/6)] Merge pull request #6 from MaskingTechnology/jitar-#4 by Peter van Vliet
+* \[[3](https://github.com/MaskingTechnology/jitar/pull/3)] Merge pull request #3 from MaskingTechnology/jitar-#2 by Peter van Vliet
+
+# v0.1.0
+[2022-10-21]
