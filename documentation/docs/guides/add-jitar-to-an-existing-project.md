@@ -49,7 +49,7 @@ There are also a few requirements for the `tsconfig.json` file. Make sure to use
 }
 ```
 
-In the [environments section](../deploy/environments), the setup of the development environment is documented. Follow those steps to create a starter file, a service configuration and add a start script.
+In the [environments section](../deploy/environments), the setup of the development environment is documented. Follow those steps to create a service configuration and add a start script.
 
 ### Step 2: Choose a segmentation strategy
 

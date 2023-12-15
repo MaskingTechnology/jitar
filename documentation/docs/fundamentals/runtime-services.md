@@ -232,6 +232,7 @@ The standalone service has the same configuration properties as the repository s
 * index - file to serve when accessed by a web browser (optional, default `index.html`).
 * assets - list of whitelisted assets (optional, default `undefined`).
 * middleware - list of [middleware modules](../develop/middleware.md) to load (optional).
+* overrides - map with import overrides (optional, default `undefined`).
 
 A full configuration example looks like this:
 
@@ -244,7 +245,8 @@ A full configuration example looks like this:
         "cache": "./.jitar",
         "index": "index.html",
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
-        "middleware": ["./middleware1", "./middleware2"]
+        "middleware": ["./middleware1", "./middleware2"],
+        "overrides": { "./my-module": "./alternative-module" }
     }
 }
 ```

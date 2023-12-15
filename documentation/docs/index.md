@@ -5,7 +5,8 @@ layout: doc
 ---
 
 # Welcome
-Welcome to the documentation of Jitar, a runtime that automates all end-to-end communication for your JavaScript and TypeScript applications.
+
+Welcome to the documentation of Jitar, a distributed runtime for scaling monolithic full-stack JavaScript and TypeScript applications.
 
 We are excited to have you here. Our goal is to provide you the information you need to get started with Jitar and to help you get the most out of it. We hope you find this documentation useful.
 
@@ -14,4 +15,5 @@ Jitar is still in early development. Not all features are (fully) developed yet,
 :::
 
 ## We love feedback!
+
 Jitar and its documentation, examples and website are a work in progress. We are constantly improving them. If you have any feedback, please let us know by [creating an issue](https://github.com/MaskingTechnology/jitar/issues/new), or [starting a discussion](https://github.com/MaskingTechnology/jitar/discussions).

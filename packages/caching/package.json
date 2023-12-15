@@ -1,6 +1,6 @@
 {
   "name": "@jitar/caching",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "JavaScript caching library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
@@ -26,8 +26,8 @@
     "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
-    "@jitar/reflection": "^0.4.2",
-    "@jitar/runtime": "^0.4.2"
+    "@jitar/reflection": "^0.5.0",
+    "@jitar/runtime": "^0.5.0"
   },
   "repository": {
     "type": "git",

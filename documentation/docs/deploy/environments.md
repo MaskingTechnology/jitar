@@ -24,24 +24,10 @@ We like to use a standalone service for development. This requires only one Jita
     "url": "http://localhost:3000",
     "standalone":
     {
-        "assets": [...]
+        "assets": [...],
+        "middlewares": [...]
     }
 }
-```
-
-And a standalone starter script that adds all middleware used by the application.
-
-```ts
-// src/standalone.ts
-import { buildServer } from 'jitar';
-
-const moduleImporter = async (specifier: string) => import(specifier);
-
-const server = await buildServer(moduleImporter);
-server.addMiddleware(/* first */);
-server.addMiddleware(/* second */);
-server.start();
-/* … */
 ```
 
 Next you need to add a script in the `package.json` file.
@@ -64,9 +50,7 @@ Distributed applications require more of the infrastructure that comes with a co
 
 Setting up a distributed environment requires the same steps as a standalone setup. The only difference is that you need to create a configuration per service like the repository, gateway, and node(s). For the naming we use the service type, like we do with the standalone. Don't forget to add scripts to the `package.json` file.
 
-If your application uses middleware you need to create starter files per service and the middleware that belongs to that service. For example, the authentication middleware needs to be added to the gateway, and the authorization middleware to the node(s).
-
-If your environment requires multiple nodes, you can append a node name to the configuration and starter script. For example "node-sales", "node-orders", etc..
+If your environment requires multiple nodes, you can append a node name to the configuration. For example "node-sales", "node-orders", etc..
 
 ## Other environments
 

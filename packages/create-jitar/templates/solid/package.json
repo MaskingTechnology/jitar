@@ -13,14 +13,14 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@jitar/plugin-vite": "^0.4.1",
+    "@jitar/plugin-vite": "^0.5.0",
     "@types/express": "^4.17.17",
     "typescript": "^5.0.4",
     "vite": "^4.3.5",
     "vite-plugin-solid": "^2.7.0"
   },
   "dependencies": {
-    "jitar": "^0.4.1",
+    "jitar": "^0.5.0",
     "solid-js": "^1.7.5"
   }
 }

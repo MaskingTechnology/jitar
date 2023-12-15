@@ -5,7 +5,7 @@
     "healthChecks": ["./integrations/jitar/databaseHealthCheck"],
     "standalone":
     {
-        "assets": [ "index.html", "main.js", "App.js", "vite.svg", "assets/**/*" ],
+        "assets": [ "index.html", "assets/**/*" ],
         "middlewares": ["./integrations/jitar/requestLogger"]
     }
 }
