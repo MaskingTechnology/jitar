@@ -216,3 +216,13 @@
 .vp-doc .header-anchor {
     padding-right: 0;
 }
+
+.vp-doc [class*="language-"] pre
+{
+    background-color: #ebeced;
+}
+
+.dark .vp-doc [class*="language-"] pre
+{
+    background-color: var(--vp-code-block-bg);
+}
