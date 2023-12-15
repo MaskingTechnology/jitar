@@ -1,14 +1,3 @@
-
 .VPNav .container .title {
     font-size: 1.4em;
-}
-
-.vp-doc [class*="language-"] pre
-{
-    background-color: #ebeced;
-}
-
-.dark .vp-doc [class*="language-"] pre
-{
-    background-color: var(--vp-code-block-bg);
 }
