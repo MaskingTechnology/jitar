@@ -10,6 +10,11 @@ export default class JitarController
 {
     constructor(app: express.Application)
     {
-        app.use('/jitar', express.static(fileLocation));
+        const options =
+        {
+            index: false
+        };
+
+        app.use('/jitar', express.static(fileLocation, options));
     }
 }
