@@ -56,15 +56,15 @@ export default class LocalFileManager implements FileManager
     async read(filename: string): Promise<File>
     {
         const rootPath = this.getRootLocation();
-        const absoluteFilename = path.resolve(rootPath, filename);
+        const absoluteFilename = this.getAbsoluteLocation(filename);
         
         if (absoluteFilename.startsWith(rootPath) === false)
         {
             throw new FileNotFound(filename);
         }
 
-        const type = await this.getType(filename);
-        const content = await this.getContent(filename);
+        const type = await this.getType(absoluteFilename);
+        const content = await this.getContent(absoluteFilename);
 
         return new File(filename, type, content);
     }

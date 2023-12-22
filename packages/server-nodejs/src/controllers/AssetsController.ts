@@ -2,7 +2,7 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalRepository, Standalone, FileNotFound, BadRequest } from '@jitar/runtime';
+import { LocalRepository, Standalone, FileNotFound } from '@jitar/runtime';
 
 import ContentTypes from '../definitions/ContentTypes.js';
 import Headers from '../definitions/Headers.js';

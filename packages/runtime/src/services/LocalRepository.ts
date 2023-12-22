@@ -13,7 +13,6 @@ import ModuleLoader from '../utils/ModuleLoader.js';
 import ClientIdHelper from '../utils/ClientIdHelper.js';
 
 import Repository from './Repository.js';
-import UrlRewriter from '../utils/UrlRewriter.js';
 
 const clientIdHelper = new ClientIdHelper();
 
