@@ -5,6 +5,9 @@ import { Logger } from 'tslog';
 import { ClientIdHelper, LocalRepository, Standalone } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
+import ContentTypes from '../definitions/ContentTypes.js';
+import Headers from '../definitions/Headers.js';
+
 const clientIdHelper = new ClientIdHelper();
 
 export default class ModulesController
@@ -26,6 +29,8 @@ export default class ModulesController
     async registerClient(request: Request, response: Response): Promise<Response>
     {
         this.#logger.info('Register client');
+
+        response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
 
         if ((request.body instanceof Array) === false)
         {
@@ -49,6 +54,8 @@ export default class ModulesController
 
         if (typeof clientId !== 'string' || clientIdHelper.validate(clientId) === false)
         {
+            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
+
             return response.status(400).send('Invalid client id.');
         }
 
@@ -62,7 +69,7 @@ export default class ModulesController
 
             this.#logger.info(`Got module -> '${filename}' (${clientId})`);
 
-            response.set('Content-Type', file.type);
+            response.set(Headers.CONTENT_TYPE, file.type);
 
             return response.status(200).send(file.content);
         }
@@ -74,7 +81,7 @@ export default class ModulesController
 
             const data = this.#serializer.serialize(error);
 
-            response.setHeader('Content-Type', 'application/json');
+            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.JSON);
 
             return response.status(500).send(data);
         }
