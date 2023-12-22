@@ -6,6 +6,7 @@ import { LocalRepository, Standalone, FileNotFound } from '@jitar/runtime';
 
 import ContentTypes from '../definitions/ContentTypes.js';
 import Headers from '../definitions/Headers.js';
+import StringSanitizer from '../utils/StringSanitizer.js';
 
 export default class AssetsController
 {
@@ -49,18 +50,21 @@ export default class AssetsController
             {
                 this.#logger.warn(`Failed to get asset -> '${filename}' | ${error.message}`);
 
+                const cleanMessage = StringSanitizer.sanitize(error.message);
+
                 response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
 
-                return response.status(404).send(error.message);
+                return response.status(404).send(cleanMessage);
             }
 
             const message = error instanceof Error ? error.message : String(error);
+            const cleanMessage = StringSanitizer.sanitize(message);
 
             this.#logger.error(`Failed to get file content -> '${filename}' | ${message}`);
 
             response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
             
-            return response.status(500).send(message);
+            return response.status(500).send(cleanMessage);
         }
     }
 

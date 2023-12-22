@@ -8,6 +8,7 @@ import { Serializer } from '@jitar/serialization';
 import ContentTypes from '../definitions/ContentTypes.js';
 import Headers from '../definitions/Headers.js';
 import CorsMiddleware from '../middleware/CorsMiddleware.js';
+import StringSanitizer from '../utils/StringSanitizer.js';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
 const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
@@ -54,7 +55,7 @@ export default class RPCController
         catch (error: unknown)
         {
             const message = error instanceof Error ? error.message : String(error);
-            const cleanMessage = this.#sanitize(message);
+            const cleanMessage = StringSanitizer.sanitize(message);
 
             this.#logger.warn(`Invalid request -> ${message}`);
 
@@ -79,7 +80,7 @@ export default class RPCController
         catch (error: unknown)
         {
             const message = error instanceof Error ? error.message : String(error);
-            const cleanMessage = this.#sanitize(message);
+            const cleanMessage = StringSanitizer.sanitize(message);
 
             this.#logger.warn(`Invalid request -> ${message}`);
 
@@ -177,7 +178,7 @@ export default class RPCController
         if (this.#runtime.hasProcedure(fqn) === false)
         {
             // We need this check to make sure we won't run an private procedure.
-            const cleanFqn = this.#sanitize(fqn);
+            const cleanFqn = StringSanitizer.sanitize(fqn);
 
             response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
 
@@ -305,12 +306,5 @@ export default class RPCController
         }
 
         return this.#isClassType(parentClass, className);
-    }
-
-    #sanitize(message: string): string
-    {
-        return message
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
     }
 }
