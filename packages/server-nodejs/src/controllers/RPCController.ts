@@ -54,12 +54,13 @@ export default class RPCController
         catch (error: unknown)
         {
             const message = error instanceof Error ? error.message : String(error);
-            
+            const cleanMessage = this.#sanitize(message);
+
             this.#logger.warn(`Invalid request -> ${message}`);
 
             response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
 
-            return response.status(400).send(`Invalid request -> ${message}`);
+            return response.status(400).send(`Invalid request -> ${cleanMessage}`);
         }
     }
 
@@ -78,12 +79,13 @@ export default class RPCController
         catch (error: unknown)
         {
             const message = error instanceof Error ? error.message : String(error);
+            const cleanMessage = this.#sanitize(message);
 
             this.#logger.warn(`Invalid request -> ${message}`);
 
             response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
 
-            return response.status(400).send(`Invalid request -> ${message}`);
+            return response.status(400).send(`Invalid request -> ${cleanMessage}`);
         }
     }
 
@@ -175,7 +177,11 @@ export default class RPCController
         if (this.#runtime.hasProcedure(fqn) === false)
         {
             // We need this check to make sure we won't run an private procedure.
-            return response.status(404).send(`Procedure not found -> ${fqn}`);
+            const cleanFqn = this.#sanitize(fqn);
+
+            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
+
+            return response.status(404).send(`Procedure not found -> ${cleanFqn}`);
         }
 
         try
@@ -299,5 +305,12 @@ export default class RPCController
         }
 
         return this.#isClassType(parentClass, className);
+    }
+
+    #sanitize(message: string): string
+    {
+        return message
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     }
 }
