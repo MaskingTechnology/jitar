@@ -54,15 +54,6 @@ export default class AssetsController
                 return response.status(404).send(error.message);
             }
 
-            if (error instanceof BadRequest)
-            {
-                this.#logger.warn(`Invalid path -> '${path}' |  ${error.message}`);
-
-                response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
-
-                return response.status(400).send(error.message);
-            }
-
             const message = error instanceof Error ? error.message : String(error);
 
             this.#logger.error(`Failed to get file content -> '${filename}' | ${message}`);
@@ -75,6 +66,17 @@ export default class AssetsController
 
     #decodePath(path: string): string
     {
-        return decodeURIComponent(path);
+        try
+        {
+            return decodeURIComponent(path);
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.warn(`Failed to decode path -> '${path}' | ${message}`);
+
+            return '';
+        }
     }
 }
