@@ -24,6 +24,11 @@ export default class LocalFileManager implements FileManager
     {
         const location = filename.startsWith('/') ? filename : path.join(this.#location, filename);
 
+        if (location.startsWith(this.#location) === false)
+        {
+            throw new Error(`Invalid filename: ${filename}`);
+        }
+
         return path.resolve(location);
     }
 
