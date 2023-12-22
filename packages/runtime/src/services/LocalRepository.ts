@@ -13,6 +13,7 @@ import ModuleLoader from '../utils/ModuleLoader.js';
 import ClientIdHelper from '../utils/ClientIdHelper.js';
 
 import Repository from './Repository.js';
+import UrlRewriter from '../utils/UrlRewriter.js';
 
 const clientIdHelper = new ClientIdHelper();
 
@@ -136,6 +137,14 @@ export default class LocalRepository extends Repository
 
     readAsset(filename: string): Promise<File>
     {
+        const rootPath = this.#fileManager.getRootLocation();
+        const absoluteFilename = UrlRewriter.addBase(filename, rootPath);
+        
+        if (absoluteFilename.startsWith(rootPath) === false)
+        {
+            throw new FileNotFound(filename);
+        }
+
         if (this.#assets.has(filename) === false)
         {
             throw new FileNotFound(filename);

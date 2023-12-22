@@ -24,12 +24,12 @@ export default class AssetsController
 
     async #getContent(request: Request, response: Response): Promise<Response>
     {
+        const path = request.path.substring(1).trim();
+        const decodedPath = this.#decodePath(path);
+        const filename = decodedPath.length === 0 ? this.#indexFile : decodedPath;
+
         try
         {
-            const path = request.path.substring(1).trim();
-            const decodedPath = this.#decodePath(path);
-            const filename = decodedPath.length === 0 ? this.#indexFile : decodedPath;
-
             const file = await this.#repository.readAsset(filename);
 
             this.#logger.info(`Got asset -> '${filename}'`);
@@ -47,7 +47,7 @@ export default class AssetsController
         {
             if (error instanceof FileNotFound)
             {
-                this.#logger.warn(`Failed to get asset -> ${error.message}`);
+                this.#logger.warn(`Failed to get asset -> '${filename}' | ${error.message}`);
 
                 response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
 
@@ -56,7 +56,7 @@ export default class AssetsController
 
             if (error instanceof BadRequest)
             {
-                this.#logger.warn(`Invalid path -> ${error.message}`);
+                this.#logger.warn(`Invalid path -> '${path}' |  ${error.message}`);
 
                 response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
 
@@ -65,7 +65,7 @@ export default class AssetsController
 
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error(`Failed to get file content -> ${message}`);
+            this.#logger.error(`Failed to get file content -> '${filename}' | ${message}`);
 
             response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
             
@@ -75,13 +75,6 @@ export default class AssetsController
 
     #decodePath(path: string): string
     {
-        const decodedPath = decodeURIComponent(path);
-
-        if (decodedPath.includes('..'))
-        {
-            throw new BadRequest(`Invalid path '${decodedPath}'`);
-        }
-
-        return decodedPath;
+        return decodeURIComponent(path);
     }
 }
