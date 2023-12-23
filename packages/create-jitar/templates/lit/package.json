@@ -19,11 +19,11 @@
   },
   "dependencies": {
     "jitar": "^0.5.0",
-    "lit": "^2.7.4"
+    "lit": "^3.1.0"
   },
   "devDependencies": {
     "@jitar/plugin-vite": "^0.5.0",
-    "typescript": "^5.0.4",
-    "vite": "^4.3.5"
+    "typescript": "^5.3.3",
+    "vite": "^5.0.10"
   }
 }
