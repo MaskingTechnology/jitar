@@ -30,7 +30,7 @@
     "@jitar/reflection": "^0.5.0"
   },
   "peerDependencies": {
-    "vite": "*"
+    "vite": ">=4.0.0 || >=5.0.0"
   },
   "peerDependenciesMeta": {
     "vite": {
