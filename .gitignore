@@ -1,3 +1,4 @@
 .vscode
+.nx
 node_modules
 **/*.tgz
