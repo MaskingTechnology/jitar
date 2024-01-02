@@ -55,7 +55,7 @@
     "eslint-plugin-jitar": "0.0.1",
     "eslint-plugin-sonarjs": "^0.23.0",
     "lerna": "^8.0.1",
-    "rollup": "^3.29.4",
+    "rollup": "^4.9.2",
     "rollup-plugin-dts": "^6.0.2",
     "vite": "^4.4.11",
     "vitest": "^0.34.6"
