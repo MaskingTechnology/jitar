@@ -49,7 +49,9 @@ const DECLARATIONS =
     OBJECT: "const object = { key1: 'value1', key2: 'value2' };",
     REGEX: "const regex = /regex/g;",
     DESTRUCTURING_ARRAY: "const [value1, value2 = true] = array;",
-    DESTRUCTURING_OBJECT: "const {key1, key2 = false} = object;"
+    DESTRUCTURING_OBJECT: "const {key1, key2 = false} = object;",
+    KEYWORD_AS_NAME: "const as = 'value';",
+    KEYWORD_AS_VALUE: "const alias = as;"
 };
 
 const FUNCTIONS =
@@ -74,6 +76,7 @@ const FUNCTIONS =
     DESTRUCTURING_REST_PARAMETERS: "function name({ param1, param2 }, [ param3, ...param4 ]) {}",
     SIMPLE_BODY: "function name() { return 'value'; }",
     BLOCK_BODY: "function name() { if (true) { return 'value'; } }",
+    KEYWORD_AS_NAME: "function as() {}"
 };
 
 const CLASSES =
@@ -157,6 +160,13 @@ export class Person
 }
 
 const peter = new Person(name, 42);
+
+async function async() { }
+const a = async;
+const b = async () => {};
+
+const as = 12;
+export { as as hi };
 
 export { name, peter };
 `,
