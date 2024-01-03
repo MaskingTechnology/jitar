@@ -5,7 +5,7 @@ import TokenList from './TokenList.js';
 
 import { Divider, isDivider } from './definitions/Divider.js';
 import { Group } from './definitions/Group.js';
-import { Keyword, isDeclaration, isKeyword } from './definitions/Keyword.js';
+import { Keyword, isDeclaration, isKeyword, isNotReserved } from './definitions/Keyword.js';
 import { List } from './definitions/List.js';
 import { Operator } from './definitions/Operator.js';
 import { Scope } from './definitions/Scope.js';
@@ -184,13 +184,24 @@ export default class Parser
         }
         else if (token.isType(TokenType.KEYWORD))
         {
-            if (token.hasValue(Keyword.ASYNC))
+            if (isNotReserved(token.value))
             {
-                tokenList.step(); // Read away the async keyword
+                const next = tokenList.next;
+                const nextIsFunction = next !== undefined && (next.hasValue(Keyword.FUNCTION) || next.hasValue(Group.OPEN));
+                
+                if (token.hasValue(Keyword.ASYNC) && nextIsFunction)
+                {
+                    tokenList.step(); // Read away the async keyword
 
-                return this.#parseNext(tokenList, true);
+                    return this.#parseNext(tokenList, true);
+                }
+                else if (next === undefined || this.#atEndOfStatement(next))
+                {
+                    return this.#parseExpression(tokenList);
+                }
             }
-            else if (token.hasValue(Keyword.RETURN))
+            
+            if (token.hasValue(Keyword.RETURN))
             {
                 return this.#parseExpression(tokenList);
             }
@@ -376,7 +387,7 @@ export default class Parser
             stepSize++;
         }
 
-        const name = token.isType(TokenType.IDENTIFIER) ? token.value : ANONYMOUS_IDENTIFIER;
+        const name = this.#isIdentifier(token) ? token.value : ANONYMOUS_IDENTIFIER;
         const as = isDefault ? DEFAULT_IDENTIFIER : name;
         let from: string | undefined = undefined;
 
@@ -550,7 +561,7 @@ export default class Parser
             token = tokenList.step(); // Read away the generator operator
         }
 
-        if (token.isType(TokenType.IDENTIFIER))
+        if (this.#isIdentifier(token))
         {
             isPrivate = token.value.startsWith(PRIVATE_INDICATOR);
             name = isPrivate ? token.value.substring(1) : token.value;
@@ -669,7 +680,7 @@ export default class Parser
         let name = ANONYMOUS_IDENTIFIER;
         let parent: string | undefined = undefined;
 
-        if (token.isType(TokenType.IDENTIFIER))
+        if (this.#isIdentifier(token))
         {
             name = token.value;
 
@@ -909,5 +920,11 @@ export default class Parser
         return [Divider.TERMINATOR, Divider.SEPARATOR].includes(token.value)
             || [List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value)
             || isKeyword(token.value);
+    }
+
+    #isIdentifier(token: Token): boolean
+    {
+        return token.isType(TokenType.IDENTIFIER)
+            || (token.isType(TokenType.KEYWORD) && isNotReserved(token.value));
     }
 }

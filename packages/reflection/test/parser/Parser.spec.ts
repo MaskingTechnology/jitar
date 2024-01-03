@@ -414,6 +414,24 @@ describe('parser/Parser', () =>
             expect(secondMember.value).toBeInstanceOf(ReflectionExpression);
             expect(secondMember.value?.definition).toBe('false');
         });
+
+        it('should parse a declaration with a non reserved keyword as name', () =>
+        {
+            const declaration = parser.parseDeclaration(DECLARATIONS.KEYWORD_AS_NAME);
+
+            expect(declaration.name).toBe('as');
+            expect(declaration.value).toBeInstanceOf(ReflectionExpression);
+            expect(declaration.value?.definition).toBe("'value'");
+        });
+
+        it('should parse a declaration that refers to a non reserved keyword as value', () =>
+        {
+            const declaration = parser.parseDeclaration(DECLARATIONS.KEYWORD_AS_VALUE);
+
+            expect(declaration.name).toBe('alias');
+            expect(declaration.value).toBeInstanceOf(ReflectionExpression);
+            expect(declaration.value?.definition).toBe('as');
+        });
     });
 
     describe('.parseFunction(code)', () =>
@@ -738,6 +756,17 @@ describe('parser/Parser', () =>
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(0);
         });
+
+        it('should parse function with a non reserved keyword as name', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.KEYWORD_AS_NAME);
+            expect(funktion.name).toBe('as');
+            expect(funktion.isAsync).toBe(false);
+            expect(funktion.body).toBe("{ }");
+
+            const parameters = funktion.parameters;
+            expect(parameters.length).toBe(0);
+        });
     });
 
     describe('.parseClass(code)', () =>
@@ -918,19 +947,19 @@ describe('parser/Parser', () =>
             const module = parser.parse(MODULES.TERMINATED);
             
             const members = module.members;
-            expect(members.length).toBe(9);
+            expect(members.length).toBe(14);
 
             const imports = module.imports;
             expect(imports.length).toBe(2);
 
             const exports = module.exports;
-            expect(exports.length).toBe(3);
+            expect(exports.length).toBe(4);
 
             const declarations = module.declarations;
-            expect(declarations.length).toBe(2);
+            expect(declarations.length).toBe(4);
 
             const functions = module.functions;
-            expect(functions.length).toBe(1);
+            expect(functions.length).toBe(3);
 
             const classes = module.classes;
             expect(classes.length).toBe(1);

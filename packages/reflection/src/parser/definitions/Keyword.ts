@@ -37,4 +37,13 @@ function isDeclaration(value: string): boolean
         || value === Keyword.VAR;
 }
 
-export { Keyword, isKeyword, isDeclaration };
+function isNotReserved(value: string): boolean
+{
+    return value === Keyword.AS
+        || value === Keyword.ASYNC
+        || value === Keyword.FROM
+        || value === Keyword.GET
+        || value === Keyword.SET;
+}
+
+export { Keyword, isKeyword, isDeclaration, isNotReserved };
