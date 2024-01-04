@@ -115,7 +115,16 @@ export default class RPCController
 
     #extractVersion(request: ExpressRequest): Version
     {
-        return VersionParser.parse(request.query.version);
+        const version = request.query.version !== undefined
+            ? request.query.version
+            : '';
+
+        if (typeof version !== 'string')
+        {
+            throw new BadRequest('Invalid version number');
+        }
+
+        return VersionParser.parse(version);
     }
 
     #extractSerialize(request: ExpressRequest): boolean

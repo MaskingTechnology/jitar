@@ -7,13 +7,8 @@ const versionExpression = /^\d+(?:\.\d+){0,2}$/;
 
 export default class VersionParser
 {
-    static parse(number: unknown): Version
+    static parse(number: string): Version
     {
-        if (typeof number !== 'string')
-        {
-            throw new InvalidVersionNumber(String(number));
-        }
-
         if (number.trim().length === 0)
         {
             return Version.DEFAULT;

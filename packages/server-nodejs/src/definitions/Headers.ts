@@ -5,4 +5,6 @@ const Headers =
     FRAME_OPTIONS : 'X-Frame-Options'
 } as const;
 
+Object.freeze(Headers);
+
 export default Headers;

@@ -2,7 +2,7 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalRepository, Standalone, FileNotFound } from '@jitar/runtime';
+import { LocalRepository, Standalone, FileNotFound, BadRequest } from '@jitar/runtime';
 
 import ContentTypes from '../definitions/ContentTypes.js';
 import Headers from '../definitions/Headers.js';
@@ -25,12 +25,15 @@ export default class AssetsController
 
     async #getContent(request: Request, response: Response): Promise<Response>
     {
+        let filename = '';
         const path = request.path.substring(1).trim();
-        const decodedPath = this.#decodePath(path);
-        const filename = decodedPath.length === 0 ? this.#indexFile : decodedPath;
 
         try
         {
+            const decodedPath = this.#decodePath(path);
+
+            filename = decodedPath.length === 0 ? this.#indexFile : decodedPath;
+            
             const file = await this.#repository.readAsset(filename);
 
             this.#logger.info(`Got asset -> '${filename}'`);
@@ -51,10 +54,19 @@ export default class AssetsController
                 this.#logger.warn(`Failed to get asset -> '${filename}' | ${error.message}`);
 
                 const cleanMessage = StringSanitizer.sanitize(error.message);
-
                 response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
 
                 return response.status(404).send(cleanMessage);
+            }
+
+            if (error instanceof BadRequest)
+            {
+                this.#logger.warn(`Failed to decode path -> '${path}' | ${error.message}`);
+
+                const cleanMessage = StringSanitizer.sanitize(error.message);
+                response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
+
+                return response.status(400).send(cleanMessage);
             }
 
             const message = error instanceof Error ? error.message : String(error);
@@ -76,11 +88,7 @@ export default class AssetsController
         }
         catch (error: unknown)
         {
-            const message = error instanceof Error ? error.message : String(error);
-
-            this.#logger.warn(`Failed to decode path -> '${path}' | ${message}`);
-
-            return '';
+            throw new BadRequest('Invalid path');
         }
     }
 }
