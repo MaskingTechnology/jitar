@@ -42,6 +42,8 @@ export default class AssetsController
                 response.setHeader(Headers.FRAME_OPTIONS, 'DENY');
             }
 
+            response.setHeader(Headers.CONTENT_TYPE, file.type);
+
             return response.status(200).send(file.content);
         }
         catch (error: unknown)
