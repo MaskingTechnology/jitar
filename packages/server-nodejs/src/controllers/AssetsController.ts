@@ -30,7 +30,7 @@ export default class AssetsController
 
         try
         {
-            const decodedPath = this.#decodePath(path);
+            const decodedPath = decodeURIComponent(path);
 
             filename = decodedPath.length === 0 ? this.#indexFile : decodedPath;
             
@@ -59,16 +59,6 @@ export default class AssetsController
                 return response.status(404).send(cleanMessage);
             }
 
-            if (error instanceof BadRequest)
-            {
-                this.#logger.warn(`Failed to decode path -> '${path}' | ${error.message}`);
-
-                const cleanMessage = StringSanitizer.sanitize(error.message);
-                response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
-
-                return response.status(400).send(cleanMessage);
-            }
-
             const message = error instanceof Error ? error.message : String(error);
             const cleanMessage = StringSanitizer.sanitize(message);
 
@@ -77,18 +67,6 @@ export default class AssetsController
             response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
             
             return response.status(500).send(cleanMessage);
-        }
-    }
-
-    #decodePath(path: string): string
-    {
-        try
-        {
-            return decodeURIComponent(path);
-        }
-        catch (error: unknown)
-        {
-            throw new BadRequest('Invalid path');
         }
     }
 }
