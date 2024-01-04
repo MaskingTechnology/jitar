@@ -5,7 +5,6 @@ import { Logger } from 'tslog';
 import { ClientIdHelper, LocalRepository, Standalone } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
-import ContentTypes from '../definitions/ContentTypes.js';
 import Headers from '../definitions/Headers.js';
 
 const clientIdHelper = new ClientIdHelper();
@@ -30,8 +29,6 @@ export default class ModulesController
     {
         this.#logger.info('Register client');
 
-        response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
-
         if ((request.body instanceof Array) === false)
         {
             return response.status(400).send('Invalid segment file list.');
@@ -43,7 +40,7 @@ export default class ModulesController
 
         this.#logger.info(`Registered client -> ${clientId} [${segmentFiles.join(',')}]`);
 
-        return response.status(200).send(clientId);
+        return response.status(200).type('text').send(clientId);
     }
 
     async getModule(request: Request, response: Response): Promise<Response>
@@ -54,9 +51,7 @@ export default class ModulesController
 
         if (typeof clientId !== 'string' || clientIdHelper.validate(clientId) === false)
         {
-            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
-
-            return response.status(400).send('Invalid client id.');
+            return response.status(400).type('text').send('Invalid client id.');
         }
 
         const pathKey = `/${clientId}/`;
@@ -81,9 +76,7 @@ export default class ModulesController
 
             const data = this.#serializer.serialize(error);
 
-            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.JSON);
-
-            return response.status(500).send(data);
+            return response.status(500).type('json').send(data);
         }
     }
 }

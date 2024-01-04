@@ -8,7 +8,6 @@ import { Serializer } from '@jitar/serialization';
 import ContentTypes from '../definitions/ContentTypes.js';
 import Headers from '../definitions/Headers.js';
 import CorsMiddleware from '../middleware/CorsMiddleware.js';
-import StringSanitizer from '../utils/StringSanitizer.js';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
 const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
@@ -55,13 +54,10 @@ export default class RPCController
         catch (error: unknown)
         {
             const message = error instanceof Error ? error.message : String(error);
-            const cleanMessage = StringSanitizer.sanitize(message);
 
             this.#logger.warn(`Invalid request -> ${message}`);
 
-            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
-
-            return response.status(400).send(`Invalid request -> ${cleanMessage}`);
+            return response.status(400).type('text').send(`Invalid request -> ${message}`);
         }
     }
 
@@ -80,13 +76,10 @@ export default class RPCController
         catch (error: unknown)
         {
             const message = error instanceof Error ? error.message : String(error);
-            const cleanMessage = StringSanitizer.sanitize(message);
 
             this.#logger.warn(`Invalid request -> ${message}`);
 
-            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
-
-            return response.status(400).send(`Invalid request -> ${cleanMessage}`);
+            return response.status(400).type('text').send(`Invalid request -> ${message}`);
         }
     }
 
@@ -187,11 +180,7 @@ export default class RPCController
         if (this.#runtime.hasProcedure(fqn) === false)
         {
             // We need this check to make sure we won't run an private procedure.
-            const cleanFqn = StringSanitizer.sanitize(fqn);
-
-            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
-
-            return response.status(404).send(`Procedure not found -> ${cleanFqn}`);
+            return response.status(404).type('text').send(`Procedure not found -> ${fqn}`);
         }
 
         try

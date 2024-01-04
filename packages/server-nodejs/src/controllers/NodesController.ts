@@ -52,7 +52,7 @@ export default class NodesController
 
             this.#logger.error(`Failed to add node | ${message}`);
 
-            return response.status(status).send(message);
+            return response.status(status).type('text').send(message);
         }
     }
 }
