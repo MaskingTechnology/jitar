@@ -3,7 +3,7 @@ import InvalidVersionNumber from '../errors/InvalidVersionNumber.js';
 
 import Version from '../models/Version.js';
 
-const versionExpression = /^\d+(?:\.\d+){0,2}$/;
+const VERSION_EXPRESSION = /^\d+(?:\.\d+){0,2}$/;
 
 export default class VersionParser
 {
@@ -14,7 +14,7 @@ export default class VersionParser
             return Version.DEFAULT;
         }
 
-        if (versionExpression.test(number) === false)
+        if (VERSION_EXPRESSION.test(number) === false)
         {
             throw new InvalidVersionNumber(number);
         }

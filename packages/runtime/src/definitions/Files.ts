@@ -11,12 +11,12 @@ Object.freeze(Files);
 
 function convertToLocalFilename(filename: string): string
 {
-    return filename.replace('.js', '.local.js');
+    return filename.replace(/\.js$/, '.local.js');
 }
 
 function convertToRemoteFilename(filename: string): string
 {
-    return filename.replace('.js', '.remote.js');
+    return filename.replace(/\.js$/, '.remote.js');
 }
 
 function createNodeFilename(name: string): string
