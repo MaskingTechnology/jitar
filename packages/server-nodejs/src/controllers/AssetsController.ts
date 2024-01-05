@@ -4,6 +4,8 @@ import { Logger } from 'tslog';
 
 import { LocalRepository, Standalone, FileNotFound } from '@jitar/runtime';
 
+import Headers from '../definitions/Headers.js';
+
 export default class AssetsController
 {
     #repository: LocalRepository | Standalone;
@@ -30,8 +32,7 @@ export default class AssetsController
         {
             const file = await this.#repository.readAsset(filename);
 
-            response.set('Content-Type', file.type);
-            response.set('Content-Length', String(file.size));
+            response.setHeader(Headers.CONTENT_TYPE, file.type);
             response.status(200).send(file.content);
         }
         catch (error: unknown)

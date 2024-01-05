@@ -4,6 +4,9 @@ import { Logger } from 'tslog';
 
 import { LocalGateway, LocalNode, Standalone } from '@jitar/runtime';
 
+import Headers from '../definitions/Headers';
+import ContentTypes from '../definitions/ContentTypes';
+
 export default class ProceduresController
 {
     #runtime: LocalGateway | LocalNode | Standalone;
@@ -22,6 +25,8 @@ export default class ProceduresController
         const names = this.#runtime.getProcedureNames();
 
         this.#logger.info('Got procedure names');
+
+        response.setHeader(Headers.CONTENT_TYPE, ContentTypes.JSON);
 
         return response.status(200).send(names);
     }

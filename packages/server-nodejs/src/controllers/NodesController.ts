@@ -6,6 +6,8 @@ import { LocalGateway, RemoteNode } from '@jitar/runtime';
 
 import NodeDto, { nodeDtoSchema } from '../models/NodeDto.js';
 import DataConverter from '../utils/DataConverter.js';
+import Headers from '../definitions/Headers.js';
+import ContentTypes from '../definitions/ContentTypes.js';
 
 export default class NodesController
 {
@@ -26,6 +28,8 @@ export default class NodesController
         const nodes = this.#gateway.nodes.map(node => { return { url: node.url, procedureNames: node.getProcedureNames() }; });
 
         this.#logger.info('Got nodes');
+
+        response.setHeader(Headers.CONTENT_TYPE, ContentTypes.JSON);
 
         return response.status(200).send(nodes);
     }
@@ -51,6 +55,8 @@ export default class NodesController
             const message = error instanceof Error ? error.message : String(error);
 
             this.#logger.error(`Failed to add node | ${message}`);
+
+            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT)
 
             return response.status(status).send(error);
         }

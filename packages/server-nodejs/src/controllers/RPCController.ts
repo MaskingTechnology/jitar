@@ -6,6 +6,8 @@ import { Request as JitarRequest, Version, VersionParser, ProcedureRuntime, BadR
 import { Serializer } from '@jitar/serialization';
 
 import CorsMiddleware from '../middleware/CorsMiddleware.js';
+import Headers from '../definitions/Headers.js';
+import ContentTypes from '../definitions/ContentTypes.js';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
 const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
@@ -188,9 +190,9 @@ export default class RPCController
     {
         const content = await this.#createResponseContent(result, serialize);
         const contentType = this.#createResponseContentType(content);
-        const responseContent = contentType === 'text/plain' ? String(content) : content;
+        const responseContent = contentType === ContentTypes.TEXT ? String(content) : content;
 
-        response.setHeader('Content-Type', contentType);
+        response.setHeader(Headers.CONTENT_TYPE, contentType);
 
         return response.status(200).send(responseContent);
     }
@@ -201,7 +203,7 @@ export default class RPCController
         const contentType = this.#createResponseContentType(content);
         const statusCode = this.#createResponseStatusCode(error);
 
-        response.setHeader('Content-Type', contentType);
+        response.setHeader(Headers.CONTENT_TYPE, contentType);
 
         return response.status(statusCode).send(content);
     }
@@ -216,8 +218,8 @@ export default class RPCController
     #createResponseContentType(content: unknown): string
     {
         return typeof content === 'object'
-            ? 'application/json'
-            : 'text/plain';
+            ? ContentTypes.JSON
+            : ContentTypes.TEXT;
     }
 
     #setResponseHeaders(response: ExpressResponse, headers: Map<string, string>): void

@@ -5,6 +5,9 @@ import { Logger } from 'tslog';
 import { ClientIdHelper, LocalRepository, Standalone } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
+import Headers from '../definitions/Headers';
+import ContentTypes from '../definitions/ContentTypes';
+
 const clientIdHelper = new ClientIdHelper();
 
 export default class ModulesController
@@ -38,6 +41,8 @@ export default class ModulesController
 
         this.#logger.info(`Registered client -> ${clientId} [${segmentFiles.join(',')}]`);
 
+        response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
+
         return response.status(200).send(clientId);
     }
 
@@ -62,9 +67,7 @@ export default class ModulesController
 
             this.#logger.info(`Got module -> '${filename}' (${clientId})`);
 
-            response.set('Content-Type', file.type);
-
-            return response.status(200).send(file.content);
+            return response.type('text').status(200).send(file.content);
         }
         catch (error: unknown)
         {
@@ -74,7 +77,7 @@ export default class ModulesController
 
             const data = this.#serializer.serialize(error);
 
-            response.setHeader('Content-Type', 'application/json');
+            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.JSON);
 
             return response.status(500).send(data);
         }
