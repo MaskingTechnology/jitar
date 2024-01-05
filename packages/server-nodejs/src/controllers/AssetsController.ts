@@ -48,16 +48,16 @@ export default class AssetsController
             {
                 this.#logger.warn(`Failed to get asset ->  ${error.message}`);
 
-                response.status(404).send(error.message);
+                response.status(404).type('text').send(error.message);
 
                 return;
             }
 
-            const message = error instanceof Error ? error.message : String(error);
+            const message = error instanceof Error ? error.message : 'Internal server error';
 
             this.#logger.error(`Failed to get file content -> ${message}`);
 
-            response.status(500).send(message);
+            response.status(500).type('text').send(message);
         }
     }
 }
