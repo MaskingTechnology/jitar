@@ -75,7 +75,7 @@ export default class ModulesController
 
             this.#logger.info(`Got module -> '${filename}' (${clientId})`);
 
-            //response.setHeader(Headers.CONTENT_TYPE, file.type);
+            response.setHeader(Headers.CONTENT_TYPE, file.type);
 
             return response.status(200).send(file.content);
         }
