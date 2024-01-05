@@ -26,6 +26,7 @@ import RuntimeDefaults from './definitions/RuntimeDefaults.js';
 
 import RuntimeNotAvailable from './errors/RuntimeNotAvailable.js';
 import LogBuilder from './utils/LogBuilder.js';
+import Headers from './definitions/Headers.js';
 
 const STARTUP_MESSAGE = `
        ██ ██ ████████  █████  ██████  
@@ -59,6 +60,7 @@ export default class JitarServer
 
         this.#app.use(express.json());
         this.#app.use(express.urlencoded({ extended: true }));
+        this.#app.use((request, response, next) => this.#addDefaultHeaders(request, response, next));
 
         this.#app.disable('x-powered-by');
 
@@ -256,5 +258,13 @@ export default class JitarServer
         procedureNames.sort();
 
         this.#logger.info('Registered RPC entries', procedureNames);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    #addDefaultHeaders(request: express.Request, response: express.Response, next: express.NextFunction): void
+    {
+        response.setHeader(Headers.CONTENT_TYPE_OPTIONS, 'nosniff');
+
+        next();
     }
 }

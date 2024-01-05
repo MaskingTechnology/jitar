@@ -4,6 +4,9 @@ import { Logger } from 'tslog';
 
 import { LocalRepository, Standalone, FileNotFound } from '@jitar/runtime';
 
+import Headers from '../definitions/Headers.js';
+import ContentTypes from '../definitions/ContentTypes.js';
+
 export default class AssetsController
 {
     #repository: LocalRepository | Standalone;
@@ -21,24 +24,29 @@ export default class AssetsController
 
     async #getContent(request: Request, response: Response): Promise<void>
     {
-        this.#logger.info(`Got asset -> '${request.path}'`);
-
-        const path = request.path.substring(1).trim();
-        const filename = path.length === 0 ? this.#indexFile : path;
-
         try
         {
+            const path = request.path.substring(1).trim();
+            const decodedPath = decodeURIComponent(path);
+            const filename = decodedPath.length === 0 ? this.#indexFile : decodedPath;
+
             const file = await this.#repository.readAsset(filename);
 
-            response.set('Content-Type', file.type);
-            response.set('Content-Length', String(file.size));
+            this.#logger.info(`Got asset -> '${request.path}'`);
+
+            if (file.type === ContentTypes.HTML)
+            {
+                response.setHeader(Headers.FRAME_OPTIONS, 'DENY');
+            }
+
+            response.setHeader(Headers.CONTENT_TYPE, file.type);
             response.status(200).send(file.content);
         }
         catch (error: unknown)
         {
             if (error instanceof FileNotFound)
             {
-                this.#logger.warn(`Failed to get asset -> '${filename}' | ${error.message}`);
+                this.#logger.warn(`Failed to get asset ->  ${error.message}`);
 
                 response.status(404).send(error.message);
 
@@ -47,7 +55,7 @@ export default class AssetsController
 
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error(`Failed to get file content -> '${filename}' | ${message}`);
+            this.#logger.error(`Failed to get file content -> ${message}`);
 
             response.status(500).send(message);
         }

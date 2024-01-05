@@ -3,6 +3,8 @@ import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
 import { LocalNode, Standalone } from '@jitar/runtime';
+import Headers from '../definitions/Headers';
+import ContentTypes from '../definitions/ContentTypes';
 
 export default class HealthController
 {
@@ -34,7 +36,7 @@ export default class HealthController
 
         this.#logger.debug('Got health status');
 
-        response.setHeader('Content-Type', 'text/plain');
+        response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
 
         return response.status(200).send(healthy);
     }

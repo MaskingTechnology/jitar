@@ -9,7 +9,7 @@ export default class FileNotFound extends NotFound
 
     constructor(filename: string)
     {
-        super(`The file '${filename} could not be found'`);
+        super(`The file '${filename}' could not be found`);
 
         this.#filename = filename;
     }

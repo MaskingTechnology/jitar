@@ -9,14 +9,16 @@ const Files =
 
 Object.freeze(Files);
 
+const EXTENSION_PATTERN = /\.js$/;
+
 function convertToLocalFilename(filename: string): string
 {
-    return filename.replace('.js', '.local.js');
+    return filename.replace(EXTENSION_PATTERN, '.local.js');
 }
 
 function convertToRemoteFilename(filename: string): string
 {
-    return filename.replace('.js', '.remote.js');
+    return filename.replace(EXTENSION_PATTERN, '.remote.js');
 }
 
 function createNodeFilename(name: string): string
