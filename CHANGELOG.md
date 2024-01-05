@@ -1,3 +1,22 @@
+# v0.5.1
+[2024-01-05]
+
+### Features
+
+* \[[416](https://github.com/MaskingTechnology/jitar/pull/416)] feat(creator): bumped vite to version 5 (#416) by Bas Meeuwissen
+* \[[430](https://github.com/MaskingTechnology/jitar/pull/430)] feat(server): improved server-side validations (#430) by Bas Meeuwissen
+
+### Fixes
+
+* \[[428](https://github.com/MaskingTechnology/jitar/pull/428)] fix(reflection): Added support for non-reserved keywords as identifiers (#428) by Peter van Vliet
+* \[[413](https://github.com/MaskingTechnology/jitar/pull/413)] #fix(runtime): starting health checks in standalone mode (#413) by Peter van Vliet
+
+### Chores
+
+* \[[426](https://github.com/MaskingTechnology/jitar/pull/426)] chore(deps): bump rollup (#426) by dependabot[bot]
+* \[[425](https://github.com/MaskingTechnology/jitar/pull/425)] chore(deps): restricted dependabot (#425) by Bas Meeuwissen
+* \[[423](https://github.com/MaskingTechnology/jitar/pull/423)] chore(deps): january updates (#423) by Bas Meeuwissen
+
 # v0.5.0
 [2023-12-15]
 
@@ -11,6 +30,7 @@
 
 ### Chores
 
+* \[[401](https://github.com/MaskingTechnology/jitar/pull/401)] chore: release of version 0.5 (#401) by Peter van Vliet
 * \[[393](https://github.com/MaskingTechnology/jitar/pull/393)] chore(deps): additional updates december (#393) by Bas Meeuwissen
 * \[[389](https://github.com/MaskingTechnology/jitar/pull/389)] chore(deps): december updates (#389) by Peter van Vliet
 * \[[379](https://github.com/MaskingTechnology/jitar/pull/379)] chore(release): added auto changelog (#379) by Bas Meeuwissen
