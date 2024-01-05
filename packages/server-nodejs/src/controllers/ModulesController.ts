@@ -37,6 +37,14 @@ export default class ModulesController
 
         const segmentFiles = request.body as string[];
 
+        for (const segmentFile of segmentFiles)
+        {
+            if (typeof segmentFile !== 'string')
+            {
+                return response.status(400).send('Invalid segment file list.');
+            }
+        }
+
         const clientId = await this.#repository.registerClient(segmentFiles);
 
         this.#logger.info(`Registered client -> ${clientId} [${segmentFiles.join(',')}]`);
@@ -67,7 +75,9 @@ export default class ModulesController
 
             this.#logger.info(`Got module -> '${filename}' (${clientId})`);
 
-            return response.type('text').status(200).send(file.content);
+            //response.setHeader(Headers.CONTENT_TYPE, file.type);
+
+            return response.status(200).send(file.content);
         }
         catch (error: unknown)
         {
