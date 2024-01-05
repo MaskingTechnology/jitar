@@ -56,7 +56,7 @@ export default class NodesController
 
             this.#logger.error(`Failed to add node | ${message}`);
 
-            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT)
+            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
 
             return response.status(status).send(error);
         }
