@@ -41,24 +41,50 @@ export default class RPCController
 
     async runGet(request: ExpressRequest, response: ExpressResponse): Promise<ExpressResponse>
     {
-        const fqn = this.#extractFqn(request);
-        const version = this.#extractVersion(request);
-        const args = this.#extractQueryArguments(request);
-        const headers = this.#extractHeaders(request);
-        const serialize = this.#extractSerialize(request);
+        try
+        {
+            const fqn = this.#extractFqn(request);
+            const version = this.#extractVersion(request);
+            const args = this.#extractQueryArguments(request);
+            const headers = this.#extractHeaders(request);
+            const serialize = this.#extractSerialize(request);
 
-        return this.#run(fqn, version, args, headers, response, serialize);
+            return this.#run(fqn, version, args, headers, response, serialize);
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.warn(`Invalid request -> ${message}`);
+
+            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT)
+
+            return response.status(400).send(`Invalid request -> ${message}`);
+        }
     }
 
     async runPost(request: ExpressRequest, response: ExpressResponse): Promise<ExpressResponse>
     {
-        const fqn = this.#extractFqn(request);
-        const version = this.#extractVersion(request);
-        const args = this.#extractBodyArguments(request);
-        const headers = this.#extractHeaders(request);
-        const serialize = this.#extractSerialize(request);
+        try
+        {
+            const fqn = this.#extractFqn(request);
+            const version = this.#extractVersion(request);
+            const args = this.#extractBodyArguments(request);
+            const headers = this.#extractHeaders(request);
+            const serialize = this.#extractSerialize(request);
 
-        return this.#run(fqn, version, args, headers, response, serialize);
+            return this.#run(fqn, version, args, headers, response, serialize);
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.warn(`Invalid request -> ${message}`);
+
+            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT)
+
+            return response.status(400).send(`Invalid request -> ${message}`);
+        }
     }
 
     async runOptions(request: ExpressRequest, response: ExpressResponse): Promise<ExpressResponse>
@@ -68,14 +94,34 @@ export default class RPCController
 
     #extractFqn(request: ExpressRequest): string
     {
-        return request.path.substring(5);
+        const decodedFqn = decodeURIComponent(request.path.trim());
+        const fqn = decodedFqn.substring(5).trim();
+
+        if (fqn.length === 0)
+        {
+            throw new BadRequest('Missing procedure name');
+        }
+
+        if (fqn.includes('..'))
+        {
+            throw new BadRequest('Invalid procedure name');
+        }
+
+        return fqn;
     }
 
     #extractVersion(request: ExpressRequest): Version
     {
-        return request.query.version !== undefined
-            ? VersionParser.parse(request.query.version.toString())
-            : Version.DEFAULT;
+        const version = request.query.version !== undefined
+            ? request.query.version
+            : '';
+
+        if (typeof version !== 'string')
+        {
+            throw new BadRequest('Invalid version number');
+        }
+
+        return VersionParser.parse(version);
     }
 
     #extractSerialize(request: ExpressRequest): boolean
@@ -138,6 +184,8 @@ export default class RPCController
         if (this.#runtime.hasProcedure(fqn) === false)
         {
             // We need this check to make sure we won't run an private procedure.
+            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
+
             return response.status(404).send(`Procedure not found -> ${fqn}`);
         }
 
