@@ -3,6 +3,8 @@ import InvalidVersionNumber from '../errors/InvalidVersionNumber.js';
 
 import Version from '../models/Version.js';
 
+const VERSION_EXPRESSION = /^\d+(?:\.\d+){0,2}$/;
+
 export default class VersionParser
 {
     static parse(number: string): Version
@@ -12,6 +14,11 @@ export default class VersionParser
             return Version.DEFAULT;
         }
 
+        if (VERSION_EXPRESSION.test(number) === false)
+        {
+            throw new InvalidVersionNumber(number);
+        }
+
         const parts = number.split('.');
 
         switch (parts.length)
@@ -19,7 +26,7 @@ export default class VersionParser
             case 1: return new Version(Number.parseInt(parts[0]));
             case 2: return new Version(Number.parseInt(parts[0]), Number.parseInt(parts[1]));
             case 3: return new Version(Number.parseInt(parts[0]), Number.parseInt(parts[1]), Number.parseInt(parts[2]));
-            default: throw new InvalidVersionNumber(number);
+            default: return new Version(Number.parseInt(parts[0]), Number.parseInt(parts[1]), Number.parseInt(parts[2]));
         }
     }
 }

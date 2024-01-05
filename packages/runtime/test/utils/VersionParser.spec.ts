@@ -44,5 +44,12 @@ describe('utils/VersionParser', () =>
 
             expect(run).toThrow(new InvalidVersionNumber('1.2.3.4'));
         });
+
+        it('should not parse an invalid number', () =>
+        {
+            const run = () => VersionParser.parse('1.2.a');
+
+            expect(run).toThrow(new InvalidVersionNumber('1.2.a'));
+        });
     });
 });
