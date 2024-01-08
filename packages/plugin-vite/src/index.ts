@@ -39,11 +39,12 @@ function createServerConfig(jitarUrl: string)
     };
 }
 
-function createBootstrapCode(segments: string[]): string
+function createBootstrapCode(segments: string[], middlewares: string[]): string
 {
     const segmentString = segments.map(segment => `'${segment}'`).join(', ');
+    const middlewareString = middlewares.map(middleware => `'${middleware}'`).join(', ');
 
-    return `<script type="module">const jitar = await import("/jitar/client.js"); await jitar.startClient(document.location.origin, [${segmentString}]);</script>`;
+    return `<script type="module">const jitar = await import("/jitar/client.js"); await jitar.startClient(document.location.origin, [${segmentString}], [${middlewareString}]);</script>`;
 }
 
 async function createImportCode(code: string, id: string, jitarFullPath: string, jitarPath: string): Promise<string>
@@ -81,7 +82,7 @@ async function createImportCode(code: string, id: string, jitarFullPath: string,
         + exportCode;
 }
 
-export default function viteJitar(sourcePath: string, jitarPath: string, jitarUrl: string, segments: string[] = []): PluginOption
+export default function viteJitar(sourcePath: string, jitarPath: string, jitarUrl: string, segments: string[] = [], middlewares: string[] = []): PluginOption
 {
     sourcePath = formatPath(sourcePath);
     jitarPath = formatPath(jitarPath);
@@ -126,7 +127,7 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
 
         transformIndexHtml(html)
         {
-            return html.replace('<head>', `<head>${createBootstrapCode(segments)}`);
+            return html.replace('<head>', `<head>${createBootstrapCode(segments, middlewares)}`);
         }
 
     } as PluginOption;
