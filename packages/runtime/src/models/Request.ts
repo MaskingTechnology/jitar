@@ -46,16 +46,16 @@ export default class Request
 
     setHeader(name: string, value: string): void
     {
-        this.#headers.set(name, value);
+        this.#headers.set(name.toLowerCase(), value);
     }
 
     getHeader(name: string): string | undefined
     {
-        return this.#headers.get(name);
+        return this.#headers.get(name.toLowerCase());
     }
 
     removeHeader(name: string): void
     {
-        this.#headers.delete(name);
+        this.#headers.delete(name.toLowerCase());
     }
 }

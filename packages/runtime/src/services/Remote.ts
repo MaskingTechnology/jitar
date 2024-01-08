@@ -110,8 +110,9 @@ export default class Remote
 
         const response = await this.#callRemote(url, options, 200);
         const result = await this.#createResponseResult(response);
+        const headers = this.#createResponseHeaders(response);
 
-        return new ResultResponse(result);
+        return new ResultResponse(result, headers);
     }
 
     async #callRemote(url: string, options: object, expectedStatus: number): Promise<Response>
@@ -150,5 +151,17 @@ export default class Remote
         }
 
         return response.text();
+    }
+
+    #createResponseHeaders(response: Response): Map<string, string>
+    {
+        const headers = new Map();
+
+        for (const [name, value] of response.headers)
+        {
+            headers.set(name, value);
+        }
+
+        return headers;
     }
 }
