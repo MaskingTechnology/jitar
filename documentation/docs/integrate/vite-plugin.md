@@ -34,7 +34,7 @@ import jitar from '@jitar/plugin-vite';
 
 export default defineConfig({
   plugins: [
-	jitar(srcPath, jitarPath, jitarUrl, [segments])
+	jitar(srcPath, jitarPath, jitarUrl, [segments], [middlewares])
   ]
 });
 ```
@@ -45,6 +45,7 @@ The plugin takes 4 arguments:
 1. jitarPath - The path to the source files used by Jitar. This path is relative to the source root. We like to use `domain` (which points to `src/domain`), * but feel free to use something else.
 1. jitarUrl - The URL of the Jitar instance. Jitar uses by default `http://localhost:3000`, but can be configured differently in the Jitar config.
 1. segments - The segments to use for the client app. This is an array of strings. The default is an empty array.
+1. middlewares - The middlewares to use for calling remote procedures. This is an array of strings. The default is an empty array.
 
 There are also a few requirements for the tsconfig.json file
 
