@@ -1,6 +1,6 @@
 # Migrate from 0.5.x to 0.6.0
 
-The 0.6 version of Jitar introduces minor breaking changes. All changes are described here, with instructions how to adopt them.
+The 0.6 version of Jitar introduces breaking changes. All changes are described here, with instructions how to adopt them.
 
 ## Set up and tear down scripts
 
