@@ -26,8 +26,8 @@ Configurations are placed in JSON files. The basic structure looks like this.
 ```json
 {
     "url": "SERVICE_URL",
-    "setUp": "SET_UP_SCRIPT",
-    "tearDown": "TEAR_DOWN_SCRIPT",
+    "setUp": ["SET_UP_SCRIPT"],
+    "tearDown": ["TEAR_DOWN_SCRIPT"],
     "healthChecks": ["HEALTH_CHECK_SCRIPT"],
     "SERVICE_TYPE":
     {
@@ -40,8 +40,8 @@ Configurations are placed in JSON files. The basic structure looks like this.
 There are four properties at root level:
 
 * url - service url containing protocol, address and port (e.g. `http://service.example.com:3000`).
-* setUp - optional [set up script](../develop/setup-and-teardown.md) that gets executed on startup (e.g. `./setUp`).
-* tearDown - optional [tear down script](../develop/setup-and-teardown.md) that gets executed on shutdown (e.g. `./tearDown`).
+* setUp - optional list of [set up scripts](../develop/setup-and-teardown.md) that gets executed on startup.
+* tearDown - optional list of [tear down scripts](../develop/setup-and-teardown.md) that gets executed on shutdown.
 * healthChecks - optional list of [health check scripts](../deploy/health-checks.md) for checking the service health.
 * SERVICE_TYPE - configuration of the specific service (differs per type).
 
