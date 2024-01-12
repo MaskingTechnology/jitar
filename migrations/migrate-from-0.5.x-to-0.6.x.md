@@ -1,6 +1,6 @@
 # Migrate from 0.5.x to 0.6.0
 
-The 0.6 version of Jitar introduces breaking changes to ... All changes are described here, with instructions how to adopt them.
+The 0.6 version of Jitar introduces minor breaking changes. All changes are described here, with instructions how to adopt them.
 
 ## Set up and tear down scripts
 
@@ -29,3 +29,8 @@ Now, the script needs to be wrapped in an array like this:
 ```
 
 In case multiple scripts are registered, whey will be loaded in the given order.
+
+## Middleware request and response headers
+
+From this version all headers are case-insensitive. Internally they're treated as lower-case values now.
+If you're depending on case-sensitivity, you need to undertake action.
