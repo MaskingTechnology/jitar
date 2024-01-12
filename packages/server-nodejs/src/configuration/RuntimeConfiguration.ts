@@ -10,8 +10,8 @@ import StandaloneConfiguration, { standaloneSchema } from './StandaloneConfigura
 export const runtimeSchema = z
     .object({
         url: z.string().optional(),
-        setUp: z.string().optional(),
-        tearDown: z.string().optional(),
+        setUp: z.array(z.string()).optional(),
+        tearDown: z.array(z.string()).optional(),
         healthChecks: z.array(z.string()).optional(),
         standalone: standaloneSchema.optional(),
         repository: repositorySchema.optional(),
@@ -25,8 +25,8 @@ export const runtimeSchema = z
 export default class RuntimeConfiguration
 {
     #url?: string;
-    #setUp?: string;
-    #tearDown?: string;
+    #setUp?: string[];
+    #tearDown?: string[];
     #healthChecks?: string[];
     #standalone?: StandaloneConfiguration;
     #repository?: RepositoryConfiguration;
@@ -34,7 +34,7 @@ export default class RuntimeConfiguration
     #node?: NodeConfiguration;
     #proxy?: ProxyConfiguration;
 
-    constructor(url?: string, setUp?: string, tearDown?: string, healthChecks?: string[], standalone?: StandaloneConfiguration, repository?: RepositoryConfiguration, gateway?: GatewayConfiguration, node?: NodeConfiguration, proxy?: ProxyConfiguration)
+    constructor(url?: string, setUp?: string[], tearDown?: string[], healthChecks?: string[], standalone?: StandaloneConfiguration, repository?: RepositoryConfiguration, gateway?: GatewayConfiguration, node?: NodeConfiguration, proxy?: ProxyConfiguration)
     {
         this.#url = url;
         this.#setUp = setUp;

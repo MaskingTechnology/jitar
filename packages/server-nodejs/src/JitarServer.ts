@@ -187,14 +187,17 @@ export default class JitarServer
 
         await runtime.start();
 
-        const setUpScript = this.#configuration.setUp;
+        const setUpScripts = this.#configuration.setUp;
 
-        if (setUpScript === undefined)
+        if (setUpScripts === undefined)
         {
             return;
         }
 
-        await runtime.import(setUpScript, ExecutionScopes.APPLICATION);
+        for (const setUpScript of setUpScripts)
+        {
+            await runtime.import(setUpScript, ExecutionScopes.APPLICATION);
+        }
     }
 
     async #stopApplication(): Promise<void>
@@ -203,14 +206,17 @@ export default class JitarServer
 
         await runtime.stop();
 
-        const tearDownScript = this.#configuration.tearDown;
+        const tearDownScripts = this.#configuration.tearDown;
 
-        if (tearDownScript === undefined)
+        if (tearDownScripts === undefined)
         {
             return;
         }
 
-        await runtime.import(tearDownScript, ExecutionScopes.APPLICATION);
+        for (const tearDownScript of tearDownScripts)
+        {
+            await runtime.import(tearDownScript, ExecutionScopes.APPLICATION);
+        }
     }
 
     #startServer(port: string): Promise<void>
