@@ -82,7 +82,7 @@ When the frontend of the application is not hosted by Jitar you want to enable c
 
 ## Construction
 
-When starting and stopping an Jitar service, it might be useful to do additional tasks. In this example the use of start up and tear down scripts is demonstrated.
+When starting and stopping a Jitar service, it might be useful to do additional tasks. In this example the use of start up and tear down scripts is demonstrated.
 
 [View in repository](https://github.com/MaskingTechnology/jitar/tree/main/examples/concepts/construction){target="_blank"}
 
