@@ -21,6 +21,6 @@
     "vite": "^5.0.12"
   },
   "dependencies": {
-    "jitar": "^0.5.0"
+    "jitar": "^0.6.0"
   }
 }
