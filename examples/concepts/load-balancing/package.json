@@ -11,6 +11,6 @@
         "node2": "node --experimental-network-imports dist/jitar.js --config=services/node2.json"
     },
     "dependencies": {
-        "jitar": "^0.5.0"
+        "jitar": "^0.6.0"
     }
 }
