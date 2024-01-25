@@ -1,4 +1,5 @@
 
+import InvalidSecret from '../errors/InvalidSecret.js';
 import ProcedureNotFound from '../errors/ProcedureNotFound.js';
 
 import Request from '../models/Request.js';
@@ -44,9 +45,9 @@ export default class LocalGateway extends Gateway
 
     async addNode(node: Node, secret?: string): Promise<void>
     {
-        if (this.#secret !== secret)
+        if (secret !== undefined && this.#secret !== secret)
         {
-            throw new Error('Invalid secret');
+            throw new InvalidSecret();
         }
 
         this.#nodes.add(node);

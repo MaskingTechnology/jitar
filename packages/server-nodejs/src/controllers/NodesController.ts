@@ -43,7 +43,7 @@ export default class NodesController
             const node = new RemoteNode(nodeDto.url);
             node.procedureNames = new Set(nodeDto.procedureNames);
 
-            await this.#gateway.addNode(node);
+            await this.#gateway.addNode(node, nodeDto.secret);
 
             this.#logger.info(`Added node -> ${node.url}`);
 
@@ -58,7 +58,7 @@ export default class NodesController
 
             response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
 
-            return response.status(status).send(error);
+            return response.status(status).send(message);
         }
     }
 }

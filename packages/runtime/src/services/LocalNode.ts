@@ -20,20 +20,24 @@ import { setRuntime } from '../hooks.js';
 export default class LocalNode extends Node
 {
     #gateway?: Gateway;
+    #secret?: string;
     #argumentConstructor: ArgumentConstructor;
 
     #segmentNames: Set<string> = new Set();
     #segments: Map<string, Segment> = new Map();
 
-    constructor(repository: Repository, gateway?: Gateway, url?: string, argumentConstructor = new ArgumentConstructor())
+    constructor(repository: Repository, gateway?: Gateway, url?: string, secret?: string, argumentConstructor = new ArgumentConstructor())
     {
         super(repository, url);
 
         this.#gateway = gateway;
+        this.#secret = secret;
         this.#argumentConstructor = argumentConstructor;
 
         setRuntime(this);
     }
+
+    get secret() { return this.#secret; }
 
     set segmentNames(names: Set<string>)
     {

@@ -128,8 +128,6 @@ export default class RuntimeBuilder
             throw new RuntimeNotBuilt('Repository is not set for the gateway');
         }
 
-        console.log('buildGateway', this.#repository, this.#url, secret);
-
         const gateway = new LocalGateway(this.#repository, this.#url, secret);
         gateway.healthCheckFiles = this.#healthChecks;
         gateway.middlewareFiles = this.#middlewares;
@@ -137,14 +135,14 @@ export default class RuntimeBuilder
         return gateway;
     }
 
-    buildNode(): LocalNode
+    buildNode(secret?: string): LocalNode
     {
         if (this.#repository === undefined)
         {
             throw new RuntimeNotBuilt('Repository is not set for the node');
         }
         
-        const node = new LocalNode(this.#repository, this.#gateway, this.#url);
+        const node = new LocalNode(this.#repository, this.#gateway, this.#url, secret);
         node.segmentNames = this.#segments;
         node.healthCheckFiles = this.#healthChecks;
         node.middlewareFiles = this.#middlewares;

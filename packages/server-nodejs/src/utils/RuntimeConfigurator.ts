@@ -110,6 +110,7 @@ export default class RuntimeConfigurator
         const gatewayUrl = configuration.gateway;
         const segmentNames = configuration.segments ?? [];
         const middlewares = configuration.middlewares ?? [];
+        const secret = configuration.secret;
 
         return new RuntimeBuilder()
             .url(url)
@@ -118,7 +119,7 @@ export default class RuntimeConfigurator
             .repository(repositoryUrl)
             .gateway(gatewayUrl)
             .segment(...segmentNames)
-            .buildNode();
+            .buildNode(secret);
     }
 
     static async #configureProxy(url: string, healthChecks: string[], configuration: ProxyConfiguration): Promise<Proxy>

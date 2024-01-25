@@ -80,7 +80,8 @@ export default class Remote
         const body =
         {
             url: node.url,
-            procedureNames: node.getProcedureNames()
+            procedureNames: node.getProcedureNames(),
+            secret: node.secret
         };
         const options =
         {
