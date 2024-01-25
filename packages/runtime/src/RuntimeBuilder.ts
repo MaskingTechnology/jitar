@@ -121,14 +121,16 @@ export default class RuntimeBuilder
         return repository;
     }
 
-    buildGateway(): LocalGateway
+    buildGateway(secret?: string): LocalGateway
     {
         if (this.#repository === undefined)
         {
             throw new RuntimeNotBuilt('Repository is not set for the gateway');
         }
 
-        const gateway = new LocalGateway(this.#repository, this.#url);
+        console.log('buildGateway', this.#repository, this.#url, secret);
+
+        const gateway = new LocalGateway(this.#repository, this.#url, secret);
         gateway.healthCheckFiles = this.#healthChecks;
         gateway.middlewareFiles = this.#middlewares;
 

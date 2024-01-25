@@ -90,13 +90,14 @@ export default class RuntimeConfigurator
         const repositoryUrl = configuration.repository;
         const middlewares = configuration.middlewares ?? [];
         const monitorInterval = configuration.monitor;
+        const secret = configuration.secret;
 
         const gateway = new RuntimeBuilder()
             .url(url)
             .healthCheck(...healthChecks)
             .middleware(...middlewares)
             .repository(repositoryUrl)
-            .buildGateway();
+            .buildGateway(secret);
 
         new NodeMonitor(gateway, monitorInterval);
 

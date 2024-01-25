@@ -6,7 +6,7 @@
     },
     "./game/getSecret": {
         "default": {
-            "access": "private"
+            "access": "protected"
         }
     }
 }

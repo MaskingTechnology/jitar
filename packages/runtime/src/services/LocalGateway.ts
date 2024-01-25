@@ -7,11 +7,20 @@ import Response from '../models/Response.js';
 import Gateway from './Gateway.js';
 import Node from './Node.js';
 import NodeBalancer from './NodeBalancer.js';
+import Repository from './Repository.js';
 
 export default class LocalGateway extends Gateway
 {
     #nodes: Set<Node> = new Set();
     #balancers: Map<string, NodeBalancer> = new Map();
+    #secret?: string;
+
+    constructor(repository: Repository, url?: string, secret?: string)
+    {
+        super(repository, url);
+
+        this.#secret = secret;
+    }
 
     get nodes()
     {
@@ -33,8 +42,13 @@ export default class LocalGateway extends Gateway
         return procedureNames.includes(fqn);
     }
 
-    async addNode(node: Node): Promise<void>
+    async addNode(node: Node, secret?: string): Promise<void>
     {
+        if (this.#secret !== secret)
+        {
+            throw new Error('Invalid secret');
+        }
+
         this.#nodes.add(node);
 
         for (const name of node.getProcedureNames())

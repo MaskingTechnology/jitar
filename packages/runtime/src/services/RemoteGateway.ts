@@ -33,6 +33,8 @@ export default class RemoteGateway extends Gateway
         {
             await this.addNode(this.#node);
         }
+
+        //fout afvangen
     }
 
     getProcedureNames(): string[]
