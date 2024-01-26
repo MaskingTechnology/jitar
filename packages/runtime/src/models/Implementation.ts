@@ -22,6 +22,8 @@ export default class Implementation
 
     get public() { return this.#access === AccessLevels.PUBLIC; }
 
+    get protected() { return this.#access === AccessLevels.PROTECTED; }
+
     get parameters() { return this.#parameters; }
 
     get executable() { return this.#executable; }

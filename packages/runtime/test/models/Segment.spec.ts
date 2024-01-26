@@ -24,11 +24,12 @@ describe('models/Segment', () =>
         });
     });
 
-    describe('.getPublicProcedures()', () =>
+    // protected
+    describe('.getExposedProcedures()', () =>
     {
         it('should return public procedures only', async () =>
         {
-            const procedures = generalSegment.getPublicProcedures();
+            const procedures = generalSegment.getExposedProcedures();
 
             expect(procedures.length).toBe(1);
             expect(procedures[0].fqn).toBe('public');
