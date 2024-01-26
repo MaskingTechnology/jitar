@@ -80,7 +80,7 @@ export default class Remote
         {
             url: node.url,
             procedureNames: node.getProcedureNames(),
-            secret: node.secret,
+            trustKey: node.trustKey,
         };
         const options =
         {

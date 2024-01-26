@@ -1,5 +1,5 @@
 
-import InvalidSecret from '../errors/InvalidSecret.js';
+import InvalidTrustKey from '../errors/InvalidTrustKey.js';
 import ProcedureNotFound from '../errors/ProcedureNotFound.js';
 
 import Request from '../models/Request.js';
@@ -14,13 +14,13 @@ export default class LocalGateway extends Gateway
 {
     #nodes: Set<Node> = new Set();
     #balancers: Map<string, NodeBalancer> = new Map();
-    #secret?: string;
+    #trustKey?: string;
 
-    constructor(repository: Repository, url?: string, secret?: string)
+    constructor(repository: Repository, url?: string, trustKey?: string)
     {
         super(repository, url);
 
-        this.#secret = secret;
+        this.#trustKey = trustKey;
     }
 
     get nodes()
@@ -43,11 +43,11 @@ export default class LocalGateway extends Gateway
         return procedureNames.includes(fqn);
     }
 
-    async addNode(node: Node, secret?: string): Promise<void>
+    async addNode(node: Node, trustKey?: string): Promise<void>
     {
-        if (secret !== undefined && this.#secret !== secret)
+        if (trustKey !== undefined && this.#trustKey !== trustKey)
         {
-            throw new InvalidSecret();
+            throw new InvalidTrustKey();
         }
 
         this.#nodes.add(node);

@@ -121,28 +121,28 @@ export default class RuntimeBuilder
         return repository;
     }
 
-    buildGateway(secret?: string): LocalGateway
+    buildGateway(trustKey?: string): LocalGateway
     {
         if (this.#repository === undefined)
         {
             throw new RuntimeNotBuilt('Repository is not set for the gateway');
         }
 
-        const gateway = new LocalGateway(this.#repository, this.#url, secret);
+        const gateway = new LocalGateway(this.#repository, this.#url, trustKey);
         gateway.healthCheckFiles = this.#healthChecks;
         gateway.middlewareFiles = this.#middlewares;
 
         return gateway;
     }
 
-    buildNode(secret?: string): LocalNode
+    buildNode(trustKey?: string): LocalNode
     {
         if (this.#repository === undefined)
         {
             throw new RuntimeNotBuilt('Repository is not set for the node');
         }
         
-        const node = new LocalNode(this.#repository, this.#gateway, this.#url, secret);
+        const node = new LocalNode(this.#repository, this.#gateway, this.#url, trustKey);
         node.segmentNames = this.#segments;
         node.healthCheckFiles = this.#healthChecks;
         node.middlewareFiles = this.#middlewares;
@@ -178,7 +178,7 @@ export default class RuntimeBuilder
         return proxy;
     }
 
-    buildStandalone(secret?: string): Standalone
+    buildStandalone(trustKey?: string): Standalone
     {
         if (this.#fileManager === undefined)
         {
@@ -190,7 +190,7 @@ export default class RuntimeBuilder
         repository.assets = this.#assets;
         repository.overrides = this.#overrides;
 
-        const node = new LocalNode(repository, this.#gateway, this.#url, secret);
+        const node = new LocalNode(repository, this.#gateway, this.#url, trustKey);
         node.segmentNames = this.#segments;
 
         const standalone = new Standalone(repository, node, this.#url);

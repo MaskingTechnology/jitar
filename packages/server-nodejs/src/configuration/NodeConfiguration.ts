@@ -9,26 +9,26 @@ export const nodeSchema = z
         repository: z.string().url().optional(),
         segments: z.array(z.string()).nonempty(),
         middlewares: z.array(z.string()).optional(),
-        secret: z.string().optional()
+        trustKey: z.string().optional()
     })
     .strict()
-    .transform((value) => new NodeConfiguration(value.gateway, value.repository, value.segments, value.middlewares, value.secret));
+    .transform((value) => new NodeConfiguration(value.gateway, value.repository, value.segments, value.middlewares, value.trustKey));
 
 export default class NodeConfiguration extends ProcedureRuntimeConfiguration
 {
     #gateway?: string;
     #repository?: string;
     #segments: string[];
-    #secret?: string;
+    #trustKey?: string;
 
-    constructor(gateway: string | undefined, repository: string | undefined, segments: string[], middlewares?: string[], secret?: string)
+    constructor(gateway: string | undefined, repository: string | undefined, segments: string[], middlewares?: string[], trustKey?: string)
     {
         super(middlewares);
 
         this.#gateway = gateway;
         this.#repository = repository;
         this.#segments = segments;
-        this.#secret = secret;
+        this.#trustKey = trustKey;
     }
 
     get gateway() { return this.#gateway; }
@@ -37,5 +37,5 @@ export default class NodeConfiguration extends ProcedureRuntimeConfiguration
 
     get segments() { return this.#segments; }
 
-    get secret() { return this.#secret; }
+    get trustKey() { return this.#trustKey; }
 }

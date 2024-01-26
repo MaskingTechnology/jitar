@@ -82,12 +82,12 @@ Imports have multiple properties that can be configured. These properties will b
 
 ### Trusted clients
 
-When building a distributed application, you don't want all functions to be available by the outside world. Some functions are only used internally by other segments. To protect the access to these functions, Jitar provides a `secret` property in the [runtime services](../fundamentals/runtime-services#node). This secret is used to create trusted clients. Trusted clients can access functions with the `protected` access level.
+When building a distributed application, you don't want all functions to be available by the outside world. Some functions are only used internally by other segments. To protect the access to these functions, Jitar provides a `trustKey` property in the [runtime services](../fundamentals/runtime-services#node). This key is used to create trusted clients. Trusted clients can access functions with the `protected` access level.
 
-Any client that wants to access a protected function must provide a valid access key. The access key needs to be added to the http header `x-access-key`. Any node that has a valid access key is considered a trusted client, and automatically adds the access key to the http header of outgoing requests. Any node that doesn't have a valid access key is considered an untrusted client and can only access `public` functions.
+Any client that wants to access a protected function must provide a valid key. It needs to be added to the http header `X-Jitar-Protected-Access-Key`. Any node that has a valid key is automatically considered a trusted client, and adds the access key to the http header of outgoing requests. Any node that doesn't have a valid access key is considered an untrusted client and can only access `public` functions.
 
 ::: info Note
-To enable trusted clients, the gateway must always have a shared secret configured. Any node that wants to register itself with a secret, must have the same secret in its configuration.
+To enable trusted clients, the gateway must always have a trusted key configured. Any node that wants to register itself as a trusted client, must have the same value for the `trustKey` in its configuration.
 :::
 
 ### Access protection
@@ -113,6 +113,14 @@ Functions that need to be accessible from outside need to have the public access
 
 ::: tip PRO TIP
 To protect the access to public functions [authentication and authorization](../develop/security.md#authentication-and-authorization) needs be applied.
+:::
+
+::: warning NOTE
+Any function is considered `public` if one of the implementations is public. This means that a function with multiple versions can be public, even if one of the versions is private or protected.
+:::
+
+::: warning NOTE
+Any function is considered `protected` if one of the implementations is protected. This means that a function with multiple versions can be protected, even if one of the versions is private.
 :::
 
 ### Versioning

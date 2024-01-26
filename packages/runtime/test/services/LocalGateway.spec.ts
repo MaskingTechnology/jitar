@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 
 import ProcedureNotFound from '../../src/errors/ProcedureNotFound';
+import InvalidSecret from '../../src/errors/InvalidSecret';
 import Request from '../../src/models/Request';
 import Version from '../../src/models/Version';
 
@@ -79,6 +80,29 @@ describe('services/LocalGateway', () =>
             const run = async () => gateway.run(request);
 
             expect(run).rejects.toEqual(new ProcedureNotFound('nonExisting'));
+        });
+    });
+
+    describe('.addNode(node, accessKey)', () =>
+    {
+        it('should not add a node with an incorrect access key', async () =>
+        {
+            const node = gateway.nodes[0];
+            const protectedGateway = GATEWAYS.PROTECTED;
+
+            const addNode = async () => protectedGateway.addNode(node, 'INCORRECT_ACCESS_KEY');
+
+            expect(addNode).rejects.toEqual(new InvalidSecret());
+        });
+
+        it('should not add a node with an access key to an unprotected gateway', async () =>
+        {
+            const node = gateway.nodes[0];
+            const unprotectedGateway = GATEWAYS.STANDALONE;
+
+            const addNode = async () => unprotectedGateway.addNode(node, 'NODE_ACCESS_KEY');
+
+            expect(addNode).rejects.toEqual(new InvalidSecret());
         });
     });
 });

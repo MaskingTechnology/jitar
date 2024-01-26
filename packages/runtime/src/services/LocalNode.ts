@@ -5,7 +5,7 @@ import { createNodeFilename } from '../definitions/Files.js';
 import Unauthorized from '../errors/generic/Unauthorized.js';
 import ImplementationNotFound from '../errors/ImplementationNotFound.js';
 import ProcedureNotFound from '../errors/ProcedureNotFound.js';
-import InvalidSecret from '../errors/InvalidSecret.js';
+import InvalidTrustKey from '../errors/InvalidTrustKey.js';
 
 import Procedure from '../models/Procedure.js';
 import Request from '../models/Request.js';
@@ -19,27 +19,29 @@ import Repository from './Repository.js';
 
 import { setRuntime } from '../hooks.js';
 
+const JITAR_PROTECTED_ACCESS_HEADER_KEY = 'X-Jitar-Protected-Access-Key';
+
 export default class LocalNode extends Node
 {
     #gateway?: Gateway;
-    #secret?: string;
+    #trustKey?: string;
     #argumentConstructor: ArgumentConstructor;
 
     #segmentNames: Set<string> = new Set();
     #segments: Map<string, Segment> = new Map();
 
-    constructor(repository: Repository, gateway?: Gateway, url?: string, secret?: string, argumentConstructor = new ArgumentConstructor())
+    constructor(repository: Repository, gateway?: Gateway, url?: string, trustKey?: string, argumentConstructor = new ArgumentConstructor())
     {
         super(repository, url);
 
         this.#gateway = gateway;
-        this.#secret = secret;
+        this.#trustKey = trustKey;
         this.#argumentConstructor = argumentConstructor;
 
         setRuntime(this);
     }
 
-    get secret() { return this.#secret; }
+    get trustKey() { return this.#trustKey; }
 
     set segmentNames(names: Set<string>)
     {
@@ -137,10 +139,10 @@ export default class LocalNode extends Node
             throw new ProcedureNotFound(request.fqn);
         }
         
-        if (this.#secret !== undefined)
+        if (this.#trustKey !== undefined)
         {
             const headers = request.headers;
-            headers.set('x-access-key', this.#secret);
+            headers.set(JITAR_PROTECTED_ACCESS_HEADER_KEY, this.#trustKey);
         }
 
         return this.#gateway.run(request);
@@ -148,14 +150,14 @@ export default class LocalNode extends Node
 
     async #runProcedure(procedure: Procedure, request: Request): Promise<Response>
     {
-        const secret = request.headers.get('x-access-key');
+        const trustKey = request.getHeader(JITAR_PROTECTED_ACCESS_HEADER_KEY);
 
-        if (secret !== undefined && this.#secret !== secret)
+        if (trustKey !== undefined && this.#trustKey !== trustKey)
         {
-            throw new InvalidSecret();
+            throw new InvalidTrustKey();
         }
         
-        if (secret === undefined && procedure.protected)
+        if (trustKey === undefined && procedure.protected)
         {
             throw new Unauthorized();
         }

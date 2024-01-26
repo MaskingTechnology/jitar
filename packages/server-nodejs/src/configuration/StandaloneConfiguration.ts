@@ -13,10 +13,10 @@ export const standaloneSchema = z
         assets: z.array(z.string()).optional(),
         middlewares: z.array(z.string()).optional(),
         overrides: z.record(z.string(), z.string()).optional(),
-        secret: z.string().optional()
+        trustKey: z.string().optional()
     })
     .strict()
-    .transform((value) => new StandaloneConfiguration(value.source, value.cache, value.index, value.segments, value.assets, value.middlewares, value.overrides, value.secret));
+    .transform((value) => new StandaloneConfiguration(value.source, value.cache, value.index, value.segments, value.assets, value.middlewares, value.overrides, value.trustKey));
 
 export default class StandaloneConfiguration extends ProcedureRuntimeConfiguration
 {
@@ -26,9 +26,9 @@ export default class StandaloneConfiguration extends ProcedureRuntimeConfigurati
     #segments?: string[];
     #assets?: string[];
     #overrides?: Record<string, string>;
-    #secret?: string;
+    #trustKey?: string;
 
-    constructor(source?: string, cache?: string, index?: string, segments?: string[], assets?: string[], middlewares?: string[], overrides?: Record<string, string>, secret?: string)
+    constructor(source?: string, cache?: string, index?: string, segments?: string[], assets?: string[], middlewares?: string[], overrides?: Record<string, string>, trustKey?: string)
     {
         super(middlewares);
 
@@ -38,7 +38,7 @@ export default class StandaloneConfiguration extends ProcedureRuntimeConfigurati
         this.#segments = segments;
         this.#assets = assets;
         this.#overrides = overrides;
-        this.#secret = secret;
+        this.#trustKey = trustKey;
     }
 
     get source() { return this.#source; }
@@ -53,5 +53,5 @@ export default class StandaloneConfiguration extends ProcedureRuntimeConfigurati
 
     get overrides() { return this.#overrides; }
 
-    get secret() { return this.#secret; }
+    get trustKey() { return this.#trustKey; }
 }

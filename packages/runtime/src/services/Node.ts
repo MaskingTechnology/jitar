@@ -3,5 +3,5 @@ import ProcedureRuntime from './ProcedureRuntime.js';
 
 export default abstract class Node extends ProcedureRuntime
 {
-   get secret(): string | undefined { return undefined; }
+   get trustKey(): string | undefined { return undefined; }
 }

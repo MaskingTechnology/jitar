@@ -43,7 +43,7 @@ export default class NodesController
             const node = new RemoteNode(nodeDto.url);
             node.procedureNames = new Set(nodeDto.procedureNames);
 
-            await this.#gateway.addNode(node, nodeDto.secret);
+            await this.#gateway.addNode(node, nodeDto.trustKey);
 
             this.#logger.info(`Added node -> ${node.url}`);
 
