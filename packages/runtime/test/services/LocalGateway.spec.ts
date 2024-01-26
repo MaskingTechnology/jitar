@@ -6,7 +6,6 @@ import Request from '../../src/models/Request';
 import Version from '../../src/models/Version';
 
 import { GATEWAYS, GATEWAY_URL } from '../_fixtures/services/LocalGateway.fixture';
-import exp from 'constants';
 
 const gateway = GATEWAYS.STANDALONE;
 
