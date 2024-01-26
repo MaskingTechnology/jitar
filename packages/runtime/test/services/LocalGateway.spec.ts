@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 
 import ProcedureNotFound from '../../src/errors/ProcedureNotFound';
-import InvalidSecret from '../../src/errors/InvalidSecret';
+import InvalidTrustKey from '../../src/errors/InvalidTrustKey';
 import Request from '../../src/models/Request';
 import Version from '../../src/models/Version';
 
@@ -92,7 +92,7 @@ describe('services/LocalGateway', () =>
 
             const addNode = async () => protectedGateway.addNode(node, 'INCORRECT_ACCESS_KEY');
 
-            expect(addNode).rejects.toEqual(new InvalidSecret());
+            expect(addNode).rejects.toEqual(new InvalidTrustKey());
         });
 
         it('should not add a node with an access key to an unprotected gateway', async () =>
@@ -102,7 +102,7 @@ describe('services/LocalGateway', () =>
 
             const addNode = async () => unprotectedGateway.addNode(node, 'NODE_ACCESS_KEY');
 
-            expect(addNode).rejects.toEqual(new InvalidSecret());
+            expect(addNode).rejects.toEqual(new InvalidTrustKey());
         });
     });
 });
