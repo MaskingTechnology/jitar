@@ -8,7 +8,7 @@ export const nodeDtoSchema = z
         secret: z.string().optional()
     })
     .strict()
-    .transform((value) => new NodeDto(value.url, value.procedureNames));
+    .transform((value) => new NodeDto(value.url, value.procedureNames, value.secret));
 
 export default class NodeDto
 {

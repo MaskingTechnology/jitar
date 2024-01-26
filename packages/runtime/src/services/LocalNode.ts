@@ -2,8 +2,10 @@
 import { ExecutionScopes } from '../definitions/ExecutionScope.js';
 import { createNodeFilename } from '../definitions/Files.js';
 
+import Unauthorized from '../errors/generic/Unauthorized.js';
 import ImplementationNotFound from '../errors/ImplementationNotFound.js';
 import ProcedureNotFound from '../errors/ProcedureNotFound.js';
+import InvalidSecret from '../errors/InvalidSecret.js';
 
 import Procedure from '../models/Procedure.js';
 import Request from '../models/Request.js';
@@ -77,7 +79,7 @@ export default class LocalNode extends Node
             // We only expose the public procedures
             // to protect access to private procedures
 
-            const procedures = segment.getPublicProcedures();
+            const procedures = segment.getExposedProcedures();
 
             procedures.forEach(procedure => names.add(procedure.fqn));
         }
@@ -134,12 +136,30 @@ export default class LocalNode extends Node
         {
             throw new ProcedureNotFound(request.fqn);
         }
+        
+        if (this.#secret !== undefined)
+        {
+            const headers = request.headers;
+            headers.set('x-access-key', this.#secret);
+        }
 
         return this.#gateway.run(request);
     }
 
     async #runProcedure(procedure: Procedure, request: Request): Promise<Response>
     {
+        const secret = request.headers.get('x-access-key');
+
+        if (secret !== undefined && this.#secret !== secret)
+        {
+            throw new InvalidSecret();
+        }
+        
+        if (secret === undefined && procedure.protected)
+        {
+            throw new Unauthorized();
+        }
+
         const implementation = procedure.getImplementation(request.version);
 
         if (implementation === undefined)

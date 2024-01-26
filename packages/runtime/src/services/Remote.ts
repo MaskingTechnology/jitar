@@ -73,7 +73,6 @@ export default class Remote
         return new Map(Object.entries(health));
     }
 
-    // secret
     async addNode(node: Node): Promise<void>
     {
         const url = `${this.#url}/nodes`;
@@ -81,7 +80,7 @@ export default class Remote
         {
             url: node.url,
             procedureNames: node.getProcedureNames(),
-            secret: node.secret
+            secret: node.secret,
         };
         const options =
         {
