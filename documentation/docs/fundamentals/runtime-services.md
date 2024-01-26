@@ -115,6 +115,7 @@ The following configuration properties are available:
 * repository - url of the repository (required).
 * segments - list of segment names to load (optional, loads all segments by default).
 * middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
+* secret - shared secret for creating trusted clients (optional).
 
 A full configuration example looks like this:
 
@@ -126,7 +127,8 @@ A full configuration example looks like this:
         "gateway": "http://gateway.example.com:3000",
         "repository": "http://repository.example.com:3000",
         "segments": ["segment1", "segment2"],
-        "middlewares": ["./middleware1", "./middleware2"]
+        "middlewares": ["./middleware1", "./middleware2"],
+        "secret": "MY_SHARED_SECRET"
     }
 }
 ```
@@ -162,6 +164,7 @@ The following configuration properties are available:
 * repository - url of the repository (required).
 * monitor - node monitoring interval in milliseconds (optional, default `5000`).
 * middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
+* secret - shared secret for creating trusted clients (optional).
 
 A full configuration example looks like this:
 
@@ -172,7 +175,8 @@ A full configuration example looks like this:
     {
         "repository": "http://repository.example.com:3000",
         "monitor": 5000,
-        "middlewares": ["./middleware1", "./middleware2"]
+        "middlewares": ["./middleware1", "./middleware2"],
+        "secret": "MY_SHARED_SECRET"
     }
 }
 ```
@@ -233,6 +237,7 @@ The standalone service has the same configuration properties as the repository s
 * assets - list of whitelisted assets (optional, default `undefined`).
 * middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
 * overrides - map with import overrides (optional, default `undefined`).
+* secret - shared secret for creating trusted clients (optional).
 
 A full configuration example looks like this:
 
@@ -246,7 +251,8 @@ A full configuration example looks like this:
         "index": "index.html",
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
         "middlewares": ["./middleware1", "./middleware2"],
-        "overrides": { "./my-module": "./alternative-module" }
+        "overrides": { "./my-module": "./alternative-module" },
+        "secret": "MY_SHARED_SECRET"
     }
 }
 ```

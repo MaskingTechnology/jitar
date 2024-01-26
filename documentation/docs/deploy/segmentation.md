@@ -80,6 +80,16 @@ The import names must correspond with the export names in the module. You can al
 
 Imports have multiple properties that can be configured. These properties will be explained next.
 
+### Trusted clients
+
+When building a distributed application, you don't want all functions to be available by the outside world. Some functions are only used internally by other segments. To protect the access to these functions, Jitar provides a `secret` property in the [runtime services](../fundamentals/runtime-services#node). This secret is used to create trusted clients. Trusted clients can access functions with the `protected` access level.
+
+Any client that wants to access a protected function must provide a valid access key. The access key needs to be added to the http header `x-access-key`. Any node that has a valid access key is considered a trusted client, and automatically adds the access key to the http header of outgoing requests. Any node that doesn't have a valid access key is considered an untrusted client and can only access `public` functions.
+
+::: info Note
+To enable trusted clients, the gateway must always have a shared secret configured. Any node that wants to register itself with a secret, must have the same secret in its configuration.
+:::
+
 ### Access protection
 
 Segments enable deploying application pieces on different servers. This requires functions to be remotely accessible to make sure the application keeps working. But it also introduces a security risk that needs to be addressed. The access property sets the basic access level of a function. For example.
@@ -89,12 +99,17 @@ Segments enable deploying application pieces on different servers. This requires
     "./domain/secret":
     {
         "getSecret": { "access": "private" },
-        "useSecret": { "access": "public" }
+        "checkSecret": { "access": "protected" },
+        "guessSecret": { "access": "public" }
     }
 }
 ```
 
-By default a function has private access. This means that the function can only be called within its own segment, and can not be called from outside. Functions that need to be accessible from outside need to have the public access level.
+By default a function has private access. This means that the function can only be called within its own segment, and cannot be called from outside.
+
+Protected functions can be called from outside, but only if the client is trusted. This is useful for functions that need to be called by other segments, but not by external applications.
+
+Functions that need to be accessible from outside need to have the public access level.
 
 ::: tip PRO TIP
 To protect the access to public functions [authentication and authorization](../develop/security.md#authentication-and-authorization) needs be applied.
