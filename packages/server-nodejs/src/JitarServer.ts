@@ -86,7 +86,7 @@ export default class JitarServer
     {
         const url = new URL(this.#configuration.url ?? RuntimeDefaults.URL);
 
-        await this.#startApplication(); // get fail on load, and then stop ?
+        await this.#startApplication();
         await this.#startServer(url.port);
 
         this.#printProcedureInfo();
