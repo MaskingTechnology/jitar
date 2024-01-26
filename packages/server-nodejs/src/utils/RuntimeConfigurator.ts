@@ -38,6 +38,7 @@ export default class RuntimeConfigurator
         const overrides = configuration.overrides ?? {};
         const middlewares = configuration.middlewares ?? [];
         const fileManager = new LocalFileManager(cacheLocation);
+        const secret = configuration.secret;
 
         await this.#buildCache(sourceLocation, cacheLocation);
 
@@ -57,7 +58,7 @@ export default class RuntimeConfigurator
             .asset(...assets)
             .override(overrides)
             .fileManager(fileManager)
-            .buildStandalone();
+            .buildStandalone(secret);
     }
 
     static async #configureRepository(url: string, healthChecks: string[], configuration: RepositoryConfiguration): Promise<LocalRepository>

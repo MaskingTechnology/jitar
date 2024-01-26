@@ -178,7 +178,7 @@ export default class RuntimeBuilder
         return proxy;
     }
 
-    buildStandalone(): Standalone
+    buildStandalone(secret?: string): Standalone
     {
         if (this.#fileManager === undefined)
         {
@@ -190,7 +190,7 @@ export default class RuntimeBuilder
         repository.assets = this.#assets;
         repository.overrides = this.#overrides;
 
-        const node = new LocalNode(repository, this.#gateway, this.#url);
+        const node = new LocalNode(repository, this.#gateway, this.#url, secret);
         node.segmentNames = this.#segments;
 
         const standalone = new Standalone(repository, node, this.#url);
