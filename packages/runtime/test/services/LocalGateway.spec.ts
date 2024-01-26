@@ -6,6 +6,7 @@ import Request from '../../src/models/Request';
 import Version from '../../src/models/Version';
 
 import { GATEWAYS, GATEWAY_URL } from '../_fixtures/services/LocalGateway.fixture';
+import exp from 'constants';
 
 const gateway = GATEWAYS.STANDALONE;
 
@@ -21,11 +22,12 @@ describe('services/LocalGateway', () =>
 
     describe('.getProcedureNames()', () =>
     {
-        it('should contain all public procedure names', () =>
+        it('should contain all public and protected procedure names', () =>
         {
             const procedureNames = gateway.getProcedureNames();
 
-            expect(procedureNames).toHaveLength(5);
+            expect(procedureNames).toHaveLength(6);
+            expect(procedureNames).toContain('protected');
             expect(procedureNames).toContain('public');
             expect(procedureNames).toContain('second');
             expect(procedureNames).toContain('third');
@@ -38,12 +40,14 @@ describe('services/LocalGateway', () =>
     {
         it('should have public procedures', () =>
         {
+            const hasProtectedProcedure = gateway.hasProcedure('protected');
             const hasPublicProcedure = gateway.hasProcedure('public');
             const hasSecondProcedure = gateway.hasProcedure('second');
             const hasThirdProcedure = gateway.hasProcedure('third');
             const hasFourthProcedure = gateway.hasProcedure('fourth');
             const hasSixthProcedure = gateway.hasProcedure('sixth');
 
+            expect(hasProtectedProcedure).toBeTruthy();
             expect(hasPublicProcedure).toBeTruthy();
             expect(hasSecondProcedure).toBeTruthy();
             expect(hasThirdProcedure).toBeTruthy();

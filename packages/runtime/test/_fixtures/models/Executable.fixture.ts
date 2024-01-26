@@ -5,6 +5,7 @@ const EXECUTABLES =
 {
     // General
     PRIVATE: () => { return 'private'; },
+    PROTECTED: () => { return 'protected'; },
     PUBLIC: () => { return 'public'; },
     PARAMETERS: (mandatory: string, optional = 'default') => { return `${mandatory} ${optional}`; },
     BROKEN: () => { throw new Error('broken'); },
