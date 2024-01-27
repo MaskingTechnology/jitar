@@ -2,6 +2,7 @@
 import { describe, expect, it } from 'vitest';
 
 import ProcedureNotFound from '../../src/errors/ProcedureNotFound';
+import InvalidTrustKey from '../../src/errors/InvalidTrustKey';
 import Request from '../../src/models/Request';
 import Version from '../../src/models/Version';
 
@@ -21,11 +22,12 @@ describe('services/LocalGateway', () =>
 
     describe('.getProcedureNames()', () =>
     {
-        it('should contain all public procedure names', () =>
+        it('should contain all public and protected procedure names', () =>
         {
             const procedureNames = gateway.getProcedureNames();
 
-            expect(procedureNames).toHaveLength(5);
+            expect(procedureNames).toHaveLength(6);
+            expect(procedureNames).toContain('protected');
             expect(procedureNames).toContain('public');
             expect(procedureNames).toContain('second');
             expect(procedureNames).toContain('third');
@@ -38,12 +40,14 @@ describe('services/LocalGateway', () =>
     {
         it('should have public procedures', () =>
         {
+            const hasProtectedProcedure = gateway.hasProcedure('protected');
             const hasPublicProcedure = gateway.hasProcedure('public');
             const hasSecondProcedure = gateway.hasProcedure('second');
             const hasThirdProcedure = gateway.hasProcedure('third');
             const hasFourthProcedure = gateway.hasProcedure('fourth');
             const hasSixthProcedure = gateway.hasProcedure('sixth');
 
+            expect(hasProtectedProcedure).toBeTruthy();
             expect(hasPublicProcedure).toBeTruthy();
             expect(hasSecondProcedure).toBeTruthy();
             expect(hasThirdProcedure).toBeTruthy();
@@ -76,6 +80,29 @@ describe('services/LocalGateway', () =>
             const run = async () => gateway.run(request);
 
             expect(run).rejects.toEqual(new ProcedureNotFound('nonExisting'));
+        });
+    });
+
+    describe('.addNode(node, accessKey)', () =>
+    {
+        it('should not add a node with an incorrect access key', async () =>
+        {
+            const node = gateway.nodes[0];
+            const protectedGateway = GATEWAYS.PROTECTED;
+
+            const addNode = async () => protectedGateway.addNode(node, 'INCORRECT_ACCESS_KEY');
+
+            expect(addNode).rejects.toEqual(new InvalidTrustKey());
+        });
+
+        it('should not add a node with an access key to an unprotected gateway', async () =>
+        {
+            const node = gateway.nodes[0];
+            const unprotectedGateway = GATEWAYS.STANDALONE;
+
+            const addNode = async () => unprotectedGateway.addNode(node, 'NODE_ACCESS_KEY');
+
+            expect(addNode).rejects.toEqual(new InvalidTrustKey());
         });
     });
 });

@@ -38,6 +38,7 @@ export default class RuntimeConfigurator
         const overrides = configuration.overrides ?? {};
         const middlewares = configuration.middlewares ?? [];
         const fileManager = new LocalFileManager(cacheLocation);
+        const trustKey = configuration.trustKey;
 
         await this.#buildCache(sourceLocation, cacheLocation);
 
@@ -57,7 +58,7 @@ export default class RuntimeConfigurator
             .asset(...assets)
             .override(overrides)
             .fileManager(fileManager)
-            .buildStandalone();
+            .buildStandalone(trustKey);
     }
 
     static async #configureRepository(url: string, healthChecks: string[], configuration: RepositoryConfiguration): Promise<LocalRepository>
@@ -90,13 +91,14 @@ export default class RuntimeConfigurator
         const repositoryUrl = configuration.repository;
         const middlewares = configuration.middlewares ?? [];
         const monitorInterval = configuration.monitor;
+        const trustKey = configuration.trustKey;
 
         const gateway = new RuntimeBuilder()
             .url(url)
             .healthCheck(...healthChecks)
             .middleware(...middlewares)
             .repository(repositoryUrl)
-            .buildGateway();
+            .buildGateway(trustKey);
 
         new NodeMonitor(gateway, monitorInterval);
 
@@ -109,6 +111,7 @@ export default class RuntimeConfigurator
         const gatewayUrl = configuration.gateway;
         const segmentNames = configuration.segments ?? [];
         const middlewares = configuration.middlewares ?? [];
+        const trustKey = configuration.trustKey;
 
         return new RuntimeBuilder()
             .url(url)
@@ -117,7 +120,7 @@ export default class RuntimeConfigurator
             .repository(repositoryUrl)
             .gateway(gatewayUrl)
             .segment(...segmentNames)
-            .buildNode();
+            .buildNode(trustKey);
     }
 
     static async #configureProxy(url: string, healthChecks: string[], configuration: ProxyConfiguration): Promise<Proxy>

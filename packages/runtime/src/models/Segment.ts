@@ -32,10 +32,10 @@ export default class Segment
         return this.#procedures.get(fqn);
     }
 
-    getPublicProcedures(): Procedure[]
+    getExposedProcedures(): Procedure[]
     {
         const procedures = [...this.#procedures.values()];
 
-        return procedures.filter(procedure => procedure.public);
+        return procedures.filter(procedure => procedure.public || procedure.protected);
     }
 }

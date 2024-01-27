@@ -1,7 +1,7 @@
 {
     "url": "http://127.0.0.1:3000",
-    "standalone":
-    {
+    "gateway": {
+        "repository": "http://127.0.0.1:2999",
         "trustKey": "VERY_SECRET_KEY"
     }
 }

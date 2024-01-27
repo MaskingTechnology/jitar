@@ -4,7 +4,11 @@
     "private": true,
     "scripts": {
         "build": "tsc",
-        "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json"
+        "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json",
+        "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
+        "gateway": "node --experimental-network-imports dist/jitar.js --config=services/gateway.json",
+        "node-web": "node --experimental-network-imports dist/jitar.js --config=services/web.json",
+        "node-game": "node --experimental-network-imports dist/jitar.js --config=services/game.json"
     },
     "dependencies": {
         "jitar": "^0.6.0"

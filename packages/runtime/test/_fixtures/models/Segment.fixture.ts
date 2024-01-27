@@ -7,6 +7,7 @@ const SEGMENTS =
 {
     GENERAL: new Segment('general')
         .addProcedure(PROCEDURES.PRIVATE)
+        .addProcedure(PROCEDURES.PROTECTED)
         .addProcedure(PROCEDURES.PUBLIC)
         .addProcedure(PROCEDURES.PARAMETERS)
         .addProcedure(PROCEDURES.BROKEN)

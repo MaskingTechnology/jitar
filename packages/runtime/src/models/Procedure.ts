@@ -25,6 +25,22 @@ export default class Procedure
         return implementations.some(implementation => implementation.public);
     }
 
+    get protected()
+    {
+        // Public procedures take precedence over protected procedures in case of duplicates
+        // If at least one implementation is protected, the procedure is protected
+        // Protected procedures can be called from outside the segment with a key
+
+        if (this.public)
+        {
+            return false;
+        }
+        
+        const implementations = [...this.#implementations.values()];
+
+        return implementations.some(implementation => implementation.protected);
+    }
+
     addImplementation(implementation: Implementation): Procedure
     {
         this.#implementations.set(implementation.version, implementation);

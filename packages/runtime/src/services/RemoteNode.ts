@@ -18,6 +18,8 @@ export default class RemoteNode extends Node
         this.#remote = new Remote(url);
     }
 
+    get trustKey() { return undefined; }
+
     set procedureNames(names: Set<string>)
     {
         this.#procedureNames = names;
