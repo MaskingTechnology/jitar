@@ -19,7 +19,7 @@ import Repository from './Repository.js';
 
 import { setRuntime } from '../hooks.js';
 
-const JITAR_PROTECTED_ACCESS_HEADER_KEY = 'X-Jitar-Protected-Access-Key';
+const JITAR_TRUST_HEADER_KEY = 'X-Jitar-Trust-Key';
 
 export default class LocalNode extends Node
 {
@@ -142,7 +142,7 @@ export default class LocalNode extends Node
         if (this.#trustKey !== undefined)
         {
             const headers = request.headers;
-            headers.set(JITAR_PROTECTED_ACCESS_HEADER_KEY, this.#trustKey);
+            headers.set(JITAR_TRUST_HEADER_KEY, this.#trustKey);
         }
 
         return this.#gateway.run(request);
@@ -150,8 +150,8 @@ export default class LocalNode extends Node
 
     async #runProcedure(procedure: Procedure, request: Request): Promise<Response>
     {
-        const trustKey = request.getHeader(JITAR_PROTECTED_ACCESS_HEADER_KEY);
-
+        const trustKey = request.getHeader(JITAR_TRUST_HEADER_KEY);
+        
         if (trustKey !== undefined && this.#trustKey !== trustKey)
         {
             throw new InvalidTrustKey();

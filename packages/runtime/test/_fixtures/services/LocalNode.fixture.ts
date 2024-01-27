@@ -6,7 +6,9 @@ import { HEALTH_CHECKS } from '../interfaces/HealthCheck.fixture';
 import { SEGMENTS } from '../models/Segment.fixture';
 import { REPOSITORIES } from './LocalRepository.fixture';
 
-const singleNode = new LocalNode(REPOSITORIES.DUMMY);
+const TRUST_KEY = 'MY_TRUST_KEY';
+
+const singleNode = new LocalNode(REPOSITORIES.DUMMY, undefined, undefined, TRUST_KEY);
 singleNode.addSegment(SEGMENTS.GENERAL);
 singleNode.addSegment(SEGMENTS.FIRST);
 singleNode.addSegment(SEGMENTS.SECOND);
@@ -34,4 +36,4 @@ const NODES =
 
 setRuntime(singleNode);
 
-export { NODES };
+export { NODES, TRUST_KEY };

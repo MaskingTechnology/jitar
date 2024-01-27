@@ -2,6 +2,6 @@
     "url": "http://127.0.0.1:3000",
     "standalone":
     {
-        "secret": "VERY_SECRET_KEY"
+        "trustKey": "VERY_SECRET_KEY"
     }
 }
