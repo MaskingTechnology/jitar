@@ -238,7 +238,7 @@ export default class RPCController
     {
         const content = await this.#createResponseContent(result, serialize);
         const contentType = this.#createResponseContentType(content);
-        const responseContent = contentType === ContentTypes.TEXT ? String(content) : content;
+        const responseContent = contentType === ContentTypes.JSON ? content : String(content);
 
         response.setHeader(Headers.CONTENT_TYPE, contentType);
 
@@ -265,9 +265,13 @@ export default class RPCController
 
     #createResponseContentType(content: unknown): string
     {
-        return typeof content === 'object'
-            ? ContentTypes.JSON
-            : ContentTypes.TEXT;
+        switch(typeof content)
+        {
+            case 'boolean': return ContentTypes.BOOLEAN;
+            case 'number': return ContentTypes.NUMBER;
+            case 'object': return ContentTypes.JSON;
+            default: return ContentTypes.TEXT;
+        }
     }
 
     #setResponseHeaders(response: ExpressResponse, headers: Map<string, string>): void
