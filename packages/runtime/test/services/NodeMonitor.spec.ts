@@ -5,7 +5,7 @@ import { MONITORS, GATEWAY, NODES } from '../_fixtures/services/NodeMonitor.fixt
 
 const monitor = MONITORS.HEALTH;
 
-describe('services/LocalGateway', () =>
+describe('services/NodeMonitor', () =>
 {
     describe('.monitor()', () =>
     {
