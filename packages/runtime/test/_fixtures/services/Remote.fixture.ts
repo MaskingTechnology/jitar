@@ -1,6 +1,10 @@
 
 import Request from '../../../src/models/Request';
 import Version from '../../../src/models/Version';
+import Remote from '../../../src/services/Remote';
+
+const remote = new Remote('http://localhost:3000');
+const CONTENT_TYPE = 'Content-Type';
 
 const BOOLEAN_REQUEST = new Request('game/checkSecret', Version.DEFAULT, new Map(), new Map());
 const NUMBER_REQUEST = new Request('game/getSecret', Version.DEFAULT, new Map(), new Map());
@@ -35,4 +39,4 @@ function customFetch(input: URL | RequestInfo, options: RequestInit | undefined)
 
 globalThis.fetch = customFetch;
 
-export { REQUESTS };
+export { REQUESTS, remote, CONTENT_TYPE };

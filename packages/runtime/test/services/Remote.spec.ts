@@ -1,12 +1,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import Remote from '../../src/services/Remote';
-
-import { REQUESTS } from '../_fixtures/services/Remote.fixture';
-
-const remote = new Remote('http://localhost:3000');
-const CONTENT_TYPE = 'Content-Type';
+import { REQUESTS, remote, CONTENT_TYPE } from '../_fixtures/services/Remote.fixture';
 
 describe('services/Remote', () =>
 {
