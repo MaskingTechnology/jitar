@@ -142,7 +142,7 @@ export default class Remote
         return this.#serializer.deserialize(result);
     }
 
-    #getResponseResult(response: Response): Promise<unknown>
+    async #getResponseResult(response: Response): Promise<unknown>
     {
         const contentType = response.headers.get('Content-Type');
 
@@ -151,7 +151,19 @@ export default class Remote
             return response.json();
         }
 
-        return response.text();
+        const content = await response.text();
+
+        if (contentType !== null && contentType.includes('boolean'))
+        {
+            return content === 'true';
+        }
+
+        if (contentType !== null && contentType.includes('number'))
+        {
+            return Number(content);
+        }
+
+        return content;
     }
 
     #createResponseHeaders(response: Response): Map<string, string>

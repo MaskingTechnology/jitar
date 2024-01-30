@@ -5,7 +5,7 @@ import { NODES, NODE_URL } from '../_fixtures/services/RemoteNode.fixture';
 
 const node = NODES.REMOTE;
 
-describe('services/LocalGateway', () =>
+describe('services/RemoteNode', () =>
 {
     describe('.url', () =>
     {

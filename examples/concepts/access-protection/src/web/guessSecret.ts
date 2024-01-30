@@ -1,9 +1,9 @@
 
 import checkSecret from '../game/checkSecret';
 
-export default async function guessSecret(secret: string): Promise<string>
+export default async function guessSecret(secret: number): Promise<string>
 {
-    const guessed = await checkSecret(secret);
+    const isGuessed = await checkSecret(secret);
 
-    return guessed ? 'Congratulations!' : 'Sorry, try again!';
+    return isGuessed ? 'Congratulations!' : 'Sorry, try again!';
 }
