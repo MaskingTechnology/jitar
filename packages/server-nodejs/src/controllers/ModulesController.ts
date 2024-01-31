@@ -56,14 +56,14 @@ export default class ModulesController
 
     async getModule(request: Request, response: Response): Promise<Response>
     {
-        this.#logger.info(`Get module for -> '${request.params.clientId}'`);
-
         const clientId = request.params.clientId;
 
         if (typeof clientId !== 'string' || clientIdHelper.validate(clientId) === false)
         {
             return response.status(400).send('Invalid client id.');
         }
+
+        this.#logger.info(`Get module for -> '${request.params.clientId}'`);
 
         const pathKey = `/${clientId}/`;
         const pathIndex = request.path.indexOf(pathKey) + pathKey.length;

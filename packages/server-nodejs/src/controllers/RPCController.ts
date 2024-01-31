@@ -57,9 +57,7 @@ export default class RPCController
 
             this.#logger.warn(`Invalid request -> ${message}`);
 
-            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
-
-            return response.status(400).send(`Invalid request -> ${message}`);
+            return response.status(400).type('text').send(`Invalid request -> ${message}`);
         }
     }
 
@@ -81,9 +79,7 @@ export default class RPCController
 
             this.#logger.warn(`Invalid request -> ${message}`);
 
-            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
-
-            return response.status(400).send(`Invalid request -> ${message}`);
+            return response.status(400).type('text').send(`Invalid request -> ${message}`);
         }
     }
 

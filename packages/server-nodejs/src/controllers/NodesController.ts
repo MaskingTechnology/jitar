@@ -8,6 +8,7 @@ import NodeDto, { nodeDtoSchema } from '../models/NodeDto.js';
 import DataConverter from '../utils/DataConverter.js';
 import Headers from '../definitions/Headers.js';
 import ContentTypes from '../definitions/ContentTypes.js';
+import ConversionError from '../errors/ConversionError.js';
 
 export default class NodesController
 {
@@ -51,14 +52,20 @@ export default class NodesController
         }
         catch (error: unknown)
         {
-            const status = error instanceof Array ? 400 : 500;
-            const message = error instanceof Error ? error.message : String(error);
+            if (error instanceof ConversionError)
+            {
+                const message = error.message;
+
+                this.#logger.warn(`Failed to add node | ${message}`);
+
+                return response.status(400).type('text').send(message);
+            }
+
+            const message = error instanceof Error ? error.message : 'Internal server error';
 
             this.#logger.error(`Failed to add node | ${message}`);
 
-            response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
-
-            return response.status(status).send(message);
+            return response.status(500).type('text').send(message);
         }
     }
 }
