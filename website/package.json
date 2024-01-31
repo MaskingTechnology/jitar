@@ -13,9 +13,9 @@
         "minify-css": "minify src/css/*.css src/css/**/*.css src/fonts/**/*.css > dist/site.css"
     },
     "devDependencies": {
-        "cpx2": "^6.0.1",
-        "minify": "^10.5.2",
+        "cpx2": "^7.0.1",
+        "minify": "^11.0.1",
         "npm-run-all": "^4.1.5",
-        "rimraf": "^5.0.0"
+        "rimraf": "^5.0.5"
     }
 }
