@@ -14,13 +14,13 @@ export default class RuntimeConfigurationLoader
     static load(filename: string): RuntimeConfiguration
     {
         const plainContents = readFileSync(filename, 'utf-8');
-        const replacedContents = this.#replaceEnvValues(plainContents);
+        const replacedContents = this.#replaceEnvironmentVariables(plainContents);
         const parsedContents = JSON.parse(replacedContents);
 
         return DataConverter.convert<RuntimeConfiguration>(runtimeSchema, parsedContents);
     }
 
-    static #replaceEnvValues(contents: string): string
+    static #replaceEnvironmentVariables(contents: string): string
     {
         return contents.replace(ENVIRONMENT_VARIABLE_REGEX, (match, group) => 
         {
