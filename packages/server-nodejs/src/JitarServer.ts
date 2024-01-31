@@ -86,8 +86,21 @@ export default class JitarServer
     {
         const url = new URL(this.#configuration.url ?? RuntimeDefaults.URL);
 
-        await this.#startApplication();
-        await this.#startServer(url.port);
+        try
+        {
+            await this.#startApplication();
+            await this.#startServer(url.port);
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.error(`Failed to start server -> ${message}`);
+
+            await this.stop();
+
+            return;
+        }
 
         this.#printProcedureInfo();
 
@@ -96,9 +109,20 @@ export default class JitarServer
 
     async stop(): Promise<void>
     {
-        await this.#stopServer();
-        await this.#stopApplication();
+        try
+        {
+            await this.#stopServer();
+            await this.#stopApplication();
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : String(error);
 
+            this.#logger.error(`Caught error while stopping server -> ${message}`);
+
+            return;
+        }
+        
         this.#logger.info('Server stopped');
     }
 
@@ -226,7 +250,12 @@ export default class JitarServer
             return Promise.resolve();
         }
 
-        return new Promise(resolve => { this.#server = this.#app.listen(port, resolve); });
+        return new Promise((resolve, reject) => 
+        { 
+            this.#server = this.#app.listen(port, resolve);
+            
+            this.#server.on('error', reject);
+        });
     }
 
     #stopServer(): Promise<void>
