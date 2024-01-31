@@ -37,6 +37,15 @@ Configurations are placed in JSON files. The basic structure looks like this.
 }
 ```
 
+::: tip NOTE
+The configuration also supports environment variables. They can be used by wrapping the variable name in `${}`. For example, `${ENVIRONMENT_VARIABLE_1}`.
+```json
+{
+    "PROPERTY_3": "${ENVIRONMENT_VARIABLE_3}"
+}
+```
+:::
+
 There are four properties at root level:
 
 * url - service url containing protocol, address and port (e.g. `http://service.example.com:3000`).
@@ -128,7 +137,7 @@ A full configuration example looks like this:
         "repository": "http://repository.example.com:3000",
         "segments": ["segment1", "segment2"],
         "middlewares": ["./middleware1", "./middleware2"],
-        "trustKey": "MY_TRUST_KEY"
+        "trustKey": "${MY_TRUST_KEY}"
     }
 }
 ```
@@ -176,7 +185,7 @@ A full configuration example looks like this:
         "repository": "http://repository.example.com:3000",
         "monitor": 5000,
         "middlewares": ["./middleware1", "./middleware2"],
-        "trustKey": "MY_TRUST_KEY"
+        "trustKey": "${MY_TRUST_KEY}"
     }
 }
 ```
@@ -252,7 +261,7 @@ A full configuration example looks like this:
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
         "middlewares": ["./middleware1", "./middleware2"],
         "overrides": { "./my-module": "./alternative-module" },
-        "trustKey": "MY_TRUST_KEY"
+        "trustKey": "${MY_TRUST_KEY}"
     }
 }
 ```
