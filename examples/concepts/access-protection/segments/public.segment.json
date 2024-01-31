@@ -1,0 +1,7 @@
+{
+    "./web/guessSecret": {
+        "default": {
+            "access": "public"
+        }
+    }
+}

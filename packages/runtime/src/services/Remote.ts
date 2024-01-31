@@ -79,7 +79,8 @@ export default class Remote
         const body =
         {
             url: node.url,
-            procedureNames: node.getProcedureNames()
+            procedureNames: node.getProcedureNames(),
+            trustKey: node.trustKey,
         };
         const options =
         {
@@ -110,8 +111,9 @@ export default class Remote
 
         const response = await this.#callRemote(url, options, 200);
         const result = await this.#createResponseResult(response);
+        const headers = this.#createResponseHeaders(response);
 
-        return new ResultResponse(result);
+        return new ResultResponse(result, headers);
     }
 
     async #callRemote(url: string, options: object, expectedStatus: number): Promise<Response>
@@ -140,7 +142,7 @@ export default class Remote
         return this.#serializer.deserialize(result);
     }
 
-    #getResponseResult(response: Response): Promise<unknown>
+    async #getResponseResult(response: Response): Promise<unknown>
     {
         const contentType = response.headers.get('Content-Type');
 
@@ -149,6 +151,30 @@ export default class Remote
             return response.json();
         }
 
-        return response.text();
+        const content = await response.text();
+
+        if (contentType !== null && contentType.includes('boolean'))
+        {
+            return content === 'true';
+        }
+
+        if (contentType !== null && contentType.includes('number'))
+        {
+            return Number(content);
+        }
+
+        return content;
+    }
+
+    #createResponseHeaders(response: Response): Map<string, string>
+    {
+        const headers = new Map();
+
+        for (const [name, value] of response.headers)
+        {
+            headers.set(name, value);
+        }
+
+        return headers;
     }
 }

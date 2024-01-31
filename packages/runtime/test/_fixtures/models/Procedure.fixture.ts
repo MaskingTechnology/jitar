@@ -8,6 +8,8 @@ const PROCEDURES =
     // General
     PRIVATE: new Procedure('private')
         .addImplementation(IMPLEMENTATIONS.PRIVATE),
+    PROTECTED: new Procedure('protected')
+        .addImplementation(IMPLEMENTATIONS.PROTECTED),
     PUBLIC: new Procedure('public')
         .addImplementation(IMPLEMENTATIONS.PUBLIC),
     PARAMETERS: new Procedure('parameter')

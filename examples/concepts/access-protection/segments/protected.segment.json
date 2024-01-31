@@ -1,7 +1,7 @@
 {
     "./game/checkSecret": {
         "default": {
-            "access": "public"
+            "access": "protected"
         }
     },
     "./game/getSecret": {

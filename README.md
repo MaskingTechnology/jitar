@@ -2,11 +2,11 @@
 
 <img width="1102" alt="explainer" src="https://github.com/MaskingTechnology/jitar/assets/108156553/2129b4cc-a32c-497e-b69d-d5670a66d7aa">
 
-Welcome to [Jitar](https://jitar.dev), a runtime that automates all end-to-end communication for your JavaScript and TypeScript applications. You can call your server functions directly, Jitar takes care of the rest.
+Welcome to [Jitar](https://jitar.dev), a distributed runtime for JavaScript and TypeScript that lets you build your application as a monolith and deploy it as (micro)services by configuration.
 
-In contrast to any framework-like solution, there is no trace of Jitar in the application code. Jitar breaks up your application as configured on the go, so you can build your application as a monolith and deploy it as microservices.
+Jitar runs on the server and the web browser, closing the gap between the frontend and backend. All end-to-end communication is automated with type-safety. You can call your server functions directly, Jitar takes care of the rest.
 
-Free yourself from the burden of building and maintaining APIs. Jitar is the missing link between frontend and backend.
+In contrast to other solutions, there is no trace of Jitar in the application code, ensuring platform and framework agnosticism for easy integration and safety.
 
 **🏁 Try Jitar:** see our [Quick Start](https://docs.jitar.dev/introduction/quick-start.html)
 

@@ -2,8 +2,10 @@
 import { ExecutionScopes } from '../definitions/ExecutionScope.js';
 import { createNodeFilename } from '../definitions/Files.js';
 
+import Unauthorized from '../errors/generic/Unauthorized.js';
 import ImplementationNotFound from '../errors/ImplementationNotFound.js';
 import ProcedureNotFound from '../errors/ProcedureNotFound.js';
+import InvalidTrustKey from '../errors/InvalidTrustKey.js';
 
 import Procedure from '../models/Procedure.js';
 import Request from '../models/Request.js';
@@ -17,23 +19,29 @@ import Repository from './Repository.js';
 
 import { setRuntime } from '../hooks.js';
 
+const JITAR_TRUST_HEADER_KEY = 'X-Jitar-Trust-Key';
+
 export default class LocalNode extends Node
 {
     #gateway?: Gateway;
+    #trustKey?: string;
     #argumentConstructor: ArgumentConstructor;
 
     #segmentNames: Set<string> = new Set();
     #segments: Map<string, Segment> = new Map();
 
-    constructor(repository: Repository, gateway?: Gateway, url?: string, argumentConstructor = new ArgumentConstructor())
+    constructor(repository: Repository, gateway?: Gateway, url?: string, trustKey?: string, argumentConstructor = new ArgumentConstructor())
     {
         super(repository, url);
 
         this.#gateway = gateway;
+        this.#trustKey = trustKey;
         this.#argumentConstructor = argumentConstructor;
 
         setRuntime(this);
     }
+
+    get trustKey() { return this.#trustKey; }
 
     set segmentNames(names: Set<string>)
     {
@@ -73,7 +81,7 @@ export default class LocalNode extends Node
             // We only expose the public procedures
             // to protect access to private procedures
 
-            const procedures = segment.getPublicProcedures();
+            const procedures = segment.getExposedProcedures();
 
             procedures.forEach(procedure => names.add(procedure.fqn));
         }
@@ -130,12 +138,30 @@ export default class LocalNode extends Node
         {
             throw new ProcedureNotFound(request.fqn);
         }
+        
+        if (this.#trustKey !== undefined)
+        {
+            const headers = request.headers;
+            headers.set(JITAR_TRUST_HEADER_KEY, this.#trustKey);
+        }
 
         return this.#gateway.run(request);
     }
 
     async #runProcedure(procedure: Procedure, request: Request): Promise<Response>
     {
+        const trustKey = request.getHeader(JITAR_TRUST_HEADER_KEY);
+        
+        if (trustKey !== undefined && this.#trustKey !== trustKey)
+        {
+            throw new InvalidTrustKey();
+        }
+        
+        if (trustKey === undefined && procedure.protected)
+        {
+            throw new Unauthorized();
+        }
+
         const implementation = procedure.getImplementation(request.version);
 
         if (implementation === undefined)

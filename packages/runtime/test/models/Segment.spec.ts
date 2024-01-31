@@ -16,6 +16,13 @@ describe('models/Segment', () =>
             expect(hasProcedure).toBeTruthy();
         });
 
+        it('should have a protected procedure', async () =>
+        {
+            const hasProcedure = generalSegment.hasProcedure('protected');
+
+            expect(hasProcedure).toBeTruthy();
+        });
+
         it('should have a private procedure', async () =>
         {
             const hasProcedure = generalSegment.hasProcedure('private');
@@ -24,14 +31,15 @@ describe('models/Segment', () =>
         });
     });
 
-    describe('.getPublicProcedures()', () =>
+    describe('.getExposedProcedures()', () =>
     {
-        it('should return public procedures only', async () =>
+        it('should return public and protected procedures only', async () =>
         {
-            const procedures = generalSegment.getPublicProcedures();
+            const procedures = generalSegment.getExposedProcedures();
 
-            expect(procedures.length).toBe(1);
-            expect(procedures[0].fqn).toBe('public');
+            expect(procedures.length).toBe(2);
+            expect(procedures[0].fqn).toBe('protected');
+            expect(procedures[1].fqn).toBe('public');
         });
     });
 });

@@ -17,11 +17,16 @@ const healthGateway = new LocalGateway(REPOSITORIES.DUMMY, GATEWAY_URL);
 healthGateway.addNode(NODES.GOOD);
 healthGateway.addNode(NODES.BAD);
 
+const protectedGateway = new LocalGateway(REPOSITORIES.DUMMY, GATEWAY_URL, 'MY_PROTECTED_ACCESS_KEY');
+protectedGateway.addNode(NODES.FIRST, 'MY_PROTECTED_ACCESS_KEY');
+protectedGateway.addNode(NODES.SECOND);
+
 const GATEWAYS =
 {
     STANDALONE: standaloneGateway,
     DISTRIBUTED: distributedGateway,
-    HEALTH: healthGateway
+    HEALTH: healthGateway,
+    PROTECTED: protectedGateway
 };
 
 export { GATEWAYS, GATEWAY_URL };

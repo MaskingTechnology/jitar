@@ -1,7 +1,33 @@
 
 // Run the public function (succeeds)
 
-GET http://localhost:3000/rpc/game/checkSecret?secret=123 HTTP/1.1
+POST http://localhost:3000/rpc/web/guessSecret HTTP/1.1
+content-type: application/json
+
+{
+    "secret": 123
+}
+
+###
+
+// Run the protected function with key (succeeds)
+POST http://localhost:3000/rpc/game/checkSecret HTTP/1.1
+X-Jitar-Trust-Key: VERY_SECRET_KEY
+content-type: application/json
+
+{
+    "secret": 123
+}
+
+###
+
+// Run the protected function without key (fails -> 401)
+POST http://localhost:3000/rpc/game/checkSecret HTTP/1.1
+content-type: application/json
+
+{
+    "secret": 123
+}
 
 ###
 

@@ -10,7 +10,7 @@ import { BALANCERS, NODES } from '../_fixtures/services/NodeBalancer.fixture';
 const balancer = BALANCERS.FILLED;
 const emptyBalancer = BALANCERS.EMPTY;
 
-describe('services/LocalGateway', () =>
+describe('services/NodeBalancer', () =>
 {
     describe('.getNextNode()', () =>
     {

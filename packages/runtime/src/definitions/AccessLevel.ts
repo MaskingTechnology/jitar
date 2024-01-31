@@ -2,6 +2,7 @@
 const AccessLevels =
 {
     PRIVATE: 'private',
+    PROTECTED: 'protected',
     PUBLIC: 'public'
 } as const;
 

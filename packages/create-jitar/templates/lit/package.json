@@ -18,12 +18,12 @@
     "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json"
   },
   "dependencies": {
-    "jitar": "^0.5.0",
-    "lit": "^2.7.4"
+    "jitar": "^0.6.0",
+    "lit": "^3.1.0"
   },
   "devDependencies": {
     "@jitar/plugin-vite": "^0.5.0",
-    "typescript": "^5.0.4",
-    "vite": "^4.3.5"
+    "typescript": "^5.3.3",
+    "vite": "^5.0.12"
   }
 }

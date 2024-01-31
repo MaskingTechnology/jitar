@@ -1,3 +1,36 @@
+# v0.6.0
+[2024-01-12]
+
+### Features
+
+* \[[441](https://github.com/MaskingTechnology/jitar/pull/441)] feat(server): multiple set up and tear down scripts support (#441) by Peter van Vliet
+* \[[439](https://github.com/MaskingTechnology/jitar/pull/439)] feat(runtime): web client middleware support (#439) by Peter van Vliet
+* \[[437](https://github.com/MaskingTechnology/jitar/pull/437)] feat(runtime): Mapped remote response headers (#437) by Peter van Vliet
+
+### Chores
+
+* \[[435](https://github.com/MaskingTechnology/jitar/pull/435)] chore(documentation): Updated readme introduction (#435) by Peter van Vliet
+* \[[433](https://github.com/MaskingTechnology/jitar/pull/433)] chore(release): v0.5.1 (#433) by Peter van Vliet
+
+# v0.5.1
+[2024-01-05]
+
+### Features
+
+* \[[416](https://github.com/MaskingTechnology/jitar/pull/416)] feat(creator): bumped vite to version 5 (#416) by Bas Meeuwissen
+* \[[430](https://github.com/MaskingTechnology/jitar/pull/430)] feat(server): improved server-side validations (#430) by Bas Meeuwissen
+
+### Fixes
+
+* \[[428](https://github.com/MaskingTechnology/jitar/pull/428)] fix(reflection): Added support for non-reserved keywords as identifiers (#428) by Peter van Vliet
+* \[[413](https://github.com/MaskingTechnology/jitar/pull/413)] #fix(runtime): starting health checks in standalone mode (#413) by Peter van Vliet
+
+### Chores
+
+* \[[426](https://github.com/MaskingTechnology/jitar/pull/426)] chore(deps): bump rollup (#426) by dependabot[bot]
+* \[[425](https://github.com/MaskingTechnology/jitar/pull/425)] chore(deps): restricted dependabot (#425) by Bas Meeuwissen
+* \[[423](https://github.com/MaskingTechnology/jitar/pull/423)] chore(deps): january updates (#423) by Bas Meeuwissen
+
 # v0.5.0
 [2023-12-15]
 
@@ -11,6 +44,7 @@
 
 ### Chores
 
+* \[[401](https://github.com/MaskingTechnology/jitar/pull/401)] chore: release of version 0.5 (#401) by Peter van Vliet
 * \[[393](https://github.com/MaskingTechnology/jitar/pull/393)] chore(deps): additional updates december (#393) by Bas Meeuwissen
 * \[[389](https://github.com/MaskingTechnology/jitar/pull/389)] chore(deps): december updates (#389) by Peter van Vliet
 * \[[379](https://github.com/MaskingTechnology/jitar/pull/379)] chore(release): added auto changelog (#379) by Bas Meeuwissen
@@ -19,6 +53,18 @@
 
 # v0.4.2
 [2023-10-18]
+
+### Features
+
+* \[[325](https://github.com/MaskingTechnology/jitar/pull/325)] feat(server): custom serializers support (#325) by Bas Meeuwissen
+* \[[322](https://github.com/MaskingTechnology/jitar/pull/322)] feat(serialization): added bigint support (#322) by Bas Meeuwissen
+* \[[319](https://github.com/MaskingTechnology/jitar/pull/319)] feat(serialization): regexp serialization support (#319) by Bas Meeuwissen
+
+### Fixes
+
+* \[[342](https://github.com/MaskingTechnology/jitar/pull/342)] bug(runtime): middleware not executed properly (#342) by Peter van Vliet
+* \[[326](https://github.com/MaskingTechnology/jitar/pull/326)] bug(caching): it should not be possible to register a function multiple times (#326) by Bas Meeuwissen
+* \[[324](https://github.com/MaskingTechnology/jitar/pull/324)] bug(server): incorrect serialization control at the gateway (#324) by Peter van Vliet
 
 ### Chores
 
@@ -29,32 +75,23 @@
 * \[[358](https://github.com/MaskingTechnology/jitar/pull/358)] npm: bump rollup-plugin-dts from 6.0.0 to 6.0.1 (#358) by dependabot[bot]
 * \[[357](https://github.com/MaskingTechnology/jitar/pull/357)] chore(deps): updates september (#357) by Peter van Vliet
 * \[[350](https://github.com/MaskingTechnology/jitar/pull/350)] chore(dependencies): updates (#350) by Peter van Vliet
-
-# v0.4.1
-[2023-07-25]
-
-### Features
-
-* \[[325](https://github.com/MaskingTechnology/jitar/pull/325)] feat(server): custom serializers support (#325) by Bas Meeuwissen
-* \[[322](https://github.com/MaskingTechnology/jitar/pull/322)] feat(serialization): added bigint support (#322) by Bas Meeuwissen
-* \[[319](https://github.com/MaskingTechnology/jitar/pull/319)] feat(serialization): regexp serialization support (#319) by Bas Meeuwissen
-* \[[317](https://github.com/MaskingTechnology/jitar/pull/317)] feat(runtime): configure active health checks (#317) by Bas Meeuwissen
-* \[[316](https://github.com/MaskingTechnology/jitar/pull/316)] feat(runtime): added timeout option to health checks (#316) by Bas Meeuwissen
-* \[[312](https://github.com/MaskingTechnology/jitar/pull/312)] feat(runtime): improved health check system (#312) by Bas Meeuwissen
-
-### Fixes
-
-* \[[342](https://github.com/MaskingTechnology/jitar/pull/342)] bug(runtime): middleware not executed properly (#342) by Peter van Vliet
-* \[[326](https://github.com/MaskingTechnology/jitar/pull/326)] bug(caching): it should not be possible to register a function multiple times (#326) by Bas Meeuwissen
-* \[[324](https://github.com/MaskingTechnology/jitar/pull/324)] bug(server): incorrect serialization control at the gateway (#324) by Peter van Vliet
-
-### Chores
-
 * \[[343](https://github.com/MaskingTechnology/jitar/pull/343)] chore: release v0.4.1 (#343) by Bas Meeuwissen
 * \[[339](https://github.com/MaskingTechnology/jitar/pull/339)] chore(build): added sonar for linting (#339) by Bas Meeuwissen
 * \[[336](https://github.com/MaskingTechnology/jitar/pull/336)] chore(deps): bumped dependencies (#336) by Bas Meeuwissen
 * \[[318](https://github.com/MaskingTechnology/jitar/pull/318)] chore(build): update linter to eliminate returns of await in async functions (#318) by Bas Meeuwissen
 * \[[321](https://github.com/MaskingTechnology/jitar/pull/321)] chore(deps): migrate to lerna 7 (#321) by Bas Meeuwissen
+
+# v0.4.1
+[2023-06-21]
+
+### Features
+
+* \[[317](https://github.com/MaskingTechnology/jitar/pull/317)] feat(runtime): configure active health checks (#317) by Bas Meeuwissen
+* \[[316](https://github.com/MaskingTechnology/jitar/pull/316)] feat(runtime): added timeout option to health checks (#316) by Bas Meeuwissen
+* \[[312](https://github.com/MaskingTechnology/jitar/pull/312)] feat(runtime): improved health check system (#312) by Bas Meeuwissen
+
+### Chores
+
 * \[[307](https://github.com/MaskingTechnology/jitar/pull/307)] npm: bump @rollup/plugin-node-resolve from 15.0.2 to 15.1.0 (#307) by dependabot[bot]
 * \[[308](https://github.com/MaskingTechnology/jitar/pull/308)] npm: bump mongodb from 5.4.0 to 5.5.0 (#308) by dependabot[bot]
 * \[[313](https://github.com/MaskingTechnology/jitar/pull/313)] build(deps): bump vite from 4.3.5 to 4.3.9 in /documentation (#313) by dependabot[bot]

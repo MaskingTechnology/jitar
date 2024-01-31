@@ -10,6 +10,7 @@ const IMPLEMENTATIONS =
 {
     // General
     PRIVATE: new Implementation(Version.DEFAULT, AccessLevels.PRIVATE, [], EXECUTABLES.PRIVATE),
+    PROTECTED: new Implementation(Version.DEFAULT, AccessLevels.PROTECTED, [], EXECUTABLES.PROTECTED),
     PUBLIC: new Implementation(Version.DEFAULT, AccessLevels.PUBLIC, [], EXECUTABLES.PUBLIC),
     PARAMETERS: new Implementation(Version.DEFAULT, AccessLevels.PRIVATE, [PARAMETERS.MANDATORY, PARAMETERS.OPTIONAL], EXECUTABLES.PARAMETERS),
     BROKEN: new Implementation(Version.DEFAULT, AccessLevels.PRIVATE, [], EXECUTABLES.BROKEN),

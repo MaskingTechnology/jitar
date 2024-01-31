@@ -13,9 +13,10 @@ export const standaloneSchema = z
         assets: z.array(z.string()).optional(),
         middlewares: z.array(z.string()).optional(),
         overrides: z.record(z.string(), z.string()).optional(),
+        trustKey: z.string().optional()
     })
     .strict()
-    .transform((value) => new StandaloneConfiguration(value.source, value.cache, value.index, value.segments, value.assets, value.middlewares, value.overrides));
+    .transform((value) => new StandaloneConfiguration(value.source, value.cache, value.index, value.segments, value.assets, value.middlewares, value.overrides, value.trustKey));
 
 export default class StandaloneConfiguration extends ProcedureRuntimeConfiguration
 {
@@ -25,8 +26,9 @@ export default class StandaloneConfiguration extends ProcedureRuntimeConfigurati
     #segments?: string[];
     #assets?: string[];
     #overrides?: Record<string, string>;
+    #trustKey?: string;
 
-    constructor(source?: string, cache?: string, index?: string, segments?: string[], assets?: string[], middlewares?: string[], overrides?: Record<string, string>)
+    constructor(source?: string, cache?: string, index?: string, segments?: string[], assets?: string[], middlewares?: string[], overrides?: Record<string, string>, trustKey?: string)
     {
         super(middlewares);
 
@@ -36,6 +38,7 @@ export default class StandaloneConfiguration extends ProcedureRuntimeConfigurati
         this.#segments = segments;
         this.#assets = assets;
         this.#overrides = overrides;
+        this.#trustKey = trustKey;
     }
 
     get source() { return this.#source; }
@@ -49,4 +52,6 @@ export default class StandaloneConfiguration extends ProcedureRuntimeConfigurati
     get assets() { return this.#assets; }
 
     get overrides() { return this.#overrides; }
+
+    get trustKey() { return this.#trustKey; }
 }

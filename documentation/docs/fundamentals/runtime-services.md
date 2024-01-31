@@ -26,8 +26,8 @@ Configurations are placed in JSON files. The basic structure looks like this.
 ```json
 {
     "url": "SERVICE_URL",
-    "setUp": "SET_UP_SCRIPT",
-    "tearDown": "TEAR_DOWN_SCRIPT",
+    "setUp": ["SET_UP_SCRIPT"],
+    "tearDown": ["TEAR_DOWN_SCRIPT"],
     "healthChecks": ["HEALTH_CHECK_SCRIPT"],
     "SERVICE_TYPE":
     {
@@ -37,11 +37,20 @@ Configurations are placed in JSON files. The basic structure looks like this.
 }
 ```
 
+::: tip NOTE
+The configuration also supports environment variables. They can be used by wrapping the variable name in `${}`. For example, `${ENVIRONMENT_VARIABLE_1}`.
+```json
+{
+    "PROPERTY_3": "${ENVIRONMENT_VARIABLE_3}"
+}
+```
+:::
+
 There are four properties at root level:
 
 * url - service url containing protocol, address and port (e.g. `http://service.example.com:3000`).
-* setUp - optional [set up script](../develop/setup-and-teardown.md) that gets executed on startup (e.g. `./setUp`).
-* tearDown - optional [tear down script](../develop/setup-and-teardown.md) that gets executed on shutdown (e.g. `./tearDown`).
+* setUp - optional list of [set up scripts](../develop/setup-and-teardown.md) that gets executed on startup.
+* tearDown - optional list of [tear down scripts](../develop/setup-and-teardown.md) that gets executed on shutdown.
 * healthChecks - optional list of [health check scripts](../deploy/health-checks.md) for checking the service health.
 * SERVICE_TYPE - configuration of the specific service (differs per type).
 
@@ -114,7 +123,8 @@ The following configuration properties are available:
 * gateway - url of the gateway (optional, in case no gateway is used).
 * repository - url of the repository (required).
 * segments - list of segment names to load (optional, loads all segments by default).
-* middleware - list of [middleware modules](../develop/middleware.md) to load (optional).
+* middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
+* trustKey - key for creating trusted client (optional).
 
 A full configuration example looks like this:
 
@@ -126,7 +136,8 @@ A full configuration example looks like this:
         "gateway": "http://gateway.example.com:3000",
         "repository": "http://repository.example.com:3000",
         "segments": ["segment1", "segment2"],
-        "middleware": ["./middleware1", "./middleware2"]
+        "middlewares": ["./middleware1", "./middleware2"],
+        "trustKey": "${MY_TRUST_KEY}"
     }
 }
 ```
@@ -161,7 +172,8 @@ The following configuration properties are available:
 
 * repository - url of the repository (required).
 * monitor - node monitoring interval in milliseconds (optional, default `5000`).
-* middleware - list of [middleware modules](../develop/middleware.md) to load (optional).
+* middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
+* trustKey - key for creating trusted clients (optional).
 
 A full configuration example looks like this:
 
@@ -172,7 +184,8 @@ A full configuration example looks like this:
     {
         "repository": "http://repository.example.com:3000",
         "monitor": 5000,
-        "middleware": ["./middleware1", "./middleware2"]
+        "middlewares": ["./middleware1", "./middleware2"],
+        "trustKey": "${MY_TRUST_KEY}"
     }
 }
 ```
@@ -196,7 +209,7 @@ The following configuration properties are available:
 * gateway - url of the gateway (optional if node property set).
 * node - url of the node (optional if gateway property set).
 * repository - url of the repository (required).
-* middleware - list of [middleware modules](../develop/middleware.md) to load (optional).
+* middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
 
 A full configuration example looks like this:
 
@@ -207,7 +220,7 @@ A full configuration example looks like this:
     {
         "gateway": "http://gateway.example.com:3000",
         "repository": "http://repository.example.com:3000",
-        "middleware": ["./middleware1", "./middleware2"]
+        "middlewares": ["./middleware1", "./middleware2"]
     }
 }
 ```
@@ -231,8 +244,9 @@ The standalone service has the same configuration properties as the repository s
 * cache - location of the application cache (optional, default `./.jitar`).
 * index - file to serve when accessed by a web browser (optional, default `index.html`).
 * assets - list of whitelisted assets (optional, default `undefined`).
-* middleware - list of [middleware modules](../develop/middleware.md) to load (optional).
+* middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
 * overrides - map with import overrides (optional, default `undefined`).
+* trustKey - key for creating trusted clients (optional).
 
 A full configuration example looks like this:
 
@@ -245,8 +259,9 @@ A full configuration example looks like this:
         "cache": "./.jitar",
         "index": "index.html",
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
-        "middleware": ["./middleware1", "./middleware2"],
-        "overrides": { "./my-module": "./alternative-module" }
+        "middlewares": ["./middleware1", "./middleware2"],
+        "overrides": { "./my-module": "./alternative-module" },
+        "trustKey": "${MY_TRUST_KEY}"
     }
 }
 ```
