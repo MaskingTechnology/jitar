@@ -101,9 +101,9 @@ export default class LocalFileManager implements FileManager
         return glob(`${location}/${pattern}`);
     }
 
-    async getNodeSegmentFiles(): Promise<string[]>
+    async getWorkerSegmentFiles(): Promise<string[]>
     {
-        return this.filter('**/*.segment.node.js');
+        return this.filter('**/*.segment.worker.js');
     }
 
     async getRepositorySegmentFiles(): Promise<string[]>
@@ -124,7 +124,7 @@ export default class LocalFileManager implements FileManager
     #isGeneratedFile(filename: string): boolean
     {
         return filename.endsWith('.local.js')
-            || filename.endsWith('.node.js')
+            || filename.endsWith('.worker.js')
             || filename.endsWith('.repository.js')
             || filename.endsWith('.remote.js');
     }

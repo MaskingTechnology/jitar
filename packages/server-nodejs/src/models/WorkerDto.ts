@@ -1,16 +1,16 @@
 
 import { z } from 'zod';
 
-export const nodeDtoSchema = z
+export const workerDtoSchema = z
     .object({
         url: z.string().url(),
         procedureNames: z.array(z.string()).optional(),
         trustKey: z.string().optional()
     })
     .strict()
-    .transform((value) => new NodeDto(value.url, value.procedureNames, value.trustKey));
+    .transform((value) => new WorkerDto(value.url, value.procedureNames, value.trustKey));
 
-export default class NodeDto
+export default class WorkerDto
 {
     url: string;
     procedureNames: string[];

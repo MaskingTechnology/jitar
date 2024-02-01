@@ -2,17 +2,17 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalGateway, LocalNode, Standalone } from '@jitar/runtime';
+import { LocalGateway, LocalWorker, Standalone } from '@jitar/runtime';
 
 import Headers from '../definitions/Headers';
 import ContentTypes from '../definitions/ContentTypes';
 
 export default class ProceduresController
 {
-    #runtime: LocalGateway | LocalNode | Standalone;
+    #runtime: LocalGateway | LocalWorker | Standalone;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, runtime: LocalGateway | LocalNode | Standalone, logger: Logger<unknown>)
+    constructor(app: express.Application, runtime: LocalGateway | LocalWorker | Standalone, logger: Logger<unknown>)
     {
         this.#runtime = runtime;
         this.#logger = logger;
