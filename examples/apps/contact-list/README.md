@@ -35,7 +35,7 @@ Production
 * Repository (`services/repository.json`)
 * Gateway (`services/gateway.json`)
 * Proxy (`services/proxy.json`)
-* Node - loads the *server* segment (`services/node.json`)
+* Worker - loads the *server* segment (`services/worker.json`)
 
 ## Running the example
 
@@ -78,7 +78,7 @@ Note that the Jitar instance needs to run beside Vite, otherwise the backend com
 
 ## Running in production
 
-To run the application in production mode, we need four terminal sessions to start the repository, gateway, node and proxy (as webserver) separately. The starting order is of importance.
+To run the application in production mode, we need four terminal sessions to start the repository, gateway, worker and proxy (as webserver) separately. The starting order is of importance.
 
 **Repository** (terminal 1)
 
@@ -92,10 +92,10 @@ npm run repo
 npm run gateway
 ```
 
-**Node** (terminal 3)
+**Worker** (terminal 3)
 
 ```bash
-npm run node
+npm run worker
 ```
 
 **Proxy** (terminal 4)

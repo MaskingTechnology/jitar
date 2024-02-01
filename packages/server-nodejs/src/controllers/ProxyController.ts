@@ -29,8 +29,12 @@ export default class ProxyController
 
         this.#logger.info(`Forwarding -> ${url}`);
 
-        return url.startsWith('/rpc')
+        const result = url.startsWith('/rpc')
             ? this.#runnerUrl
             : this.#repositoryUrl;
+
+        this.#logger.info(`Forwarded -> ${result}`);
+
+        return result;
     }
 }

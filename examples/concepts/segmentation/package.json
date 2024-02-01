@@ -7,8 +7,8 @@
         "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json",
         "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
         "gateway": "node --experimental-network-imports dist/jitar.js --config=services/gateway.json",
-        "node-data": "node --experimental-network-imports dist/jitar.js --config=services/data.json",
-        "node-process": "node --experimental-network-imports dist/jitar.js --config=services/process.json"
+        "worker-data": "node --experimental-network-imports dist/jitar.js --config=services/data.json",
+        "worker-process": "node --experimental-network-imports dist/jitar.js --config=services/process.json"
     },
     "dependencies": {
         "jitar": "^0.6.0"
