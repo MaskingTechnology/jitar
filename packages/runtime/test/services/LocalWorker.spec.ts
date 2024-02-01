@@ -5,19 +5,19 @@ import ProcedureNotFound from '../../src/errors/ProcedureNotFound';
 import Request from '../../src/models/Request';
 import Version from '../../src/models/Version';
 
-import { NODES, TRUST_KEY } from '../_fixtures/services/LocalNode.fixture';
+import { WORKERS, TRUST_KEY } from '../_fixtures/services/LocalWorker.fixture';
 import Unauthorized from '../../src/errors/generic/Unauthorized';
 import InvalidTrustKey from '../../src/errors/InvalidTrustKey';
 
-const node = NODES.SINGLE;
+const worker = WORKERS.SINGLE;
 
-describe('services/LocalNode', () =>
+describe('services/LocalWorker', () =>
 {
     describe('.isHealthy()', () =>
     {
         it('should be healthy', async () =>
         {
-            const healthy = await node.isHealthy();
+            const healthy = await worker.isHealthy();
 
             expect(healthy).toBeTruthy();
         });
@@ -27,8 +27,8 @@ describe('services/LocalNode', () =>
     {
         it('should find public procedures', () =>
         {
-            const hasSecondProcedure = node.hasProcedure('second');
-            const hasThirdProcedure = node.hasProcedure('third');
+            const hasSecondProcedure = worker.hasProcedure('second');
+            const hasThirdProcedure = worker.hasProcedure('third');
 
             expect(hasSecondProcedure).toBeTruthy();
             expect(hasThirdProcedure).toBeTruthy();
@@ -36,15 +36,15 @@ describe('services/LocalNode', () =>
 
         it('should find protected procedures', () =>
         {
-            const hasProtectedProcedure = node.hasProcedure('protected');
+            const hasProtectedProcedure = worker.hasProcedure('protected');
 
             expect(hasProtectedProcedure).toBeTruthy();
         });
 
         it('should not find private procedures', () =>
         {
-            const hasPrivateProcedure = node.hasProcedure('private');
-            const hasFirstProcedure = node.hasProcedure('first');
+            const hasPrivateProcedure = worker.hasProcedure('private');
+            const hasFirstProcedure = worker.hasProcedure('first');
 
             expect(hasPrivateProcedure).toBeFalsy();
             expect(hasFirstProcedure).toBeFalsy();
@@ -52,7 +52,7 @@ describe('services/LocalNode', () =>
 
         it('should not find non-existing procedures', () =>
         {
-            const hasNonExistingProcedure = node.hasProcedure('nonExisting');
+            const hasNonExistingProcedure = worker.hasProcedure('nonExisting');
 
             expect(hasNonExistingProcedure).toBeFalsy();
         });
@@ -63,7 +63,7 @@ describe('services/LocalNode', () =>
         it('should run a public procedure that calls a private procedure on the same segment', async () =>
         {
             const request = new Request('second', Version.DEFAULT, new Map(), new Map());
-            const response = await node.run(request);
+            const response = await worker.run(request);
 
             expect(response.result).toBe('first');
         });
@@ -71,7 +71,7 @@ describe('services/LocalNode', () =>
         it('should run a public procedure that calls a private procedure on another segment', async () =>
         {
             const request = new Request('sixth', Version.DEFAULT, new Map(), new Map());
-            const response = await node.run(request);
+            const response = await worker.run(request);
 
             expect(response.result).toBe('first');
         });
@@ -79,7 +79,7 @@ describe('services/LocalNode', () =>
         it('should run a public procedure that calls a public procedure on another segment', async () =>
         {
             const request = new Request('third', Version.DEFAULT, new Map(), new Map());
-            const response = await node.run(request);
+            const response = await worker.run(request);
 
             expect(response.result).toBe('fourth');
         });
@@ -87,7 +87,7 @@ describe('services/LocalNode', () =>
         it('should not run a non-existing procedure', async () =>
         {
             const request = new Request('nonExisting', Version.DEFAULT, new Map(), new Map());
-            const run = async () => node.run(request);
+            const run = async () => worker.run(request);
 
             expect(run).rejects.toEqual(new ProcedureNotFound('nonExisting'));
         });
@@ -96,7 +96,7 @@ describe('services/LocalNode', () =>
         {
             const headers = new Map().set('x-jitar-trust-key', TRUST_KEY);
             const request = new Request('protected', Version.DEFAULT, new Map(), headers);
-            const response = await node.run(request);
+            const response = await worker.run(request);
 
             expect(response.result).toBe('protected');
         });
@@ -105,7 +105,7 @@ describe('services/LocalNode', () =>
         {
             const headers = new Map().set('x-jitar-trust-key', 'invalid');
             const request = new Request('protected', Version.DEFAULT, new Map(), headers);
-            const run = async () => node.run(request);
+            const run = async () => worker.run(request);
 
             expect(run).rejects.toEqual(new InvalidTrustKey());
         });
@@ -113,7 +113,7 @@ describe('services/LocalNode', () =>
         it('should not run a protected procedure without trust key', async () =>
         {
             const request = new Request('protected', Version.DEFAULT, new Map(), new Map());
-            const run = async () => node.run(request);
+            const run = async () => worker.run(request);
 
             expect(run).rejects.toEqual(new Unauthorized());
         });

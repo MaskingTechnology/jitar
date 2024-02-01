@@ -1,8 +1,8 @@
 
-import Node from './Node.js';
+import Worker from './Worker.js';
 import ProcedureRuntime from './ProcedureRuntime.js';
 
 export default abstract class Gateway extends ProcedureRuntime
 {
-    abstract addNode(node: Node): Promise<void>;
+    abstract addWorker(worker: Worker): Promise<void>;
 }

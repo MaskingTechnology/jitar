@@ -4,15 +4,15 @@ import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
 import RemoteGateway from './RemoteGateway.js';
-import RemoteNode from './RemoteNode.js';
+import RemoteWorker from './RemoteWorker.js';
 import RemoteRepository from './RemoteRepository.js';
 import ProcedureRuntime from './ProcedureRuntime.js';
 
 export default class Proxy extends ProcedureRuntime
 {
-    #runner: RemoteGateway | RemoteNode;
+    #runner: RemoteGateway | RemoteWorker;
 
-    constructor(repository: RemoteRepository, runner: RemoteGateway | RemoteNode, url?: string)
+    constructor(repository: RemoteRepository, runner: RemoteGateway | RemoteWorker, url?: string)
     {
         super(repository, url);
 

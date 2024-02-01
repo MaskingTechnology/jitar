@@ -9,8 +9,8 @@ import LocalRepository from './services/LocalRepository.js';
 import RemoteGateway from './services/RemoteGateway.js';
 import LocalGateway from './services/LocalGateway.js';
 
-import RemoteNode from './services/RemoteNode.js';
-import LocalNode from './services/LocalNode.js';
+import RemoteWorker from './services/RemoteWorker.js';
+import LocalWorker from './services/LocalWorker.js';
 
 import Proxy from './services/Proxy.js';
 import Standalone from './services/Standalone.js';
@@ -27,7 +27,7 @@ export default class RuntimeBuilder
 
     #repository?: RemoteRepository;
     #gateway?: RemoteGateway;
-    #node?: RemoteNode;
+    #worker?: RemoteWorker;
 
     url(url?: string): this
     {
@@ -98,9 +98,9 @@ export default class RuntimeBuilder
         return this;
     }
 
-    node(url?: string): this
+    worker(url?: string): this
     {
-        this.#node = url !== undefined ? new RemoteNode(url) : undefined;
+        this.#worker = url !== undefined ? new RemoteWorker(url) : undefined;
 
         return this;
     }
@@ -135,26 +135,26 @@ export default class RuntimeBuilder
         return gateway;
     }
 
-    buildNode(trustKey?: string): LocalNode
+    buildWorker(trustKey?: string): LocalWorker
     {
         if (this.#repository === undefined)
         {
-            throw new RuntimeNotBuilt('Repository is not set for the node');
+            throw new RuntimeNotBuilt('Repository is not set for the worker');
         }
         
-        const node = new LocalNode(this.#repository, this.#gateway, this.#url, trustKey);
-        node.segmentNames = this.#segments;
-        node.healthCheckFiles = this.#healthChecks;
-        node.middlewareFiles = this.#middlewares;
+        const worker = new LocalWorker(this.#repository, this.#gateway, this.#url, trustKey);
+        worker.segmentNames = this.#segments;
+        worker.healthCheckFiles = this.#healthChecks;
+        worker.middlewareFiles = this.#middlewares;
 
         this.#repository.segmentNames = this.#segments;
 
         if (this.gateway !== undefined)
         {
-            (this.#gateway as RemoteGateway).node = node;
+            (this.#gateway as RemoteGateway).worker = worker;
         }
         
-        return node;
+        return worker;
     }
 
     buildProxy(): Proxy
@@ -164,11 +164,11 @@ export default class RuntimeBuilder
             throw new RuntimeNotBuilt('Repository is not set for the proxy');
         }
 
-        const runner = this.#gateway ?? this.#node;
+        const runner = this.#gateway ?? this.#worker;
 
         if (runner === undefined)
         {
-            throw new RuntimeNotBuilt('Runner (gateway or node) is not set for the proxy');
+            throw new RuntimeNotBuilt('Runner (gateway or worker) is not set for the proxy');
         }
 
         const proxy = new Proxy(this.#repository, runner, this.#url);
@@ -190,10 +190,10 @@ export default class RuntimeBuilder
         repository.assets = this.#assets;
         repository.overrides = this.#overrides;
 
-        const node = new LocalNode(repository, this.#gateway, this.#url, trustKey);
-        node.segmentNames = this.#segments;
+        const worker = new LocalWorker(repository, this.#gateway, this.#url, trustKey);
+        worker.segmentNames = this.#segments;
 
-        const standalone = new Standalone(repository, node, this.#url);
+        const standalone = new Standalone(repository, worker, this.#url);
         standalone.healthCheckFiles = this.#healthChecks;
         standalone.middlewareFiles = this.#middlewares;
 

@@ -3,10 +3,10 @@ import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
 import DummyRepository from './DummyRepository.js';
-import Node from './Node.js';
+import Worker from './Worker.js';
 import Remote from './Remote.js';
 
-export default class RemoteNode extends Node
+export default class RemoteWorker extends Worker
 {
     #remote: Remote;
     #procedureNames: Set<string> = new Set();

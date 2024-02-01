@@ -6,13 +6,13 @@ import Response from '../models/Response.js';
 
 import DummyRepository from './DummyRepository.js';
 import Gateway from './Gateway.js';
-import Node from './Node.js';
+import Worker from './Worker.js';
 import Remote from './Remote.js';
 
 export default class RemoteGateway extends Gateway
 {
     #remote: Remote;
-    #node?: Node;
+    #worker?: Worker;
 
     constructor(url: string)
     {
@@ -21,17 +21,17 @@ export default class RemoteGateway extends Gateway
         this.#remote = new Remote(url);
     }
 
-    get node() { return this.#node; }
+    get worker() { return this.#worker; }
 
-    set node(node: Node | undefined) { this.#node = node; }
+    set worker(worker: Worker | undefined) { this.#worker = worker; }
 
     async start(): Promise<void>
     {
         await super.start();
         
-        if (this.#node !== undefined)
+        if (this.#worker !== undefined)
         {
-            await this.addNode(this.#node);
+            await this.addWorker(this.#worker);
         }
     }
 
@@ -46,9 +46,9 @@ export default class RemoteGateway extends Gateway
         throw new NotImplemented();
     }
 
-    addNode(node: Node): Promise<void>
+    addWorker(worker: Worker): Promise<void>
     {
-        return this.#remote.addNode(node);
+        return this.#remote.addWorker(worker);
     }
 
     run(request: Request): Promise<Response>

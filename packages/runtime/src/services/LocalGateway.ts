@@ -6,14 +6,14 @@ import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
 import Gateway from './Gateway.js';
-import Node from './Node.js';
-import NodeBalancer from './NodeBalancer.js';
+import Worker from './Worker.js';
+import WorkerBalancer from './WorkerBalancer.js';
 import Repository from './Repository.js';
 
 export default class LocalGateway extends Gateway
 {
-    #nodes: Set<Node> = new Set();
-    #balancers: Map<string, NodeBalancer> = new Map();
+    #workers: Set<Worker> = new Set();
+    #balancers: Map<string, WorkerBalancer> = new Map();
     #trustKey?: string;
 
     constructor(repository: Repository, url?: string, trustKey?: string)
@@ -23,14 +23,14 @@ export default class LocalGateway extends Gateway
         this.#trustKey = trustKey;
     }
 
-    get nodes()
+    get workers()
     {
-        return [...this.#nodes.values()];
+        return [...this.#workers.values()];
     }
 
     getProcedureNames(): string[]
     {
-        const procedureNames = this.nodes.map(node => node.getProcedureNames());
+        const procedureNames = this.workers.map(worker => worker.getProcedureNames());
         const uniqueNames = new Set(procedureNames.flat());
 
         return [...uniqueNames.values()];
@@ -43,28 +43,28 @@ export default class LocalGateway extends Gateway
         return procedureNames.includes(fqn);
     }
 
-    async addNode(node: Node, trustKey?: string): Promise<void>
+    async addWorker(worker: Worker, trustKey?: string): Promise<void>
     {
         if (trustKey !== undefined && this.#trustKey !== trustKey)
         {
             throw new InvalidTrustKey();
         }
 
-        this.#nodes.add(node);
+        this.#workers.add(worker);
 
-        for (const name of node.getProcedureNames())
+        for (const name of worker.getProcedureNames())
         {
             const balancer = this.#getOrCreateBalancer(name);
 
-            balancer.addNode(node);
+            balancer.addWorker(worker);
         }
     }
 
-    removeNode(node: Node): void
+    removeWorker(worker: Worker): void
     {
-        this.#nodes.delete(node);
+        this.#workers.delete(worker);
 
-        for (const name of node.getProcedureNames())
+        for (const name of worker.getProcedureNames())
         {
             const balancer = this.#getBalancer(name);
 
@@ -73,22 +73,22 @@ export default class LocalGateway extends Gateway
                 continue;
             }
 
-            balancer.removeNode(node);
+            balancer.removeWorker(worker);
         }
     }
 
-    #getBalancer(fqn: string): NodeBalancer | undefined
+    #getBalancer(fqn: string): WorkerBalancer | undefined
     {
         return this.#balancers.get(fqn);
     }
 
-    #getOrCreateBalancer(fqn: string): NodeBalancer
+    #getOrCreateBalancer(fqn: string): WorkerBalancer
     {
         let balancer = this.#getBalancer(fqn);
 
         if (balancer === undefined)
         {
-            balancer = new NodeBalancer();
+            balancer = new WorkerBalancer();
 
             this.#balancers.set(fqn, balancer);
         }

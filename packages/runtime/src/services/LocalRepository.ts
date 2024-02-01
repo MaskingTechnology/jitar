@@ -152,11 +152,11 @@ export default class LocalRepository extends Repository
 
         if (segmentFilename === undefined)
         {
-            return this.#readNodeModule(name);
+            return this.#readWorkerModule(name);
         }
 
         return this.#hasClientSegmentFile(clientId, segmentFilename)
-            ? this.#readNodeModule(name)
+            ? this.#readWorkerModule(name)
             : this.#readRemoteModule(name);
     }
 
@@ -194,7 +194,7 @@ export default class LocalRepository extends Repository
         return clientSegmentFiles.some(clientSegmentFilename => segmentFilename.endsWith(clientSegmentFilename));
     }
 
-    async #readNodeModule(name: string): Promise<File>
+    async #readWorkerModule(name: string): Promise<File>
     {
         const filename = this.#getModuleFilename(name);
         const file = await this.#readFile(filename);

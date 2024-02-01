@@ -1,17 +1,17 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { NODES, NODE_URL } from '../_fixtures/services/RemoteNode.fixture';
+import { WORKERS, WORKER_URL } from '../_fixtures/services/RemoteWorker.fixture';
 
-const node = NODES.REMOTE;
+const worker = WORKERS.REMOTE;
 
-describe('services/RemoteNode', () =>
+describe('services/RemoteWorker', () =>
 {
     describe('.url', () =>
     {
         it('should contain an url', () =>
         {
-            expect(node.url).toContain(NODE_URL);
+            expect(worker.url).toContain(WORKER_URL);
         });
     });
 
@@ -19,7 +19,7 @@ describe('services/RemoteNode', () =>
     {
         it('should contain all registered procedure', () =>
         {
-            const names = node.getProcedureNames();
+            const names = worker.getProcedureNames();
 
             expect(names).toContain('first');
             expect(names).toContain('second');
@@ -30,8 +30,8 @@ describe('services/RemoteNode', () =>
     {
         it('should find a procedure', () =>
         {
-            const hasFirstProcedure = node.hasProcedure('first');
-            const hasSecondProcedure = node.hasProcedure('second');
+            const hasFirstProcedure = worker.hasProcedure('first');
+            const hasSecondProcedure = worker.hasProcedure('second');
 
             expect(hasFirstProcedure).toBeTruthy();
             expect(hasSecondProcedure).toBeTruthy();
@@ -39,7 +39,7 @@ describe('services/RemoteNode', () =>
 
         it('should not find a procedure', () =>
         {
-            const hasNoProcedure = node.hasProcedure('third');
+            const hasNoProcedure = worker.hasProcedure('third');
 
             expect(hasNoProcedure).toBeFalsy();
         });

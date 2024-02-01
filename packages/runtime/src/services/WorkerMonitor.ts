@@ -1,10 +1,10 @@
 
 import LocalGateway from './LocalGateway.js';
-import Node from './Node.js';
+import Worker from './Worker.js';
 
 const DEFAULT_FREQUENCY = 5000;
 
-export default class NodeMonitor
+export default class WorkerMonitor
 {
     #gateway: LocalGateway;
     #frequency: number;
@@ -33,27 +33,27 @@ export default class NodeMonitor
 
     async #monitor(): Promise<void>
     {
-        const nodes = this.#gateway.nodes;
-        const promises = nodes.map(async (node: Node) => this.#monitorNode(node));
+        const workers = this.#gateway.workers;
+        const promises = workers.map(async (worker: Worker) => this.#monitorWorker(worker));
 
         await Promise.all(promises);
     }
 
-    async #monitorNode(node: Node): Promise<void>
+    async #monitorWorker(worker: Worker): Promise<void>
     {
-        const available = await this.#checkNodeAvailable(node);
+        const available = await this.#checkWorkerAvailable(worker);
 
         if (available === false)
         {
-            this.#gateway.removeNode(node);
+            this.#gateway.removeWorker(worker);
         }
     }
 
-    async #checkNodeAvailable(node: Node): Promise<boolean>
+    async #checkWorkerAvailable(worker: Worker): Promise<boolean>
     {
         try
         {
-            return await node.isHealthy();
+            return await worker.isHealthy();
         }
         catch (error)
         {
