@@ -33,8 +33,6 @@ export default class ProxyController
             ? this.#runnerUrl
             : this.#repositoryUrl;
 
-        this.#logger.info(`Forwarded -> ${result}`);
-
         return result;
     }
 }

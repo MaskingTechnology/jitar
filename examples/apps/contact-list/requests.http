@@ -7,4 +7,9 @@ GET http://localhost:3000/rpc/domain/contact/getContacts?version=0.0.0&serialize
 
 ###
 
-GET http://localhost:3001/rpc/domain/contact/getContacts?version=0.0.0&serialize=true HTTP/1.1
+POST http://localhost:3001/rpc/domain/contact/getContacts?version=0.0.0&serialize=true HTTP/1.1
+conent-type: application/json
+
+{
+    
+}
