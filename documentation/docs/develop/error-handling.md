@@ -13,7 +13,7 @@ next:
 
 # Error handling
 
-For handling errors the default JavaScript error system can be used for throwing and catching errors. When an error occurs it will be passed to the calling procedure until it’s catched like any normal JavaScript application. If the error occurs on a remote server, the error will be (de)serialized and rethrown on the calling node.
+For handling errors the default JavaScript error system can be used for throwing and catching errors. When an error occurs it will be passed to the calling procedure until it’s caught like any normal JavaScript application. If the error occurs on a remote server, the error will be (de)serialized and thrown on the calling worker.
 
 You can create your own custom errors and use the `instanceof` operator to distinguish them like this:
 

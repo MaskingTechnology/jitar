@@ -70,7 +70,7 @@ export default defineConfig({
           { text: 'Logging', link: '/monitor/logging' },
           { text: 'Health', link: '/monitor/health' },
           { text: 'Procedures', link: '/monitor/procedures' },
-          { text: 'Nodes', link: '/monitor/nodes' }
+          { text: 'Workers', link: '/monitor/workers' }
         ]
       },
       {

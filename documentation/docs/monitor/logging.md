@@ -30,7 +30,7 @@ The debug level is the most verbose level. It will output all debug, info, warn 
 * Health requested
 * Health status requested
 
-It's advisable to not use the debug level in production because the health of a node gets requested frequently. If you experience any issues with this, you can use this mode.
+It's advisable to not use the debug level in production because the health of a worker gets requested frequently. If you experience any issues with this, you can use this mode.
 
 ## Info
 
@@ -40,7 +40,7 @@ The info level will output all info, warn and error messages. The info level con
 * Assets retrieved
 * Client registration
 * Module retrieval
-* Node registration / retrieval
+* Worker registration / retrieval
 * Registered procedure names
 * Forward message
 * RPC registration / execution
@@ -61,5 +61,5 @@ The error level is the most severe level. This level contains messages of all ru
 
 * Asset that could not be loaded
 * Module that could not get loaded
-* Node that could not get added
+* Worker that could not get added
 * Procedure that threw an error

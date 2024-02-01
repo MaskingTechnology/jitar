@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Node monitoring
-    link: /monitor/nodes
+    text: Worker monitoring
+    link: /monitor/workers
 
 next:
     text: Add Jitar to an existing project
@@ -33,24 +33,24 @@ In-depth information on creating segments can be found in the [segmentation sect
 
 ### Step 3: Configure the cluster
 
-Once the segmentation strategy is defined, the cluster needs to be configured. A cluster always requires the [repository](../fundamentals/runtime-services#repository), [gateway](../fundamentals/runtime-services#gateway) and [node](../fundamentals/runtime-services#node) services, so you need to configure them separately. A separate node configuration is required for each (backend) segment.
+Once the segmentation strategy is defined, the cluster needs to be configured. A cluster always requires the [repository](../fundamentals/runtime-services#repository), [gateway](../fundamentals/runtime-services#gateway) and [worker](../fundamentals/runtime-services#worker) services, so you need to configure them separately. A separate worker configuration is required for each (backend) segment.
 
 In-depth information on configuring the services can be found in the [runtime services section](../fundamentals/runtime-services).
 
 ### Step 4: Deploy the cluster
 
-The final step is to deploy the cluster. You can spin up as many nodes per segment as you want, Jitar will [automatically balance the load](../deploy/load-balancing) between them. Keep in mind that using multiple services always leads to performance loss due to network latency. Therefore it's important to perform some tests before going into production. In some cases some tweaking of the segmentation strategy or the number of nodes is required to get it right. You can only find out by measuring it.
+The final step is to deploy the cluster. You can spin up as many workers per segment as you want, Jitar will [automatically balance the load](../deploy/load-balancing) between them. Keep in mind that using multiple services always leads to performance loss due to network latency. Therefore it's important to perform some tests before going into production. In some cases some tweaking of the segmentation strategy or the number of workers is required to get it right. You can only find out by measuring it.
 
 ## Reliability
 
 Some parts of an application are more important than others. Parts that are crucial might need a guarantee of their availability. In this case it's a good idea to set up a cluster.
 
-The [gateway service](../fundamentals/runtime-services#gateway) provides a failover system out-of-the box that uses the [health system](../monitor/health) for monitoring the availability of its nodes. If a node doesn't respond or returns an unhealthy state, the gateway will stop using the node and resort to the remaining nodes. This means that a cluster with multiple nodes is required to be able to guarantee availability.
+The [gateway service](../fundamentals/runtime-services#gateway) provides a failover system out-of-the box that uses the [health system](../monitor/health) for monitoring the availability of its workers. If a worker doesn't respond or returns an unhealthy state, the gateway will stop using the worker and resort to the remaining workers. This means that a cluster with multiple workers is required to be able to guarantee availability.
 
-Setting up an availability cluster requires the same steps as [setting up a scalability cluster](#scalability), but with different reasoning. We do not recommend changing the segmentation strategy for adding reliability. Instead you can simply spin up multiple instances of the existing node(s).
+Setting up an availability cluster requires the same steps as [setting up a scalability cluster](#scalability), but with different reasoning. We do not recommend changing the segmentation strategy for adding reliability. Instead you can simply spin up multiple instances of the existing worker(s).
 
 ## Security
 
 Limiting and protecting access to public services is always recommended. For the protection of a public [standalone service](../fundamentals/runtime-services#standalone) or a cluster of services, the proxy service could be placed in a [DMZ](https://en.wikipedia.org/wiki/DMZ_(computing)){target="_blank"}.
 
-The proxy only forwards requests to other services. The RPC calls are forwarded to a [gateway](../fundamentals/runtime-services#gateway) or [node](../fundamentals/runtime-services#node) and the rest of the calls are forwarded to the [repository](../fundamentals/runtime-services#repository). When the application is deployed as a [standalone service](../fundamentals/runtime-services#standalone), both services run on the same server.
+The proxy only forwards requests to other services. The RPC calls are forwarded to a [gateway](../fundamentals/runtime-services#gateway) or [worker](../fundamentals/runtime-services#worker) and the rest of the calls are forwarded to the [repository](../fundamentals/runtime-services#repository). When the application is deployed as a [standalone service](../fundamentals/runtime-services#standalone), both services run on the same server.

@@ -13,7 +13,7 @@ next:
 
 # Data serialization
 
-Jitar comes with a powerful (de)serializer that is used for sharing data between nodes. In this section you'll find more information on this topic..
+Jitar comes with a powerful (de)serializer that is used for sharing data between workers. In this section you'll find more information on this topic..
 
 Note: The serializer is available as a separate NPM package that you can use in your own project. You can find more information on this in the [readme of the package](https://github.com/MaskingTechnology/jitar/blob/main/packages/serialization/README.md){target="_blank"}.
 

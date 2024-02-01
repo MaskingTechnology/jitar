@@ -28,7 +28,7 @@ This example demonstrates how to distribute an application in production. It als
 
 ## Load balancing
 
-Jitar comes with load balancing capabilities out-of-the-box. This example demonstrates how to load balance application segments by running them on multiple nodes.
+Jitar comes with load balancing capabilities out-of-the-box. This example demonstrates how to load balance application segments by running them on multiple workers.
 
 [View in repository](https://github.com/MaskingTechnology/jitar/tree/main/examples/concepts/load-balancing){target="_blank"}
 
@@ -64,7 +64,7 @@ This example demonstrates how to set up a node client. It’s for you when you a
 
 ## Health checks
 
-For the health of a cluster it’s important that nodes can communicate their health status. In this example you’ll learn how to create heath checks and request the health of a service.
+For the health of a cluster it’s important that workers can communicate their health status. In this example you’ll learn how to create heath checks and request the health of a service.
 
 [View in repository](https://github.com/MaskingTechnology/jitar/tree/main/examples/concepts/health-checks){target="_blank"}
 

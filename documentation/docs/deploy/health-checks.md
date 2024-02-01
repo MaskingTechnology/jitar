@@ -13,7 +13,7 @@ next:
 
 # Health checks
 
-The [gateway service](../fundamentals/runtime-services#gateway) determines if a node still can be used safely by frequently checking its health. Health checks are used for health determination. Jitar has no out-of-the-box health checks, but you can create and add your own. A common use case is for checking database availability. In case a node can't access its database, we want the gateway to stop using it. Health checks can be added to any of the services.
+The [gateway service](../fundamentals/runtime-services#gateway) determines if a worker still can be used safely by frequently checking its health. Health checks are used for health determination. Jitar has no out-of-the-box health checks, but you can create and add your own. A common use case is for checking database availability. In case a worker can't access its database, we want the gateway to stop using it. Health checks can be added to any of the services.
 
 ::: warning BREAKING CHANGES
 Version 0.5 introduced breaking changes. Please check our [migration guide](https://github.com/MaskingTechnology/jitar/blob/main/migrations/migrate-from-0.4.x-to-0.5.0.md) for more information.
@@ -58,17 +58,17 @@ export default instance;
 We can use this module file for the registration at the service:
 
 ```json
-// services/node.json
+// services/worker.json
 {
     "url": "http://localhost:3000",
     "healthChecks": ["./databaseHealthCheck"],
-    "node":
+    "worker":
     {
         // ...
     }
 }
 ```
 
-Once added, the node will trigger the check automatically. You can also check yourself using the health API. More information on this can be found in the [MONITOR section](../monitor/health).
+Once added, the worker will trigger the check automatically. You can also check yourself using the health API. More information on this can be found in the [MONITOR section](../monitor/health).
 
 **Note** that health checks are defined at the root level of the configuration. This means you can add health checks for all service types. When using external monitoring tools that monitor a cluster, this could be useful.

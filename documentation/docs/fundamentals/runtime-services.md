@@ -100,21 +100,21 @@ A full configuration example looks like this.
 
 This is a core service that is always required, except when running Jitar as a [standalone service](#standalone).
 
-## Node
+## Worker
 
-A node loads application segments and runs its functions on request.
+A worker loads application segments and runs its functions on request.
 
 ### Segmentation
 
-A node can load one or multiple segments, making it very easy to combine application pieces that have to be scaled yet. This strategy can save you a lot on hosting costs!
+A worker can load one or multiple segments, making it very easy to combine application pieces that have to be scaled yet. This strategy can save you a lot on hosting costs!
 
 ::: warning KEEP IN MIND
-Like any other service, a node runs on the server. Keep this in mind when creating and selecting the segments.
+Like any other service, a worker runs on the server. Keep this in mind when creating and selecting the segments.
 :::
 
 ### Gateway registration
 
-When configured, a node can register itself to a [gateway service](#gateway) to become available in the cluster.
+When configured, a worker can register itself to a [gateway service](#gateway) to become available in the cluster.
 
 ### Configuration properties
 
@@ -130,8 +130,8 @@ A full configuration example looks like this:
 
 ```json
 {
-    "url": "http://node.example.com:3000",
-    "node":
+    "url": "http://worker.example.com:3000",
+    "worker":
     {
         "gateway": "http://gateway.example.com:3000",
         "repository": "http://repository.example.com:3000",
@@ -148,19 +148,19 @@ This is a core service that is always required, except when running Jitar as a [
 
 ## Gateway
 
-The gateway provides a single point of access for running remote application functions. It acts as a mediator between a client and multiple node services.
+The gateway provides a single point of access for running remote application functions. It acts as a mediator between a client and multiple worker services.
 
 ### Routing
 
-When a function request comes in, the gateway will look for a node containing the function and forwards the request.
+When a function request comes in, the gateway will look for a worker containing the function and forwards the request.
 
 ### Load balancing
 
-If a function is available on multiple nodes, the gateway will automatically balance the requests round robin over the nodes.
+If a function is available on multiple workers, the gateway will automatically balance the requests round robin over the workers.
 
-### Node monitoring
+### Worker monitoring
 
-The availability of nodes is actively monitored. If a node cannot be reached or replies to have [an unhealthy state](../monitor/health.md), it will be removed from the gateway.
+The availability of workers is actively monitored. If a worker cannot be reached or replies to have [an unhealthy state](../monitor/health.md), it will be removed from the gateway.
 
 ### Caching
 
@@ -171,7 +171,7 @@ There aren't any caching options yet, but we are planning on implementing them. 
 The following configuration properties are available:
 
 * repository - url of the repository (required).
-* monitor - node monitoring interval in milliseconds (optional, default `5000`).
+* monitor - worker monitoring interval in milliseconds (optional, default `5000`).
 * middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
 * trustKey - key for creating trusted clients (optional).
 
@@ -192,22 +192,22 @@ A full configuration example looks like this:
 
 ### When to use
 
-This service is used for creating a cluster and is only useful when working with multiple nodes. It also works with a single node, but adds a lot of overhead.
+This service is used for creating a cluster and is only useful when working with multiple workers. It also works with a single worker, but adds a lot of overhead.
 
 ## Proxy
 
-The proxy acts as an intermediary between clients and a Jitar cluster. It's a single point of access for both the [repository](#repository) and [gateway](#gateway) / [node](#node) services.
+The proxy acts as an intermediary between clients and a Jitar cluster. It's a single point of access for both the [repository](#repository) and [gateway](#gateway) / [worker](#worker) services.
 
 ### Request forwarding
 
-The single purpose of the proxy is to forward requests to the right service. RPC requests are forwarded to the [gateway](#gateway) or [node](#node) service (depending on the configuration). Other requests are forwarded to the repository.
+The single purpose of the proxy is to forward requests to the right service. RPC requests are forwarded to the [gateway](#gateway) or [worker](#worker) service (depending on the configuration). Other requests are forwarded to the repository.
 
 ### Configuration properties
 
 The following configuration properties are available:
 
-* gateway - url of the gateway (optional if node property set).
-* node - url of the node (optional if gateway property set).
+* gateway - url of the gateway (optional if worker property set).
+* worker - url of the worker (optional if gateway property set).
 * repository - url of the repository (required).
 * middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
 
@@ -234,7 +234,7 @@ This service is not required, but very helpful for protecting your cluster. Comm
 
 ## Standalone
 
-Combines the repository and node core services into a single instance.
+Combines the repository and worker core services into a single instance.
 
 ### Configuration properties
 

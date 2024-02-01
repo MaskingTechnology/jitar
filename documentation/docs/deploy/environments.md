@@ -48,9 +48,9 @@ If you wonder why we've used 'standalone' instead of 'development' for the namin
 
 Distributed applications require more of the infrastructure that comes with a cost. Therefore we like to keep things simple and try to use the standalone setup in production as long as possible. We recommend only using multiple Jitar services for availability and scalability reasons.
 
-Setting up a distributed environment requires the same steps as a standalone setup. The only difference is that you need to create a configuration per service like the repository, gateway, and node(s). For the naming we use the service type, like we do with the standalone. Don't forget to add scripts to the `package.json` file.
+Setting up a distributed environment requires the same steps as a standalone setup. The only difference is that you need to create a configuration per service like the repository, gateway, and worker(s). For the naming we use the service type, like we do with the standalone. Don't forget to add scripts to the `package.json` file.
 
-If your environment requires multiple nodes, you can append a node name to the configuration. For example "node-sales", "node-orders", etc..
+If your environment requires multiple workers, you can append a name to the configuration. For example "worker-sales", "worker-orders", etc..
 
 ## Other environments
 
