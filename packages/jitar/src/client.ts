@@ -31,7 +31,7 @@ export
     MissingParameterValue,
     ModuleNotAccessible,
     ModuleNotLoaded,
-    NoNodeAvailable,
+    NoWorkerAvailable,
     ProcedureNotAccessible,
     ProcedureNotFound,
     RepositoryNotAvailable,
