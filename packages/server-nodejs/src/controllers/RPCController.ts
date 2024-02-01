@@ -41,8 +41,6 @@ export default class RPCController
 
     async runGet(request: ExpressRequest, response: ExpressResponse): Promise<ExpressResponse>
     {
-        this.#logger.info(`Running GET`);
-
         try
         {
             const fqn = this.#extractFqn(request);
@@ -65,8 +63,6 @@ export default class RPCController
 
     async runPost(request: ExpressRequest, response: ExpressResponse): Promise<ExpressResponse>
     {
-        this.#logger.info(`Running POST`);
-
         try
         {
             const fqn = this.#extractFqn(request);
