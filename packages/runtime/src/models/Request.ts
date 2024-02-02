@@ -24,6 +24,11 @@ export default class Request
 
     get headers() { return this.#headers; }
 
+    clearArguments(): void
+    {
+        this.#args.clear();
+    }
+    
     setArgument(name: string, value: unknown): void
     {
         this.#args.set(name, value);
@@ -32,6 +37,11 @@ export default class Request
     getArgument(name: string): unknown
     {
         return this.#args.get(name);
+    }
+
+    hasArgument(name: string): boolean
+    {
+        return this.#args.has(name);
     }
 
     removeArgument(name: string): void
@@ -52,6 +62,11 @@ export default class Request
     getHeader(name: string): string | undefined
     {
         return this.#headers.get(name.toLowerCase());
+    }
+
+    hasHeader(name: string): boolean
+    {
+        return this.#headers.has(name.toLowerCase());
     }
 
     removeHeader(name: string): void

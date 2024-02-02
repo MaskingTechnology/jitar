@@ -235,17 +235,18 @@ export default class RPCController
         const content = await this.#createResponseContent(result, serialize);
         const contentType = this.#createResponseContentType(content);
         const responseContent = contentType === ContentTypes.JSON ? content : String(content);
+        const statusCode = this.#createResponseResultStatusCode(result, response);
 
         response.setHeader(Headers.CONTENT_TYPE, contentType);
 
-        return response.status(200).send(responseContent);
+        return response.status(statusCode).send(responseContent);
     }
 
     async #createErrorResponse(error: unknown, errorData: unknown, response: ExpressResponse, serialize: boolean): Promise<ExpressResponse>
     {
         const content = await this.#createResponseContent(errorData, serialize);
         const contentType = this.#createResponseContentType(content);
-        const statusCode = this.#createResponseStatusCode(error);
+        const statusCode = this.#createResponseErrorStatusCode(error);
 
         response.setHeader(Headers.CONTENT_TYPE, contentType);
 
@@ -272,26 +273,38 @@ export default class RPCController
 
     #setResponseHeaders(response: ExpressResponse, headers: Map<string, string>): void
     {
-        for (const [key, value] of Object.entries(headers))
+        for (const [key, value] of headers.entries())
         {
             if (value === undefined)
             {
                 continue;
             }
 
-            const lowerKey = key.toLowerCase();
-            const stringValue = value.toString();
-
-            if (IGNORED_HEADER_KEYS.includes(lowerKey))
+            if (IGNORED_HEADER_KEYS.includes(key))
             {
                 continue;
             }
 
-            response.set(lowerKey, stringValue);
+            response.set(key, value);
         }
     }
 
-    #createResponseStatusCode(error: unknown): number
+    #createResponseResultStatusCode(result: unknown, response: ExpressResponse): number
+    {
+        if (response.hasHeader(Headers.LOCATION))
+        {
+            return 302;
+        }
+
+        if (result === undefined)
+        {
+            return 204;
+        }
+
+        return 200;
+    }
+
+    #createResponseErrorStatusCode(error: unknown): number
     {
         if (error instanceof Object === false)
         {

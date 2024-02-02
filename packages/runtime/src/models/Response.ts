@@ -31,6 +31,11 @@ export default class Response
         return this.#headers.get(name.toLowerCase());
     }
 
+    hasHeader(name: string): boolean
+    {
+        return this.#headers.has(name.toLowerCase());
+    }
+
     removeHeader(name: string): void
     {
         this.#headers.delete(name.toLowerCase());
