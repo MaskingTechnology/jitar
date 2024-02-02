@@ -4,5 +4,11 @@
             "access": "public",
             "version": "0.0.0"
         }
+    },
+    "./redirect": {
+        "default": {
+            "access": "public",
+            "version": "0.0.0"
+        }
     }
 }
