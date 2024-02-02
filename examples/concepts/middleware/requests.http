@@ -2,3 +2,9 @@
 // Execute the procedure and check the terminal
 
 GET http://localhost:3000/rpc/ping HTTP/1.1
+
+###
+
+// Execute the procedure and check the result
+
+GET http://localhost:3000/rpc/redirect HTTP/1.1
