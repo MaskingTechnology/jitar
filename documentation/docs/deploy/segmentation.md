@@ -82,12 +82,12 @@ Imports have multiple properties that can be configured. These properties will b
 
 ### Trusted clients
 
-When building a distributed application, you don't want all functions to be available by the outside world. Some functions are only used internally by other segments. To protect the access to these functions, Jitar provides a `trustKey` property in the [runtime services](../fundamentals/runtime-services#node). This key is used to create trusted clients. Trusted clients can access functions with the `protected` access level.
+When building a distributed application, you don't want all functions to be available by the outside world. Some functions are only used internally by other segments. To protect the access to these functions, Jitar provides a `trustKey` property in the [runtime services](../fundamentals/runtime-services#worker). This key is used to create trusted clients. Trusted clients can access functions with the `protected` access level.
 
-Any client that wants to access a protected function must provide a valid key. It needs to be added to the http header `X-Jitar-Trust-Key`. Any node that has a valid key is automatically considered a trusted client, and adds the access key to the http header of outgoing requests. Any node that doesn't have a valid access key is considered an untrusted client and can only access `public` functions.
+Any client that wants to access a protected function must provide a valid key. It needs to be added to the http header `X-Jitar-Trust-Key`. Any worker that has a valid key is automatically considered a trusted client, and adds the access key to the http header of outgoing requests. Any worker that doesn't have a valid access key is considered an untrusted client and can only access `public` functions.
 
 ::: info Note
-To enable trusted clients, the gateway must always have a trusted key configured. Any node that wants to register itself as a trusted client, must have the same value for the `trustKey` in its configuration.
+To enable trusted clients, the gateway must always have a trusted key configured. Any worker that wants to register itself as a trusted client, must have the same value for the `trustKey` in its configuration.
 :::
 
 ### Access protection

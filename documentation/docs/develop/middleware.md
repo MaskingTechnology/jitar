@@ -94,19 +94,19 @@ export default instance;
 We can use this module file for the registration at the service:
 
 ```json
-// services/node.json
+// services/worker.json
 {
     "url": "http://localhost:3000",
-    "node":
+    "worker":
     {
         "middlewares": ["./defaultRequestLogger"]
     }
 }
 ```
 
-**Note** that middleware can only be added to a node, gateway, proxy and standalone service because they are actively involved with the communication system.
+**Note** that middleware can only be added to a worker, gateway, proxy and standalone service because they are actively involved with the communication system.
 
-It's likely that different services require different middleware. For example, you might want to add authentication middleware to the gateway and authorization middleware to the node.
+It's likely that different services require different middleware. For example, you might want to add authentication middleware to the gateway and authorization middleware to the worker.
 
 ::: warning KEEP IN MIND 
 Middleware is executed in the order of registration. This means that the middleware that is added first is called first.

@@ -6,7 +6,7 @@ const ORDER_SEGMENT_REPOSITORY = `export const files = [
 \t"order/storeOrder.js"
 ];`;
 
-const ORDER_SEGMENT_NODE = 
+const ORDER_SEGMENT_WORKER = 
 `const { default : $1 } = await __import("./order/createOrder.js", "application", false);
 const { v0_0_0 : $2, v1_0_0 : $3 } = await __import("./order/storeOrder.js", "application", false);
 const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __import("jitar", "runtime", false);
@@ -23,7 +23,7 @@ const PRODUCT_SEGMENT_REPOSITORY = `export const files = [
 \t"product/getProducts.js"
 ];`;
 
-const PRODUCT_SEGMENT_NODE = 
+const PRODUCT_SEGMENT_WORKER = 
 `const { default : $1, searchProducts : $2 } = await __import("./product/getProducts.js", "application", false);
 const { default : $3, searchProducts : $4 } = await __import("./product/getProducts_v1.js", "application", false);
 const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __import("jitar", "runtime", false);
@@ -149,9 +149,9 @@ Product.source = "./product/models.js";`;
 
 const CACHE_FILES =
 {
-    './order.segment.node.js': ORDER_SEGMENT_NODE,
+    './order.segment.worker.js': ORDER_SEGMENT_WORKER,
     './order.segment.repository.js': ORDER_SEGMENT_REPOSITORY,
-    './product.segment.node.js': PRODUCT_SEGMENT_NODE,
+    './product.segment.worker.js': PRODUCT_SEGMENT_WORKER,
     './product.segment.repository.js': PRODUCT_SEGMENT_REPOSITORY,
     './order/createOrder.local.js': CREATE_ORDER_LOCAL,
     './order/createOrder.remote.js': CREATE_ORDER_REMOTE,
@@ -167,9 +167,9 @@ const CACHE_FILES =
 
 const CACHE_SEGMENT_FILENAMES =
 [
-    './order.segment.node.js',
+    './order.segment.worker.js',
     './order.segment.repository.js',
-    './product.segment.node.js',
+    './product.segment.worker.js',
     './product.segment.repository.js',
 ];
 

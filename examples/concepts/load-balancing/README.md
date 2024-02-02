@@ -1,7 +1,7 @@
 
 # Jitar | Load Balancing example
 
-This example demonstrates how to load balance application segments by running them on multiple nodes.
+This example demonstrates how to load balance application segments by running them on multiple workers.
 
 The application contains simple calculator tasks that are placed in a single segment.
 Each of its functions can be used independently.
@@ -29,8 +29,8 @@ Production
 
 * Repository (`services/repository.json`)
 * Gateway (`services/gateway.json`)
-* Node 1 - loads the *calculator* segment (`services/node1.json`)
-* Node 2 - loads the *calculator* segment (`services/node2.json`)
+* Worker 1 - loads the *calculator* segment (`services/worker1.json`)
+* Worker 2 - loads the *calculator* segment (`services/worker2.json`)
 
 ## Running the example (load balanced)
 
@@ -46,7 +46,7 @@ npm install
 npm run build
 ```
 
-To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importance.
+To start Jitar we need four terminal sessions to start the repository, gateway, and workers separately. The starting order is of importance.
 
 **Repository** (terminal 1)
 
@@ -60,17 +60,17 @@ npm run repo
 npm run gateway
 ```
 
-**Node 1** (terminal 3)
+**Worker 1** (terminal 3)
 
 ```bash
-npm run node1
+npm run worker1
 ```
 
-**Node 2** (terminal 4)
+**Worker 2** (terminal 4)
 
 ```bash
-npm run node2
+npm run worker2
 ```
 
 The ``requests.http`` file contains example request to call the procedure.
-Note that the requests are handled round robin by both nodes per procedure.
+Note that the requests are handled round robin by both workers per procedure.

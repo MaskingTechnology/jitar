@@ -130,8 +130,8 @@ The `services` folder contains all [service configuration](../fundamentals/runti
 ```txt
 services
 ├─ gateway.json
-├─ node-account.json
-├─ node-reporting.json
+├─ worker-account.json
+├─ worker-reporting.json
 ├─ proxy.json
 ├─ repository.json
 └─ standalone.json

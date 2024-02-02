@@ -2,18 +2,18 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalNode, Standalone } from '@jitar/runtime';
+import { LocalWorker, Standalone } from '@jitar/runtime';
 import Headers from '../definitions/Headers';
 import ContentTypes from '../definitions/ContentTypes';
 
 export default class HealthController
 {
-    #node: LocalNode | Standalone;
+    #worker: LocalWorker | Standalone;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, node: LocalNode | Standalone, logger: Logger<unknown>)
+    constructor(app: express.Application, worker: LocalWorker | Standalone, logger: Logger<unknown>)
     {
-        this.#node = node;
+        this.#worker = worker;
         this.#logger = logger;
 
         app.get('/health', (request: Request, response: Response) => { this.getHealth(request, response); });
@@ -22,7 +22,7 @@ export default class HealthController
 
     async getHealth(request: Request, response: Response): Promise<Response>
     {
-        const health = await this.#node.getHealth();
+        const health = await this.#worker.getHealth();
         const data = Object.fromEntries(health);
 
         this.#logger.debug('Got health');
@@ -32,7 +32,7 @@ export default class HealthController
 
     async isHealthy(request: Request, response: Response): Promise<Response>
     {
-        const healthy = await this.#node.isHealthy();
+        const healthy = await this.#worker.isHealthy();
 
         this.#logger.debug('Got health status');
 

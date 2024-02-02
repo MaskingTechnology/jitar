@@ -33,7 +33,7 @@ The first endpoint is for requesting [assets](./assets). By default all files ar
 
 Assets can be whitelisted per file, or by using glob patterns. For example the pattern `assets/**/*` whitelists all files and subfolder files in the assets folder.
 
-The second endpoint is for requesting module files internally used by nodes to load their functions. Requesting a module file requires a valid client id provided by the repository at the registration of a node. The repository only allows requesting files with the .js extension that are placed in the application folder. To prevent any form of information leakage make sure the code does not contain sensitive information (like access keys).
+The second endpoint is for requesting module files internally used by workers to load their functions. Requesting a module file requires a valid client id provided by the repository at the registration of a worker. The repository only allows requesting files with the .js extension that are placed in the application folder. To prevent any form of information leakage make sure the code does not contain sensitive information (like access keys).
 
 ::: tip PRO TIP
 To prevent the access of server modules from any client, make sure that all modules are registered in a server [segment](../fundamentals/building-blocks#segments). The repository will provide a remote implementation if a client tries to load the module. Remote implementations do not contain any information other than function and parameter names.
@@ -57,7 +57,7 @@ export default class Authentication implements Middleware
 }
 ```
 
-In a distributed setup we register this middleware at the [gateway service](../fundamentals/runtime-services.md#gateway) to make sure a node only gets called when the user is authenticated. The authorization may depend on attributes gathered during the execution of the function. Therefore we add the authorization middleware to the [node service](../fundamentals/runtime-services#node).
+In a distributed setup we register this middleware at the [gateway service](../fundamentals/runtime-services.md#gateway) to make sure a worker only gets called when the user is authenticated. The authorization may depend on attributes gathered during the execution of the function. Therefore we add the authorization middleware to the [worker service](../fundamentals/runtime-services#worker).
 
 ```ts
 import { Middleware, Request, Response, NextHandler } from 'jitar';

@@ -3,42 +3,42 @@ import File from '../models/File.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
-import LocalNode from './LocalNode.js';
+import LocalWorker from './LocalWorker.js';
 import LocalRepository from './LocalRepository.js';
 import ProcedureRuntime from './ProcedureRuntime.js';
 
 export default class Standalone extends ProcedureRuntime
 {
-    #node: LocalNode;
+    #worker: LocalWorker;
 
-    constructor(repository: LocalRepository, node: LocalNode, url?: string)
+    constructor(repository: LocalRepository, worker: LocalWorker, url?: string)
     {
         super(repository, url);
 
-        this.#node = node;
+        this.#worker = worker;
     }
 
-    get node() { return this.#node; }
+    get worker() { return this.#worker; }
 
     async start(): Promise<void>
     {
-        // The node will start the repository
-        await this.#node.start();
+        // The worker will start the repository
+        await this.#worker.start();
 
         await super.start();
     }
 
     async stop(): Promise<void>
     {
-        // The node will stop the repository
-        await this.#node.stop();
+        // The worker will stop the repository
+        await this.#worker.stop();
 
         await super.stop();
     }
 
     getProcedureNames(): string[] 
     {
-        return this.#node.getProcedureNames();
+        return this.#worker.getProcedureNames();
     }
 
     hasProcedure(fqn: string): boolean
@@ -65,6 +65,6 @@ export default class Standalone extends ProcedureRuntime
 
     run(request: Request): Promise<Response>
     {
-        return this.#node.run(request);
+        return this.#worker.run(request);
     }
 }

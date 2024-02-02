@@ -1,12 +1,12 @@
 
-import { Runtime, RuntimeBuilder, LocalRepository, LocalGateway, LocalNode, NodeMonitor, Proxy, Standalone } from '@jitar/runtime';
+import { Runtime, RuntimeBuilder, LocalRepository, LocalGateway, LocalWorker, WorkerMonitor, Proxy, Standalone } from '@jitar/runtime';
 import { CacheManager } from '@jitar/caching';
 
 import RuntimeConfiguration from '../configuration/RuntimeConfiguration.js';
 import StandaloneConfiguration from '../configuration/StandaloneConfiguration.js';
 import RepositoryConfiguration from '../configuration/RepositoryConfiguration.js';
 import GatewayConfiguration from '../configuration/GatewayConfiguration.js';
-import NodeConfiguration from '../configuration/NodeConfiguration.js';
+import WorkerConfiguration from '../configuration/WorkerConfiguration.js';
 import ProxyConfiguration from '../configuration/ProxyConfiguration.js';
 
 import RuntimeDefaults from '../definitions/RuntimeDefaults.js';
@@ -25,7 +25,7 @@ export default class RuntimeConfigurator
         if (configuration.standalone !== undefined) return this.#configureStandAlone(url, healthChecks, configuration.standalone);
         if (configuration.repository !== undefined) return this.#configureRepository(url, healthChecks, configuration.repository);
         if (configuration.gateway !== undefined) return this.#configureGateway(url, healthChecks, configuration.gateway);
-        if (configuration.node !== undefined) return this.#configureNode(url, healthChecks, configuration.node);
+        if (configuration.worker !== undefined) return this.#configureWorker(url, healthChecks, configuration.worker);
         if (configuration.proxy !== undefined) return this.#configureProxy(url, healthChecks, configuration.proxy);
 
         throw new UnknownRuntimeMode();
@@ -43,7 +43,7 @@ export default class RuntimeConfigurator
         await this.#buildCache(sourceLocation, cacheLocation);
 
         const segmentNames = configuration.segments === undefined
-            ? await this.#getNodeSegmentNames(fileManager)
+            ? await this.#getWorkerSegmentNames(fileManager)
             : configuration.segments;
 
         const assets = configuration.assets !== undefined
@@ -100,12 +100,12 @@ export default class RuntimeConfigurator
             .repository(repositoryUrl)
             .buildGateway(trustKey);
 
-        new NodeMonitor(gateway, monitorInterval);
+        new WorkerMonitor(gateway, monitorInterval);
 
         return gateway;
     }
 
-    static async #configureNode(url: string, healthChecks: string[], configuration: NodeConfiguration): Promise<LocalNode>
+    static async #configureWorker(url: string, healthChecks: string[], configuration: WorkerConfiguration): Promise<LocalWorker>
     {
         const repositoryUrl = configuration.repository;
         const gatewayUrl = configuration.gateway;
@@ -120,14 +120,14 @@ export default class RuntimeConfigurator
             .repository(repositoryUrl)
             .gateway(gatewayUrl)
             .segment(...segmentNames)
-            .buildNode(trustKey);
+            .buildWorker(trustKey);
     }
 
     static async #configureProxy(url: string, healthChecks: string[], configuration: ProxyConfiguration): Promise<Proxy>
     {
         const repositoryUrl = configuration.repository;
         const gatewayUrl = configuration.gateway;
-        const nodeUrl = configuration.node;
+        const workerUrl = configuration.worker;
         const middlewares = configuration.middlewares ?? [];
 
         return new RuntimeBuilder()
@@ -136,7 +136,7 @@ export default class RuntimeConfigurator
             .middleware(...middlewares)
             .repository(repositoryUrl)
             .gateway(gatewayUrl)
-            .node(nodeUrl)
+            .worker(workerUrl)
             .buildProxy();
     }
 
@@ -152,9 +152,9 @@ export default class RuntimeConfigurator
         await cacheManager.build();
     }
 
-    static async #getNodeSegmentNames(fileManager: LocalFileManager): Promise<string[]>
+    static async #getWorkerSegmentNames(fileManager: LocalFileManager): Promise<string[]>
     {
-        const segmentFilenames = await fileManager.getNodeSegmentFiles();
+        const segmentFilenames = await fileManager.getWorkerSegmentFiles();
 
         return segmentFilenames.map(filename => this.#extractSegmentName(filename));
     }

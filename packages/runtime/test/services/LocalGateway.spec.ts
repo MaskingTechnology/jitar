@@ -58,7 +58,7 @@ describe('services/LocalGateway', () =>
 
     describe('.run(name, version, parameters)', () =>
     {
-        it('should find and run a procedure from a node', async () =>
+        it('should find and run a procedure from a worker', async () =>
         {
             const request = new Request('second', Version.DEFAULT, new Map(), new Map());
             const response = await gateway.run(request);
@@ -66,7 +66,7 @@ describe('services/LocalGateway', () =>
             expect(response.result).toBe('first');
         });
 
-        it('should find and run a procedure from a node that calls a procedure on another node', async () =>
+        it('should find and run a procedure from a worker that calls a procedure on another worker', async () =>
         {
             const request = new Request('third', Version.DEFAULT, new Map(), new Map());
             const response = await gateway.run(request);
@@ -83,26 +83,26 @@ describe('services/LocalGateway', () =>
         });
     });
 
-    describe('.addNode(node, accessKey)', () =>
+    describe('.addWorker(worker, accessKey)', () =>
     {
-        it('should not add a node with an incorrect access key', async () =>
+        it('should not add a worker with an incorrect access key', async () =>
         {
-            const node = gateway.nodes[0];
+            const worker = gateway.workers[0];
             const protectedGateway = GATEWAYS.PROTECTED;
 
-            const addNode = async () => protectedGateway.addNode(node, 'INCORRECT_ACCESS_KEY');
+            const addWorker = async () => protectedGateway.addWorker(worker, 'INCORRECT_ACCESS_KEY');
 
-            expect(addNode).rejects.toEqual(new InvalidTrustKey());
+            expect(addWorker).rejects.toEqual(new InvalidTrustKey());
         });
 
-        it('should not add a node with an access key to an unprotected gateway', async () =>
+        it('should not add a worker with an access key to an unprotected gateway', async () =>
         {
-            const node = gateway.nodes[0];
+            const worker = gateway.workers[0];
             const unprotectedGateway = GATEWAYS.STANDALONE;
 
-            const addNode = async () => unprotectedGateway.addNode(node, 'NODE_ACCESS_KEY');
+            const addWorker = async () => unprotectedGateway.addWorker(worker, 'WORKER_ACCESS_KEY');
 
-            expect(addNode).rejects.toEqual(new InvalidTrustKey());
+            expect(addWorker).rejects.toEqual(new InvalidTrustKey());
         });
     });
 });

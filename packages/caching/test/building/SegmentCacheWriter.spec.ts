@@ -24,10 +24,10 @@ describe('building/SegmentCacheWriter', () =>
             const result = fileManager.writtenFiles;
             expect(result.size).toBe(4);
 
-            expect(result.get(OUTPUT.FILENAMES.ORDER_NODE)).toBe(OUTPUT.CONTENT.ORDER_NODE);
+            expect(result.get(OUTPUT.FILENAMES.ORDER_WORKER)).toBe(OUTPUT.CONTENT.ORDER_WORKER);
             expect(result.get(OUTPUT.FILENAMES.ORDER_REPOSITORY)).toBe(OUTPUT.CONTENT.ORDER_REPOSITORY);
 
-            expect(result.get(OUTPUT.FILENAMES.PRODUCT_NODE)).toBe(OUTPUT.CONTENT.PRODUCT_NODE);
+            expect(result.get(OUTPUT.FILENAMES.PRODUCT_WORKER)).toBe(OUTPUT.CONTENT.PRODUCT_WORKER);
             expect(result.get(OUTPUT.FILENAMES.PRODUCT_REPOSITORY)).toBe(OUTPUT.CONTENT.PRODUCT_REPOSITORY);
         });
     });

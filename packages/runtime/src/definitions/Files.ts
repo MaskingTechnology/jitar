@@ -3,7 +3,7 @@ const Files =
 {
     MODULE_PATTERN: '**/*.js',
     SEGMENT_PATTERN: '**/*.segment.json',
-    NODE_SEGMENT_PATTERN: '**/*.segment.node.js',
+    WORKER_SEGMENT_PATTERN: '**/*.segment.worker.js',
     REPOSITORY_SEGMENT_PATTERN: '**/*.segment.repository.js'
 };
 
@@ -21,9 +21,9 @@ function convertToRemoteFilename(filename: string): string
     return filename.replace(EXTENSION_PATTERN, '.remote.js');
 }
 
-function createNodeFilename(name: string): string
+function createWorkerFilename(name: string): string
 {
-    return `./${name}.segment.node.js`;
+    return `./${name}.segment.worker.js`;
 }
 
 function createRepositoryFilename(name: string): string
@@ -36,4 +36,4 @@ function isSegmentFilename(filename: string): boolean
     return filename.includes('.segment.');
 }
 
-export { Files, convertToLocalFilename, convertToRemoteFilename, createNodeFilename, createRepositoryFilename, isSegmentFilename };
+export { Files, convertToLocalFilename, convertToRemoteFilename, createWorkerFilename, createRepositoryFilename, isSegmentFilename };

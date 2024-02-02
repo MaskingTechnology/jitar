@@ -7,8 +7,8 @@
         "standalone": "node --experimental-network-imports --env-file=.env dist/jitar.js --config=services/standalone.json",
         "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
         "gateway": "node --experimental-network-imports --env-file=.env dist/jitar.js --config=services/gateway.json",
-        "node-web": "node --experimental-network-imports --env-file=.env dist/jitar.js --config=services/web.json",
-        "node-game": "node --experimental-network-imports --env-file=.env dist/jitar.js --config=services/game.json"
+        "worker-web": "node --experimental-network-imports --env-file=.env dist/jitar.js --config=services/web.json",
+        "worker-game": "node --experimental-network-imports --env-file=.env dist/jitar.js --config=services/game.json"
     },
     "dependencies": {
         "jitar": "^0.6.0"

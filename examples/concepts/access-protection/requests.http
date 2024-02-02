@@ -12,7 +12,7 @@ content-type: application/json
 
 // Run the protected function with key (succeeds)
 POST http://localhost:3000/rpc/game/checkSecret HTTP/1.1
-X-Jitar-Trust-Key: VERY_SECRET_KEY
+X-Jitar-Trust-Key: MY_VERY_SECRET_KEY
 content-type: application/json
 
 {

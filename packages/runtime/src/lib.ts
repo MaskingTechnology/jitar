@@ -25,7 +25,7 @@ export { default as InvalidVersionNumber } from './errors/InvalidVersionNumber.j
 export { default as MissingParameterValue } from './errors/MissingParameterValue.js';
 export { default as ModuleNotAccessible } from './errors/ModuleNotAccessible.js';
 export { default as ModuleNotLoaded } from './errors/ModuleNotLoaded.js';
-export { default as NoNodeAvailable } from './errors/NoNodeAvailable.js';
+export { default as NoWorkerAvailable } from './errors/NoWorkerAvailable.js';
 export { default as ProcedureNotAccessible } from './errors/ProcedureNotAccessible.js';
 export { default as ProcedureNotFound } from './errors/ProcedureNotFound.js';
 export { default as RepositoryNotAvailable } from './errors/RepositoryNotAvailable.js';
@@ -53,14 +53,14 @@ export { default as Version } from './models/Version.js';
 // Services
 export { default as Gateway } from './services/Gateway.js';
 export { default as LocalGateway } from './services/LocalGateway.js';
-export { default as LocalNode } from './services/LocalNode.js';
+export { default as LocalWorker } from './services/LocalWorker.js';
 export { default as LocalRepository } from './services/LocalRepository.js';
-export { default as Node } from './services/Node.js';
-export { default as NodeMonitor } from './services/NodeMonitor.js';
+export { default as Worker } from './services/Worker.js';
+export { default as WorkerMonitor } from './services/WorkerMonitor.js';
 export { default as ProcedureRuntime } from './services/ProcedureRuntime.js';
 export { default as Proxy } from './services/Proxy.js';
 export { default as Remote } from './services/Remote.js';
-export { default as RemoteNode } from './services/RemoteNode.js';
+export { default as RemoteWorker } from './services/RemoteWorker.js';
 export { default as RemoteGateway } from './services/RemoteGateway.js';
 export { default as RemoteRepository } from './services/RemoteRepository.js';
 export { default as Repository } from './services/Repository.js';

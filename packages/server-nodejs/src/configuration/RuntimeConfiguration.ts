@@ -2,7 +2,7 @@
 import { z } from 'zod';
 
 import GatewayConfiguration, { gatewaySchema } from './GatewayConfiguration.js';
-import NodeConfiguration, { nodeSchema } from './NodeConfiguration.js';
+import WorkerConfiguration, { workerSchema } from './WorkerConfiguration.js';
 import ProxyConfiguration, { proxySchema } from './ProxyConfiguration.js';
 import RepositoryConfiguration, { repositorySchema } from './RepositoryConfiguration.js';
 import StandaloneConfiguration, { standaloneSchema } from './StandaloneConfiguration.js';
@@ -16,11 +16,11 @@ export const runtimeSchema = z
         standalone: standaloneSchema.optional(),
         repository: repositorySchema.optional(),
         gateway: gatewaySchema.optional(),
-        node: nodeSchema.optional(),
+        worker: workerSchema.optional(),
         proxy: proxySchema.optional()
     })
     .strict()
-    .transform((value) => new RuntimeConfiguration(value.url, value.setUp, value.tearDown, value.healthChecks, value.standalone, value.repository, value.gateway, value.node, value.proxy));
+    .transform((value) => new RuntimeConfiguration(value.url, value.setUp, value.tearDown, value.healthChecks, value.standalone, value.repository, value.gateway, value.worker, value.proxy));
 
 export default class RuntimeConfiguration
 {
@@ -31,10 +31,10 @@ export default class RuntimeConfiguration
     #standalone?: StandaloneConfiguration;
     #repository?: RepositoryConfiguration;
     #gateway?: GatewayConfiguration;
-    #node?: NodeConfiguration;
+    #worker?: WorkerConfiguration;
     #proxy?: ProxyConfiguration;
 
-    constructor(url?: string, setUp?: string[], tearDown?: string[], healthChecks?: string[], standalone?: StandaloneConfiguration, repository?: RepositoryConfiguration, gateway?: GatewayConfiguration, node?: NodeConfiguration, proxy?: ProxyConfiguration)
+    constructor(url?: string, setUp?: string[], tearDown?: string[], healthChecks?: string[], standalone?: StandaloneConfiguration, repository?: RepositoryConfiguration, gateway?: GatewayConfiguration, worker?: WorkerConfiguration, proxy?: ProxyConfiguration)
     {
         this.#url = url;
         this.#setUp = setUp;
@@ -43,7 +43,7 @@ export default class RuntimeConfiguration
         this.#standalone = standalone;
         this.#repository = repository;
         this.#gateway = gateway;
-        this.#node = node;
+        this.#worker = worker;
         this.#proxy = proxy;
     }
 
@@ -61,7 +61,7 @@ export default class RuntimeConfiguration
 
     get gateway() { return this.#gateway; }
 
-    get node() { return this.#node; }
+    get worker() { return this.#worker; }
 
     get proxy() { return this.#proxy; }
 }

@@ -29,10 +29,10 @@ export const files = [
 ];
 ```
 
-The second contains the actual segment model that holds a full description for all its functions (called procedures in this context). It's used by the node service to load their segments.
+The second contains the actual segment model that holds a full description for all its functions (called procedures in this context). It's used by the worker service to load their segments.
 
 ```js
-// {segment name}.segment.node.js
+// {segment name}.segment.worker.js
 const { default : $1 } = await __import("./file1.js", "application", false);
 const { a : $2, b : $3 } = await __import("./file2.js", "application", false);
 const { Segment, /* more */} = await __import("jitar", "runtime", false);

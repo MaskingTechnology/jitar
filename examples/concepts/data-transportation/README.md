@@ -50,7 +50,7 @@ npm install
 npm run build
 ```
 
-To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importance.
+To start Jitar we need four terminal sessions to start the repository, gateway, and workers separately. The starting order is of importance.
 
 **Repository** (terminal 1)
 
@@ -67,13 +67,13 @@ npm run gateway
 **Account segment** (terminal 3)
 
 ```bash
-npm run node-account
+npm run worker-account
 ```
 
 **Helpdesk segment** (terminal 4)
 
 ```bash
-npm run node-helpdesk
+npm run worker-helpdesk
 ```
 
 The ``requests.http`` file contains example request to call the procedures. Note that the Account object is created on the *account* segment.

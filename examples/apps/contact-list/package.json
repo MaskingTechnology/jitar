@@ -9,7 +9,7 @@
     "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json",
     "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
     "gateway": "node --experimental-network-imports dist/jitar.js --config=services/gateway.json",
-    "node": "node --experimental-network-imports dist/jitar.js --config=services/node.json",
+    "worker": "node --experimental-network-imports dist/jitar.js --config=services/worker.json",
     "proxy": "node --experimental-network-imports dist/jitar.js --config=services/proxy.json",
     "preview": "vite preview"
   },

@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import ProcedureRuntimeConfiguration from './ProcedureRuntimeConfiguration';
 
-export const nodeSchema = z
+export const workerSchema = z
     .object({
         gateway: z.string().url().optional(),
         repository: z.string().url().optional(),
@@ -12,9 +12,9 @@ export const nodeSchema = z
         trustKey: z.string().optional()
     })
     .strict()
-    .transform((value) => new NodeConfiguration(value.gateway, value.repository, value.segments, value.middlewares, value.trustKey));
+    .transform((value) => new WorkerConfiguration(value.gateway, value.repository, value.segments, value.middlewares, value.trustKey));
 
-export default class NodeConfiguration extends ProcedureRuntimeConfiguration
+export default class WorkerConfiguration extends ProcedureRuntimeConfiguration
 {
     #gateway?: string;
     #repository?: string;

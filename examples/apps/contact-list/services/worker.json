@@ -3,7 +3,7 @@
     "setUp": ["./integrations/jitar/setUpDatabase"],
     "tearDown": ["./integrations/jitar/tearDownDatabase"],
     "healthChecks": ["./integrations/jitar/databaseHealthCheck"],
-    "node":
+    "worker":
     {
         "gateway": "http://127.0.0.1:3000",
         "repository": "http://127.0.0.1:2999",

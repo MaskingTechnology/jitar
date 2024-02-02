@@ -1,6 +1,6 @@
 
 import { ExecutionScopes } from '../definitions/ExecutionScope.js';
-import { createNodeFilename } from '../definitions/Files.js';
+import { createWorkerFilename } from '../definitions/Files.js';
 
 import Unauthorized from '../errors/generic/Unauthorized.js';
 import ImplementationNotFound from '../errors/ImplementationNotFound.js';
@@ -14,14 +14,14 @@ import Segment from '../models/Segment.js';
 import ArgumentConstructor from '../utils/ArgumentConstructor.js';
 
 import Gateway from './Gateway.js';
-import Node from './Node.js';
+import Worker from './Worker.js';
 import Repository from './Repository.js';
 
 import { setRuntime } from '../hooks.js';
 
 const JITAR_TRUST_HEADER_KEY = 'X-Jitar-Trust-Key';
 
-export default class LocalNode extends Node
+export default class LocalWorker extends Worker
 {
     #gateway?: Gateway;
     #trustKey?: string;
@@ -120,7 +120,7 @@ export default class LocalNode extends Node
 
     async #loadSegment(name: string): Promise<void>
     {
-        const filename = createNodeFilename(name);
+        const filename = createWorkerFilename(name);
         const module = await this.import(filename, ExecutionScopes.APPLICATION);
         const segment = module.segment as Segment;
 

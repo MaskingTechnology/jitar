@@ -3,7 +3,7 @@ import express, { Express } from 'express';
 import { Server } from 'http';
 import { Logger } from 'tslog';
 
-import { LocalGateway, LocalNode, LocalRepository, Proxy, Runtime, RemoteClassLoader, ExecutionScopes, Standalone } from '@jitar/runtime';
+import { LocalGateway, LocalWorker, LocalRepository, Proxy, Runtime, RemoteClassLoader, ExecutionScopes, Standalone } from '@jitar/runtime';
 import { ClassLoader, Serializer, SerializerBuilder, ValueSerializer } from '@jitar/serialization';
 
 import ServerOptions from './configuration/ServerOptions.js';
@@ -16,7 +16,7 @@ import AssetsController from './controllers/AssetsController.js';
 import HealthController from './controllers/HealthController.js';
 import JitarController from './controllers/JitarController.js';
 import ModulesController from './controllers/ModulesController.js';
-import NodesController from './controllers/NodesController.js';
+import WorkerController from './controllers/WorkerController.js';
 import ProceduresController from './controllers/ProceduresController.js';
 import ProxyController from './controllers/ProxyController.js';
 import RPCController from './controllers/RPCController.js';
@@ -159,9 +159,9 @@ export default class JitarServer
         {
             this.#addGatewayControllers(this.#runtime);
         }
-        else if (this.#configuration.node !== undefined && this.#runtime instanceof LocalNode)
+        else if (this.#configuration.worker !== undefined && this.#runtime instanceof LocalWorker)
         {
-            this.#addNodeControllers(this.#runtime);
+            this.#addWorkerControllers(this.#runtime);
         }
         else if (this.#configuration.proxy !== undefined && this.#runtime instanceof Proxy)
         {
@@ -188,16 +188,16 @@ export default class JitarServer
 
     #addGatewayControllers(gateway: LocalGateway): void
     {
-        new NodesController(this.#app, gateway, this.#logger);
+        new WorkerController(this.#app, gateway, this.#logger);
         new ProceduresController(this.#app, gateway, this.#logger);
         new RPCController(this.#app, gateway, this.#serializer, this.#logger);
     }
 
-    #addNodeControllers(node: LocalNode): void
+    #addWorkerControllers(worker: LocalWorker): void
     {
-        new HealthController(this.#app, node, this.#logger);
-        new ProceduresController(this.#app, node, this.#logger);
-        new RPCController(this.#app, node, this.#serializer, this.#logger);
+        new HealthController(this.#app, worker, this.#logger);
+        new ProceduresController(this.#app, worker, this.#logger);
+        new RPCController(this.#app, worker, this.#serializer, this.#logger);
     }
 
     #addProxyControllers(proxy: Proxy): void
@@ -275,9 +275,9 @@ export default class JitarServer
 
     #printProcedureInfo()
     {
-        const runtime = this.#getRuntime() as LocalNode | Standalone;
+        const runtime = this.#getRuntime() as LocalWorker | Standalone;
 
-        if (runtime instanceof LocalNode === false
+        if (runtime instanceof LocalWorker === false
          && runtime instanceof Standalone === false)
         {
             return;

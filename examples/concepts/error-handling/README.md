@@ -32,8 +32,8 @@ Production
 
 * Repository (`services/repository.json`)
 * Gateway (`services/gateway.json`)
-* Data - loads the *contact* segment (`services/node1.json`)
-* Process - loads the *organization* segment (`services/node2.json`)
+* Data - loads the *contact* segment (`services/data.json`)
+* Process - loads the *organization* segment (`services/process.json`)
 
 ## Running the example
 
@@ -49,7 +49,7 @@ npm install
 npm run build
 ```
 
-To start Jitar we need four terminal sessions to start the repository, gateway, and nodes separately. The starting order is of importantance.
+To start Jitar we need four terminal sessions to start the repository, gateway, and workers separately. The starting order is of importantance.
 
 **Repository** (terminal 1)
 
@@ -66,13 +66,13 @@ npm run gateway
 **Data segment** (terminal 3)
 
 ```bash
-npm run node-data
+npm run worker-data
 ```
 
 **Process segment** (terminal 4)
 
 ```bash
-npm run node-process
+npm run worker-process
 ```
 
 The ``requests.http`` file contains example requests to call the procedures.

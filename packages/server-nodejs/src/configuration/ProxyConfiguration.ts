@@ -5,7 +5,7 @@ import ProcedureRuntimeConfiguration from './ProcedureRuntimeConfiguration';
 
 export const proxySchema = z
     .object({
-        node: z.string().url().optional(),
+        worker: z.string().url().optional(),
         gateway: z.string().url().optional(),
         repository: z.string().url(),
         middlewares: z.array(z.string()).optional()
@@ -13,43 +13,43 @@ export const proxySchema = z
     .strict()
     .superRefine((value, ctx) =>
     {
-        if (value.node === undefined && value.gateway === undefined)
+        if (value.worker === undefined && value.gateway === undefined)
         {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
-                message: 'Either node or gateway must be defined',
-                path: ['node', 'gateway']
+                message: 'Either worker or gateway must be defined',
+                path: ['worker', 'gateway']
             });
         }
 
-        if (value.node !== undefined && value.gateway !== undefined)
+        if (value.worker !== undefined && value.gateway !== undefined)
         {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
-                message: 'Only node or gateway must be defined',
-                path: ['node', 'gateway'],
+                message: 'Only worker or gateway must be defined',
+                path: ['worker', 'gateway'],
 
             });
         }
     })
-    .transform((value) => new ProxyConfiguration(value.node, value.gateway, value.repository, value.middlewares));
+    .transform((value) => new ProxyConfiguration(value.worker, value.gateway, value.repository, value.middlewares));
 
 export default class ProxyConfiguration extends ProcedureRuntimeConfiguration
 {
-    #node?: string;
+    #worker?: string;
     #gateway?: string;
     #repository: string;
 
-    constructor(node: string | undefined, gateway: string | undefined, repository: string, middlewares?: string[])
+    constructor(worker: string | undefined, gateway: string | undefined, repository: string, middlewares?: string[])
     {
         super(middlewares);
 
-        this.#node = node;
+        this.#worker = worker;
         this.#gateway = gateway;
         this.#repository = repository;
     }
 
-    get node() { return this.#node; }
+    get worker() { return this.#worker; }
 
     get gateway() { return this.#gateway; }
 

@@ -7,7 +7,7 @@ import { default as ResultResponse } from '../models/Response.js';
 
 import RemoteClassLoader from '../utils/RemoteClassLoader.js';
 
-import Node from './Node.js';
+import Worker from './Worker.js';
 
 const remoteClassLoader = new RemoteClassLoader();
 const defaultSerializer = SerializerBuilder.build(remoteClassLoader);
@@ -73,14 +73,14 @@ export default class Remote
         return new Map(Object.entries(health));
     }
 
-    async addNode(node: Node): Promise<void>
+    async addWorker(worker: Worker): Promise<void>
     {
-        const url = `${this.#url}/nodes`;
+        const url = `${this.#url}/workers`;
         const body =
         {
-            url: node.url,
-            procedureNames: node.getProcedureNames(),
-            trustKey: node.trustKey,
+            url: worker.url,
+            procedureNames: worker.getProcedureNames(),
+            trustKey: worker.trustKey,
         };
         const options =
         {
