@@ -10,7 +10,7 @@ import Headers from '../definitions/Headers.js';
 import ContentTypes from '../definitions/ContentTypes.js';
 
 const RPC_PARAMETERS = ['version', 'serialize'];
-const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent'];
+const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent', 'keep-alive'];
 const CORS_MAX_AGE = 86400;
 
 // Required to work after minification.
@@ -272,7 +272,23 @@ export default class RPCController
 
     #setResponseHeaders(response: ExpressResponse, headers: Map<string, string>): void
     {
-        headers.forEach((value, key) => response.setHeader(key, value));
+        for (const [key, value] of Object.entries(headers))
+        {
+            if (value === undefined)
+            {
+                continue;
+            }
+
+            const lowerKey = key.toLowerCase();
+            const stringValue = value.toString();
+
+            if (IGNORED_HEADER_KEYS.includes(lowerKey))
+            {
+                continue;
+            }
+
+            response.set(lowerKey, stringValue);
+        }
     }
 
     #createResponseStatusCode(error: unknown): number
