@@ -11,7 +11,7 @@
         "client": "node dist/client.js"
     },
     "dependencies": {
-        "jitar": "^0.6.0",
+        "jitar": "*",
         "express": "^4.18.2"
     },
     "devDependencies": {

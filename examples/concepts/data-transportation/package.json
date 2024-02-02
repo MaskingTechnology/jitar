@@ -11,6 +11,6 @@
         "worker-helpdesk": "node --experimental-network-imports dist/jitar.js --config=services/helpdesk.json"
     },
     "dependencies": {
-        "jitar": "^0.6.0"
+        "jitar": "*"
     }
 }

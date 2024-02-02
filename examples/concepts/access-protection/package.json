@@ -11,6 +11,6 @@
         "worker-game": "node --experimental-network-imports --env-file=.env dist/jitar.js --config=services/game.json"
     },
     "dependencies": {
-        "jitar": "^0.6.0"
+        "jitar": "*"
     }
 }
