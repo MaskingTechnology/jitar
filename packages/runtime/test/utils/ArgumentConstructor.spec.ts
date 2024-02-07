@@ -393,4 +393,27 @@ describe('utils/ArgumentExtractor', () =>
             expect(run).toThrowError(new InvalidParameterValue('...rest'));
         });
     });
+
+    describe('.extract(parameters, args) | Middleware named', () =>
+    {
+        it('should extract all middleware added parameter values', () =>
+        {
+            const args = argumentConstructor.extract(PARAMETERS.MIDDLEWARE_NAMED, ARGUMENTS.MIDDLEWARE_NAMED_ALL);
+
+            expect(args).toHaveLength(3);
+            expect(args[0]).toBe(1);
+            expect(args[1]).toBe('John Doe');
+            expect(args[2]).toBe(42);
+        });
+
+        it('should extract used middleware added parameters', () =>
+        {
+            const args = argumentConstructor.extract(PARAMETERS.MIDDLEWARE_NAMED, ARGUMENTS.MIDDLEWARE_NAMED_EXTRA);
+
+            expect(args).toHaveLength(3);
+            expect(args[0]).toBe(1);
+            expect(args[1]).toBe(undefined);
+            expect(args[2]).toBe(undefined);
+        });
+    });
 });
