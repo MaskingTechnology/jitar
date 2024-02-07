@@ -9,11 +9,14 @@ import NamedParameter from '../models/NamedParameter.js';
 import ObjectParameter from '../models/ObjectParameter.js';
 import Parameter from '../models/Parameter.js';
 
+const OPTIONAL_PARAMETER_PREFIX = '*';
+const OPTIONAL_PARAMETER_PREFIX_LENGTH = OPTIONAL_PARAMETER_PREFIX.length;
+
 export default class ArgumentExtractor
 {
     extract(parameters: Parameter[], args: Map<string, unknown>): unknown[]
     {
-        const argsCopy = new Map(args);
+        const argsCopy = this.#copyArguments(parameters, args);
         const values: unknown[] = [];
 
         for (const parameter of parameters)
@@ -31,6 +34,40 @@ export default class ArgumentExtractor
         }
 
         return values;
+    }
+
+    #copyArguments(parameters: Parameter[], args: Map<string, unknown>): Map<string, unknown>
+    {
+        const copy = new Map<string, unknown>();
+
+        for (const [key, value] of args)
+        {
+            if (this.#isOptionalParameter(key))
+            {
+                const name = this.#getOptionalParameterName(key);
+
+                if (parameters.find(parameter => parameter.name === name) !== undefined)
+                {
+                    copy.set(name, value);
+                }
+
+                continue;
+            }
+
+            copy.set(key, value);
+        }
+
+        return copy;
+    }
+
+    #isOptionalParameter(name: string): boolean
+    {
+        return name.startsWith(OPTIONAL_PARAMETER_PREFIX);
+    }
+
+    #getOptionalParameterName(name: string): string
+    {
+        return name.substring(OPTIONAL_PARAMETER_PREFIX_LENGTH);
     }
 
     #extractArgumentValue(parameter: Parameter, args: Map<string, unknown>, parent?: Parameter): unknown
