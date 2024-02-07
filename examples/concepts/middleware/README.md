@@ -9,15 +9,17 @@ The application implements a simple logging middleware.
 
 **Functions**
 
+* hello (`src/hello.ts`)
 * ping (`src/ping.ts`)
+* redirect (`src/redirect.ts`)
 
 **Segments**
 
-* Default - contains the *ping* procedure (`src/segments/default.segment.json`)
+* Default - contains all the procedures (`src/segments/default.segment.json`)
 
 **Services**
 
-* Standalone - contains the logging middleware (`src/services/standalone.json`)
+* Standalone - contains all the middlewares (`src/services/standalone.json`)
 
 ## Running the example
 

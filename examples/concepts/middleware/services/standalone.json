@@ -2,6 +2,6 @@
     "url": "http://127.0.0.1:3000",
     "standalone":
     {
-        "middlewares": ["./loggingMiddleware", "./redirectMiddleware"]
+        "middlewares": ["./loggingMiddleware", "./redirectMiddleware", "./parameterMiddleware"]
     }
 }
