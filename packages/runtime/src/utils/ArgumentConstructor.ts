@@ -9,8 +9,8 @@ import NamedParameter from '../models/NamedParameter.js';
 import ObjectParameter from '../models/ObjectParameter.js';
 import Parameter from '../models/Parameter.js';
 
-const OPTIONAL_PARAMETER_PREFIX = '*';
-const OPTIONAL_PARAMETER_PREFIX_LENGTH = OPTIONAL_PARAMETER_PREFIX.length;
+const OPTIONAL_ARGUMENT_PREFIX = '*';
+const OPTIONAL_ARGUMENT_PREFIX_LENGTH = OPTIONAL_ARGUMENT_PREFIX.length;
 
 export default class ArgumentExtractor
 {
@@ -42,9 +42,9 @@ export default class ArgumentExtractor
 
         for (const [key, value] of args)
         {
-            if (this.#isOptionalParameter(key))
+            if (this.#isOptionalArgument(key))
             {
-                const name = this.#getOptionalParameterName(key);
+                const name = this.#getParameterName(key);
 
                 if (parameters.find(parameter => parameter.name === name) !== undefined)
                 {
@@ -60,14 +60,14 @@ export default class ArgumentExtractor
         return copy;
     }
 
-    #isOptionalParameter(name: string): boolean
+    #isOptionalArgument(argument: string): boolean
     {
-        return name.startsWith(OPTIONAL_PARAMETER_PREFIX);
+        return argument.startsWith(OPTIONAL_ARGUMENT_PREFIX);
     }
 
-    #getOptionalParameterName(name: string): string
+    #getParameterName(argument: string): string
     {
-        return name.substring(OPTIONAL_PARAMETER_PREFIX_LENGTH);
+        return argument.substring(OPTIONAL_ARGUMENT_PREFIX_LENGTH);
     }
 
     #extractArgumentValue(parameter: Parameter, args: Map<string, unknown>, parent?: Parameter): unknown

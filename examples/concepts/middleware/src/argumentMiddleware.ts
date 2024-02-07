@@ -1,7 +1,7 @@
 
 import { Middleware, Request, Response, NextHandler } from 'jitar';
 
-class ParameterMiddleware implements Middleware
+class ArgumentMiddleware implements Middleware
 {
     async handle(request: Request, next: NextHandler): Promise<Response>
     {
@@ -17,6 +17,6 @@ class ParameterMiddleware implements Middleware
     }
 }
 
-const instance = new ParameterMiddleware();
+const instance = new ArgumentMiddleware();
 
 export default instance;
