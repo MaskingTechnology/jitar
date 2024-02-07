@@ -394,11 +394,11 @@ describe('utils/ArgumentExtractor', () =>
         });
     });
 
-    describe('.extract(parameters, args) | Middleware named', () =>
+    describe('.extract(parameters, args) | Middleware', () =>
     {
-        it('should extract all middleware added parameter values', () =>
+        it('should extract all optional arguments', () =>
         {
-            const args = argumentConstructor.extract(PARAMETERS.MIDDLEWARE_NAMED, ARGUMENTS.MIDDLEWARE_NAMED_ALL);
+            const args = argumentConstructor.extract(PARAMETERS.MIDDLEWARE, ARGUMENTS.MIDDLEWARE_OPTIONAL);
 
             expect(args).toHaveLength(3);
             expect(args[0]).toBe(1);
@@ -406,9 +406,9 @@ describe('utils/ArgumentExtractor', () =>
             expect(args[2]).toBe(42);
         });
 
-        it('should extract used middleware added parameters', () =>
+        it('should extract used optional arguments', () =>
         {
-            const args = argumentConstructor.extract(PARAMETERS.MIDDLEWARE_NAMED, ARGUMENTS.MIDDLEWARE_NAMED_EXTRA);
+            const args = argumentConstructor.extract(PARAMETERS.MIDDLEWARE, ARGUMENTS.MIDDLEWARE_EXTRA);
 
             expect(args).toHaveLength(3);
             expect(args[0]).toBe(1);

@@ -30,7 +30,7 @@ const PARAMETERS =
     REST: [new NamedParameter('...rest', false)],
     REST_ARRAY: [new ArrayParameter([new NamedParameter('name', false), new NamedParameter('...rest', true)])],
     REST_OBJECT: [new ObjectParameter([new NamedParameter('name', false), new NamedParameter('...rest', true)])],
-    MIDDLEWARE_NAMED: [new NamedParameter('id', true), new NamedParameter('name', true), new NamedParameter('age', true)]
+    MIDDLEWARE: [new NamedParameter('id', true), new NamedParameter('name', true), new NamedParameter('age', true)]
 };
 
 const ARGUMENTS =
@@ -64,8 +64,8 @@ const ARGUMENTS =
     REST_OBJECT_VALID: new Map(Object.entries({ 'name': 'John Doe', '...rest': { 'first': 'foo', 'second': 'bar' }})),
     REST_OBJECT_INVALID: new Map(Object.entries({ 'name': 'John Doe', '...rest': 'foo' })),
 
-    MIDDLEWARE_NAMED_ALL: new Map(Object.entries({ '*id': 1, '*name': 'John Doe', '*age': 42 })), // All parameters added by middleware
-    MIDDLEWARE_NAMED_EXTRA: new Map(Object.entries({ 'id': 1, '*additional': 'argument', '*ignore': true })), // Additional arguments added by middleware
+    MIDDLEWARE_OPTIONAL: new Map(Object.entries({ '*id': 1, '*name': 'John Doe', '*age': 42 })), // All arguments are optional
+    MIDDLEWARE_EXTRA: new Map(Object.entries({ 'id': 1, '*additional': 'argument', '*ignore': true })), // Additional optional arguments
 };
 
 export { PARAMETERS, ARGUMENTS };
