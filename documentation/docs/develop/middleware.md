@@ -64,6 +64,14 @@ const myHeader = request.getHeader('X-My-Header');
 request.removeHeader('X-My-Header');
 ```
 
+::: warning ARGUMENTS
+When setting an argument it is important to remember that it is added to each and every request. Any function that is called after the middleware must have the argument as a parameter available. 
+:::
+
+::: tip OPTIONAL ARGUMENTS
+The middleware can set optional arguments. These are arguments that are prefixed with a *, i.e. `*name`. This means that jitar will automatically pass the argument to a function if it has a parameter with the same name.
+:::
+
 The `response` contains besides the actual value the response headers. It has the following interface.
 
 ```ts

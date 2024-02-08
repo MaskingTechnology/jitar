@@ -62,6 +62,9 @@ const ARGUMENTS =
 
     REST_OBJECT_VALID: new Map(Object.entries({ 'name': 'John Doe', '...rest': { 'first': 'foo', 'second': 'bar' }})),
     REST_OBJECT_INVALID: new Map(Object.entries({ 'name': 'John Doe', '...rest': 'foo' })),
+
+    OPTIONAL_ARGUMENTS: new Map(Object.entries({ '*id': 1, '*name': 'John Doe', '*age': 42 })), // All arguments are optional
+    OPTIONAL_ARGUMENTS_EXTRA: new Map(Object.entries({ 'id': 1, 'name': 'John Doe', '*additional': 'argument', '*ignore': true })), // Additional optional arguments
 };
 
 export { PARAMETERS, ARGUMENTS };
