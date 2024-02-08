@@ -46,7 +46,7 @@ export default class ArgumentExtractor
             {
                 const name = this.#getParameterName(key);
 
-                if (this.#hasOptionalArgument(parameters, name) === true)
+                if (this.#containsParameter(parameters, name) === true)
                 {
                     copy.set(name, value);
                 }
@@ -70,7 +70,7 @@ export default class ArgumentExtractor
         return argument.substring(OPTIONAL_ARGUMENT_PREFIX_LENGTH);
     }
 
-    #hasOptionalArgument(parameters: Parameter[], name: string): boolean
+    #containsParameter(parameters: Parameter[], name: string): boolean
     {
         return parameters.find(parameter => parameter.name === name) !== undefined;
     }
