@@ -394,11 +394,11 @@ describe('utils/ArgumentExtractor', () =>
         });
     });
 
-    describe('.extract(parameters, args) | Middleware', () =>
+    describe('.extract(parameters, args) | Optional arguments', () =>
     {
         it('should extract all optional arguments', () =>
         {
-            const args = argumentConstructor.extract(PARAMETERS.MIDDLEWARE, ARGUMENTS.MIDDLEWARE_OPTIONAL);
+            const args = argumentConstructor.extract(PARAMETERS.NAMED, ARGUMENTS.OPTIONAL_ARGUMENTS);
 
             expect(args).toHaveLength(3);
             expect(args[0]).toBe(1);
@@ -408,11 +408,11 @@ describe('utils/ArgumentExtractor', () =>
 
         it('should extract used optional arguments', () =>
         {
-            const args = argumentConstructor.extract(PARAMETERS.MIDDLEWARE, ARGUMENTS.MIDDLEWARE_EXTRA);
+            const args = argumentConstructor.extract(PARAMETERS.NAMED, ARGUMENTS.OPTIONAL_ARGUMENTS_EXTRA);
 
             expect(args).toHaveLength(3);
             expect(args[0]).toBe(1);
-            expect(args[1]).toBe(undefined);
+            expect(args[1]).toBe('John Doe');
             expect(args[2]).toBe(undefined);
         });
     });

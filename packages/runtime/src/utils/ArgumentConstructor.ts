@@ -46,7 +46,7 @@ export default class ArgumentExtractor
             {
                 const name = this.#getParameterName(key);
 
-                if (parameters.find(parameter => parameter.name === name) !== undefined)
+                if (this.#hasOptionalArgument(parameters, name) === true)
                 {
                     copy.set(name, value);
                 }
@@ -68,6 +68,11 @@ export default class ArgumentExtractor
     #getParameterName(argument: string): string
     {
         return argument.substring(OPTIONAL_ARGUMENT_PREFIX_LENGTH);
+    }
+
+    #hasOptionalArgument(parameters: Parameter[], name: string): boolean
+    {
+        return parameters.find(parameter => parameter.name === name) !== undefined;
     }
 
     #extractArgumentValue(parameter: Parameter, args: Map<string, unknown>, parent?: Parameter): unknown
