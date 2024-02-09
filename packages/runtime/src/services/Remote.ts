@@ -35,7 +35,8 @@ export default class Remote
             body: JSON.stringify(segmentFiles)
         };
 
-        const response = await this.#callRemote(url, options, 200);
+        const response = await this.#callRemote(url, options);
+
         return response.text();
     }
 
@@ -44,7 +45,7 @@ export default class Remote
         const url = `${this.#url}/${filename}`;
         const options = { method: 'GET' };
 
-        const response = await this.#callRemote(url, options, 200);
+        const response = await this.#callRemote(url, options);
         const type = response.headers.get('Content-Type') || 'application/octet-stream';
         const content = await response.text();
 
@@ -56,7 +57,7 @@ export default class Remote
         const url = `${this.#url}/health/status`;
         const options = { method: 'GET' };
 
-        const response = await this.#callRemote(url, options, 200);
+        const response = await this.#callRemote(url, options);
         const healthy = await response.text();
 
         return Boolean(healthy);
@@ -67,7 +68,7 @@ export default class Remote
         const url = `${this.#url}/health`;
         const options = { method: 'GET' };
 
-        const response = await this.#callRemote(url, options, 200);
+        const response = await this.#callRemote(url, options);
         const health = await response.json();
 
         return new Map(Object.entries(health));
@@ -89,7 +90,7 @@ export default class Remote
             body: JSON.stringify(body)
         };
 
-        await this.#callRemote(url, options, 201);
+        await this.#callRemote(url, options);
     }
 
     async run(request: Request): Promise<ResultResponse>
@@ -109,23 +110,28 @@ export default class Remote
             body: body
         };
 
-        const response = await this.#callRemote(url, options, 200);
+        const response = await this.#callRemote(url, options);
         const result = await this.#createResponseResult(response);
         const headers = this.#createResponseHeaders(response);
 
         return new ResultResponse(result, headers);
     }
 
-    async #callRemote(url: string, options: object, expectedStatus: number): Promise<Response>
+    async #callRemote(url: string, options: object): Promise<Response>
     {
         const response = await fetch(url, options);
 
-        if (response.status !== expectedStatus)
+        if (this.#isErrorResponse(response))
         {
             throw await this.#createResponseResult(response);
         }
 
         return response;
+    }
+
+    #isErrorResponse(response: Response): boolean
+    {
+        return response.status < 200 || response.status > 299;
     }
 
     async #createRequestBody(body: unknown): Promise<string>
