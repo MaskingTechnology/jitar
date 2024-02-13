@@ -51,7 +51,7 @@ export default class ImportRewriter
         }
 
         const members = this.#rewriteImportMembers(dependency);
-        const extractDefault = members.startsWith('{') ? 'false' : 'true';
+        const extractDefault = this.#mustUseAs(dependency) ? 'true' : 'false';
 
         return `const ${members} = await __import("${from}", "${scope}", ${extractDefault});`;
     }
