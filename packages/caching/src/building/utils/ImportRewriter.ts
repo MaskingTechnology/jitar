@@ -51,8 +51,9 @@ export default class ImportRewriter
         }
 
         const members = this.#rewriteImportMembers(dependency);
+        const extractDefault = this.#mustUseAs(dependency) ? 'true' : 'false';
 
-        return `const ${members} = await __import("${from}", "${scope}");`;
+        return `const ${members} = await __import("${from}", "${scope}", ${extractDefault});`;
     }
 
     #rewriteImportFrom(dependency: ReflectionImport, filename: string): string

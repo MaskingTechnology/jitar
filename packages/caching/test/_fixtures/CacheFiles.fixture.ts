@@ -38,7 +38,7 @@ export const segment = new Segment("product")
 \t)`;
 
 const CREATE_ORDER_LOCAL =
-`const { Order, OrderLine } = await __import("./order/models.js", "application");
+`const { Order, OrderLine } = await __import("./order/models.js", "application", false);
 
 export default async function createOrder(items)
 {
@@ -56,9 +56,9 @@ const CREATE_ORDER_REMOTE =
 }`;
 
 const STORE_ORDER_LOCAL =
-`const mysql = await __import("mysql", "runtime");
-const createId = await __import("uuid", "runtime");
-const { Order } = await __import("./order/models.js", "application");
+`const mysql = await __import("mysql", "runtime", true);
+const createId = await __import("uuid", "runtime", true);
+const { Order } = await __import("./order/models.js", "application", false);
 
 export async function v0_0_0(order)
 {
@@ -87,8 +87,8 @@ Order.source = "./order/models.js";
 OrderLine.source = "./order/models.js";`;
 
 const GET_PRODUCTS_LOCAL =
-`const mongodb = await __import("mongodb", "runtime");
-const { Product } = await __import("./product/models.js", "application");
+`const mongodb = await __import("mongodb", "runtime", true);
+const { Product } = await __import("./product/models.js", "application", false);
 
 export default async function getProducts(id)
 {
@@ -115,8 +115,8 @@ export async function searchProducts({ query , sort }) {
 }`;
 
 const GET_PRODUCTS_LOCAL_V1 =
-`const mongodb = await __import("mongodb", "runtime");
-const { Product } = await __import("./product/models.js", "application");
+`const mongodb = await __import("mongodb", "runtime", true);
+const { Product } = await __import("./product/models.js", "application", false);
 
 export default async function getProducts(id)
 {
