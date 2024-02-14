@@ -77,6 +77,7 @@ The following configuration properties are available:
 * source - location of the application code (optional, default `./src`).
 * cache - location of the application cache (optional, default `./.jitar`).
 * index - file to serve when accessed by a web browser (optional, default `index.html`).
+* serveIndexOnNotFound - when true, the index file will be served if the requested file is not found (default `false`).
 * assets - list of whitelisted assets (optional, default `undefined`).
 * overrides - map with import overrides (optional, default `undefined`).
 
@@ -90,6 +91,7 @@ A full configuration example looks like this.
         "source": "./src",
         "cache": "./.jitar",
         "index": "index.html",
+        "serveIndexOnNotFound": false,
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
         "overrides": { "./my-module": "./alternative-module" }
     }
@@ -243,6 +245,7 @@ The standalone service has the same configuration properties as the repository s
 * source - location of the application code (optional, default `./src`).
 * cache - location of the application cache (optional, default `./.jitar`).
 * index - file to serve when accessed by a web browser (optional, default `index.html`).
+* serveIndexOnNotFound - when true, the index file will be served if the requested file is not found (default `false`).
 * assets - list of whitelisted assets (optional, default `undefined`).
 * middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
 * overrides - map with import overrides (optional, default `undefined`).
@@ -258,6 +261,7 @@ A full configuration example looks like this:
         "source": "./src",
         "cache": "./.jitar",
         "index": "index.html",
+        "serveIndexOnNotFound": false,
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
         "middlewares": ["./middleware1", "./middleware2"],
         "overrides": { "./my-module": "./alternative-module" },

@@ -6,6 +6,7 @@
     "standalone":
     {
         "assets": [ "index.html", "assets/**/*" ],
-        "middlewares": ["./integrations/jitar/requestLogger"]
+        "middlewares": ["./integrations/jitar/requestLogger"],
+        "serveIndexOnNotFound": true
     }
 }

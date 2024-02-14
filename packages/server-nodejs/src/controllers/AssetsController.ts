@@ -1,5 +1,5 @@
 
-import express, { Request, Response } from 'express';
+import { Application, Request, Response } from 'express';
 import { Logger } from 'tslog';
 
 import { LocalRepository, Standalone, FileNotFound } from '@jitar/runtime';
@@ -7,16 +7,20 @@ import { LocalRepository, Standalone, FileNotFound } from '@jitar/runtime';
 import Headers from '../definitions/Headers.js';
 import ContentTypes from '../definitions/ContentTypes.js';
 
+type Repository = LocalRepository | Standalone;
+
 export default class AssetsController
 {
-    #repository: LocalRepository | Standalone;
+    #repository: Repository;
     #indexFile: string;
+    #serveIndexOnNotFound: boolean;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, repository: LocalRepository | Standalone, indexFile: string, logger: Logger<unknown>)
+    constructor(app: Application, repository: Repository, indexFile: string, serveIndexOnNotFound: boolean, logger: Logger<unknown>)
     {
         this.#repository = repository;
         this.#indexFile = indexFile;
+        this.#serveIndexOnNotFound = serveIndexOnNotFound;
         this.#logger = logger;
 
         app.get('*', (request: Request, response: Response) => { this.#getContent(request, response); });
@@ -24,15 +28,20 @@ export default class AssetsController
 
     async #getContent(request: Request, response: Response): Promise<void>
     {
+        const path = request.path.substring(1).trim();
+        const decodedPath = decodeURIComponent(path);
+        const filename = decodedPath.length === 0 ? this.#indexFile : decodedPath;
+
+        this.#loadContent(filename, response);
+    }
+
+    async #loadContent(filename: string, response: Response): Promise<void>
+    {
         try
         {
-            const path = request.path.substring(1).trim();
-            const decodedPath = decodeURIComponent(path);
-            const filename = decodedPath.length === 0 ? this.#indexFile : decodedPath;
-
             const file = await this.#repository.readAsset(filename);
 
-            this.#logger.info(`Got asset -> '${request.path}'`);
+            this.#logger.info(`Got asset -> '${filename}'`);
 
             if (file.type === ContentTypes.HTML)
             {
@@ -46,16 +55,21 @@ export default class AssetsController
         {
             if (error instanceof FileNotFound)
             {
-                this.#logger.warn(`Failed to get asset ->  ${error.message}`);
+                if (this.#serveIndexOnNotFound && filename !== this.#indexFile)
+                {
+                    return this.#loadContent(this.#indexFile, response);
+                }
 
-                response.status(404).type('text').send(error.message);
+                this.#logger.warn(`Failed to get asset -> '${filename}'`);
+
+                response.status(404).type('text').send('Not found');
 
                 return;
             }
 
             const message = error instanceof Error ? error.message : 'Internal server error';
 
-            this.#logger.error(`Failed to get file content -> ${message}`);
+            this.#logger.error(`Failed to get asset -> ${message}`);
 
             response.status(500).type('text').send(message);
         }
