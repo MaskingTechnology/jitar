@@ -146,14 +146,16 @@ export default class JitarServer
         if (this.#configuration.standalone !== undefined && this.#runtime instanceof Standalone)
         {
             const index = this.#configuration.standalone.index ?? RuntimeDefaults.INDEX;
+            const serveIndexOnNotFound = this.#configuration.standalone.serveIndexOnNotFound ?? RuntimeDefaults.SERVE_INDEX_ON_NOT_FOUND;
 
-            this.#addStandAloneControllers(this.#runtime, index);
+            this.#addStandAloneControllers(this.#runtime, index, serveIndexOnNotFound);
         }
         else if (this.#configuration.repository !== undefined && this.#runtime instanceof LocalRepository)
         {
             const index = this.#configuration.repository.index ?? RuntimeDefaults.INDEX;
+            const serveIndexOnNotFound = this.#configuration.repository.serveIndexOnNotFound ?? RuntimeDefaults.SERVE_INDEX_ON_NOT_FOUND;
 
-            this.#addRepositoryControllers(this.#runtime, index);
+            this.#addRepositoryControllers(this.#runtime, index, serveIndexOnNotFound);
         }
         else if (this.#configuration.gateway !== undefined && this.#runtime instanceof LocalGateway)
         {
@@ -169,21 +171,21 @@ export default class JitarServer
         }
     }
 
-    #addStandAloneControllers(standalone: Standalone, index: string): void
+    #addStandAloneControllers(standalone: Standalone, index: string, serveIndexOnNotFound: boolean): void
     {
         new HealthController(this.#app, standalone, this.#logger);
         new JitarController(this.#app);
         new ModulesController(this.#app, standalone, this.#serializer, this.#logger);
         new ProceduresController(this.#app, standalone, this.#logger);
         new RPCController(this.#app, standalone, this.#serializer, this.#logger);
-        new AssetsController(this.#app, standalone, index, this.#logger);
+        new AssetsController(this.#app, standalone, index, serveIndexOnNotFound, this.#logger);
     }
 
-    #addRepositoryControllers(repository: LocalRepository, index: string): void
+    #addRepositoryControllers(repository: LocalRepository, index: string, serveIndexOnNotFound: boolean): void
     {
         new JitarController(this.#app);
         new ModulesController(this.#app, repository, this.#serializer, this.#logger);
-        new AssetsController(this.#app, repository, index, this.#logger);
+        new AssetsController(this.#app, repository, index, serveIndexOnNotFound, this.#logger);
     }
 
     #addGatewayControllers(gateway: LocalGateway): void
