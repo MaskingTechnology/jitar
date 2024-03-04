@@ -56,17 +56,17 @@ export default class JitarServer
         this.#classLoader = new RemoteClassLoader();
         this.#serializer = SerializerBuilder.build(this.#classLoader);
 
+        this.#options = ServerOptionsReader.read();
+        this.#configuration = RuntimeConfigurationLoader.load(this.#options.config);
+        this.#logger = LogBuilder.build(this.#options.loglevel);
+
         this.#app = express();
 
-        this.#app.use(express.json());
+        this.#app.use(express.json({limit: this.#options.bodylimit }));
         this.#app.use(express.urlencoded({ extended: true }));
         this.#app.use((request, response, next) => this.#addDefaultHeaders(request, response, next));
 
         this.#app.disable('x-powered-by');
-
-        this.#options = ServerOptionsReader.read();
-        this.#configuration = RuntimeConfigurationLoader.load(this.#options.config);
-        this.#logger = LogBuilder.build(this.#options.loglevel);
 
         this.#printStartupMessage();
     }
