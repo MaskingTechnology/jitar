@@ -54,7 +54,8 @@ export default defineConfig({
           { text: 'Segmentation', link: '/deploy/segmentation' },
           { text: 'Environments', link: '/deploy/environments' },
           { text: 'Load balancing', link: '/deploy/load-balancing' },
-          { text: 'Health checks', link: '/deploy/health-checks' }
+          { text: 'Health checks', link: '/deploy/health-checks' },
+          { text: 'Runtime settings', link: '/deploy/runtime-settings' }
         ]
       },
       {

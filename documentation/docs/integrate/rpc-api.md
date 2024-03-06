@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Health checks
-    link: /deploy/health-checks
+    text: Runtime settings
+    link: /deploy/runtime-settings
 
 next:
     text: Vite plugin
