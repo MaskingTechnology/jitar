@@ -6,8 +6,8 @@ prev:
     link: /deploy/load-balancing
 
 next:
-    text: RPC API
-    link: /integrate/rpc-api
+    text: Runtime settings
+    link: /deploy/runtime-settings
 
 ---
 
