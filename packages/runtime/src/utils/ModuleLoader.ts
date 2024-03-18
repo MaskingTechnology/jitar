@@ -4,6 +4,7 @@ import ModuleNotLoaded from '../errors/ModuleNotLoaded.js';
 
 import Module from '../types/Module.js';
 import ModuleImporter from '../types/ModuleImporter.js';
+import Environment from './Environment.js';
 
 import UrlRewriter from './UrlRewriter.js';
 
@@ -33,7 +34,9 @@ export default class ModuleLoader
 
         if (specifier.startsWith('/jitar'))
         {
-            return this.#import('JITAR_LIBRARY_NAME');
+            return Environment.isServer()
+                ? this.#import('JITAR_LIBRARY_NAME')
+                : this.#import(specifier);
         }
 
         const filename = this.assureExtension(specifier);
