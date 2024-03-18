@@ -36,7 +36,8 @@ export default class ClassSerializer extends ValueSerializer
         return object instanceof Object
             && object.serialized === true
             && typeof object.name === 'string'
-            && object.args instanceof Array
+            && object.args instanceof Object
+            && object.args.constructor === Object
             && object.fields instanceof Object
             && object.fields.constructor === Object;
     }
@@ -45,17 +46,17 @@ export default class ClassSerializer extends ValueSerializer
     {
         const clazz = reflector.getClass(object);
         const model = reflector.fromClass(clazz, true);
-        const parameterNames = this.#extractParameterNames(model);
+        const parameterNames = this.#extractConstructorParameters(model);
 
         const name = clazz.name;
         const source = (clazz as Loadable).source;
-        const args: unknown[] = await this.#extractArguments(model, parameterNames, object);
-        const fields: FlexObject = await this.#extractFields(model, parameterNames, object);
+        const args: FlexObject = await this.#serializeConstructor(model, parameterNames, object);
+        const fields: FlexObject = await this.#serializeFields(model, parameterNames, object);
 
         return { serialized: true, name: name, source: source, args: args, fields: fields };
     }
 
-    #extractParameterNames(model: ReflectionClass): string[]
+    #extractConstructorParameters(model: ReflectionClass): string[]
     {
         const constructor = model.getFunction('constructor');
         const parameters = (constructor?.parameters ?? []) as ReflectionField[];
@@ -63,9 +64,9 @@ export default class ClassSerializer extends ValueSerializer
         return parameters.map(parameter => parameter.name);
     }
 
-    async #extractArguments(model: ReflectionClass, includeNames: string[], object: object): Promise<unknown[]>
+    async #serializeConstructor(model: ReflectionClass, includeNames: string[], object: object): Promise<FlexObject>
     {
-        const args: unknown[] = [];
+        const args: FlexObject = {};
 
         for (const name of includeNames)
         {
@@ -75,13 +76,13 @@ export default class ClassSerializer extends ValueSerializer
                 ? await this.serializeOther((object as FlexObject)[name])
                 : undefined;
 
-            args.push(objectValue);
+            args[name] = objectValue;
         }
 
         return args;
     }
 
-    async #extractFields(model: ReflectionClass, excludeNames: string[], object: object): Promise<FlexObject>
+    async #serializeFields(model: ReflectionClass, excludeNames: string[], object: object): Promise<FlexObject>
     {
         const fields: FlexObject = {};
 
@@ -115,7 +116,7 @@ export default class ClassSerializer extends ValueSerializer
             throw new InvalidClass(object.name);
         }
 
-        const args = await Promise.all(object.args.map(async (value) => this.deserializeOther(value)));
+        const args = await this.#deserializeConstructor(clazz as Function, object.args);
 
         const instance = reflector.createInstance(clazz as Function, args) as SerializableObject;
 
@@ -129,13 +130,29 @@ export default class ClassSerializer extends ValueSerializer
         return instance;
     }
 
-    async #getClass(clazz: Loadable): Promise<unknown>
+    async #deserializeConstructor(clazz: Function, args: FlexObject): Promise<unknown[]>
     {
-        if (clazz.source === undefined)
+        const model = reflector.fromClass(clazz, true);
+        const constructor = model.getFunction('constructor');
+        const parameters = (constructor?.parameters ?? []) as ReflectionField[];
+
+        const values = parameters.map(parameter =>
         {
-            return (globalThis as FlexObject)[clazz.name];
+            const value = args[parameter.name];
+
+            return this.deserializeOther(value);
+        });
+
+        return Promise.all(values);
+    }
+
+    async #getClass(loadable: Loadable): Promise<unknown>
+    {
+        if (loadable.source === undefined)
+        {
+            return (globalThis as FlexObject)[loadable.name];
         }
 
-        return this.#classLoader.loadClass(clazz);
+        return this.#classLoader.loadClass(loadable);
     }
 }
