@@ -4,7 +4,7 @@ import Serialized from '../Serialized.js';
 
 type SerializedClass = Serialized & Loadable &
 {
-    args: unknown[],
+    args: Record<string, unknown>,
     fields: Record<string, unknown>
 }
 
