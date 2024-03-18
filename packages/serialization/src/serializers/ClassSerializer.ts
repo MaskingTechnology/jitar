@@ -116,9 +116,9 @@ export default class ClassSerializer extends ValueSerializer
             throw new InvalidClass(object.name);
         }
 
-        const args = await this.#deserializeConstructor(clazz as Function, object.args);
+        const args = await this.#deserializeConstructor(clazz, object.args);
 
-        const instance = reflector.createInstance(clazz as Function, args) as SerializableObject;
+        const instance = reflector.createInstance(clazz, args) as SerializableObject;
 
         for (const name in object.fields)
         {
