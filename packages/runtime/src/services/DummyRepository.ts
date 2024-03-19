@@ -13,25 +13,19 @@ export default class DummyRepository extends Repository
     async stop(): Promise<void> { }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async registerClient(segmentFiles: string[]): Promise<string>
-    {
-        throw new RepositoryNotAvailable();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async readAsset(filename: string): Promise<File>
     {
         throw new RepositoryNotAvailable();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async readModule(filename: string, clientId: string): Promise<File>
+    async readModule(source: string, specifier: string): Promise<File>
     {
         throw new RepositoryNotAvailable();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async loadModule(filename: string): Promise<Module>
+    async loadModule(specifier: string): Promise<Module>
     {
         throw new RepositoryNotAvailable();
     }

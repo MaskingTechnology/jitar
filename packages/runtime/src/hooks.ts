@@ -1,11 +1,11 @@
 
-import { ExecutionScope } from './definitions/ExecutionScope.js';
 import RuntimeNotAvailable from './errors/RuntimeNotAvailable.js';
+import Import from './models/Import.js';
 import Request from './models/Request.js';
 import ProcedureRuntime from './services/ProcedureRuntime.js';
 import VersionParser from './utils/VersionParser.js';
-
-const RUNS_IN_BROWSER = typeof window !== 'undefined';
+import Environment from './utils/Environment.js';
+import { ExecutionScope } from './lib.js';
 
 let _runtime: ProcedureRuntime;
 
@@ -24,18 +24,21 @@ export function getRuntime(): ProcedureRuntime
     return _runtime;
 }
 
-export async function importModule(name: string, scope: ExecutionScope, extractDefault = true): Promise<unknown>
+export async function importModule(specifier: string, executionScope: ExecutionScope, extractDefault: boolean, source?: string): Promise<unknown>
 {
     const runtime = getRuntime();
     
-    if (RUNS_IN_BROWSER && name === 'JITAR_LIBRARY_NAME')
+    if (Environment.isBrowser() && specifier === 'JITAR_LIBRARY_NAME')
     {
-        name = 'RUNTIME_HOOKS_LOCATION';
+        specifier = 'RUNTIME_HOOKS_LOCATION';
     }
 
-    const module = await runtime.import(name, scope);
+    console.log('importModule', specifier, source);
 
-    return extractDefault && module.default !== undefined ? module.default : module;
+    const importModel = new Import(specifier, executionScope, extractDefault, source);
+    const module = await runtime.import(importModel);
+
+    return importModel.extractDefault && module.default !== undefined ? module.default : module;
 }
 
 export async function runProcedure(fqn: string, versionNumber: string, args: object, sourceRequest?: Request): Promise<unknown>

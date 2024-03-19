@@ -24,17 +24,11 @@ export default class RemoteRepository extends Repository
 
     async start(): Promise<void>
     {
-        const clientId = await this.registerClient(this.segmentNames);
-        const baseUrl = this.#getModuleBaseUrl(clientId);
+        const baseUrl = this.#getModuleBaseUrl();
         
         ModuleLoader.setBaseUrl(baseUrl);
 
         await super.start();
-    }
-
-    registerClient(segmentFiles: string[]): Promise<string>
-    {
-        return this.#remote.registerClient(segmentFiles);
     }
 
     readAsset(filename: string): Promise<File>
@@ -42,18 +36,18 @@ export default class RemoteRepository extends Repository
         return this.#remote.loadFile(filename);
     }
 
-    readModule(filename: string, clientId: string): Promise<File>
+    readModule(source: string, specifier: string): Promise<File>
     {
-        return this.#remote.loadFile(`modules/${clientId}/${filename}`);
+        return this.#remote.loadFile(`modules/${specifier}?source=${source}`);
     }
 
-    loadModule(filename: string): Promise<Module>
+    loadModule(specifier: string): Promise<Module>
     {
-        return ModuleLoader.load(filename);
+        return ModuleLoader.load(specifier);
     }
 
-    #getModuleBaseUrl(clientId: string): string
+    #getModuleBaseUrl(): string
     {
-        return `${this.url}/modules/${clientId}`;
+        return `${this.url}/modules/`;
     }
 }

@@ -1,7 +1,8 @@
 
-import { ExecutionScope, ExecutionScopes } from '../definitions/ExecutionScope.js';
+import { ExecutionScopes } from '../definitions/ExecutionScope.js';
 import InvalidHealthCheck from '../errors/InvalidHealthCheck.js';
 import HealthCheck from '../interfaces/HealthCheck.js';
+import Import from '../models/Import.js';
 import Module from '../types/Module.js';
 
 export default abstract class Runtime
@@ -22,7 +23,7 @@ export default abstract class Runtime
         this.#healthCheckFiles = filenames;
     }
 
-    abstract import(url: string, scope: ExecutionScope): Promise<Module>;
+    abstract import(importModel: Import): Promise<Module>;
 
     start(): Promise<void>
     {
@@ -90,7 +91,8 @@ export default abstract class Runtime
 
     async #importHealthCheck(url: string): Promise<void>
     {
-        const module = await this.import(url, ExecutionScopes.APPLICATION);
+        const importModel = new Import(url, ExecutionScopes.APPLICATION);
+        const module = await this.import(importModel);
         const healthCheck = module.default as HealthCheck;
 
         if (healthCheck?.isHealthy === undefined)

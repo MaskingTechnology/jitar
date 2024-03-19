@@ -2,13 +2,11 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { ClientIdHelper, LocalRepository, Standalone } from '@jitar/runtime';
+import { LocalRepository, Standalone } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
 import Headers from '../definitions/Headers';
 import ContentTypes from '../definitions/ContentTypes';
-
-const clientIdHelper = new ClientIdHelper();
 
 export default class ModulesController
 {
@@ -22,58 +20,28 @@ export default class ModulesController
         this.#serializer = serializer;
         this.#logger = logger;
 
-        app.post('/modules', (request: Request, response: Response) => { this.registerClient(request, response); });
-        app.get('/modules/:clientId/*', (request: Request, response: Response) => { this.getModule(request, response); });
-    }
-
-    async registerClient(request: Request, response: Response): Promise<Response>
-    {
-        this.#logger.info('Register client');
-
-        if ((request.body instanceof Array) === false)
-        {
-            return response.status(400).send('Invalid segment file list.');
-        }
-
-        const segmentFiles = request.body as string[];
-
-        for (const segmentFile of segmentFiles)
-        {
-            if (typeof segmentFile !== 'string')
-            {
-                return response.status(400).send('Invalid segment file list.');
-            }
-        }
-
-        const clientId = await this.#repository.registerClient(segmentFiles);
-
-        this.#logger.info(`Registered client -> ${clientId} [${segmentFiles.join(',')}]`);
-
-        response.setHeader(Headers.CONTENT_TYPE, ContentTypes.TEXT);
-
-        return response.status(200).send(clientId);
+        app.get('/modules/*', (request: Request, response: Response) => { this.getModule(request, response); });
     }
 
     async getModule(request: Request, response: Response): Promise<Response>
     {
-        const clientId = request.params.clientId;
+        const source = request.query.source ?? "";
 
-        if (typeof clientId !== 'string' || clientIdHelper.validate(clientId) === false)
+        if (typeof source !== 'string')
         {
-            return response.status(400).send('Invalid client id.');
+            return response.status(400).send('Invalid source.');
         }
 
-        this.#logger.info(`Get module for -> '${request.params.clientId}'`);
+        this.#logger.info(`Get module for -> '${source}'`);
 
-        const pathKey = `/${clientId}/`;
-        const pathIndex = request.path.indexOf(pathKey) + pathKey.length;
-        const filename = request.path.substring(pathIndex);
+        const pathKey = '/modules/';
+        const specifier = request.path.substring(pathKey.length);
 
         try
         {
-            const file = await this.#repository.readModule(filename, clientId);
+            const file = await this.#repository.readModule(source, specifier);
 
-            this.#logger.info(`Got module -> '${filename}' (${clientId})`);
+            this.#logger.info(`Got module -> '${specifier}' (${source})`);
 
             response.setHeader(Headers.CONTENT_TYPE, file.type);
 
@@ -83,7 +51,7 @@ export default class ModulesController
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error(`Failed to get module -> '${filename}' (${clientId}) | ${message}`);
+            this.#logger.error(`Failed to get module -> '${specifier}' (${source}) | ${message}`);
 
             const data = this.#serializer.serialize(error);
 

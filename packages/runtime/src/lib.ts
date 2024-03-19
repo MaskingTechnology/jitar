@@ -15,10 +15,8 @@ export { default as Teapot } from './errors/generic/Teapot.js';
 export { default as Unauthorized } from './errors/generic/Unauthorized.js';
 
 // Runtime errors
-export { default as ClientNotFound } from './errors/ClientNotFound.js';
 export { default as FileNotFound } from './errors/FileNotFound.js';
 export { default as ImplementationNotFound } from './errors/ImplementationNotFound.js';
-export { default as InvalidClientId } from './errors/InvalidClientId.js';
 export { default as InvalidParameterValue } from './errors/InvalidParameterValue.js';
 export { default as InvalidSegmentFile } from './errors/InvalidSegmentFile.js';
 export { default as InvalidVersionNumber } from './errors/InvalidVersionNumber.js';
@@ -42,6 +40,7 @@ export { default as Middleware } from './interfaces/Middleware.js';
 export { default as ArrayParameter } from './models/ArrayParameter.js';
 export { default as File } from './models/File.js';
 export { default as Implementation } from './models/Implementation.js';
+export { default as Import } from './models/Import.js';
 export { default as NamedParameter } from './models/NamedParameter.js';
 export { default as ObjectParameter } from './models/ObjectParameter.js';
 export { default as Procedure } from './models/Procedure.js';
@@ -72,7 +71,6 @@ export { default as NextHandler } from './types/NextHandler.js';
 export { default as ModuleImporter } from './types/ModuleImporter.js';
 
 // Utils
-export { default as ClientIdHelper } from './utils/ClientIdHelper.js';
 export { default as ModuleLoader } from './utils/ModuleLoader.js';
 export { default as RemoteClassLoader } from './utils/RemoteClassLoader.js';
 export { default as VersionParser } from './utils/VersionParser.js';

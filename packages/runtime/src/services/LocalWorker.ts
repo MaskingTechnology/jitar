@@ -7,6 +7,7 @@ import ImplementationNotFound from '../errors/ImplementationNotFound.js';
 import ProcedureNotFound from '../errors/ProcedureNotFound.js';
 import InvalidTrustKey from '../errors/InvalidTrustKey.js';
 
+import Import from '../models/Import.js';
 import Procedure from '../models/Procedure.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
@@ -121,7 +122,8 @@ export default class LocalWorker extends Worker
     async #loadSegment(name: string): Promise<void>
     {
         const filename = createWorkerFilename(name);
-        const module = await this.import(filename, ExecutionScopes.APPLICATION);
+        const importModel = new Import(filename, ExecutionScopes.APPLICATION);
+        const module = await this.import(importModel);
         const segment = module.segment as Segment;
 
         this.addSegment(segment);

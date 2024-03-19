@@ -3,7 +3,7 @@ import express, { Express } from 'express';
 import { Server } from 'http';
 import { Logger } from 'tslog';
 
-import { LocalGateway, LocalWorker, LocalRepository, Proxy, Runtime, RemoteClassLoader, ExecutionScopes, Standalone } from '@jitar/runtime';
+import { LocalGateway, LocalWorker, LocalRepository, Proxy, Runtime, RemoteClassLoader, ExecutionScopes, Standalone, Import } from '@jitar/runtime';
 import { ClassLoader, Serializer, SerializerBuilder, ValueSerializer } from '@jitar/serialization';
 
 import ServerOptions from './configuration/ServerOptions.js';
@@ -222,7 +222,9 @@ export default class JitarServer
 
         for (const setUpScript of setUpScripts)
         {
-            await runtime.import(setUpScript, ExecutionScopes.APPLICATION);
+            const importModel = new Import(setUpScript, ExecutionScopes.APPLICATION);
+
+            await runtime.import(importModel);
         }
     }
 
@@ -241,7 +243,9 @@ export default class JitarServer
 
         for (const tearDownScript of tearDownScripts)
         {
-            await runtime.import(tearDownScript, ExecutionScopes.APPLICATION);
+            const importModel = new Import(tearDownScript, ExecutionScopes.APPLICATION);
+
+            await runtime.import(importModel);
         }
     }
 

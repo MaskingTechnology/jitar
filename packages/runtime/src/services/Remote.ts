@@ -25,24 +25,10 @@ export default class Remote
         this.#serializer = serializer;
     }
 
-    async registerClient(segmentFiles: string[]): Promise<string>
-    {
-        const url = `${this.#url}/modules`;
-        const options =
-        {
-            method: 'POST',
-            headers: { 'Content-Type': APPLICATION_JSON },
-            body: JSON.stringify(segmentFiles)
-        };
-
-        const response = await this.#callRemote(url, options);
-
-        return response.text();
-    }
-
     async loadFile(filename: string): Promise<File>
     {
         const url = `${this.#url}/${filename}`;
+        console.log('load file', url);
         const options = { method: 'GET' };
 
         const response = await this.#callRemote(url, options);

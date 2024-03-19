@@ -53,14 +53,9 @@ export default class Standalone extends ProcedureRuntime
         return this.repository.readAsset(filename);
     }
 
-    registerClient(segmentFiles: string[]): Promise<string>
+    readModule(source: string, specifier: string): Promise<File>
     {
-        return this.repository.registerClient(segmentFiles);
-    }
-
-    readModule(filename: string, clientId: string): Promise<File>
-    {
-        return this.repository.readModule(filename, clientId);
+        return this.repository.readModule(source, specifier);
     }
 
     run(request: Request): Promise<Response>

@@ -1,28 +1,22 @@
 
 import { createRepositoryFilename, convertToLocalFilename, convertToRemoteFilename, isSegmentFilename } from '../definitions/Files.js';
 
-import ClientNotFound from '../errors/ClientNotFound.js';
 import FileNotFound from '../errors/FileNotFound.js';
-import InvalidClientId from '../errors/InvalidClientId.js';
 import InvalidSegmentFile from '../errors/InvalidSegmentFile.js';
 
 import FileManager from '../interfaces/FileManager.js';
 import File from '../models/File.js';
 import Module from '../types/Module.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
-import ClientIdHelper from '../utils/ClientIdHelper.js';
 
 import Repository from './Repository.js';
-
-const clientIdHelper = new ClientIdHelper();
 
 export default class LocalRepository extends Repository
 {
     // All filenames used here are relative to the root location.
 
     #fileManager: FileManager;
-    #segments: Map<string, string> = new Map();
-    #clients: Map<string, string[]> = new Map();
+    #segments: Map<string, string[]> = new Map();
 
     #segmentNames: Set<string> = new Set();
     #assets: Set<string> = new Set();
@@ -63,7 +57,6 @@ export default class LocalRepository extends Repository
 
     stop(): Promise<void>
     {
-        this.#unregisterClients();
         this.#unloadSegments();
 
         return super.stop();
@@ -99,7 +92,7 @@ export default class LocalRepository extends Repository
 
     async registerSegment(name: string, filenames: string[]): Promise<void>
     {
-        filenames.forEach((filename: string) => this.#segments.set(filename, name));
+        this.#segments.set(name, filenames);
     }
 
     #translateOverrides(): void
@@ -120,20 +113,6 @@ export default class LocalRepository extends Repository
         this.#overrides = translated;
     }
 
-    async registerClient(segmentFilenames: string[]): Promise<string>
-    {
-        const clientId = clientIdHelper.generate();
-
-        this.#clients.set(clientId, segmentFilenames);
-
-        return clientId;
-    }
-
-    #unregisterClients(): void
-    {
-        this.#clients.clear();
-    }
-
     readAsset(filename: string): Promise<File>
     {
         if (this.#assets.has(filename) === false)
@@ -144,54 +123,36 @@ export default class LocalRepository extends Repository
         return this.#readFile(filename);
     }
 
-    readModule(name: string, clientId: string): Promise<File>
+    readModule(source: string, specifier: string): Promise<File>
     {
-        clientId = this.#validateClientId(clientId);
-
-        const segmentFilename = this.#segments.get(name);
-
-        if (segmentFilename === undefined)
+        if (isSegmentFilename(specifier))
         {
-            return this.#readWorkerModule(name);
+            return this.#readWorkerModule(specifier); 
         }
 
-        return this.#hasClientSegmentFile(clientId, segmentFilename)
-            ? this.#readWorkerModule(name)
-            : this.#readRemoteModule(name);
+        if (this.#isSegmented(specifier) === false)
+        {
+            return this.#readWorkerModule(specifier);
+        }
+
+        return this.#bbb(source, specifier)
+            ? this.#readWorkerModule(specifier)
+            : this.#readRemoteModule(specifier);
     }
 
-    loadModule(name: string): Promise<Module>
+    loadModule(specifier: string): Promise<Module>
     {
-        const filename = this.#getModuleFilename(name);
+        const filename = this.#getModuleFilename(specifier);
 
         return ModuleLoader.load(filename);
     }
 
-    #validateClientId(clientId: string): string
+    #bbb(source: string, specifier: string): boolean
     {
-        if (clientIdHelper.validate(clientId) === false)
-        {
-            throw new InvalidClientId(clientId);
-        }
+        const sourceSegments = this.#aaa(source);
+        const specifierSegments = this.#aaa(specifier);
 
-        if (this.#clients.has(clientId) === false)
-        {
-            throw new ClientNotFound(clientId);
-        }
-
-        return clientId;
-    }
-
-    #hasClientSegmentFile(clientId: string, segmentFilename: string): boolean
-    {
-        const clientSegmentFiles = this.#clients.get(clientId);
-
-        if (clientSegmentFiles === undefined)
-        {
-            throw new ClientNotFound(clientId);
-        }
-
-        return clientSegmentFiles.some(clientSegmentFilename => segmentFilename.endsWith(clientSegmentFilename));
+        return sourceSegments.some(segmentName => specifierSegments.includes(segmentName));
     }
 
     async #readWorkerModule(name: string): Promise<File>
@@ -233,5 +194,29 @@ export default class LocalRepository extends Repository
     #readFile(filename: string): Promise<File>
     {
         return this.#fileManager.read(filename);
+    }
+
+    #aaa(filename: string): string[]
+    {
+        const segmentNames = [...this.#segments.keys()];
+
+        return segmentNames.filter(segmentName =>
+        {
+            const filenames = this.#segments.get(segmentName) ?? [];
+
+            return filenames.includes(filename);
+        });
+    }
+
+    #isSegmented(filename: string): boolean
+    {
+        const segmentNames = [...this.#segments.keys()];
+
+        return segmentNames.some(segmentName =>
+        {
+            const filenames = this.#segments.get(segmentName) ?? [];
+
+            return filenames.includes(filename);
+        });
     }
 }
