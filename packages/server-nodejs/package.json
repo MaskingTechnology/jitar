@@ -28,7 +28,7 @@
     "dependencies": {
         "@jitar/caching": "^0.7.1",
         "@jitar/runtime": "^0.7.1",
-        "express": "^4.18.3",
+        "express": "^4.19.2",
         "express-http-proxy": "^2.0.0",
         "fs-extra": "^11.2.0",
         "glob-promise": "6.0.5",
