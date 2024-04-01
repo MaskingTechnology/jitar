@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@jitar/reflection": "^0.7.1",
-    "@jitar/runtime": "^0.7.1"
+    "@jitar/runtime": "^0.7.2"
   },
   "repository": {
     "type": "git",
