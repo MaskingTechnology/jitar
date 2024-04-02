@@ -26,8 +26,8 @@
         "prepublishOnly": "npm run clean && npm run build"
     },
     "dependencies": {
-        "@jitar/caching": "^0.7.2",
-        "@jitar/runtime": "^0.7.2",
+        "@jitar/caching": "*",
+        "@jitar/runtime": "*",
         "express": "^4.19.2",
         "express-http-proxy": "^2.0.0",
         "fs-extra": "^11.2.0",
