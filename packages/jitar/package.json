@@ -36,8 +36,8 @@
         "zod": "^3.22.4"
     },
     "devDependencies": {
-        "@jitar/runtime": "^0.7.2",
-        "@jitar/server-nodejs": "^0.7.3"
+        "@jitar/runtime": "*",
+        "@jitar/server-nodejs": "*"
     },
     "engines": {
         "node": ">=20.0"

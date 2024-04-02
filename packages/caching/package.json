@@ -26,8 +26,8 @@
     "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
-    "@jitar/reflection": "^0.7.1",
-    "@jitar/runtime": "^0.7.2"
+    "@jitar/reflection": "*",
+    "@jitar/runtime": "*"
   },
   "repository": {
     "type": "git",
