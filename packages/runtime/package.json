@@ -1,6 +1,6 @@
 {
   "name": "@jitar/runtime",
-  "version": "0.7.1",
+  "version": "0.7.4",
   "description": "JavaScript runtime library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
@@ -26,7 +26,7 @@
     "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
-    "@jitar/serialization": "^0.7.1"
+    "@jitar/serialization": "*"
   },
   "repository": {
     "type": "git",
