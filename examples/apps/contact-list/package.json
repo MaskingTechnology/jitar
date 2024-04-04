@@ -15,16 +15,16 @@
   },
   "dependencies": {
     "jitar": "*",
-    "mongodb": "^6.4.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "mongodb": "*",
+    "react": "*",
+    "react-dom": "*"
   },
   "devDependencies": {
     "@jitar/plugin-vite": "*",
-    "@types/react": "^18.2.61",
-    "@types/react-dom": "^18.2.19",
-    "@vitejs/plugin-react": "^4.2.1",
-    "typescript": "^5.4.3",
-    "vite": "^5.2.7"
+    "@types/react": "*",
+    "@types/react-dom": "*",
+    "@vitejs/plugin-react": "*",
+    "typescript": "*",
+    "vite": "*"
   }
 }
