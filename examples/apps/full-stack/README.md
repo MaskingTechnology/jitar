@@ -1,7 +1,7 @@
 
-# Jitar | Contact list
+# Jitar | Full Stack
 
-This example contact list application is build with React, MongoDB and Jitar (ReMoJi stack).
+This full stack example a contact list application is build with React, MongoDB and Jitar (ReMoJi stack).
 It includes frontend and backend functions and a database for storing contacts.
 
 ## Project setup
