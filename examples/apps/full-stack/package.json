@@ -1,5 +1,5 @@
 {
-  "name": "jitar-contact-list-example",
+  "name": "jitar-full-stack-example",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -15,16 +15,16 @@
   },
   "dependencies": {
     "jitar": "*",
-    "mongodb": "^6.4.0",
+    "mongodb": "^6.5.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@jitar/plugin-vite": "*",
-    "@types/react": "^18.2.61",
-    "@types/react-dom": "^18.2.19",
-    "@vitejs/plugin-react": "^4.2.1",
-    "typescript": "^5.4.3",
-    "vite": "^5.2.7"
+    "@types/react": "^18.2.74",
+    "@types/react-dom": "^18.2.24",
+    "@vitejs/plugin-react": "*",
+    "typescript": "5.4.3",
+    "vite": "^5.2.8"
   }
 }

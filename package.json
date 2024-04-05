@@ -4,6 +4,11 @@
   "private": true,
   "license": "MIT",
   "type": "module",
+  "workspaces": [
+    "packages/*",
+    "tools/*",
+    "examples/**/*"
+  ],
   "scripts": {
     "build": "lerna run build --scope=jitar --scope=create-jitar --scope=@jitar/plugin*",
     "build:examples": "lerna run build --scope=*-example",
