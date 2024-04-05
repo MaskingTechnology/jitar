@@ -28,7 +28,6 @@ export default class Remote
     async loadFile(filename: string): Promise<File>
     {
         const url = `${this.#url}/${filename}`;
-        console.log('load file', url);
         const options = { method: 'GET' };
 
         const response = await this.#callRemote(url, options);

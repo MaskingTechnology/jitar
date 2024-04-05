@@ -112,15 +112,15 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
         }
     }
 
-    async #importMiddleware(url: string): Promise<void>
+    async #importMiddleware(specifier: string): Promise<void>
     {
-        const importModel = new Import(url, ExecutionScopes.APPLICATION);
+        const importModel = new Import('', specifier, ExecutionScopes.APPLICATION);
         const module = await this.import(importModel);
         const middleware = module.default as Middleware;
 
         if (middleware?.handle === undefined)
         {
-            throw new InvalidMiddleware(url);
+            throw new InvalidMiddleware(specifier);
         }
 
         this.addMiddleware(middleware);

@@ -76,8 +76,8 @@ async function createImportCode(code: string, id: string, jitarFullPath: string,
         exportCode += `export { ${functionKeys.join(', ')} };\n`;
     }
 
-    return 'import { getClient } from "/jitar/client.js";\n'
-        + `const module = await (await getClient()).import("./${jitarPath}${relativeId}");\n`
+    return 'import { getClient, Import } from "/jitar/client.js";\n'
+        + `const module = await (await getClient()).import(new Import("", "./${jitarPath}${relativeId}", "application", false));\n`
         + importCode
         + exportCode;
 }
@@ -105,11 +105,11 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
             jitarFullPath = path.join(resolvedConfig.root, sourcePath, jitarPath);
         },
 
-        resolveId(source: string)
+        resolveId(id: string)
         {
-            if (source === '/jitar/client.js')
+            if (id === '/jitar/client.js')
             {
-                return { id: source, external: 'absolute' };
+                return { id, external: 'absolute' };
             }
 
             return null;
@@ -117,11 +117,17 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
 
         async transform(code: string, id: string)
         {
-            if (jitarFullPath === undefined || id.includes(jitarFullPath) === false)
+            if (jitarFullPath === undefined)
             {
                 return code;
             }
 
+            if (id.includes(jitarFullPath))
+            {
+                return undefined;
+            }
+
+            // TODO: refactor createImportCode to rewrite all the jitar (domain) related imports
             return createImportCode(code, id, jitarFullPath, jitarPath);
         },
 

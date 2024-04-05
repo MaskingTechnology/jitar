@@ -25,23 +25,23 @@ export default class ModulesController
 
     async getModule(request: Request, response: Response): Promise<Response>
     {
-        const source = request.query.source ?? "";
+        const caller = request.query.caller ?? '';
 
-        if (typeof source !== 'string')
+        if (typeof caller !== 'string')
         {
-            return response.status(400).send('Invalid source.');
+            return response.status(400).send('Invalid caller.');
         }
 
-        this.#logger.info(`Get module for -> '${source}'`);
+        this.#logger.info(`Get module for -> '${caller}'`);
 
         const pathKey = '/modules/';
         const specifier = request.path.substring(pathKey.length);
 
         try
         {
-            const file = await this.#repository.readModule(source, specifier);
+            const file = await this.#repository.readModule(caller, specifier);
 
-            this.#logger.info(`Got module -> '${specifier}' (${source})`);
+            this.#logger.info(`Got module -> '${specifier}' (${caller})`);
 
             response.setHeader(Headers.CONTENT_TYPE, file.type);
 
@@ -51,7 +51,7 @@ export default class ModulesController
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error(`Failed to get module -> '${specifier}' (${source}) | ${message}`);
+            this.#logger.error(`Failed to get module -> '${specifier}' (${caller}) | ${message}`);
 
             const data = this.#serializer.serialize(error);
 

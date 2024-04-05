@@ -22,7 +22,7 @@ export default abstract class Repository extends Runtime
 
     abstract readAsset(filename: string): Promise<File>;
 
-    abstract readModule(source: string, specifier: string): Promise<File>;
+    abstract readModule(caller: string, specifier: string): Promise<File>;
 
     abstract loadModule(specifier: string): Promise<Module>;
 }

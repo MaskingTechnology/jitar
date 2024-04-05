@@ -123,7 +123,7 @@ export default class LocalRepository extends Repository
         return this.#readFile(filename);
     }
 
-    readModule(source: string, specifier: string): Promise<File>
+    readModule(caller: string, specifier: string): Promise<File>
     {
         if (isSegmentFilename(specifier))
         {
@@ -132,10 +132,13 @@ export default class LocalRepository extends Repository
 
         if (this.#isSegmented(specifier) === false)
         {
+            console.log('NOT SEGMENTED', specifier);
             return this.#readWorkerModule(specifier);
         }
 
-        return this.#bbb(source, specifier)
+        console.log('IS SEGMENTED', specifier);
+
+        return this.#inSameSegment(caller, specifier)
             ? this.#readWorkerModule(specifier)
             : this.#readRemoteModule(specifier);
     }
@@ -147,26 +150,22 @@ export default class LocalRepository extends Repository
         return ModuleLoader.load(filename);
     }
 
-    #bbb(source: string, specifier: string): boolean
+    async #readWorkerModule(specifier: string): Promise<File>
     {
-        const sourceSegments = this.#aaa(source);
-        const specifierSegments = this.#aaa(specifier);
+        console.log('WORKER MODULE', specifier);
 
-        return sourceSegments.some(segmentName => specifierSegments.includes(segmentName));
-    }
-
-    async #readWorkerModule(name: string): Promise<File>
-    {
-        const filename = this.#getModuleFilename(name);
+        const filename = this.#getModuleFilename(specifier);
         const file = await this.#readFile(filename);
         const code = file.content.toString();
 
         return new File(filename, 'application/javascript', code);
     }
 
-    #readRemoteModule(name: string): Promise<File>
+    #readRemoteModule(specifier: string): Promise<File>
     {
-        const remoteFilename = convertToRemoteFilename(name);
+        console.log('REMOTE MODULE', specifier);
+
+        const remoteFilename = convertToRemoteFilename(specifier);
 
         return this.#readFile(remoteFilename);
     }
@@ -196,7 +195,15 @@ export default class LocalRepository extends Repository
         return this.#fileManager.read(filename);
     }
 
-    #aaa(filename: string): string[]
+    #inSameSegment(firstFilename: string, secondFilename: string): boolean
+    {
+        const firstSegments = this.#filterSegments(firstFilename);
+        const secondSegments = this.#filterSegments(secondFilename);
+
+        return firstSegments.some(segmentName => secondSegments.includes(segmentName));
+    }
+
+    #filterSegments(filename: string): string[]
     {
         const segmentNames = [...this.#segments.keys()];
 

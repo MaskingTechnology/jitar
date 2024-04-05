@@ -222,7 +222,7 @@ export default class JitarServer
 
         for (const setUpScript of setUpScripts)
         {
-            const importModel = new Import(setUpScript, ExecutionScopes.APPLICATION);
+            const importModel = new Import('', setUpScript, ExecutionScopes.APPLICATION);
 
             await runtime.import(importModel);
         }
@@ -243,7 +243,7 @@ export default class JitarServer
 
         for (const tearDownScript of tearDownScripts)
         {
-            const importModel = new Import(tearDownScript, ExecutionScopes.APPLICATION);
+            const importModel = new Import('', tearDownScript, ExecutionScopes.APPLICATION);
 
             await runtime.import(importModel);
         }

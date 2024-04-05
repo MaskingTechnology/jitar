@@ -24,7 +24,7 @@ export function getRuntime(): ProcedureRuntime
     return _runtime;
 }
 
-export async function importModule(specifier: string, executionScope: ExecutionScope, extractDefault: boolean, source?: string): Promise<unknown>
+export async function importModule(caller: string, specifier: string, executionScope: ExecutionScope, extractDefault: boolean): Promise<unknown>
 {
     const runtime = getRuntime();
     
@@ -33,9 +33,7 @@ export async function importModule(specifier: string, executionScope: ExecutionS
         specifier = 'RUNTIME_HOOKS_LOCATION';
     }
 
-    console.log('importModule', specifier, source);
-
-    const importModel = new Import(specifier, executionScope, extractDefault, source);
+    const importModel = new Import(caller, specifier, executionScope, extractDefault);
     const module = await runtime.import(importModel);
 
     return importModel.extractDefault && module.default !== undefined ? module.default : module;

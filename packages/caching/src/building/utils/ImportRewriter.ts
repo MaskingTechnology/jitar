@@ -43,17 +43,18 @@ export default class ImportRewriter
 
     #rewriteImport(dependency: ReflectionImport, scope: string, filename: string): string
     {   
+        const caller = this.#ensureRoot(filename);
         const from = this.#rewriteImportFrom(dependency, filename);
 
         if (dependency.members.length === 0)
         {
-            return `await __import("${from}", "${scope}", true, "${filename}");`;
+            return `await __import("${caller}", "${from}", "${scope}", true);`;
         }
 
         const members = this.#rewriteImportMembers(dependency);
         const extractDefault = this.#mustUseAs(dependency) ? 'true' : 'false';
 
-        return `const ${members} = await __import("${from}", "${scope}", ${extractDefault}, "${filename}");`;
+        return `const ${members} = await __import("${caller}", "${from}", "${scope}", ${extractDefault});`;
     }
 
     #rewriteImportFrom(dependency: ReflectionImport, filename: string): string

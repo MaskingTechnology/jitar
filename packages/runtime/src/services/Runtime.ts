@@ -89,15 +89,15 @@ export default abstract class Runtime
         }
     }
 
-    async #importHealthCheck(url: string): Promise<void>
+    async #importHealthCheck(specifier: string): Promise<void>
     {
-        const importModel = new Import(url, ExecutionScopes.APPLICATION);
+        const importModel = new Import('', specifier, ExecutionScopes.APPLICATION);
         const module = await this.import(importModel);
         const healthCheck = module.default as HealthCheck;
 
         if (healthCheck?.isHealthy === undefined)
         {
-            throw new InvalidHealthCheck(url);
+            throw new InvalidHealthCheck(specifier);
         }
 
         this.addHealthCheck(healthCheck as HealthCheck);

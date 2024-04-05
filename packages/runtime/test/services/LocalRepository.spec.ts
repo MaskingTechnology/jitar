@@ -1,11 +1,8 @@
 
 import { describe, expect, it } from 'vitest';
 
-import InvalidClientId from '../../src/errors/InvalidClientId';
-import ClientNotFound from '../../src/errors/ClientNotFound';
-
 import FileNotFound from '../../src/errors/FileNotFound';
-import { REPOSITORIES, REPOSITORY_FILES, CLIENT } from '../_fixtures/services/LocalRepository.fixture';
+import { REPOSITORIES, REPOSITORY_FILES } from '../_fixtures/services/LocalRepository.fixture';
 
 const repository = REPOSITORIES.DEFAULT;
 
@@ -13,20 +10,6 @@ describe('services/LocalRepository', () =>
 {
     describe('.readModule(clientId, filename)', () =>
     {
-        it('should not accept an invalid client id', () =>
-        {
-            const run = async () => repository.readModule('/some/file', 'INVALID');
-
-            expect(run).rejects.toEqual(new InvalidClientId('INVALID'));
-        });
-
-        it('should not accept an unknown client id', () =>
-        {
-            const run = async () => repository.readModule('/some/file', 'CLIENT_9999');
-
-            expect(run).rejects.toEqual(new ClientNotFound('CLIENT_9999'));
-        });
-
         it('should return an unsegmented module file', async () =>
         {
             const result = await repository.readModule(REPOSITORY_FILES.UNSEGMENTED, CLIENT.id);

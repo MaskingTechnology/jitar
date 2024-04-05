@@ -122,7 +122,7 @@ export default class LocalWorker extends Worker
     async #loadSegment(name: string): Promise<void>
     {
         const filename = createWorkerFilename(name);
-        const importModel = new Import(filename, ExecutionScopes.APPLICATION);
+        const importModel = new Import('', filename, ExecutionScopes.APPLICATION);
         const module = await this.import(importModel);
         const segment = module.segment as Segment;
 

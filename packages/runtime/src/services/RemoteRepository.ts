@@ -36,9 +36,9 @@ export default class RemoteRepository extends Repository
         return this.#remote.loadFile(filename);
     }
 
-    readModule(source: string, specifier: string): Promise<File>
+    readModule(caller: string, specifier: string): Promise<File>
     {
-        return this.#remote.loadFile(`modules/${specifier}?source=${source}`);
+        return this.#remote.loadFile(`modules/${specifier}?caller=${caller}`);
     }
 
     loadModule(specifier: string): Promise<Module>

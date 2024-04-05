@@ -25,10 +25,10 @@ export default class SegmentCacheWriter
 
     async #writeWorkerCache(cache: SegmentCache): Promise<void>
     {
-        const importCode = this.#createImportCode(cache.imports);
-        const segmentCode = this.#createSegmentCode(cache.name, cache.procedures);
-
         const filename = createWorkerFilename(cache.name);
+        const importCode = this.#createImportCode(cache.imports, filename);
+        const segmentCode = this.#createSegmentCode(cache.name, cache.procedures, filename);
+
         const code = `${importCode}\n${segmentCode}`;
 
         return this.#fileManager.write(filename, code);
@@ -37,28 +37,29 @@ export default class SegmentCacheWriter
     async #writeRepositoryCache(cache: SegmentCache): Promise<void>
     {
         const filename = createRepositoryFilename(cache.name);
-        const code = `export const files = [\n\t"${[...cache.files].join('",\n\t"')}"\n];`;
+        const files = cache.files.map(file => `./${file}`);
+        const code = `export const files = [\n\t"${[...files].join('",\n\t"')}"\n];`;
 
         return this.#fileManager.write(filename, code);
     }
 
-    #createImportCode(imports: SegmentImport[]): string
+    #createImportCode(imports: SegmentImport[], filename: string): string
     {
         const codes: string[] = [];
 
         for (const { members, from } of imports)
         {
-            codes.push(`const { ${members.join(', ')} } = await __import("./${from}", "application", false);`);
+            codes.push(`const { ${members.join(', ')} } = await __import("${filename}", "./${from}", "application", false);`);
         }
 
         return codes.join('\n');
     }
 
-    #createSegmentCode(name: string, procedures: SegmentProcedure[]): string
+    #createSegmentCode(name: string, procedures: SegmentProcedure[], filename: string): string
     {
         const codes: string[] = [];
         
-        codes.push('const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __import("jitar", "runtime", false);');
+        codes.push(`const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __import("${filename}", "jitar", "runtime", false);`);
         codes.push(`export const segment = new Segment("${name}")`);
 
         for (const procedure of procedures)
