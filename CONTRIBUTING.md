@@ -1,7 +1,7 @@
 # Contributing to Jitar
 
 We want to make contributing to this project as easy and transparent as
-possible.
+possible. For our development workflow, see [DEVELOPMENT.md](./DEVELOPMENT.md).
 
 ## Pull Requests
 
