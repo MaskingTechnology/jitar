@@ -18,5 +18,6 @@
     "jsx": "react-jsx"
   },
   "include": ["src"],
+  "exclude": ["src/webui"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
