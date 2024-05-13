@@ -39,7 +39,7 @@ export default class ModulesController
 
         try
         {
-            const file = await this.#repository.readModule(caller, specifier);
+            const file = await this.#repository.readModule(caller, `./${specifier}`);
 
             this.#logger.info(`Got module -> '${specifier}' (${caller})`);
 

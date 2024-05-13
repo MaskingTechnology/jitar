@@ -117,17 +117,12 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
 
         async transform(code: string, id: string)
         {
-            if (jitarFullPath === undefined)
+            if (jitarFullPath === undefined
+             || id.includes(jitarFullPath) === false)
             {
                 return code;
             }
 
-            if (id.includes(jitarFullPath))
-            {
-                return undefined;
-            }
-
-            // TODO: refactor createImportCode to rewrite all the jitar (domain) related imports
             return createImportCode(code, id, jitarFullPath, jitarPath);
         },
 
