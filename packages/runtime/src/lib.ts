@@ -74,6 +74,7 @@ export { default as ModuleImporter } from './types/ModuleImporter.js';
 export { default as ModuleLoader } from './utils/ModuleLoader.js';
 export { default as RemoteClassLoader } from './utils/RemoteClassLoader.js';
 export { default as VersionParser } from './utils/VersionParser.js';
+export { default as FileHelper } from './utils/FileHelper.js';
 
 // Root
 export { default as RuntimeBuilder } from './RuntimeBuilder.js';

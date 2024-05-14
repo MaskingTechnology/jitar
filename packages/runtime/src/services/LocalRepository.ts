@@ -1,20 +1,19 @@
 
-import { createRepositoryFilename, convertToLocalFilename, convertToRemoteFilename, isSegmentFilename } from '../definitions/Files.js';
-
 import FileNotFound from '../errors/FileNotFound.js';
 import InvalidSegmentFile from '../errors/InvalidSegmentFile.js';
 
+import { ExecutionScopes } from '../definitions/ExecutionScope.js';
 import FileManager from '../interfaces/FileManager.js';
 import File from '../models/File.js';
+import Import from '../models/Import.js';
 import Module from '../types/Module.js';
+import FileHelper from '../utils/FileHelper.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
 
 import Repository from './Repository.js';
 
 export default class LocalRepository extends Repository
 {
-    // All filenames used here are relative to the root location.
-
     #fileManager: FileManager;
     #segments: Map<string, string[]> = new Map();
 
@@ -72,9 +71,11 @@ export default class LocalRepository extends Repository
 
     async #loadSegment(name: string): Promise<void>
     {
-        const relativeFilename = `./${createRepositoryFilename(name)}`;
+        const relativeFilename = FileHelper.createRepositoryFilename(name);
         const absoluteFilename = this.#fileManager.getAbsoluteLocation(relativeFilename);
-        const module = await ModuleLoader.load(absoluteFilename);
+
+        const importModel = new Import('', absoluteFilename, ExecutionScopes.APPLICATION);
+        const module = await ModuleLoader.load(importModel);
         const files = module.files as string[];
 
         if (files === undefined)
@@ -101,8 +102,8 @@ export default class LocalRepository extends Repository
 
         for (const [targetName, destinationName] of this.#overrides)
         {
-            const relativeTargetFilename = ModuleLoader.assureExtension(targetName);
-            const relativeDestinationFilename = ModuleLoader.assureExtension(destinationName);
+            const relativeTargetFilename = FileHelper.assureRelativeFilenameWithExtension(targetName);
+            const relativeDestinationFilename = FileHelper.assureRelativeFilenameWithExtension(destinationName);
 
             const absoluteTargetFilename = this.#fileManager.getAbsoluteLocation(relativeTargetFilename);
             const absoluteDestinationFilename = this.#fileManager.getAbsoluteLocation(relativeDestinationFilename);
@@ -123,9 +124,18 @@ export default class LocalRepository extends Repository
         return this.#readFile(filename);
     }
 
-    readModule(caller: string, specifier: string): Promise<File>
+    readModule(importModel: Import): Promise<File>
     {
-        if (isSegmentFilename(specifier))
+        const { specifier, caller } = importModel;
+
+        console.log('CALLER', caller);
+
+        if (FileHelper.isSegmentFilename(caller))
+        {
+            return this.#readWorkerModule(specifier); 
+        }
+
+        if (FileHelper.isSegmentFilename(specifier))
         {
             return this.#readWorkerModule(specifier); 
         }
@@ -143,11 +153,12 @@ export default class LocalRepository extends Repository
             : this.#readRemoteModule(specifier);
     }
 
-    loadModule(specifier: string): Promise<Module>
+    loadModule(importModel: Import): Promise<Module>
     {
-        const filename = this.#getModuleFilename(specifier);
+        const filename = this.#getModuleFilename(importModel.specifier);
+        const fileImportModel = new Import(importModel.caller, filename, importModel.scope);
 
-        return ModuleLoader.load(filename);
+        return ModuleLoader.load(fileImportModel);
     }
 
     async #readWorkerModule(specifier: string): Promise<File>
@@ -165,24 +176,25 @@ export default class LocalRepository extends Repository
     {
         console.log('REMOTE MODULE', specifier);
 
-        const remoteFilename = convertToRemoteFilename(specifier);
+        const relativeFilename = FileHelper.assureRelativeFilenameWithExtension(specifier);
+        const remoteFilename = FileHelper.convertToRemoteFilename(relativeFilename);
 
         return this.#readFile(remoteFilename);
     }
 
-    #getModuleFilename(name: string): string
+    #getModuleFilename(filename: string): string
     {
-        const relativeFilename = ModuleLoader.assureExtension(name);
+        const relativeFilename = FileHelper.assureRelativeFilenameWithExtension(filename);
         const absoluteFilename = this.#fileManager.getAbsoluteLocation(relativeFilename);
 
-        if (isSegmentFilename(absoluteFilename))
+        if (FileHelper.isSegmentFilename(absoluteFilename))
         {
             return absoluteFilename;
         }
 
         const assignedFilename = this.#getAssignedFilename(absoluteFilename);
 
-        return convertToLocalFilename(assignedFilename);
+        return FileHelper.convertToLocalFilename(assignedFilename);
     }
 
     #getAssignedFilename(filename: string): string

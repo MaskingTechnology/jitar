@@ -7,9 +7,9 @@ import { component1, component2 } from '../path/to/components.js';
 `;
 
 const APPLICATION_IMPORTS_RESULT =
-`await __import("./components/path/to/file.js", "application");
-const component = await __import("./components/path/to/component.js", "application", true);
-const { component1, component2 } = await __import("./path/to/components.js", "application", false);
+`await __import("/components/path/to/file.js", "application");
+const component = await __import("/components/path/to/component.js", "application", true);
+const { component1, component2 } = await __import("/path/to/components.js", "application", false);
 `;
 
 const RUNTIME_IMPORTS =

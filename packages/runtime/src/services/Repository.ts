@@ -14,15 +14,15 @@ export default abstract class Repository extends Runtime
     {
         if (importModel.scope === ExecutionScopes.RUNTIME)
         {
-            return ModuleLoader.load(importModel.specifier);
+            return ModuleLoader.load(importModel);
         }
         
-        return this.loadModule(importModel.specifier);
+        return this.loadModule(importModel);
     }
 
     abstract readAsset(filename: string): Promise<File>;
 
-    abstract readModule(caller: string, specifier: string): Promise<File>;
+    abstract readModule(importModel: Import): Promise<File>;
 
-    abstract loadModule(specifier: string): Promise<Module>;
+    abstract loadModule(importModel: Import): Promise<Module>;
 }

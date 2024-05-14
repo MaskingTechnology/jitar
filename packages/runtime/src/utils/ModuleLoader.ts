@@ -1,12 +1,13 @@
 
 import ModuleNotAccessible from '../errors/ModuleNotAccessible.js';
 import ModuleNotLoaded from '../errors/ModuleNotLoaded.js';
-
+import Import from '../models/Import.js';
 import Module from '../types/Module.js';
 import ModuleImporter from '../types/ModuleImporter.js';
-import Environment from './Environment.js';
 
+import Environment from './Environment.js';
 import UrlRewriter from './UrlRewriter.js';
+import FileHelper from './FileHelper.js';
 
 const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
@@ -25,8 +26,10 @@ export default class ModuleLoader
         _import = importer;
     }
 
-    static async load(specifier: string): Promise<Module>
+    static async load(importModel: Import): Promise<Module>
     {
+        const { specifier, caller } = importModel;
+        
         if (this.#isSystemModule(specifier))
         {
             return this.#import(specifier);
@@ -39,7 +42,7 @@ export default class ModuleLoader
                 : this.#import(specifier);
         }
 
-        const filename = this.assureExtension(specifier);
+        const filename = FileHelper.assureExtension(specifier);
         const url = UrlRewriter.addBase(filename, _baseUrl);
 
         if (url.startsWith(_baseUrl) === false)
@@ -47,12 +50,11 @@ export default class ModuleLoader
             throw new ModuleNotAccessible(specifier);
         }
 
-        return this.#import(url);
-    }
+        const aaa = _baseUrl.startsWith('//') ? url : `${url}?caller=${caller}`;
 
-    static assureExtension(specifier: string): string
-    {
-        return specifier.endsWith('.js') ? specifier : `${specifier}.js`;
+        console.log('ModuleLoader.load', aaa);
+
+        return this.#import(aaa);
     }
 
     static #isSystemModule(specifier: string): boolean

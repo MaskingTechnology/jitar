@@ -1,6 +1,6 @@
 
 import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionField, ReflectionFunction, ReflectionParameter } from '@jitar/reflection';
-import { FileManager, VersionParser, createWorkerFilename, createRepositoryFilename } from '@jitar/runtime';
+import { FileManager, VersionParser, FileHelper } from '@jitar/runtime';
 
 import SegmentCache from './models/SegmentCache.js';
 import SegmentImport from './models/SegmentImport.js';
@@ -25,7 +25,7 @@ export default class SegmentCacheWriter
 
     async #writeWorkerCache(cache: SegmentCache): Promise<void>
     {
-        const filename = createWorkerFilename(cache.name);
+        const filename = FileHelper.createWorkerFilename(cache.name);
         const importCode = this.#createImportCode(cache.imports, filename);
         const segmentCode = this.#createSegmentCode(cache.name, cache.procedures, filename);
 
@@ -36,8 +36,8 @@ export default class SegmentCacheWriter
 
     async #writeRepositoryCache(cache: SegmentCache): Promise<void>
     {
-        const filename = createRepositoryFilename(cache.name);
-        const files = cache.files.map(file => `./${file}`);
+        const filename = FileHelper.createRepositoryFilename(cache.name);
+        const files = cache.files.map(file => `/${file}`);
         const code = `export const files = [\n\t"${[...files].join('",\n\t"')}"\n];`;
 
         return this.#fileManager.write(filename, code);
@@ -49,7 +49,7 @@ export default class SegmentCacheWriter
 
         for (const { members, from } of imports)
         {
-            codes.push(`const { ${members.join(', ')} } = await __import("${filename}", "./${from}", "application", false);`);
+            codes.push(`const { ${members.join(', ')} } = await __import("${filename}", "/${from}", "application", false);`);
         }
 
         return codes.join('\n');

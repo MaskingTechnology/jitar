@@ -2,7 +2,7 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalRepository, Standalone } from '@jitar/runtime';
+import { LocalRepository, Standalone, Import, ExecutionScopes } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
 import Headers from '../definitions/Headers';
@@ -34,12 +34,13 @@ export default class ModulesController
 
         this.#logger.info(`Get module for -> '${caller}'`);
 
-        const pathKey = '/modules/';
+        const pathKey = '/modules';
         const specifier = request.path.substring(pathKey.length);
 
         try
         {
-            const file = await this.#repository.readModule(caller, `./${specifier}`);
+            const importModel = new Import(caller, specifier, ExecutionScopes.APPLICATION);
+            const file = await this.#repository.readModule(importModel);
 
             this.#logger.info(`Got module -> '${specifier}' (${caller})`);
 

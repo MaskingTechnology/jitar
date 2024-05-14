@@ -1,5 +1,5 @@
 
-import { FileManager, convertToLocalFilename, convertToRemoteFilename } from '@jitar/runtime';
+import { FileManager, FileHelper } from '@jitar/runtime';
 
 import ModuleCache from './models/ModuleCache.js';
 import Module from './models/Module.js';
@@ -36,7 +36,7 @@ export default class ModuleCacheWriter
         const importCode = this.#rewriteAllImports(cache.module);
         const sourceCode = this.#createSourceCode(cache.module);
 
-        const filename = convertToLocalFilename(cache.module.filename);
+        const filename = FileHelper.convertToLocalFilename(cache.module.filename);
         const code = `${importCode}\n${sourceCode}`;
 
         return this.#fileManager.write(filename, code.trim());
@@ -52,7 +52,7 @@ export default class ModuleCacheWriter
         const filename = module.filename;
         const classes = module.content.exportedClasses;
         const classNames = classes.map(clazz => clazz.name);
-        const sourceCode = classNames.map(className => `${className}.source = "./${filename}";`);
+        const sourceCode = classNames.map(className => `${className}.source = "/${filename}";`);
 
         return sourceCode.join('\n');
     }
@@ -67,7 +67,7 @@ export default class ModuleCacheWriter
             return;
         }
 
-        const filename = convertToRemoteFilename(cache.module.filename);
+        const filename = FileHelper.convertToRemoteFilename(cache.module.filename);
         const code = this.#createRemoteCode(cache.segment);
 
         return this.#fileManager.write(filename, code.trim());

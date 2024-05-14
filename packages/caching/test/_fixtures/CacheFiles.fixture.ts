@@ -7,8 +7,8 @@ const ORDER_SEGMENT_REPOSITORY = `export const files = [
 ];`;
 
 const ORDER_SEGMENT_WORKER = 
-`const { default : $1 } = await __import("./order/createOrder.js", "application", false);
-const { v0_0_0 : $2, v1_0_0 : $3 } = await __import("./order/storeOrder.js", "application", false);
+`const { default : $1 } = await __import("/order/createOrder.js", "application", false);
+const { v0_0_0 : $2, v1_0_0 : $3 } = await __import("/order/storeOrder.js", "application", false);
 const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __import("jitar", "runtime", false);
 export const segment = new Segment("order")
 \t.addProcedure(new Procedure("order/createOrder")
@@ -24,8 +24,8 @@ const PRODUCT_SEGMENT_REPOSITORY = `export const files = [
 ];`;
 
 const PRODUCT_SEGMENT_WORKER = 
-`const { default : $1, searchProducts : $2 } = await __import("./product/getProducts.js", "application", false);
-const { default : $3, searchProducts : $4 } = await __import("./product/getProducts_v1.js", "application", false);
+`const { default : $1, searchProducts : $2 } = await __import("/product/getProducts.js", "application", false);
+const { default : $3, searchProducts : $4 } = await __import("/product/getProducts_v1.js", "application", false);
 const { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } = await __import("jitar", "runtime", false);
 export const segment = new Segment("product")
 \t.addProcedure(new Procedure("product/getProducts")
@@ -38,7 +38,7 @@ export const segment = new Segment("product")
 \t)`;
 
 const CREATE_ORDER_LOCAL =
-`const { Order, OrderLine } = await __import("./order/models.js", "application", false);
+`const { Order, OrderLine } = await __import("/order/models.js", "application", false);
 
 export default async function createOrder(items)
 {
@@ -58,7 +58,7 @@ const CREATE_ORDER_REMOTE =
 const STORE_ORDER_LOCAL =
 `const mysql = await __import("mysql", "runtime", true);
 const createId = await __import("uuid", "runtime", true);
-const { Order } = await __import("./order/models.js", "application", false);
+const { Order } = await __import("/order/models.js", "application", false);
 
 export async function v0_0_0(order)
 {
@@ -83,12 +83,12 @@ const ORDER_MODELS_LOCAL =
 `export class Order {}
 export class OrderLine {}
 
-Order.source = "./order/models.js";
-OrderLine.source = "./order/models.js";`;
+Order.source = "/order/models.js";
+OrderLine.source = "/order/models.js";`;
 
 const GET_PRODUCTS_LOCAL =
 `const mongodb = await __import("mongodb", "runtime", true);
-const { Product } = await __import("./product/models.js", "application", false);
+const { Product } = await __import("/product/models.js", "application", false);
 
 export default async function getProducts(id)
 {
@@ -116,7 +116,7 @@ export async function searchProducts({ query , sort }) {
 
 const GET_PRODUCTS_LOCAL_V1 =
 `const mongodb = await __import("mongodb", "runtime", true);
-const { Product } = await __import("./product/models.js", "application", false);
+const { Product } = await __import("/product/models.js", "application", false);
 
 export default async function getProducts(id)
 {
@@ -145,46 +145,46 @@ export async function searchProducts([ query , sort ]) {
 const PRODUCT_MODELS_LOCAL =
 `export class Product {}
 
-Product.source = "./product/models.js";`;
+Product.source = "/product/models.js";`;
 
 const CACHE_FILES =
 {
-    './order.segment.worker.js': ORDER_SEGMENT_WORKER,
-    './order.segment.repository.js': ORDER_SEGMENT_REPOSITORY,
-    './product.segment.worker.js': PRODUCT_SEGMENT_WORKER,
-    './product.segment.repository.js': PRODUCT_SEGMENT_REPOSITORY,
-    './order/createOrder.local.js': CREATE_ORDER_LOCAL,
-    './order/createOrder.remote.js': CREATE_ORDER_REMOTE,
-    './order/storeOrder.local.js': STORE_ORDER_LOCAL,
-    './order/storeOrder.remote.js': STORE_ORDER_REMOTE,
-    './order/models.local.js': ORDER_MODELS_LOCAL,
-    './product/getProducts.local.js': GET_PRODUCTS_LOCAL,
-    './product/getProducts.remote.js': GET_PRODUCTS_REMOTE,
-    './product/getProducts_v1.local.js': GET_PRODUCTS_LOCAL_V1,
-    './product/getProducts_v1.remote.js': GET_PRODUCTS_REMOTE_V1,
-    './product/models.local.js': PRODUCT_MODELS_LOCAL
+    '/order.segment.worker.js': ORDER_SEGMENT_WORKER,
+    '/order.segment.repository.js': ORDER_SEGMENT_REPOSITORY,
+    '/product.segment.worker.js': PRODUCT_SEGMENT_WORKER,
+    '/product.segment.repository.js': PRODUCT_SEGMENT_REPOSITORY,
+    '/order/createOrder.local.js': CREATE_ORDER_LOCAL,
+    '/order/createOrder.remote.js': CREATE_ORDER_REMOTE,
+    '/order/storeOrder.local.js': STORE_ORDER_LOCAL,
+    '/order/storeOrder.remote.js': STORE_ORDER_REMOTE,
+    '/order/models.local.js': ORDER_MODELS_LOCAL,
+    '/product/getProducts.local.js': GET_PRODUCTS_LOCAL,
+    '/product/getProducts.remote.js': GET_PRODUCTS_REMOTE,
+    '/product/getProducts_v1.local.js': GET_PRODUCTS_LOCAL_V1,
+    '/product/getProducts_v1.remote.js': GET_PRODUCTS_REMOTE_V1,
+    '/product/models.local.js': PRODUCT_MODELS_LOCAL
 };
 
 const CACHE_SEGMENT_FILENAMES =
 [
-    './order.segment.worker.js',
-    './order.segment.repository.js',
-    './product.segment.worker.js',
-    './product.segment.repository.js',
+    '/order.segment.worker.js',
+    '/order.segment.repository.js',
+    '/product.segment.worker.js',
+    '/product.segment.repository.js',
 ];
 
 const CACHE_MODULE_FILENAMES =
 [
-    './order/createOrder.local.js',
-    './order/createOrder.remote.js',
-    './order/storeOrder.local.js',
-    './order/storeOrder.remote.js',
-    './order/models.local.js',
-    './product/getProducts.local.js',
-    './product/getProducts.remote.js',
-    './product/getProducts_v1.local.js',
-    './product/getProducts_v1.remote.js',
-    './product/models.local.js',
+    '/order/createOrder.local.js',
+    '/order/createOrder.remote.js',
+    '/order/storeOrder.local.js',
+    '/order/storeOrder.remote.js',
+    '/order/models.local.js',
+    '/product/getProducts.local.js',
+    '/product/getProducts.remote.js',
+    '/product/getProducts_v1.local.js',
+    '/product/getProducts_v1.remote.js',
+    '/product/models.local.js',
 ];
 
 export { CACHE_FILES, CACHE_SEGMENT_FILENAMES, CACHE_MODULE_FILENAMES };

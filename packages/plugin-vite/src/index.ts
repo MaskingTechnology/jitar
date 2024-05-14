@@ -77,7 +77,7 @@ async function createImportCode(code: string, id: string, jitarFullPath: string,
     }
 
     return 'import { getClient, Import } from "/jitar/client.js";\n'
-        + `const module = await (await getClient()).import(new Import("", "./${jitarPath}${relativeId}", "application", false));\n`
+        + `const module = await (await getClient()).import(new Import("", "/${jitarPath}${relativeId}", "application", false));\n`
         + importCode
         + exportCode;
 }

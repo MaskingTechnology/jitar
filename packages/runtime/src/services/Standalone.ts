@@ -2,6 +2,7 @@
 import File from '../models/File.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
+import Import from '../models/Import.js';
 
 import LocalWorker from './LocalWorker.js';
 import LocalRepository from './LocalRepository.js';
@@ -53,9 +54,9 @@ export default class Standalone extends ProcedureRuntime
         return this.repository.readAsset(filename);
     }
 
-    readModule(source: string, specifier: string): Promise<File>
+    readModule(importModel: Import): Promise<File>
     {
-        return this.repository.readModule(source, specifier);
+        return this.repository.readModule(importModel);
     }
 
     run(request: Request): Promise<Response>

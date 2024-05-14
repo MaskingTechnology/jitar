@@ -1,6 +1,5 @@
 
 import { ExecutionScopes } from '../definitions/ExecutionScope.js';
-import { createWorkerFilename } from '../definitions/Files.js';
 
 import Unauthorized from '../errors/generic/Unauthorized.js';
 import ImplementationNotFound from '../errors/ImplementationNotFound.js';
@@ -13,6 +12,7 @@ import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 import Segment from '../models/Segment.js';
 import ArgumentConstructor from '../utils/ArgumentConstructor.js';
+import FileHelper from '../utils/FileHelper.js';
 
 import Gateway from './Gateway.js';
 import Worker from './Worker.js';
@@ -121,7 +121,7 @@ export default class LocalWorker extends Worker
 
     async #loadSegment(name: string): Promise<void>
     {
-        const filename = createWorkerFilename(name);
+        const filename = FileHelper.createWorkerFilename(name);
         const importModel = new Import('', filename, ExecutionScopes.APPLICATION);
         const module = await this.import(importModel);
         const segment = module.segment as Segment;

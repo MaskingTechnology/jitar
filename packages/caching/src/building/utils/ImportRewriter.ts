@@ -1,4 +1,5 @@
 
+import { FileHelper } from '@jitar/runtime';
 import { ReflectionImport, Reflector } from '@jitar/reflection';
 
 import Keyword from '../definitions/Keyword.js';
@@ -43,7 +44,7 @@ export default class ImportRewriter
 
     #rewriteImport(dependency: ReflectionImport, scope: string, filename: string): string
     {   
-        const caller = this.#ensureRoot(filename);
+        const caller = FileHelper.assureAbsolutePath(filename);
         const from = this.#rewriteImportFrom(dependency, filename);
 
         if (dependency.members.length === 0)
@@ -83,59 +84,15 @@ export default class ImportRewriter
         const sourcePath = this.#extractFilepath(sourceFilename);
 
         const concatenated = `${sourcePath}/${importFilename}`;
-        const translated = this.#translateFilename(concatenated);
-        const rooted = this.#ensureRoot(translated);
+        const translated = FileHelper.translatePath(concatenated);
+        const rooted = FileHelper.assureAbsolutePath(translated);
 
-        return this.#ensureExtension(rooted);
+        return FileHelper.assureExtension(rooted);
     }
 
     #extractFilepath(filename: string)
     {
         return filename.split('/').slice(0, -1).join('/');
-    }
-
-    #translateFilename(filename: string)
-    {
-        const parts = filename.split('/');
-        const translated = [];
-
-        translated.push(parts[0]);
-
-        for (let index = 1; index < parts.length; index++)
-        {
-            const part = parts[index].trim();
-
-            switch (part)
-            {
-                case '': continue;
-                case '.': continue;
-                case '..': translated.pop(); continue;
-            }
-
-            translated.push(part);
-        }
-
-        return translated.join('/');
-    }
-
-    #ensureRoot(filename: string): string
-    {
-        if (filename.startsWith('./'))
-        {
-            return filename;
-        }
-
-        if (filename.startsWith('//'))
-        {
-            filename = filename.substring(1);
-        }
-
-        return filename.startsWith('/') ? `.${filename}` : `./${filename}`;
-    }
-
-    #ensureExtension(filename: string): string
-    {
-        return filename.endsWith('.js') ? filename : `${filename}.js`;
     }
 
     #mustUseAs(dependency: ReflectionImport): boolean
