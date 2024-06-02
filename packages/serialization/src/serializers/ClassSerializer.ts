@@ -6,7 +6,6 @@ import ClassNotFound from '../errors/ClassNotFound.js';
 import InvalidClass from '../errors/InvalidClass.js';
 import ClassLoader from '../interfaces/ClassLoader.js';
 import Loadable from '../types/Loadable.js';
-import FlexObject from '../types/serialized/SerializableObject.js';
 import SerializableObject from '../types/serialized/SerializableObject.js';
 import SerializedClass from '../types/serialized/SerializedClass.js';
 
@@ -50,8 +49,8 @@ export default class ClassSerializer extends ValueSerializer
 
         const name = clazz.name;
         const source = (clazz as Loadable).source;
-        const args: FlexObject = await this.#serializeConstructor(model, parameterNames, object);
-        const fields: FlexObject = await this.#serializeFields(model, parameterNames, object);
+        const args: SerializableObject = await this.#serializeConstructor(model, parameterNames, object);
+        const fields: SerializableObject = await this.#serializeFields(model, parameterNames, object);
 
         return { serialized: true, name: name, source: source, args: args, fields: fields };
     }
@@ -64,16 +63,16 @@ export default class ClassSerializer extends ValueSerializer
         return parameters.map(parameter => parameter.name);
     }
 
-    async #serializeConstructor(model: ReflectionClass, includeNames: string[], object: object): Promise<FlexObject>
+    async #serializeConstructor(model: ReflectionClass, includeNames: string[], object: object): Promise<SerializableObject>
     {
-        const args: FlexObject = {};
+        const args: SerializableObject = {};
 
         for (const name of includeNames)
         {
             // Constructor parameters that can't be read make it impossible to fully reconstruct the object.
 
             const objectValue = model.canRead(name)
-                ? await this.serializeOther((object as FlexObject)[name])
+                ? await this.serializeOther((object as SerializableObject)[name])
                 : undefined;
 
             args[name] = objectValue;
@@ -82,9 +81,9 @@ export default class ClassSerializer extends ValueSerializer
         return args;
     }
 
-    async #serializeFields(model: ReflectionClass, excludeNames: string[], object: object): Promise<FlexObject>
+    async #serializeFields(model: ReflectionClass, excludeNames: string[], object: object): Promise<SerializableObject>
     {
-        const fields: FlexObject = {};
+        const fields: SerializableObject = {};
 
         for (const property of model.writable)
         {
@@ -97,7 +96,7 @@ export default class ClassSerializer extends ValueSerializer
                 continue;
             }
 
-            fields[name] = await this.serializeOther((object as FlexObject)[name]);
+            fields[name] = await this.serializeOther((object as SerializableObject)[name]);
         }
 
         return fields;
@@ -130,7 +129,7 @@ export default class ClassSerializer extends ValueSerializer
         return instance;
     }
 
-    async #deserializeConstructor(clazz: Function, args: FlexObject): Promise<unknown[]>
+    async #deserializeConstructor(clazz: Function, args: SerializableObject): Promise<unknown[]>
     {
         const model = reflector.fromClass(clazz, true);
         const constructor = model.getFunction('constructor');
@@ -150,7 +149,7 @@ export default class ClassSerializer extends ValueSerializer
     {
         if (loadable.source === undefined)
         {
-            return (globalThis as FlexObject)[loadable.name];
+            return (globalThis as SerializableObject)[loadable.name];
         }
 
         return this.#classLoader.loadClass(loadable);

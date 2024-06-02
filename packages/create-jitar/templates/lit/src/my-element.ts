@@ -29,7 +29,7 @@ export class MyElement extends LitElement
     `
   }
 
-  static styles = css`
+  static readonly styles = css`
     :host {
       max-width: 1280px;
       margin: 0 auto;

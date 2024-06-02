@@ -14,13 +14,13 @@ const App: Component = () => {
   return (
     <>
         <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" class="logo" alt="Vite logo" />
+          <img src="/vite.svg" className="logo" alt="Vite logo" />
         </a>
         <a href="https://solidjs.com" target="_blank">
-          <img src={solidjslogo} class="logo solid" alt="Solid logo" />
+          <img src={solidjslogo} className="logo solid" alt="Solid logo" />
         </a>
         <a href="https://jitar.dev" target="_blank">
-          <img src={jitarLogo} class="logo jitar" alt="Jitar logo" />
+          <img src={jitarLogo} className="logo jitar" alt="Jitar logo" />
         </a>
         <h1>{ message }</h1>
     </>
