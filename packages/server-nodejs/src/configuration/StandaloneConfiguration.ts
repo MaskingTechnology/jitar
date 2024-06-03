@@ -2,7 +2,6 @@
 import { z } from 'zod';
 
 import ProcedureRuntimeConfiguration from './ProcedureRuntimeConfiguration';
-import { override } from 'prompts';
 
 export const standaloneSchema = z
     .object({

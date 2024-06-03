@@ -311,7 +311,7 @@ export default class RPCController
             return 500;
         }
 
-        const errorClass = (error as Object).constructor as Function;
+        const errorClass = error.constructor;
 
         if (this.#isClassType(errorClass, BAD_REQUEST_NAME)) return 400;
         if (this.#isClassType(errorClass, UNAUTHORIZED_NAME)) return 401;

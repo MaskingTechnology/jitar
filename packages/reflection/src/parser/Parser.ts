@@ -89,7 +89,7 @@ export default class Parser
             throw new UnexpectedParseResult('an import definition');
         }
 
-        return model as ReflectionImport;
+        return model;
     }
 
     parseExport(code: string): ReflectionExport
@@ -101,7 +101,7 @@ export default class Parser
             throw new UnexpectedParseResult('an export definition');
         }
 
-        return model as ReflectionExport;
+        return model;
     }
 
     parseDeclaration(code: string): ReflectionDeclaration
@@ -113,7 +113,7 @@ export default class Parser
             throw new UnexpectedParseResult('a declaration definition');
         }
 
-        return model as ReflectionDeclaration;
+        return model;
     }
 
     parseFunction(code: string): ReflectionFunction
@@ -126,7 +126,7 @@ export default class Parser
             throw new UnexpectedParseResult('a function definition');
         }
 
-        return model as ReflectionFunction;
+        return model;
     }
 
     parseClass(code: string): ReflectionClass
@@ -139,7 +139,7 @@ export default class Parser
             throw new UnexpectedParseResult('a class definition');
         }
 
-        return model as ReflectionClass;
+        return model;
     }
 
     #parseScope(tokenList: TokenList): ReflectionScope
@@ -175,7 +175,7 @@ export default class Parser
         {
             const next = tokenList.next;
 
-            if (next !== undefined && next.hasValue(Operator.ARROW))
+            if (next?.hasValue(Operator.ARROW))
             {
                 return this.#parseArrowFunction(tokenList, isAsync);
             }
@@ -216,7 +216,7 @@ export default class Parser
         {
             const next = this.#peekAfterBlock(tokenList, Group.OPEN, Group.CLOSE);
 
-            if (next !== undefined && next.hasValue(Operator.ARROW))
+            if (next?.hasValue(Operator.ARROW))
             {
                 return this.#parseArrowFunction(tokenList, isAsync);
             }
@@ -393,7 +393,7 @@ export default class Parser
 
         token = tokenList.step(); // Read away the name
 
-        if (token !== undefined && token.hasValue(Keyword.FROM))
+        if (token?.hasValue(Keyword.FROM))
         {
             token = tokenList.step(); // Read away the FROM keyword
 
@@ -419,7 +419,7 @@ export default class Parser
         let from: string | undefined = undefined;
         let token = tokenList.current;
 
-        if (token !== undefined && token.hasValue(Keyword.FROM))
+        if (token?.hasValue(Keyword.FROM))
         {
             token = tokenList.step(); // Read away the FROM keyword
             from = token.value;

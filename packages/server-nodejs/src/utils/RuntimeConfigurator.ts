@@ -42,9 +42,7 @@ export default class RuntimeConfigurator
 
         await this.#buildCache(sourceLocation, cacheLocation);
 
-        const segmentNames = configuration.segments === undefined
-            ? await this.#getWorkerSegmentNames(fileManager)
-            : configuration.segments;
+        const segmentNames = configuration.segments ?? await this.#getWorkerSegmentNames(fileManager);
 
         const assets = configuration.assets !== undefined
             ? await fileManager.getAssetFiles(configuration.assets)
