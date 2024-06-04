@@ -1,5 +1,5 @@
-# v0.7.4
-[2024-04-02]
+# v0.7.5
+[2024-06-03]
 
 ### Fixes
 
@@ -7,6 +7,13 @@
 
 ### Chores
 
+* \[[526](https://github.com/MaskingTechnology/jitar/pull/526)] chore: sonar issues (#526) by Bas Meeuwissen
+* \[[524](https://github.com/MaskingTechnology/jitar/pull/524)] chore(deps): june updates (#524) by dependabot[bot]
+* \[[522](https://github.com/MaskingTechnology/jitar/pull/522)] chore(examples): exclude webui folder (#522) by Bas Meeuwissen
+* \[[520](https://github.com/MaskingTechnology/jitar/pull/520)] chore(deps): bump rollup from 4.14.0 to 4.17.2 (#520) by dependabot[bot]
+* \[[518](https://github.com/MaskingTechnology/jitar/pull/518)] chore: build improvements (#518) by dependabot[bot]
+* \[[519](https://github.com/MaskingTechnology/jitar/pull/519)] chore(build): simplify monorepo setup (#519) by Bas Meeuwissen
+* \[[517](https://github.com/MaskingTechnology/jitar/pull/517)] chore: release version 0.7.4 (#517) by Bas Meeuwissen
 * \[[515](https://github.com/MaskingTechnology/jitar/pull/515)] chore(creator): Jitar updates in templates (#515) by Bas Meeuwissen
 * \[[513](https://github.com/MaskingTechnology/jitar/pull/513)] chore(deps): wildcard for internal @jitar package versions (#513) by Bas Meeuwissen
 * \[[511](https://github.com/MaskingTechnology/jitar/pull/511)] chore(deps): april update (#511) by Bas Meeuwissen
