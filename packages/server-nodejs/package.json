@@ -1,6 +1,6 @@
 {
     "name": "@jitar/server-nodejs",
-    "version": "0.7.4",
+    "version": "0.7.5",
     "description": "NodeJS server implementation for Jitar.",
     "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
     "license": "MIT",
@@ -31,9 +31,9 @@
         "express": "^4.19.2",
         "express-http-proxy": "^2.0.0",
         "fs-extra": "^11.2.0",
-        "glob": "10.4.1",
+        "glob": "10.4.3",
         "mime-types": "^2.1.35",
-        "tslog": "^4.9.2",
+        "tslog": "^4.9.3",
         "yargs": "^17.7.2",
         "zod": "^3.23.8"
     },
