@@ -23,8 +23,8 @@ The API returns a list of procedure names (FQNs) that are registered with this s
 
 ``` json
 [
-    “procedure1”,
-    “procedure2”
+    "procedure1",
+    "procedure2"
 ]
 ```
 
