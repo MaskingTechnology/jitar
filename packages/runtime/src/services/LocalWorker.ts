@@ -1,12 +1,9 @@
 
-import { ExecutionScopes } from '../definitions/ExecutionScope.js';
-
 import Unauthorized from '../errors/generic/Unauthorized.js';
 import ImplementationNotFound from '../errors/ImplementationNotFound.js';
 import ProcedureNotFound from '../errors/ProcedureNotFound.js';
 import InvalidTrustKey from '../errors/InvalidTrustKey.js';
 
-import Import from '../models/Import.js';
 import Procedure from '../models/Procedure.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
@@ -16,7 +13,6 @@ import FileHelper from '../utils/FileHelper.js';
 
 import Gateway from './Gateway.js';
 import Worker from './Worker.js';
-import Repository from './Repository.js';
 
 import { setRuntime } from '../hooks.js';
 
@@ -31,9 +27,9 @@ export default class LocalWorker extends Worker
     #segmentNames: Set<string> = new Set();
     #segments: Map<string, Segment> = new Map();
 
-    constructor(repository: Repository, gateway?: Gateway, url?: string, trustKey?: string, argumentConstructor = new ArgumentConstructor())
+    constructor(gateway?: Gateway, url?: string, trustKey?: string, argumentConstructor = new ArgumentConstructor())
     {
-        super(repository, url);
+        super(url);
 
         this.#gateway = gateway;
         this.#trustKey = trustKey;
@@ -122,8 +118,7 @@ export default class LocalWorker extends Worker
     async #loadSegment(name: string): Promise<void>
     {
         const filename = FileHelper.createWorkerFilename(name);
-        const importModel = new Import('', filename, ExecutionScopes.APPLICATION);
-        const module = await this.import(importModel);
+        const module = await this.import(filename);
         const segment = module.segment as Segment;
 
         this.addSegment(segment);

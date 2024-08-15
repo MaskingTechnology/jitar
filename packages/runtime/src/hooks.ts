@@ -1,11 +1,8 @@
 
 import RuntimeNotAvailable from './errors/RuntimeNotAvailable.js';
-import Import from './models/Import.js';
 import Request from './models/Request.js';
 import ProcedureRuntime from './services/ProcedureRuntime.js';
 import VersionParser from './utils/VersionParser.js';
-import Environment from './utils/Environment.js';
-import { ExecutionScope } from './lib.js';
 
 let _runtime: ProcedureRuntime;
 
@@ -22,21 +19,6 @@ export function getRuntime(): ProcedureRuntime
     }
 
     return _runtime;
-}
-
-export async function importModule(caller: string, specifier: string, executionScope: ExecutionScope, extractDefault: boolean): Promise<unknown>
-{
-    const runtime = getRuntime();
-    
-    if (Environment.isBrowser() && specifier === 'JITAR_LIBRARY_NAME')
-    {
-        specifier = 'RUNTIME_HOOKS_LOCATION';
-    }
-
-    const importModel = new Import(caller, specifier, executionScope, extractDefault);
-    const module = await runtime.import(importModel);
-
-    return importModel.extractDefault && module.default !== undefined ? module.default : module;
 }
 
 export async function runProcedure(fqn: string, versionNumber: string, args: object, sourceRequest?: Request): Promise<unknown>

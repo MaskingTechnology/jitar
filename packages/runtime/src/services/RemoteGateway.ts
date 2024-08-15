@@ -4,7 +4,6 @@ import NotImplemented from '../errors/generic/NotImplemented.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
-import DummyRepository from './DummyRepository.js';
 import Gateway from './Gateway.js';
 import Worker from './Worker.js';
 import Remote from './Remote.js';
@@ -16,7 +15,7 @@ export default class RemoteGateway extends Gateway
 
     constructor(url: string)
     {
-        super(new DummyRepository(), url);
+        super(url);
 
         this.#remote = new Remote(url);
     }

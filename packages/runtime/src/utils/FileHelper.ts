@@ -82,7 +82,7 @@ export default class FileHelper
 
     static createWorkerFilename(name: string): string
     {
-        return `./${name}.segment.worker.js`;
+        return `./${name}.segment.js`;
     }
 
     static createRepositoryFilename(name: string): string

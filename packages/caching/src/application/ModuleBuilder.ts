@@ -42,15 +42,17 @@ export default class ModuleBuilder
 
         if (moduleSegments.length === 0)
         {
-            return this.#buildSharedModule(module, segmentation);
+            await this.#buildSharedModule(module, segmentation);
         }
+        else
+        {
+            // Otherwise, it is a segment module that can be called remotely
 
-        // Otherwise, it is a segment module that can be called remotely
+            const segmentBuilds = moduleSegments.map(segment => this.#buildSegmentModule(module, segment, segmentation));
+            const remoteBuild = this.#buildRemoteModule(module, moduleSegments);
 
-        const segmentBuilds = moduleSegments.map(segment => this.#buildSegmentModule(module, segment, segmentation));
-        const remoteBuild = this.#buildRemoteModule(module, moduleSegments);
-
-        await Promise.all([...segmentBuilds, remoteBuild]);
+            await Promise.all([...segmentBuilds, remoteBuild]);
+        }
 
         this.#fileManager.delete(module.filename);
     }

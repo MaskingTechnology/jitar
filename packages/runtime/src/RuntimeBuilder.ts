@@ -128,7 +128,7 @@ export default class RuntimeBuilder
             throw new RuntimeNotBuilt('Repository is not set for the gateway');
         }
 
-        const gateway = new LocalGateway(this.#repository, this.#url, trustKey);
+        const gateway = new LocalGateway(this.#url, trustKey);
         gateway.healthCheckFiles = this.#healthChecks;
         gateway.middlewareFiles = this.#middlewares;
 
@@ -142,7 +142,7 @@ export default class RuntimeBuilder
             throw new RuntimeNotBuilt('Repository is not set for the worker');
         }
         
-        const worker = new LocalWorker(this.#repository, this.#gateway, this.#url, trustKey);
+        const worker = new LocalWorker(this.#gateway, this.#url, trustKey);
         worker.segmentNames = this.#segments;
         worker.healthCheckFiles = this.#healthChecks;
         worker.middlewareFiles = this.#middlewares;
@@ -190,7 +190,7 @@ export default class RuntimeBuilder
         repository.assets = this.#assets;
         repository.overrides = this.#overrides;
 
-        const worker = new LocalWorker(repository, this.#gateway, this.#url, trustKey);
+        const worker = new LocalWorker(this.#gateway, this.#url, trustKey);
         worker.segmentNames = this.#segments;
 
         const standalone = new Standalone(repository, worker, this.#url);

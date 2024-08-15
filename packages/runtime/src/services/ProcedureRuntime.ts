@@ -1,11 +1,8 @@
 
-import { ExecutionScopes } from '../definitions/ExecutionScope.js';
-
 import InvalidMiddleware from '../errors/InvalidMiddleware.js';
 
 import Middleware from '../interfaces/Middleware.js';
 import Runner from '../interfaces/Runner.js';
-import Import from '../models/Import.js';
 
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
@@ -13,26 +10,22 @@ import Response from '../models/Response.js';
 import Module from '../types/Module.js';
 import NextHandler from '../types/NextHandler.js';
 
+import ModuleLoader from '../utils/ModuleLoader.js';
+
 import ProcedureRunner from './ProcedureRunner.js';
-import Repository from './Repository.js';
 import Runtime from './Runtime.js';
 
 export default abstract class ProcedureRuntime extends Runtime implements Runner
 {
-    #repository: Repository;
     #middlewareFiles: Set<string> = new Set();
     #middlewares: Middleware[] = [];
 
-    constructor(repository: Repository, url?: string)
+    constructor(url?: string)
     {
         super(url);
 
-        this.#repository = repository;
-
         this.#middlewares.push(new ProcedureRunner(this));
     }
-
-    get repository() { return this.#repository; }
 
     set middlewareFiles(filenames: Set<string>)
     {
@@ -41,8 +34,6 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
     async start(): Promise<void>
     {
-        await this.#repository.start();
-
         await super.start();
 
         await this.#importMiddlewares();
@@ -51,8 +42,6 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
     async stop(): Promise<void>
     {
         this.#clearMiddlewares();
-
-        await this.#repository.stop();
 
         await super.stop();
     }
@@ -63,9 +52,9 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
     abstract run(request: Request): Promise<Response>;
 
-    import(importModel: Import): Promise<Module>
+    import(specifier: string): Promise<Module>
     {
-        return this.#repository.import(importModel);
+        return ModuleLoader.load(specifier);
     }
 
     addMiddleware(middleware: Middleware)
@@ -114,8 +103,7 @@ export default abstract class ProcedureRuntime extends Runtime implements Runner
 
     async #importMiddleware(specifier: string): Promise<void>
     {
-        const importModel = new Import('', specifier, ExecutionScopes.APPLICATION);
-        const module = await this.import(importModel);
+        const module = await this.import(specifier);
         const middleware = module.default as Middleware;
 
         if (middleware?.handle === undefined)

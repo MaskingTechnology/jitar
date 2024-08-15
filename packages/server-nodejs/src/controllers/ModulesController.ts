@@ -2,7 +2,7 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalRepository, Standalone, Import, ExecutionScopes } from '@jitar/runtime';
+import { LocalRepository, Standalone } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
 import Headers from '../definitions/Headers';
@@ -25,24 +25,16 @@ export default class ModulesController
 
     async getModule(request: Request, response: Response): Promise<Response>
     {
-        const caller = request.query.caller ?? '';
-
-        if (typeof caller !== 'string')
-        {
-            return response.status(400).send('Invalid caller.');
-        }
-
-        this.#logger.info(`Get module for -> '${caller}'`);
+        //this.#logger.info(`Get module for -> '${caller}'`);
 
         const pathKey = '/modules';
         const specifier = request.path.substring(pathKey.length);
 
         try
         {
-            const importModel = new Import(caller, specifier, ExecutionScopes.APPLICATION);
-            const file = await this.#repository.readModule(importModel);
+            const file = await this.#repository.readModule(specifier);
 
-            this.#logger.info(`Got module -> '${specifier}' (${caller})`);
+            this.#logger.info(`Got module -> '${specifier}'`);
 
             response.setHeader(Headers.CONTENT_TYPE, file.type);
 
@@ -52,7 +44,7 @@ export default class ModulesController
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error(`Failed to get module -> '${specifier}' (${caller}) | ${message}`);
+            this.#logger.error(`Failed to get module -> '${specifier}' | ${message}`);
 
             const data = this.#serializer.serialize(error);
 

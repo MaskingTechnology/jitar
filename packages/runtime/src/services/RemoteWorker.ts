@@ -2,7 +2,6 @@
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
 
-import DummyRepository from './DummyRepository.js';
 import Worker from './Worker.js';
 import Remote from './Remote.js';
 
@@ -13,7 +12,7 @@ export default class RemoteWorker extends Worker
 
     constructor(url: string)
     {
-        super(new DummyRepository(), url);
+        super(url);
 
         this.#remote = new Remote(url);
     }

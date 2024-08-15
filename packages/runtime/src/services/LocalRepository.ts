@@ -2,10 +2,8 @@
 import FileNotFound from '../errors/FileNotFound.js';
 import InvalidSegmentFile from '../errors/InvalidSegmentFile.js';
 
-import { ExecutionScopes } from '../definitions/ExecutionScope.js';
 import FileManager from '../interfaces/FileManager.js';
 import File from '../models/File.js';
-import Import from '../models/Import.js';
 import Module from '../types/Module.js';
 import FileHelper from '../utils/FileHelper.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
@@ -74,8 +72,7 @@ export default class LocalRepository extends Repository
         const relativeFilename = FileHelper.createRepositoryFilename(name);
         const absoluteFilename = this.#fileManager.getAbsoluteLocation(relativeFilename);
 
-        const importModel = new Import('', absoluteFilename, ExecutionScopes.APPLICATION);
-        const module = await ModuleLoader.load(importModel);
+        const module = await ModuleLoader.load(absoluteFilename);
         const files = module.files as string[];
 
         if (files === undefined)
@@ -124,47 +121,8 @@ export default class LocalRepository extends Repository
         return this.#readFile(filename);
     }
 
-    readModule(importModel: Import): Promise<File>
+    async readModule(specifier: string): Promise<File>
     {
-        const { specifier, caller } = importModel;
-
-        console.log('CALLER', caller);
-
-        if (FileHelper.isSegmentFilename(caller))
-        {
-            return this.#readWorkerModule(specifier); 
-        }
-
-        if (FileHelper.isSegmentFilename(specifier))
-        {
-            return this.#readWorkerModule(specifier); 
-        }
-
-        if (this.#isSegmented(specifier) === false)
-        {
-            console.log('NOT SEGMENTED', specifier);
-            return this.#readWorkerModule(specifier);
-        }
-
-        console.log('IS SEGMENTED', specifier);
-
-        return this.#inSameSegment(caller, specifier)
-            ? this.#readWorkerModule(specifier)
-            : this.#readRemoteModule(specifier);
-    }
-
-    loadModule(importModel: Import): Promise<Module>
-    {
-        const filename = this.#getModuleFilename(importModel.specifier);
-        const fileImportModel = new Import(importModel.caller, filename, importModel.scope);
-
-        return ModuleLoader.load(fileImportModel);
-    }
-
-    async #readWorkerModule(specifier: string): Promise<File>
-    {
-        console.log('WORKER MODULE', specifier);
-
         const filename = this.#getModuleFilename(specifier);
         const file = await this.#readFile(filename);
         const code = file.content.toString();
@@ -172,14 +130,11 @@ export default class LocalRepository extends Repository
         return new File(filename, 'application/javascript', code);
     }
 
-    #readRemoteModule(specifier: string): Promise<File>
+    loadModule(specifier: string): Promise<Module>
     {
-        console.log('REMOTE MODULE', specifier);
+        const filename = this.#getModuleFilename(specifier);
 
-        const relativeFilename = FileHelper.assureRelativeFilenameWithExtension(specifier);
-        const remoteFilename = FileHelper.convertToRemoteFilename(relativeFilename);
-
-        return this.#readFile(remoteFilename);
+        return ModuleLoader.load(filename);
     }
 
     #getModuleFilename(filename: string): string
@@ -205,37 +160,5 @@ export default class LocalRepository extends Repository
     #readFile(filename: string): Promise<File>
     {
         return this.#fileManager.read(filename);
-    }
-
-    #inSameSegment(firstFilename: string, secondFilename: string): boolean
-    {
-        const firstSegments = this.#filterSegments(firstFilename);
-        const secondSegments = this.#filterSegments(secondFilename);
-
-        return firstSegments.some(segmentName => secondSegments.includes(segmentName));
-    }
-
-    #filterSegments(filename: string): string[]
-    {
-        const segmentNames = [...this.#segments.keys()];
-
-        return segmentNames.filter(segmentName =>
-        {
-            const filenames = this.#segments.get(segmentName) ?? [];
-
-            return filenames.includes(filename);
-        });
-    }
-
-    #isSegmented(filename: string): boolean
-    {
-        const segmentNames = [...this.#segments.keys()];
-
-        return segmentNames.some(segmentName =>
-        {
-            const filenames = this.#segments.get(segmentName) ?? [];
-
-            return filenames.includes(filename);
-        });
     }
 }

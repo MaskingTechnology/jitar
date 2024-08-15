@@ -8,7 +8,6 @@ import Response from '../models/Response.js';
 import Gateway from './Gateway.js';
 import Worker from './Worker.js';
 import WorkerBalancer from './WorkerBalancer.js';
-import Repository from './Repository.js';
 
 export default class LocalGateway extends Gateway
 {
@@ -16,9 +15,9 @@ export default class LocalGateway extends Gateway
     #balancers: Map<string, WorkerBalancer> = new Map();
     #trustKey?: string;
 
-    constructor(repository: Repository, url?: string, trustKey?: string)
+    constructor(url?: string, trustKey?: string)
     {
-        super(repository, url);
+        super(url);
 
         this.#trustKey = trustKey;
     }

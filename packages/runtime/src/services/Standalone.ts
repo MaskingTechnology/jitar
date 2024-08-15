@@ -2,7 +2,6 @@
 import File from '../models/File.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
-import Import from '../models/Import.js';
 
 import LocalWorker from './LocalWorker.js';
 import LocalRepository from './LocalRepository.js';
@@ -10,12 +9,14 @@ import ProcedureRuntime from './ProcedureRuntime.js';
 
 export default class Standalone extends ProcedureRuntime
 {
+    #repository: LocalRepository;
     #worker: LocalWorker;
 
     constructor(repository: LocalRepository, worker: LocalWorker, url?: string)
     {
-        super(repository, url);
+        super(url);
 
+        this.#repository = repository
         this.#worker = worker;
     }
 
@@ -51,12 +52,12 @@ export default class Standalone extends ProcedureRuntime
 
     readAsset(filename: string): Promise<File>
     {
-        return this.repository.readAsset(filename);
+        return this.#repository.readAsset(filename);
     }
 
-    readModule(importModel: Import): Promise<File>
+    readModule(specifier: string): Promise<File>
     {
-        return this.repository.readModule(importModel);
+        return this.#repository.readModule(specifier);
     }
 
     run(request: Request): Promise<Response>

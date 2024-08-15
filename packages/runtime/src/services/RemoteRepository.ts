@@ -1,6 +1,5 @@
 
 import File from '../models/File.js';
-import Import from '../models/Import.js';
 import Module from '../types/Module.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
 
@@ -37,15 +36,14 @@ export default class RemoteRepository extends Repository
         return this.#remote.loadFile(filename);
     }
 
-    readModule(importModel: Import): Promise<File>
+    readModule(specifier: string): Promise<File>
     {
-        console.log('RemoteRepository.readModule', importModel.specifier, importModel.caller);
-        return this.#remote.loadFile(`modules/${importModel.specifier}?caller=${importModel.caller}`);
+        return this.#remote.loadFile(`modules/${specifier}`);
     }
 
-    loadModule(importModel: Import): Promise<Module>
+    loadModule(specifier: string): Promise<Module>
     {
-        return ModuleLoader.load(importModel);
+        return ModuleLoader.load(specifier);
     }
 
     #getModuleBaseUrl(): string

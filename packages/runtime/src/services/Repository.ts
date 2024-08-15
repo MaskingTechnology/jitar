@@ -1,8 +1,5 @@
 
-import { ExecutionScopes } from '../definitions/ExecutionScope.js';
-
 import File from '../models/File.js';
-import Import from '../models/Import.js';
 import Module from '../types/Module.js';
 import ModuleLoader from '../utils/ModuleLoader.js';
 
@@ -10,19 +7,14 @@ import Runtime from './Runtime.js';
 
 export default abstract class Repository extends Runtime
 {
-    async import(importModel: Import): Promise<Module>
+    async import(specifier: string): Promise<Module>
     {
-        if (importModel.scope === ExecutionScopes.RUNTIME)
-        {
-            return ModuleLoader.load(importModel);
-        }
-        
-        return this.loadModule(importModel);
+        return ModuleLoader.load(specifier);
     }
 
     abstract readAsset(filename: string): Promise<File>;
 
-    abstract readModule(importModel: Import): Promise<File>;
+    abstract readModule(specifier: string): Promise<File>;
 
-    abstract loadModule(importModel: Import): Promise<Module>;
+    abstract loadModule(specifier: string): Promise<Module>;
 }

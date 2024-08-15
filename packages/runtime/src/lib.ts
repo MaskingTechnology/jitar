@@ -2,7 +2,6 @@
 // Definitions
 export * from './definitions/AccessLevel.js';
 export * from './definitions/Files.js';
-export * from './definitions/ExecutionScope.js';
 
 // Generic errors
 export { default as BadRequest } from './errors/generic/BadRequest.js';
@@ -40,7 +39,6 @@ export { default as Middleware } from './interfaces/Middleware.js';
 export { default as ArrayParameter } from './models/ArrayParameter.js';
 export { default as File } from './models/File.js';
 export { default as Implementation } from './models/Implementation.js';
-export { default as Import } from './models/Import.js';
 export { default as NamedParameter } from './models/NamedParameter.js';
 export { default as ObjectParameter } from './models/ObjectParameter.js';
 export { default as Procedure } from './models/Procedure.js';

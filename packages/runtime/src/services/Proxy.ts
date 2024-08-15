@@ -2,7 +2,6 @@
 import File from '../models/File.js';
 import Request from '../models/Request.js';
 import Response from '../models/Response.js';
-import Import from '../models/Import.js';
 
 import RemoteGateway from './RemoteGateway.js';
 import RemoteWorker from './RemoteWorker.js';
@@ -11,14 +10,18 @@ import ProcedureRuntime from './ProcedureRuntime.js';
 
 export default class Proxy extends ProcedureRuntime
 {
+    #repository: RemoteRepository;
     #runner: RemoteGateway | RemoteWorker;
 
     constructor(repository: RemoteRepository, runner: RemoteGateway | RemoteWorker, url?: string)
     {
-        super(repository, url);
+        super(url);
 
+        this.#repository = repository;
         this.#runner = runner;
     }
+
+    get repository() { return this.#repository; }
 
     get runner() { return this.#runner; }
 
@@ -50,12 +53,12 @@ export default class Proxy extends ProcedureRuntime
 
     readAsset(filename: string): Promise<File>
     {
-        return this.repository.readAsset(filename);
+        return this.#repository.readAsset(filename);
     }
 
-    readModule(importModel: Import): Promise<File>
+    readModule(specifier: string): Promise<File>
     {
-        return this.repository.readModule(importModel);
+        return this.#repository.readModule(specifier);
     }
 
     run(request: Request): Promise<Response>

@@ -1,9 +1,6 @@
 
 import { ClassLoader, Loadable, ClassNotFound, InvalidClass } from '@jitar/serialization';
 
-import Import from '../models/Import.js';
-import { ExecutionScopes } from '../definitions/ExecutionScope.js';
-
 import ModuleLoader from './ModuleLoader.js';
 
 export default class RemoteClassLoader implements ClassLoader
@@ -15,8 +12,7 @@ export default class RemoteClassLoader implements ClassLoader
             throw new ClassNotFound(loadable.name);
         }
 
-        const importModel = new Import('', loadable.source, ExecutionScopes.APPLICATION);
-        const module = await ModuleLoader.load(importModel);
+        const module = await ModuleLoader.load(loadable.source);
         const clazz = (module[loadable.name] ?? module['default']) as Function;
 
         if (clazz === undefined)
