@@ -2,7 +2,7 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalRepository, Standalone } from '@jitar/runtime';
+import { LocalRepository } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
 import Headers from '../definitions/Headers';
@@ -10,11 +10,11 @@ import ContentTypes from '../definitions/ContentTypes';
 
 export default class ModulesController
 {
-    #repository: LocalRepository | Standalone;
+    #repository: LocalRepository;
     #serializer: Serializer;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, repository: LocalRepository | Standalone, serializer: Serializer, logger: Logger<unknown>)
+    constructor(app: express.Application, repository: LocalRepository, serializer: Serializer, logger: Logger<unknown>)
     {
         this.#repository = repository;
         this.#serializer = serializer;

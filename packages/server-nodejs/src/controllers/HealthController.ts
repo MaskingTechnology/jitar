@@ -2,16 +2,16 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalWorker, Standalone } from '@jitar/runtime';
+import { LocalWorker } from '@jitar/runtime';
 import Headers from '../definitions/Headers';
 import ContentTypes from '../definitions/ContentTypes';
 
 export default class HealthController
 {
-    #worker: LocalWorker | Standalone;
+    #worker: LocalWorker;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, worker: LocalWorker | Standalone, logger: Logger<unknown>)
+    constructor(app: express.Application, worker: LocalWorker, logger: Logger<unknown>)
     {
         this.#worker = worker;
         this.#logger = logger;

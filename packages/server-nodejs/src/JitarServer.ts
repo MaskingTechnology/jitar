@@ -3,7 +3,7 @@ import express, { Express } from 'express';
 import { Server } from 'http';
 import { Logger } from 'tslog';
 
-import { LocalGateway, LocalWorker, LocalRepository, Proxy, Runtime, RemoteClassLoader, Standalone } from '@jitar/runtime';
+import { LocalGateway, LocalWorker, LocalRepository, Proxy, Service, ImportFunction, SourceManager, ClassModuleLoader } from '@jitar/runtime';
 import { ClassLoader, Serializer, SerializerBuilder, ValueSerializer } from '@jitar/serialization';
 
 import ServerOptions from './configuration/ServerOptions.js';
@@ -26,6 +26,7 @@ import RuntimeDefaults from './definitions/RuntimeDefaults.js';
 
 import RuntimeNotAvailable from './errors/RuntimeNotAvailable.js';
 import LogBuilder from './utils/LogBuilder.js';
+import LocalFileManager from './utils/LocalFileManager.js';
 import Headers from './definitions/Headers.js';
 
 const STARTUP_MESSAGE = `
@@ -43,42 +44,44 @@ export default class JitarServer
     #app: Express;
     #server?: Server;
 
-    #runtime?: Runtime;
+    #service?: Service;
     #serializer: Serializer;
-    #classLoader: ClassLoader;
 
-    #options: ServerOptions;
     #configuration: RuntimeConfiguration;
     #logger: Logger<unknown>;
+    #sourceManager: SourceManager;
 
-    constructor()
+    constructor(importFunction: ImportFunction)
     {
-        this.#classLoader = new RemoteClassLoader();
-        this.#serializer = SerializerBuilder.build(this.#classLoader);
+        const options = ServerOptionsReader.read();
+        const cacheLocation = RuntimeDefaults.CACHE; // TODO: Add cache location to server options
+        const fileManager = new LocalFileManager(cacheLocation);
 
-        this.#options = ServerOptionsReader.read();
-        this.#configuration = RuntimeConfigurationLoader.load(this.#options.config);
-        this.#logger = LogBuilder.build(this.#options.loglevel);
+        this.#configuration = RuntimeConfigurationLoader.load(options.config);
+        this.#logger = LogBuilder.build(options.loglevel);
+        this.#sourceManager = new SourceManager(importFunction, fileManager);
+
+        const classLoader = new ClassModuleLoader(this.#sourceManager);
+        this.#serializer = SerializerBuilder.build(classLoader);
 
         this.#app = express();
-
-        this.#app.use(express.json({limit: this.#options.bodylimit }));
+        this.#app.use(express.json({limit: options.bodylimit }));
         this.#app.use(express.urlencoded({ extended: true }));
         this.#app.use((request, response, next) => this.#addDefaultHeaders(request, response, next));
-
         this.#app.disable('x-powered-by');
 
         this.#printStartupMessage();
     }
 
-    get classLoader(): ClassLoader
-    {
-        return this.#classLoader;
-    }
+    // get classLoader(): ClassLoader
+    // {
+    //     return this.#classLoader;
+    // }
 
     async build(): Promise<void>
     {
-        this.#runtime = await RuntimeConfigurator.configure(this.#configuration);
+        const runtimeConfigurator = new RuntimeConfigurator(this.#sourceManager);
+        this.#service = await runtimeConfigurator.configure(this.#configuration);
         this.#addControllers();
     }
 
@@ -131,54 +134,37 @@ export default class JitarServer
         this.#serializer.addSerializer(serializer);
     }
 
-    #getRuntime(): Runtime
+    #getRuntime(): Service
     {
-        if (this.#runtime === undefined)
+        if (this.#service === undefined)
         {
             throw new RuntimeNotAvailable();
         }
 
-        return this.#runtime;
+        return this.#service;
     }
 
     #addControllers(): void
     {
-        if (this.#configuration.standalone !== undefined && this.#runtime instanceof Standalone)
-        {
-            const index = this.#configuration.standalone.index ?? RuntimeDefaults.INDEX;
-            const serveIndexOnNotFound = this.#configuration.standalone.serveIndexOnNotFound ?? RuntimeDefaults.SERVE_INDEX_ON_NOT_FOUND;
-
-            this.#addStandAloneControllers(this.#runtime, index, serveIndexOnNotFound);
-        }
-        else if (this.#configuration.repository !== undefined && this.#runtime instanceof LocalRepository)
+        if (this.#configuration.repository !== undefined && this.#service instanceof LocalRepository)
         {
             const index = this.#configuration.repository.index ?? RuntimeDefaults.INDEX;
             const serveIndexOnNotFound = this.#configuration.repository.serveIndexOnNotFound ?? RuntimeDefaults.SERVE_INDEX_ON_NOT_FOUND;
 
-            this.#addRepositoryControllers(this.#runtime, index, serveIndexOnNotFound);
+            this.#addRepositoryControllers(this.#service, index, serveIndexOnNotFound);
         }
-        else if (this.#configuration.gateway !== undefined && this.#runtime instanceof LocalGateway)
+        else if (this.#configuration.gateway !== undefined && this.#service instanceof LocalGateway)
         {
-            this.#addGatewayControllers(this.#runtime);
+            this.#addGatewayControllers(this.#service);
         }
-        else if (this.#configuration.worker !== undefined && this.#runtime instanceof LocalWorker)
+        else if (this.#configuration.worker !== undefined && this.#service instanceof LocalWorker)
         {
-            this.#addWorkerControllers(this.#runtime);
+            this.#addWorkerControllers(this.#service);
         }
-        else if (this.#configuration.proxy !== undefined && this.#runtime instanceof Proxy)
+        else if (this.#configuration.proxy !== undefined && this.#service instanceof Proxy)
         {
-            this.#addProxyControllers(this.#runtime);
+            this.#addProxyControllers(this.#service);
         }
-    }
-
-    #addStandAloneControllers(standalone: Standalone, index: string, serveIndexOnNotFound: boolean): void
-    {
-        new HealthController(this.#app, standalone, this.#logger);
-        new JitarController(this.#app);
-        new ModulesController(this.#app, standalone, this.#serializer, this.#logger);
-        new ProceduresController(this.#app, standalone, this.#logger);
-        new RPCController(this.#app, standalone, this.#serializer, this.#logger);
-        new AssetsController(this.#app, standalone, index, serveIndexOnNotFound, this.#logger);
     }
 
     #addRepositoryControllers(repository: LocalRepository, index: string, serveIndexOnNotFound: boolean): void
@@ -222,7 +208,7 @@ export default class JitarServer
 
         for (const setUpScript of setUpScripts)
         {
-            await runtime.import(setUpScript);
+            await this.#sourceManager.import(setUpScript);
         }
     }
 
@@ -241,7 +227,7 @@ export default class JitarServer
 
         for (const tearDownScript of tearDownScripts)
         {
-            await runtime.import(tearDownScript);
+            await this.#sourceManager.import(tearDownScript);
         }
     }
 
@@ -277,10 +263,9 @@ export default class JitarServer
 
     #printProcedureInfo()
     {
-        const runtime = this.#getRuntime() as LocalWorker | Standalone;
+        const runtime = this.#getRuntime();
 
-        if (runtime instanceof LocalWorker === false
-         && runtime instanceof Standalone === false)
+        if (runtime instanceof LocalWorker === false)
         {
             return;
         }

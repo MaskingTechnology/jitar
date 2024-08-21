@@ -1,13 +1,11 @@
 
-import { ModuleImporter, ModuleLoader } from '@jitar/runtime';
+import { ImportFunction } from '@jitar/runtime';
 
 import JitarServer from './JitarServer.js';
 
-export async function buildServer(moduleImporter: ModuleImporter): Promise<JitarServer>
+export async function buildServer(importFunction: ImportFunction): Promise<JitarServer>
 {
-    ModuleLoader.setImporter(moduleImporter);
-
-    const server = new JitarServer();
+    const server = new JitarServer(importFunction);
 
     await server.build();
 

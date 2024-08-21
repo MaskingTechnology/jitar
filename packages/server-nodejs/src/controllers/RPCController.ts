@@ -2,7 +2,7 @@
 import express, { Request as ExpressRequest, Response as ExpressResponse } from 'express';
 import { Logger } from 'tslog';
 
-import { Request as JitarRequest, Version, VersionParser, ProcedureRuntime, BadRequest, Unauthorized, PaymentRequired, Forbidden, NotFound, Teapot, NotImplemented } from '@jitar/runtime';
+import { Request as JitarRequest, Version, VersionParser, RunnerService, BadRequest, Unauthorized, PaymentRequired, Forbidden, NotFound, Teapot, NotImplemented } from '@jitar/runtime';
 import { Serializer } from '@jitar/serialization';
 
 import CorsMiddleware from '../middleware/CorsMiddleware.js';
@@ -24,11 +24,11 @@ const NOT_IMPLEMENTED_NAME = NotImplemented.name;
 
 export default class RPCController
 {
-    #runtime: ProcedureRuntime;
+    #runtime: RunnerService;
     #serializer: Serializer;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, runtime: ProcedureRuntime, serializer: Serializer, logger: Logger<unknown>)
+    constructor(app: express.Application, runtime: RunnerService, serializer: Serializer, logger: Logger<unknown>)
     {
         this.#runtime = runtime;
         this.#serializer = serializer;
@@ -191,7 +191,7 @@ export default class RPCController
             const argsMap = new Map<string, unknown>(Object.entries(deserializedArgs));
 
             const runtimeRequest = new JitarRequest(fqn, version, argsMap, headers);
-            const runtimeResponse = await this.#runtime.handle(runtimeRequest);
+            const runtimeResponse = await this.#runtime.run(runtimeRequest);
 
             this.#logger.info(`Ran procedure -> ${fqn} (v${version.toString()})`);
 
@@ -215,19 +215,21 @@ export default class RPCController
 
     async #setCors(response: ExpressResponse): Promise<ExpressResponse>
     {
-        const cors = this.#runtime.getMiddleware(CorsMiddleware) as CorsMiddleware;
-
-        if (cors === undefined)
-        {
-            return response.status(204).send();
-        }
-
-        response.setHeader('Access-Control-Allow-Origin', cors.allowOrigin);
-        response.setHeader('Access-Control-Allow-Methods', cors.allowMethods);
-        response.setHeader('Access-Control-Allow-Headers', cors.allowHeaders);
-        response.setHeader('Access-Control-Max-Age', CORS_MAX_AGE);
-
         return response.status(204).send();
+        
+        // const cors = this.#runtime.getMiddleware(CorsMiddleware) as CorsMiddleware;
+
+        // if (cors === undefined)
+        // {
+        //     return response.status(204).send();
+        // }
+
+        // response.setHeader('Access-Control-Allow-Origin', cors.allowOrigin);
+        // response.setHeader('Access-Control-Allow-Methods', cors.allowMethods);
+        // response.setHeader('Access-Control-Allow-Headers', cors.allowHeaders);
+        // response.setHeader('Access-Control-Max-Age', CORS_MAX_AGE);
+
+        // return response.status(204).send();
     }
 
     async #createResultResponse(result: unknown, response: ExpressResponse, serialize: boolean): Promise<ExpressResponse>

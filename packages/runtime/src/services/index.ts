@@ -14,3 +14,6 @@ export { default as LocalWorker } from './worker/LocalWorker';
 export { default as RemoteWorker } from './worker/RemoteWorker';
 
 export { default as Remote } from './Remote';
+
+export { default as Service } from './Service';
+export { default as RunnerService } from './RunnerService';

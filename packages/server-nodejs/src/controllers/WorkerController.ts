@@ -26,7 +26,7 @@ export default class WorkerController
 
     async getWorkers(request: Request, response: Response): Promise<Response>
     {
-        const workers = this.#gateway.workers.map(worker => { return { url: worker.url, procedureNames: worker.getProcedureNames() }; });
+        const workers: object[] = [];//this.#gateway.workers.map(worker => { return { url: worker.url, procedureNames: worker.getProcedureNames() }; });
 
         this.#logger.info('Got workers');
 
@@ -39,14 +39,14 @@ export default class WorkerController
     {
         try
         {
-            const workerDto = DataConverter.convert<WorkerDto>(workerDtoSchema, request.body);
+            // const workerDto = DataConverter.convert<WorkerDto>(workerDtoSchema, request.body);
 
-            const worker = new RemoteWorker(workerDto.url);
-            worker.procedureNames = new Set(workerDto.procedureNames);
+            // const worker = new RemoteWorker(workerDto.url);
+            // worker.procedureNames = new Set(workerDto.procedureNames);
 
-            await this.#gateway.addWorker(worker, workerDto.trustKey);
+            // await this.#gateway.addWorker(worker, workerDto.trustKey);
 
-            this.#logger.info(`Added worker -> ${worker.url}`);
+            // this.#logger.info(`Added worker -> ${worker.url}`);
 
             return response.status(201).send();
         }

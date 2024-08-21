@@ -2,21 +2,19 @@
 import { Application, Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalRepository, Standalone, FileNotFound } from '@jitar/runtime';
+import { LocalRepository, FileNotFound } from '@jitar/runtime';
 
 import Headers from '../definitions/Headers.js';
 import ContentTypes from '../definitions/ContentTypes.js';
 
-type Repository = LocalRepository | Standalone;
-
 export default class AssetsController
 {
-    #repository: Repository;
+    #repository: LocalRepository;
     #indexFile: string;
     #serveIndexOnNotFound: boolean;
     #logger: Logger<unknown>;
 
-    constructor(app: Application, repository: Repository, indexFile: string, serveIndexOnNotFound: boolean, logger: Logger<unknown>)
+    constructor(app: Application, repository: LocalRepository, indexFile: string, serveIndexOnNotFound: boolean, logger: Logger<unknown>)
     {
         this.#repository = repository;
         this.#indexFile = indexFile;
