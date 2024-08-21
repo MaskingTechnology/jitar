@@ -1,10 +1,19 @@
 
-import RuntimeNotAvailable from './errors/RuntimeNotAvailable.js';
-import Request from './models/Request.js';
-import ProcedureRuntime from './services/ProcedureRuntime.js';
-import VersionParser from './utils/VersionParser.js';
+import { ServerError } from './errors';
+
+import Request from './execution/models/Request.js';
+import ProcedureRuntime from './services/RunnerService.js';
+import VersionParser from './execution/utils/VersionParser.js';
 
 let _runtime: ProcedureRuntime;
+
+export class RuntimeNotAvailable extends ServerError
+{
+    constructor()
+    {
+        super(`Runtime not available`);
+    }
+}
 
 export function setRuntime(runtime: ProcedureRuntime): void
 {
@@ -30,7 +39,7 @@ export async function runProcedure(fqn: string, versionNumber: string, args: obj
     const headersMap = sourceRequest instanceof Request ? sourceRequest.headers : new Map();
 
     const targetRequest = new Request(fqn, version, argsMap, headersMap);
-    const targetResponse = await runtime.handle(targetRequest);
+    const targetResponse = await runtime.run(targetRequest);
 
     return targetResponse.result;
 }

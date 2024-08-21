@@ -1,16 +1,8 @@
 
-import { Serializer, SerializerBuilder } from '@jitar/serialization';
+import { Serializer } from '@jitar/serialization';
 
-import File from '../models/File.js';
-import Request from '../models/Request.js';
-import { default as ResultResponse } from '../models/Response.js';
-
-import RemoteClassLoader from '../utils/RemoteClassLoader.js';
-
-import Worker from './Worker.js';
-
-const remoteClassLoader = new RemoteClassLoader();
-const defaultSerializer = SerializerBuilder.build(remoteClassLoader);
+import { Request, Response as ResultResponse } from '../execution';
+import { File } from '../source';
 
 const APPLICATION_JSON = 'application/json';
 
@@ -19,7 +11,7 @@ export default class Remote
     #url: string;
     #serializer: Serializer;
 
-    constructor(url: string, serializer: Serializer = defaultSerializer)
+    constructor(url: string, serializer: Serializer)
     {
         this.#url = url;
         this.#serializer = serializer;
@@ -27,10 +19,10 @@ export default class Remote
 
     async loadFile(filename: string): Promise<File>
     {
-        const url = `${this.#url}/${filename}`;
+        const remoteUrl = `${this.#url}/${filename}`;
         const options = { method: 'GET' };
 
-        const response = await this.#callRemote(url, options);
+        const response = await this.#callRemote(remoteUrl, options);
         const type = response.headers.get('Content-Type') || 'application/octet-stream';
         const content = await response.text();
 
@@ -39,10 +31,10 @@ export default class Remote
 
     async isHealthy(): Promise<boolean>
     {
-        const url = `${this.#url}/health/status`;
+        const remoteUrl = `${this.#url}/health/status`;
         const options = { method: 'GET' };
 
-        const response = await this.#callRemote(url, options);
+        const response = await this.#callRemote(remoteUrl, options);
         const healthy = await response.text();
 
         return Boolean(healthy);
@@ -50,24 +42,19 @@ export default class Remote
 
     async getHealth(): Promise<Map<string, boolean>>
     {
-        const url = `${this.#url}/health`;
+        const remoteUrl = `${this.#url}/health`;
         const options = { method: 'GET' };
 
-        const response = await this.#callRemote(url, options);
+        const response = await this.#callRemote(remoteUrl, options);
         const health = await response.json();
 
         return new Map(Object.entries(health));
     }
 
-    async addWorker(worker: Worker): Promise<void>
+    async addWorker(url: string, procedureNames: string[], trustKey?: string): Promise<void>
     {
-        const url = `${this.#url}/workers`;
-        const body =
-        {
-            url: worker.url,
-            procedureNames: worker.getProcedureNames(),
-            trustKey: worker.trustKey,
-        };
+        const remoteUrl = `${this.#url}/workers`;
+        const body = { url, procedureNames, trustKey};
         const options =
         {
             method: 'POST',
@@ -75,7 +62,7 @@ export default class Remote
             body: JSON.stringify(body)
         };
 
-        await this.#callRemote(url, options);
+        await this.#callRemote(remoteUrl, options);
     }
 
     async run(request: Request): Promise<ResultResponse>
