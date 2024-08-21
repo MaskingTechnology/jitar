@@ -1,37 +1,32 @@
 
 import { FileManager, Files } from '@jitar/runtime';
 
-import ApplicationCacheBuilder from './building/ApplicationCacheBuilder.js';
-import ApplicationCacheWriter from './building/ApplicationCacheWriter.js';
-import ApplicationReader from './building/ApplicationReader.js';
+import { ApplicationReader, ApplicationBuilder } from './application';
 
 export default class CacheManager
 {
     #projectFileManager: FileManager;
     #appFileManager: FileManager;
 
-    #reader: ApplicationReader;
-    #builder: ApplicationCacheBuilder;
-    #writer: ApplicationCacheWriter;
+    #applicationReader: ApplicationReader;
+    #applicationBuilder: ApplicationBuilder;
 
     constructor(projectFileManager: FileManager, appFileManager: FileManager)
     {
         this.#projectFileManager = projectFileManager;
         this.#appFileManager = appFileManager;
 
-        this.#reader = new ApplicationReader(appFileManager);
-        this.#builder = new ApplicationCacheBuilder();
-        this.#writer = new ApplicationCacheWriter(appFileManager);
+        this.#applicationReader = new ApplicationReader(appFileManager);
+        this.#applicationBuilder = new ApplicationBuilder(appFileManager);
     }
 
     async build(): Promise<void>
     {
-        const segmentFiles = await this.#projectFileManager.filter(Files.SEGMENT_PATTERN);
         const moduleFiles = await this.#appFileManager.filter(Files.MODULE_PATTERN);
+        const segmentFiles = await this.#projectFileManager.filter(Files.SEGMENT_PATTERN);
 
-        const application = await this.#reader.read(segmentFiles, moduleFiles);
-        const cache = this.#builder.build(application);
+        const application = await this.#applicationReader.read(moduleFiles, segmentFiles);
 
-        return this.#writer.write(cache);
+        return this.#applicationBuilder.build(application);
     }
 }

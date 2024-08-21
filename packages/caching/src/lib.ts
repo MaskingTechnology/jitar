@@ -1,2 +1,2 @@
 
-export { default as CacheManager } from './Builder.js';
+export { default as CacheManager } from './CacheManager';
