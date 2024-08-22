@@ -2,6 +2,7 @@
 export { default as Files } from './definitions/Files';
 
 export { default as FileNotFound } from './errors/FileNotFound';
+export { default as ModuleNotLoaded } from './errors/ModuleNotLoaded';
 
 export { default as FileManager } from './interfaces/FileManager';
 export { default as ModuleImporter } from './interfaces/ModuleImporter';

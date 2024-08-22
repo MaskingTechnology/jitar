@@ -1,5 +1,6 @@
 
 import { Module } from '../module';
+import { FileHelper } from '../utils';
 
 export default class ClassSourceBuilder
 {
@@ -12,7 +13,7 @@ export default class ClassSourceBuilder
 
     build(): string
     {
-        const filename = this.#module.filename;
+        const filename = FileHelper.addSubExtension(this.#module.filename, 'shared');
         const classes = this.#module.reflection.exportedClasses;
         const classNames = classes.map(clazz => clazz.name);
         const sourceCode = classNames.map(className => `${className}.source = "/${filename}";`);

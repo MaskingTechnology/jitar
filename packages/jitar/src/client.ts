@@ -28,7 +28,7 @@ export
     // InvalidVersionNumber,
     // MissingParameterValue,
     // ModuleNotAccessible,
-    // ModuleNotLoaded,
+    ModuleNotLoaded,
     // NoWorkerAvailable,
     // ProcedureNotAccessible,
     // ProcedureNotFound,
@@ -39,3 +39,9 @@ export
     // startClient,
     getClient
 } from '@jitar/runtime';
+
+export
+{
+    ClassNotFound,
+    InvalidClass
+} from '@jitar/serialization';

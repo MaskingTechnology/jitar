@@ -20,10 +20,13 @@ export default class SourceManager
     {
         try
         {
+            // If the specifier is an absolute path, we need to convert it to a path
+            // relative to the cache folder.
+            
             const fullSpecifier = specifier.startsWith('/')
-                ? this.#fileManager.getAbsoluteLocation(specifier)
+                ? this.#fileManager.getAbsoluteLocation(`.${specifier}`)
                 : specifier;
-
+            
             return await this.#import(fullSpecifier);
         }
         catch (error: unknown)
