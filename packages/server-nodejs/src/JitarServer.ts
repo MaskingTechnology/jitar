@@ -3,8 +3,8 @@ import express, { Express } from 'express';
 import { Server } from 'http';
 import { Logger } from 'tslog';
 
-import { LocalGateway, LocalWorker, LocalRepository, Proxy, Service, ImportFunction, SourceManager, ClassModuleLoader } from '@jitar/runtime';
-import { ClassLoader, Serializer, SerializerBuilder, ValueSerializer } from '@jitar/serialization';
+import { LocalGateway, LocalWorker, LocalRepository, Proxy, Service, ImportFunction, SourceManager, ClassModuleLoader, RuntimeBuilder, RunnerService } from '@jitar/runtime';
+import { Serializer, SerializerBuilder, ValueSerializer } from '@jitar/serialization';
 
 import ServerOptions from './configuration/ServerOptions.js';
 
@@ -50,6 +50,7 @@ export default class JitarServer
     #configuration: RuntimeConfiguration;
     #logger: Logger<unknown>;
     #sourceManager: SourceManager;
+    #runtimeBuilder: RuntimeBuilder;
 
     constructor(importFunction: ImportFunction)
     {
@@ -60,9 +61,8 @@ export default class JitarServer
         this.#configuration = RuntimeConfigurationLoader.load(options.config);
         this.#logger = LogBuilder.build(options.loglevel);
         this.#sourceManager = new SourceManager(importFunction, fileManager);
-
-        const classLoader = new ClassModuleLoader(this.#sourceManager);
-        this.#serializer = SerializerBuilder.build(classLoader);
+        this.#runtimeBuilder = new RuntimeBuilder(this.#sourceManager);
+        this.#serializer = this.#runtimeBuilder.serializer;
 
         this.#app = express();
         this.#app.use(express.json({limit: options.bodylimit }));
@@ -80,7 +80,7 @@ export default class JitarServer
 
     async build(): Promise<void>
     {
-        const runtimeConfigurator = new RuntimeConfigurator(this.#sourceManager);
+        const runtimeConfigurator = new RuntimeConfigurator(this.#runtimeBuilder);
         this.#service = await runtimeConfigurator.configure(this.#configuration);
         this.#addControllers();
     }
@@ -161,6 +161,14 @@ export default class JitarServer
         {
             this.#addWorkerControllers(this.#service);
         }
+        else if (this.#configuration.standalone !== undefined && this.#service instanceof Proxy)
+        {
+            const index = this.#configuration.standalone.index ?? RuntimeDefaults.INDEX;
+            const serveIndexOnNotFound = this.#configuration.standalone.serveIndexOnNotFound ?? RuntimeDefaults.SERVE_INDEX_ON_NOT_FOUND;
+
+            this.#addWorkerControllers(this.#service.runner as LocalWorker);
+            this.#addRepositoryControllers(this.#service.repository as LocalRepository, index, serveIndexOnNotFound);
+        }
         else if (this.#configuration.proxy !== undefined && this.#service instanceof Proxy)
         {
             this.#addProxyControllers(this.#service);
@@ -176,7 +184,7 @@ export default class JitarServer
 
     #addGatewayControllers(gateway: LocalGateway): void
     {
-        new WorkerController(this.#app, gateway, this.#logger);
+        new WorkerController(this.#app, gateway, this.#runtimeBuilder, this.#logger);
         new ProceduresController(this.#app, gateway, this.#logger);
         new RPCController(this.#app, gateway, this.#serializer, this.#logger);
     }
@@ -265,12 +273,12 @@ export default class JitarServer
     {
         const runtime = this.#getRuntime();
 
-        if (runtime instanceof LocalWorker === false)
+        if (runtime instanceof LocalRepository)
         {
             return;
         }
 
-        const procedureNames = runtime.getProcedureNames();
+        const procedureNames = (runtime as RunnerService).getProcedureNames();
 
         if (procedureNames.length === 0)
         {

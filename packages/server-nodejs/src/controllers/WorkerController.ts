@@ -2,7 +2,7 @@
 import express, { Request, Response } from 'express';
 import { Logger } from 'tslog';
 
-import { LocalGateway, RemoteWorker } from '@jitar/runtime';
+import { LocalGateway, RuntimeBuilder } from '@jitar/runtime';
 
 import WorkerDto, { workerDtoSchema } from '../models/WorkerDto.js';
 import DataConverter from '../utils/DataConverter.js';
@@ -13,11 +13,13 @@ import ConversionError from '../errors/ConversionError.js';
 export default class WorkerController
 {
     #gateway: LocalGateway;
+    #runtimeBuilder: RuntimeBuilder;
     #logger: Logger<unknown>;
 
-    constructor(app: express.Application, gateway: LocalGateway, logger: Logger<unknown>)
+    constructor(app: express.Application, gateway: LocalGateway, runtimeBuilder: RuntimeBuilder, logger: Logger<unknown>)
     {
         this.#gateway = gateway;
+        this.#runtimeBuilder = runtimeBuilder;
         this.#logger = logger;
 
         app.get('/workers', (request: Request, response: Response) => { this.getWorkers(request, response); });
@@ -39,14 +41,13 @@ export default class WorkerController
     {
         try
         {
-            // const workerDto = DataConverter.convert<WorkerDto>(workerDtoSchema, request.body);
+            const workerDto = DataConverter.convert<WorkerDto>(workerDtoSchema, request.body);
 
-            // const worker = new RemoteWorker(workerDto.url);
-            // worker.procedureNames = new Set(workerDto.procedureNames);
+            const worker = this.#runtimeBuilder.buildRemoteWorker(workerDto.url, workerDto.procedureNames);
 
-            // await this.#gateway.addWorker(worker, workerDto.trustKey);
+            await this.#gateway.addWorker(worker, workerDto.trustKey);
 
-            // this.#logger.info(`Added worker -> ${worker.url}`);
+            this.#logger.info(`Added worker -> ${worker.url}`);
 
             return response.status(201).send();
         }

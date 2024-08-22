@@ -2,26 +2,22 @@
 import { Request, Response } from '../../execution';
 import { File } from '../../source';
 
-import Gateway from '../gateway/Gateway';
-import Worker from '../worker/Worker';
-import RemoteRepository from '../repository/RemoteRepository';
+import Repository from '../repository/Repository';
 
 import RunnerService from '../RunnerService';
-
-type Runner = Gateway | Worker;
 
 type Configuration =
 {
     url: string;
-    repository: RemoteRepository;
-    runner: Runner;
+    repository: Repository;
+    runner: RunnerService;
 };
 
-export default class Proxy implements RunnerService
+export default class Proxy implements Repository, RunnerService
 {
     #url: string;
-    #repository: RemoteRepository;
-    #runner: Runner;
+    #repository: Repository;
+    #runner: RunnerService;
 
     constructor(configuration: Configuration)
     {

@@ -1,200 +1,133 @@
 
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
-import { ServerError } from './errors';
 import { ExecutionManager } from './execution';
-import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, RemoteWorker, LocalWorker, Proxy, Remote } from './services';
+import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, RemoteWorker, LocalWorker, Proxy, Remote, RunnerService } from './services';
 import { HealthManager } from './health';
 import { MiddlewareManager } from './middleware';
 import { SourceManager, ClassModuleLoader } from './source';
 
-export class RuntimeNotBuilt extends ServerError
+type ServiceConfiguration =
 {
-    constructor(reason: string)
-    {
-        super(`Building the runtime failed: ${reason}`);
-    }
+    url: string;
 }
+
+type RunnerServiceConfiguration = ServiceConfiguration &
+{
+    trustKey?: string;
+    healthChecks: string[];
+    middlewares: string[];
+}
+
+type LocalGatewayConfiguration = RunnerServiceConfiguration &
+{
+    monitorInterval?: number;
+};
+
+type LocalWorkerConfiguration = RunnerServiceConfiguration &
+{
+    segmentNames: string[];
+    gatewayUrl?: string;
+};
+
+type LocalRepositoryConfiguration = ServiceConfiguration &
+{
+    assets: string[];
+};
+
+type ProxyConfiguration = ServiceConfiguration &
+{
+    repositoryUrl: string;
+    runnerUrl: string;
+};
+
+type StandaloneConfiguration = LocalWorkerConfiguration & LocalRepositoryConfiguration;
 
 export default class RuntimeBuilder
 {
-    #url: string;
     #sourceManager: SourceManager;
+    #serializer: Serializer;
 
-    #segmentNames: Set<string> = new Set();
-    #healthCheckFilenames: Set<string> = new Set();
-    #middlewareFilenames: Set<string> = new Set();
-    #assets: Set<string> = new Set();
-
-    #repositoryUrl?: string;
-    #gatewayUrl?: string;
-    #workerUrl?: string;
-
-    constructor(url: string, sourceManager: SourceManager)
+    constructor(sourceManager: SourceManager)
     {
-        this.#url = url;
         this.#sourceManager = sourceManager;
+        this.#serializer = this.#buildSerializer();
     }
 
-    segment(...names: string[]): this
-    {
-        names.forEach(name => this.#segmentNames.add(name));
+    get sourceManager() { return this.#sourceManager; }
 
-        return this;
+    get serializer() { return this.#serializer; }
+
+    async buildLocalGateway(configuration: LocalGatewayConfiguration): Promise<LocalGateway>
+    {
+        const url = configuration.url;
+        const trustKey = configuration.trustKey;
+        const healthManager = await this.#buildHealthManager(configuration.healthChecks);
+        const middlewareManager = await this.#buildMiddlewareManager(configuration.middlewares);
+        const monitorInterval = configuration.monitorInterval;
+
+        return new LocalGateway({ url, trustKey, healthManager, middlewareManager, monitorInterval });
     }
 
-    healthCheck(...filenames: string[]): this
+    buildRemoteGateway(url: string): RemoteGateway
     {
-        filenames.forEach(filename => this.#healthCheckFilenames.add(filename));
+        const remote = this.#buildRemote(url);
 
-        return this;
+        return new RemoteGateway({ url, remote });
     }
 
-    middleware(...filenames: string[]): this
+    async buildLocalWorker(configuration: LocalWorkerConfiguration): Promise<LocalWorker>
     {
-        filenames.forEach(filename => this.#middlewareFilenames.add(filename));
-
-        return this;
-    }
-
-    asset(...patterns: string[]): this
-    {
-        patterns.forEach(pattern => this.#assets.add(pattern));
-
-        return this;
-    }
-
-    repository(url?: string): this
-    {
-        this.#repositoryUrl = url;
-
-        return this;
-    }
-
-    gateway(url?: string): this
-    {
-        this.#gatewayUrl = url;
-
-        return this;
-    }
-
-    worker(url?: string): this
-    {
-        this.#workerUrl = url;
-
-        return this;
-    }
-
-    async buildRepository(): Promise<LocalRepository>
-    {
-        const url = this.#url;
-        const sourceManager = this.#sourceManager;
-        const assets = this.#assets;
-
-        return new LocalRepository({ url, sourceManager, assets });
-    }
-
-    async buildGateway(trustKey?: string): Promise<LocalGateway>
-    {
-        const url = this.#url;
-        const healthManager = await this.#buildHealthManager();
-        const middlewareManager = await this.#buildMiddlewareManager();
-
-        return new LocalGateway({ url, trustKey, healthManager, middlewareManager });
-    }
-
-    async buildWorker(trustKey?: string): Promise<LocalWorker>
-    {
-        const url = this.#url;
-        const gateway = this.#buildRemoteGateway();
-        const healthManager = await this.#buildHealthManager();
-        const middlewareManager = await this.#buildMiddlewareManager();
-        const executionManager = await this.#buildExecutionManager();
+        const url = configuration.url;
+        const trustKey = configuration.trustKey;
+        const gateway = configuration.gatewayUrl ? this.buildRemoteGateway(configuration.gatewayUrl) : undefined;
+        const healthManager = await this.#buildHealthManager(configuration.healthChecks);
+        const middlewareManager = await this.#buildMiddlewareManager(configuration.middlewares);
+        const executionManager = await this.#buildExecutionManager(configuration.segmentNames);
 
         return new LocalWorker({ url, trustKey, gateway, healthManager, middlewareManager, executionManager });
     }
 
-    async buildProxy(): Promise<Proxy>
+    buildRemoteWorker(url: string, procedures: string[]): RemoteWorker
     {
-        const url = this.#url;
-        const repository = this.#buildRemoteRepository();
-        const runner = this.#buildRemoteGateway() ?? this.#buildRemoteWorker();
+        const procedureNames = new Set<string>(procedures);
+        const remote = this.#buildRemote(url);
+
+        return new RemoteWorker({ url, procedureNames, remote });
+    }
+
+    async buildLocalRepository(configuration: LocalRepositoryConfiguration): Promise<LocalRepository>
+    {
+        const url = configuration.url;
+        const sourceManager = this.#sourceManager;
+        const assets = new Set(configuration.assets);
+
+        return new LocalRepository({ url, sourceManager, assets });
+    }
+
+    buildRemoteRepository(url: string): RemoteRepository
+    {
+        const remote = this.#buildRemote(url);
+
+        return new RemoteRepository({ url, remote });
+    }
+
+    async buildProxy(configuration: ProxyConfiguration): Promise<Proxy>
+    {
+        const url = configuration.url;
+        const repository = this.buildRemoteRepository(configuration.repositoryUrl);
+        const runner = this.buildRemoteWorker(configuration.runnerUrl ,[]);
 
         return new Proxy({ url, repository, runner });
     }
 
-    async #buildHealthManager(): Promise<HealthManager>
+    async buildStandalone(configuration: StandaloneConfiguration): Promise<Proxy>
     {
-        const manager = new HealthManager(this.#sourceManager);
+        const url = configuration.url;
+        const repository = await this.buildLocalRepository(configuration);
+        const runner = await this.buildLocalWorker(configuration);
 
-        const filenames = [...this.#healthCheckFilenames.values()];
-
-        await Promise.all(filenames.map(filename => manager.importHealthCheck(filename)));
-
-        return manager;
-    }
-
-    async #buildMiddlewareManager(): Promise<MiddlewareManager>
-    {
-        const manager = new MiddlewareManager(this.#sourceManager);
-
-        const filenames = [...this.#middlewareFilenames.values()];
-
-        await Promise.all(filenames.map(filename => manager.importMiddleware(filename)));
-
-        return manager;
-    }
-
-    async #buildExecutionManager(): Promise<ExecutionManager>
-    {
-        const manager = new ExecutionManager(this.#sourceManager);
-
-        const segmentNames = [...this.#segmentNames.values()];
-        const filenames = segmentNames.map(name => `./${name}.segment.js`);
-
-        await Promise.all(filenames.map(filename => manager.importSegment(filename)));
-
-        return manager;
-    }
-
-    #buildRemoteGateway(): RemoteGateway | undefined
-    {
-        if (this.#gatewayUrl === undefined)
-        {
-            return undefined;
-        }
-
-        return new RemoteGateway({
-            url: this.#gatewayUrl,
-            remote: this.#buildRemote(this.#gatewayUrl)
-        });
-    }
-
-    #buildRemoteWorker(): RemoteWorker
-    {
-        if (this.#workerUrl === undefined)
-        {
-            throw new RuntimeNotBuilt('Worker URL is required');
-        }
-
-        return new RemoteWorker({
-            url: this.#workerUrl,
-            procedureNames: new Set(),
-            remote: this.#buildRemote(this.#workerUrl)
-        });
-    }
-
-    #buildRemoteRepository(): RemoteRepository
-    {
-        if (this.#repositoryUrl === undefined)
-        {
-            throw new RuntimeNotBuilt('Repository URL is required');
-        }
-
-        return new RemoteRepository({
-            url: this.#repositoryUrl,
-            remote: this.#buildRemote(this.#repositoryUrl)
-        });
+        return new Proxy({ url, repository, runner });
     }
 
     #buildRemote(url: string): Remote
@@ -209,5 +142,33 @@ export default class RuntimeBuilder
         const classLoader = new ClassModuleLoader(this.#sourceManager);
 
         return SerializerBuilder.build(classLoader);
+    }
+
+    async #buildHealthManager(filenames: string[]): Promise<HealthManager>
+    {
+        const manager = new HealthManager(this.#sourceManager);
+
+        await Promise.all(filenames.map(filename => manager.importHealthCheck(filename)));
+
+        return manager;
+    }
+
+    async #buildMiddlewareManager(filenames: string[]): Promise<MiddlewareManager>
+    {
+        const manager = new MiddlewareManager(this.#sourceManager);
+
+        await Promise.all(filenames.map(filename => manager.importMiddleware(filename)));
+
+        return manager;
+    }
+
+    async #buildExecutionManager(segmentNames: string[]): Promise<ExecutionManager>
+    {
+        const manager = new ExecutionManager(this.#sourceManager);
+        const filenames = segmentNames.map(name => `./${name}.segment.js`);
+
+        await Promise.all(filenames.map(filename => manager.importSegment(filename)));
+
+        return manager;
     }
 }

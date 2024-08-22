@@ -17,11 +17,11 @@ import LocalFileManager from './LocalFileManager.js';
 
 export default class RuntimeConfigurator
 {
-    #sourceManager: SourceManager;
+    #runtimeBuilder: RuntimeBuilder;
 
-    constructor(sourceManager: SourceManager)
+    constructor(runtimeBuilder: RuntimeBuilder)
     {
-        this.#sourceManager = sourceManager;
+        this.#runtimeBuilder = runtimeBuilder;
     }
 
     async configure(configuration: RuntimeConfiguration): Promise<Service>
@@ -34,7 +34,8 @@ export default class RuntimeConfigurator
         if (configuration.repository !== undefined) return this.#configureRepository(url, healthChecks, configuration.repository);
         if (configuration.gateway !== undefined) return this.#configureGateway(url, healthChecks, configuration.gateway);
         if (configuration.worker !== undefined) return this.#configureWorker(url, healthChecks, configuration.worker);
-        if (configuration.proxy !== undefined) return this.#configureProxy(url, healthChecks, configuration.proxy);
+        if (configuration.standalone !== undefined) return this.#configureStandalone(url, healthChecks, configuration.standalone);
+        if (configuration.proxy !== undefined) return this.#configureProxy(url, configuration.proxy);
 
         throw new UnknownRuntimeMode();
     }
@@ -53,63 +54,62 @@ export default class RuntimeConfigurator
 
     async #configureRepository(url: string, healthChecks: string[], configuration: RepositoryConfiguration): Promise<LocalRepository>
     {
-        const cacheLocation = RuntimeDefaults.CACHE;
-        const fileManager = new LocalFileManager(cacheLocation);
+        const assets = await this.#getAssetFilenames(configuration.assets);
 
-        const assets = configuration.assets !== undefined
-            ? await fileManager.getAssetFiles(configuration.assets)
-            : [];
-
-        return new RuntimeBuilder(url, this.#sourceManager)
-            .healthCheck(...healthChecks)
-            .asset(...assets)
-            .buildRepository();
+        return this.#runtimeBuilder.buildLocalRepository({ url, assets });
     }
 
     async #configureGateway(url: string, healthChecks: string[], configuration: GatewayConfiguration): Promise<LocalGateway>
     {
-        const repositoryUrl = configuration.repository;
         const middlewares = configuration.middlewares ?? [];
         const monitorInterval = configuration.monitor;
         const trustKey = configuration.trustKey;
 
-        return new RuntimeBuilder(url, this.#sourceManager)
-            .healthCheck(...healthChecks)
-            .middleware(...middlewares)
-            .repository(repositoryUrl)
-            .buildGateway(trustKey);
+        return this.#runtimeBuilder.buildLocalGateway({ url, trustKey, healthChecks, middlewares, monitorInterval });
     }
 
     async #configureWorker(url: string, healthChecks: string[], configuration: WorkerConfiguration): Promise<LocalWorker>
     {
-        const repositoryUrl = configuration.repository;
         const gatewayUrl = configuration.gateway;
         const segmentNames = configuration.segments ?? [];
         const middlewares = configuration.middlewares ?? [];
         const trustKey = configuration.trustKey;
 
-        return new RuntimeBuilder(url, this.#sourceManager)
-            .healthCheck(...healthChecks)
-            .middleware(...middlewares)
-            .repository(repositoryUrl)
-            .gateway(gatewayUrl)
-            .segment(...segmentNames)
-            .buildWorker(trustKey);
+        return this.#runtimeBuilder.buildLocalWorker({ url, trustKey, healthChecks, middlewares, segmentNames, gatewayUrl });
     }
 
-    async #configureProxy(url: string, healthChecks: string[], configuration: ProxyConfiguration): Promise<Proxy>
+    async #configureStandalone(url: string, healthChecks: string[], configuration: StandaloneConfiguration): Promise<Proxy>
     {
-        const repositoryUrl = configuration.repository;
-        const gatewayUrl = configuration.gateway;
-        const workerUrl = configuration.worker;
+        const assets = await this.#getAssetFilenames(configuration.assets);
+        const segmentNames = configuration.segments ?? [];
         const middlewares = configuration.middlewares ?? [];
 
-        return new RuntimeBuilder(url, this.#sourceManager)
-            .healthCheck(...healthChecks)
-            .middleware(...middlewares)
-            .repository(repositoryUrl)
-            .gateway(gatewayUrl)
-            .worker(workerUrl)
-            .buildProxy();
+        return this.#runtimeBuilder.buildStandalone({ url, assets, healthChecks, middlewares, segmentNames });
+    }
+
+    async #configureProxy(url: string, configuration: ProxyConfiguration): Promise<Proxy>
+    {
+        const repositoryUrl = configuration.repository;
+        const runnerUrl = configuration.gateway ?? configuration.worker;
+        const middlewares = configuration.middlewares ?? [];
+
+        if (runnerUrl === undefined)
+        {
+            throw new Error('Runner URL is required for proxy configuration');
+        }
+
+        return this.#runtimeBuilder.buildProxy({ url, repositoryUrl, runnerUrl });
+    }
+
+    async #getAssetFilenames(assets?: string[]): Promise<string[]>
+    {
+        if (assets === undefined)
+        {
+            return [];
+        }
+
+        const fileManager = new LocalFileManager(RuntimeDefaults.CACHE);
+
+        return fileManager.getAssetFiles(assets);
     }
 }

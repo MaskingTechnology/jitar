@@ -5,7 +5,6 @@
     "scripts": {
         "build": "tsc",
         "standalone": "node .jitar/jitar.shared.js --config=services/standalone.json",
-        "repo": "node .jitar/jitar.shared.js --config=services/repository.json",
         "gateway": "node .jitar/jitar.shared.js --config=services/gateway.json",
         "worker-account": "node .jitar/jitar.shared.js --config=services/account.json",
         "worker-helpdesk": "node .jitar/jitar.shared.js --config=services/helpdesk.json"
