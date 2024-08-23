@@ -10,9 +10,9 @@ export default class SourceManager
     #import: ImportFunction;
     #fileManager: FileManager;
 
-    constructor(moduleImporter: ImportFunction, fileManager: FileManager)
+    constructor(importFunction: ImportFunction, fileManager: FileManager)
     {
-        this.#import = moduleImporter;
+        this.#import = importFunction;
         this.#fileManager = fileManager;
     }
 

@@ -1,11 +1,11 @@
 
 import { ServerError } from './errors';
+import { Runner } from './execution';
 
 import Request from './execution/models/Request.js';
-import ProcedureRuntime from './services/RunnerService.js';
 import VersionParser from './execution/utils/VersionParser.js';
 
-let _runtime: ProcedureRuntime;
+let _runtime: Runner;
 
 export class RuntimeNotAvailable extends ServerError
 {
@@ -15,12 +15,12 @@ export class RuntimeNotAvailable extends ServerError
     }
 }
 
-export function setRuntime(runtime: ProcedureRuntime): void
+export function setRuntime(runtime: Runner): void
 {
     _runtime = runtime;
 }
 
-export function getRuntime(): ProcedureRuntime
+export function getRuntime(): Runner
 {
     if (_runtime === undefined)
     {

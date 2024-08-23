@@ -22,22 +22,8 @@ export
     Teapot,
     Unauthorized,
     FileNotFound,
-    // ImplementationNotFound,
-    // InvalidParameterValue,
-    // InvalidSegmentFile,
-    // InvalidVersionNumber,
-    // MissingParameterValue,
-    // ModuleNotAccessible,
     ModuleNotLoaded,
-    // NoWorkerAvailable,
-    // ProcedureNotAccessible,
-    // ProcedureNotFound,
-    // RepositoryNotAvailable,
-    // RuntimeNotAvailable,
-    // SegmentNotFound,
-    // UnknownParameter,
-    // startClient,
-    getClient
+    startClient
 } from '@jitar/runtime';
 
 export

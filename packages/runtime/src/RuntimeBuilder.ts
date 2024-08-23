@@ -2,7 +2,7 @@
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
 import { ExecutionManager } from './execution';
-import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, RemoteWorker, LocalWorker, Proxy, Remote, RunnerService } from './services';
+import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, RemoteWorker, LocalWorker, Proxy, Remote, Client } from './services';
 import { HealthManager } from './health';
 import { MiddlewareManager } from './middleware';
 import { SourceManager, ClassModuleLoader } from './source';
@@ -42,6 +42,13 @@ type ProxyConfiguration = ServiceConfiguration &
 };
 
 type StandaloneConfiguration = LocalWorkerConfiguration & LocalRepositoryConfiguration;
+
+type ClientConfiguration =
+{
+    remoteUrl: string;
+    segmentNames: string[];
+    middlewares: string[];
+};
 
 export default class RuntimeBuilder
 {
@@ -128,6 +135,15 @@ export default class RuntimeBuilder
         const runner = await this.buildLocalWorker(configuration);
 
         return new Proxy({ url, repository, runner });
+    }
+
+    async buildClient(configuration: ClientConfiguration): Promise<Client>
+    {
+        const gateway = this.buildRemoteGateway(configuration.remoteUrl);
+        const middlewareManager = await this.#buildMiddlewareManager(configuration.middlewares);
+        const executionManager = await this.#buildExecutionManager(configuration.segmentNames);
+
+        return new Client({ gateway, middlewareManager, executionManager });
     }
 
     #buildRemote(url: string): Remote

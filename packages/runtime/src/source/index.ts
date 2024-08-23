@@ -13,5 +13,6 @@ export { default as Module } from './types/Module';
 export { default as File } from './models/File';
 
 export { default as ClassModuleLoader } from './utils/ClassModuleLoader';
+export { default as RemoteFileManager } from './utils/RemoteFileManager';
 
 export { default as SourceManager } from './SourceManager';
