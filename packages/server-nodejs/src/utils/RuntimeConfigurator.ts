@@ -29,8 +29,6 @@ export default class RuntimeConfigurator
         const url = configuration.url ?? RuntimeDefaults.URL;
         const healthChecks = configuration.healthChecks ?? [];
 
-        await this.#buildCache(RuntimeDefaults.SOURCE, RuntimeDefaults.CACHE);
-
         if (configuration.repository !== undefined) return this.#configureRepository(url, healthChecks, configuration.repository);
         if (configuration.gateway !== undefined) return this.#configureGateway(url, healthChecks, configuration.gateway);
         if (configuration.worker !== undefined) return this.#configureWorker(url, healthChecks, configuration.worker);
@@ -38,18 +36,6 @@ export default class RuntimeConfigurator
         if (configuration.proxy !== undefined) return this.#configureProxy(url, configuration.proxy);
 
         throw new UnknownRuntimeMode();
-    }
-
-    async #buildCache(sourceLocation: string, cacheLocation: string): Promise<void>
-    {
-        const projectFileManager = new LocalFileManager('./');
-        await projectFileManager.delete(cacheLocation);
-        await projectFileManager.copy(sourceLocation, cacheLocation);
-
-        const appFileManager = new LocalFileManager(cacheLocation);
-
-        const cacheManager = new CacheManager(projectFileManager, appFileManager);
-        await cacheManager.build();
     }
 
     async #configureRepository(url: string, healthChecks: string[], configuration: RepositoryConfiguration): Promise<LocalRepository>

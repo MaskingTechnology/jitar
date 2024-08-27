@@ -23,34 +23,6 @@ function formatPath(path: string)
     return path;
 }
 
-function createServerConfig(jitarUrl: string)
-{
-    return {
-        build:
-        {
-            target: 'esnext'
-        },
-        server: {
-            proxy: {
-                '/rpc': jitarUrl
-            }
-        }
-    };
-}
-
-function createBootstrapCode(middlewares: string[]): string
-{
-    const jitarImport = `import { startClient } from "jitar/client";`;
-    const middlewareImports = middlewares.map((middleware, index) => `import { default as $${index} } from "${middleware}";`).join('');
-
-    const importFunction = `const importFunction = (specifier) => import(specifier);`;
-    const middlewareArray = `const middlewares = [${middlewares.map((_, index) => `$${index}`).join(', ')}];`;
-
-    const startClient = `startClient(document.location.origin, importFunction, [], middlewares);`;
-
-    return `${jitarImport}\n${middlewareImports}\n${importFunction}\n${middlewareArray}\n${startClient}`;
-}
-
 export default function viteJitar(sourcePath: string, jitarPath: string, jitarUrl: string, segments: string[] = [], middlewares: string[] = []): PluginOption
 {
     sourcePath = formatPath(sourcePath);
@@ -66,7 +38,10 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
 
         config()
         {
-            return createServerConfig(jitarUrl);
+            return {
+                build: { target: 'esnext' },
+                server: { proxy: { '/rpc': jitarUrl }}
+            };
         },
 
         configResolved(resolvedConfig: ResolvedConfig)
@@ -113,7 +88,7 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
                     return null;
                 }
 
-                const cacheId = resolution.id.replace('/src/', '/.jitar/');
+                const cacheId = resolution.id.replace('/src/', '/dist/');
 
                 for (const scope of scopes)
                 {
@@ -131,9 +106,20 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
 
         load(id)
         {
-            return id === BOOTSTRAPPING_ID
-                ? createBootstrapCode(middlewares)
-                : null;
+            if (id !== BOOTSTRAPPING_ID)
+            {
+                return null;
+            }
+
+            const jitarImport = `import { startClient } from "jitar/client";`;
+            const middlewareImports = middlewares.map((middleware, index) => `import { default as $${index} } from "${middleware}";`).join('');
+
+            const importFunction = `const importFunction = (specifier) => import(specifier);`;
+            const middlewareArray = `const middlewares = [${middlewares.map((_, index) => `$${index}`).join(', ')}];`;
+
+            const startClient = `startClient(document.location.origin, importFunction, [], middlewares);`;
+
+            return `${jitarImport}\n${middlewareImports}\n${importFunction}\n${middlewareArray}\n${startClient}`;
         }
 
     } as PluginOption;

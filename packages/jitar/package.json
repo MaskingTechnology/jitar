@@ -18,10 +18,11 @@
         "dist",
         "!dist/types"
     ],
+    "bin": "./dist/cli.js",
     "scripts": {
         "lint": "eslint . --ext .ts",
         "validate": "tsc -p tsconfig.json --noEmit",
-        "build": "npm run clean && rollup -c",
+        "build": "npm run clean && rollup -c && chmod +x dist/cli.js",
         "clean": "rm -rf dist",
         "prepublishOnly": "npm run clean && npm run build"
     },
@@ -30,12 +31,14 @@
         "express-http-proxy": "^2.0.0",
         "fs-extra": "^11.2.0",
         "glob-promise": "6.0.5",
+        "jitar": "file:",
         "mime-types": "^2.1.35",
         "tslog": "^4.9.2",
         "yargs": "^17.7.2",
         "zod": "^3.22.4"
     },
     "devDependencies": {
+        "@jitar/cli": "*",
         "@jitar/runtime": "*",
         "@jitar/server-nodejs": "*"
     },

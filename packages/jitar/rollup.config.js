@@ -47,6 +47,22 @@ export default [
 		]
 	},
 	{
+		external: SERVER_EXTERNALS,
+		input: 'src/cli.ts',
+		output: {
+			file: 'dist/cli.js',
+			format: 'module',
+			plugins: [terser({
+				module: true,
+				mangle: false
+			})]
+		},
+		plugins: [
+			typescript(),
+			nodeResolve()
+		]
+	},
+	{
 		input: './dist/types/lib.d.ts',
 	 	output: [{ file: 'dist/lib.d.ts', format: 'module' }],
 	 	plugins: [dts({
