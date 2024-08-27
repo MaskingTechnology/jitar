@@ -1,0 +1,11 @@
+{
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+      "noEmit": false,
+      "jsx": "react-jsx",
+      "rootDir": "./src",
+      "outDir": "./dist",
+    },
+    "include": ["src"],
+    "exclude": ["src/webui"]
+}

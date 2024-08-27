@@ -5,12 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc",
-    "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json",
-    "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
-    "gateway": "node --experimental-network-imports dist/jitar.js --config=services/gateway.json",
-    "worker": "node --experimental-network-imports dist/jitar.js --config=services/worker.json",
-    "proxy": "node --experimental-network-imports dist/jitar.js --config=services/proxy.json",
+    "build": "npm run build-domain && npm run build-webui",
+    "build-domain": "rm -rf dist && tsc -p tsconfig.build.json && jitar build",
+    "build-webui": "vite build",
+    "standalone": "node dist/jitar.shared.js --config=services/standalone.json",
+    "repo": "node dist/jitar.shared.js --config=services/repository.json",
+    "gateway": "node dist/jitar.shared.js --config=services/gateway.json",
+    "worker": "node dist/jitar.shared.js --config=services/worker.json",
+    "proxy": "node dist/jitar.shared.js --config=services/proxy.json",
     "preview": "vite preview"
   },
   "dependencies": {

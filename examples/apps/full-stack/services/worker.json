@@ -1,13 +1,12 @@
 {
     "url": "http://127.0.0.1:3001",
-    "setUp": ["./integrations/jitar/setUpDatabase"],
-    "tearDown": ["/integrations/jitar/tearDownDatabase"],
-    "healthChecks": ["/integrations/jitar/databaseHealthCheck"],
+    "setUp": ["./integrations/jitar/setUpDatabase.shared.js"],
+    "tearDown": ["./integrations/jitar/tearDownDatabase.shared.js"],
+    "healthChecks": ["./integrations/jitar/databaseHealthCheck.shared.js"],
     "worker":
     {
-        "gateway": "http://127.0.0.1:3000",
-        "repository": "http://127.0.0.1:2999",
         "segments": [ "server" ],
-        "middlewares": ["/integrations/jitar/requestLogger"]
+        "gateway": "http://127.0.0.1:3000",
+        "middlewares": ["./integrations/jitar/requestLogger.shared.js"]
     }
 }
