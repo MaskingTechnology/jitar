@@ -1,5 +1,5 @@
 
-# Jitar Configuration
+# Jitar Execution
 
 This package contains the components for the execution of procedures from [Jitar](https://jitar.dev) applications.
 

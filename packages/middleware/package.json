@@ -1,0 +1,45 @@
+{
+  "name": "@jitar/middleware",
+  "version": "0.7.4",
+  "description": "Middleware library for the Jitar runtime.",
+  "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
+  "license": "MIT",
+  "type": "module",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "files": [
+    "CHANGELOG.md",
+    "README.md",
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "vitest run",
+    "test-coverage": "vitest run --coverage",
+    "lint": "eslint . --ext .ts",
+    "build": "tsc -p tsconfig.json",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "dependencies": {
+    "@jitar/errors": "*",
+    "@jitar/execution": "*",
+    "@jitar/sourcing": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MaskingTechnology/jitar.git"
+  },
+  "bugs": {
+    "url": "https://github.com/MaskingTechnology/jitar/issues"
+  },
+  "homepage": "https://jitar.dev",
+  "keywords": [
+    "configuration",
+    "jitar"
+  ]
+}
