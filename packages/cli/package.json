@@ -1,13 +1,13 @@
 {
   "name": "@jitar/cli",
   "version": "0.7.4",
-  "description": "JavaScript CLI library for the Jitar runtime.",
+  "description": "CLI tool for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
   "type": "module",
-  "types": "dist/lib.d.ts",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/lib.js"
+    ".": "./dist/index.js"
   },
   "files": [
     "CHANGELOG.md",
@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "@jitar/caching": "*",
-    "@jitar/server-nodejs": "*"
+    "@jitar/configuration": "*"
   },
   "repository": {
     "type": "git",
@@ -38,7 +38,6 @@
   },
   "homepage": "https://jitar.dev",
   "keywords": [
-    "javascript",
     "cli",
     "jitar"
   ]

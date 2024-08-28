@@ -1,5 +1,5 @@
 
-import { LocalFileManager } from '@jitar/server-nodejs';
+import { ConfigurationManager } from '@jitar/configuration';
 import { CacheManager } from '@jitar/caching';
 
 import Command from '../interfaces/Command';
@@ -8,10 +8,12 @@ export default class BuildCache implements Command
 {
     async execute(args: Map<string, string>): Promise<void>
     {
-        const projectFileManager = new LocalFileManager('./');
-        const appFileManager = new LocalFileManager('./dist');
+        const configurationManager = new ConfigurationManager();
+        
+        const configuration = await configurationManager.configure();
 
-        const cacheManager = new CacheManager(projectFileManager, appFileManager);
-        cacheManager.build();
+        const cacheManager = new CacheManager(configuration);
+
+        return cacheManager.build();
     }
 }

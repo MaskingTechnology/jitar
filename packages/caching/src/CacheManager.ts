@@ -1,32 +1,38 @@
 
-import { FileManager, Files } from '@jitar/runtime';
+import type { Configuration } from '@jitar/configuration';
+import { Files, FileManagerBuilder, type FileManager } from '@jitar/sourcing';
 
-import { ApplicationReader, ApplicationBuilder } from './application';
+import { ApplicationReader } from './source';
+import { ApplicationBuilder } from './target';
 
 export default class CacheManager
 {
     #projectFileManager: FileManager;
-    #appFileManager: FileManager;
+    #sourceFileManager: FileManager;
+    #targetFileManager: FileManager;
 
     #applicationReader: ApplicationReader;
     #applicationBuilder: ApplicationBuilder;
 
-    constructor(projectFileManager: FileManager, appFileManager: FileManager)
+    constructor(configuration: Configuration)
     {
-        this.#projectFileManager = projectFileManager;
-        this.#appFileManager = appFileManager;
+        const fileManagerBuilder = new FileManagerBuilder('./');
 
-        this.#applicationReader = new ApplicationReader(appFileManager);
-        this.#applicationBuilder = new ApplicationBuilder(appFileManager);
+        this.#projectFileManager = fileManagerBuilder.buildLocal();
+        this.#sourceFileManager = fileManagerBuilder.buildLocal(configuration.source);
+        this.#targetFileManager = fileManagerBuilder.buildLocal(configuration.target);
+
+        this.#applicationReader = new ApplicationReader(this.#sourceFileManager);
+        this.#applicationBuilder = new ApplicationBuilder(this.#targetFileManager);
     }
 
     async build(): Promise<void>
     {
-        const moduleFiles = await this.#appFileManager.filter(Files.MODULE_PATTERN);
+        const moduleFiles = await this.#sourceFileManager.filter(Files.MODULE_PATTERN);
         const segmentFiles = await this.#projectFileManager.filter(Files.SEGMENT_PATTERN);
 
-        const application = await this.#applicationReader.read(moduleFiles, segmentFiles);
+        const applicationModel = await this.#applicationReader.read(moduleFiles, segmentFiles);
 
-        return this.#applicationBuilder.build(application);
+        return this.#applicationBuilder.build(applicationModel);
     }
 }
