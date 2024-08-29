@@ -1,5 +1,5 @@
 
-import { Forbidden } from './errors';
+import { Forbidden } from '@jitar/errors';
 
 import { runProcedure } from './hooks.js';
 

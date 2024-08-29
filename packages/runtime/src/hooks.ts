@@ -1,9 +1,6 @@
 
-import { ServerError } from './errors';
-import { Runner } from './execution';
-
-import Request from './execution/models/Request.js';
-import VersionParser from './execution/utils/VersionParser.js';
+import { ServerError } from '@jitar/errors';
+import { Runner, Request, VersionParser } from '@jitar/execution';
 
 let _runtime: Runner;
 

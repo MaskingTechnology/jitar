@@ -1,7 +1,6 @@
 
 import { ClassLoader, Loadable, ClassNotFound, InvalidClass } from '@jitar/serialization';
-
-import ModuleImporter from '../interfaces/ModuleImporter';
+import { ModuleImporter } from '@jitar/sourcing';
 
 export default class ClassModuleLoader implements ClassLoader
 {
