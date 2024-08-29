@@ -1,5 +1,5 @@
 
-import { VersionParser } from '@jitar/runtime';
+import { VersionParser } from '@jitar/execution';
 import type { FileManager } from '@jitar/sourcing';
 import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionField, ReflectionFunction, ReflectionParameter } from '@jitar/reflection';
 

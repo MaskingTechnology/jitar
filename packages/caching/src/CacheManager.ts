@@ -1,5 +1,5 @@
 
-import type { Configuration } from '@jitar/configuration';
+import type { RuntimeConfiguration } from '@jitar/configuration';
 import { Files, FileManagerBuilder, type FileManager } from '@jitar/sourcing';
 
 import { ApplicationReader } from './source';
@@ -14,7 +14,7 @@ export default class CacheManager
     #applicationReader: ApplicationReader;
     #applicationBuilder: ApplicationBuilder;
 
-    constructor(configuration: Configuration)
+    constructor(configuration: RuntimeConfiguration)
     {
         const fileManagerBuilder = new FileManagerBuilder('./');
 

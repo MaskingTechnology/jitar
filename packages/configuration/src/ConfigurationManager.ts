@@ -1,35 +1,31 @@
 
-import { type FileManager, FileManagerBuilder } from '@jitar/sourcing';
+import { RuntimeConfiguration, RuntimeConfigurationBuilder } from './runtime';
+import { ServerConfiguration, ServerConfigurationBuilder } from './server';
+import { ConfigurationReader, ConfigurationValidator } from './utils';
 
-import Configuration from './models/Configuration';
-
-const DEFAULT_CONFIGURATION_FILENAME = 'jitar.json';
+const DEFAULT_ROOT_PATH = './';
 
 export default class ConfigurationManager
 {
-    #fileManager: FileManager;
+    #runtimeConfigurationBuilder: RuntimeConfigurationBuilder;
+    #serverConfigurationBuilder : ServerConfigurationBuilder;
 
-    constructor()
+    constructor(rootPath = DEFAULT_ROOT_PATH)
     {
-        this.#fileManager = new FileManagerBuilder('./').buildLocal();
+        const reader = new ConfigurationReader(rootPath);
+        const validator = new ConfigurationValidator();
+
+        this.#runtimeConfigurationBuilder = new RuntimeConfigurationBuilder(reader, validator);
+        this.#serverConfigurationBuilder = new ServerConfigurationBuilder(reader, validator);
     }
 
-    async configure(filename = DEFAULT_CONFIGURATION_FILENAME): Promise<Configuration>
+    configureRuntime(filename?: string): Promise<RuntimeConfiguration>
     {
-        return await this.#fileManager.exists(filename)
-            ? this.#configureFromFile(filename)
-            : this.#configureDefault();
+        return this.#runtimeConfigurationBuilder.build(filename);
     }
 
-    async #configureFromFile(filename: string): Promise<Configuration>
+    configureServer(filename: string): Promise<ServerConfiguration>
     {
-        const file = this.#fileManager.read(filename);
-
-        return new Configuration("source", "target");
-    }
-
-    #configureDefault(): Configuration
-    {
-        return new Configuration('./dist', './dist');
+        return this.#serverConfigurationBuilder.build(filename);
     }
 }

@@ -27,7 +27,8 @@
   },
   "dependencies": {
     "@jitar/caching": "*",
-    "@jitar/configuration": "*"
+    "@jitar/configuration": "*",
+    "@jitar/sourcing": "*"
   },
   "repository": {
     "type": "git",

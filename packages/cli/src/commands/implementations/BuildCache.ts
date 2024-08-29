@@ -10,7 +10,7 @@ export default class BuildCache implements Command
     {
         const configurationManager = new ConfigurationManager();
         
-        const configuration = await configurationManager.configure();
+        const configuration = await configurationManager.configureRuntime();
 
         const cacheManager = new CacheManager(configuration);
 
