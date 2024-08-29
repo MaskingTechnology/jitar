@@ -1,6 +1,6 @@
 
-import { Request, Response, ExecutionManager, Runner } from '@jitar/execution';
-import { MiddlewareManager, ProcedureRunner } from '@jitar/middleware';
+import type { Request, Response, ExecutionManager, Runner } from '@jitar/execution';
+import { type MiddlewareManager, ProcedureRunner } from '@jitar/middleware';
 
 import RemoteGateway from './gateway/RemoteGateway';
 
@@ -27,8 +27,6 @@ export default class Client implements Runner
 
         // TODO: Should be done when constructing the middleware manager
         this.#middlewareManager.addMiddleware(new ProcedureRunner(this.#executionManager));
-
-        // TODO: Move runtime registration to the starter script
     }
 
     run(request: Request): Promise<Response>

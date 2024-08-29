@@ -4,13 +4,18 @@ import { Module, ImportFunction, ModuleNotLoaded } from './modules';
 
 export default class SourceManager
 {
-    #import: ImportFunction;
     #fileManager: FileManager;
+    #import: ImportFunction;
 
-    constructor(importFunction: ImportFunction, fileManager: FileManager)
+    constructor(fileManager: FileManager, importFunction: ImportFunction)
     {
-        this.#import = importFunction;
         this.#fileManager = fileManager;
+        this.#import = importFunction;
+    }
+
+    async read(filename: string): Promise<File>
+    {
+        return this.#fileManager.read(filename);
     }
 
     async import(specifier: string): Promise<Module>
@@ -32,10 +37,5 @@ export default class SourceManager
 
             throw new ModuleNotLoaded(specifier, message);
         }
-    }
-
-    async read(filename: string): Promise<File>
-    {
-        return this.#fileManager.read(filename);
     }
 }
