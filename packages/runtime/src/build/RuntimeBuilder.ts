@@ -89,7 +89,7 @@ export default class RuntimeBuilder
         return new LocalWorker({ url, trustKey, gateway, healthManager, middlewareManager, executionManager });
     }
 
-    buildRemoteWorker(url: string, procedures: string[]): RemoteWorker
+    #buildRemoteWorker(url: string, procedures: string[]): RemoteWorker
     {
         const procedureNames = new Set<string>(procedures);
         const remote = this.#buildRemote(url);
@@ -100,7 +100,7 @@ export default class RuntimeBuilder
     async #buildLocalRepository(url: string, configuration: RepositoryConfiguration): Promise<LocalRepository>
     {
         const sourcingManager = this.#sourcingManager;
-        const assets = new Set(configuration.assets);
+        const assets = await this.#buildAssetSet(configuration.assets);
 
         return new LocalRepository({ url, sourcingManager, assets });
     }
@@ -174,5 +174,12 @@ export default class RuntimeBuilder
         await Promise.all(filenames.map(filename => manager.importSegment(filename)));
 
         return manager;
+    }
+
+    async #buildAssetSet(patterns: string[]): Promise<Set<string>>
+    {
+        const filenames = await this.#sourcingManager.filter(...patterns);
+
+        return new Set(filenames);
     }
 }

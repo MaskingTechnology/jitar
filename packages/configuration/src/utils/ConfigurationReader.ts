@@ -1,5 +1,6 @@
 
-import { type FileManager, FileManagerBuilder } from '@jitar/sourcing';
+import { FileManagerBuilder } from '@jitar/sourcing';
+import type { FileManager } from '@jitar/sourcing';
 
 export default class ConfigurationReader
 {

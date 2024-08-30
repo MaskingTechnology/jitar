@@ -1,5 +1,5 @@
 
-import { Response } from '@jitar/execution';
+import type { Response } from '@jitar/execution';
 
 type NextHandler = () => Promise<Response>;
 

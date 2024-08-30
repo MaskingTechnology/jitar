@@ -1,5 +1,5 @@
 
-import Module from '../types/Module';
+import type Module from '../types/Module';
 
 export default interface ModuleImporter
 {

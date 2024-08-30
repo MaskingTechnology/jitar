@@ -7,7 +7,7 @@ import ArrayParameter from '../models/ArrayParameter';
 import DestructuredParameter from '../models/DestructuredParameter';
 import NamedParameter from '../models/NamedParameter';
 import ObjectParameter from '../models/ObjectParameter';
-import Parameter from '../models/Parameter';
+import type Parameter from '../models/Parameter';
 
 const OPTIONAL_ARGUMENT_PREFIX = '*';
 const OPTIONAL_ARGUMENT_PREFIX_LENGTH = OPTIONAL_ARGUMENT_PREFIX.length;

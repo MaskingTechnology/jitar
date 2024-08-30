@@ -1,14 +1,17 @@
 
-import { SourcingManager } from '@jitar/sourcing';
+import type { SourcingManager } from '@jitar/sourcing';
 
 import ImplementationNotFound from './errors/ImplementationNotFound';
 import InvalidSegmentFile from './errors/InvalidSegmentFile';
 import ProcedureNotFound from './errors/ProcedureNotFound';
-import Runner from './interfaces/Runner';
-import Request from './models/Request';
+
+import type Runner from './interfaces/Runner';
+
+import type Request from './models/Request';
 import Response from './models/Response';
-import Segment from './models/Segment';
-import Procedure from './models/Procedure';
+import type Segment from './models/Segment';
+import type Procedure from './models/Procedure';
+
 import ArgumentConstructor from './utils/ArgumentConstructor';
 
 export default class ExecutionManager implements Runner

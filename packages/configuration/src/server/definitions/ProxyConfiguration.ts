@@ -1,5 +1,5 @@
 
-import { ValidationScheme } from '../../utils';
+import type { ValidationScheme } from '../../utils';
 
 type ProxyConfiguration =
 {

@@ -1,5 +1,6 @@
 
-import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionDestructuredValue, ReflectionField, ReflectionParameter } from '@jitar/reflection';
+import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionDestructuredValue, ReflectionField } from '@jitar/reflection';
+import type { ReflectionParameter } from '@jitar/reflection';
 import { AccessLevels } from '@jitar/execution';
 
 import type { SegmentImplementation as Implementation } from '../source';

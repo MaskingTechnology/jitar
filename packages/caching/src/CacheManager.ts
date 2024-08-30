@@ -1,6 +1,7 @@
 
 import type { RuntimeConfiguration } from '@jitar/configuration';
-import { Files, FileManagerBuilder, type FileManager } from '@jitar/sourcing';
+import { Files, FileManagerBuilder } from '@jitar/sourcing';
+import type { FileManager } from '@jitar/sourcing';
 
 import { ApplicationReader } from './source';
 import { ApplicationBuilder } from './target';

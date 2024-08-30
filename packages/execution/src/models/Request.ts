@@ -1,5 +1,5 @@
 
-import Version from './Version';
+import type Version from './Version';
 
 export default class Request
 {

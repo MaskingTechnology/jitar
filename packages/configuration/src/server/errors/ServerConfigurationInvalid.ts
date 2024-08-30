@@ -1,10 +1,12 @@
 
-import { ValidationResult } from '../../utils';
+import type { ValidationResult } from '../../utils';
 
 export default class ServerConfigurationInvalid extends Error
 {
     public constructor(validation: ValidationResult)
     {
-        super(validation.errors.join('\n'));
+        const errorMessages = validation.errors.join('\n');
+
+        super(`Server configuration is invalid:\n${errorMessages}`);
     }
 }

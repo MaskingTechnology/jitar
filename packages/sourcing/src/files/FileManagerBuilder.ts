@@ -1,5 +1,5 @@
 
-import FileManager from './interfaces/FileManager';
+import type FileManager from './interfaces/FileManager';
 
 import LocalFileManager from './implementations/LocalFileManager';
 import RemoteFileManager from './implementations/RemoteFileManager';

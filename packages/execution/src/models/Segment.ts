@@ -1,5 +1,5 @@
 
-import Procedure from './Procedure';
+import type Procedure from './Procedure';
 
 export default class Segment
 {

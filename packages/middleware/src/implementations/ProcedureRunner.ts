@@ -1,8 +1,8 @@
 
-import{ Runner, Request, Response } from '@jitar/execution';
+import type { Runner, Request, Response } from '@jitar/execution';
 
-import Middleware from '../interfaces/Middleware';
-import NextHandler from '../types/NextHandler';
+import type Middleware from '../interfaces/Middleware';
+import type NextHandler from '../types/NextHandler';
 
 export default class ProcedureRunner implements Middleware
 {

@@ -1,8 +1,8 @@
 
 import { AccessLevels, AccessLevel } from '../definitions/AccessLevel';
 
-import Parameter from './Parameter';
-import Version from './Version';
+import type Parameter from './Parameter';
+import type Version from './Version';
 
 export default class Implementation
 {

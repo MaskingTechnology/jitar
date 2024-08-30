@@ -1,8 +1,8 @@
 
-import { SourcingManager } from '@jitar/sourcing';
+import type { SourcingManager } from '@jitar/sourcing';
 
 import InvalidHealthCheck from './errors/InvalidHealthCheck';
-import HealthCheck from './interfaces/HealthCheck';
+import type HealthCheck from './interfaces/HealthCheck';
 
 export default class HealthManager
 {

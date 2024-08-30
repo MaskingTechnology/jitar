@@ -1,5 +1,5 @@
 
-import Implementation from './Implementation';
+import type Implementation from './Implementation';
 import Version from './Version';
 
 export default class Procedure

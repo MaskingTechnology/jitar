@@ -5,7 +5,7 @@ import mime from 'mime-types';
 import path from 'path';
 
 import FileNotFound from '../errors/FileNotFound';
-import FileManager from '../interfaces/FileManager';
+import type FileManager from '../interfaces/FileManager';
 import File from '../models/File';
 
 export default class LocalFileManager implements FileManager
@@ -108,33 +108,5 @@ export default class LocalFileManager implements FileManager
         const location = this.getAbsoluteLocation('./');
 
         return glob(`${location}/${pattern}`);
-    }
-
-    async getWorkerSegmentFiles(): Promise<string[]>
-    {
-        return this.filter('**/*.segment.worker.js');
-    }
-
-    async getRepositorySegmentFiles(): Promise<string[]>
-    {
-        return this.filter('**/*.segment.repository.js');
-    }
-
-    async getAssetFiles(patterns: string[]): Promise<string[]>
-    {
-        const promises = patterns.map(pattern => this.filter(pattern));
-        const assetFiles = (await Promise.all(promises)).flat();
-
-        return assetFiles
-            .map(filename => this.getRelativeLocation(filename))
-            .filter(filename => this.#isGeneratedFile(filename) === false);
-    }
-
-    #isGeneratedFile(filename: string): boolean
-    {
-        return filename.endsWith('.local.js')
-            || filename.endsWith('.worker.js')
-            || filename.endsWith('.repository.js')
-            || filename.endsWith('.remote.js');
     }
 }

@@ -1,5 +1,6 @@
 
-import { ReflectionImport, Reflector } from '@jitar/reflection';
+import { Reflector } from '@jitar/reflection';
+import type { ReflectionImport } from '@jitar/reflection';
 
 import type { Module, Segmentation, Segment } from '../source';
 import { FileHelper } from '../utils';

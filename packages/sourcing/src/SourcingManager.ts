@@ -1,6 +1,7 @@
 
-import { File, FileManager } from './files';
-import { Module, ImportFunction, ModuleNotLoaded } from './modules';
+import type { File, FileManager } from './files';
+import { ModuleNotLoaded } from './modules';
+import type { Module, ImportFunction } from './modules';
 
 export default class SourceManager
 {
@@ -11,6 +12,18 @@ export default class SourceManager
     {
         this.#fileManager = fileManager;
         this.#import = importFunction;
+    }
+
+    async filter(...patterns: string[]): Promise<string[]>
+    {
+        const files = await Promise.all(patterns.map(pattern => this.#fileManager.filter(pattern)));
+
+        return files.flat().map(file => this.#fileManager.getRelativeLocation(file));
+    }
+
+    async exists(filename: string): Promise<boolean>
+    {
+        return this.#fileManager.exists(filename);
     }
 
     async read(filename: string): Promise<File>
