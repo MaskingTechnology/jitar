@@ -42,7 +42,8 @@
         "@jitar/errors": "*",
         "@jitar/execution": "*",
         "@jitar/health": "*",
-        "@jitar/middleware": "*"
+        "@jitar/middleware": "*",
+        "@jitar/server-http": "*"
     },
     "engines": {
         "node": ">=20.0"
