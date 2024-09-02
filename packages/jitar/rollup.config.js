@@ -11,8 +11,8 @@ export default [
 	{
 		external: SERVER_EXTERNALS,
 		input: {
-			server: 'src/server.ts',
-			client: 'src/client.ts'
+			cli: 'src/cli.ts',
+			lib: 'src/lib.ts'
 		},
 		output: {
 			dir: 'dist',
@@ -29,36 +29,6 @@ export default [
 				preventAssignment: true,
 				values: REPLACE_VALUES
 			}),
-			nodeResolve()
-		]
-	},
-	{
-		external: [
-			'./client.js',
-			'./server.js'
-		],
-		input: 'src/lib.ts',
-		output: {
-			file: 'dist/lib.js',
-			format: 'module'
-		},
-		plugins: [
-			typescript()
-		]
-	},
-	{
-		external: SERVER_EXTERNALS,
-		input: 'src/cli.ts',
-		output: {
-			file: 'dist/cli.js',
-			format: 'module',
-			plugins: [terser({
-				module: true,
-				mangle: false
-			})]
-		},
-		plugins: [
-			typescript(),
 			nodeResolve()
 		]
 	},

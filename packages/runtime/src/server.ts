@@ -15,7 +15,7 @@ export default async function buildServer(runtimeConfiguration: RuntimeConfigura
 
     const server = await runtimeBuilder.buildServer(serverConfiguration);
 
-    setRuntime(server);
+    setRuntime(server.proxy.runner);
 
     return server;
 }

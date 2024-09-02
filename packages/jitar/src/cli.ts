@@ -2,5 +2,12 @@
 
 import { CliManager } from '@jitar/cli';
 
-const cliManager = new CliManager();
-cliManager.manage();
+try
+{
+    const cliManager = new CliManager();
+    cliManager.manage();
+}
+catch (error: unknown)
+{
+    console.error('Epic fail');
+}

@@ -1,7 +1,7 @@
 {
-  "name": "@jitar/cli",
+  "name": "@jitar/server-http",
   "version": "0.7.4",
-  "description": "CLI tool for the Jitar runtime.",
+  "description": "HTTP server for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
   "type": "module",
@@ -26,11 +26,8 @@
     "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
-    "@jitar/caching": "*",
-    "@jitar/configuration": "*",
-    "@jitar/sourcing": "*",
-    "@jitar/server-http": "*",
-    "@jitar/runtime": "*"
+    "@jitar/errors": "*",
+    "@jitar/services": "*"
   },
   "repository": {
     "type": "git",
@@ -41,7 +38,7 @@
   },
   "homepage": "https://jitar.dev",
   "keywords": [
-    "cli",
+    "configuration",
     "jitar"
   ]
 }

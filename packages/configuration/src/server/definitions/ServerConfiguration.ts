@@ -10,8 +10,8 @@ import WorkerConfiguration, { validationScheme as workerValidationScheme } from 
 type ServerConfiguration =
 {
     url: string;
-    setup?: string[];
-    teardown?: string[];
+    setUp?: string[];
+    tearDown?: string[];
 
     gateway?: GatewayConfiguration;
     proxy?: ProxyConfiguration;
@@ -25,8 +25,8 @@ export default ServerConfiguration;
 const validationScheme: ValidationScheme =
 {
     url: { type: 'url', required: true },
-    setup: { type: 'list', required: false, items: { type: 'string' } },
-    teardown: { type: 'list', required: false, items: { type: 'string' } },
+    setUp: { type: 'list', required: false, items: { type: 'string' } },
+    tearDown: { type: 'list', required: false, items: { type: 'string' } },
 
     gateway: { type: 'group', required: false, fields: gatewayValidationScheme },
     proxy: { type: 'group', required: false, fields: proxyValidationScheme },

@@ -13,8 +13,14 @@ export { default as Worker } from './worker/Worker';
 export { default as LocalWorker } from './worker/LocalWorker';
 export { default as RemoteWorker } from './worker/RemoteWorker';
 
-export { default as Client } from './Client';
-export { default as Server } from './Server';
+export { default as DummyProvider } from './dummy/DummyProvider';
+export { default as DummyRunner } from './dummy/DummyRunner';
+
+export { default as Client } from './client/Client';
+
+export { default as ServerResponse } from './server/types/ServerResponse';
+export { default as Server } from './server/Server';
+
 export { default as Remote } from './Remote';
 
 export { default as Service } from './Service';

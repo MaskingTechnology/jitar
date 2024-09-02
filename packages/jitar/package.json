@@ -39,8 +39,10 @@
     },
     "devDependencies": {
         "@jitar/cli": "*",
-        "@jitar/runtime": "*",
-        "@jitar/server-nodejs": "*"
+        "@jitar/errors": "*",
+        "@jitar/execution": "*",
+        "@jitar/health": "*",
+        "@jitar/middleware": "*"
     },
     "engines": {
         "node": ">=20.0"

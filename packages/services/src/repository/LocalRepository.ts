@@ -16,11 +16,18 @@ export default class LocalRepository implements Repository
     #sourcingManager: SourcingManager;
     #assets: Set<string>;
 
+    #indexFilename?: string;
+    #serviceIndexOnNotFound: boolean;
+
     constructor(configuration: Configuration)
     {
         this.#url = configuration.url;
         this.#sourcingManager = configuration.sourcingManager;
         this.#assets = configuration.assets;
+
+        // TODO: make these configurable
+        this.#indexFilename = 'index.html';
+        this.#serviceIndexOnNotFound = false;
     }
 
     get url() { return this.#url; }
@@ -45,13 +52,23 @@ export default class LocalRepository implements Repository
         return new Map();
     }
 
-    readAsset(filename: string): Promise<File>
+    provide(filename: string): Promise<File>
     {
         if (this.#assets.has(filename) === false)
         {
+            if (this.#mustProvideIndex())
+            {
+                return this.provide(this.#indexFilename!);
+            }
+
             throw new FileNotFound(filename);
         }
 
         return this.#sourcingManager.read(filename);
+    }
+
+    #mustProvideIndex(): boolean
+    {
+        return this.#indexFilename !== undefined && this.#serviceIndexOnNotFound;
     }
 }

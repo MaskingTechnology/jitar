@@ -2,50 +2,59 @@
 import type { Request, Response } from '@jitar/execution';
 import type { File } from '@jitar/sourcing';
 
-import Repository from '../repository/Repository';
-
 import RunnerService from '../RunnerService';
+import ProviderService from '../ProviderService';
 
 type Configuration =
 {
     url: string;
-    repository: Repository;
+    provider: ProviderService;
     runner: RunnerService;
 };
 
-export default class Proxy implements Repository, RunnerService
+export default class Proxy implements ProviderService, RunnerService
 {
     #url: string;
-    #repository: Repository;
+    #provider: ProviderService;
     #runner: RunnerService;
 
     constructor(configuration: Configuration)
     {
         this.#url = configuration.url;
-        this.#repository = configuration.repository;
+        this.#provider = configuration.provider;
         this.#runner = configuration.runner;
     }
 
     get url() { return this.#url; }
 
-    isHealthy(): Promise<boolean>
+    async isHealthy(): Promise<boolean>
     {
-        throw new Error('Method not implemented.');
+        const [providerHealthy, runnerHealthy] = await Promise.all([
+            this.#provider.isHealthy(),
+            this.#runner.isHealthy()
+        ]);
+
+        return providerHealthy && runnerHealthy;
     }
 
-    getHealth(): Promise<Map<string, boolean>>
+    async getHealth(): Promise<Map<string, boolean>>
     {
-        throw new Error('Method not implemented.');
+        const [providerHealth, runnerHealth] = await Promise.all([
+            this.#provider.getHealth(),
+            this.#runner.getHealth()
+        ]);
+
+        return new Map([...providerHealth, ...runnerHealth]);
     }
 
-    get repository() { return this.#repository; }
+    get provider() { return this.#provider; }
 
     get runner() { return this.#runner; }
 
     async start(): Promise<void>
     {
         await Promise.all([
-            this.#repository.start(),
+            this.#provider.start(),
             this.#runner.start()
         ]);
     }
@@ -54,13 +63,13 @@ export default class Proxy implements Repository, RunnerService
     {
         await Promise.all([
             this.#runner.stop(),
-            this.#repository.stop()
+            this.#provider.stop()
         ]);
     }
 
-    readAsset(filename: string): Promise<File>
+    provide(filename: string): Promise<File>
     {
-        return this.#repository.readAsset(filename);
+        return this.#provider.provide(filename);
     }
 
     getProcedureNames(): string[] 

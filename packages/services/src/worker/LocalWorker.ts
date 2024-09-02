@@ -113,7 +113,7 @@ export default class LocalWorker implements Worker
         
         const procedure = this.#executionManager.getProcedure(request.fqn);
 
-        if (trustKey === undefined && procedure!.protected)
+        if (trustKey === undefined && procedure?.protected)
         {
             throw new Unauthorized();
         }

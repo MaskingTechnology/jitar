@@ -2,7 +2,7 @@
 import { ServerConfiguration, GatewayConfiguration, WorkerConfiguration, RepositoryConfiguration, ProxyConfiguration, StandaloneConfiguration } from '@jitar/configuration';
 import { ExecutionManager } from '@jitar/execution';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
-import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, RemoteWorker, LocalWorker, Proxy, Remote, Client, Server, Service } from '@jitar/services';
+import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, LocalWorker, Proxy, DummyProvider, DummyRunner, Remote, Client, Server } from '@jitar/services';
 import { HealthManager } from '@jitar/health';
 import { MiddlewareManager } from '@jitar/middleware';
 import { SourcingManager } from '@jitar/sourcing';
@@ -42,23 +42,48 @@ export default class RuntimeBuilder
 
     async buildServer(configuration: ServerConfiguration): Promise<Server>
     {
-        const service = await this.#buildService(configuration);
+        const proxy = await this.#buildService(configuration);
         const sourcingManager = this.#sourcingManager;
-        const setUpScripts = configuration.setup ?? [];
-        const tearDownScripts = configuration.teardown ?? [];
+        const serializer = this.#serializer;
+        const setUpScripts = configuration.setUp ?? [];
+        const tearDownScripts = configuration.tearDown ?? [];
 
-        return new Server({ service, sourcingManager, setUpScripts, tearDownScripts });
+        return new Server({ proxy, sourcingManager, serializer, setUpScripts, tearDownScripts });
     }
 
-    #buildService(configuration: ServerConfiguration): Promise<Service>
+    #buildService(configuration: ServerConfiguration): Promise<Proxy>
     {
-        if (configuration.gateway !== undefined) return this.#buildLocalGateway(configuration.url, configuration.gateway);
-        if (configuration.worker !== undefined) return this.#buildLocalWorker(configuration.url, configuration.worker);
-        if (configuration.repository !== undefined) return this.#buildLocalRepository(configuration.url, configuration.repository);
+        if (configuration.gateway !== undefined) return this.#buildGatewayProxy(configuration.url, configuration.gateway);
+        if (configuration.worker !== undefined) return this.#buildWorkerProxy(configuration.url, configuration.worker);
+        if (configuration.repository !== undefined) return this.#buildRepositoryProxy(configuration.url, configuration.repository);
         if (configuration.proxy !== undefined) return this.#buildProxy(configuration.url, configuration.proxy);
         if (configuration.standalone !== undefined) return this.#buildStandalone(configuration.url, configuration.standalone);
 
         throw new Error('Invalid server configuration');
+    }
+
+    async #buildGatewayProxy(url: string, configuration: GatewayConfiguration): Promise<Proxy>
+    {
+        const provider = new DummyProvider();
+        const runner = await this.#buildLocalGateway(url, configuration);
+
+        return new Proxy({ url, provider, runner });
+    }
+
+    async #buildWorkerProxy(url: string, configuration: WorkerConfiguration): Promise<Proxy>
+    {
+        const provider = new DummyProvider();
+        const runner = await this.#buildLocalWorker(url, configuration);
+
+        return new Proxy({ url, provider, runner });
+    }
+
+    async #buildRepositoryProxy(url: string, configuration: RepositoryConfiguration): Promise<Proxy>
+    {
+        const provider = await this.#buildLocalRepository(url, configuration);
+        const runner = new DummyRunner();
+
+        return new Proxy({ url, provider, runner });
     }
 
     async #buildLocalGateway(url: string, configuration: GatewayConfiguration): Promise<LocalGateway>
@@ -89,14 +114,6 @@ export default class RuntimeBuilder
         return new LocalWorker({ url, trustKey, gateway, healthManager, middlewareManager, executionManager });
     }
 
-    #buildRemoteWorker(url: string, procedures: string[]): RemoteWorker
-    {
-        const procedureNames = new Set<string>(procedures);
-        const remote = this.#buildRemote(url);
-
-        return new RemoteWorker({ url, procedureNames, remote });
-    }
-
     async #buildLocalRepository(url: string, configuration: RepositoryConfiguration): Promise<LocalRepository>
     {
         const sourcingManager = this.#sourcingManager;
@@ -114,18 +131,18 @@ export default class RuntimeBuilder
 
     async #buildProxy(url: string, configuration: ProxyConfiguration): Promise<Proxy>
     {
-        const repository = this.#buildRemoteRepository(configuration.repository);
+        const provider = this.#buildRemoteRepository(configuration.repository);
         const runner = this.#buildRemoteGateway(configuration.gateway);
 
-        return new Proxy({ url, repository, runner });
+        return new Proxy({ url, provider, runner });
     }
 
     async #buildStandalone(url: string, configuration: StandaloneConfiguration): Promise<Proxy>
     {
-        const repository = await this.#buildLocalRepository(url, configuration);
+        const provider = await this.#buildLocalRepository(url, configuration);
         const runner = await this.#buildLocalWorker(url, configuration);
 
-        return new Proxy({ url, repository, runner });
+        return new Proxy({ url, provider, runner });
     }
 
     #buildRemote(url: string): Remote

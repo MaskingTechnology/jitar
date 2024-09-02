@@ -44,7 +44,7 @@ export default class RemoteRepository implements Repository
         return this.#remote.getHealth();
     }
 
-    readAsset(filename: string): Promise<File>
+    provide(filename: string): Promise<File>
     {
         return this.#remote.loadFile(filename);
     }

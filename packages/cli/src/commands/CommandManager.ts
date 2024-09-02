@@ -2,6 +2,7 @@
 import Command from './interfaces/Command';
 
 import BuildCache from './implementations/BuildCache';
+import StartServer from './implementations/StartServer';
 
 export default class CommandManager
 {
@@ -10,6 +11,7 @@ export default class CommandManager
     constructor()
     {
         this.#commands.set('build', new BuildCache());
+        this.#commands.set('start', new StartServer());
     }
 
     execute(name: string, args: Map<string, string>): Promise<void>

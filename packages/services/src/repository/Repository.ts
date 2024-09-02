@@ -1,9 +1,7 @@
 
-import { File } from '@jitar/sourcing';
+import ProviderService from '../ProviderService';
 
-import Service from '../Service';
-
-export default interface Repository extends Service
+export default interface Repository extends ProviderService
 {
-    readAsset(filename: string): Promise<File>;
+    // No additional methods
 }
