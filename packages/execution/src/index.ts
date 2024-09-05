@@ -1,13 +1,13 @@
 
 export { AccessLevels, AccessLevel } from './definitions/AccessLevel';
 
-export { default as ExecutionError } from './errors/ExecutionError';
 export { default as InvalidVersionNumber } from './errors/InvalidVersionNumber';
 export { default as ProcedureNotFound } from './errors/ProcedureNotFound';
 
 export { default as Runner } from './interfaces/Runner';
 
 export { default as Segment } from './models/Segment';
+export { default as Class } from './models/Class';
 export { default as Procedure } from './models/Procedure';
 export { default as Implementation } from './models/Implementation';
 export { default as Version } from './models/Version';

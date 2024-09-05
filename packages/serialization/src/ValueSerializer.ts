@@ -1,6 +1,6 @@
 
-import Serializer from './Serializer.js';
-import ParentSerializerNotSet from './errors/ParentSerializerNotSet.js';
+import Serializer from './Serializer';
+import ParentSerializerNotSet from './errors/ParentSerializerNotSet';
 
 export default abstract class ValueSerializer
 {

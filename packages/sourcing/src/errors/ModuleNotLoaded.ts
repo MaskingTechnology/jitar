@@ -1,6 +1,4 @@
 
-import { Loadable } from '@jitar/serialization';
-
 export default class ModuleNotLoaded extends Error
 {
     #url: string;
@@ -20,5 +18,3 @@ export default class ModuleNotLoaded extends Error
 
     get reason() { return this.#reason; }
 }
-
-(ModuleNotLoaded as Loadable).source = 'RUNTIME_ERROR_LOCATION';

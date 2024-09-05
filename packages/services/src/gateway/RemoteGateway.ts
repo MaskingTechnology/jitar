@@ -10,7 +10,6 @@ import Gateway from './Gateway';
 type Configuration =
 {
     url: string;
-    remote: Remote;
 };
 
 export default class RemoteGateway implements Gateway
@@ -21,7 +20,7 @@ export default class RemoteGateway implements Gateway
     constructor(configuration: Configuration)
     {
         this.#url = configuration.url;
-        this.#remote = configuration.remote;
+        this.#remote = new Remote(configuration.url);
     }
 
     get url() { return this.#url; }

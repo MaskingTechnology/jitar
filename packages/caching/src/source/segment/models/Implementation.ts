@@ -1,38 +1,26 @@
 
 import type { ReflectionFunction } from '@jitar/reflection';
 
-export default class Implementation
+import Member from './Member';
+
+export default class Implementation extends Member
 {
-    #id: string;
-    #importKey: string;
-    #fqn: string;
     #access: string;
     #version: string;
-    #importDefault: boolean;
-    #executable: ReflectionFunction;
+    #reflection: ReflectionFunction;
 
-    constructor(id: string, importKey: string, fqn: string, access: string, version: string, importDefault: boolean, executable: ReflectionFunction)
+    constructor(id: string, importKey: string, fqn: string, access: string, version: string, reflection: ReflectionFunction)
     {
-        this.#id = id;
-        this.#importKey = importKey;
-        this.#fqn = fqn;
+        super(id, importKey, fqn);
+
         this.#access = access;
         this.#version = version;
-        this.#importDefault = importDefault;
-        this.#executable = executable;
+        this.#reflection = reflection;
     }
-
-    get id() { return this.#id; }
-
-    get importKey() { return this.#importKey; }
-
-    get fqn() { return this.#fqn; }
 
     get access() { return this.#access; }
 
     get version() { return this.#version; }
 
-    get importDefault() { return this.#importDefault; }
-
-    get executable() { return this.#executable; }
+    get reflection() { return this.#reflection; }
 }

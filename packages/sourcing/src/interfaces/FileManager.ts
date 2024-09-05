@@ -1,5 +1,5 @@
 
-import File from '../models/File';
+import type File from '../models/File';
 
 interface FileManager
 {

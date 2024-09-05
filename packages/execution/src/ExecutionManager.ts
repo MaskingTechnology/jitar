@@ -1,89 +1,72 @@
 
-import type { SourcingManager } from '@jitar/sourcing';
-
 import ImplementationNotFound from './errors/ImplementationNotFound';
-import InvalidSegmentFile from './errors/InvalidSegmentFile';
+import InvalidSegment from './errors/InvalidSegment';
 import ProcedureNotFound from './errors/ProcedureNotFound';
 
 import type Runner from './interfaces/Runner';
 
 import type Request from './models/Request';
 import Response from './models/Response';
-import type Segment from './models/Segment';
+import Application from './models/Application';
+import Segment from './models/Segment';
+import type Class from './models/Class';
 import type Procedure from './models/Procedure';
 
 import ArgumentConstructor from './utils/ArgumentConstructor';
 
 export default class ExecutionManager implements Runner
 {
-    #sourcingManager: SourcingManager;
     #argumentConstructor: ArgumentConstructor = new ArgumentConstructor();
-    #segments: Map<string, Segment> = new Map();
+    #application: Application = new Application();
 
-    constructor(sourcingManager: SourcingManager)
+    async addSegment(segment: Segment): Promise<void>
     {
-        this.#sourcingManager = sourcingManager;
-    }
-
-    async importSegment(filename: string): Promise<void>
-    {
-        const module = await this.#sourcingManager.import(filename);
-
-        if (module.segment === undefined)
+        if ((segment instanceof Segment) === false)
         {
-            throw new InvalidSegmentFile(filename);
+            throw new InvalidSegment();
         }
 
-        const segment = module.segment as Segment;
-
-        this.addSegment(segment);
+        this.#application.addSegment(segment);
     }
 
-    addSegment(segment: Segment): void
+    getClassNames(): string[]
     {
-        this.#segments.set(segment.id, segment);
+        return this.#application.getClassNames();
     }
 
-    hasProcedure(fqn: string): boolean
+    hasClass(fqn: string): boolean
     {
-        const procedureNames = this.getProcedureNames();
+        return this.#application.hasClass(fqn);
+    }
 
-        return procedureNames.includes(fqn);
+    getClass(fqn: string): Class | undefined
+    {
+        return this.#application.getClass(fqn);
+    }
+
+    getClassByImplementation(implementation: Function): Class | undefined
+    {
+        return this.#application.getClassByImplementation(implementation);
     }
 
     getProcedureNames(): string[]
     {
-        const names: Set<string> = new Set();
+        return this.#application.getProcedureNames();
+    }
 
-        for (const segment of this.#segments.values())
-        {
-            // We only expose the public and protected procedures
-            // to protect access to private procedures
-
-            const procedures = segment.getExposedProcedures();
-
-            procedures.forEach(procedure => names.add(procedure.fqn));
-        }
-
-        return [...names.values()];
+    hasProcedure(fqn: string): boolean
+    {
+        return this.#application.hasProcedure(fqn);
     }
 
     getProcedure(fqn: string): Procedure | undefined
     {
-        for (const segment of this.#segments.values())
-        {
-            if (segment.hasProcedure(fqn))
-            {
-                return segment.getProcedure(fqn);
-            }
-        }
-
-        return undefined;
+        return this.#application.getProcedure(fqn);
     }
 
     async run(request: Request): Promise<Response>
     {
-        const procedure = this.getProcedure(request.fqn);
+        const procedure = this.#application.getProcedure(request.fqn);
 
         if (procedure === undefined)
         {
@@ -97,10 +80,10 @@ export default class ExecutionManager implements Runner
             throw new ImplementationNotFound(procedure.fqn, request.version.toString());
         }
 
-        const values: unknown[] = this.#argumentConstructor.extract(implementation.parameters, request.args);
+        const args: unknown[] = this.#argumentConstructor.extract(implementation.parameters, request.args);
 
-        const result = await implementation.executable.call(request, ...values);
+        const result = await implementation.executable.call(request, ...args);
 
-        return new Response(result);
+        return new Response(true, result);
     }
 }

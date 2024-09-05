@@ -1,6 +1,6 @@
 
 import type { RuntimeConfiguration } from '@jitar/configuration';
-import { Files, FileManagerBuilder } from '@jitar/sourcing';
+import { Files, LocalFileManager } from '@jitar/sourcing';
 import type { FileManager } from '@jitar/sourcing';
 
 import { ApplicationReader } from './source';
@@ -17,11 +17,9 @@ export default class CacheManager
 
     constructor(configuration: RuntimeConfiguration)
     {
-        const fileManagerBuilder = new FileManagerBuilder('./');
-
-        this.#projectFileManager = fileManagerBuilder.buildLocal();
-        this.#sourceFileManager = fileManagerBuilder.buildLocal(configuration.source);
-        this.#targetFileManager = fileManagerBuilder.buildLocal(configuration.target);
+        this.#projectFileManager = new LocalFileManager('./');
+        this.#sourceFileManager = new LocalFileManager(configuration.source);
+        this.#targetFileManager = new LocalFileManager(configuration.target);
 
         this.#applicationReader = new ApplicationReader(this.#sourceFileManager);
         this.#applicationBuilder = new ApplicationBuilder(this.#targetFileManager);

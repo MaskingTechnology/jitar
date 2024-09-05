@@ -1,7 +1,7 @@
 
-import ValueSerializer from './ValueSerializer.js';
-import NoDeserializerFound from './errors/NoDeserializerFound.js';
-import NoSerializerFound from './errors/NoSerializerFound.js';
+import ValueSerializer from './ValueSerializer';
+import NoDeserializerFound from './errors/NoDeserializerFound';
+import NoSerializerFound from './errors/NoSerializerFound';
 
 export default class Serializer
 {

@@ -1,21 +1,20 @@
 
 import { RuntimeConfiguration, ServerConfiguration } from '@jitar/configuration';
-import { SourcingManager, ImportFunction, FileManagerBuilder } from '@jitar/sourcing';
+import { SourcingManager, LocalFileManager } from '@jitar/sourcing';
+import { ServerBuilder } from '@jitar/services';
 import type { Server } from '@jitar/services';
 
-import RuntimeBuilder from './build/RuntimeBuilder';
+import { setRunner } from './hooks';
 
-import { setRuntime } from './hooks';
-
-export default async function buildServer(runtimeConfiguration: RuntimeConfiguration, serverConfiguration: ServerConfiguration, importFunction: ImportFunction): Promise<Server>
+export default async function buildServer(runtimeConfiguration: RuntimeConfiguration, serverConfiguration: ServerConfiguration): Promise<Server>
 {
-    const fileManager = new FileManagerBuilder(runtimeConfiguration.target).buildLocal();
-    const sourcingManager = new SourcingManager(fileManager, importFunction);
-    const runtimeBuilder = new RuntimeBuilder(sourcingManager);
+    const fileManager = new LocalFileManager(runtimeConfiguration.target);
+    const sourcingManager = new SourcingManager(fileManager);
+    const serverBuilder = new ServerBuilder(sourcingManager);
 
-    const server = await runtimeBuilder.buildServer(serverConfiguration);
+    const server = await serverBuilder.build(serverConfiguration);
 
-    setRuntime(server.proxy.runner);
+    setRunner(server.proxy.runner);
 
     return server;
 }

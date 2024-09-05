@@ -1,7 +1,7 @@
 
 import type { FileManager } from '@jitar/sourcing';
 
-import type { Application, Module, Segmentation, Segment } from '../source';
+import type { Application, Module, Segmentation, Segment, SegmentImplementation as Implementation } from '../source';
 import { FileHelper } from '../utils';
 
 import RemoteModuleBuilder from './RemoteModuleBuilder';
@@ -46,8 +46,14 @@ export default class ModuleBuilder
             // Otherwise, it is a segment module that can be called remotely
 
             const segmentBuilds = moduleSegments.map(segment => this.#buildSegmentModule(module, segment, segmentation));
-            const remoteBuild = this.#buildRemoteModule(module, moduleSegments);
 
+            const firstModuleSegment = moduleSegments[0];
+            const segmentModule = firstModuleSegment.getModule(module.filename);
+
+            const remoteBuild= segmentModule!.hasImplementations()
+                ? this.#buildRemoteModule(module, moduleSegments)
+                : [];
+            
             await Promise.all([...segmentBuilds, remoteBuild]);
         }
 
@@ -74,14 +80,28 @@ export default class ModuleBuilder
     {
         // The remote module contains calls to segmented procedures only
 
-        const segmentModules = segments.map(segment => segment.getModule(module.filename));
-        const implementations = segmentModules.flatMap(segmentModule => segmentModule!.implementations);
-
-        // TODO: Make the list of implementations unique
-
+        const implementations = this.#getImplementations(module, segments);
         const filename = FileHelper.addSubExtension(module.filename, 'remote');
         const code = this.#remoteModuleBuilder.build(implementations);
 
         return this.#fileManager.write(filename, code);
+    }
+
+    #getImplementations(module: Module, segments: Segment[]): Implementation[]
+    {
+        const segmentModules = segments.map(segment => segment.getModule(module.filename));
+        const implementations = segmentModules.flatMap(segmentModule => segmentModule!.getImplementations());
+
+        // Implementation can be duplicated across segments
+        // We need to ensure that each implementation is unique
+
+        const unique: Map<string, Implementation> = new Map();
+
+        for (const implementation of implementations)
+        {
+            unique.set(implementation.fqn, implementation);
+        }
+
+        return [...unique.values()];
     }
 }

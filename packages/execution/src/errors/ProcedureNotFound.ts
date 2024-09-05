@@ -1,11 +1,7 @@
 
-import { Loadable } from '@jitar/serialization';
+import { NotFound } from '@jitar/errors';
 
-import ExecutionError from './ExecutionError';
-
-// TODO: extends NotFound from @jitar/errors
-
-export default class ProcedureNotFound extends ExecutionError
+export default class ProcedureNotFound extends NotFound
 {
     #fqn: string;
 
@@ -18,5 +14,3 @@ export default class ProcedureNotFound extends ExecutionError
 
     get fqn() { return this.#fqn; }
 }
-
-(ProcedureNotFound as Loadable).source = 'RUNTIME_ERROR_LOCATION';

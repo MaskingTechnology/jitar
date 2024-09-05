@@ -42,7 +42,7 @@ export default class RemoteModuleBuilder
 
         const fqn = implementation.fqn;
         const version = implementation.version;
-        const args = this.#createArguments(implementation.executable.parameters);
+        const args = this.#createArguments(implementation.reflection.parameters);
 
         const declaration = this.#createDeclaration(implementation);
         const body = `return __run('${fqn}', '${version}', { ${args} }, this);`;
@@ -113,10 +113,10 @@ export default class RemoteModuleBuilder
 
     #createDeclaration(implementation: Implementation): string
     {
-        const name = implementation.executable.name;
-        const parameters = this.#createParameters(implementation.executable.parameters);
+        const name = implementation.reflection.name;
+        const parameters = this.#createParameters(implementation.reflection.parameters);
 
-        const prefix = implementation.importDefault ? 'default ' : '';
+        const prefix = implementation.importKey === 'default' ? 'default ' : '';
 
         return `\nexport ${prefix}async function ${name}(${parameters})`;
     }

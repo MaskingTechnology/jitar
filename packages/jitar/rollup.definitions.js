@@ -10,10 +10,3 @@ export const SERVER_EXTERNALS =
     'yargs',
     'zod'
 ];
-
-export const REPLACE_VALUES =
-{
-    'RUNTIME_ERROR_LOCATION': 'jitar',
-    'RUNTIME_HOOKS_LOCATION': 'jitar',
-    'JITAR_LIBRARY_NAME': 'jitar',
-};

@@ -1,54 +1,37 @@
 
 import { ServerConfiguration, GatewayConfiguration, WorkerConfiguration, RepositoryConfiguration, ProxyConfiguration, StandaloneConfiguration } from '@jitar/configuration';
-import { ExecutionManager } from '@jitar/execution';
-import { Serializer, SerializerBuilder } from '@jitar/serialization';
-import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, LocalWorker, Proxy, DummyProvider, DummyRunner, Remote, Client, Server } from '@jitar/services';
-import { HealthManager } from '@jitar/health';
-import { MiddlewareManager } from '@jitar/middleware';
+import { Segment, ExecutionManager } from '@jitar/execution';
+import { HealthCheck, HealthManager } from '@jitar/health';
+import { Middleware, MiddlewareManager } from '@jitar/middleware';
 import { SourcingManager } from '@jitar/sourcing';
 
-import ClassModuleLoader from './ClassModuleLoader';
-
-type ClientConfiguration =
-{
-    remoteUrl: string;
-    segmentNames: string[];
-    middlewares: string[];
-};
+import RemoteRepository from './repository/RemoteRepository';
+import LocalRepository from './repository/LocalRepository';
+import RemoteGateway from './gateway/RemoteGateway';
+import LocalGateway from './gateway/LocalGateway';
+import LocalWorker from './worker/LocalWorker';
+import Proxy from './proxy/Proxy';
+import DummyProvider from './dummy/DummyProvider';
+import DummyRunner from './dummy/DummyRunner';
+import Server from './server/Server';
 
 export default class RuntimeBuilder
 {
     #sourcingManager: SourcingManager;
-    #serializer: Serializer;
 
     constructor(sourcingManager: SourcingManager)
     {
         this.#sourcingManager = sourcingManager;
-        this.#serializer = this.#buildSerializer();
     }
 
-    get sourcingManager() { return this.#sourcingManager; }
-
-    get serializer() { return this.#serializer; }
-
-    async buildClient(configuration: ClientConfiguration): Promise<Client>
-    {
-        const gateway = this.#buildRemoteGateway(configuration.remoteUrl);
-        const middlewareManager = await this.#buildMiddlewareManager(configuration.middlewares);
-        const executionManager = await this.#buildExecutionManager(configuration.segmentNames);
-
-        return new Client({ gateway, middlewareManager, executionManager });
-    }
-
-    async buildServer(configuration: ServerConfiguration): Promise<Server>
+    async build(configuration: ServerConfiguration): Promise<Server>
     {
         const proxy = await this.#buildService(configuration);
         const sourcingManager = this.#sourcingManager;
-        const serializer = this.#serializer;
         const setUpScripts = configuration.setUp ?? [];
         const tearDownScripts = configuration.tearDown ?? [];
 
-        return new Server({ proxy, sourcingManager, serializer, setUpScripts, tearDownScripts });
+        return new Server({ proxy, sourcingManager, setUpScripts, tearDownScripts });
     }
 
     #buildService(configuration: ServerConfiguration): Promise<Proxy>
@@ -59,6 +42,7 @@ export default class RuntimeBuilder
         if (configuration.proxy !== undefined) return this.#buildProxy(configuration.url, configuration.proxy);
         if (configuration.standalone !== undefined) return this.#buildStandalone(configuration.url, configuration.standalone);
 
+        // TODO: make specific error
         throw new Error('Invalid server configuration');
     }
 
@@ -98,9 +82,7 @@ export default class RuntimeBuilder
 
     #buildRemoteGateway(url: string): RemoteGateway
     {
-        const remote = this.#buildRemote(url);
-
-        return new RemoteGateway({ url, remote });
+        return new RemoteGateway({ url });
     }
 
     async #buildLocalWorker(url: string, configuration: WorkerConfiguration): Promise<LocalWorker>
@@ -124,9 +106,7 @@ export default class RuntimeBuilder
 
     #buildRemoteRepository(url: string): RemoteRepository
     {
-        const remote = this.#buildRemote(url);
-
-        return new RemoteRepository({ url, remote });
+        return new RemoteRepository({ url });
     }
 
     async #buildProxy(url: string, configuration: ProxyConfiguration): Promise<Proxy>
@@ -145,27 +125,15 @@ export default class RuntimeBuilder
         return new Proxy({ url, provider, runner });
     }
 
-    #buildRemote(url: string): Remote
-    {
-        const serializer = this.#buildSerializer();
-
-        return new Remote(url, serializer);
-    }
-
-    #buildSerializer(): Serializer
-    {
-        const classLoader = new ClassModuleLoader(this.#sourcingManager);
-
-        return SerializerBuilder.build(classLoader);
-    }
-
     async #buildHealthManager(filenames?: string[]): Promise<HealthManager>
     {
-        const manager = new HealthManager(this.#sourcingManager);
+        const manager = new HealthManager();
 
         if (filenames !== undefined)
         {
-            await Promise.all(filenames.map(filename => manager.importHealthCheck(filename)));
+            const modules = await Promise.all(filenames.map(filename => this.#sourcingManager.import(filename)));
+
+            modules.forEach(module => manager.addHealthCheck(module.default as HealthCheck));
         }
 
         return manager;
@@ -173,11 +141,13 @@ export default class RuntimeBuilder
 
     async #buildMiddlewareManager(filenames?: string[]): Promise<MiddlewareManager>
     {
-        const manager = new MiddlewareManager(this.#sourcingManager);
+        const manager = new MiddlewareManager();
 
         if (filenames !== undefined)
         {
-            await Promise.all(filenames.map(filename => manager.importMiddleware(filename)));
+            const modules = await Promise.all(filenames.map(filename => this.#sourcingManager.import(filename)));
+
+            modules.forEach(module => manager.addMiddleware(module.default as Middleware));
         }
 
         return manager;
@@ -185,10 +155,12 @@ export default class RuntimeBuilder
 
     async #buildExecutionManager(segmentNames: string[]): Promise<ExecutionManager>
     {
-        const manager = new ExecutionManager(this.#sourcingManager);
+        const manager = new ExecutionManager();
         const filenames = segmentNames.map(name => `./${name}.segment.js`);
 
-        await Promise.all(filenames.map(filename => manager.importSegment(filename)));
+        const modules = await Promise.all(filenames.map(filename => this.#sourcingManager.import(filename)));
+
+        modules.forEach(module => manager.addSegment(module.default as Segment));
 
         return manager;
     }

@@ -1,5 +1,5 @@
 
-import { ReflectionFunction } from '@jitar/reflection';
+import { ReflectionFunction, ReflectionClass, ReflectionMember } from '@jitar/reflection';
 import type { FileManager } from '@jitar/sourcing';
 
 import { FileHelper, IdGenerator } from '../../utils';
@@ -9,12 +9,13 @@ import FunctionNotAsync from './errors/FunctionNotAsync';
 import InvalidFilename from './errors/InvalidFilename';
 import MissingModuleExport from './errors/MissingModuleExport';
 import FileNotLoaded from './errors/FileNotLoaded';
-import NotAFunction from './errors/NotAFunction';
+import InvalidModuleExport from './errors/InvalidModuleExport';
 import ModuleNotFound from './errors/ModuleNotFound';
 
 import Segmentation from './models/Segmentation';
 import Segment from './models/Segment';
 import Module from './models/Module';
+import Class from './models/Class';
 import Procedure from './models/Procedure';
 import Implementation from './models/Implementation';
 
@@ -48,9 +49,9 @@ export default class SegmentReader
 
         const name = this.#extractSegmentName(filename);
         const modules = this.#createModules(definition);
-        const procedures = this.#createProcedures(modules);
+        const [classes, procedures] = this.#createMembers(modules);
 
-        return new Segment(name, modules, procedures);
+        return new Segment(name, modules, classes, procedures);
     }
 
     #extractSegmentName(filename: string): string
@@ -116,49 +117,69 @@ export default class SegmentReader
         return moduleParts.join('/');
     }
 
-    #createProcedures(modules: Module[]): Procedure[]
+    #createMembers(modules: Module[]): [Class[], Procedure[]]
     {
-        const idGenerator = new IdGenerator();
+        const classes: Map<string, Class> = new Map();
         const procedures: Map<string, Procedure> = new Map();
+
+        const idGenerator = new IdGenerator();
 
         for (const module of modules)
         {
-            this.#extractModuleProcedures(module, procedures, idGenerator);
+            this.#extractModuleMembers(module, classes, procedures, idGenerator);
         }
 
-        return [...procedures.values()];
+        return [[...classes.values()], [...procedures.values()]];
     }
 
-    #extractModuleProcedures(module: Module, procedures: Map<string, Procedure>, idGenerator: IdGenerator): void
+    #extractModuleMembers(module: Module, classes: Map<string, Class>, procedures: Map<string, Procedure>, idGenerator: IdGenerator): void
     {
         for (const [importKey, properties] of Object.entries(module.imports))
         {
-            // To make sure that we create the correct FQN, we need to get the executable
-            const executable = this.#getExecutable(module.filename, importKey);
+            const id = idGenerator.next();
+            const reflection = this.#getMember(module.filename, importKey);
 
-            const procedureName = properties.as ?? executable.name;
+            const name = properties.as ?? reflection.name;
             const access = properties.access ?? DEFAULT_ACCESS_LEVEL;
             const version = properties.version ?? DEFAULT_VERSION_NUMBER;
 
-            const fqn = module.location !== '' ? `${module.location}/${procedureName}` : procedureName;
-            const isDefault = importKey === 'default';
+            const fqn = module.location !== '' ? `${module.location}/${name}` : name;
 
-            const id = idGenerator.next();
-            const implementation = new Implementation(id, importKey, fqn, access, version, isDefault, executable);
+            if (reflection instanceof ReflectionClass)
+            {
+                const clazz = new Class(id, importKey, fqn, reflection);
 
-            module.addImplementation(implementation);
+                module.addMember(clazz);
 
-            const procedure = procedures.has(fqn)
-                ? procedures.get(fqn) as Procedure
-                : new Procedure(fqn);
+                classes.set(fqn, clazz);
+            }
+            else if (reflection instanceof ReflectionFunction)
+            {
+                if (reflection.isAsync === false)
+                {
+                    throw new FunctionNotAsync(module.filename, reflection.name);
+                }
 
-            procedure.addImplementation(implementation);
+                const implementation = new Implementation(id, importKey, fqn, access, version, reflection);
 
-            procedures.set(fqn, procedure);
+                module.addMember(implementation);
+
+                const procedure = procedures.has(implementation.fqn)
+                    ? procedures.get(implementation.fqn) as Procedure
+                    : new Procedure(implementation.fqn);
+
+                procedure.addImplementation(implementation);
+
+                procedures.set(implementation.fqn, procedure);
+            }
+            else
+            {
+                throw new InvalidModuleExport(module.filename, importKey);
+            }
         }
     }
 
-    #getExecutable(filename: string, importKey: string): ReflectionFunction
+    #getMember(filename: string, importKey: string): ReflectionMember
     {
         const module = this.#repository.get(filename);
 
@@ -167,21 +188,13 @@ export default class SegmentReader
             throw new ModuleNotFound(filename);
         }
 
-        const executable = module.reflection.getExported(importKey) as ReflectionFunction;
+        const member = module.reflection.getExported(importKey);
 
-        if (executable === undefined)
+        if (member === undefined)
         {
             throw new MissingModuleExport(filename, importKey);
         }
-        else if ((executable instanceof ReflectionFunction) === false)
-        {
-            throw new NotAFunction(filename, importKey);
-        }
-        else if (executable.isAsync === false)
-        {
-            throw new FunctionNotAsync(filename, executable.name);
-        }
 
-        return executable;
+        return member;
     }
 }

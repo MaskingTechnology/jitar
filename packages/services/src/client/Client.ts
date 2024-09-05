@@ -1,53 +1,48 @@
 
-import type { Request, Response, ExecutionManager, Runner } from '@jitar/execution';
-import { type MiddlewareManager, ProcedureRunner } from '@jitar/middleware';
+import type { ExecutionManager, Request, Response } from '@jitar/execution';
+import type { HealthManager } from '@jitar/health';
+import type { MiddlewareManager } from '@jitar/middleware';
 
+import LocalWorker from '../worker/LocalWorker';
 import RemoteGateway from '../gateway/RemoteGateway';
 
 type Configuration =
 {
-    gateway: RemoteGateway;
+    remoteUrl: string;
+    healthManager: HealthManager; // object with all health checks loaded
     middlewareManager: MiddlewareManager; // object with all middleware loaded
     executionManager: ExecutionManager; // object with all segments loaded
 };
 
-export default class Client implements Runner
+export default class Client
 {
-    #gateway: RemoteGateway;
-
-    #middlewareManager: MiddlewareManager;
-    #executionManager: ExecutionManager;
+    #worker: LocalWorker;
 
     constructor(configuration: Configuration)
     {
-        this.#gateway = configuration.gateway;
+        this.#worker = new LocalWorker({
+            url: configuration.remoteUrl,
+            gateway: new RemoteGateway({ url: configuration.remoteUrl }),
+            healthManager: configuration.healthManager,
+            middlewareManager: configuration.middlewareManager,
+            executionManager: configuration.executionManager
+        });
+    }
 
-        this.#middlewareManager = configuration.middlewareManager;
-        this.#executionManager = configuration.executionManager;
+    get worker() { return this.#worker; }
 
-        // TODO: Should be done when constructing the middleware manager
-        this.#middlewareManager.addMiddleware(new ProcedureRunner(this.#executionManager));
+    start(): Promise<void>
+    {
+        return this.#worker.start();
+    }
+
+    stop(): Promise<void>
+    {
+        return this.#worker.stop();
     }
 
     run(request: Request): Promise<Response>
     {
-        return this.#mustRunLocal(request)
-            ? this.#runLocal(request)
-            : this.#runRemote(request);
-    }
-
-    #mustRunLocal(request: Request): boolean
-    {
-        return this.#executionManager.hasProcedure(request.fqn);
-    }
-
-    #runLocal(request: Request): Promise<Response>
-    {
-        return this.#middlewareManager.handle(request);
-    }
-
-    #runRemote(request: Request): Promise<Response>
-    {
-        return this.#gateway.run(request);
+        return this.#worker.run(request);
     }
 }

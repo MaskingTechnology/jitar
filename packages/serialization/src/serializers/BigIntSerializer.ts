@@ -1,7 +1,7 @@
 
-import ValueSerializer from '../ValueSerializer.js';
-import SerializedBigInt from '../types/serialized/SerializedBigInt.js';
-import InvalidBigIntString from './errors/InvalidBigIntString.js';
+import ValueSerializer from '../ValueSerializer';
+import SerializedBigInt from '../types/serialized/SerializedBigInt';
+import InvalidBigIntString from './errors/InvalidBigIntString';
 
 export default class BigIntSerializer extends ValueSerializer
 {

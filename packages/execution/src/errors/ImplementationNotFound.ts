@@ -1,9 +1,7 @@
 
-import { Loadable } from '@jitar/serialization';
+import { NotFound } from '@jitar/errors';
 
-import ExecutionError from './ExecutionError';
-
-export default class ImplementationNotFound extends ExecutionError
+export default class ImplementationNotFound extends NotFound
 {
     #fqn: string;
     #version: string;
@@ -20,5 +18,3 @@ export default class ImplementationNotFound extends ExecutionError
 
     get version() { return this.#version; }
 }
-
-(ImplementationNotFound as Loadable).source = 'RUNTIME_ERROR_LOCATION';

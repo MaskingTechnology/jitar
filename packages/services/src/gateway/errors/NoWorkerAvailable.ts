@@ -1,6 +1,5 @@
 
 import { ServerError } from '@jitar/errors';
-import { Loadable } from '@jitar/serialization';
 
 export default class NoWorkerAvailable extends ServerError
 {
@@ -15,5 +14,3 @@ export default class NoWorkerAvailable extends ServerError
 
     get name() { return this.#name; }
 }
-
-(NoWorkerAvailable as Loadable).source = 'RUNTIME_ERROR_LOCATION';

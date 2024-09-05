@@ -8,7 +8,6 @@ import Repository from './Repository';
 type Configuration =
 {
     url: string;
-    remote: Remote;
 };
 
 export default class RemoteRepository implements Repository
@@ -19,7 +18,7 @@ export default class RemoteRepository implements Repository
     constructor(configuration: Configuration)
     {
         this.#url = configuration.url;
-        this.#remote = configuration.remote;
+        this.#remote = new Remote(configuration.url);
     }
     
     get url() { return this.#url; }

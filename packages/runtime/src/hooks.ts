@@ -2,7 +2,7 @@
 import { ServerError } from '@jitar/errors';
 import { Runner, Request, VersionParser } from '@jitar/execution';
 
-let _runtime: Runner;
+let _runner: Runner;
 
 export class RuntimeNotAvailable extends ServerError
 {
@@ -12,24 +12,14 @@ export class RuntimeNotAvailable extends ServerError
     }
 }
 
-export function setRuntime(runtime: Runner): void
+export function setRunner(runner: Runner): void
 {
-    _runtime = runtime;
+    _runner = runner;
 }
 
-export function getRuntime(): Runner
+export async function runProcedure(fqn: string, versionNumber: string, args: Record<string, unknown>, sourceRequest?: Request): Promise<unknown>
 {
-    if (_runtime === undefined)
-    {
-        throw new RuntimeNotAvailable();
-    }
-
-    return _runtime;
-}
-
-export async function runProcedure(fqn: string, versionNumber: string, args: object, sourceRequest?: Request): Promise<unknown>
-{
-    const runtime = getRuntime();
+    const runtime = getRunner();
 
     const version = VersionParser.parse(versionNumber);
     const argsMap = new Map<string, unknown>(Object.entries(args));
@@ -38,5 +28,20 @@ export async function runProcedure(fqn: string, versionNumber: string, args: obj
     const targetRequest = new Request(fqn, version, argsMap, headersMap);
     const targetResponse = await runtime.run(targetRequest);
 
+    if (targetResponse.success === false)
+    {
+        throw targetResponse.result;
+    }
+    
     return targetResponse.result;
+}
+
+function getRunner(): Runner
+{
+    if (_runner === undefined)
+    {
+        throw new RuntimeNotAvailable();
+    }
+
+    return _runner;
 }

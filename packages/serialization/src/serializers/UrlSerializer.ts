@@ -1,7 +1,7 @@
 
-import ValueSerializer from '../ValueSerializer.js';
-import SerializedUrl from '../types/serialized/SerializedUrl.js';
-import InvalidUrlString from './errors/InvalidUrlString.js';
+import ValueSerializer from '../ValueSerializer';
+import SerializedUrl from '../types/serialized/SerializedUrl';
+import InvalidUrlString from './errors/InvalidUrlString';
 
 export default class UrlSerializer extends ValueSerializer
 {

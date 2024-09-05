@@ -1,17 +1,16 @@
 
-import type { File, FileManager } from './files';
-import { ModuleNotLoaded } from './modules';
-import type { Module, ImportFunction } from './modules';
+import type File from './models/File';
+import type FileManager from './interfaces/FileManager';
+import ModuleNotLoaded from './errors/ModuleNotLoaded';
+import type Module from './types/Module';
 
 export default class SourceManager
 {
     #fileManager: FileManager;
-    #import: ImportFunction;
 
-    constructor(fileManager: FileManager, importFunction: ImportFunction)
+    constructor(fileManager: FileManager)
     {
         this.#fileManager = fileManager;
-        this.#import = importFunction;
     }
 
     async filter(...patterns: string[]): Promise<string[]>
@@ -31,18 +30,18 @@ export default class SourceManager
         return this.#fileManager.read(filename);
     }
 
-    async import(specifier: string): Promise<Module>
+    async import(filename: string): Promise<Module>
     {
+        // If the specifier is an absolute path, we need to convert it to a path
+        // relative to the cache folder.
+        
+        const specifier = filename.startsWith('/')
+            ? this.#fileManager.getAbsoluteLocation(`.${filename}`)
+            : this.#fileManager.getAbsoluteLocation(filename);
+        
         try
         {
-            // If the specifier is an absolute path, we need to convert it to a path
-            // relative to the cache folder.
-            
-            const fullSpecifier = specifier.startsWith('/')
-                ? this.#fileManager.getAbsoluteLocation(`.${specifier}`)
-                : specifier;
-            
-            return await this.#import(fullSpecifier);
+            return await import(specifier);
         }
         catch (error: unknown)
         {

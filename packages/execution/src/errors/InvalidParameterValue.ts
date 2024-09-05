@@ -1,9 +1,7 @@
 
-import { Loadable } from '@jitar/serialization';
+import { BadRequest } from '@jitar/errors';
 
-import ExecutionError from './ExecutionError';
-
-export default class InvalidParameterValue extends ExecutionError
+export default class InvalidParameterValue extends BadRequest
 {
     #parameterName: string;
 
@@ -16,5 +14,3 @@ export default class InvalidParameterValue extends ExecutionError
 
     get parameterName() { return this.#parameterName; }
 }
-
-(InvalidParameterValue as Loadable).source = 'RUNTIME_ERROR_LOCATION';

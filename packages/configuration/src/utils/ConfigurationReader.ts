@@ -1,5 +1,5 @@
 
-import { FileManagerBuilder } from '@jitar/sourcing';
+import { LocalFileManager } from '@jitar/sourcing';
 import type { FileManager } from '@jitar/sourcing';
 
 export default class ConfigurationReader
@@ -8,7 +8,7 @@ export default class ConfigurationReader
 
     constructor(rootPath: string)
     {
-        this.#fileManager = new FileManagerBuilder(rootPath).buildLocal();
+        this.#fileManager = new LocalFileManager(rootPath);
     }
 
     async read(filename: string): Promise<Record<string, unknown>>

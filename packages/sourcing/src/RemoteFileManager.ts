@@ -1,6 +1,6 @@
 
-import type FileManager from '../interfaces/FileManager';
-import File from '../models/File';
+import type FileManager from './interfaces/FileManager';
+import File from './models/File';
 
 export default class RemoteFileManager implements FileManager
 {

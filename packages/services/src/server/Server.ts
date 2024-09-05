@@ -1,15 +1,12 @@
 
 import { BadRequest, Forbidden, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized } from '@jitar/errors';
-import { Request, Response, Version, VersionParser } from '@jitar/execution';
+import { Request, Version, VersionParser } from '@jitar/execution';
 import type { File, SourcingManager } from '@jitar/sourcing';
-import type { Serializer } from '@jitar/serialization';
 
 import LocalGateway from '../gateway/LocalGateway';
 import LocalWorker from '../worker/LocalWorker';
 import RemoteWorker from '../worker/RemoteWorker';
 import Proxy from '../proxy/Proxy';
-
-import Remote from '../Remote';
 
 import ContentTypes from './definitions/ContentTypes';
 import StatusCodes from './definitions/StatusCodes';
@@ -23,7 +20,6 @@ type Configuration =
 {
     proxy: Proxy;
     sourcingManager: SourcingManager;
-    serializer: Serializer;
     setUpScripts?: string[];
     tearDownScripts?: string[];
 };
@@ -32,7 +28,6 @@ export default class Server
 {
     #proxy: Proxy;
     #sourcingManager: SourcingManager;
-    #serializer: Serializer;
     #setUpScripts: string[];
     #tearDownScripts: string[];
 
@@ -40,7 +35,6 @@ export default class Server
     {
         this.#proxy = configuration.proxy;
         this.#sourcingManager = configuration.sourcingManager;
-        this.#serializer = configuration.serializer;
         this.#setUpScripts = configuration.setUpScripts ?? [];
         this.#tearDownScripts = configuration.tearDownScripts ?? [];
     }
@@ -114,18 +108,16 @@ export default class Server
 
     async run(runRequest: RunRequest): Promise<ServerResponse>
     {
-        try
-        {
-            const request = await this.#transformRunRequest(runRequest);
+            const request = this.#transformRunRequest(runRequest);
+
+            // TODO: remove this line when the client works again
+            request.setHeader('X-Jitar-Data-Encoding', 'serialized');
 
             const response = await this.#proxy.run(request);
 
-            return this.#respondResponse(response);
-        }
-        catch (error: unknown)
-        {
-            return this.#respondError(error);
-        }
+            return response.success
+                ? this.#respondResult(response.result, response.headers)
+                : this.#respondError(response.result);
     }
 
     async addWorker(addRequest: AddWorkerRequest): Promise<ServerResponse>
@@ -141,7 +133,7 @@ export default class Server
 
             const worker = this.#buildRemoteWorker(addRequest.url, addRequest.procedures);
 
-            runner.addWorker(worker);
+            await runner.addWorker(worker);
 
             return this.#respondSuccess();
         }
@@ -166,11 +158,11 @@ export default class Server
         await Promise.all(scripts.map(script => this.#sourcingManager.import(script)));
     }
 
-    async #transformRunRequest(request: RunRequest): Promise<Request>
+    #transformRunRequest(request: RunRequest): Request
     {
         const fqn = this.#processFqn(request.fqn);
         const version = this.#parseVersion(request.version);
-        const args = await this.#deserializeArguments(request.args);
+        const args = this.#mapArguments(request.args);
         const headers = this.#mapHeaders(request.headers);
 
         return new Request(fqn, version, args, headers);
@@ -201,11 +193,9 @@ export default class Server
         return VersionParser.parse(version);
     }
 
-    async #deserializeArguments(args: Record<string, unknown>): Promise<Map<string, unknown>>
+    #mapArguments(args: Record<string, unknown>): Map<string, unknown>
     {
-        const deserializedArgs = await this.#serializer.deserialize(args) as Record<string, unknown>;
-
-        return new Map<string, unknown>(Object.entries(deserializedArgs));
+        return new Map<string, unknown>(Object.entries(args));
     }
 
     #mapHeaders(headers: Record<string, string>): Map<string, string>
@@ -255,19 +245,18 @@ export default class Server
         return { result, contentType, headers, status };
     }
 
-    async #respondResponse(response: Response): Promise<ServerResponse>
+    #respondResult(result: unknown, headerMap: Map<string, string>): ServerResponse
     {
-        const result = await this.#serializeResult(response.result);
         const contentType = this.#determineContentType(result);
-        const headers = this.#unmapHeaders(response.headers);
+        const headers = this.#unmapHeaders(headerMap);
         const status = StatusCodes.OK;
 
         return { result, contentType, headers, status };
     }
 
-    async #respondError(error: unknown): Promise<ServerResponse>
+    #respondError(error: unknown): ServerResponse
     {
-        const result = await this.#serializeResult(error);
+        const result = error instanceof Error ? error.message : error;
         const contentType = this.#determineContentType(result);
         const headers = {};
         const status = this.#determineStatusCode(error);
@@ -283,11 +272,6 @@ export default class Server
         const status = StatusCodes.OK;
 
         return { result, contentType, headers, status };
-    }
-
-    #serializeResult(result: unknown): Promise<unknown>
-    {
-        return this.#serializer.serialize(result);
     }
 
     #determineContentType(content: unknown): string
@@ -322,8 +306,7 @@ export default class Server
     #buildRemoteWorker(url: string, procedures: string[]): RemoteWorker
     {
         const procedureNames = new Set<string>(procedures);
-        const remote = new Remote(url, this.#serializer);
 
-        return new RemoteWorker({ url, procedureNames, remote });
+        return new RemoteWorker({ url, procedureNames });
     }
 }

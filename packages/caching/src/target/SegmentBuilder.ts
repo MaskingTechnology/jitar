@@ -8,7 +8,7 @@ import type { Application, Segment, SegmentModule } from '../source';
 import { FileHelper } from '../utils';
 
 const KEYWORD_DEFAULT = 'default';
-const RUNTIME_IMPORTS = 'import { Segment, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } from "jitar";';
+const RUNTIME_IMPORTS = 'import { Segment, Class, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } from "jitar";';
 
 export default class SegmentBuilder
 {
@@ -70,14 +70,14 @@ export default class SegmentBuilder
 
     #createModuleImportMembers(module: SegmentModule): string
     {
-        const implementations = module.implementations;
+        const members = module.members;
 
-        const defaultImplementation = implementations.find(implementation => implementation.importKey === KEYWORD_DEFAULT);
+        const defaultImplementation = members.find(member => member.importKey === KEYWORD_DEFAULT);
         const hasDefaultImplementation = defaultImplementation !== undefined;
         const defaultMemberImport = hasDefaultImplementation ? defaultImplementation.id : '';
 
-        const namedImplementations = implementations.filter(implementation => implementation.importKey !== KEYWORD_DEFAULT);
-        const nameImplementationImports = namedImplementations.map(implementation => `${implementation.importKey} as ${implementation.id}`);
+        const namedImplementations = members.filter(member => member.importKey !== KEYWORD_DEFAULT);
+        const nameImplementationImports = namedImplementations.map(member => `${member.importKey} as ${member.id}`);
         const hasNamedImplementations = namedImplementations.length > 0;
         const groupedNamedMemberImports = hasNamedImplementations ? `{ ${nameImplementationImports.join(', ')} }` : '';
 
@@ -90,7 +90,12 @@ export default class SegmentBuilder
     {
         const lines: string[] = [];
         
-        lines.push(`export const segment = new Segment("${segment.name}")`);
+        lines.push(`export default new Segment("${segment.name}")`);
+
+        for (const clazz of segment.classes)
+        {
+            lines.push(`\t.addClass(new Class("${clazz.fqn}", ${clazz.id}))`);
+        }
 
         for (const procedure of segment.procedures)
         {
@@ -99,7 +104,7 @@ export default class SegmentBuilder
             for (const implementation of procedure.implementations)
             {
                 const version = this.#createVersionCode(implementation.version);
-                const parameters = this.#createParametersCode(implementation.executable);
+                const parameters = this.#createParametersCode(implementation.reflection);
 
                 lines.push(`\t\t.addImplementation(new Implementation(${version}, "${implementation.access}", ${parameters}, ${implementation.id}))`);
             }
@@ -117,9 +122,9 @@ export default class SegmentBuilder
         return `new Version(${version.major}, ${version.minor}, ${version.patch})`;
     }
 
-    #createParametersCode(executable: ReflectionFunction): string
+    #createParametersCode(reflection: ReflectionFunction): string
     {
-        const result = this.#extractParameters(executable.parameters);
+        const result = this.#extractParameters(reflection.parameters);
 
         return `[${result.join(', ')}]`;
     }

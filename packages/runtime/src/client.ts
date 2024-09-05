@@ -1,20 +1,18 @@
 
-import { SourcingManager, ImportFunction, FileManagerBuilder } from '@jitar/sourcing';
+import type { Segment } from '@jitar/execution';
+import type { Middleware } from '@jitar/middleware';
+import { ClientBuilder } from '@jitar/services';
 import type { Client } from '@jitar/services';
 
-import RuntimeBuilder from './build/RuntimeBuilder';
+import { setRunner } from './hooks';
 
-import { setRuntime } from './hooks';
-
-export default async function buildClient(remoteUrl: string, importFunction: ImportFunction, segmentNames: string[] = [], middlewares: string[] = []): Promise<Client>
+export default function buildClient(remoteUrl: string, segments: Segment[] = [], middleware: Middleware[] = []): Client
 {
-    const fileManager = new FileManagerBuilder(remoteUrl).buildRemote();
-    const sourcingManager = new SourcingManager(fileManager, importFunction);
-    const runtimeBuilder = new RuntimeBuilder(sourcingManager);
+    const clientBuilder = new ClientBuilder();
 
-    const runtime = await runtimeBuilder.buildClient({ remoteUrl, segmentNames, middlewares });
+    const client = clientBuilder.build({ remoteUrl, segments, middleware, healthChecks: [] });
 
-    setRuntime(runtime);
+    setRunner(client.worker);
 
-    return runtime;
+    return client;
 }

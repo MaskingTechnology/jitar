@@ -1,6 +1,6 @@
 
-import ValueSerializer from '../ValueSerializer.js';
-import SerializedError from '../types/serialized/SerializedError.js';
+import ValueSerializer from '../ValueSerializer';
+import SerializedError from '../types/serialized/SerializedError';
 
 export default class ErrorSerializer extends ValueSerializer
 {

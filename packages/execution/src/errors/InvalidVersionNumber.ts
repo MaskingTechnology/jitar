@@ -1,9 +1,7 @@
 
-import { Loadable } from '@jitar/serialization';
+import { BadRequest } from '@jitar/errors';
 
-import ExecutionError from './ExecutionError';
-
-export default class InvalidVersionNumber extends ExecutionError
+export default class InvalidVersionNumber extends BadRequest
 {
     #number: string;
 
@@ -16,5 +14,3 @@ export default class InvalidVersionNumber extends ExecutionError
 
     get number() { return this.#number; }
 }
-
-(InvalidVersionNumber as Loadable).source = 'RUNTIME_ERROR_LOCATION';

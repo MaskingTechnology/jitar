@@ -111,15 +111,16 @@ export default function viteJitar(sourcePath: string, jitarPath: string, jitarUr
                 return null;
             }
 
-            const jitarImport = `import { buildClient } from "jitar/client";`;
+            // TODO: import segment files
+            
+            const jitarImport = `import { buildClient } from "jitar";`;
             const middlewareImports = middlewares.map((middleware, index) => `import { default as $${index} } from "${middleware}";`).join('');
 
-            const importFunction = `const importFunction = (specifier) => import(specifier);`;
             const middlewareArray = `const middlewares = [${middlewares.map((_, index) => `$${index}`).join(', ')}];`;
 
-            const startClient = `buildClient(document.location.origin, importFunction, [], middlewares);`;
+            const startClient = `buildClient(document.location.origin, [], middlewares);`;
 
-            return `${jitarImport}\n${middlewareImports}\n${importFunction}\n${middlewareArray}\n${startClient}`;
+            return `${jitarImport}\n${middlewareImports}\n${middlewareArray}\n${startClient}`;
         }
 
     } as PluginOption;

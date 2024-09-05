@@ -2,7 +2,7 @@
 import type { Module } from '../source';
 import { FileHelper } from '../utils';
 
-export default class ClassSourceBuilder
+export default class ClassAnnotator
 {
     #module: Module;
 
@@ -11,12 +11,12 @@ export default class ClassSourceBuilder
         this.#module = module;
     }
 
-    build(): string
+    annotate(): string
     {
         const filename = FileHelper.addSubExtension(this.#module.filename, 'shared');
         const classes = this.#module.reflection.exportedClasses;
         const classNames = classes.map(clazz => clazz.name);
-        const sourceCode = classNames.map(className => `${className}.source = "/${filename}";`);
+        const sourceCode = classNames.map(className => `${className}.fqn = "/${filename}";`);
 
         return sourceCode.join('\n');
     }

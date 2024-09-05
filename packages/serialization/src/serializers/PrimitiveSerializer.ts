@@ -1,5 +1,5 @@
 
-import ValueSerializer from '../ValueSerializer.js';
+import ValueSerializer from '../ValueSerializer';
 
 export default class PrimitiveSerializer extends ValueSerializer
 {

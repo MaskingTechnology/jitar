@@ -21,7 +21,9 @@ export { default as Client } from './client/Client';
 export { default as ServerResponse } from './server/types/ServerResponse';
 export { default as Server } from './server/Server';
 
-export { default as Remote } from './Remote';
-
 export { default as Service } from './Service';
 export { default as RunnerService } from './RunnerService';
+export { default as ProviderService } from './ProviderService';
+
+export { default as ClientBuilder } from './ClientBuilder';
+export { default as ServerBuilder } from './ServerBuilder';

@@ -1,30 +1,33 @@
 
-import Serializer from './Serializer.js';
-import ClassLoader from './interfaces/ClassLoader.js';
-import ArraySerializer from './serializers/ArraySerializer.js';
-import BigIntSerializer from './serializers/BigIntSerializer.js';
-import ClassSerializer from './serializers/ClassSerializer.js';
-import DateSerializer from './serializers/DateSerializer.js';
-import ErrorSerializer from './serializers/ErrorSerializer.js';
-import MapSerializer from './serializers/MapSerializer.js';
-import ObjectSerializer from './serializers/ObjectSerializer.js';
-import PrimitiveSerializer from './serializers/PrimitiveSerializer.js';
-import RegExpSerializer from './serializers/RegExpSerializer.js';
-import SetSerializer from './serializers/SetSerializer.js';
-import TypedArraySerializer from './serializers/TypedArraySerializer.js';
-import UrlSerializer from './serializers/UrlSerializer.js';
-import DefaultClassLoader from './DefaultClassLoader.js';
-
-const defaultClassLoader = new DefaultClassLoader();
+import Serializer from './Serializer';
+import ClassResolver from './interfaces/ClassResolver';
+import ArraySerializer from './serializers/ArraySerializer';
+import BigIntSerializer from './serializers/BigIntSerializer';
+import ClassSerializer from './serializers/ClassSerializer';
+import DateSerializer from './serializers/DateSerializer';
+import ErrorSerializer from './serializers/ErrorSerializer';
+import MapSerializer from './serializers/MapSerializer';
+import ObjectSerializer from './serializers/ObjectSerializer';
+import PrimitiveSerializer from './serializers/PrimitiveSerializer';
+import RegExpSerializer from './serializers/RegExpSerializer';
+import SetSerializer from './serializers/SetSerializer';
+import TypedArraySerializer from './serializers/TypedArraySerializer';
+import UrlSerializer from './serializers/UrlSerializer';
 
 export default class SerializerBuilder
 {
-    public static build(loader: ClassLoader = defaultClassLoader): Serializer
+    public static build(classResolver?: ClassResolver): Serializer
     {
         const serializer = new Serializer();
+        
         serializer.addSerializer(new PrimitiveSerializer());
         serializer.addSerializer(new ObjectSerializer());
-        serializer.addSerializer(new ClassSerializer(loader));
+
+        if (classResolver !== undefined)
+        {
+            serializer.addSerializer(new ClassSerializer(classResolver));
+        }
+
         serializer.addSerializer(new ErrorSerializer());
         serializer.addSerializer(new RegExpSerializer());
         serializer.addSerializer(new BigIntSerializer());

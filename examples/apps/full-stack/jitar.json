@@ -1,4 +1,4 @@
 {
     "source": "./dist",
-    "target": "./dist"
+    "target": "./.jitar"
 }

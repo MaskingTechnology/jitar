@@ -9,7 +9,6 @@ type Configuration =
 {
     url: string;
     procedureNames: Set<string>;
-    remote: Remote;
 };
 
 export default class RemoteWorker implements Worker
@@ -22,7 +21,7 @@ export default class RemoteWorker implements Worker
     {
         this.#url = configuration.url;
         this.#procedureNames = configuration.procedureNames;
-        this.#remote = configuration.remote;
+        this.#remote = new Remote(configuration.url);
     }
     
     get url() { return this.#url; }

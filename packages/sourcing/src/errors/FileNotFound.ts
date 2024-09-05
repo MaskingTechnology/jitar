@@ -1,6 +1,4 @@
 
-import { Loadable } from '@jitar/serialization';
-
 export default class FileNotFound extends Error
 {
     #filename: string;
@@ -14,5 +12,3 @@ export default class FileNotFound extends Error
 
     get filename() { return this.#filename; }
 }
-
-(FileNotFound as Loadable).source = 'RUNTIME_ERROR_LOCATION';

@@ -1,34 +1,18 @@
 
-import type { SourcingManager } from '@jitar/sourcing';
-
 import InvalidHealthCheck from './errors/InvalidHealthCheck';
 import type HealthCheck from './interfaces/HealthCheck';
 
 export default class HealthManager
 {
-    #sourcingManager: SourcingManager;
     #healthChecks: Map<string, HealthCheck> = new Map();
-
-    constructor(sourcingManager: SourcingManager)
-    {
-        this.#sourcingManager = sourcingManager;
-    }
-
-    async importHealthCheck(filename: string): Promise<void>
-    {
-        const module = await this.#sourcingManager.import(filename);
-        const healthCheck = module.default as HealthCheck;
-
-        if (healthCheck?.isHealthy === undefined)
-        {
-            throw new InvalidHealthCheck(filename);
-        }
-
-        this.addHealthCheck(healthCheck as HealthCheck);
-    }
 
     addHealthCheck(healthCheck: HealthCheck): void
     {
+        if (healthCheck.isHealthy === undefined)
+        {
+            throw new InvalidHealthCheck();
+        }
+
         this.#healthChecks.set(healthCheck.name, healthCheck);
     }
 

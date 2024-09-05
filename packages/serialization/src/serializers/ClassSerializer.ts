@@ -1,26 +1,26 @@
 
 import { ReflectionClass, ReflectionField, Reflector } from '@jitar/reflection';
 
-import ValueSerializer from '../ValueSerializer.js';
-import ClassNotFound from '../errors/ClassNotFound.js';
-import InvalidClass from '../errors/InvalidClass.js';
-import ClassLoader from '../interfaces/ClassLoader.js';
-import Loadable from '../types/Loadable.js';
-import FlexObject from '../types/serialized/SerializableObject.js';
-import SerializableObject from '../types/serialized/SerializableObject.js';
-import SerializedClass from '../types/serialized/SerializedClass.js';
+import ValueSerializer from '../ValueSerializer';
+import ClassNotFound from '../errors/ClassNotFound';
+import InvalidClass from '../errors/InvalidClass';
+import ClassResolver from '../interfaces/ClassResolver';
+import FlexObject from '../types/serialized/SerializableObject';
+import SerializableObject from '../types/serialized/SerializableObject';
+import SerializedClass from '../types/serialized/SerializedClass';
+import Resolvable from '../types/Resolvable';
 
 const reflector = new Reflector();
 
 export default class ClassSerializer extends ValueSerializer
 {
-    #classLoader: ClassLoader;
+    #classResolver: ClassResolver;
 
-    constructor(classLoader: ClassLoader)
+    constructor(classResolver: ClassResolver)
     {
         super();
 
-        this.#classLoader = classLoader;
+        this.#classResolver = classResolver;
     }
 
     canSerialize(value: unknown): boolean
@@ -35,7 +35,8 @@ export default class ClassSerializer extends ValueSerializer
 
         return object instanceof Object
             && object.serialized === true
-            && typeof object.name === 'string'
+            && object.name === 'class'
+            && typeof object.key === 'string'
             && object.args instanceof Object
             && object.args.constructor === Object
             && object.fields instanceof Object
@@ -48,12 +49,12 @@ export default class ClassSerializer extends ValueSerializer
         const model = reflector.fromClass(clazz, true);
         const parameterNames = this.#extractConstructorParameters(model);
 
-        const name = clazz.name;
-        const source = (clazz as Loadable).source;
+        const name = 'class';
+        const key = this.#classResolver.resolveKey(clazz);
         const args: FlexObject = await this.#serializeConstructor(model, parameterNames, object);
         const fields: FlexObject = await this.#serializeFields(model, parameterNames, object);
 
-        return { serialized: true, name: name, source: source, args: args, fields: fields };
+        return { serialized: true, key, name, args, fields };
     }
 
     #extractConstructorParameters(model: ReflectionClass): string[]
@@ -146,13 +147,13 @@ export default class ClassSerializer extends ValueSerializer
         return Promise.all(values);
     }
 
-    async #getClass(loadable: Loadable): Promise<unknown>
+    async #getClass(resolvable: Resolvable): Promise<unknown>
     {
-        if (loadable.source === undefined)
+        if (resolvable.key === undefined)
         {
-            return (globalThis as FlexObject)[loadable.name];
+            return (globalThis as FlexObject)[resolvable.key];
         }
 
-        return this.#classLoader.loadClass(loadable);
+        return this.#classResolver.resolveClass(resolvable.key);
     }
 }

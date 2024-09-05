@@ -4,9 +4,9 @@ import glob from 'glob-promise';
 import mime from 'mime-types';
 import path from 'path';
 
-import FileNotFound from '../errors/FileNotFound';
-import type FileManager from '../interfaces/FileManager';
-import File from '../models/File';
+import FileNotFound from './errors/FileNotFound';
+import type FileManager from './interfaces/FileManager';
+import File from './models/File';
 
 export default class LocalFileManager implements FileManager
 {

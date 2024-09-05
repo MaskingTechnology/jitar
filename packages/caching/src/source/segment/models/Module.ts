@@ -1,14 +1,16 @@
 
 import type Imports from '../types/Imports';
 
-import type Implementation from './Implementation';
+import Class from './Class';
+import Implementation from './Implementation';
+import type Member from './Member';
 
 export default class Module
 {
     #filename: string;
     #location: string;
     #imports: Imports;
-    #implementations: Implementation[] = [];
+    #members: Member[] = [];
 
     constructor(filename: string, location: string, imports: Imports)
     {
@@ -23,10 +25,30 @@ export default class Module
 
     get imports() { return this.#imports; }
 
-    get implementations() { return this.#implementations; }
-
-    addImplementation(implementation: Implementation): void
+    get members() { return this.#members; }
+    
+    hasClasses(): boolean
     {
-        this.#implementations.push(implementation);
+        return this.#members.some(member => member instanceof Class);
+    }
+
+    getClasses(): Class[]
+    {
+        return this.#members.filter(member => member instanceof Class) as Class[];
+    }
+
+    hasImplementations(): boolean
+    {
+        return this.#members.some(member => member instanceof Implementation);
+    }
+
+    getImplementations(): Implementation[]
+    {
+        return this.#members.filter(member => member instanceof Implementation) as Implementation[];
+    }
+
+    addMember(members: Member): void
+    {
+        this.#members.push(members);
     }
 }

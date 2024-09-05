@@ -1,6 +1,5 @@
 
 import { Request, Response } from '@jitar/execution';
-import type { SourcingManager } from '@jitar/sourcing';
 
 import InvalidMiddleware from './errors/InvalidMiddleware';
 import type Middleware from './interfaces/Middleware';
@@ -8,29 +7,15 @@ import type NextHandler from './types/NextHandler';
 
 export default class MiddlewareManager
 {
-    #sourcingManager: SourcingManager;
     #middlewares: Middleware[] = [];
-
-    constructor(sourcingManager: SourcingManager)
-    {
-        this.#sourcingManager = sourcingManager;
-    }
-
-    async importMiddleware(filename: string): Promise<void>
-    {
-        const module = await this.#sourcingManager.import(filename);
-        const middleware = module.default as Middleware;
-
-        if (middleware?.handle === undefined)
-        {
-            throw new InvalidMiddleware(filename);
-        }
-
-        this.addMiddleware(middleware);
-    }
 
     addMiddleware(middleware: Middleware): void
     {
+        if (middleware?.handle === undefined)
+        {
+            throw new InvalidMiddleware();
+        }
+        
         // We want to add the middleware before the ProcedureRunner because
         // it is the last middleware that needs to be called.
 
@@ -62,7 +47,7 @@ export default class MiddlewareManager
 
         if (next === undefined)
         {
-            return async () => new Response();
+            return async () => new Response(true);
         }
 
         const nextHandler = this.#getNextHandler(request, index + 1);

@@ -27,8 +27,7 @@
   },
   "dependencies": {
     "@jitar/errors": "*",
-    "@jitar/execution": "*",
-    "@jitar/sourcing": "*"
+    "@jitar/execution": "*"
   },
   "repository": {
     "type": "git",

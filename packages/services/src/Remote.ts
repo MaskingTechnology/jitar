@@ -1,6 +1,5 @@
 
 import { Request, Response as ResultResponse } from '@jitar/execution';
-import { Serializer } from '@jitar/serialization';
 import { File } from '@jitar/sourcing';
 
 const APPLICATION_JSON = 'application/json';
@@ -8,12 +7,10 @@ const APPLICATION_JSON = 'application/json';
 export default class Remote
 {
     #url: string;
-    #serializer: Serializer;
 
-    constructor(url: string, serializer: Serializer)
+    constructor(url: string)
     {
         this.#url = url;
-        this.#serializer = serializer;
     }
 
     async loadFile(filename: string): Promise<File>
@@ -72,7 +69,7 @@ export default class Remote
         const argsObject = Object.fromEntries(request.args);
         const headersObject = Object.fromEntries(request.headers);
 
-        const url = `${this.#url}/rpc/${request.fqn}?version=${versionString}&serialize=true`;
+        const url = `${this.#url}/rpc/${request.fqn}?version=${versionString}`;
         const body = await this.#createRequestBody(argsObject);
         const options =
         {
@@ -81,11 +78,12 @@ export default class Remote
             body: body
         };
 
-        const response = await this.#callRemote(url, options);
-        const result = await this.#createResponseResult(response);
+        const response = await fetch(url, options);
+        const success = this.#isSuccessResponse(response);
+        const result = await this.#getResponseResult(response);
         const headers = this.#createResponseHeaders(response);
 
-        return new ResultResponse(result, headers);
+        return new ResultResponse(success, result, headers);
     }
 
     async #callRemote(url: string, options: object): Promise<Response>
@@ -94,10 +92,18 @@ export default class Remote
 
         if (this.#isErrorResponse(response))
         {
-            throw await this.#createResponseResult(response);
+            const message = await this.#getResponseResult(response);
+
+            // TODO: make specific error
+            throw new Error(String(message));
         }
 
         return response;
+    }
+
+    #isSuccessResponse(response: Response): boolean
+    {
+        return response.status >= 200 && response.status < 300;
     }
 
     #isErrorResponse(response: Response): boolean
@@ -107,16 +113,7 @@ export default class Remote
 
     async #createRequestBody(body: unknown): Promise<string>
     {
-        const data = await this.#serializer.serialize(body);
-        
-        return JSON.stringify(data);
-    }
-
-    async #createResponseResult(response: Response): Promise<unknown>
-    {
-        const result = await this.#getResponseResult(response);
-
-        return this.#serializer.deserialize(result);
+        return JSON.stringify(body);
     }
 
     async #getResponseResult(response: Response): Promise<unknown>

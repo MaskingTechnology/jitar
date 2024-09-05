@@ -1,6 +1,5 @@
 
-import { ConfigurationManager, RuntimeConfiguration } from '@jitar/configuration';
-import { FileManagerBuilder, Module, ImportFunction } from '@jitar/sourcing'; // Via runtime?
+import { ConfigurationManager } from '@jitar/configuration';
 import { Server } from '@jitar/services';
 import { buildServer } from '@jitar/runtime';
 import { HttpServer } from '@jitar/server-http';
@@ -26,18 +25,6 @@ export default class StartServer implements Command
         const runtimeConfiguration = await configurationManager.configureRuntime();
         const serverConfiguration = await configurationManager.configureServer('./services/standalone.json');
 
-        const importFunction = await this.#getImportFunction(runtimeConfiguration);
-
-        return buildServer(runtimeConfiguration, serverConfiguration, importFunction);
-    }
-
-    async #getImportFunction(configuration: RuntimeConfiguration): Promise<ImportFunction>
-    {
-        const fileManager = new FileManagerBuilder('./').buildLocal(configuration.target);
-
-        const filename = fileManager.getAbsoluteLocation('jitar.js');
-        const module = await import(filename) as Module;
-
-        return module.default as ImportFunction;
+        return buildServer(runtimeConfiguration, serverConfiguration);
     }
 }

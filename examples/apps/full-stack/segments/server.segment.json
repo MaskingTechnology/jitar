@@ -1,4 +1,5 @@
 {
+    "./domain/contact/Contact": { "default": {  } },
     "./domain/contact/createContact": { "default": { "access": "public" } },
     "./domain/contact/deleteContact": { "default": { "access": "public" } },
     "./domain/contact/getContacts": { "default": { "access": "public" } }

@@ -1,19 +1,19 @@
 
 import type { Module, Segmentation, Segment } from '../source';
 
-import ClassSourceBuilder from './ClassSourceBuilder';
+// import ClassAnnotator from './ClassAnnotator';
 import ImportRewriter from './ImportRewriter';
 
 export default class LocalModuleBuilder
 {
     build(module: Module, segmentation: Segmentation, segment?: Segment): string
     {
-        const classSourceBuilder = new ClassSourceBuilder(module);
+        // const classAnnotator = new ClassAnnotator(module);
         const importRewriter = new ImportRewriter(module, segmentation, segment);
 
-        const importCode = importRewriter.rewrite();
-        const sourceCode = classSourceBuilder.build();
+        return importRewriter.rewrite();
+        // const sourceCode = classAnnotator.annotate();
 
-        return `${importCode}\n${sourceCode}`;
+        // return `${importCode}\n${sourceCode}`;
     }
 }

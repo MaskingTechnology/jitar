@@ -10,6 +10,7 @@ export default class CommandManager
 
     constructor()
     {
+        // TODO: add commands 'help', 'version', 'init' and 'about'
         this.#commands.set('build', new BuildCache());
         this.#commands.set('start', new StartServer());
     }
