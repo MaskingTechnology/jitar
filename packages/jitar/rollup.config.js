@@ -8,6 +8,9 @@ import { SERVER_EXTERNALS } from './rollup.definitions.js';
 export default [
 	{
 		external: SERVER_EXTERNALS,
+		treeshake: {
+			moduleSideEffects: false
+		},
 		input: {
 			cli: 'src/cli.ts',
 			lib: 'src/lib.ts'
@@ -23,7 +26,9 @@ export default [
 		},
 		plugins: [
 			typescript(),
-			nodeResolve()
+			nodeResolve({
+				browser: true
+			})
 		]
 	}
 ]

@@ -8,6 +8,6 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    jitar('src', 'domain', 'http://localhost:3000')
+    jitar({ sourceDir: 'src', targetDir: 'dist', jitarDir: 'domain', jitarUrl: 'http://localhost:3000', segments: ['client'] })
   ]
 })

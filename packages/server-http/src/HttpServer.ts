@@ -59,7 +59,7 @@ export default class HttpServer
 
         this.#app.post('/workers', this.#addWorker.bind(this));
 
-        this.#app.post('*', this.#provide.bind(this));
+        this.#app.get('*', this.#provide.bind(this));
     }
 
     #startHttp(): Promise<void>

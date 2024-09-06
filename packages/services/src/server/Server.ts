@@ -110,9 +110,6 @@ export default class Server
     {
             const request = this.#transformRunRequest(runRequest);
 
-            // TODO: remove this line when the client works again
-            request.setHeader('X-Jitar-Data-Encoding', 'serialized');
-
             const response = await this.#proxy.run(request);
 
             return response.success
