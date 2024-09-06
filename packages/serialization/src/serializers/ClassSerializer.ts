@@ -69,15 +69,17 @@ export default class ClassSerializer extends ValueSerializer
     {
         const args: FlexObject = {};
 
-        for (const name of includeNames)
+        for (const [index, name] of includeNames.entries())
         {
             // Constructor parameters that can't be read make it impossible to fully reconstruct the object.
 
-            const objectValue = model.canRead(name)
+            const value = model.canRead(name)
                 ? await this.serializeOther((object as FlexObject)[name])
                 : undefined;
 
-            args[name] = objectValue;
+            const key = index.toString();
+
+            args[key] = value;
         }
 
         return args;
@@ -137,9 +139,10 @@ export default class ClassSerializer extends ValueSerializer
         const constructor = model.getFunction('constructor');
         const parameters = (constructor?.parameters ?? []) as ReflectionField[];
 
-        const values = parameters.map(parameter =>
+        const values = parameters.map((_, index) =>
         {
-            const value = args[parameter.name];
+            const key = index.toString();
+            const value = args[key];
 
             return this.deserializeOther(value);
         });
