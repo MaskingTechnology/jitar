@@ -33,6 +33,11 @@ function assureExtension(filename: string)
     return `${filename}.js`;
 }
 
+function makeShared(filename: string)
+{
+    return assureExtension(filename).replace('.js', '.shared.js')
+}
+
 type PluginConfig =
 {
     sourceDir: string;
@@ -147,7 +152,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             }
 
             const segmentFiles = segments.map(name => `${targetPath}/${name}.segment.js`);
-            const middlewareFiles = middlewares.map(name => assureExtension(`${targetPath}/${name}`));
+            const middlewareFiles = middlewares.map(name => makeShared(`${targetPath}/${name}`));
 
             const jitarImport = `import { buildClient } from "jitar";`;
             const segmentImports = segmentFiles.map((filename, index) => `import { default as $S${index} } from "${filename}";`).join('');

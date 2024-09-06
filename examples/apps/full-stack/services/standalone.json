@@ -1,13 +1,13 @@
 {
     "url": "http://127.0.0.1:3000",
-    "setUp": ["./integrations/jitar/setUpDatabase.shared.js"],
-    "tearDown": ["./integrations/jitar/tearDownDatabase.shared.js"],
+    "setUp": ["./integrations/jitar/setUpDatabase"],
+    "tearDown": ["./integrations/jitar/tearDownDatabase"],
     "standalone":
     {
         "segments": ["server"],
-        "healthChecks": ["./integrations/jitar/databaseHealthCheck.shared.js"],
-        "middlewares": ["./integrations/jitar/requestLogger.shared.js"],
-        "assets": [ "index.html", "assets/**/*", "domain/**/*" ],
+        "healthChecks": ["./integrations/jitar/databaseHealthCheck"],
+        "middlewares": ["./integrations/jitar/requestLogger"],
+        "assets": [ "index.html", "assets/**/*" ],
         "serveIndexOnNotFound": true
     }
 }

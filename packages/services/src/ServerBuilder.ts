@@ -26,10 +26,13 @@ export default class RuntimeBuilder
 
     async build(configuration: ServerConfiguration): Promise<Server>
     {
+        const setUp = configuration.setUp ?? [];
+        const tearDown = configuration.tearDown ?? [];
+
         const proxy = await this.#buildService(configuration);
         const sourcingManager = this.#sourcingManager;
-        const setUpScripts = configuration.setUp ?? [];
-        const tearDownScripts = configuration.tearDown ?? [];
+        const setUpScripts = setUp.map(filename => this.#makeSharedFilename(filename));
+        const tearDownScripts = tearDown.map(filename => this.#makeSharedFilename(filename));
 
         return new Server({ proxy, sourcingManager, setUpScripts, tearDownScripts });
     }
@@ -131,7 +134,8 @@ export default class RuntimeBuilder
 
         if (filenames !== undefined)
         {
-            const modules = await Promise.all(filenames.map(filename => this.#sourcingManager.import(filename)));
+            const sharedFilenames = filenames.map(filename => this.#makeSharedFilename(filename));
+            const modules = await Promise.all(sharedFilenames.map(filename => this.#sourcingManager.import(filename)));
 
             modules.forEach(module => manager.addHealthCheck(module.default as HealthCheck));
         }
@@ -145,7 +149,8 @@ export default class RuntimeBuilder
 
         if (filenames !== undefined)
         {
-            const modules = await Promise.all(filenames.map(filename => this.#sourcingManager.import(filename)));
+            const sharedFilenames = filenames.map(filename => this.#makeSharedFilename(filename));
+            const modules = await Promise.all(sharedFilenames.map(filename => this.#sourcingManager.import(filename)));
 
             modules.forEach(module => manager.addMiddleware(module.default as Middleware));
         }
@@ -170,5 +175,15 @@ export default class RuntimeBuilder
         const filenames = await this.#sourcingManager.filter(...patterns);
 
         return new Set(filenames);
+    }
+
+    #makeSharedFilename(filename: string): string
+    {
+        if (filename.endsWith('.js') === false)
+        {
+            filename += '.js';
+        }
+
+        return filename.replace('.js', '.shared.js');
     }
 }
