@@ -2,7 +2,7 @@
     "url": "http://127.0.0.1:2999",
     "repository":
     {
-        "assets": [ "index.html", "assets/**/*", "domain/**/*" ],
+        "assets": [ "index.html", "assets/**/*" ],
         "serveIndexOnNotFound": true
     }
 }

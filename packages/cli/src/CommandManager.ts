@@ -1,8 +1,10 @@
 
 import Command from './interfaces/Command';
 
-import BuildCache from './implementations/BuildCache';
-import StartServer from './implementations/StartServer';
+import BuildCache from './commands/BuildCache';
+import StartServer from './commands/StartServer';
+
+import ArgumentManager from './ArgumentManager';
 
 export default class CommandManager
 {
@@ -15,7 +17,7 @@ export default class CommandManager
         this.#commands.set('start', new StartServer());
     }
 
-    execute(name: string, args: Map<string, string>): Promise<void>
+    execute(name: string, args: ArgumentManager): Promise<void>
     {
         const command = this.#commands.get(name);
 

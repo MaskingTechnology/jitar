@@ -1,6 +1,6 @@
 
-import { ArgumentManager } from './arguments';
-import { CommandManager } from './commands';
+import ArgumentManager from './ArgumentManager';
+import CommandManager from './CommandManager';
 
 export default class CliManager
 {
@@ -16,8 +16,7 @@ export default class CliManager
     manage(): Promise<void>
     {
         const command = this.#argumentManager.getCommand();
-        const args = this.#argumentManager.getArguments();
 
-        return this.#commandManager.execute(command, args);
+        return this.#commandManager.execute(command, this.#argumentManager);
     }
 }
