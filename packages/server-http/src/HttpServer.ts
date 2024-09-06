@@ -147,10 +147,12 @@ export default class HttpServer
     async #addWorker(request: Request, response: Response): Promise<Response>
     {
         const args = this.#extractBodyArguments(request);
-        const url = typeof args.url === 'string' ? args.url : '';
-        const procedures = Array.isArray(args.procedures) ? args.procedures as string[] : [];
 
-        const serverResponse = await this.#server.addWorker({ url, procedures });
+        // TODO: validate args
+        const url = typeof args.url === 'string' ? args.url : '';
+        const procedureNames = Array.isArray(args.procedureNames) ? args.procedureNames as string[] : [];
+
+        const serverResponse = await this.#server.addWorker({ url, procedureNames });
 
         return this.#transformResponse(response, serverResponse);
     }

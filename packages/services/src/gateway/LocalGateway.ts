@@ -1,5 +1,6 @@
 
-import type { Request, Response } from '@jitar/execution';
+import { Response } from '@jitar/execution';
+import type { Request } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
 import { MiddlewareManager, ProcedureRunner } from '@jitar/middleware';
 
@@ -84,9 +85,18 @@ export default class LocalGateway implements Gateway
         return this.#workerManager.hasProcedure(name);
     }
 
-    run(request: Request): Promise<Response>
+    async run(request: Request): Promise<Response>
     {
-        return this.#middlewareManager.handle(request);
+        try
+        {
+            return this.#middlewareManager.handle(request);
+        }
+        catch (error: unknown)
+        {
+            // TODO: serialize error
+
+            return new Response(false, error);
+        }
     }
 
     #isInvalidTrustKey(trustKey?: string): boolean

@@ -2,7 +2,7 @@
 type AddWorkerRequest =
 {
     url: string;
-    procedures: string[];
+    procedureNames: string[];
 };
 
 export default AddWorkerRequest;
