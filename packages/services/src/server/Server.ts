@@ -2,6 +2,7 @@
 import { BadRequest, Forbidden, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized } from '@jitar/errors';
 import { Request, Version, VersionParser } from '@jitar/execution';
 import type { File, SourcingManager } from '@jitar/sourcing';
+import { Logger } from '@jitar/logging';
 
 import LocalGateway from '../gateway/LocalGateway';
 import LocalWorker from '../worker/LocalWorker';
@@ -31,6 +32,8 @@ export default class Server
     #setUpScripts: string[];
     #tearDownScripts: string[];
 
+    #logger: Logger = new Logger();
+
     constructor(configuration: Configuration)
     {
         this.#proxy = configuration.proxy;
@@ -47,11 +50,11 @@ export default class Server
 
         await this.#proxy.start();
 
-        console.log(`Server started at ${this.#proxy.url}`);
+        this.#logger.info(`Server started at ${this.#proxy.url}`);
         
         if (this.#proxy.runner instanceof LocalWorker)
         {
-            console.log('RPC procedures:', this.#proxy.runner.getProcedureNames());
+            this.#logger.info('RPC procedures:', this.#proxy.runner.getProcedureNames());
         }
     }
 
@@ -61,7 +64,7 @@ export default class Server
 
         await this.#tearDown();
 
-        console.log('Server stopped');
+        this.#logger.info('Server stopped');
     }
 
     async getHealth(): Promise<ServerResponse>
@@ -70,10 +73,16 @@ export default class Server
         {
             const health = await this.#proxy.getHealth();
 
+            this.#logger.info('Got health');
+
             return this.#respondHealth(health);
         }
         catch (error: unknown)
         {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.error('Failed to get health:', message);
+
             return this.#respondError(error);
         }
     }
@@ -84,10 +93,16 @@ export default class Server
         {
             const healthy = await this.#proxy.isHealthy();
 
+            this.#logger.debug('Got health status');
+
             return this.#respondHealthy(healthy);
         }
         catch (error: unknown)
         {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.error('Failed to get health status:', message);
+
             return this.#respondError(error);
         }
     }
@@ -98,10 +113,16 @@ export default class Server
         {
             const file = await this.#proxy.provide(provideRequest.filename);
 
+            this.#logger.info('Provided file:', provideRequest.filename);
+
             return this.#respondFile(file);
         }
         catch (error: unknown)
         {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.error('Failed to provide file:', message);
+
             return this.#respondError(error);
         }
     }
@@ -111,6 +132,8 @@ export default class Server
             const request = this.#transformRunRequest(runRequest);
 
             const response = await this.#proxy.run(request);
+
+            this.#logger.info('Ran request:', request.fqn);
 
             return response.success
                 ? this.#respondResult(response.result, response.headers)
@@ -128,14 +151,20 @@ export default class Server
                 throw new BadRequest('Cannot add worker to remote gateway');
             }
 
-            const worker = this.#buildRemoteWorker(addRequest.url, addRequest.procedures);
+            const worker = this.#buildRemoteWorker(addRequest.url, addRequest.procedureNames);
 
             await runner.addWorker(worker);
+
+            this.#logger.info('Added worker:', worker.url);
 
             return this.#respondSuccess();
         }
         catch (error: unknown)
         {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.error('Failed to add worker:', message);
+
             return this.#respondError(error);
         }
     }
