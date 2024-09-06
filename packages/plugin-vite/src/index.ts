@@ -4,7 +4,7 @@ import fs from 'fs';
 
 import { PluginOption, normalizePath, ResolvedConfig } from 'vite';
 
-const BOOTSTRAPPING_ID = 'jitar-client';
+const JITAR_BUNDLE_ID = 'jitar-client';
 
 function formatDir(dir: string)
 {
@@ -91,19 +91,19 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
             if (options.input === undefined)
             {
-                options.input = BOOTSTRAPPING_ID;
+                options.input = JITAR_BUNDLE_ID;
             }
             else if (typeof options.input === 'string')
             {
-                options.input = [options.input, BOOTSTRAPPING_ID];
+                options.input = [options.input, JITAR_BUNDLE_ID];
             }
             else if (Array.isArray(options.input))
             {
-                options.input.push(BOOTSTRAPPING_ID);
+                options.input.push(JITAR_BUNDLE_ID);
             }
             else if (typeof options.input === 'object')
             {
-                options.input.additionalEntry = BOOTSTRAPPING_ID;
+                options.input.additionalEntry = JITAR_BUNDLE_ID;
             }
 
             return options;
@@ -114,7 +114,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             order: 'pre',
             async handler(source: string, importer: string | undefined, options: object)
             {
-                if (source === BOOTSTRAPPING_ID)
+                if (source === JITAR_BUNDLE_ID)
                 {
                     return source;
                 }
@@ -146,7 +146,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
         {
             // Create the jitar client bundle content
             
-            if (id !== BOOTSTRAPPING_ID)
+            if (id !== JITAR_BUNDLE_ID)
             {
                 return null;
             }
@@ -174,7 +174,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
             for (const [fileName, chunk] of bundles)
             {
-                if (chunk.type === 'chunk' && chunk.name === BOOTSTRAPPING_ID)
+                if (chunk.type === 'chunk' && chunk.name === JITAR_BUNDLE_ID)
                 {
                     jitarBundleFilename = fileName;
 
@@ -189,10 +189,26 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
             if (jitarBundleFilename === undefined)
             {
-                console.warn('Jitar bundle not found!');
+                // Dev mode: insert the pre generated jitar bundle
 
-                return html;
+                const assetPath = path.join(targetDir, 'assets');
+                const filenames = fs.readdirSync(assetPath);
+                
+                const jitarFilename = filenames.find(fileName => fileName.startsWith(JITAR_BUNDLE_ID) && fileName.endsWith('.js'));
+
+                if (jitarFilename === undefined)
+                {
+                    console.warn('Jitar bundle not found! Did you build the application first?');
+
+                    return html;
+                }
+
+                const jitarBundle = fs.readFileSync(path.join(assetPath, jitarFilename), 'utf-8');
+
+                return html.replace('<script', `<script type="module">${jitarBundle}</script>\n    <script`);
             }
+
+            // Production mode: load the jitar bundle from the assets folder
 
             return html.replace('<script', `<script type="module" crossorigin src="/${jitarBundleFilename}"></script>\n    <script`);
         }
