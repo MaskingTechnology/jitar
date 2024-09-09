@@ -1,8 +1,8 @@
 
 export default class Teapot extends Error
 {
-    constructor()
+    constructor(message = "I'm a teapot")
     {
-        super(`I'm a teapot`);
+        super(message);
     }
 }

@@ -1,5 +1,5 @@
 
-import { Request, Response } from '@jitar/execution';
+import { Request, Response, StatusCodes } from '@jitar/execution';
 
 import InvalidMiddleware from './errors/InvalidMiddleware';
 import type Middleware from './interfaces/Middleware';
@@ -47,7 +47,7 @@ export default class MiddlewareManager
 
         if (next === undefined)
         {
-            return async () => new Response(true);
+            return async () => new Response(StatusCodes.OK);
         }
 
         const nextHandler = this.#getNextHandler(request, index + 1);

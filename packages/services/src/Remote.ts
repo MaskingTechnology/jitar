@@ -1,8 +1,10 @@
 
-import { Request, Response as ResultResponse } from '@jitar/execution';
+import { ErrorConverter, Request, Response as ResultResponse } from '@jitar/execution';
 import { File } from '@jitar/sourcing';
 
 const APPLICATION_JSON = 'application/json';
+
+const errorConverter = new ErrorConverter();
 
 export default class Remote
 {
@@ -78,32 +80,26 @@ export default class Remote
             body: body
         };
 
-        const response = await fetch(url, options);
-        const success = this.#isSuccessResponse(response);
+        const response = await this.#callRemote(url, options, false);
+        const status = response.status;
         const result = await this.#getResponseResult(response);
         const headers = this.#createResponseHeaders(response);
 
-        return new ResultResponse(success, result, headers);
+        return new ResultResponse(status, result, headers);
     }
 
-    async #callRemote(url: string, options: object): Promise<Response>
+    async #callRemote(url: string, options: object, throwOnError = true): Promise<Response>
     {
         const response = await fetch(url, options);
 
-        if (this.#isErrorResponse(response))
+        if (throwOnError && this.#isErrorResponse(response))
         {
-            const message = await this.#getResponseResult(response);
+            const result = await this.#getResponseResult(response);
 
-            // TODO: make specific error
-            throw new Error(String(message));
+            throw errorConverter.fromStatus(response.status, String(result));
         }
 
         return response;
-    }
-
-    #isSuccessResponse(response: Response): boolean
-    {
-        return response.status >= 200 && response.status < 300;
     }
 
     #isErrorResponse(response: Response): boolean

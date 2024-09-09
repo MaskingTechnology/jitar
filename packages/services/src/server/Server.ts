@@ -1,6 +1,7 @@
 
 import { BadRequest, Forbidden, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized } from '@jitar/errors';
 import { Request, Version, VersionParser } from '@jitar/execution';
+import type { Response } from '@jitar/execution';
 import type { File, SourcingManager } from '@jitar/sourcing';
 import { Logger } from '@jitar/logging';
 
@@ -129,15 +130,24 @@ export default class Server
 
     async run(runRequest: RunRequest): Promise<ServerResponse>
     {
+        try
+        {
             const request = this.#transformRunRequest(runRequest);
 
             const response = await this.#proxy.run(request);
 
             this.#logger.info('Ran request:', request.fqn);
 
-            return response.success
-                ? this.#respondResult(response.result, response.headers)
-                : this.#respondError(response.result);
+            return this.#respondResponse(response);
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.error('Failed run request:', message);
+
+            return this.#respondError(error);
+        }
     }
 
     async addWorker(addRequest: AddWorkerRequest): Promise<ServerResponse>
@@ -271,11 +281,12 @@ export default class Server
         return { result, contentType, headers, status };
     }
 
-    #respondResult(result: unknown, headerMap: Map<string, string>): ServerResponse
+    #respondResponse(response: Response): ServerResponse
     {
+        const result = response.result;
         const contentType = this.#determineContentType(result);
-        const headers = this.#unmapHeaders(headerMap);
-        const status = StatusCodes.OK;
+        const headers = this.#unmapHeaders(response.headers);
+        const status = response.status;
 
         return { result, contentType, headers, status };
     }

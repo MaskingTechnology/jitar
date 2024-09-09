@@ -87,16 +87,7 @@ export default class LocalGateway implements Gateway
 
     async run(request: Request): Promise<Response>
     {
-        try
-        {
-            return this.#middlewareManager.handle(request);
-        }
-        catch (error: unknown)
-        {
-            // TODO: serialize error
-
-            return new Response(false, error);
-        }
+        return this.#middlewareManager.handle(request);
     }
 
     #isInvalidTrustKey(trustKey?: string): boolean

@@ -1,18 +1,18 @@
 
 export default class Response
 {
-    #success: boolean;
+    #status: number;
     #result: unknown;
     #headers: Map<string, string>;
 
-    constructor(success: boolean, result: unknown = undefined, headers = new Map())
+    constructor(status: number, result: unknown = undefined, headers = new Map())
     {
-        this.#success = success;
+        this.#status = status;
         this.#result = result;
         this.#headers = headers;
     }
 
-    get success() { return this.#success; }
+    get status() { return this.#status; }
 
     get result() { return this.#result; }
 

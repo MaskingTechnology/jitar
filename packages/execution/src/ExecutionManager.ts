@@ -1,4 +1,6 @@
 
+import StatusCodes from './definitions/StatusCodes';
+
 import ImplementationNotFound from './errors/ImplementationNotFound';
 import InvalidSegment from './errors/InvalidSegment';
 import ProcedureNotFound from './errors/ProcedureNotFound';
@@ -11,12 +13,16 @@ import Application from './models/Application';
 import Segment from './models/Segment';
 import type Class from './models/Class';
 import type Procedure from './models/Procedure';
+import type Implementation from './models/Implementation';
+import type Version from './models/Version';
 
 import ArgumentConstructor from './utils/ArgumentConstructor';
+import ErrorConverter from './utils/ErrorConverter';
 
 export default class ExecutionManager implements Runner
 {
     #argumentConstructor: ArgumentConstructor = new ArgumentConstructor();
+    #errorConverter: ErrorConverter = new ErrorConverter();
     #application: Application = new Application();
 
     async addSegment(segment: Segment): Promise<void>
@@ -66,24 +72,40 @@ export default class ExecutionManager implements Runner
 
     async run(request: Request): Promise<Response>
     {
-        const procedure = this.#application.getProcedure(request.fqn);
-
-        if (procedure === undefined)
-        {
-            throw new ProcedureNotFound(request.fqn);
-        }
-
-        const implementation = procedure.getImplementation(request.version);
-
-        if (implementation === undefined)
-        {
-            throw new ImplementationNotFound(procedure.fqn, request.version.toString());
-        }
+        const implementation = this.#getImplementation(request.fqn, request.version);
 
         const args: unknown[] = this.#argumentConstructor.extract(implementation.parameters, request.args);
 
-        const result = await implementation.executable.call(request, ...args);
+        try
+        {
+            const result = await implementation.executable.call(request, ...args);
 
-        return new Response(true, result);
+            return new Response(StatusCodes.OK, result);
+        }
+        catch (error: unknown)
+        {
+            const status = this.#errorConverter.toStatus(error);
+
+            return new Response(status, error);
+        }
+    }
+
+    #getImplementation(fqn: string, version: Version): Implementation
+    {
+        const procedure = this.#application.getProcedure(fqn);
+
+        if (procedure === undefined)
+        {
+            throw new ProcedureNotFound(fqn);
+        }
+
+        const implementation = procedure.getImplementation(version);
+
+        if (implementation === undefined)
+        {
+            throw new ImplementationNotFound(procedure.fqn, version.toString());
+        }
+
+        return implementation;
     }
 }

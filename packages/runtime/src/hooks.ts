@@ -1,6 +1,6 @@
 
 import { ServerError } from '@jitar/errors';
-import { Runner, Request, VersionParser } from '@jitar/execution';
+import { Runner, Request, VersionParser, StatusCodes } from '@jitar/execution';
 
 let _runner: Runner;
 
@@ -28,7 +28,7 @@ export async function runProcedure(fqn: string, versionNumber: string, args: Rec
     const targetRequest = new Request(fqn, version, argsMap, headersMap);
     const targetResponse = await runtime.run(targetRequest);
 
-    if (targetResponse.success === false)
+    if (targetResponse.status !== StatusCodes.OK)
     {
         throw targetResponse.result;
     }

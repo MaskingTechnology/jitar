@@ -1,5 +1,5 @@
 
-import { Request, Response, ExecutionManager } from '@jitar/execution';
+import { Request, Response, ExecutionManager, StatusCodes } from '@jitar/execution';
 import { Unauthorized } from '@jitar/errors';
 import { HealthManager } from '@jitar/health';
 import { MiddlewareManager, ProcedureRunner } from '@jitar/middleware';
@@ -114,35 +114,26 @@ export default class LocalWorker implements Worker
         const dataEncoding = request.getHeader(JITAR_DATA_ENCODING_KEY);
         const trustKey = request.getHeader(JITAR_TRUST_HEADER_KEY);
 
-        let response: Response;
-
-        try
+        if (trustKey !== undefined && this.#trustKey !== trustKey)
         {
-            if (trustKey !== undefined && this.#trustKey !== trustKey)
-            {
-                throw new InvalidTrustKey();
-            }
-            
-            const procedure = this.#executionManager.getProcedure(request.fqn);
-
-            if (trustKey === undefined && procedure?.protected)
-            {
-                throw new Unauthorized();
-            }
-
-            if (dataEncoding === JITAR_DATA_ENCODING_VALUE)
-            {
-                request = await this.#deserializeRequest(request);
-            }
-
-            request.removeHeader(JITAR_DATA_ENCODING_KEY);
-
-            response = await this.#middlewareManager.handle(request);
+            throw new InvalidTrustKey();
         }
-        catch (error: unknown)
+        
+        const procedure = this.#executionManager.getProcedure(request.fqn);
+
+        if (trustKey === undefined && procedure?.protected)
         {
-            response = new Response(false, error);
+            throw new Unauthorized();
         }
+
+        if (dataEncoding === JITAR_DATA_ENCODING_VALUE)
+        {
+            request = await this.#deserializeRequest(request);
+        }
+
+        request.removeHeader(JITAR_DATA_ENCODING_KEY);
+
+        const response = await this.#middlewareManager.handle(request);
 
         if (dataEncoding === JITAR_DATA_ENCODING_VALUE)
         {
@@ -200,13 +191,13 @@ export default class LocalWorker implements Worker
     {
         const serializedResult = await this.#serializer.serialize(response.result);
 
-        return new Response(response.success, serializedResult, response.headers);
+        return new Response(response.status, serializedResult, response.headers);
     }
 
     async #deserializeResponse(response: Response): Promise<Response>
     {
         const deserializedResult = await this.#serializer.deserialize(response.result);
 
-        return new Response(response.success, deserializedResult, response.headers);
+        return new Response(response.status, deserializedResult, response.headers);
     }
 }

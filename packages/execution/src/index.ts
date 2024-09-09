@@ -1,5 +1,6 @@
 
 export { AccessLevels, AccessLevel } from './definitions/AccessLevel';
+export { default as StatusCodes } from './definitions/StatusCodes';
 
 export { default as InvalidVersionNumber } from './errors/InvalidVersionNumber';
 export { default as ProcedureNotFound } from './errors/ProcedureNotFound';
@@ -18,6 +19,7 @@ export { default as Request } from './models/Request';
 export { default as Response } from './models/Response';
 
 export { default as ArgumentConstructor } from './utils/ArgumentConstructor';
+export { default as ErrorConverter } from './utils/ErrorConverter';
 export { default as VersionParser } from './utils/VersionParser';
 
 export { default as ExecutionManager } from './ExecutionManager';
