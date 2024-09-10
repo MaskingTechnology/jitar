@@ -3,7 +3,7 @@ import type { ValidationScheme } from '@jitar/validation';
 
 type RepositoryConfiguration =
 {
-    index: string;
+    indexFilename: string;
     serveIndexOnNotFound: boolean;
     assets: string[];
 };
@@ -12,7 +12,7 @@ export default RepositoryConfiguration;
 
 const validationScheme: ValidationScheme =
 {
-    index: { type: 'string', required: false },
+    indexFilename: { type: 'string', required: false },
     serveIndexOnNotFound: { type: 'boolean', required: false },
     assets: { type: 'list', required: false, items: { type: 'string' } }
 } as const;

@@ -8,7 +8,12 @@ type Configuration =
     url: string;
     assets: Set<string>;
     sourcingManager: SourcingManager;
+    indexFilename?: string;
+    serveIndexOnNotFound?: boolean;
 };
+
+const DEFAULT_INDEX_FILENAME = 'index.html';
+const DEFAULT_SERVE_INDEX_ON_NOT_FOUND = false;
 
 export default class LocalRepository implements Repository
 {
@@ -16,8 +21,8 @@ export default class LocalRepository implements Repository
     #sourcingManager: SourcingManager;
     #assets: Set<string>;
 
-    #indexFilename?: string;
-    #serviceIndexOnNotFound: boolean;
+    #indexFilename: string;
+    #serveIndexOnNotFound: boolean;
 
     constructor(configuration: Configuration)
     {
@@ -25,9 +30,8 @@ export default class LocalRepository implements Repository
         this.#sourcingManager = configuration.sourcingManager;
         this.#assets = configuration.assets;
 
-        // TODO: make these configurable
-        this.#indexFilename = 'index.html';
-        this.#serviceIndexOnNotFound = false;
+        this.#indexFilename = configuration.indexFilename ?? DEFAULT_INDEX_FILENAME;
+        this.#serveIndexOnNotFound = configuration.serveIndexOnNotFound ?? DEFAULT_SERVE_INDEX_ON_NOT_FOUND;
     }
 
     get url() { return this.#url; }
@@ -54,21 +58,32 @@ export default class LocalRepository implements Repository
 
     provide(filename: string): Promise<File>
     {
+        if (this.#mustProvideIndex(filename))
+        {
+            return this.provide(this.#indexFilename);
+        }
+
         if (this.#assets.has(filename) === false)
         {
-            if (this.#mustProvideIndex())
-            {
-                return this.provide(this.#indexFilename!);
-            }
-
             throw new FileNotFound(filename);
         }
 
         return this.#sourcingManager.read(filename);
     }
 
-    #mustProvideIndex(): boolean
+    #mustProvideIndex(filename: string): boolean
     {
-        return this.#indexFilename !== undefined && this.#serviceIndexOnNotFound;
+        if (filename === '')
+        {
+            return true;
+        }
+
+        if (filename === this.#indexFilename)
+        {
+            return false;
+        }
+
+        return this.#serveIndexOnNotFound
+            && this.#assets.has(filename) === false;
     }
 }

@@ -6,7 +6,7 @@
     {
         "segments": ["server"],
         "healthChecks": ["./integrations/jitar/databaseHealthCheck"],
-        "middlewares": ["./integrations/jitar/requestLogger"],
+        "middleware": ["./integrations/jitar/requestLogger"],
         "assets": [ "index.html", "assets/**/*" ],
         "serveIndexOnNotFound": true
     }
