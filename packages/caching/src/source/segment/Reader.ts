@@ -21,6 +21,22 @@ import Implementation from './models/Implementation';
 
 import SegmentFile from './types/File';
 
+type Members =
+{
+    classes: Map<string, Class>;
+    procedures: Map<string, Procedure>
+}
+
+type MemberProperties =
+{
+    id: string;
+    importKey: string;
+    name: string;
+    access: string;
+    version: string;
+    fqn: string;
+}
+
 const SEGMENT_FILE_EXTENSION = '.segment.json';
 const DEFAULT_ACCESS_LEVEL = 'private';
 const DEFAULT_VERSION_NUMBER = '0.0.0';
@@ -49,7 +65,10 @@ export default class SegmentReader
 
         const name = this.#extractSegmentName(filename);
         const modules = this.#createModules(definition);
-        const [classes, procedures] = this.#createMembers(modules);
+        const members = this.#createMembers(modules);
+
+        const classes = [...members.classes.values()];
+        const procedures = [...members.procedures.values()];
 
         return new Segment(name, modules, classes, procedures);
     }
@@ -117,22 +136,21 @@ export default class SegmentReader
         return moduleParts.join('/');
     }
 
-    #createMembers(modules: Module[]): [Class[], Procedure[]]
+    #createMembers(modules: Module[]): Members
     {
-        const classes: Map<string, Class> = new Map();
-        const procedures: Map<string, Procedure> = new Map();
+        const members: Members = { classes: new Map(), procedures: new Map() };
 
         const idGenerator = new IdGenerator();
 
         for (const module of modules)
         {
-            this.#extractModuleMembers(module, classes, procedures, idGenerator);
+            this.#extractModuleMembers(module, members, idGenerator);
         }
 
-        return [[...classes.values()], [...procedures.values()]];
+        return members;
     }
 
-    #extractModuleMembers(module: Module, classes: Map<string, Class>, procedures: Map<string, Procedure>, idGenerator: IdGenerator): void
+    #extractModuleMembers(module: Module, members: Members, idGenerator: IdGenerator): void
     {
         for (const [importKey, properties] of Object.entries(module.imports))
         {
@@ -145,38 +163,49 @@ export default class SegmentReader
 
             const fqn = module.location !== '' ? `${module.location}/${name}` : name;
 
+            const memberProperties = { id, importKey, name, access, version, fqn };
+
             if (reflection instanceof ReflectionClass)
             {
-                const clazz = new Class(id, importKey, fqn, reflection);
-
-                module.addMember(clazz);
-
-                classes.set(fqn, clazz);
+                return this.#registerClassMember(module, members, reflection, memberProperties);
             }
-            else if (reflection instanceof ReflectionFunction)
+
+            if (reflection instanceof ReflectionFunction)
             {
-                if (reflection.isAsync === false)
-                {
-                    throw new FunctionNotAsync(module.filename, reflection.name);
-                }
-
-                const implementation = new Implementation(id, importKey, fqn, access, version, reflection);
-
-                module.addMember(implementation);
-
-                const procedure = procedures.has(implementation.fqn)
-                    ? procedures.get(implementation.fqn) as Procedure
-                    : new Procedure(implementation.fqn);
-
-                procedure.addImplementation(implementation);
-
-                procedures.set(implementation.fqn, procedure);
+                return this.#registerProcedureMember(module, members, reflection, memberProperties);
             }
-            else
-            {
-                throw new InvalidModuleExport(module.filename, importKey);
-            }
+            
+            throw new InvalidModuleExport(module.filename, importKey);
         }
+    }
+
+    #registerClassMember(module: Module, members: Members, reflection: ReflectionClass, properties: MemberProperties): void
+    {
+        const clazz = new Class(properties.id, properties.importKey, properties.fqn, reflection);
+
+        module.addMember(clazz);
+
+        members.classes.set(properties.fqn, clazz);
+    }
+
+    #registerProcedureMember(module: Module, members: Members, reflection: ReflectionFunction, properties: MemberProperties): void
+    {
+        if (reflection.isAsync === false)
+        {
+            throw new FunctionNotAsync(module.filename, properties.name);
+        }
+
+        const implementation = new Implementation(properties.id, properties.importKey, properties.fqn, properties.access, properties.version, reflection);
+
+        module.addMember(implementation);
+
+        const procedure = members.procedures.has(implementation.fqn)
+            ? members.procedures.get(implementation.fqn) as Procedure
+            : new Procedure(implementation.fqn);
+
+        procedure.addImplementation(implementation);
+
+        members.procedures.set(implementation.fqn, procedure);
     }
 
     #getMember(filename: string, importKey: string): ReflectionMember
