@@ -10,26 +10,27 @@ export default class StartServer implements Command
 {
     async execute(args: ArgumentManager): Promise<void>
     {
-        const configurationFile = args.getRequiredArgument('--config');
+        const runtimeConfigFile = args.getOptionalArgument('--config', undefined);
+        const serviceConfigFile = args.getRequiredArgument('--service');
 
-        const httpServer = await this.#buildServer(configurationFile);
+        const httpServer = await this.#buildServer(runtimeConfigFile, serviceConfigFile);
 
         return this.#runServer(httpServer);        
     }
 
-    async #buildServer(configurationFile: string): Promise<HttpServer>
+    async #buildServer(runtimeConfigFile: string | undefined, serviceConfigFile: string): Promise<HttpServer>
     {
         const configurationManager = new ConfigurationManager();
         
-        const runtimeConfiguration = await configurationManager.configureRuntime();
-        const serverConfiguration = await configurationManager.configureServer(configurationFile);
+        const runtimeConfiguration = await configurationManager.configureRuntime(runtimeConfigFile);
+        const serverConfiguration = await configurationManager.configureServer(serviceConfigFile);
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [protocol, host, port] = serverConfiguration.url.split(':');
 
         const server = await buildServer(runtimeConfiguration, serverConfiguration);
 
-        return new HttpServer(server, port)
+        return new HttpServer(server, port);
     }
 
     #runServer(httpServer: HttpServer): Promise<void>

@@ -5,7 +5,7 @@ const COMMAND_INDEX = 2;
 
 export default class ArgumentManager
 {
-    #command: string;
+    #command: string | undefined;
     #args: Map<string, string>;
 
     constructor(args: string[])
@@ -14,7 +14,7 @@ export default class ArgumentManager
         this.#args = this.#parseArguments(args);
     }
 
-    getCommand(): string
+    getCommand(): string | undefined
     {
         return this.#command;
     }

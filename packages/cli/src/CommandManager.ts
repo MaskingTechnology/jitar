@@ -1,6 +1,9 @@
 
 import Command from './interfaces/Command';
 
+import ShowHelp from './commands/ShowHelp';
+import ShowAbout from './commands/ShowAbout';
+import ShowVersion from './commands/ShowVersion';
 import BuildCache from './commands/BuildCache';
 import StartServer from './commands/StartServer';
 
@@ -12,7 +15,10 @@ export default class CommandManager
 
     constructor()
     {
-        // TODO: add commands 'help', 'version', 'init' and 'about'
+        // TODO: add 'init' command
+        this.#commands.set('help', new ShowHelp());
+        this.#commands.set('about', new ShowAbout());
+        this.#commands.set('version', new ShowVersion());
         this.#commands.set('build', new BuildCache());
         this.#commands.set('start', new StartServer());
     }

@@ -15,7 +15,7 @@ export default class CliManager
 
     manage(): Promise<void>
     {
-        const command = this.#argumentManager.getCommand();
+        const command = this.#argumentManager.getCommand() ?? 'help';
 
         return this.#commandManager.execute(command, this.#argumentManager);
     }

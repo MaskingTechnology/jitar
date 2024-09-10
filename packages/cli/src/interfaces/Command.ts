@@ -1,7 +1,9 @@
 
 import type ArgumentManager from '../ArgumentManager';
 
-export default interface Command
+interface Command
 {
     execute(args: ArgumentManager): Promise<void>;
 }
+
+export default Command;
