@@ -2,9 +2,18 @@
 import ValidationScheme, { FieldValidation, PrimitiveValidation, GroupValidation, ListValidation } from './types/ValidationScheme';
 import ValidationResult from './types/ValidationResult';
 
+type Data = Record<string, unknown>;
+
 export default class Validator
 {
-    validate(data: Record<string, unknown>, scheme: ValidationScheme): ValidationResult
+    #strict: boolean;
+
+    public constructor(strict: boolean = true)
+    {
+        this.#strict = strict;
+    }
+
+    validate(data: Data, scheme: ValidationScheme): ValidationResult
     {
         const errors: string[] = [];
         
@@ -15,21 +24,47 @@ export default class Validator
         return { valid, errors };
     }
 
-    #validateData(key: string, data: Record<string, unknown>, scheme: ValidationScheme, errors: string[]): void
+    #validateData(key: string, data: Data, scheme: ValidationScheme, errors: string[]): void
     {
-        const fieldKeys = Object.keys(scheme);
-
-        for (const fieldKey of fieldKeys)
+        if (this.#strict)
         {
-            const fieldKeyFull = `${key}${fieldKey}`;
-            const fieldScheme = scheme[fieldKey];
-            const value = data[fieldKey];
+            this.#validateKeys(key, data, scheme, errors);
+        }
 
-            this.#validateField(fieldKeyFull, value, fieldScheme, errors);
+        this.#validateValues(key, data, scheme, errors);
+    }
+
+    #validateKeys(key: string, data: Data, scheme: ValidationScheme, errors: string[]): void
+    {
+        const dataKeys = Object.keys(data);
+        const schemeKeys = Object.keys(scheme);
+
+        for (const dataKey of dataKeys)
+        {
+            if (schemeKeys.includes(dataKey) === false)
+            {
+                const absoluteKey = this.#composeKey(key, dataKey);
+
+                errors.push(`Unknown field '${absoluteKey}'`);
+            }
         }
     }
 
-    #validateField(key: string, value: unknown, scheme: FieldValidation, errors: string[]): void
+    #validateValues(key: string, data: Data, scheme: ValidationScheme, errors: string[]): void
+    {
+        const valueKeys = Object.keys(scheme);
+
+        for (const valueKey of valueKeys)
+        {
+            const absoluteKey = this.#composeKey(key, valueKey);
+            const fieldScheme = scheme[valueKey];
+            const value = data[valueKey];
+
+            this.#validateValue(absoluteKey, value, fieldScheme, errors);
+        }
+    }
+
+    #validateValue(key: string, value: unknown, scheme: FieldValidation, errors: string[]): void
     {
         if (value === undefined)
         {
@@ -109,9 +144,7 @@ export default class Validator
             return;
         }
 
-        const dataKey = `${key}.`;
-
-        this.#validateData(dataKey, value as Record<string, unknown>, scheme.fields, errors);
+        this.#validateData(key, value as Record<string, unknown>, scheme.fields, errors);
     }
 
     #validateList(key: string, value: unknown, scheme: ListValidation, errors: string[]): void
@@ -127,10 +160,15 @@ export default class Validator
 
         for (const itemIndex in data)
         {
-            const itemKey = `${key}.${itemIndex}.`;
+            const itemKey = this.#composeKey(key, itemIndex);
             const itemValue = data[itemIndex];
 
-            this.#validateField(itemKey, itemValue, scheme.items, errors)
+            this.#validateValue(itemKey, itemValue, scheme.items, errors)
         }
+    }
+
+    #composeKey(parent: string, key: string): string
+    {
+        return parent === '' ? key : `${parent}.${key}`;
     }
 }

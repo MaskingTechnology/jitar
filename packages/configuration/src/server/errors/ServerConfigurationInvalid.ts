@@ -1,12 +1,14 @@
 
 import type { ValidationResult } from '@jitar/validation';
 
+const BREAK = '\n => ';
+
 export default class ServerConfigurationInvalid extends Error
 {
     public constructor(validation: ValidationResult)
     {
-        const errorMessages = validation.errors.join('\n');
+        const errorMessages = validation.errors.join(BREAK);
 
-        super(`Server configuration is invalid:\n${errorMessages}`);
+        super(`Invalid server configuration:${BREAK}${errorMessages}`);
     }
 }
