@@ -29,6 +29,13 @@ export default class Logger
         console.error(messageString);
     }
 
+    fatal(...message: unknown[]): void
+    {
+        const messageString = this.#createMessage('[FATAL]', ...message);
+
+        console.error(messageString);
+    }
+
     debug(...message: unknown[]): void
     {
         if (this.#debugEnabled === false)
