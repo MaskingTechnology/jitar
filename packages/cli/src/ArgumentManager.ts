@@ -1,4 +1,6 @@
 
+import MissingArgument from './errors/MissingArgument';
+
 const COMMAND_INDEX = 2;
 
 export default class ArgumentManager
@@ -23,7 +25,7 @@ export default class ArgumentManager
 
         if (value === undefined)
         {
-            throw new Error(`Missing argument '${name}'`);
+            throw new MissingArgument(name);
         }
 
         return value;

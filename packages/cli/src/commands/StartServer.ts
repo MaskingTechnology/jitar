@@ -24,6 +24,7 @@ export default class StartServer implements Command
         const runtimeConfiguration = await configurationManager.configureRuntime();
         const serverConfiguration = await configurationManager.configureServer(configurationFile);
 
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [protocol, host, port] = serverConfiguration.url.split(':');
 
         const server = await buildServer(runtimeConfiguration, serverConfiguration);

@@ -40,6 +40,7 @@
         "@jitar/errors": "*",
         "@jitar/execution": "*",
         "@jitar/health": "*",
+        "@jitar/logging": "*",
         "@jitar/middleware": "*",
         "@jitar/server-http": "*"
     },
