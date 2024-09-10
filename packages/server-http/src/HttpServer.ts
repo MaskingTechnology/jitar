@@ -3,6 +3,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import { Server as Http } from 'http';
 
 import type { Server, ServerResponse } from '@jitar/services';
+import { Validator } from '@jitar/validation';
 
 const DEFAULT_BODY_LIMIT = 1024 * 200; // 200 KB
 const RPC_PARAMETERS = ['version', 'serialize'];
@@ -10,6 +11,8 @@ const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-enc
 
 export default class HttpServer
 {
+    #validator = new Validator();
+
     #server: Server;
     #port: string;
     #app: Express;
@@ -148,13 +151,32 @@ export default class HttpServer
     {
         const args = this.#extractBodyArguments(request);
 
-        // TODO: validate args
-        const url = typeof args.url === 'string' ? args.url : '';
-        const procedureNames = Array.isArray(args.procedureNames) ? args.procedureNames as string[] : [];
+        const validation = this.#validator.validate(args,
+        {
+            url: { type: 'url', required: true },
+            procedureNames: { type: 'list', required: true, items: { type: 'string' } }
+        });
 
-        const serverResponse = await this.#server.addWorker({ url, procedureNames });
+        if (validation.valid === false)
+        {
+            return response.status(400).send(validation.errors.join('\n'));
+        }
 
-        return this.#transformResponse(response, serverResponse);
+        const url = args.url as string;
+        const procedureNames = args.procedureNames as string[];
+
+        try
+        {
+            const serverResponse = await this.#server.addWorker({ url, procedureNames });
+
+            return this.#transformResponse(response, serverResponse);
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : 'Server error';
+
+            return response.status(500).send(message);
+        }
     }
 
     async #provide(request: Request, response: Response): Promise<Response>

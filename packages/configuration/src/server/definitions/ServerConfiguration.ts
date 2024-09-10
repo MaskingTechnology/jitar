@@ -1,5 +1,5 @@
 
-import type { ValidationScheme } from '../../utils';
+import type { ValidationScheme } from '@jitar/validation';
 
 import GatewayConfiguration, { validationScheme as gatewayValidationScheme } from './GatewayConfiguration';
 import ProxyConfiguration, { validationScheme as proxyValidationScheme } from './ProxyConfiguration';

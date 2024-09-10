@@ -1,5 +1,7 @@
 
-import type { ConfigurationReader, ConfigurationValidator } from '../utils';
+import type { Validator } from '@jitar/validation';
+
+import type { ConfigurationReader } from '../utils';
 
 import ServerConfiguration, { validationScheme } from './definitions/ServerConfiguration';
 import ServerConfigurationInvalid from './errors/ServerConfigurationInvalid';
@@ -7,9 +9,9 @@ import ServerConfigurationInvalid from './errors/ServerConfigurationInvalid';
 export default class ConfigurationBuilder
 {
     #reader: ConfigurationReader;
-    #validator: ConfigurationValidator;
+    #validator: Validator;
 
-    constructor(reader: ConfigurationReader, validator: ConfigurationValidator)
+    constructor(reader: ConfigurationReader, validator: Validator)
     {
         this.#reader = reader;
         this.#validator = validator;

@@ -1,37 +1,8 @@
 
-type FieldValidation = PrimitiveValidation | GroupValidation | ListValidation;
+import ValidationScheme, { FieldValidation, PrimitiveValidation, GroupValidation, ListValidation } from './types/ValidationScheme';
+import ValidationResult from './types/ValidationResult';
 
-type PrimitiveValidation =
-{
-    type: 'string' | 'integer' | 'real' | 'boolean' | 'url';
-    required?: boolean;
-};
-
-type GroupValidation = 
-{
-    type: 'group';
-    required?: boolean;
-    fields: Record<string, FieldValidation>;
-}
-
-type ListValidation =
-{
-    type: 'list';
-    required?: boolean;
-    items: PrimitiveValidation;
-};
-
-type ValidationScheme = Record<string, FieldValidation>;
-
-type ValidationResult =
-{
-    valid: boolean;
-    errors: string[];
-};
-
-export { ValidationScheme, ValidationResult };
-
-export default class ConfigurationValidator
+export default class Validator
 {
     validate(data: Record<string, unknown>, scheme: ValidationScheme): ValidationResult
     {

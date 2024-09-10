@@ -26,7 +26,8 @@
     "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
-    "@jitar/sourcing": "*"
+    "@jitar/sourcing": "*",
+    "@jitar/validation": "*"
   },
   "repository": {
     "type": "git",

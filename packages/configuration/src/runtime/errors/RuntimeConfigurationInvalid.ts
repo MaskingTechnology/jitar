@@ -1,5 +1,5 @@
 
-import type { ValidationResult } from '../../utils';
+import type { ValidationResult } from '@jitar/validation';
 
 export default class RuntimeConfigurationInvalid extends Error
 {

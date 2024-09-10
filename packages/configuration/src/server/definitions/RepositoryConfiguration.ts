@@ -1,5 +1,5 @@
 
-import type { ValidationScheme } from '../../utils';
+import type { ValidationScheme } from '@jitar/validation';
 
 type RepositoryConfiguration =
 {
