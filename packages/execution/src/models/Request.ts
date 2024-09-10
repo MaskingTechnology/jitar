@@ -1,4 +1,6 @@
 
+import RunModes, { RunMode } from '../definitions/RunModes';
+
 import type Version from './Version';
 
 export default class Request
@@ -7,13 +9,15 @@ export default class Request
     #version: Version;
     #args: Map<string, unknown>;
     #headers: Map<string, string> = new Map();
+    #mode: RunMode;
 
-    constructor(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>)
+    constructor(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, mode: RunMode)
     {
         this.#fqn = fqn;
         this.#version = version;
         this.#args = args;
         this.#headers = headers;
+        this.#mode = mode;
     }
 
     get fqn() { return this.#fqn; }
@@ -23,6 +27,8 @@ export default class Request
     get args() { return this.#args; }
 
     get headers() { return this.#headers; }
+
+    get mode() { return this.#mode; }
 
     clearArguments(): void
     {

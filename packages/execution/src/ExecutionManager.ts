@@ -1,5 +1,6 @@
 
 import StatusCodes from './definitions/StatusCodes';
+import RunModes from './definitions/RunModes';
 
 import ImplementationNotFound from './errors/ImplementationNotFound';
 import InvalidSegment from './errors/InvalidSegment';
@@ -76,18 +77,12 @@ export default class ExecutionManager implements Runner
 
         const args: unknown[] = this.#argumentConstructor.extract(implementation.parameters, request.args);
 
-        try
+        if (request.mode === RunModes.DRY)
         {
-            const result = await implementation.executable.call(request, ...args);
-
-            return new Response(StatusCodes.OK, result);
+            return new Response(StatusCodes.OK, undefined);
         }
-        catch (error: unknown)
-        {
-            const status = this.#errorConverter.toStatus(error);
 
-            return new Response(status, error);
-        }
+        return this.#runImplementation(request, implementation, args);
     }
 
     #getImplementation(fqn: string, version: Version): Implementation
@@ -107,5 +102,21 @@ export default class ExecutionManager implements Runner
         }
 
         return implementation;
+    }
+
+    async #runImplementation(request: Request, implementation: Implementation, args: unknown[]): Promise<Response>
+    {
+        try
+        {
+            const result = await implementation.executable.call(request, ...args);
+
+            return new Response(StatusCodes.OK, result);
+        }
+        catch (error: unknown)
+        {
+            const status = this.#errorConverter.toStatus(error);
+
+            return new Response(status, error);
+        }
     }
 }

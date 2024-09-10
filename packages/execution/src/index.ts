@@ -1,5 +1,6 @@
 
 export { AccessLevels, AccessLevel } from './definitions/AccessLevel';
+export { default as RunModes, RunMode } from './definitions/RunModes';
 export { default as StatusCodes } from './definitions/StatusCodes';
 
 export { default as InvalidVersionNumber } from './errors/InvalidVersionNumber';

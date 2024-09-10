@@ -4,11 +4,11 @@
     "private": true,
     "scripts": {
         "clean": "rimraf dist",
-        "compile": "tsc",
+        "compile": "tsc && jitar build",
         "copy": "cpx -u 'src/index.html' dist",
         "build": "npm-run-all clean copy compile",
-        "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json",
-        "client": "node dist/client.js"
+        "worker": "jitar start --service=services/worker.json",
+        "client": "node dist/client.shared.js"
     },
     "dependencies": {
         "jitar": "*",

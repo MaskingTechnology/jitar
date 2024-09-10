@@ -170,7 +170,7 @@ export default class LocalWorker implements Worker
             serializedArgs.set(key, serializedValue);
         }
 
-        return new Request(request.fqn, request.version, serializedArgs, request.headers);
+        return new Request(request.fqn, request.version, serializedArgs, request.headers, request.mode);
     }
 
     async #deserializeRequest(request: Request): Promise<Request>
@@ -184,7 +184,7 @@ export default class LocalWorker implements Worker
             deserializedArgs.set(key, deserializedValue);
         }
 
-        return new Request(request.fqn, request.version, deserializedArgs, request.headers);
+        return new Request(request.fqn, request.version, deserializedArgs, request.headers, request.mode);
     }
 
     async #serializeResponse(response: Response): Promise<Response>

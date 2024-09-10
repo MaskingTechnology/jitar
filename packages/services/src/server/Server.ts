@@ -201,7 +201,7 @@ export default class Server
         const args = this.#mapArguments(request.args);
         const headers = this.#mapHeaders(request.headers);
 
-        return new Request(fqn, version, args, headers);
+        return new Request(fqn, version, args, headers, request.mode);
     }
 
     #processFqn(fqn: string): string

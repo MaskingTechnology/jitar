@@ -15,13 +15,8 @@ export default class MiddlewareManager
         {
             throw new InvalidMiddleware();
         }
-        
-        // We want to add the middleware before the ProcedureRunner because
-        // it is the last middleware that needs to be called.
 
-        const index = this.#middlewares.length - 1;
-
-        this.#middlewares.splice(index, 0, middleware);
+        this.#middlewares.push(middleware);
     }
 
     getMiddleware(type: Function): Middleware | undefined
@@ -36,6 +31,8 @@ export default class MiddlewareManager
 
     handle(request: Request): Promise<Response>
     {
+        // Middleware will be executed in the order they were added.
+        
         const startHandler = this.#getNextHandler(request, 0);
 
         return startHandler();

@@ -58,7 +58,7 @@ export default class Application
             }
         }
 
-        return undefined
+        return undefined;
     }
 
     getProcedureNames(): string[]

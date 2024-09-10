@@ -2,6 +2,7 @@
 import express, { Express, Request, Response, NextFunction } from 'express';
 import { Server as Http } from 'http';
 
+import { RunModes } from '@jitar/execution';
 import type { Server, ServerResponse } from '@jitar/services';
 import { Validator } from '@jitar/validation';
 
@@ -120,8 +121,9 @@ export default class HttpServer
         const version = this.#extractVersion(request);
         const args = this.#extractQueryArguments(request);
         const headers = this.#extractHeaders(request);
+        const mode = RunModes.NORMAL;
 
-        const serverResponse = await this.#server.run({ fqn, version, args, headers });
+        const serverResponse = await this.#server.run({ fqn, version, args, headers, mode });
 
         return this.#transformResponse(response, serverResponse);
     }
@@ -132,19 +134,26 @@ export default class HttpServer
         const version = this.#extractVersion(request);
         const args = this.#extractBodyArguments(request);
         const headers = this.#extractHeaders(request);
+        const mode = RunModes.NORMAL;
 
-        const serverResponse = await this.#server.run({ fqn, version, args, headers });
+        const serverResponse = await this.#server.run({ fqn, version, args, headers, mode });
 
         return this.#transformResponse(response, serverResponse);
     }
 
     async #runOptions(request: Request, response: Response): Promise<Response>
     {
-        // TODO: perform dry-run
-        throw new Error('Not implemented');
-        // const serverResponse = await this.#server.dryRun();
+        // Perform a dry run
 
-        // return this.#transformResponse(response, serverResponse);
+        const fqn = this.#extractFqn(request);
+        const version = this.#extractVersion(request);
+        const args = this.#extractBodyArguments(request);
+        const headers = this.#extractHeaders(request);
+        const mode = RunModes.DRY;
+
+        const serverResponse = await this.#server.run({ fqn, version, args, headers, mode });
+
+        return this.#transformResponse(response, serverResponse);
     }
 
     async #addWorker(request: Request, response: Response): Promise<Response>
@@ -202,11 +211,6 @@ export default class HttpServer
             ? request.query.version
             : undefined;
     }
-
-    // #extractSerialize(request: Request): boolean
-    // {
-    //     return request.query.serialize === 'true';
-    // }
 
     #extractQueryArguments(request: Request): Record<string, unknown>
     {
