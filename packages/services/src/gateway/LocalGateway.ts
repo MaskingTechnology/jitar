@@ -39,8 +39,8 @@ export default class LocalGateway implements Gateway
         this.#workerManager = new WorkerManager();
         this.#workerMonitor = new WorkerMonitor(this.#workerManager, configuration.monitorInterval);
 
-        // TODO: Should be done when constructing the middleware manager
-        this.#middlewareManager.addMiddleware(new ProcedureRunner(this.#workerManager));
+        const procedureRunner = new ProcedureRunner(this.#workerManager);
+        this.#middlewareManager.addMiddleware(procedureRunner);
     }
     
     get url() { return this.#url; }
