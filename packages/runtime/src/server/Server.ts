@@ -3,12 +3,8 @@ import { BadRequest, Forbidden, NotFound, NotImplemented, PaymentRequired, Teapo
 import { Request, Version, VersionParser } from '@jitar/execution';
 import type { Response } from '@jitar/execution';
 import type { File, SourcingManager } from '@jitar/sourcing';
+import { LocalGateway, LocalWorker, RemoteWorker, Proxy } from '@jitar/services';
 import { Logger } from '@jitar/logging';
-
-import LocalGateway from '../gateway/LocalGateway';
-import LocalWorker from '../worker/LocalWorker';
-import RemoteWorker from '../worker/RemoteWorker';
-import Proxy from '../proxy/Proxy';
 
 import ContentTypes from './definitions/ContentTypes';
 import StatusCodes from './definitions/StatusCodes';

@@ -3,7 +3,7 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import { Server as Http } from 'http';
 
 import { RunModes } from '@jitar/execution';
-import type { Server, ServerResponse } from '@jitar/services';
+import type { Server, ServerResponse } from '@jitar/runtime';
 import { Validator } from '@jitar/validation';
 
 const DEFAULT_BODY_LIMIT = 1024 * 200; // 200 KB

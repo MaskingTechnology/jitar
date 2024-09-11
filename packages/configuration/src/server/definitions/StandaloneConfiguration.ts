@@ -7,7 +7,7 @@ type StandaloneConfiguration =
     middleware: string[];
     healthChecks: string[];
 
-    index: string;
+    indexFilename: string;
     serveIndexOnNotFound: boolean;
     assets: string[];
 };
@@ -20,7 +20,7 @@ const validationScheme: ValidationScheme =
     middleware: { type: 'list', required: false, items: { type: 'string' } },
     healthChecks: { type: 'list', required: false, items: { type: 'string' } },
 
-    index: { type: 'string', required: false },
+    indexFilename: { type: 'string', required: false },
     serveIndexOnNotFound: { type: 'boolean', required: false },
     assets: { type: 'list', required: false, items: { type: 'string' } }
 } as const;

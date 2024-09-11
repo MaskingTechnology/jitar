@@ -3,17 +3,11 @@ import { ServerConfiguration, GatewayConfiguration, WorkerConfiguration, Reposit
 import { Segment, ExecutionManager } from '@jitar/execution';
 import { HealthCheck, HealthManager } from '@jitar/health';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
+import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, LocalWorker, Proxy, DummyProvider, DummyRunner } from '@jitar/services';
 import { SourcingManager } from '@jitar/sourcing';
 
-import RemoteRepository from './repository/RemoteRepository';
-import LocalRepository from './repository/LocalRepository';
-import RemoteGateway from './gateway/RemoteGateway';
-import LocalGateway from './gateway/LocalGateway';
-import LocalWorker from './worker/LocalWorker';
-import Proxy from './proxy/Proxy';
-import DummyProvider from './dummy/DummyProvider';
-import DummyRunner from './dummy/DummyRunner';
-import Server from './server/Server';
+import UnknownServiceConfigured from './errors/UnknownServiceConfigured';
+import Server from './Server';
 
 export default class RuntimeBuilder
 {
@@ -45,8 +39,7 @@ export default class RuntimeBuilder
         if (configuration.proxy !== undefined) return this.#buildProxy(configuration.url, configuration.proxy);
         if (configuration.standalone !== undefined) return this.#buildStandalone(configuration.url, configuration.standalone);
 
-        // TODO: make specific error
-        throw new Error('Invalid server configuration');
+        throw new UnknownServiceConfigured();
     }
 
     async #buildGatewayProxy(url: string, configuration: GatewayConfiguration): Promise<Proxy>

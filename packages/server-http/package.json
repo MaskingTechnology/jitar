@@ -28,7 +28,7 @@
   "dependencies": {
     "@jitar/errors": "*",
     "@jitar/execution": "*",
-    "@jitar/services": "*",
+    "@jitar/runtime": "*",
     "@jitar/validation": "*"
   },
   "repository": {

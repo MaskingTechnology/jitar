@@ -1,8 +1,9 @@
 
 import { RuntimeConfiguration, ServerConfiguration } from '@jitar/configuration';
 import { SourcingManager, LocalFileManager } from '@jitar/sourcing';
-import { ServerBuilder } from '@jitar/services';
-import type { Server } from '@jitar/services';
+
+import type Server from './server/Server';
+import ServerBuilder from './server/ServerBuilder';
 
 import { setRunner } from './hooks';
 

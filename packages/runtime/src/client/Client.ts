@@ -2,9 +2,7 @@
 import type { ExecutionManager, Request, Response } from '@jitar/execution';
 import type { HealthManager } from '@jitar/health';
 import type { MiddlewareManager } from '@jitar/middleware';
-
-import LocalWorker from '../worker/LocalWorker';
-import RemoteGateway from '../gateway/RemoteGateway';
+import { LocalWorker, RemoteGateway } from '@jitar/services';
 
 type Configuration =
 {

@@ -3,7 +3,7 @@ import { Segment, ExecutionManager } from '@jitar/execution';
 import { HealthCheck, HealthManager } from '@jitar/health';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
 
-import Client from './client/Client';
+import Client from './Client';
 
 type ClientConfiguration =
 {

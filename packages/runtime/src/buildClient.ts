@@ -1,8 +1,9 @@
 
 import type { Segment } from '@jitar/execution';
 import type { Middleware } from '@jitar/middleware';
-import { ClientBuilder } from '@jitar/services';
-import type { Client } from '@jitar/services';
+
+import type Client from './client/Client';
+import ClientBuilder from './client/ClientBuilder';
 
 import { setRunner } from './hooks';
 
