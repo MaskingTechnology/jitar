@@ -7,5 +7,4 @@ export { default as FileManager } from './interfaces/FileManager';
 export { default as Module } from './types/Module';
 
 export { default as LocalFileManager } from './LocalFileManager';
-export { default as RemoteFileManager } from './RemoteFileManager';
 export { default as SourcingManager } from './SourcingManager';
