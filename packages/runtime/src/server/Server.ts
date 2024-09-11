@@ -6,6 +6,8 @@ import type { File, SourcingManager } from '@jitar/sourcing';
 import { LocalGateway, LocalWorker, RemoteWorker, Proxy } from '@jitar/services';
 import { Logger } from '@jitar/logging';
 
+import Runtime from '../Runtime';
+
 import ContentTypes from './definitions/ContentTypes';
 import StatusCodes from './definitions/StatusCodes';
 
@@ -22,7 +24,7 @@ type Configuration =
     tearDownScripts?: string[];
 };
 
-export default class Server
+export default class Server extends Runtime
 {
     #proxy: Proxy;
     #sourcingManager: SourcingManager;
@@ -33,6 +35,8 @@ export default class Server
 
     constructor(configuration: Configuration)
     {
+        super(configuration.proxy.runner);
+        
         this.#proxy = configuration.proxy;
         this.#sourcingManager = configuration.sourcingManager;
         this.#setUpScripts = configuration.setUpScripts ?? [];

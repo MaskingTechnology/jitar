@@ -4,6 +4,8 @@ import type { HealthManager } from '@jitar/health';
 import type { MiddlewareManager } from '@jitar/middleware';
 import { LocalWorker, RemoteGateway } from '@jitar/services';
 
+import Runtime from '../Runtime';
+
 type Configuration =
 {
     remoteUrl: string;
@@ -12,19 +14,23 @@ type Configuration =
     executionManager: ExecutionManager; // object with all segments loaded
 };
 
-export default class Client
+export default class Client extends Runtime
 {
     #worker: LocalWorker;
 
     constructor(configuration: Configuration)
     {
-        this.#worker = new LocalWorker({
+        const runner = new LocalWorker({
             url: configuration.remoteUrl,
             gateway: new RemoteGateway({ url: configuration.remoteUrl }),
             healthManager: configuration.healthManager,
             middlewareManager: configuration.middlewareManager,
             executionManager: configuration.executionManager
         });
+
+        super(runner);
+
+        this.#worker = runner;
     }
 
     get worker() { return this.#worker; }

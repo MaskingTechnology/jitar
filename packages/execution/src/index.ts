@@ -5,6 +5,7 @@ export { default as StatusCodes } from './definitions/StatusCodes';
 
 export { default as InvalidVersionNumber } from './errors/InvalidVersionNumber';
 export { default as ProcedureNotFound } from './errors/ProcedureNotFound';
+export { default as ProcedureNotAccessible } from './errors/ProcedureNotAccessible';
 
 export { default as Runner } from './interfaces/Runner';
 
