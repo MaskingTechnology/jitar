@@ -6,8 +6,10 @@ import { RunModes } from '@jitar/execution';
 import type { Server, ServerResponse } from '@jitar/runtime';
 import { Validator } from '@jitar/validation';
 
+const DEFAULT_PORT = '3000';
 const DEFAULT_BODY_LIMIT = 1024 * 200; // 200 KB
-const RPC_PARAMETERS = ['version', 'serialize'];
+
+const IGNORED_QUERY_PARAMETERS = ['version'];
 const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent', 'keep-alive'];
 
 export default class HttpServer
@@ -19,7 +21,7 @@ export default class HttpServer
     #app: Express;
     #http?: Http;
 
-    constructor(server: Server, port: string, bodyLimit = DEFAULT_BODY_LIMIT)
+    constructor(server: Server, port: string = DEFAULT_PORT, bodyLimit = DEFAULT_BODY_LIMIT)
     {
         this.#server = server;
         this.#port = port;
@@ -218,7 +220,7 @@ export default class HttpServer
 
         for (const [key, value] of Object.entries(request.query))
         {
-            if (RPC_PARAMETERS.includes(key))
+            if (IGNORED_QUERY_PARAMETERS.includes(key))
             {
                 // We need to filter out the RPC parameters,
                 // because they are not a procedure argument.

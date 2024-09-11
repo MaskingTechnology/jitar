@@ -6,6 +6,17 @@ import { HttpServer } from '@jitar/server-http';
 import Command from '../interfaces/Command';
 import ArgumentManager from '../ArgumentManager';
 
+const banner = `
+     ██╗██╗████████╗ █████╗ ██████╗ 
+     ██║██║╚══██╔══╝██╔══██╗██╔══██╗
+     ██║██║   ██║   ███████║██████╔╝
+██   ██║██║   ██║   ██╔══██║██╔══██╗
+╚█████╔╝██║   ██║   ██║  ██║██║  ██║
+ ╚════╝ ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝
+ ~ Distributed JavaScript Runtime ~
+____________________________________
+`;
+
 export default class StartServer implements Command
 {
     async execute(args: ArgumentManager): Promise<void>
@@ -36,6 +47,8 @@ export default class StartServer implements Command
     #runServer(httpServer: HttpServer): Promise<void>
     {
         process.on('SIGINT', async () => httpServer.stop());
+
+        console.log(banner);
 
         return httpServer.start();
     }

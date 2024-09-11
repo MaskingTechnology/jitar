@@ -6,10 +6,10 @@ const message = `
 Usage: jitar <command> [options]
 
 Commands:
-  build     Builds the application
-  start     Starts a Jitar instance
-  about     Show information about Jitar
-  version   Show the version of Jitar
+  build     Builds the application (creates segment bundles)
+  serve     Starts a server with the configured service
+  about     Shows information about Jitar
+  version   Shows the installed version of Jitar
   help      Shows help (this message)
 
 Options:

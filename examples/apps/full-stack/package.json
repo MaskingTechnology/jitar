@@ -8,11 +8,11 @@
     "build": "npm run build-domain && npm run build-webui",
     "build-domain": "rm -rf dist && tsc -p tsconfig.build.json && jitar build",
     "build-webui": "vite build",
-    "standalone": "jitar start --service=services/standalone.json",
-    "repo": "jitar start --service=services/repository.json",
-    "gateway": "jitar start --service=services/gateway.json",
-    "worker": "jitar start --service=services/worker.json",
-    "proxy": "jitar start --service=services/proxy.json",
+    "standalone": "jitar serve --service=services/standalone.json",
+    "repo": "jitar serve --service=services/repository.json",
+    "gateway": "jitar serve --service=services/gateway.json",
+    "worker": "jitar serve --service=services/worker.json",
+    "proxy": "jitar serve --service=services/proxy.json",
     "preview": "vite preview"
   },
   "dependencies": {
