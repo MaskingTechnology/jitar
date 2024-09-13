@@ -29,7 +29,8 @@
     "@jitar/configuration": "*",
     "@jitar/reflection": "*",
     "@jitar/execution": "*",
-    "@jitar/sourcing": "*"
+    "@jitar/sourcing": "*",
+    "@jitar/logging": "*"
   },
   "repository": {
     "type": "git",

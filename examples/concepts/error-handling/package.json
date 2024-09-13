@@ -3,12 +3,11 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "build": "tsc",
-        "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json",
-        "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
-        "gateway": "node --experimental-network-imports dist/jitar.js --config=services/gateway.json",
-        "worker-data": "node --experimental-network-imports dist/jitar.js --config=services/data.json",
-        "worker-process": "node --experimental-network-imports dist/jitar.js --config=services/process.json"
+        "build": "rm -rf dist .jitar && tsc && jitar build",
+        "standalone": "jitar start --service=services/standalone.json",
+        "gateway": "jitar start --service=services/gateway.json",
+        "worker-data": "jitar start --service=services/data.json",
+        "worker-process": "jitar start --service=services/process.json"
     },
     "dependencies": {
         "jitar": "*"

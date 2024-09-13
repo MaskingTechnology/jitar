@@ -87,7 +87,7 @@ export default class ImportRewriter
     {
         const callingModulePath = FileHelper.extractPath(this.#module.filename);
         const relativeFilename = FileHelper.makePathRelative(filename, callingModulePath);
-        
+
         return FileHelper.addSubExtension(relativeFilename, scope);
     }
 

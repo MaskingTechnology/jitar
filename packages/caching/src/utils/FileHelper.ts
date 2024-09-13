@@ -9,9 +9,7 @@ export default class FileHelper
         const parts = filename.split('/');
         const translated = [];
 
-        translated.push(parts[0]);
-
-        for (let index = 1; index < parts.length; index++)
+        for (let index = 0; index < parts.length; index++)
         {
             const part = parts[index].trim();
 
@@ -30,6 +28,11 @@ export default class FileHelper
 
     static makePathRelative(absoluteFilename: string, relativeToPath: string): string
     {
+        if (relativeToPath === '')
+        {
+            return `./${absoluteFilename}`;
+        }
+        
         const absoluteFilenameParts = absoluteFilename.split('/');
         const relativeToParts = relativeToPath.split('/');
 
@@ -49,9 +52,11 @@ export default class FileHelper
 
     static makePathAbsolute(relativeFilename: string, relativeToPath: string): string
     {
-        const concatenated = `${relativeToPath}/${relativeFilename}`;
+        const fullPath = relativeToPath !== ''
+            ? `${relativeToPath}/${relativeFilename}`
+            : relativeFilename;
 
-        return this.translatePath(concatenated);
+        return this.translatePath(fullPath);
     }
 
     static extractPath(filename: string)

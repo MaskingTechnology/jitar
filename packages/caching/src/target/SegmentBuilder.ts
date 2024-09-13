@@ -3,6 +3,7 @@ import { VersionParser } from '@jitar/execution';
 import type { FileManager } from '@jitar/sourcing';
 import { ReflectionDestructuredArray, ReflectionDestructuredObject } from '@jitar/reflection';
 import type { ReflectionField, ReflectionFunction, ReflectionParameter } from '@jitar/reflection';
+import { Logger } from '@jitar/logging';
 
 import type { Application, Segment, SegmentModule } from '../source';
 import { FileHelper } from '../utils';
@@ -13,6 +14,7 @@ const RUNTIME_IMPORTS = 'import { Segment, Class, Procedure, Implementation, Ver
 export default class SegmentBuilder
 {
     #fileManager: FileManager;
+    #logger = new Logger();
 
     constructor(fileManager: FileManager)
     {
@@ -34,6 +36,8 @@ export default class SegmentBuilder
         const code = this.#createCode(segment);
 
         await this.#fileManager.write(filename, code);
+
+        this.#logger.info(`Built ${segment.name} segment (${segment.modules.length} modules, ${segment.procedures.length} procedures, ${segment.classes.length} classes)`);
     }
 
     #createCode(segment: Segment): string

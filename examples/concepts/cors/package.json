@@ -3,10 +3,10 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "clean": "rimraf .jitar",
+        "clean": "rm -rf dist .jitar",
         "compile": "tsc && jitar build",
         "copy": "cpx -u 'src/index.html' dist",
-        "build": "npm-run-all clean copy compile",
+        "build": "npm run clean && npm run copy && npm run compile",
         "standalone": "jitar start --service=services/standalone.json",
         "client": "node dist/client.js"
     },
@@ -15,8 +15,6 @@
         "express": "*"
     },
     "devDependencies": {
-        "cpx2": "*",
-        "npm-run-all": "*",
-        "rimraf": "*"
+        "cpx2": "*"
     }
 }
