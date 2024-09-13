@@ -99,7 +99,9 @@ export default class ModuleBuilder
 
         for (const implementation of implementations)
         {
-            unique.set(implementation.fqn, implementation);
+            const key = `${implementation.fqn}:${implementation.version.toString()}`;
+
+            unique.set(key, implementation);
         }
 
         return [...unique.values()];

@@ -152,10 +152,12 @@ export default class SegmentReader
 
     #extractModuleMembers(module: Module, members: Members, idGenerator: IdGenerator): void
     {
-        for (const [importKey, properties] of Object.entries(module.imports))
+        for (const importKey in module.imports)
         {
             const id = idGenerator.next();
             const reflection = this.#getMember(module.filename, importKey);
+
+            const properties = module.imports[importKey];
 
             const name = properties.as ?? reflection.name;
             const access = properties.access ?? DEFAULT_ACCESS_LEVEL;
@@ -167,12 +169,16 @@ export default class SegmentReader
 
             if (reflection instanceof ReflectionClass)
             {
-                return this.#registerClassMember(module, members, reflection, memberProperties);
+                this.#registerClassMember(module, members, reflection, memberProperties);
+
+                continue;
             }
 
             if (reflection instanceof ReflectionFunction)
             {
-                return this.#registerProcedureMember(module, members, reflection, memberProperties);
+                this.#registerProcedureMember(module, members, reflection, memberProperties);
+
+                continue;
             }
             
             throw new InvalidModuleExport(module.filename, importKey);
