@@ -265,8 +265,9 @@ export default class HttpServer
 
     #transformResponse(response: Response, serverResponse: ServerResponse): Response
     {
-        response.status(serverResponse.status);
-
+        const status = this.#transformStatus(serverResponse);
+        
+        response.status(status);
         response.setHeader('Content-Type', serverResponse.contentType);
 
         for (const [name, value] of Object.entries(serverResponse.headers))
@@ -274,10 +275,29 @@ export default class HttpServer
             response.setHeader(name, value);
         }
 
-        const result = typeof serverResponse.result === 'number'
-            ? String(serverResponse.result)
-            : serverResponse.result;
+        const result = this.#transformResult(serverResponse);
 
         return response.send(result);
+    }
+
+    #transformStatus(serverResponse: ServerResponse): number
+    {
+        if (serverResponse.headers.location !== undefined)
+        {
+            return 302;
+        }
+
+        return serverResponse.status;
+    }
+
+    #transformResult(serverResponse: ServerResponse): unknown
+    {
+        if (typeof serverResponse.result === 'number'
+         || typeof serverResponse.result === 'boolean')
+         {
+            return String(serverResponse.result);
+         }
+        
+         return serverResponse.result;
     }
 }
