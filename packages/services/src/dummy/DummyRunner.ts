@@ -11,6 +11,11 @@ export default class DummyRunner implements RunnerService
         throw new NotImplemented();
     }
 
+    get trustKey(): string | undefined
+    {
+        throw new NotImplemented();
+    }
+
     start(): Promise<void>
     {
         return Promise.resolve();

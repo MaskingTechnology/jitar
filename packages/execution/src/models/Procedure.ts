@@ -15,27 +15,15 @@ export default class Procedure
 
     get fqn() { return this.#fqn; }
 
-    get public()
+    get public(): boolean
     {
-        // If at least one implementation is public, the procedure is public
-        // Public procedures can be called from outside the segment
-
         const implementations = [...this.#implementations.values()];
 
         return implementations.some(implementation => implementation.public);
     }
 
-    get protected()
+    get protected(): boolean
     {
-        // Public procedures take precedence over protected procedures in case of duplicates
-        // If at least one implementation is protected, the procedure is protected
-        // Protected procedures can be called from outside the segment with a key
-
-        if (this.public)
-        {
-            return false;
-        }
-        
         const implementations = [...this.#implementations.values()];
 
         return implementations.some(implementation => implementation.protected);

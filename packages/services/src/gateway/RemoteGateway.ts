@@ -24,6 +24,8 @@ export default class RemoteGateway implements Gateway
     }
 
     get url() { return this.#url; }
+
+    get trustKey() { return undefined; }
     
     start(): Promise<void>
     {

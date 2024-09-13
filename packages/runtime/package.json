@@ -30,6 +30,7 @@
     "@jitar/execution": "*",
     "@jitar/health": "*",
     "@jitar/middleware": "*",
+    "@jitar/services": "*",
     "@jitar/serialization": "*",
     "@jitar/sourcing": "*"
   },

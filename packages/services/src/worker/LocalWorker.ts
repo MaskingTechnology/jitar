@@ -1,6 +1,5 @@
 
-import { Request, Response, ExecutionManager, StatusCodes } from '@jitar/execution';
-import { Unauthorized } from '@jitar/errors';
+import { Request, Response, ExecutionManager, Implementation, ProcedureNotFound } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
 import { MiddlewareManager, ProcedureRunner } from '@jitar/middleware';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
@@ -9,7 +8,7 @@ import Gateway from '../gateway/Gateway';
 import Worker from './Worker';
 
 import ExecutionClassResolver from './ExecutionClassResolver';
-import InvalidTrustKey from './errors/InvalidTrustKey';
+import RequestNotTrusted from './errors/RequestNotTrusted';
 
 const JITAR_TRUST_HEADER_KEY = 'X-Jitar-Trust-Key';
 const JITAR_DATA_ENCODING_KEY = 'X-Jitar-Data-Encoding';
@@ -111,20 +110,20 @@ export default class LocalWorker implements Worker
 
     async #runLocal(request: Request): Promise<Response>
     {
-        const dataEncoding = request.getHeader(JITAR_DATA_ENCODING_KEY);
-        const trustKey = request.getHeader(JITAR_TRUST_HEADER_KEY);
+        const procedure = this.#executionManager.getProcedure(request.fqn);
+        const implementation = procedure?.getImplementation(request.version);
 
-        if (trustKey !== undefined && this.#trustKey !== trustKey)
+        if (this.#procedureNotFound(implementation))
         {
-            throw new InvalidTrustKey();
+            throw new ProcedureNotFound(request.fqn);
+        }
+
+        if (this.#requestNotTrusted(request, implementation!))
+        {
+            throw new RequestNotTrusted();
         }
         
-        const procedure = this.#executionManager.getProcedure(request.fqn);
-
-        if (trustKey === undefined && procedure?.protected)
-        {
-            throw new Unauthorized();
-        }
+        const dataEncoding = request.getHeader(JITAR_DATA_ENCODING_KEY);
 
         if (dataEncoding === JITAR_DATA_ENCODING_VALUE)
         {
@@ -143,6 +142,22 @@ export default class LocalWorker implements Worker
         return response;
     }
 
+    #procedureNotFound(implementation?: Implementation): boolean
+    {
+        return implementation === undefined
+            || implementation.private;
+    }
+
+    #requestNotTrusted(request: Request, implementation: Implementation): boolean
+    {
+        // Public requests are always allowed
+        if (implementation.public) return false;
+
+        const trustKey = request.getHeader(JITAR_TRUST_HEADER_KEY);
+
+        return this.#trustKey !== trustKey;
+    }
+
     async #runRemote(request: Request): Promise<Response>
     {
         request = await this.#serializeRequest(request);
@@ -151,7 +166,7 @@ export default class LocalWorker implements Worker
 
         if (this.#trustKey !== undefined)
         {
-            request.headers.set(JITAR_TRUST_HEADER_KEY, this.#trustKey);
+            request.setHeader(JITAR_TRUST_HEADER_KEY, this.#trustKey);
         }
 
         const response = await this.#gateway!.run(request);

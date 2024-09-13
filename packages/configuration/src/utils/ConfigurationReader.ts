@@ -2,6 +2,8 @@
 import { LocalFileManager } from '@jitar/sourcing';
 import type { FileManager } from '@jitar/sourcing';
 
+const ENVIRONMENT_VARIABLE_REGEX = /\${([^}]*)}/g;
+
 export default class ConfigurationReader
 {
     #fileManager: FileManager;
@@ -21,16 +23,30 @@ export default class ConfigurationReader
         }
 
         const file = await this.#fileManager.read(filename);
-
-        const isJsonFile  = file.type.includes('json');
-
-        if (isJsonFile === false)
-        {
-            return {};
-        }
-
         const content = file.content.toString();
+        const configuration = this.#replaceEnvironmentVariables(content);
+        
+        return file.type.includes('json')
+            ? this.#parseJson(configuration)
+            : this.#parseText(configuration);
+    }
 
-        return JSON.parse(content);
+    #replaceEnvironmentVariables(content: string): string
+    {
+        return content.replace(ENVIRONMENT_VARIABLE_REGEX, (match, key) => 
+        {
+            return process.env[key] ?? 'null';
+        });
+    }
+
+    #parseJson(configuration: string): Record<string, unknown>
+    {
+        return JSON.parse(configuration);
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    #parseText(configuration: string): Record<string, unknown>
+    {
+        return {};
     }
 }

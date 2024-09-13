@@ -27,6 +27,12 @@ export default class Proxy implements ProviderService, RunnerService
 
     get url() { return this.#url; }
 
+    get trustKey() { return this.#runner.trustKey; }
+
+    get provider() { return this.#provider; }
+
+    get runner() { return this.#runner; }
+
     async isHealthy(): Promise<boolean>
     {
         const [providerHealthy, runnerHealthy] = await Promise.all([
@@ -46,10 +52,6 @@ export default class Proxy implements ProviderService, RunnerService
 
         return new Map([...providerHealth, ...runnerHealth]);
     }
-
-    get provider() { return this.#provider; }
-
-    get runner() { return this.#runner; }
 
     async start(): Promise<void>
     {

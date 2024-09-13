@@ -9,11 +9,14 @@ export default class BuildCache implements Command
 {
     async execute(args: ArgumentManager): Promise<void>
     {
+        const environmentFile = args.getOptionalArgument('--env-file', undefined);
         const runtimeConfigFile = args.getOptionalArgument('--config', undefined);
 
         const configurationManager = new ConfigurationManager();
+
+        await configurationManager.configureEnvironment(environmentFile);
         
-        const configuration = await configurationManager.configureRuntime(runtimeConfigFile);
+        const configuration = await configurationManager.getRuntimeConfiguration(runtimeConfigFile);
 
         const cacheManager = new CacheManager(configuration);
 

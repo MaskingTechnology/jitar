@@ -67,9 +67,6 @@ export default class Application
 
         for (const segment of this.#segments.values())
         {
-            // We only expose the public and protected procedures
-            // to protect access to private procedures
-
             const procedures = segment.getExposedProcedures();
 
             procedures.forEach(procedure => names.add(procedure.fqn));

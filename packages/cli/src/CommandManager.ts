@@ -20,7 +20,7 @@ export default class CommandManager
         this.#commands.set('about', new ShowAbout());
         this.#commands.set('version', new ShowVersion());
         this.#commands.set('build', new BuildCache());
-        this.#commands.set('serve', new StartServer());
+        this.#commands.set('start', new StartServer());
     }
 
     execute(name: string, args: ArgumentManager): Promise<void>

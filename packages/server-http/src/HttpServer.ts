@@ -272,6 +272,10 @@ export default class HttpServer
             response.setHeader(name, value);
         }
 
-        return response.send(serverResponse.result);
+        const result = typeof serverResponse.result === 'number'
+            ? String(serverResponse.result)
+            : serverResponse.result;
+
+        return response.send(result);
     }
 }

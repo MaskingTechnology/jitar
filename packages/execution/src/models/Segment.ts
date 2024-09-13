@@ -55,9 +55,7 @@ export default class Segment
 
     hasProcedure(fqn: string): boolean
     {
-        const procedure = this.getProcedure(fqn);
-
-        return procedure !== undefined;
+        return this.#procedures.has(fqn);
     }
 
     getProcedure(fqn: string): Procedure | undefined

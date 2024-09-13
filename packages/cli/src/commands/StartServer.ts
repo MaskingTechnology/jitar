@@ -1,6 +1,7 @@
 
-import { ConfigurationManager } from '@jitar/configuration';
-import { buildServer } from '@jitar/runtime';
+import { ConfigurationManager, RuntimeConfiguration, ServerConfiguration } from '@jitar/configuration';
+import { LocalFileManager, SourcingManager } from '@jitar/sourcing';
+import { ServerBuilder } from '@jitar/runtime';
 import { HttpServer } from '@jitar/server-http';
 
 import Command from '../interfaces/Command';
@@ -21,25 +22,32 @@ export default class StartServer implements Command
 {
     async execute(args: ArgumentManager): Promise<void>
     {
+        const environmentFile = args.getOptionalArgument('--env-file', undefined);
         const runtimeConfigFile = args.getOptionalArgument('--config', undefined);
         const serviceConfigFile = args.getRequiredArgument('--service');
 
-        const httpServer = await this.#buildServer(runtimeConfigFile, serviceConfigFile);
+        const configurationManager = new ConfigurationManager();
+
+        await configurationManager.configureEnvironment(environmentFile);
+
+        const runtimeConfiguration = await configurationManager.getRuntimeConfiguration(runtimeConfigFile);
+        const serverConfiguration = await configurationManager.getServerConfiguration(serviceConfigFile);
+
+        const httpServer = await this.#buildServer(runtimeConfiguration, serverConfiguration);
 
         return this.#runServer(httpServer);        
     }
 
-    async #buildServer(runtimeConfigFile: string | undefined, serviceConfigFile: string): Promise<HttpServer>
+    async #buildServer(runtimeConfiguration: RuntimeConfiguration, serverConfiguration: ServerConfiguration): Promise<HttpServer>
     {
-        const configurationManager = new ConfigurationManager();
-        
-        const runtimeConfiguration = await configurationManager.configureRuntime(runtimeConfigFile);
-        const serverConfiguration = await configurationManager.configureServer(serviceConfigFile);
-
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [protocol, host, port] = serverConfiguration.url.split(':');
 
-        const server = await buildServer(runtimeConfiguration, serverConfiguration);
+        const fileManager = new LocalFileManager(runtimeConfiguration.target);
+        const sourcingManager = new SourcingManager(fileManager);
+        const serverBuilder = new ServerBuilder(sourcingManager);
+
+        const server = await serverBuilder.build(serverConfiguration);
 
         return new HttpServer(server, port);
     }

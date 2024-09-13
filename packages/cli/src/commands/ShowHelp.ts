@@ -7,7 +7,7 @@ Usage: jitar <command> [options]
 
 Commands:
   build     Builds the application (creates segment bundles)
-  serve     Starts a server with the configured service
+  start     Starts a server with the configured service
   about     Shows information about Jitar
   version   Shows the installed version of Jitar
   help      Shows help (this message)
@@ -15,6 +15,7 @@ Commands:
 Options:
   --config    Path to the configuration file (default: jitar.json)
   --service   Path to the service configuration file (required for 'start' command)
+  --env-file  Path to the environment file (default: none)
 
 More information can be found at https://docs.jitar.dev
 `;

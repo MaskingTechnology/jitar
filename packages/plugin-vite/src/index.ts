@@ -154,16 +154,21 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             const segmentFiles = segments.map(name => `${targetPath}/${name}.segment.js`);
             const middlewareFiles = middlewares.map(name => makeShared(`${targetPath}/${name}`));
 
-            const jitarImport = `import { buildClient } from "jitar";`;
+            const jitarImport = `import { ClientBuilder } from "jitar";`;
             const segmentImports = segmentFiles.map((filename, index) => `import { default as $S${index} } from "${filename}";`).join('');
             const middlewareImports = middlewareFiles.map((filename, index) => `import { default as $M${index} } from "${filename}";`).join('');
+            const imports = [jitarImport, segmentImports, middlewareImports].join('\n');
 
+            const remoteUrl = `const remoteUrl = document.location.origin;`;
             const segmentsArray = `const segments = [${segments.map((_, index) => `$S${index}`).join(', ')}];`;
-            const middlewareArray = `const middlewares = [${middlewares.map((_, index) => `$M${index}`).join(', ')}];`;
+            const middlewareArray = `const middleware = [${middlewares.map((_, index) => `$M${index}`).join(', ')}];`;
+            const declarations = [remoteUrl, segmentsArray, middlewareArray].join('\n');
 
-            const startClient = `buildClient(document.location.origin, segments, middlewares);`;
+            const buildClient = `const client = new ClientBuilder().build({remoteUrl, segments, middleware});`;
+            const startClient = `client.start();`;
+            const client = [buildClient, startClient].join('\n');
 
-            return `${jitarImport}\n${segmentImports}\n${middlewareImports}\n${segmentsArray}\n${middlewareArray}\n${startClient}`;
+            return [imports, declarations, client].join('\n');
         },
 
         generateBundle(options, bundle)

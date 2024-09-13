@@ -45,6 +45,8 @@ export default class LocalGateway implements Gateway
     
     get url() { return this.#url; }
 
+    get trustKey() { return this.#trustKey; }
+
     async start(): Promise<void>
     {
         return this.#workerMonitor.start();

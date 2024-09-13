@@ -8,9 +8,9 @@ import Client from './Client';
 type ClientConfiguration =
 {
     remoteUrl: string;
-    healthChecks: HealthCheck[];
-    middleware: Middleware[];
-    segments: Segment[];
+    healthChecks?: HealthCheck[];
+    middleware?: Middleware[];
+    segments?: Segment[];
 };
 
 export default class ClientBuilder
@@ -18,9 +18,9 @@ export default class ClientBuilder
     build(configuration: ClientConfiguration): Client
     {
         const remoteUrl = configuration.remoteUrl;
-        const healthManager = this.#buildHealthManager(configuration.healthChecks);
-        const middlewareManager = this.#buildMiddlewareManager(configuration.middleware);
-        const executionManager = this.#buildExecutionManager(configuration.segments);
+        const healthManager = this.#buildHealthManager(configuration.healthChecks ?? []);
+        const middlewareManager = this.#buildMiddlewareManager(configuration.middleware ?? []);
+        const executionManager = this.#buildExecutionManager(configuration.segments ?? []);
 
         return new Client({ remoteUrl, healthManager, middlewareManager, executionManager });
     }

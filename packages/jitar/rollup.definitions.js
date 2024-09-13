@@ -8,5 +8,6 @@ export const SERVER_EXTERNALS =
     'mime-types',
     'tslog',
     'yargs',
+    'dotenv',
     'zod'
 ];

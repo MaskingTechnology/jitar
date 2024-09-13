@@ -122,7 +122,7 @@ export default class Server extends Runtime
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error('Failed to provide file:', message);
+            this.#logger.warn('Failed to provide file:', message);
 
             return this.#respondError(error);
         }
@@ -283,7 +283,7 @@ export default class Server extends Runtime
 
     #respondResponse(response: Response): ServerResponse
     {
-        const result = response.result;
+        const result = response.result instanceof Error ? response.result.message : response.result;
         const contentType = this.#determineContentType(result);
         const headers = this.#unmapHeaders(response.headers);
         const status = response.status;
@@ -293,7 +293,7 @@ export default class Server extends Runtime
 
     #respondError(error: unknown): ServerResponse
     {
-        const result = error instanceof Error ? error.message : error;
+        const result = error instanceof Error ? error.message : String(error);
         const contentType = this.#determineContentType(result);
         const headers = {};
         const status = this.#determineStatusCode(error);
