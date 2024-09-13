@@ -5,7 +5,7 @@ type RepositoryConfiguration =
 {
     indexFilename: string;
     serveIndexOnNotFound: boolean;
-    assets: string[];
+    assets?: string[];
 };
 
 export default RepositoryConfiguration;

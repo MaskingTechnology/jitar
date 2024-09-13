@@ -3,11 +3,11 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "build": "tsc",
-        "standalone": "node .jitar/jitar.shared.js --config=services/standalone.json",
-        "gateway": "node .jitar/jitar.shared.js --config=services/gateway.json",
-        "worker-account": "node .jitar/jitar.shared.js --config=services/account.json",
-        "worker-helpdesk": "node .jitar/jitar.shared.js --config=services/helpdesk.json"
+        "build": "rm -rf .jitar && tsc && jitar build",
+        "standalone": "jitar start --service=services/standalone.json",
+        "gateway": "jitar start --service=services/gateway.json",
+        "worker-account": "jitar start --service=services/account.json",
+        "worker-helpdesk": "jitar start --service=services/helpdesk.json"
     },
     "dependencies": {
         "jitar": "*"

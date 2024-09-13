@@ -163,8 +163,10 @@ export default class RuntimeBuilder
         return manager;
     }
 
-    async #buildAssetSet(patterns: string[]): Promise<Set<string>>
+    async #buildAssetSet(patterns?: string[]): Promise<Set<string>>
     {
+        if (patterns === undefined) return new Set();
+        
         const filenames = await this.#sourcingManager.filter(...patterns);
 
         return new Set(filenames);
