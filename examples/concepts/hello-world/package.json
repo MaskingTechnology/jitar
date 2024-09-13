@@ -3,8 +3,8 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "tsc",
-        "standalone": "node .jitar/jitar.shared.js --config=services/standalone.json"
+        "build": "rm -rf dist .jitar && tsc && jitar build",
+        "standalone": "jitar start --service=services/standalone.json"
     },
     "dependencies": {
         "jitar": "*"
