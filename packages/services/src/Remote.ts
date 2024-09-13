@@ -52,7 +52,7 @@ export default class Remote
     async addWorker(url: string, procedureNames: string[], trustKey?: string): Promise<void>
     {
         const remoteUrl = `${this.#url}/workers`;
-        const body = { url, procedureNames, trustKey};
+        const body = { url, procedureNames, trustKey };
         const options =
         {
             method: 'POST',

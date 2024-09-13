@@ -4,10 +4,10 @@
     "private": true,
     "scripts": {
         "build": "rm -rf .jitar && tsc && jitar build",
-        "standalone": "jitar start --env-file=.env --service=services/standalone.json",
-        "gateway": "jitar start --env-file=.env --service=services/gateway.json",
-        "worker-public": "jitar start --env-file=.env --service=services/public.json",
-        "worker-protected": "jitar start --env-file=.env --service=services/protected.json"
+        "standalone": "jitar start --service=services/standalone.json",
+        "gateway": "jitar start --service=services/gateway.json",
+        "worker-public": "jitar start --service=services/public.json",
+        "worker-protected": "jitar start --service=services/protected.json"
     },
     "dependencies": {
         "jitar": "*"

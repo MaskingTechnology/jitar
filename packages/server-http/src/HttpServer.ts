@@ -165,7 +165,8 @@ export default class HttpServer
         const validation = this.#validator.validate(args,
         {
             url: { type: 'url', required: true },
-            procedureNames: { type: 'list', required: true, items: { type: 'string' } }
+            procedureNames: { type: 'list', required: true, items: { type: 'string' } },
+            trustKey: { type: 'string', required: false }
         });
 
         if (validation.valid === false)
@@ -175,10 +176,11 @@ export default class HttpServer
 
         const url = args.url as string;
         const procedureNames = args.procedureNames as string[];
+        const trustKey = args.trustKey as string | undefined;
 
         try
         {
-            const serverResponse = await this.#server.addWorker({ url, procedureNames });
+            const serverResponse = await this.#server.addWorker({ url, procedureNames, trustKey });
 
             return this.#transformResponse(response, serverResponse);
         }

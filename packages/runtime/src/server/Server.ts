@@ -163,7 +163,7 @@ export default class Server extends Runtime
 
             const worker = this.#buildRemoteWorker(addRequest.url, addRequest.procedureNames);
 
-            await runner.addWorker(worker);
+            await runner.addWorker(worker, addRequest.trustKey);
 
             this.#logger.info('Added worker:', worker.url);
 
