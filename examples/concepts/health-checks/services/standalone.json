@@ -1,8 +1,8 @@
 {
     "url": "http://127.0.0.1:3000",
-    "healthChecks": ["./databaseHealthCheck"],
-    "standalone":
+    "worker":
     {
-        
+        "healthChecks": ["./databaseHealthCheck"],
+        "segments": ["default"]
     }
 }
