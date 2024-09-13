@@ -3,12 +3,12 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "clean": "rimraf dist",
+        "clean": "rimraf .jitar",
         "compile": "tsc && jitar build",
         "copy": "cpx -u 'src/index.html' dist",
         "build": "npm-run-all clean copy compile",
-        "worker": "jitar start --service=services/worker.json",
-        "client": "node dist/client.shared.js"
+        "standalone": "jitar start --service=services/standalone.json",
+        "client": "node dist/client.js"
     },
     "dependencies": {
         "jitar": "*",
