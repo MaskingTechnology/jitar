@@ -17,7 +17,7 @@ POST http://localhost:3000/rpc/calculator/subtract HTTP/1.1
 content-type: application/json
 
 {
-    "first": 48,
+    "first": 12,
     "second": 6
 }
 
