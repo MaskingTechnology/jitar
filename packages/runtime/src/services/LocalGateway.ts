@@ -10,6 +10,8 @@ import Worker from './Worker.js';
 import WorkerBalancer from './WorkerBalancer.js';
 import Repository from './Repository.js';
 
+import { setRuntime } from '../hooks.js';
+
 export default class LocalGateway extends Gateway
 {
     #workers: Set<Worker> = new Set();
@@ -21,6 +23,8 @@ export default class LocalGateway extends Gateway
         super(repository, url);
 
         this.#trustKey = trustKey;
+        
+        setRuntime(this);
     }
 
     get workers()
