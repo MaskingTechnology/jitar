@@ -5,18 +5,16 @@ import typescript from '@rollup/plugin-typescript';
 
 import { SERVER_EXTERNALS } from './rollup.definitions.js';
 
-export default [
-	{
+function bundle(inputFile, outputFile, supportBrowser)
+{
+	return {
 		external: SERVER_EXTERNALS,
 		treeshake: {
 			moduleSideEffects: false
 		},
-		input: {
-			cli: 'src/cli.ts',
-			lib: 'src/lib.ts'
-		},
+		input: inputFile,
 		output: {
-			dir: 'dist',
+			file: outputFile,
 			exports: 'named',
 			format: 'module',
 			plugins: [terser({
@@ -27,8 +25,13 @@ export default [
 		plugins: [
 			typescript(),
 			nodeResolve({
-				browser: true
+				browser: supportBrowser
 			})
 		]
-	}
-]
+	};
+}
+
+export default [
+	bundle('src/cli.ts', 'dist/cli.js', false),
+	bundle('src/lib.ts', 'dist/lib.js', true)
+];
