@@ -24,11 +24,9 @@ export default class ImportRewriter
         this.#segment = segment;
     }
 
-    rewrite(): string
+    rewrite(code: string): string
     {
         const replacer = (statement: string) => this.#replaceImport(statement);
-
-        const code = this.#module.code;
 
         return code.replaceAll(IMPORT_PATTERN, replacer);
     }
