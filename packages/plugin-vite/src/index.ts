@@ -4,7 +4,8 @@ import fs from 'fs';
 
 import { PluginOption, normalizePath, ResolvedConfig } from 'vite';
 
-const JITAR_BUNDLE_ID = 'jitar-client';
+const JITAR_SOURCE_ID = 'jitar';
+const JITAR_CLIENT_ID = 'jitar-client';
 
 function formatDir(dir: string)
 {
@@ -62,6 +63,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
     let rootPath: string | undefined;
     let sourcePath: string | undefined;
     let targetPath: string | undefined;
+    let outputPath: string | undefined;
     let jitarPath: string | undefined;
     let jitarBundleFilename: string | undefined;
 
@@ -82,6 +84,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             rootPath = path.join(resolvedConfig.root);
             sourcePath = path.join(rootPath, sourceDir);
             targetPath = path.join(rootPath, targetDir);
+            outputPath = path.join(targetPath, resolvedConfig.build.assetsDir);
             jitarPath = path.join(sourcePath, jitarDir);
         },
 
@@ -91,19 +94,19 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
             if (options.input === undefined)
             {
-                options.input = JITAR_BUNDLE_ID;
+                options.input = JITAR_CLIENT_ID;
             }
             else if (typeof options.input === 'string')
             {
-                options.input = [options.input, JITAR_BUNDLE_ID];
+                options.input = [options.input, JITAR_CLIENT_ID];
             }
             else if (Array.isArray(options.input))
             {
-                options.input.push(JITAR_BUNDLE_ID);
+                options.input.push(JITAR_CLIENT_ID);
             }
             else if (typeof options.input === 'object')
             {
-                options.input.additionalEntry = JITAR_BUNDLE_ID;
+                options.input.additionalEntry = JITAR_CLIENT_ID;
             }
 
             return options;
@@ -114,9 +117,19 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             order: 'pre',
             async handler(source: string, importer: string | undefined, options: object)
             {
-                if (source === JITAR_BUNDLE_ID)
+                if (source === JITAR_CLIENT_ID)
                 {
                     return source;
+                }
+
+                if (source === JITAR_SOURCE_ID)
+                {
+                    // Redirect all jitar imports to the jitar client bundle
+                    // so we can bundle the client code with the application
+
+                    return importer !== JITAR_CLIENT_ID
+                        ? JITAR_CLIENT_ID
+                        : null;
                 }
 
                 const resolution = await this.resolve(source, importer, options);
@@ -146,7 +159,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
         {
             // Create the jitar client bundle content
             
-            if (id !== JITAR_BUNDLE_ID)
+            if (id !== JITAR_CLIENT_ID)
             {
                 return null;
             }
@@ -154,21 +167,21 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             const segmentFiles = segments.map(name => `${targetPath}/${name}.segment.js`);
             const middlewareFiles = middlewares.map(name => makeShared(`${targetPath}/${name}`));
 
-            const jitarImport = `import { ClientBuilder } from "jitar";`;
+            const jitarImport = `import { ClientBuilder } from "${JITAR_SOURCE_ID}";`;
             const segmentImports = segmentFiles.map((filename, index) => `import { default as $S${index} } from "${filename}";`).join('');
             const middlewareImports = middlewareFiles.map((filename, index) => `import { default as $M${index} } from "${filename}";`).join('');
             const imports = [jitarImport, segmentImports, middlewareImports].join('\n');
 
-            const remoteUrl = `const remoteUrl = document.location.origin;`;
+            const remoteUrl = 'const remoteUrl = document.location.origin;';
             const segmentsArray = `const segments = [${segments.map((_, index) => `$S${index}`).join(', ')}];`;
             const middlewareArray = `const middleware = [${middlewares.map((_, index) => `$M${index}`).join(', ')}];`;
             const declarations = [remoteUrl, segmentsArray, middlewareArray].join('\n');
 
-            const buildClient = `const client = new ClientBuilder().build({remoteUrl, segments, middleware});`;
-            const startClient = `client.start();`;
-            const client = [buildClient, startClient].join('\n');
+            const client = 'new ClientBuilder().build({remoteUrl, segments, middleware});';
 
-            return [imports, declarations, client].join('\n');
+            const exports = `export * from "${JITAR_SOURCE_ID}";`;
+
+            return [imports, declarations, client, exports].join('\n');
         },
 
         generateBundle(options, bundle)
@@ -179,7 +192,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
             for (const [fileName, chunk] of bundles)
             {
-                if (chunk.type === 'chunk' && chunk.name === JITAR_BUNDLE_ID)
+                if (chunk.type === 'chunk' && chunk.name === JITAR_CLIENT_ID)
                 {
                     jitarBundleFilename = fileName;
 
@@ -196,10 +209,16 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             {
                 // Dev mode: insert the pre generated jitar bundle
 
-                const assetPath = path.join(targetDir, 'assets');
-                const filenames = fs.readdirSync(assetPath);
+                if (outputPath === undefined)
+                {
+                    console.warn('Output path not found!');
+
+                    return html;
+                }
+
+                const filenames = fs.readdirSync(outputPath);
                 
-                const jitarFilename = filenames.find(fileName => fileName.startsWith(JITAR_BUNDLE_ID) && fileName.endsWith('.js'));
+                const jitarFilename = filenames.find(fileName => fileName.startsWith(JITAR_CLIENT_ID) && fileName.endsWith('.js'));
 
                 if (jitarFilename === undefined)
                 {
@@ -208,7 +227,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                     return html;
                 }
 
-                const jitarBundle = fs.readFileSync(path.join(assetPath, jitarFilename), 'utf-8');
+                const jitarBundle = fs.readFileSync(path.join(outputPath, jitarFilename), 'utf-8');
 
                 return html.replace('<script', `<script type="module">${jitarBundle}</script>\n    <script`);
             }
