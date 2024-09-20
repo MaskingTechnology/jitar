@@ -8,7 +8,8 @@
     "types": "./dist/types/lib.d.ts",
     "sideEffects": true,
     "exports": {
-        ".": "./dist/lib.js"
+        ".": "./dist/lib.js",
+        "./client": "./dist/client.js"
     },
     "files": [
         "CHANGELOG.md",

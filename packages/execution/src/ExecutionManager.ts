@@ -28,11 +28,7 @@ export default class ExecutionManager implements Runner
 
     async addSegment(segment: Segment): Promise<void>
     {
-        // We can't use the `instanceof` operator here because the Segment class
-        // comes from a different source. Instead, we can compare the constructor
-        // names to ensure that the object is an instance of the Segment class.
-        
-        if (segment?.constructor.name !== Segment.name)
+        if ((segment instanceof Segment) === false)
         {
             throw new InvalidSegment();
         }
