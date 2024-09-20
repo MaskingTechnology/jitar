@@ -30,7 +30,7 @@ export default class ArgumentExtractor
         {
             const name = argsCopy.keys().next().value;
 
-            throw new UnknownParameter(name);
+            throw new UnknownParameter(name!);
         }
 
         return values;
