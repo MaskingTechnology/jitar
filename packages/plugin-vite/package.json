@@ -1,6 +1,6 @@
 {
   "name": "@jitar/plugin-vite",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "Vite plugin for Jitar.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
@@ -27,7 +27,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@jitar/reflection": "*"
+    "@jitar/reflection": "^0.7.6"
   },
   "peerDependencies": {
     "vite": ">=4.0.0 || >=5.0.0"
@@ -49,5 +49,6 @@
     "vite",
     "vite-plugin",
     "jitar"
-  ]
+  ],
+  "gitHead": "0a9289db7787cfafdcc9a198b87cadb8843a3d75"
 }

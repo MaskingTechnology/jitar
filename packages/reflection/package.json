@@ -1,6 +1,6 @@
 {
   "name": "@jitar/reflection",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "JavaScript reflection library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
@@ -37,5 +37,6 @@
     "javascript",
     "reflection",
     "jitar"
-  ]
+  ],
+  "gitHead": "0a9289db7787cfafdcc9a198b87cadb8843a3d75"
 }
