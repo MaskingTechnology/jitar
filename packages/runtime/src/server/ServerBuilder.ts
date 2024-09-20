@@ -22,13 +22,17 @@ export default class RuntimeBuilder
     {
         const setUp = configuration.setUp ?? [];
         const tearDown = configuration.tearDown ?? [];
+        const middleware = configuration.worker?.middleware
+                        ?? configuration.gateway?.middleware
+                        ?? configuration.standalone?.middleware;
 
         const proxy = await this.#buildService(configuration);
         const sourcingManager = this.#sourcingManager;
+        const middlewareManager = await this.#buildMiddlewareManager(middleware);
         const setUpScripts = setUp.map(filename => this.#makeSharedFilename(filename));
         const tearDownScripts = tearDown.map(filename => this.#makeSharedFilename(filename));
 
-        return new Server({ proxy, sourcingManager, setUpScripts, tearDownScripts });
+        return new Server({ proxy, sourcingManager, middlewareManager, setUpScripts, tearDownScripts });
     }
 
     #buildService(configuration: ServerConfiguration): Promise<Proxy>
@@ -70,10 +74,9 @@ export default class RuntimeBuilder
     {
         const trustKey = configuration.trustKey;
         const healthManager = await this.#buildHealthManager(configuration.healthChecks);
-        const middlewareManager = await this.#buildMiddlewareManager(configuration.middleware);
         const monitorInterval = configuration.monitor;
 
-        return new LocalGateway({ url, trustKey, healthManager, middlewareManager, monitorInterval });
+        return new LocalGateway({ url, trustKey, healthManager, monitorInterval });
     }
 
     #buildRemoteGateway(url: string): RemoteGateway
@@ -86,10 +89,9 @@ export default class RuntimeBuilder
         const trustKey = configuration.trustKey;
         const gateway = configuration.gateway ? this.#buildRemoteGateway(configuration.gateway) : undefined;
         const healthManager = await this.#buildHealthManager(configuration.healthChecks);
-        const middlewareManager = await this.#buildMiddlewareManager(configuration.middleware);
         const executionManager = await this.#buildExecutionManager(configuration.segments);
 
-        return new LocalWorker({ url, trustKey, gateway, healthManager, middlewareManager, executionManager });
+        return new LocalWorker({ url, trustKey, gateway, healthManager, executionManager });
     }
 
     async #buildLocalRepository(url: string, configuration: RepositoryConfiguration): Promise<LocalRepository>

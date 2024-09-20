@@ -29,7 +29,6 @@
     "@jitar/errors": "*",
     "@jitar/execution": "*",
     "@jitar/health": "*",
-    "@jitar/middleware": "*",
     "@jitar/sourcing": "*"
   },
   "repository": {

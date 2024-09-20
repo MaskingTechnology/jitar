@@ -1,7 +1,6 @@
 
 import { Request, Response, ExecutionManager, Implementation, ProcedureNotFound } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
-import { MiddlewareManager, ProcedureRunner } from '@jitar/middleware';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
 import Gateway from '../gateway/Gateway';
@@ -19,9 +18,8 @@ type Configuration =
     url: string;
     trustKey?: string;
     gateway?: Gateway;
-    healthManager: HealthManager; // object with all health checks loaded
-    middlewareManager: MiddlewareManager; // object with all middleware loaded
-    executionManager: ExecutionManager; // object with all segments loaded
+    healthManager: HealthManager;
+    executionManager: ExecutionManager;
 };
 
 export default class LocalWorker implements Worker
@@ -31,7 +29,6 @@ export default class LocalWorker implements Worker
     #gateway?: Gateway;
 
     #healthManager: HealthManager;
-    #middlewareManager: MiddlewareManager;
     #executionManager: ExecutionManager;
 
     #serializer: Serializer;
@@ -43,14 +40,10 @@ export default class LocalWorker implements Worker
         this.#gateway = configuration.gateway;
 
         this.#healthManager = configuration.healthManager;
-        this.#middlewareManager = configuration.middlewareManager;
         this.#executionManager = configuration.executionManager;
 
         const classResolver = new ExecutionClassResolver(this.#executionManager);
         this.#serializer = SerializerBuilder.build(classResolver);
-
-        const procedureRunner = new ProcedureRunner(this.#executionManager);
-        this.#middlewareManager.addMiddleware(procedureRunner);
     }
 
     get url() { return this.#url; }
@@ -132,7 +125,7 @@ export default class LocalWorker implements Worker
 
         request.removeHeader(JITAR_DATA_ENCODING_KEY);
 
-        const response = await this.#middlewareManager.handle(request);
+        const response = await this.#executionManager.run(request);
 
         if (dataEncoding === JITAR_DATA_ENCODING_VALUE)
         {

@@ -1,15 +1,11 @@
 
-import { Request, RunModes, StatusCodes, VersionParser, ProcedureNotAccessible } from '@jitar/execution';
+import { Request, Response, RunModes, StatusCodes, VersionParser, ProcedureNotAccessible } from '@jitar/execution';
 import { RunnerService } from '@jitar/services';
 
-export default class Runtime
+export default abstract class Runtime
 {
-    #runner: RunnerService;
-
-    constructor(runner: RunnerService)
+    constructor()
     {
-        this.#runner = runner;
-
         this.#initGlobals();
     }
 
@@ -24,6 +20,10 @@ export default class Runtime
         globals.ProcedureNotAccessible = ProcedureNotAccessible;
     }
 
+    abstract getTrustKey(): string | undefined;
+
+    abstract runInternal(request: Request): Promise<Response>;
+
     async #run(fqn: string, versionNumber: string, args: Record<string, unknown>, sourceRequest?: Request): Promise<unknown>
     {
         const version = VersionParser.parse(versionNumber);
@@ -31,13 +31,14 @@ export default class Runtime
         const headersMap = sourceRequest instanceof Request ? sourceRequest.headers : new Map();
 
         const targetRequest = new Request(fqn, version, argsMap, headersMap, RunModes.NORMAL);
+        const trustKey = this.getTrustKey();
 
-        if (this.#runner.trustKey !== undefined)
+        if (trustKey !== undefined)
         {
-            targetRequest.setHeader('X-Jitar-Trust-Key', this.#runner.trustKey);
+            targetRequest.setHeader('X-Jitar-Trust-Key', trustKey);
         }
 
-        const targetResponse = await this.#runner.run(targetRequest);
+        const targetResponse = await this.runInternal(targetRequest);
 
         if (targetResponse.status !== StatusCodes.OK)
         {

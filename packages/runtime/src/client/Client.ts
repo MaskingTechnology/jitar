@@ -4,6 +4,7 @@ import type { HealthManager } from '@jitar/health';
 import type { MiddlewareManager } from '@jitar/middleware';
 import { LocalWorker, RemoteGateway } from '@jitar/services';
 
+import ProcedureRunner from '../ProcedureRunner';
 import Runtime from '../Runtime';
 
 type Configuration =
@@ -17,20 +18,23 @@ type Configuration =
 export default class Client extends Runtime
 {
     #worker: LocalWorker;
+    #middlewareManager: MiddlewareManager;
 
     constructor(configuration: Configuration)
     {
-        const runner = new LocalWorker({
+        super();
+
+        this.#worker = new LocalWorker({
             url: configuration.remoteUrl,
             gateway: new RemoteGateway({ url: configuration.remoteUrl }),
             healthManager: configuration.healthManager,
-            middlewareManager: configuration.middlewareManager,
             executionManager: configuration.executionManager
         });
 
-        super(runner);
+        this.#middlewareManager = configuration.middlewareManager;
 
-        this.#worker = runner;
+        const procedureRunner = new ProcedureRunner(this.#worker);
+        this.#middlewareManager.addMiddleware(procedureRunner);
     }
 
     get worker() { return this.#worker; }
@@ -45,8 +49,18 @@ export default class Client extends Runtime
         return this.#worker.stop();
     }
 
+    getTrustKey(): string | undefined
+    {
+        return undefined;
+    }
+
     run(request: Request): Promise<Response>
     {
-        return this.#worker.run(request);
+        return this.runInternal(request);
+    }
+
+    runInternal(request: Request): Promise<Response>
+    {
+        return this.#middlewareManager.handle(request);
     }
 }

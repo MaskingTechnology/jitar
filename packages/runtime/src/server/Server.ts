@@ -2,10 +2,12 @@
 import { BadRequest, Forbidden, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized } from '@jitar/errors';
 import { Request, Version, VersionParser } from '@jitar/execution';
 import type { Response } from '@jitar/execution';
+import type { MiddlewareManager } from '@jitar/middleware';
 import type { File, SourcingManager } from '@jitar/sourcing';
 import { LocalGateway, LocalWorker, RemoteWorker, Proxy } from '@jitar/services';
 import { Logger } from '@jitar/logging';
 
+import ProcedureRunner from '../ProcedureRunner';
 import Runtime from '../Runtime';
 
 import ContentTypes from './definitions/ContentTypes';
@@ -20,6 +22,7 @@ type Configuration =
 {
     proxy: Proxy;
     sourcingManager: SourcingManager;
+    middlewareManager: MiddlewareManager;
     setUpScripts?: string[];
     tearDownScripts?: string[];
 };
@@ -28,6 +31,7 @@ export default class Server extends Runtime
 {
     #proxy: Proxy;
     #sourcingManager: SourcingManager;
+    #middlewareManager: MiddlewareManager;
     #setUpScripts: string[];
     #tearDownScripts: string[];
 
@@ -35,15 +39,24 @@ export default class Server extends Runtime
 
     constructor(configuration: Configuration)
     {
-        super(configuration.proxy.runner);
+        super();
         
         this.#proxy = configuration.proxy;
         this.#sourcingManager = configuration.sourcingManager;
+        this.#middlewareManager = configuration.middlewareManager;
         this.#setUpScripts = configuration.setUpScripts ?? [];
         this.#tearDownScripts = configuration.tearDownScripts ?? [];
+
+        const procedureRunner = new ProcedureRunner(this.#proxy);
+        this.#middlewareManager.addMiddleware(procedureRunner);
     }
 
     get proxy() { return this.#proxy; }
+
+    getTrustKey(): string | undefined
+    {
+        return this.#proxy.trustKey;
+    }
 
     async start(): Promise<void>
     {
@@ -134,7 +147,8 @@ export default class Server extends Runtime
         {
             const request = this.#transformRunRequest(runRequest);
 
-            const response = await this.#proxy.run(request);
+            // Middleware is only executed on external requests.
+            const response = await this.#middlewareManager.handle(request);
 
             this.#logger.info('Ran request:', request.fqn);
 
@@ -148,6 +162,12 @@ export default class Server extends Runtime
 
             return this.#respondError(error);
         }
+    }
+
+    async runInternal(request: Request): Promise<Response>
+    {
+        // Middleware is not executed on internal requests.
+        return this.#proxy.run(request);
     }
 
     async addWorker(addRequest: AddWorkerRequest): Promise<ServerResponse>
