@@ -238,6 +238,7 @@ export default class RPCController
         const statusCode = this.#createResponseResultStatusCode(result, response);
 
         response.setHeader(Headers.CONTENT_TYPE, contentType);
+        response.setHeader(Headers.JITAR_CONTENT_TYPE, contentType);
 
         return response.status(statusCode).send(responseContent);
     }
@@ -262,6 +263,16 @@ export default class RPCController
 
     #createResponseContentType(content: unknown): string
     {
+        if (content === null)
+        {
+            return ContentTypes.NULL;
+        }
+
+        if (content === undefined)
+        {
+            return ContentTypes.UNDEFINED
+        }
+
         switch(typeof content)
         {
             case 'boolean': return ContentTypes.BOOLEAN;

@@ -150,7 +150,17 @@ export default class Remote
 
     async #getResponseResult(response: Response): Promise<unknown>
     {
-        const contentType = response.headers.get('Content-Type');
+        const contentType = response.headers.get('X-Jitar-Content-Type');
+
+        if (contentType !== null && contentType.includes('null'))
+        {
+            return null;
+        }
+
+        if (contentType !== null && contentType.includes('undefined'))
+        {
+            return undefined;
+        }
 
         if (contentType !== null && contentType.includes('json'))
         {
