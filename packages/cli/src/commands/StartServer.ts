@@ -2,7 +2,7 @@
 import { ConfigurationManager, RuntimeConfiguration, ServerConfiguration } from '@jitar/configuration';
 import { LocalFileManager, SourcingManager } from '@jitar/sourcing';
 import { ServerBuilder } from '@jitar/runtime';
-import { HttpServer } from '@jitar/server-http';
+import { HttpServer, HttpRemoteBuilder } from '@jitar/http';
 
 import Command from '../interfaces/Command';
 import ArgumentManager from '../ArgumentManager';
@@ -45,7 +45,8 @@ export default class StartServer implements Command
 
         const fileManager = new LocalFileManager(runtimeConfiguration.target);
         const sourcingManager = new SourcingManager(fileManager);
-        const serverBuilder = new ServerBuilder(sourcingManager);
+        const remoteBuilder = new HttpRemoteBuilder();
+        const serverBuilder = new ServerBuilder(sourcingManager, remoteBuilder);
 
         const server = await serverBuilder.build(serverConfiguration);
 

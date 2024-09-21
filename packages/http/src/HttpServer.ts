@@ -269,6 +269,7 @@ export default class HttpServer
         
         response.status(status);
         response.setHeader('Content-Type', serverResponse.contentType);
+        response.setHeader('X-Jitar-Content-Type', serverResponse.contentType);
 
         for (const [name, value] of Object.entries(serverResponse.headers))
         {

@@ -19,3 +19,5 @@ export { default as RemoteWorker } from './worker/RemoteWorker';
 export { default as Service } from './Service';
 export { default as RunnerService } from './RunnerService';
 export { default as ProviderService } from './ProviderService';
+export { default as Remote } from './Remote';
+export { default as RemoteBuilder } from './RemoteBuilder';

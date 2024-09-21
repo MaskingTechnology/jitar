@@ -33,5 +33,5 @@ function bundle(input, output, supportBrowser)
 
 export default [
 	bundle(['src/cli.ts', 'src/lib.ts'], { dir: 'dist' }, false),
-	bundle('src/lib.ts', { file: 'dist/client.js' }, true)
+	bundle('src/client.ts', { file: 'dist/client.js' }, true)
 ];

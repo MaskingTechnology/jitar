@@ -29,7 +29,7 @@
     "@jitar/caching": "*",
     "@jitar/configuration": "*",
     "@jitar/sourcing": "*",
-    "@jitar/server-http": "*",
+    "@jitar/http": "*",
     "@jitar/runtime": "*"
   },
   "repository": {

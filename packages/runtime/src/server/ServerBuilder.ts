@@ -3,7 +3,7 @@ import { ServerConfiguration, GatewayConfiguration, WorkerConfiguration, Reposit
 import { Segment, ExecutionManager } from '@jitar/execution';
 import { HealthCheck, HealthManager } from '@jitar/health';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
-import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, LocalWorker, Proxy, DummyProvider, DummyRunner } from '@jitar/services';
+import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, LocalWorker, Proxy, DummyProvider, DummyRunner, Remote, RemoteBuilder } from '@jitar/services';
 import { SourcingManager } from '@jitar/sourcing';
 
 import UnknownServiceConfigured from './errors/UnknownServiceConfigured';
@@ -12,10 +12,12 @@ import Server from './Server';
 export default class RuntimeBuilder
 {
     #sourcingManager: SourcingManager;
+    #remoteBuilder: RemoteBuilder;
 
-    constructor(sourcingManager: SourcingManager)
+    constructor(sourcingManager: SourcingManager, remoteBuilder: RemoteBuilder)
     {
         this.#sourcingManager = sourcingManager;
+        this.#remoteBuilder = remoteBuilder;
     }
 
     async build(configuration: ServerConfiguration): Promise<Server>
@@ -28,11 +30,12 @@ export default class RuntimeBuilder
 
         const proxy = await this.#buildService(configuration);
         const sourcingManager = this.#sourcingManager;
+        const remoteBuilder = this.#remoteBuilder;
         const middlewareManager = await this.#buildMiddlewareManager(middleware);
         const setUpScripts = setUp.map(filename => this.#makeSharedFilename(filename));
         const tearDownScripts = tearDown.map(filename => this.#makeSharedFilename(filename));
 
-        return new Server({ proxy, sourcingManager, middlewareManager, setUpScripts, tearDownScripts });
+        return new Server({ proxy, sourcingManager, remoteBuilder, middlewareManager, setUpScripts, tearDownScripts });
     }
 
     #buildService(configuration: ServerConfiguration): Promise<Proxy>
@@ -81,7 +84,9 @@ export default class RuntimeBuilder
 
     #buildRemoteGateway(url: string): RemoteGateway
     {
-        return new RemoteGateway({ url });
+        const remote = this.#remoteBuilder.build(url);
+
+        return new RemoteGateway({ url, remote });
     }
 
     async #buildLocalWorker(url: string, configuration: WorkerConfiguration): Promise<LocalWorker>
@@ -104,7 +109,9 @@ export default class RuntimeBuilder
 
     #buildRemoteRepository(url: string): RemoteRepository
     {
-        return new RemoteRepository({ url });
+        const remote = this.#remoteBuilder.build(url);
+
+        return new RemoteRepository({ url, remote });
     }
 
     async #buildProxy(url: string, configuration: ProxyConfiguration): Promise<Proxy>

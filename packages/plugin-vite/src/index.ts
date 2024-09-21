@@ -169,7 +169,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             const segmentFiles = segments.map(name => `${targetPath}/${name}.segment.js`);
             const middlewareFiles = middlewares.map(name => makeShared(`${targetPath}/${name}`));
 
-            const jitarImport = `import { ClientBuilder } from "${JITAR_CLIENT_ID}";`;
+            const jitarImport = `import { ClientBuilder, HttpRemoteBuilder } from "${JITAR_CLIENT_ID}";`;
             const segmentImports = segmentFiles.map((filename, index) => `import { default as $S${index} } from "${filename}";`).join('');
             const middlewareImports = middlewareFiles.map((filename, index) => `import { default as $M${index} } from "${filename}";`).join('');
             const imports = [jitarImport, segmentImports, middlewareImports].join('\n');
@@ -179,7 +179,10 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             const middlewareArray = `const middleware = [${middlewares.map((_, index) => `$M${index}`).join(', ')}];`;
             const declarations = [remoteUrl, segmentsArray, middlewareArray].join('\n');
 
-            const client = 'new ClientBuilder().build({remoteUrl, segments, middleware});';
+            const remoteBuilder = 'const remoteBuilder = new HttpRemoteBuilder();';
+            const clientBuilder = 'const clientBuilder = new ClientBuilder(remoteBuilder);';
+            const build = 'clientBuilder.build({remoteUrl, segments, middleware});';
+            const client = [remoteBuilder, clientBuilder, build].join('\n');
 
             const exports = `export * from "${JITAR_CLIENT_ID}";`;
 

@@ -10,6 +10,7 @@ import Gateway from './Gateway';
 type Configuration =
 {
     url: string;
+    remote: Remote;
 };
 
 export default class RemoteGateway implements Gateway
@@ -20,7 +21,7 @@ export default class RemoteGateway implements Gateway
     constructor(configuration: Configuration)
     {
         this.#url = configuration.url;
-        this.#remote = new Remote(configuration.url);
+        this.#remote = configuration.remote;
     }
 
     get url() { return this.#url; }
@@ -29,12 +30,12 @@ export default class RemoteGateway implements Gateway
     
     start(): Promise<void>
     {
-        return Promise.resolve();
+        return this.#remote.connect();
     }
 
     stop(): Promise<void>
     {
-        return Promise.resolve();
+        return this.#remote.disconnect();
     }
 
     isHealthy(): Promise<boolean>

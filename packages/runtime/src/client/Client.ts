@@ -2,7 +2,7 @@
 import type { ExecutionManager, Request, Response } from '@jitar/execution';
 import type { HealthManager } from '@jitar/health';
 import type { MiddlewareManager } from '@jitar/middleware';
-import { LocalWorker, RemoteGateway } from '@jitar/services';
+import { LocalWorker, RemoteGateway, Remote } from '@jitar/services';
 
 import ProcedureRunner from '../ProcedureRunner';
 import Runtime from '../Runtime';
@@ -10,9 +10,10 @@ import Runtime from '../Runtime';
 type Configuration =
 {
     remoteUrl: string;
-    healthManager: HealthManager; // object with all health checks loaded
-    middlewareManager: MiddlewareManager; // object with all middleware loaded
-    executionManager: ExecutionManager; // object with all segments loaded
+    remote: Remote;
+    healthManager: HealthManager;
+    middlewareManager: MiddlewareManager;
+    executionManager: ExecutionManager;
 };
 
 export default class Client extends Runtime
@@ -26,7 +27,10 @@ export default class Client extends Runtime
 
         this.#worker = new LocalWorker({
             url: configuration.remoteUrl,
-            gateway: new RemoteGateway({ url: configuration.remoteUrl }),
+            gateway: new RemoteGateway({
+                url: configuration.remoteUrl,
+                remote: configuration.remote
+            }),
             healthManager: configuration.healthManager,
             executionManager: configuration.executionManager
         });

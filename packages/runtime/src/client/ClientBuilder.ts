@@ -1,5 +1,6 @@
 
 import { Segment, ExecutionManager } from '@jitar/execution';
+import { RemoteBuilder } from '@jitar/services';
 import { HealthCheck, HealthManager } from '@jitar/health';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
 
@@ -15,14 +16,22 @@ type ClientConfiguration =
 
 export default class ClientBuilder
 {
+    #remoteBuilder: RemoteBuilder;
+
+    constructor(remoteBuilder: RemoteBuilder)
+    {
+        this.#remoteBuilder = remoteBuilder;
+    }
+
     build(configuration: ClientConfiguration): Client
     {
         const remoteUrl = configuration.remoteUrl;
+        const remote = this.#remoteBuilder.build(remoteUrl);
         const healthManager = this.#buildHealthManager(configuration.healthChecks ?? []);
         const middlewareManager = this.#buildMiddlewareManager(configuration.middleware ?? []);
         const executionManager = this.#buildExecutionManager(configuration.segments ?? []);
 
-        return new Client({ remoteUrl, healthManager, middlewareManager, executionManager });
+        return new Client({ remoteUrl, remote, healthManager, middlewareManager, executionManager });
     }
 
     #buildHealthManager(healthChecks: HealthCheck[]): HealthManager

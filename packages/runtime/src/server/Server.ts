@@ -4,7 +4,7 @@ import { Request, Version, VersionParser } from '@jitar/execution';
 import type { Response } from '@jitar/execution';
 import type { MiddlewareManager } from '@jitar/middleware';
 import type { File, SourcingManager } from '@jitar/sourcing';
-import { LocalGateway, LocalWorker, RemoteWorker, Proxy } from '@jitar/services';
+import { LocalGateway, LocalWorker, RemoteWorker, Proxy, RemoteBuilder } from '@jitar/services';
 import { Logger } from '@jitar/logging';
 
 import ProcedureRunner from '../ProcedureRunner';
@@ -22,6 +22,7 @@ type Configuration =
 {
     proxy: Proxy;
     sourcingManager: SourcingManager;
+    remoteBuilder: RemoteBuilder;
     middlewareManager: MiddlewareManager;
     setUpScripts?: string[];
     tearDownScripts?: string[];
@@ -31,6 +32,7 @@ export default class Server extends Runtime
 {
     #proxy: Proxy;
     #sourcingManager: SourcingManager;
+    #remoteBuilder: RemoteBuilder;
     #middlewareManager: MiddlewareManager;
     #setUpScripts: string[];
     #tearDownScripts: string[];
@@ -43,6 +45,7 @@ export default class Server extends Runtime
         
         this.#proxy = configuration.proxy;
         this.#sourcingManager = configuration.sourcingManager;
+        this.#remoteBuilder = configuration.remoteBuilder;
         this.#middlewareManager = configuration.middlewareManager;
         this.#setUpScripts = configuration.setUpScripts ?? [];
         this.#tearDownScripts = configuration.tearDownScripts ?? [];
@@ -333,7 +336,10 @@ export default class Server extends Runtime
 
     #determineContentType(content: unknown): string
     {
-        switch(typeof content)
+        if (content === undefined) return ContentTypes.UNDEFINED;
+        if (content === null) return ContentTypes.NULL;
+
+        switch (typeof content)
         {
             case 'boolean': return ContentTypes.BOOLEAN;
             case 'number': return ContentTypes.NUMBER;
@@ -362,8 +368,9 @@ export default class Server extends Runtime
 
     #buildRemoteWorker(url: string, procedures: string[]): RemoteWorker
     {
+        const remote = this.#remoteBuilder.build(url);
         const procedureNames = new Set<string>(procedures);
 
-        return new RemoteWorker({ url, procedureNames });
+        return new RemoteWorker({ url, remote, procedureNames });
     }
 }
