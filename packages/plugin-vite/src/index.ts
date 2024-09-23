@@ -129,7 +129,13 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                     // Redirect all jitar imports to the jitar client bundle
                     // so we can bundle the client code with the application
 
-                    jitarBundleImported = true;
+                    if (importer?.endsWith('.segment.js') === false)
+                    {
+                        // Flag that the jitar bundle was imported by the application
+                        // so we can avoid adding it to the HTML
+                        
+                        jitarBundleImported = true;
+                    }
 
                     return JITAR_BUNDLE_ID;
                 }
