@@ -1,6 +1,6 @@
 
 import { ConfigurationManager } from '@jitar/configuration';
-import { CacheManager } from '@jitar/caching';
+import { CacheManager } from '@jitar/build';
 
 import Command from '../interfaces/Command';
 import ArgumentManager from '../ArgumentManager';

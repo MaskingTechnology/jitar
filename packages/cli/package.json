@@ -26,7 +26,7 @@
     "prepublishOnly": "npm run clean && npm run build"
   },
   "dependencies": {
-    "@jitar/caching": "*",
+    "@jitar/build": "*",
     "@jitar/configuration": "*",
     "@jitar/sourcing": "*",
     "@jitar/http": "*",
