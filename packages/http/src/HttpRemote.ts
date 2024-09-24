@@ -3,7 +3,8 @@ import { ErrorConverter, Request, Response as ResultResponse } from '@jitar/exec
 import { Remote } from '@jitar/services';
 import { File } from '@jitar/sourcing';
 
-const APPLICATION_JSON = 'application/json';
+import HeaderKeys from './definitions/HeaderKeys';
+import HeaderValues from './definitions/HeaderValues';
 
 const errorConverter = new ErrorConverter();
 
@@ -32,7 +33,7 @@ export default class HttpRemote implements Remote
         const options = { method: 'GET' };
 
         const response = await this.#callRemote(remoteUrl, options);
-        const type = response.headers.get('Content-Type') || 'application/octet-stream';
+        const type = response.headers.get(HeaderKeys.CONTENT_TYPE) ?? HeaderValues.APPLICATION_STREAM;
         const result = await response.arrayBuffer();
         const content = Buffer.from(result);
 
@@ -68,7 +69,7 @@ export default class HttpRemote implements Remote
         const options =
         {
             method: 'POST',
-            headers: { 'Content-Type': APPLICATION_JSON },
+            headers: { 'Content-Type': HeaderValues.APPLICATION_JSON },
             body: JSON.stringify(body)
         };
 
@@ -77,7 +78,7 @@ export default class HttpRemote implements Remote
 
     async run(request: Request): Promise<ResultResponse>
     {
-        request.setHeader('Content-Type', APPLICATION_JSON);
+        request.setHeader(HeaderKeys.CONTENT_TYPE, HeaderValues.APPLICATION_JSON);
 
         const versionString = request.version.toString();
         const argsObject = Object.fromEntries(request.args);
@@ -128,7 +129,8 @@ export default class HttpRemote implements Remote
 
     async #getResponseResult(response: Response): Promise<unknown>
     {
-        const contentType = response.headers.get('X-Jitar-Content-Type');
+        const contentType = response.headers.get(HeaderKeys.JITAR_CONTENT_TYPE)
+                         ?? response.headers.get(HeaderKeys.CONTENT_TYPE);
 
         if (contentType?.includes('undefined'))
         {

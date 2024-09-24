@@ -3,14 +3,17 @@ import express, { Express, Request, Response, NextFunction } from 'express';
 import { Server as Http } from 'http';
 
 import { RunModes } from '@jitar/execution';
-import type { Server, ServerResponse } from '@jitar/runtime';
+import { Server, ServerResponse, ContentTypes } from '@jitar/runtime';
 import { Validator } from '@jitar/validation';
+
+import HeaderKeys from './definitions/HeaderKeys';
+import IgnoredHeaderKeys from './definitions/IgnoredHeaderKeys';
+import HeaderValues from './definitions/HeaderValues';
 
 const DEFAULT_PORT = '3000';
 const DEFAULT_BODY_LIMIT = 1024 * 200; // 200 KB
 
-const IGNORED_QUERY_PARAMETERS = ['version'];
-const IGNORED_HEADER_KEYS = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent', 'keep-alive'];
+const IGNORED_QUERY_PARAMETERS = ['version']; // TODO: Refactor version to custom header
 
 export default class HttpServer
 {
@@ -51,7 +54,7 @@ export default class HttpServer
         this.#app.use(express.urlencoded({ extended: true }));
         this.#app.use(this.#addDefaultHeaders.bind(this));
 
-        this.#app.disable('x-powered-by');
+        this.#app.disable(HeaderKeys.POWERED_BY);
     }
 
     #setupRoutes(): void
@@ -96,7 +99,7 @@ export default class HttpServer
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     #addDefaultHeaders(request: Request, response: Response, next: NextFunction): void
     {
-        response.setHeader('X-Content-Type-Options', 'nosniff');
+        response.setHeader(HeaderKeys.CONTENT_TYPE_OPTIONS, HeaderValues.NO_SNIFF);
 
         next();
     }
@@ -252,7 +255,7 @@ export default class HttpServer
             const lowerKey = key.toLowerCase();
             const stringValue = value.toString();
 
-            if (IGNORED_HEADER_KEYS.includes(lowerKey))
+            if (IgnoredHeaderKeys.includes(lowerKey))
             {
                 continue;
             }
@@ -266,10 +269,11 @@ export default class HttpServer
     #transformResponse(response: Response, serverResponse: ServerResponse): Response
     {
         const status = this.#transformStatus(serverResponse);
+        const contentType = this.#transformContentType(serverResponse);
         
         response.status(status);
-        response.setHeader('Content-Type', serverResponse.contentType);
-        response.setHeader('X-Jitar-Content-Type', serverResponse.contentType);
+        response.setHeader(HeaderKeys.CONTENT_TYPE, contentType);
+        response.setHeader(HeaderKeys.JITAR_CONTENT_TYPE, serverResponse.contentType);
 
         for (const [name, value] of Object.entries(serverResponse.headers))
         {
@@ -291,14 +295,36 @@ export default class HttpServer
         return serverResponse.status;
     }
 
+    #transformContentType(serverResponse: ServerResponse): string
+    {
+        const contentType = serverResponse.contentType.toLowerCase();
+
+        switch (contentType)
+        {
+            case ContentTypes.BOOLEAN:
+            case ContentTypes.NUMBER:
+            case ContentTypes.UNDEFINED:
+            case ContentTypes.NULL:
+                return ContentTypes.TEXT;
+        }
+
+        return contentType;
+    }
+
     #transformResult(serverResponse: ServerResponse): unknown
     {
-        if (typeof serverResponse.result === 'number'
-         || typeof serverResponse.result === 'boolean')
-         {
-            return String(serverResponse.result);
-         }
+        const result = serverResponse.result;
+
+        // if (result === undefined || result === null)
+        // {
+        //     return '';
+        // }
+
+        if (typeof result === 'number' || typeof result === 'boolean')
+        {
+            return String(result);
+        }
         
-         return serverResponse.result;
+        return result;
     }
 }
