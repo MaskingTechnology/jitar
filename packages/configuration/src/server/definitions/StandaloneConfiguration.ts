@@ -7,9 +7,9 @@ type StandaloneConfiguration =
     middleware: string[];
     healthChecks: string[];
 
-    indexFilename: string;
-    serveIndexOnNotFound: boolean;
-    assets: string[];
+    indexFilename?: string;
+    serveIndexOnNotFound?: boolean;
+    assets?: string[];
 };
 
 export default StandaloneConfiguration;

@@ -3,8 +3,8 @@ import type { ValidationScheme } from '@jitar/validation';
 
 type RepositoryConfiguration =
 {
-    indexFilename: string;
-    serveIndexOnNotFound: boolean;
+    indexFilename?: string;
+    serveIndexOnNotFound?: boolean;
     assets?: string[];
 };
 

@@ -103,8 +103,10 @@ export default class RuntimeBuilder
     {
         const sourcingManager = this.#sourcingManager;
         const assets = await this.#buildAssetSet(configuration.assets);
+        const indexFilename = configuration.indexFilename;
+        const serveIndexOnNotFound = configuration.serveIndexOnNotFound;
 
-        return new LocalRepository({ url, sourcingManager, assets });
+        return new LocalRepository({ url, sourcingManager, assets, indexFilename, serveIndexOnNotFound });
     }
 
     #buildRemoteRepository(url: string): RemoteRepository
