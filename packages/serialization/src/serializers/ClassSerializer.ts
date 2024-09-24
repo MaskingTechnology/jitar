@@ -1,5 +1,5 @@
 
-import { ReflectionClass, ReflectionField, Reflector } from '@jitar/reflection';
+import { ESClass, ESField, Reflector } from '@jitar/analysis';
 
 import ValueSerializer from '../ValueSerializer';
 import ClassNotFound from '../errors/ClassNotFound';
@@ -57,22 +57,22 @@ export default class ClassSerializer extends ValueSerializer
         return { serialized: true, key, name, args, fields };
     }
 
-    #extractConstructorParameters(model: ReflectionClass): string[]
+    #extractConstructorParameters(model: ESClass): string[]
     {
         const constructor = model.getFunction('constructor');
-        const parameters = (constructor?.parameters ?? []) as ReflectionField[];
+        const parameters = (constructor?.parameters ?? []) as ESField[];
 
         return parameters.map(parameter => parameter.name);
     }
 
-    async #serializeConstructor(model: ReflectionClass, includeNames: string[], object: object): Promise<FlexObject>
+    async #serializeConstructor(model: ESClass, includeNames: string[], object: object): Promise<FlexObject>
     {
         const args: FlexObject = {};
 
         for (const [index, name] of includeNames.entries())
         {
             // Constructor parameters that can't be read make it impossible to fully reconstruct the object.
-
+            
             const value = model.canRead(name)
                 ? await this.serializeOther((object as FlexObject)[name])
                 : undefined;
@@ -85,7 +85,7 @@ export default class ClassSerializer extends ValueSerializer
         return args;
     }
 
-    async #serializeFields(model: ReflectionClass, excludeNames: string[], object: object): Promise<FlexObject>
+    async #serializeFields(model: ESClass, excludeNames: string[], object: object): Promise<FlexObject>
     {
         const fields: FlexObject = {};
 
@@ -137,7 +137,7 @@ export default class ClassSerializer extends ValueSerializer
     {
         const model = reflector.fromClass(clazz, true);
         const constructor = model.getFunction('constructor');
-        const parameters = (constructor?.parameters ?? []) as ReflectionField[];
+        const parameters = (constructor?.parameters ?? []) as ESField[];
 
         const values = parameters.map((_, index) =>
         {

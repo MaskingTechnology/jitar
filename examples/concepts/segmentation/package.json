@@ -3,7 +3,7 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "build": "rm -rf dist .jitar && tsc && jitar build",
+        "build": "rm -rf dist && tsc && jitar build",
         "standalone": "jitar start --service=services/standalone.json",
         "gateway": "jitar start --service=services/gateway.json",
         "worker-data": "jitar start --service=services/data.json",

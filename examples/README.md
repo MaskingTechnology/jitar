@@ -31,15 +31,13 @@ The following examples focus on one particular concept at a time. The examples a
 1. [Multi Version](concepts/multi-version/README.md) - Demonstrates how to create multiple versions of a procedure.
 1. [Data Transportation](concepts/data-transportation/README.md) - Demonstrates how to transport data between segmented procedures.
 1. [Error handling](concepts/error-handling/README.md) - Demonstrates how to the error handling works.
-1. [Node client](concepts/node-client/README.md) - Demonstrates how to start a Jitar server and client.
 1. [Health checks](concepts/health-checks/README.md) - Demonstrates how to use health checks.
 1. [Middleware](concepts/middleware/README.md) - Demonstrates how to use middleware.
 1. [Cors](concepts/cors/README.md) - Demonstrates how to enable cors.
 1. [Construction](concepts/construction/README.md) - Demonstrates how to use a set up and tear down scripts.
-1. [Overrides](concepts/overrides/README.md) - Demonstrates how to use import overrides.
 
 ## Application examples
 
 The following examples demonstrate how to build real-world applications using Jitar.
 
-1. [Contact list](apps/contact-list/README.md) - Example of a full stack application build with React, MongoDB and Jitar.
+1. [Full stack](apps/full-stack/README.md) - Example of a full stack application build with React, MongoDB and Jitar.
