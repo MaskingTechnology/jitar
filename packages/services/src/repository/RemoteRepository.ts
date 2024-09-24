@@ -46,6 +46,6 @@ export default class RemoteRepository implements Repository
 
     provide(filename: string): Promise<File>
     {
-        return this.#remote.loadFile(filename);
+        return this.#remote.provide(filename);
     }
 }

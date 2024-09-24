@@ -8,7 +8,7 @@ export default interface Remote
 
     disconnect(): Promise<void>;
 
-    loadFile(filename: string): Promise<File>;
+    provide(filename: string): Promise<File>;
 
     isHealthy(): Promise<boolean>;
 

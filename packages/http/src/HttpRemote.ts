@@ -26,14 +26,15 @@ export default class HttpRemote implements Remote
         return Promise.resolve();
     }
 
-    async loadFile(filename: string): Promise<File>
+    async provide(filename: string): Promise<File>
     {
         const remoteUrl = `${this.#url}/${filename}`;
         const options = { method: 'GET' };
 
         const response = await this.#callRemote(remoteUrl, options);
         const type = response.headers.get('Content-Type') || 'application/octet-stream';
-        const content = await response.text();
+        const result = await response.arrayBuffer();
+        const content = Buffer.from(result);
 
         return new File(filename, type, content);
     }
