@@ -1,6 +1,6 @@
 
-import { Reflector } from '@jitar/reflection';
-import type { ReflectionImport } from '@jitar/reflection';
+import { Parser } from '@jitar/analysis';
+import type { ESImport } from '@jitar/analysis';
 
 import type { Module, Segmentation, Segment } from '../source';
 import { FileHelper } from '../utils';
@@ -9,7 +9,7 @@ const KEYWORD_DEFAULT = 'default';
 const IMPORT_PATTERN = /import\s(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/._-]+)["'\s].*/g;
 const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
-const reflector = new Reflector();
+const parser = new Parser();
 
 export default class ImportRewriter
 {
@@ -33,19 +33,19 @@ export default class ImportRewriter
 
     #replaceImport(statement: string): string
     {
-        const dependency = reflector.parseImport(statement);
+        const dependency = parser.parseImport(statement);
 
         return this.#isApplicationModule(dependency)
             ? this.#rewriteApplicationImport(dependency)
             : this.#rewriteRuntimeImport(dependency);
     }
 
-    #isApplicationModule(dependency: ReflectionImport): boolean
+    #isApplicationModule(dependency: ESImport): boolean
     {
         return APPLICATION_MODULE_INDICATORS.some(indicator => dependency.from.startsWith(indicator, 1));
     }
 
-    #rewriteApplicationImport(dependency: ReflectionImport): string
+    #rewriteApplicationImport(dependency: ESImport): string
     {
         const targetModuleFilename = this.#getTargetModuleFilename(dependency);
 
@@ -74,7 +74,7 @@ export default class ImportRewriter
             : this.#rewriteToDynamicImport(dependency, from); // segmented to shared (prevent bundling)
     }
 
-    #rewriteRuntimeImport(dependency: ReflectionImport): string
+    #rewriteRuntimeImport(dependency: ESImport): string
     {
         const from = this.#rewriteRuntimeFrom(dependency);
 
@@ -89,12 +89,12 @@ export default class ImportRewriter
         return FileHelper.addSubExtension(relativeFilename, scope);
     }
 
-    #rewriteRuntimeFrom(dependency: ReflectionImport): string
+    #rewriteRuntimeFrom(dependency: ESImport): string
     {
         return this.#stripFrom(dependency.from);
     }
 
-    #rewriteToStaticImport(dependency: ReflectionImport, from: string): string
+    #rewriteToStaticImport(dependency: ESImport, from: string): string
     {
         if (dependency.members.length === 0)
         {
@@ -106,7 +106,7 @@ export default class ImportRewriter
         return `import ${members} from "${from}";`;
     }
 
-    #rewriteToDynamicImport(dependency: ReflectionImport, from: string): string
+    #rewriteToDynamicImport(dependency: ESImport, from: string): string
     {
         if (dependency.members.length === 0)
         {
@@ -118,7 +118,7 @@ export default class ImportRewriter
         return `const ${members} = await import("${from}");`;
     }
 
-    #rewriteStaticImportMembers(dependency: ReflectionImport): string
+    #rewriteStaticImportMembers(dependency: ESImport): string
     {
         const defaultMember = dependency.members.find(member => member.name === KEYWORD_DEFAULT);
         const hasDefaultMember = defaultMember !== undefined;
@@ -134,7 +134,7 @@ export default class ImportRewriter
         return `${defaultMemberImport}${separator}${groupedNamedMemberImports}`;
     }
 
-    #rewriteDynamicImportMembers(dependency: ReflectionImport): string
+    #rewriteDynamicImportMembers(dependency: ESImport): string
     {
         if (this.#doesImportAll(dependency))
         {
@@ -147,7 +147,7 @@ export default class ImportRewriter
         return `{ ${memberImports.join(', ')} }`;
     }
 
-    #getTargetModuleFilename(dependency: ReflectionImport): string
+    #getTargetModuleFilename(dependency: ESImport): string
     {
         const from = this.#stripFrom(dependency.from);
         const callingModulePath = FileHelper.extractPath(this.#module.filename);
@@ -156,7 +156,7 @@ export default class ImportRewriter
         return FileHelper.assureExtension(translated);
     }
 
-    #doesImportAll(dependency: ReflectionImport): boolean
+    #doesImportAll(dependency: ESImport): boolean
     {
         return dependency.members.length === 1
             && dependency.members[0].name === '*';

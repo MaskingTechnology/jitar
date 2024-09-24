@@ -1,5 +1,5 @@
 
-import { Reflector } from '@jitar/reflection';
+import { Reflector } from '@jitar/analysis';
 
 import ValueSerializer from '../ValueSerializer';
 import SerializedTypedArray from '../types/serialized/SerializedTypedArray';

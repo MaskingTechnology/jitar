@@ -1,5 +1,5 @@
 
-import { Reflector } from '@jitar/reflection';
+import { Parser } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
 import FileNotLoaded from './errors/FileNotLoaded';
@@ -7,7 +7,7 @@ import FileNotLoaded from './errors/FileNotLoaded';
 import Module from './models/Module';
 import Repository from './models/Repository';
 
-const reflector = new Reflector();
+const parser = new Parser();
 
 export default class Reader
 {
@@ -29,7 +29,7 @@ export default class Reader
     {
         const relativeLocation = this.#fileManager.getRelativeLocation(filename);
         const code = await this.#loadCode(filename);
-        const module = reflector.parse(code);
+        const module = parser.parse(code);
 
         return new Module(relativeLocation, code, module);
     }

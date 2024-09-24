@@ -1,8 +1,8 @@
 
 import { VersionParser } from '@jitar/execution';
 import type { FileManager } from '@jitar/sourcing';
-import { ReflectionDestructuredArray, ReflectionDestructuredObject } from '@jitar/reflection';
-import type { ReflectionField, ReflectionFunction, ReflectionParameter } from '@jitar/reflection';
+import { ESDestructuredArray, ESDestructuredObject } from '@jitar/analysis';
+import type { ESField, ESFunction, ESParameter } from '@jitar/analysis';
 import { Logger } from '@jitar/logging';
 
 import type { Application, Segment, SegmentModule } from '../source';
@@ -108,7 +108,7 @@ export default class SegmentBuilder
             for (const implementation of procedure.implementations)
             {
                 const version = this.#createVersionCode(implementation.version);
-                const parameters = this.#createParametersCode(implementation.reflection);
+                const parameters = this.#createParametersCode(implementation.model);
 
                 lines.push(`\t\t.addImplementation(new Implementation(${version}, "${implementation.access}", ${parameters}, ${implementation.id}))`);
             }
@@ -126,14 +126,14 @@ export default class SegmentBuilder
         return `new Version(${version.major}, ${version.minor}, ${version.patch})`;
     }
 
-    #createParametersCode(reflection: ReflectionFunction): string
+    #createParametersCode(model: ESFunction): string
     {
-        const result = this.#extractParameters(reflection.parameters);
+        const result = this.#extractParameters(model.parameters);
 
         return `[${result.join(', ')}]`;
     }
 
-    #extractParameters(parameters: ReflectionParameter[]): string[]
+    #extractParameters(parameters: ESParameter[]): string[]
     {
         const result = [];
 
@@ -148,13 +148,13 @@ export default class SegmentBuilder
         return result;
     }
 
-    #extractParameter(parameter: ReflectionParameter): string
+    #extractParameter(parameter: ESParameter): string
     {
-        if (parameter instanceof ReflectionDestructuredArray)
+        if (parameter instanceof ESDestructuredArray)
         {
             return this.#createArrayParameter(parameter);
         }
-        else if (parameter instanceof ReflectionDestructuredObject)
+        else if (parameter instanceof ESDestructuredObject)
         {
             return this.#createObjectParameter(parameter);
         }
@@ -162,19 +162,19 @@ export default class SegmentBuilder
         return this.#createNamedParameter(parameter);
     }
 
-    #createNamedParameter(parameter: ReflectionField): string
+    #createNamedParameter(parameter: ESField): string
     {
         return `new NamedParameter("${parameter.name}", ${parameter.value !== undefined})`;
     }
 
-    #createArrayParameter(parameter: ReflectionDestructuredArray): string
+    #createArrayParameter(parameter: ESDestructuredArray): string
     {
         const members = this.#extractParameters(parameter.members);
 
         return `new ArrayParameter([${members.join(', ')}])`;
     }
 
-    #createObjectParameter(parameter: ReflectionDestructuredObject): string
+    #createObjectParameter(parameter: ESDestructuredObject): string
     {
         const members = this.#extractParameters(parameter.members);
 

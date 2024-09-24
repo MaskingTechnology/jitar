@@ -1,6 +1,6 @@
 
-import { ReflectionDestructuredArray, ReflectionDestructuredObject, ReflectionDestructuredValue, ReflectionField } from '@jitar/reflection';
-import type { ReflectionParameter } from '@jitar/reflection';
+import { ESDestructuredArray, ESDestructuredObject, ESDestructuredValue, ESField } from '@jitar/analysis';
+import type { ESParameter } from '@jitar/analysis';
 import { AccessLevels } from '@jitar/execution';
 
 import type { SegmentImplementation as Implementation } from '../source';
@@ -42,7 +42,7 @@ export default class RemoteModuleBuilder
 
         const fqn = implementation.fqn;
         const version = implementation.version;
-        const args = this.#createArguments(implementation.reflection.parameters);
+        const args = this.#createArguments(implementation.model.parameters);
 
         const declaration = this.#createDeclaration(implementation);
         const body = `return __run('${fqn}', '${version}', { ${args} }, this);`;
@@ -50,21 +50,21 @@ export default class RemoteModuleBuilder
         return this.#createFunction(declaration, body);
     }
 
-    #createParameters(parameters: ReflectionParameter[]): string
+    #createParameters(parameters: ESParameter[]): string
     {
         const result: string[] = [];
 
         for (const parameter of parameters)
         {
-            if (parameter instanceof ReflectionField)
+            if (parameter instanceof ESField)
             {
                 result.push(parameter.name);
             }
-            else if (parameter instanceof ReflectionDestructuredArray)
+            else if (parameter instanceof ESDestructuredArray)
             {
                 result.push(parameter.toString());
             }
-            else if (parameter instanceof ReflectionDestructuredObject)
+            else if (parameter instanceof ESDestructuredObject)
             {
                 result.push(parameter.toString());
             }
@@ -73,26 +73,26 @@ export default class RemoteModuleBuilder
         return result.join(', ');
     }
 
-    #createArguments(parameters: ReflectionParameter[]): string
+    #createArguments(parameters: ESParameter[]): string
     {
         const result = this.#extractArguments(parameters);
         
         return result.join(', ');
     }
 
-    #extractArguments(parameters: ReflectionParameter[]): string[]
+    #extractArguments(parameters: ESParameter[]): string[]
     {
         const result: string[] = [];
 
         for (const parameter of parameters)
         {
-            if (parameter instanceof ReflectionDestructuredValue)
+            if (parameter instanceof ESDestructuredValue)
             {
                 const argumentz = this.#extractArguments(parameter.members);
 
                 result.push(...argumentz);
             }
-            else if (parameter instanceof ReflectionField)
+            else if (parameter instanceof ESField)
             {
                 const argument = this.#createNamedArgument(parameter);
 
@@ -103,7 +103,7 @@ export default class RemoteModuleBuilder
         return result;
     }
 
-    #createNamedArgument(parameter: ReflectionField): string
+    #createNamedArgument(parameter: ESField): string
     {
         const key = parameter.name;
         const value = key.startsWith('...') ? key.substring(3) : key;
@@ -113,8 +113,8 @@ export default class RemoteModuleBuilder
 
     #createDeclaration(implementation: Implementation): string
     {
-        const name = implementation.reflection.name;
-        const parameters = this.#createParameters(implementation.reflection.parameters);
+        const name = implementation.model.name;
+        const parameters = this.#createParameters(implementation.model.parameters);
 
         const prefix = implementation.importKey === 'default' ? 'default ' : '';
 

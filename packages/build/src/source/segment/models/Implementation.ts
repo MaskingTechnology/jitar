@@ -1,5 +1,5 @@
 
-import type { ReflectionFunction } from '@jitar/reflection';
+import type { ESFunction } from '@jitar/analysis';
 
 import Member from './Member';
 
@@ -7,20 +7,20 @@ export default class Implementation extends Member
 {
     #access: string;
     #version: string;
-    #reflection: ReflectionFunction;
+    #model: ESFunction;
 
-    constructor(id: string, importKey: string, fqn: string, access: string, version: string, reflection: ReflectionFunction)
+    constructor(id: string, importKey: string, fqn: string, access: string, version: string, model: ESFunction)
     {
         super(id, importKey, fqn);
 
         this.#access = access;
         this.#version = version;
-        this.#reflection = reflection;
+        this.#model = model;
     }
 
     get access() { return this.#access; }
 
     get version() { return this.#version; }
 
-    get reflection() { return this.#reflection; }
+    get model() { return this.#model; }
 }

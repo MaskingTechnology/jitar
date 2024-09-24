@@ -1,18 +1,18 @@
 
-import { ReflectionClass } from '@jitar/reflection';
+import { ESClass } from '@jitar/analysis';
 
 import Member from './Member';
 
 export default class Class extends Member
 {
-    #reflection: ReflectionClass;
+    #model: ESClass;
 
-    constructor(id: string, importKey: string, fqn: string, reflection: ReflectionClass)
+    constructor(id: string, importKey: string, fqn: string, model: ESClass)
     {
         super(id, importKey, fqn);
 
-        this.#reflection = reflection;
+        this.#model = model;
     }
 
-    get reflection() { return this.#reflection; }
+    get model() { return this.#model; }
 }

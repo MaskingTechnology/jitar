@@ -1,5 +1,5 @@
 
-import { ReflectionFunction, ReflectionClass, ReflectionMember } from '@jitar/reflection';
+import { ESFunction, ESClass, ESMember } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
 import { FileHelper, IdGenerator } from '../../utils';
@@ -155,11 +155,11 @@ export default class SegmentReader
         for (const importKey in module.imports)
         {
             const id = idGenerator.next();
-            const reflection = this.#getMember(module.filename, importKey);
+            const model = this.#getMember(module.filename, importKey);
 
             const properties = module.imports[importKey];
 
-            const name = properties.as ?? reflection.name;
+            const name = properties.as ?? model.name;
             const access = properties.access ?? DEFAULT_ACCESS_LEVEL;
             const version = properties.version ?? DEFAULT_VERSION_NUMBER;
 
@@ -167,16 +167,16 @@ export default class SegmentReader
 
             const memberProperties = { id, importKey, name, access, version, fqn };
 
-            if (reflection instanceof ReflectionClass)
+            if (model instanceof ESClass)
             {
-                this.#registerClassMember(module, members, reflection, memberProperties);
+                this.#registerClassMember(module, members, model, memberProperties);
 
                 continue;
             }
 
-            if (reflection instanceof ReflectionFunction)
+            if (model instanceof ESFunction)
             {
-                this.#registerProcedureMember(module, members, reflection, memberProperties);
+                this.#registerProcedureMember(module, members, model, memberProperties);
 
                 continue;
             }
@@ -185,23 +185,23 @@ export default class SegmentReader
         }
     }
 
-    #registerClassMember(module: Module, members: Members, reflection: ReflectionClass, properties: MemberProperties): void
+    #registerClassMember(module: Module, members: Members, model: ESClass, properties: MemberProperties): void
     {
-        const clazz = new Class(properties.id, properties.importKey, properties.fqn, reflection);
+        const clazz = new Class(properties.id, properties.importKey, properties.fqn, model);
 
         module.addMember(clazz);
 
         members.classes.set(properties.fqn, clazz);
     }
 
-    #registerProcedureMember(module: Module, members: Members, reflection: ReflectionFunction, properties: MemberProperties): void
+    #registerProcedureMember(module: Module, members: Members, model: ESFunction, properties: MemberProperties): void
     {
-        if (reflection.isAsync === false)
+        if (model.isAsync === false)
         {
             throw new FunctionNotAsync(module.filename, properties.name);
         }
 
-        const implementation = new Implementation(properties.id, properties.importKey, properties.fqn, properties.access, properties.version, reflection);
+        const implementation = new Implementation(properties.id, properties.importKey, properties.fqn, properties.access, properties.version, model);
 
         module.addMember(implementation);
 
@@ -214,7 +214,7 @@ export default class SegmentReader
         members.procedures.set(implementation.fqn, procedure);
     }
 
-    #getMember(filename: string, importKey: string): ReflectionMember
+    #getMember(filename: string, importKey: string): ESMember
     {
         const module = this.#repository.get(filename);
 
@@ -223,7 +223,7 @@ export default class SegmentReader
             throw new ModuleNotFound(filename);
         }
 
-        const member = module.reflection.getExported(importKey);
+        const member = module.model.getExported(importKey);
 
         if (member === undefined)
         {

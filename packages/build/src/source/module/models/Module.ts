@@ -1,22 +1,22 @@
 
-import type { ReflectionModule } from '@jitar/reflection';
+import type { ESModule } from '@jitar/analysis';
 
 export default class Module
 {
     #filename: string;
     #code: string;
-    #reflection: ReflectionModule;
+    #model: ESModule;
 
-    constructor(filename: string, code: string, reflection: ReflectionModule)
+    constructor(filename: string, code: string, model: ESModule)
     {
         this.#code = code;
         this.#filename = filename;
-        this.#reflection = reflection;
+        this.#model = model;
     }
 
     get filename() { return this.#filename; }
 
     get code() { return this.#code; }
 
-    get reflection() { return this.#reflection; }
+    get model() { return this.#model; }
 }

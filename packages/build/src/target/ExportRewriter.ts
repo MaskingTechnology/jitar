@@ -1,6 +1,6 @@
 
-import { Reflector } from '@jitar/reflection';
-import type { ReflectionExport } from '@jitar/reflection';
+import { Parser } from '@jitar/analysis';
+import type { ESExport } from '@jitar/analysis';
 
 import type { Module, Segmentation, Segment } from '../source';
 import { FileHelper } from '../utils';
@@ -11,7 +11,7 @@ const EXPORTS_ALL = '*';
 const EXPORT_PATTERN = /export\s(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/._-]+)["'\s].*/g;
 const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
-const reflector = new Reflector();
+const parser = new Parser();
 
 export default class ExportRewriter
 {
@@ -35,7 +35,7 @@ export default class ExportRewriter
 
     #replaceExport(statement: string): string
     {
-        const dependency = reflector.parseExport(statement);
+        const dependency = parser.parseExport(statement);
 
         if (dependency.from === undefined)
         {
@@ -47,12 +47,12 @@ export default class ExportRewriter
             : this.#rewriteRuntimeExport(dependency);
     }
 
-    #isApplicationModule(dependency: ReflectionExport): boolean
+    #isApplicationModule(dependency: ESExport): boolean
     {
         return APPLICATION_MODULE_INDICATORS.some(indicator => dependency.from!.startsWith(indicator, 1));
     }
 
-    #rewriteApplicationExport(dependency: ReflectionExport): string
+    #rewriteApplicationExport(dependency: ESExport): string
     {
         const targetModuleFilename = this.#getTargetModuleFilename(dependency);
 
@@ -86,7 +86,7 @@ export default class ExportRewriter
         return this.#rewriteToStaticExport(dependency, from)
     }
 
-    #rewriteRuntimeExport(dependency: ReflectionExport): string
+    #rewriteRuntimeExport(dependency: ESExport): string
     {
         const from = this.#rewriteRuntimeFrom(dependency);
 
@@ -101,12 +101,12 @@ export default class ExportRewriter
         return FileHelper.addSubExtension(relativeFilename, scope);
     }
 
-    #rewriteRuntimeFrom(dependency: ReflectionExport): string
+    #rewriteRuntimeFrom(dependency: ESExport): string
     {
         return this.#stripFrom(dependency.from!);
     }
 
-    #rewriteToStaticExport(dependency: ReflectionExport, from: string): string
+    #rewriteToStaticExport(dependency: ESExport, from: string): string
     {
         if (dependency.members.length === 0)
         {
@@ -118,7 +118,7 @@ export default class ExportRewriter
         return `export ${members} from "${from}";`;
     }
 
-    #rewriteStaticExportMembers(dependency: ReflectionExport): string
+    #rewriteStaticExportMembers(dependency: ESExport): string
     {
         const members = dependency.members;
 
@@ -134,7 +134,7 @@ export default class ExportRewriter
         return `{ ${memberExports.join(', ')} }`;
     }
 
-    #getTargetModuleFilename(dependency: ReflectionExport): string
+    #getTargetModuleFilename(dependency: ESExport): string
     {
         const from = this.#stripFrom(dependency.from!);
         const callingModulePath = FileHelper.extractPath(this.#module.filename);
