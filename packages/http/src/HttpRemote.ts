@@ -88,12 +88,14 @@ export default class HttpRemote implements Remote
         const options =
         {
             method: 'POST',
+            redirect: 'manual',
             headers: headersObject,
             body: body
         };
 
         const response = await this.#callRemote(remoteUrl, options, false);
         const status = response.status;
+
         const result = await this.#getResponseResult(response);
         const headers = this.#createResponseHeaders(response);
 
@@ -116,7 +118,7 @@ export default class HttpRemote implements Remote
 
     #isErrorResponse(response: Response): boolean
     {
-        return response.status < 200 || response.status > 299;
+        return response.status < 200 || response.status > 399;
     }
 
     async #createRequestBody(body: unknown): Promise<string>
