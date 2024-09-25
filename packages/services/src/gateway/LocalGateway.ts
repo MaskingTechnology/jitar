@@ -1,7 +1,6 @@
 
 import { Response } from '@jitar/execution';
 import type { Request } from '@jitar/execution';
-import { HealthManager } from '@jitar/health';
 
 import Worker from '../worker/Worker';
 
@@ -15,7 +14,6 @@ type Configuration =
 {
     url: string;
     trustKey?: string;
-    healthManager: HealthManager;
     monitorInterval?: number;
 };
 
@@ -23,7 +21,6 @@ export default class LocalGateway implements Gateway
 {
     #url: string;
     #trustKey?: string;
-    #healthManager: HealthManager;
     #workerManager: WorkerManager;
     #workerMonitor: WorkerMonitor;
 
@@ -31,7 +28,6 @@ export default class LocalGateway implements Gateway
     {
         this.#url = configuration.url;
         this.#trustKey = configuration.trustKey;
-        this.#healthManager = configuration.healthManager;
         this.#workerManager = new WorkerManager();
         this.#workerMonitor = new WorkerMonitor(this.#workerManager, configuration.monitorInterval);
     }
@@ -50,14 +46,14 @@ export default class LocalGateway implements Gateway
         return this.#workerMonitor.stop();
     }
 
-    isHealthy(): Promise<boolean>
+    async isHealthy(): Promise<boolean>
     {
-        return this.#healthManager.isHealthy();
+        return true;
     }
 
-    getHealth(): Promise<Map<string, boolean>>
+    async getHealth(): Promise<Map<string, boolean>>
     {
-        return this.#healthManager.getHealth();
+        return new Map();
     }
 
     addWorker(worker: Worker, trustKey?: string): Promise<void>

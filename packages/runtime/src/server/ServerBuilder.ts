@@ -24,18 +24,18 @@ export default class RuntimeBuilder
     {
         const setUp = configuration.setUp ?? [];
         const tearDown = configuration.tearDown ?? [];
-        const middleware = configuration.worker?.middleware
-                        ?? configuration.gateway?.middleware
-                        ?? configuration.standalone?.middleware;
+        const middleware = configuration.middleware;
+        const healthChecks = configuration.healthChecks;
 
         const proxy = await this.#buildService(configuration);
         const sourcingManager = this.#sourcingManager;
         const remoteBuilder = this.#remoteBuilder;
         const middlewareManager = await this.#buildMiddlewareManager(middleware);
+        const healthManager = await this.#buildHealthManager(healthChecks);
         const setUpScripts = setUp.map(filename => this.#makeSharedFilename(filename));
         const tearDownScripts = tearDown.map(filename => this.#makeSharedFilename(filename));
 
-        return new Server({ proxy, sourcingManager, remoteBuilder, middlewareManager, setUpScripts, tearDownScripts });
+        return new Server({ proxy, sourcingManager, remoteBuilder, middlewareManager, healthManager, setUpScripts, tearDownScripts });
     }
 
     #buildService(configuration: ServerConfiguration): Promise<Proxy>
@@ -76,10 +76,9 @@ export default class RuntimeBuilder
     async #buildLocalGateway(url: string, configuration: GatewayConfiguration): Promise<LocalGateway>
     {
         const trustKey = configuration.trustKey;
-        const healthManager = await this.#buildHealthManager(configuration.healthChecks);
         const monitorInterval = configuration.monitor;
 
-        return new LocalGateway({ url, trustKey, healthManager, monitorInterval });
+        return new LocalGateway({ url, trustKey, monitorInterval });
     }
 
     #buildRemoteGateway(url: string): RemoteGateway
@@ -93,10 +92,9 @@ export default class RuntimeBuilder
     {
         const trustKey = configuration.trustKey;
         const gateway = configuration.gateway ? this.#buildRemoteGateway(configuration.gateway) : undefined;
-        const healthManager = await this.#buildHealthManager(configuration.healthChecks);
         const executionManager = await this.#buildExecutionManager(configuration.segments);
 
-        return new LocalWorker({ url, trustKey, gateway, healthManager, executionManager });
+        return new LocalWorker({ url, trustKey, gateway, executionManager });
     }
 
     async #buildLocalRepository(url: string, configuration: RepositoryConfiguration): Promise<LocalRepository>

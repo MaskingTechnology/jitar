@@ -2,11 +2,11 @@
     "url": "http://127.0.0.1:3000",
     "setUp": ["./integrations/jitar/setUpDatabase"],
     "tearDown": ["./integrations/jitar/tearDownDatabase"],
+    "healthChecks": ["./integrations/jitar/databaseHealthCheck"],
+    "middleware": ["./integrations/jitar/requestLogger"],
     "standalone":
     {
         "segments": ["server"],
-        "healthChecks": ["./integrations/jitar/databaseHealthCheck"],
-        "middleware": ["./integrations/jitar/requestLogger"],
         "assets": [ "index.html", "assets/**/*" ],
         "serveIndexOnNotFound": true
     }

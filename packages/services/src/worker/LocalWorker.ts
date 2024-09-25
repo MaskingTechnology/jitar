@@ -1,6 +1,5 @@
 
 import { ExecutionManager, Request, Response, Implementation, ProcedureNotFound } from '@jitar/execution';
-import { HealthManager } from '@jitar/health';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
 import Gateway from '../gateway/Gateway';
@@ -18,7 +17,6 @@ type Configuration =
     url: string;
     trustKey?: string;
     gateway?: Gateway;
-    healthManager: HealthManager;
     executionManager: ExecutionManager;
 };
 
@@ -27,10 +25,7 @@ export default class LocalWorker implements Worker
     #url: string;
     #trustKey?: string;
     #gateway?: Gateway;
-
-    #healthManager: HealthManager;
     #executionManager: ExecutionManager;
-
     #serializer: Serializer;
 
     constructor(configuration: Configuration)
@@ -39,7 +34,6 @@ export default class LocalWorker implements Worker
         this.#trustKey = configuration.trustKey;
         this.#gateway = configuration.gateway;
 
-        this.#healthManager = configuration.healthManager;
         this.#executionManager = configuration.executionManager;
 
         const classResolver = new ExecutionClassResolver(this.#executionManager);
@@ -78,14 +72,14 @@ export default class LocalWorker implements Worker
         return this.#executionManager.hasProcedure(name);
     }
     
-    isHealthy(): Promise<boolean>
+    async isHealthy(): Promise<boolean>
     {
-        return this.#healthManager.isHealthy();
+        return true;
     }
 
-    getHealth(): Promise<Map<string, boolean>>
+    async getHealth(): Promise<Map<string, boolean>>
     {
-        return this.#healthManager.getHealth();
+        return new Map();
     }
 
     async run(request: Request): Promise<Response>

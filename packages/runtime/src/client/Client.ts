@@ -1,6 +1,5 @@
 
 import type { ExecutionManager, Request, Response } from '@jitar/execution';
-import type { HealthManager } from '@jitar/health';
 import type { MiddlewareManager } from '@jitar/middleware';
 import { LocalWorker, RemoteGateway, Remote } from '@jitar/services';
 
@@ -11,7 +10,6 @@ type Configuration =
 {
     remoteUrl: string;
     remote: Remote;
-    healthManager: HealthManager;
     middlewareManager: MiddlewareManager;
     executionManager: ExecutionManager;
 };
@@ -31,7 +29,6 @@ export default class Client extends Runtime
                 url: configuration.remoteUrl,
                 remote: configuration.remote
             }),
-            healthManager: configuration.healthManager,
             executionManager: configuration.executionManager
         });
 

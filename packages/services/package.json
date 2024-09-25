@@ -28,7 +28,6 @@
   "dependencies": {
     "@jitar/errors": "*",
     "@jitar/execution": "*",
-    "@jitar/health": "*",
     "@jitar/sourcing": "*"
   },
   "repository": {

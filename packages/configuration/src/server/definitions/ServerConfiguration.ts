@@ -12,6 +12,8 @@ type ServerConfiguration =
     url: string;
     setUp?: string[];
     tearDown?: string[];
+    middleware?: string[];
+    healthChecks?: string[];
 
     gateway?: GatewayConfiguration;
     proxy?: ProxyConfiguration;
@@ -27,6 +29,8 @@ const validationScheme: ValidationScheme =
     url: { type: 'url', required: true },
     setUp: { type: 'list', required: false, items: { type: 'string' } },
     tearDown: { type: 'list', required: false, items: { type: 'string' } },
+    middleware: { type: 'list', required: false, items: { type: 'string' } },
+    healthChecks: { type: 'list', required: false, items: { type: 'string' } },
 
     gateway: { type: 'group', required: false, fields: gatewayValidationScheme },
     proxy: { type: 'group', required: false, fields: proxyValidationScheme },

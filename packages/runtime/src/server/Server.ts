@@ -3,6 +3,7 @@ import { BadRequest, Forbidden, NotFound, NotImplemented, PaymentRequired, Teapo
 import { Request, Version, VersionParser } from '@jitar/execution';
 import type { Response } from '@jitar/execution';
 import type { MiddlewareManager } from '@jitar/middleware';
+import type { HealthManager } from '@jitar/health';
 import type { File, SourcingManager } from '@jitar/sourcing';
 import { LocalGateway, LocalWorker, RemoteWorker, Proxy, RemoteBuilder } from '@jitar/services';
 import { Logger } from '@jitar/logging';
@@ -24,6 +25,7 @@ type Configuration =
     sourcingManager: SourcingManager;
     remoteBuilder: RemoteBuilder;
     middlewareManager: MiddlewareManager;
+    healthManager: HealthManager;
     setUpScripts?: string[];
     tearDownScripts?: string[];
 };
@@ -34,6 +36,7 @@ export default class Server extends Runtime
     #sourcingManager: SourcingManager;
     #remoteBuilder: RemoteBuilder;
     #middlewareManager: MiddlewareManager;
+    #healthManager: HealthManager;
     #setUpScripts: string[];
     #tearDownScripts: string[];
 
@@ -48,6 +51,7 @@ export default class Server extends Runtime
         this.#sourcingManager = configuration.sourcingManager;
         this.#remoteBuilder = configuration.remoteBuilder;
         this.#middlewareManager = configuration.middlewareManager;
+        this.#healthManager = configuration.healthManager;
         this.#setUpScripts = configuration.setUpScripts ?? [];
         this.#tearDownScripts = configuration.tearDownScripts ?? [];
 
@@ -89,7 +93,9 @@ export default class Server extends Runtime
     {
         try
         {
-            const health = await this.#proxy.getHealth();
+            const internalHealth = await this.#proxy.getHealth();
+            const externalHealth = await this.#healthManager.getHealth();
+            const health = new Map([...internalHealth, ...externalHealth]);
 
             this.#logger.info('Got health');
 
@@ -109,7 +115,9 @@ export default class Server extends Runtime
     {
         try
         {
-            const healthy = await this.#proxy.isHealthy();
+            const internalsHealthy = await this.#proxy.isHealthy();
+            const externalsHealthy = await this.#healthManager.isHealthy();
+            const healthy = internalsHealthy && externalsHealthy;
 
             this.#logger.debug('Got health status');
 
