@@ -3,10 +3,10 @@
 
 [Jitar](https://jitar.dev) is a distributed runtime for JavaScript and TypeScript applications.
 
-To add Jitar to your project run:
+To install Jitar, just run:
 
 ```bash
-npm install jitar
+npm install -g jitar
 ```
 
 For more information about Jitar:

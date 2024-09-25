@@ -1,7 +1,7 @@
 
 # Jitar CLI
 
-This package contains the components for the CLI interface of the [Jitar](https://jitar.dev) runtime.
+This package provides the CLI interface for the [Jitar](https://jitar.dev) runtime.
 
 For more information about Jitar:
 

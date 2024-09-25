@@ -1,2 +1,2 @@
 
-export { default as CliManager } from './CliManager';
+export { default as Cli } from './Cli';

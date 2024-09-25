@@ -1,8 +1,5 @@
 
-import ESClass from '../models/ESClass.js';
-import ESDeclaration from '../models/ESDeclaration.js';
-import ESFunction from '../models/ESFunction.js';
-import ESScope from '../models/ESScope.js';
+import { ESClass, ESDeclaration, ESFunction, ESScope } from '../models';
 
 export default class ClassMerger
 {

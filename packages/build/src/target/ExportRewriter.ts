@@ -5,19 +5,19 @@ import type { ESExport } from '@jitar/analysis';
 import type { Module, Segmentation, Segment } from '../source';
 import { FileHelper } from '../utils';
 
-const KEYWORD_DEFAULT = 'default';
 const EXPORTS_ALL = '*';
 
 const EXPORT_PATTERN = /export\s(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/._-]+)["'\s].*/g;
 const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
-
-const parser = new Parser();
 
 export default class ExportRewriter
 {
     #module: Module;
     #segmentation: Segmentation;
     #segment: Segment | undefined;
+
+    #parser = new Parser();
+    #fileHelper = new FileHelper();
 
     constructor(module: Module, segmentation: Segmentation, segment?: Segment)
     {
@@ -35,7 +35,7 @@ export default class ExportRewriter
 
     #replaceExport(statement: string): string
     {
-        const dependency = parser.parseExport(statement);
+        const dependency = this.#parser.parseExport(statement);
 
         if (dependency.from === undefined)
         {
@@ -83,7 +83,7 @@ export default class ExportRewriter
 
         const from = this.#rewriteApplicationFrom(targetModuleFilename, 'shared');
 
-        return this.#rewriteToStaticExport(dependency, from)
+        return this.#rewriteToStaticExport(dependency, from);
     }
 
     #rewriteRuntimeExport(dependency: ESExport): string
@@ -95,10 +95,10 @@ export default class ExportRewriter
 
     #rewriteApplicationFrom(filename: string, scope: string): string
     {
-        const callingModulePath = FileHelper.extractPath(this.#module.filename);
-        const relativeFilename = FileHelper.makePathRelative(filename, callingModulePath);
+        const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
+        const relativeFilename = this.#fileHelper.makePathRelative(filename, callingModulePath);
 
-        return FileHelper.addSubExtension(relativeFilename, scope);
+        return this.#fileHelper.addSubExtension(relativeFilename, scope);
     }
 
     #rewriteRuntimeFrom(dependency: ESExport): string
@@ -137,10 +137,10 @@ export default class ExportRewriter
     #getTargetModuleFilename(dependency: ESExport): string
     {
         const from = this.#stripFrom(dependency.from!);
-        const callingModulePath = FileHelper.extractPath(this.#module.filename);
-        const translated = FileHelper.makePathAbsolute(from, callingModulePath);
+        const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
+        const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
 
-        return FileHelper.assureExtension(translated);
+        return this.#fileHelper.assureExtension(translated);
     }
 
     #stripFrom(from: string): string

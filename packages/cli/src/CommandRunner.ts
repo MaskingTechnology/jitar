@@ -1,15 +1,15 @@
 
-import Command from './interfaces/Command';
+import Command from './Command';
 
 import ShowHelp from './commands/ShowHelp';
 import ShowAbout from './commands/ShowAbout';
 import ShowVersion from './commands/ShowVersion';
-import BuildCache from './commands/BuildCache';
+import BuildApp from './commands/BuildApp';
 import StartServer from './commands/StartServer';
 
-import ArgumentManager from './ArgumentManager';
+import ArgumentManager from './ArgumentProcessor';
 
-export default class CommandManager
+export default class CommandRunner
 {
     #commands: Map<string, Command> = new Map<string, Command>();
 
@@ -19,11 +19,11 @@ export default class CommandManager
         this.#commands.set('help', new ShowHelp());
         this.#commands.set('about', new ShowAbout());
         this.#commands.set('version', new ShowVersion());
-        this.#commands.set('build', new BuildCache());
+        this.#commands.set('build', new BuildApp());
         this.#commands.set('start', new StartServer());
     }
 
-    execute(name: string, args: ArgumentManager): Promise<void>
+    run(name: string, args: ArgumentManager): Promise<void>
     {
         const command = this.#commands.get(name);
 

@@ -1,7 +1,9 @@
 
 import Remote from './Remote';
 
-export default interface RemoteBuilder
+interface RemoteBuilder
 {
     build(url: string): Remote;
 }
+
+export default RemoteBuilder;

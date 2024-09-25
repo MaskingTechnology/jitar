@@ -3,7 +3,7 @@ import { Runner } from '@jitar/execution';
 
 import Service from './Service';
 
-export default interface RunnerService extends Runner, Service
+interface RunnerService extends Runner, Service
 {
     get trustKey(): string | undefined;
     
@@ -11,3 +11,5 @@ export default interface RunnerService extends Runner, Service
 
     hasProcedure(name: string): boolean;
 }
+
+export default RunnerService;

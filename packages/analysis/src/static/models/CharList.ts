@@ -1,5 +1,5 @@
 
-import ItemList from './ItemList.js';
+import ItemList from './ItemList';
 
 export default class CharList extends ItemList<string>
 {

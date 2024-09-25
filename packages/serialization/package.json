@@ -1,7 +1,7 @@
 {
   "name": "@jitar/serialization",
   "version": "0.7.4",
-  "description": "JavaScript serialization library for the Jitar runtime.",
+  "description": "Serialization library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
   "type": "module",
@@ -35,10 +35,5 @@
   "bugs": {
     "url": "https://github.com/MaskingTechnology/jitar/issues"
   },
-  "homepage": "https://jitar.dev",
-  "keywords": [
-    "javascript",
-    "serialization",
-    "jitar"
-  ]
+  "homepage": "https://jitar.dev"
 }

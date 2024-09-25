@@ -7,15 +7,15 @@ import FileNotLoaded from './errors/FileNotLoaded';
 import Module from './models/Module';
 import Repository from './models/Repository';
 
-const parser = new Parser();
-
 export default class Reader
 {
     #fileManager: FileManager;
+    #parser: Parser;
 
-    constructor(fileManager: FileManager)
+    constructor(fileManager: FileManager, parser: Parser = new Parser())
     {
         this.#fileManager = fileManager;
+        this.#parser = parser;
     }
 
     async readAll(filenames: string[]): Promise<Repository>
@@ -29,7 +29,7 @@ export default class Reader
     {
         const relativeLocation = this.#fileManager.getRelativeLocation(filename);
         const code = await this.#loadCode(filename);
-        const module = parser.parse(code);
+        const module = this.#parser.parse(code);
 
         return new Module(relativeLocation, code, module);
     }

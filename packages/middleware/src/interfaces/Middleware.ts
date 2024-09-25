@@ -1,7 +1,7 @@
 
 import type { Request, Response } from '@jitar/execution';
 
-import type NextHandler from '../types/NextHandler.js';
+import type NextHandler from '../types/NextHandler';
 
 interface Middleware
 {

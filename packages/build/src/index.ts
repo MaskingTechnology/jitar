@@ -1,2 +1,2 @@
 
-export { default as CacheManager } from './CacheManager';
+export { default as BuildManager } from './BuildManager';

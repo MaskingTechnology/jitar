@@ -1,7 +1,7 @@
 
 # Jitar Middleware
 
-This package contains the validation implementation for the [Jitar](https://jitar.dev) runtime.
+This package provides data validation for the [Jitar](https://jitar.dev) runtime.
 
 For more information about Jitar:
 

@@ -4,7 +4,7 @@ const EXTENSION_PATTERN = /\.js$/;
 
 export default class FileHelper
 {
-    static translatePath(filename: string)
+    translatePath(filename: string)
     {
         const parts = filename.split('/');
         const translated = [];
@@ -26,7 +26,7 @@ export default class FileHelper
         return translated.join('/');
     }
 
-    static makePathRelative(absoluteFilename: string, relativeToPath: string): string
+    makePathRelative(absoluteFilename: string, relativeToPath: string): string
     {
         if (relativeToPath === '')
         {
@@ -50,7 +50,7 @@ export default class FileHelper
         return `${prefix}/${suffix}`;
     }
 
-    static makePathAbsolute(relativeFilename: string, relativeToPath: string): string
+    makePathAbsolute(relativeFilename: string, relativeToPath: string): string
     {
         const fullPath = relativeToPath !== ''
             ? `${relativeToPath}/${relativeFilename}`
@@ -59,22 +59,22 @@ export default class FileHelper
         return this.translatePath(fullPath);
     }
 
-    static extractPath(filename: string)
+    extractPath(filename: string)
     {
         return filename.split('/').slice(0, -1).join('/');
     }
 
-    static extractFilename(filename: string)
+    extractFilename(filename: string)
     {
         return filename.split('/').pop();
     }
 
-    static assureExtension(filename: string): string
+    assureExtension(filename: string): string
     {
         return filename.endsWith(`.${DEFAULT_EXTENSION}`) ? filename : `${filename}.${DEFAULT_EXTENSION}`;
     }
 
-    static addSubExtension(filename: string, subExtension: string): string
+    addSubExtension(filename: string, subExtension: string): string
     {
         return filename.replace(EXTENSION_PATTERN, `.${subExtension}.${DEFAULT_EXTENSION}`);
     }

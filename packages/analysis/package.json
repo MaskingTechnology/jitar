@@ -1,13 +1,13 @@
 {
   "name": "@jitar/analysis",
   "version": "0.7.1",
-  "description": "JavaScript analysis library for the Jitar runtime.",
+  "description": "Application analysis library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
   "type": "module",
-  "types": "dist/lib.d.ts",
+  "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/lib.js"
+    ".": "./dist/index.js"
   },
   "files": [
     "CHANGELOG.md",
@@ -32,10 +32,5 @@
   "bugs": {
     "url": "https://github.com/MaskingTechnology/jitar/issues"
   },
-  "homepage": "https://jitar.dev",
-  "keywords": [
-    "javascript",
-    "analysis",
-    "jitar"
-  ]
+  "homepage": "https://jitar.dev"
 }

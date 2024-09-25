@@ -1,13 +1,13 @@
 
 import { ConfigurationManager } from '@jitar/configuration';
-import { CacheManager } from '@jitar/build';
+import { BuildManager } from '@jitar/build';
 
-import Command from '../interfaces/Command';
-import ArgumentManager from '../ArgumentManager';
+import Command from '../Command';
+import ArgumentProcessor from '../ArgumentProcessor';
 
-export default class BuildCache implements Command
+export default class BuildApp implements Command
 {
-    async execute(args: ArgumentManager): Promise<void>
+    async execute(args: ArgumentProcessor): Promise<void>
     {
         const environmentFile = args.getOptionalArgument('--env-file', undefined);
         const runtimeConfigFile = args.getOptionalArgument('--config', undefined);
@@ -18,8 +18,8 @@ export default class BuildCache implements Command
         
         const configuration = await configurationManager.getRuntimeConfiguration(runtimeConfigFile);
 
-        const cacheManager = new CacheManager(configuration);
+        const buildManager = new BuildManager(configuration);
 
-        return cacheManager.build();
+        return buildManager.build();
     }
 }

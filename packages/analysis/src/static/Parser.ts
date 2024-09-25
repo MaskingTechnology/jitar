@@ -1,43 +1,28 @@
 
-import Lexer from './Lexer.js';
-import Token from './Token.js';
-import TokenList from './TokenList.js';
+import {
+    ESModule, ESMember, ESExport, ESClass, ESFunction, ESField, ESGetter, ESSetter, ESImport,
+    ESGenerator, ESExpression, ESArray, ESObject, ESAlias, ESScope, ESValue, ESParameter,
+    ESDestructuredArray, ESDestructuredObject, ESDeclaration, ESIdentifier
+} from '../models';
 
-import { Divider, isDivider } from './definitions/Divider.js';
-import { Group } from './definitions/Group.js';
-import { Keyword, isDeclaration, isKeyword, isNotReserved } from './definitions/Keyword.js';
-import { List } from './definitions/List.js';
-import { Operator } from './definitions/Operator.js';
-import { Scope } from './definitions/Scope.js';
-import { TokenType } from './definitions/TokenType.js';
+import { Divider, isDivider } from './definitions/Divider';
+import { Group } from './definitions/Group';
+import { Keyword, isDeclaration, isKeyword, isNotReserved } from './definitions/Keyword';
+import { List } from './definitions/List';
+import { Operator } from './definitions/Operator';
+import { Scope } from './definitions/Scope';
+import { TokenType } from './definitions/TokenType';
 
-import ExpectedKeyword from './errors/ExpectedKeyword.js';
-import ExpectedToken from './errors/ExpectedToken.js';
-import UnexpectedKeyword from './errors/UnexpectedKeyword.js';
-import UnexpectedParseResult from './errors/UnexpectedParseResult.js';
-import UnexpectedToken from './errors/UnexpectedToken.js';
+import ExpectedKeyword from './errors/ExpectedKeyword';
+import ExpectedToken from './errors/ExpectedToken';
+import UnexpectedKeyword from './errors/UnexpectedKeyword';
+import UnexpectedParseResult from './errors/UnexpectedParseResult';
+import UnexpectedToken from './errors/UnexpectedToken';
 
-import ESModule from '../models/ESModule.js';
-import ESMember from '../models/ESMember.js';
-import ESExport from '../models/ESExport.js';
-import ESClass from '../models/ESClass.js';
-import ESFunction from '../models/ESFunction.js';
-import ESField from '../models/ESField.js';
-import ESGetter from '../models/ESGetter.js';
-import ESSetter from '../models/ESSetter.js';
-import ESImport from '../models/ESImport.js';
-import ESGenerator from '../models/ESGenerator.js';
-import ESExpression from '../models/ESExpression.js';
-import ESArray from '../models/ESArray.js';
-import ESObject from '../models/ESObject.js';
-import ESAlias from '../models/ESAlias.js';
-import ESScope from '../models/ESScope.js';
-import ESValue from '../models/ESValue.js';
-import ESParameter from '../models/ESParameter.js';
-import ESDestructuredArray from '../models/ESDestructuredArray.js';
-import ESDestructuredObject from '../models/ESDestructuredObject.js';
-import ESDeclaration from '../models/ESDeclaration.js';
-import ESIdentifier from '../models/ESIdentifier.js';
+import Token from './models/Token';
+import TokenList from './models/TokenList';
+
+import Lexer from './Lexer';
 
 const ANONYMOUS_IDENTIFIER = '';
 const DEFAULT_IDENTIFIER = 'default';

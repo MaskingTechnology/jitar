@@ -1,5 +1,5 @@
 
-import { Punctuation } from './Punctuation.js';
+import { Punctuation } from './Punctuation';
 
 const List =
 {

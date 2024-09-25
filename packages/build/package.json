@@ -1,7 +1,7 @@
 {
   "name": "@jitar/build",
   "version": "0.7.4",
-  "description": "JavaScript caching library for the Jitar runtime.",
+  "description": "Application building library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
   "type": "module",
@@ -39,10 +39,5 @@
   "bugs": {
     "url": "https://github.com/MaskingTechnology/jitar/issues"
   },
-  "homepage": "https://jitar.dev",
-  "keywords": [
-    "javascript",
-    "cache",
-    "jitar"
-  ]
+  "homepage": "https://jitar.dev"
 }

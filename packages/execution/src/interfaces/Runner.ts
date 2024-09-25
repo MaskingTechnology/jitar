@@ -1,6 +1,6 @@
 
-import type Request from '../models/Request.js';
-import type Response from '../models/Response.js';
+import type Request from '../models/Request';
+import type Response from '../models/Response';
 
 interface Runner
 {

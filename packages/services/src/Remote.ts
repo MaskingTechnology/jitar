@@ -2,7 +2,7 @@
 import { Request, Response as ResultResponse } from '@jitar/execution';
 import { File } from '@jitar/sourcing';
 
-export default interface Remote
+interface Remote
 {
     connect(): Promise<void>;
 
@@ -18,3 +18,5 @@ export default interface Remote
 
     run(request: Request): Promise<ResultResponse>;
 }
+
+export default Remote;

@@ -14,7 +14,10 @@ const RUNTIME_IMPORTS = 'import { Segment, Class, Procedure, Implementation, Ver
 export default class SegmentBuilder
 {
     #fileManager: FileManager;
+
     #logger = new Logger();
+    #fileHelper = new FileHelper();
+    #versionParser = new VersionParser();
 
     constructor(fileManager: FileManager)
     {
@@ -61,7 +64,7 @@ export default class SegmentBuilder
 
         for (const module of segment.modules)
         {
-            const filename = FileHelper.addSubExtension(module.filename, segment.name);
+            const filename = this.#fileHelper.addSubExtension(module.filename, segment.name);
             const members = this.#createModuleImportMembers(module);
 
             const importRule = `import ${members} from "./${filename}";`;
@@ -121,7 +124,7 @@ export default class SegmentBuilder
 
     #createVersionCode(versionString: string): string
     {
-        const version = VersionParser.parse(versionString);
+        const version = this.#versionParser.parse(versionString);
 
         return `new Version(${version.major}, ${version.minor}, ${version.patch})`;
     }

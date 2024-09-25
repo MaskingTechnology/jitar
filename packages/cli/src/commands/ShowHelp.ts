@@ -1,6 +1,6 @@
 
-import Command from '../interfaces/Command';
-import ArgumentManager from '../ArgumentManager';
+import Command from '../Command';
+import ArgumentProcessor from '../ArgumentProcessor';
 
 const message = `
 Usage: jitar <command> [options]
@@ -23,7 +23,7 @@ More information can be found at https://docs.jitar.dev
 export default class ShowHelp implements Command
 {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async execute(args: ArgumentManager): Promise<void>
+    async execute(args: ArgumentProcessor): Promise<void>
     {
         console.log(message);
     }

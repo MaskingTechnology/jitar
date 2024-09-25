@@ -10,15 +10,14 @@ import LocalModuleBuilder from './LocalModuleBuilder';
 export default class ModuleBuilder
 {
     #fileManager: FileManager;
-    #localModuleBuilder: LocalModuleBuilder;
-    #remoteModuleBuilder: RemoteModuleBuilder;
+
+    #localModuleBuilder = new LocalModuleBuilder();
+    #remoteModuleBuilder = new RemoteModuleBuilder();
+    #fileHelper = new FileHelper();
 
     constructor(fileManager: FileManager)
     {
         this.#fileManager = fileManager;
-
-        this.#localModuleBuilder = new LocalModuleBuilder();
-        this.#remoteModuleBuilder = new RemoteModuleBuilder();
     }
 
     async build(application: Application): Promise<void>
@@ -62,7 +61,7 @@ export default class ModuleBuilder
 
     async #buildSharedModule(module: Module, segmentation: Segmentation): Promise<void>
     {
-        const filename = FileHelper.addSubExtension(module.filename, 'shared');
+        const filename = this.#fileHelper.addSubExtension(module.filename, 'shared');
         const code = this.#localModuleBuilder.build(module, segmentation);
 
         return this.#fileManager.write(filename, code);
@@ -70,7 +69,7 @@ export default class ModuleBuilder
 
     async #buildSegmentModule(module: Module, segment: Segment, segmentation: Segmentation): Promise<void>
     {
-        const filename = FileHelper.addSubExtension(module.filename, segment.name);
+        const filename = this.#fileHelper.addSubExtension(module.filename, segment.name);
         const code = this.#localModuleBuilder.build(module, segmentation, segment);
 
         return this.#fileManager.write(filename, code);
@@ -81,7 +80,7 @@ export default class ModuleBuilder
         // The remote module contains calls to segmented procedures only
 
         const implementations = this.#getImplementations(module, segments);
-        const filename = FileHelper.addSubExtension(module.filename, 'remote');
+        const filename = this.#fileHelper.addSubExtension(module.filename, 'remote');
         const code = this.#remoteModuleBuilder.build(implementations);
 
         return this.#fileManager.write(filename, code);

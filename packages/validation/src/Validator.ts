@@ -163,7 +163,7 @@ export default class Validator
             const itemKey = this.#composeKey(key, itemIndex);
             const itemValue = data[itemIndex];
 
-            this.#validateValue(itemKey, itemValue, scheme.items, errors)
+            this.#validateValue(itemKey, itemValue, scheme.items, errors);
         }
     }
 

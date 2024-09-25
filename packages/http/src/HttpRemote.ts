@@ -6,11 +6,11 @@ import { File } from '@jitar/sourcing';
 import HeaderKeys from './definitions/HeaderKeys';
 import HeaderValues from './definitions/HeaderValues';
 
-const errorConverter = new ErrorConverter();
-
 export default class HttpRemote implements Remote
 {
     #url: string;
+    
+    #errorConverter = new ErrorConverter();
 
     constructor(url: string)
     {
@@ -80,11 +80,13 @@ export default class HttpRemote implements Remote
     {
         request.setHeader(HeaderKeys.CONTENT_TYPE, HeaderValues.APPLICATION_JSON);
 
-        const versionString = request.version.toString();
         const argsObject = Object.fromEntries(request.args);
         const headersObject = Object.fromEntries(request.headers);
 
-        const remoteUrl = `${this.#url}/rpc/${request.fqn}?version=${versionString}`;
+        const versionString = request.version.toString();
+        headersObject[HeaderKeys.JITAR_PROCEDURE_VERSION] = versionString;
+
+        const remoteUrl = `${this.#url}/rpc/${request.fqn}`;
         const body = await this.#createRequestBody(argsObject);
         const options =
         {
@@ -111,7 +113,7 @@ export default class HttpRemote implements Remote
         {
             const result = await this.#getResponseResult(response);
 
-            throw errorConverter.fromStatus(response.status, String(result));
+            throw this.#errorConverter.fromStatus(response.status, String(result));
         }
 
         return response;

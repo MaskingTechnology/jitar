@@ -1,7 +1,7 @@
 
-# Jitar Caching
+# Jitar Build
 
-This package contains the components for creating the runtime cache for [Jitar](https://jitar.dev) applications.
+This package provides the build process for the [Jitar](https://jitar.dev) runtime.
 
 For more information about Jitar:
 

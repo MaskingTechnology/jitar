@@ -1,5 +1,5 @@
 
-export default interface Service
+interface Service
 {
     get url(): string;
 
@@ -11,3 +11,5 @@ export default interface Service
 
     getHealth(): Promise<Map<string, boolean>>
 }
+
+export default Service;

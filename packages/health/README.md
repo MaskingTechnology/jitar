@@ -1,7 +1,7 @@
 
 # Jitar Health
 
-This package contains the components for health monitoring of the [Jitar](https://jitar.dev) runtime.
+This package provides the service health system for the [Jitar](https://jitar.dev) runtime.
 
 For more information about Jitar:
 

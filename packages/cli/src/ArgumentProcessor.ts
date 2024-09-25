@@ -3,7 +3,7 @@ import MissingArgument from './errors/MissingArgument';
 
 const COMMAND_INDEX = 2;
 
-export default class ArgumentManager
+export default class ArgumentProcessor
 {
     #command: string | undefined;
     #args: Map<string, string>;

@@ -1,5 +1,5 @@
 
-import RunModes, { RunMode } from '../definitions/RunModes';
+import type { RunMode } from '../definitions/RunModes';
 
 import type Version from './Version';
 

@@ -1,7 +1,7 @@
 
 # Jitar Middleware
 
-This package contains the components for middleware support for the [Jitar](https://jitar.dev) runtime.
+This package provides middleware support for the [Jitar](https://jitar.dev) runtime.
 
 For more information about Jitar:
 

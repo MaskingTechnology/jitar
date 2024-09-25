@@ -4,8 +4,8 @@ import { LocalFileManager, SourcingManager } from '@jitar/sourcing';
 import { ServerBuilder } from '@jitar/runtime';
 import { HttpServer, HttpRemoteBuilder } from '@jitar/http';
 
-import Command from '../interfaces/Command';
-import ArgumentManager from '../ArgumentManager';
+import Command from '../Command';
+import ArgumentProcessor from '../ArgumentProcessor';
 
 const banner = `
      ██╗██╗████████╗ █████╗ ██████╗ 
@@ -20,7 +20,7 @@ ____________________________________
 
 export default class StartServer implements Command
 {
-    async execute(args: ArgumentManager): Promise<void>
+    async execute(args: ArgumentProcessor): Promise<void>
     {
         const environmentFile = args.getOptionalArgument('--env-file', undefined);
         const runtimeConfigFile = args.getOptionalArgument('--config', undefined);

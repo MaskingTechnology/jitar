@@ -1,7 +1,7 @@
 
 # Jitar Configuration
 
-This package contains the components for the configuration of [Jitar](https://jitar.dev) applications.
+This package provides application sourcing (file and modules) for the [Jitar](https://jitar.dev) runtime.
 
 For more information about Jitar:
 

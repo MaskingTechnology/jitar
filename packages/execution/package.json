@@ -35,9 +35,5 @@
   "bugs": {
     "url": "https://github.com/MaskingTechnology/jitar/issues"
   },
-  "homepage": "https://jitar.dev",
-  "keywords": [
-    "configuration",
-    "jitar"
-  ]
+  "homepage": "https://jitar.dev"
 }

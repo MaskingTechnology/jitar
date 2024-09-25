@@ -46,6 +46,8 @@ export default class SegmentReader
     #fileManager: FileManager;
     #repository: ModuleRepository;
 
+    #fileHelper = new FileHelper();
+
     constructor(fileManager: FileManager, repository: ModuleRepository)
     {
         this.#fileManager = fileManager;
@@ -120,7 +122,7 @@ export default class SegmentReader
 
     #makeModuleFilename(filename: string): string
     {
-        const fullFilename = FileHelper.assureExtension(filename);
+        const fullFilename = this.#fileHelper.assureExtension(filename);
 
         if (fullFilename.startsWith('./')) return fullFilename.substring(2);
         if (fullFilename.startsWith('/')) return fullFilename.substring(1);

@@ -1,7 +1,7 @@
 
 # Jitar Runtime
 
-This package contains the runtime components for [Jitar](https://jitar.dev) applications.
+This package provides the client and server for the [Jitar](https://jitar.dev) runtime.
 
 For more information about Jitar:
 

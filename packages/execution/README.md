@@ -1,7 +1,7 @@
 
 # Jitar Execution
 
-This package contains the components for the execution of procedures from [Jitar](https://jitar.dev) applications.
+This package provides the execution model (segmentation, procedure, etc.) for the [Jitar](https://jitar.dev) runtime.
 
 For more information about Jitar:
 

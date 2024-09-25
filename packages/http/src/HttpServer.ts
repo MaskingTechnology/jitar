@@ -6,25 +6,21 @@ import { RunModes } from '@jitar/execution';
 import { Server, ServerResponse, ContentTypes } from '@jitar/runtime';
 import { Validator } from '@jitar/validation';
 
+import Defaults from './definitions/Defaults';
 import HeaderKeys from './definitions/HeaderKeys';
 import IgnoredHeaderKeys from './definitions/IgnoredHeaderKeys';
 import HeaderValues from './definitions/HeaderValues';
 
-const DEFAULT_PORT = '3000';
-const DEFAULT_BODY_LIMIT = 1024 * 200; // 200 KB
-
-const IGNORED_QUERY_PARAMETERS = ['version']; // TODO: Refactor version to custom header
-
 export default class HttpServer
 {
-    #validator = new Validator();
-
     #server: Server;
     #port: string;
     #app: Express;
     #http?: Http;
 
-    constructor(server: Server, port: string = DEFAULT_PORT, bodyLimit = DEFAULT_BODY_LIMIT)
+    #validator = new Validator();
+
+    constructor(server: Server, port: string = Defaults.PORT_NUMBER, bodyLimit: number = Defaults.BODY_LIMIT)
     {
         this.#server = server;
         this.#port = port;
@@ -128,6 +124,8 @@ export default class HttpServer
         const headers = this.#extractHeaders(request);
         const mode = RunModes.NORMAL;
 
+        console.log('VERSION', version);
+
         const serverResponse = await this.#server.run({ fqn, version, args, headers, mode });
 
         return this.#transformResponse(response, serverResponse);
@@ -214,9 +212,9 @@ export default class HttpServer
 
     #extractVersion(request: Request): string | undefined
     {
-        return typeof request.query.version === 'string'
-            ? request.query.version
-            : undefined;
+        const versionString = request.headers[HeaderKeys.JITAR_PROCEDURE_VERSION];
+        
+        return Array.isArray(versionString) ? versionString[0] : versionString;
     }
 
     #extractQueryArguments(request: Request): Record<string, unknown>
@@ -225,14 +223,6 @@ export default class HttpServer
 
         for (const [key, value] of Object.entries(request.query))
         {
-            if (IGNORED_QUERY_PARAMETERS.includes(key))
-            {
-                // We need to filter out the RPC parameters,
-                // because they are not a procedure argument.
-
-                continue;
-            }
-
             args[key] = value;
         }
 

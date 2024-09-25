@@ -1,29 +1,13 @@
 
-import ESClass from '../models/ESClass.js';
-import ESDeclaration from '../models/ESDeclaration.js';
-import ESExpression from '../models/ESExpression.js';
-import ESFunction from '../models/ESFunction.js';
-import ESGetter from '../models/ESGetter.js';
-import ESMember from '../models/ESMember.js';
-import ESModule from '../models/ESModule.js';
-import ESScope from '../models/ESScope.js';
-import ESSetter from '../models/ESSetter.js';
-import ESValue from '../models/ESValue.js';
+import { ESClass, ESDeclaration, ESExpression, ESFunction, ESGetter, ESMember, ESModule, ESScope, ESSetter, ESValue } from '../models';
+import { Parser } from '../static';
 
-import Parser from '../static/Parser.js';
-
-import ClassMerger from './ClassMerger.js';
+import ClassMerger from './ClassMerger';
 
 export default class Reflector
 {
-    #parser: Parser;
-    #merger: ClassMerger;
-
-    constructor(parser = new Parser(), merger = new ClassMerger())
-    {
-        this.#parser = parser;
-        this.#merger = merger;
-    }
+    #parser = new Parser();
+    #merger = new ClassMerger();
 
     fromModule(module: object, inherit = false): ESModule
     {

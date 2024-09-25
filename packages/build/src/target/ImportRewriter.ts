@@ -9,13 +9,14 @@ const KEYWORD_DEFAULT = 'default';
 const IMPORT_PATTERN = /import\s(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/._-]+)["'\s].*/g;
 const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
-const parser = new Parser();
-
 export default class ImportRewriter
 {
     #module: Module;
     #segmentation: Segmentation;
     #segment: Segment | undefined;
+
+    #parser = new Parser();
+    #fileHelper = new FileHelper();
 
     constructor(module: Module, segmentation: Segmentation, segment?: Segment)
     {
@@ -33,7 +34,7 @@ export default class ImportRewriter
 
     #replaceImport(statement: string): string
     {
-        const dependency = parser.parseImport(statement);
+        const dependency = this.#parser.parseImport(statement);
 
         return this.#isApplicationModule(dependency)
             ? this.#rewriteApplicationImport(dependency)
@@ -83,10 +84,10 @@ export default class ImportRewriter
 
     #rewriteApplicationFrom(filename: string, scope: string): string
     {
-        const callingModulePath = FileHelper.extractPath(this.#module.filename);
-        const relativeFilename = FileHelper.makePathRelative(filename, callingModulePath);
+        const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
+        const relativeFilename = this.#fileHelper.makePathRelative(filename, callingModulePath);
 
-        return FileHelper.addSubExtension(relativeFilename, scope);
+        return this.#fileHelper.addSubExtension(relativeFilename, scope);
     }
 
     #rewriteRuntimeFrom(dependency: ESImport): string
@@ -150,10 +151,10 @@ export default class ImportRewriter
     #getTargetModuleFilename(dependency: ESImport): string
     {
         const from = this.#stripFrom(dependency.from);
-        const callingModulePath = FileHelper.extractPath(this.#module.filename);
-        const translated = FileHelper.makePathAbsolute(from, callingModulePath);
+        const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
+        const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
 
-        return FileHelper.assureExtension(translated);
+        return this.#fileHelper.assureExtension(translated);
     }
 
     #doesImportAll(dependency: ESImport): boolean

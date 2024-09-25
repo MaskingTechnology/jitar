@@ -29,7 +29,7 @@ export default class WorkerManager implements Runner
         return procedureNames.includes(fqn);
     }
 
-    async addWorker(worker: Worker, trustKey?: string): Promise<void>
+    async addWorker(worker: Worker): Promise<void>
     {
         this.#workers.add(worker);
 

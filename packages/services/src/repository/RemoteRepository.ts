@@ -13,7 +13,7 @@ type Configuration =
 
 export default class RemoteRepository implements Repository
 {
-    #url: string
+    #url: string;
     #remote: Remote;
     
     constructor(configuration: Configuration)

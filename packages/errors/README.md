@@ -1,7 +1,7 @@
 
 # Jitar Errors
 
-This package contains the generic errors thrown by the [Jitar](https://jitar.dev) runtime.
+This package provides the generic errors thrown by the [Jitar](https://jitar.dev) runtime.
 
 For more information about Jitar:
 

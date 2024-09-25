@@ -1,9 +1,10 @@
 
 import { Request, Response, RunModes, StatusCodes, VersionParser, ProcedureNotAccessible } from '@jitar/execution';
-import { RunnerService } from '@jitar/services';
 
 export default abstract class Runtime
 {
+    #versionParser = new VersionParser();
+
     constructor()
     {
         this.#initGlobals();
@@ -26,7 +27,7 @@ export default abstract class Runtime
 
     async #run(fqn: string, versionNumber: string, args: Record<string, unknown>, sourceRequest?: Request): Promise<unknown>
     {
-        const version = VersionParser.parse(versionNumber);
+        const version = this.#versionParser.parse(versionNumber);
         const argsMap = new Map<string, unknown>(Object.entries(args));
         const headersMap = sourceRequest instanceof Request ? sourceRequest.headers : new Map();
 

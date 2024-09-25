@@ -38,6 +38,7 @@ export default class Server extends Runtime
     #tearDownScripts: string[];
 
     #logger: Logger = new Logger();
+    #versionParser = new VersionParser();
 
     constructor(configuration: Configuration)
     {
@@ -249,7 +250,7 @@ export default class Server extends Runtime
             return Version.DEFAULT;
         }
 
-        return VersionParser.parse(version);
+        return this.#versionParser.parse(version);
     }
 
     #mapArguments(args: Record<string, unknown>): Map<string, unknown>

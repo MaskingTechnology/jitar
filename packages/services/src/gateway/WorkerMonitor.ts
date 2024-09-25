@@ -56,7 +56,7 @@ export default class WorkerMonitor
         {
             return await worker.isHealthy();
         }
-        catch (error)
+        catch (error: unknown)
         {
             return false;
         }

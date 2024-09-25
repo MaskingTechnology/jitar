@@ -1,20 +1,20 @@
 
-import CharList from './CharList.js';
-import Token from './Token.js';
-import TokenList from './TokenList.js';
+import CharList from './models/CharList';
+import Token from './models/Token';
+import TokenList from './models/TokenList';
 
-import { Comment, isComment } from './definitions/Comment.js';
-import { isDivider } from './definitions/Divider.js';
-import { isEmpty } from './definitions/Empty.js';
-import { Group, isGroup } from './definitions/Group.js';
-import { isKeyword } from './definitions/Keyword.js';
-import { List, isList } from './definitions/List.js';
-import { isLiteral } from './definitions/Literal.js';
-import { isOperator, Operator } from './definitions/Operator.js';
-import { Punctuation } from './definitions/Punctuation.js';
-import { isScope } from './definitions/Scope.js';
-import { TokenType } from './definitions/TokenType.js';
-import { Whitespace, isWhitespace } from './definitions/Whitespace.js';
+import { Comment, isComment } from './definitions/Comment';
+import { isDivider } from './definitions/Divider';
+import { isEmpty } from './definitions/Empty';
+import { Group, isGroup } from './definitions/Group';
+import { isKeyword } from './definitions/Keyword';
+import { List, isList } from './definitions/List';
+import { isLiteral } from './definitions/Literal';
+import { isOperator, Operator } from './definitions/Operator';
+import { Punctuation } from './definitions/Punctuation';
+import { isScope } from './definitions/Scope';
+import { TokenType } from './definitions/TokenType';
+import { Whitespace, isWhitespace } from './definitions/Whitespace';
 
 const ESCAPE_CHAR = '\\';
 

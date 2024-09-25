@@ -1,7 +1,7 @@
 {
   "name": "@jitar/runtime",
   "version": "0.7.4",
-  "description": "JavaScript runtime library for the Jitar runtime.",
+  "description": "Client and server runtime library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
   "type": "module",
@@ -41,9 +41,5 @@
   "bugs": {
     "url": "https://github.com/MaskingTechnology/jitar/issues"
   },
-  "homepage": "https://jitar.dev",
-  "keywords": [
-    "runtime",
-    "jitar"
-  ]
+  "homepage": "https://jitar.dev"
 }

@@ -1,7 +1,7 @@
 
-# Jitar Middleware
+# Jitar Logging
 
-This package contains the logging implementation for the [Jitar](https://jitar.dev) runtime.
+This package provides logging for the [Jitar](https://jitar.dev) runtime.
 
 For more information about Jitar:
 

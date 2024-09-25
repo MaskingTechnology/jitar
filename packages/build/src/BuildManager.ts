@@ -6,7 +6,7 @@ import type { FileManager } from '@jitar/sourcing';
 import { ApplicationReader } from './source';
 import { ApplicationBuilder } from './target';
 
-export default class CacheManager
+export default class BuildManager
 {
     #projectFileManager: FileManager;
     #sourceFileManager: FileManager;

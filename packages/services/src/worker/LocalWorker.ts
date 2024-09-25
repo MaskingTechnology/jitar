@@ -1,5 +1,5 @@
 
-import { Request, Response, ExecutionManager, Implementation, ProcedureNotFound } from '@jitar/execution';
+import { ExecutionManager, Request, Response, Implementation, ProcedureNotFound } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 

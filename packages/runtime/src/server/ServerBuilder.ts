@@ -3,7 +3,7 @@ import { ServerConfiguration, GatewayConfiguration, WorkerConfiguration, Reposit
 import { Segment, ExecutionManager } from '@jitar/execution';
 import { HealthCheck, HealthManager } from '@jitar/health';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
-import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, LocalWorker, Proxy, DummyProvider, DummyRunner, Remote, RemoteBuilder } from '@jitar/services';
+import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, LocalWorker, Proxy, DummyProvider, DummyRunner, RemoteBuilder } from '@jitar/services';
 import { SourcingManager } from '@jitar/sourcing';
 
 import UnknownServiceConfigured from './errors/UnknownServiceConfigured';

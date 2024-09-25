@@ -25,7 +25,7 @@ export default class Implementation
 
     get protected() { return this.#access === AccessLevels.PROTECTED; }
 
-    get private() { return this.#access === AccessLevels.PRIVATE; };
+    get private() { return this.#access === AccessLevels.PRIVATE; }
 
     get parameters() { return this.#parameters; }
 
