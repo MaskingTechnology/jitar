@@ -1,7 +1,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { VERSIONS } from '../_fixtures/models/Version.fixture';
+import { VERSIONS } from './fixtures';
 
 const actualVersion = VERSIONS.ACTUAL;
 

@@ -1,38 +1,5 @@
 
-import ArrayParameter from '../../../src/models/ArrayParameter';
-import NamedParameter from '../../../src/models/NamedParameter';
-import ObjectParameter from '../../../src/models/ObjectParameter';
-
-const PARAMETERS =
-{
-    NAMED: [new NamedParameter('id', false), new NamedParameter('name', false), new NamedParameter('age', true)],
-    ARRAY: [new ArrayParameter([new NamedParameter('query', false), new NamedParameter('sort', true)])],
-    OBJECT: [new ObjectParameter([new NamedParameter('query', false), new NamedParameter('sort', true)])],
-    MIXED: [
-        new NamedParameter('id', false),
-        new ArrayParameter([new NamedParameter('name', false), new NamedParameter('age', true)]),
-        new ObjectParameter([new NamedParameter('query', false), new NamedParameter('sort', true)])
-    ],
-    NESTED_ARRAY: [
-        new ArrayParameter([
-            new NamedParameter('id', false),
-            new ArrayParameter([new NamedParameter('name', false), new NamedParameter('age', true)]),
-            new ObjectParameter([new NamedParameter('query', false), new NamedParameter('sort', false)], undefined, true)
-        ])
-    ],
-    NESTED_OBJECT: [
-        new ObjectParameter([
-            new NamedParameter('id', false),
-            new ArrayParameter([new NamedParameter('name', false), new NamedParameter('age', true)], 'person'),
-            new ObjectParameter([new NamedParameter('query', false), new NamedParameter('sort', false)], 'filter', true)
-        ])
-    ],
-    REST: [new NamedParameter('...rest', false)],
-    REST_ARRAY: [new ArrayParameter([new NamedParameter('name', false), new NamedParameter('...rest', true)])],
-    REST_OBJECT: [new ObjectParameter([new NamedParameter('name', false), new NamedParameter('...rest', true)])]
-};
-
-const ARGUMENTS =
+export const ARGUMENTS =
 {
     NAMED_ALL: new Map(Object.entries({ 'id': 1, 'name': 'John Doe', 'age': 42 })),
     NAMED_OPTIONAL: new Map(Object.entries({ 'id': 1, 'name': 'John Doe' })), // Misses the age
@@ -66,5 +33,3 @@ const ARGUMENTS =
     OPTIONAL_ARGUMENTS: new Map(Object.entries({ '*id': 1, '*name': 'John Doe', '*age': 42 })), // All arguments are optional
     OPTIONAL_ARGUMENTS_EXTRA: new Map(Object.entries({ 'id': 1, 'name': 'John Doe', '*additional': 'argument', '*ignore': true })), // Additional optional arguments
 };
-
-export { PARAMETERS, ARGUMENTS };

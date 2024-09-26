@@ -1,7 +1,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { IMPLEMENTATIONS } from '../_fixtures/models/Implementation.fixture';
+import { IMPLEMENTATIONS } from './fixtures';
 
 const privateImplementation = IMPLEMENTATIONS.PRIVATE;
 const publicImplementation = IMPLEMENTATIONS.PUBLIC;

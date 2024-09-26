@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import Version from '../../src/models/Version';
 
-import { PROCEDURES } from '../_fixtures/models/Procedure.fixture';
+import { PROCEDURES } from './fixtures';
 
 const privateProcedure = PROCEDURES.PRIVATE;
 const publicProcedure = PROCEDURES.PUBLIC;

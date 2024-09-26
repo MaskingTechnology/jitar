@@ -1,7 +1,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { SEGMENTS } from '../_fixtures/models/Segment.fixture';
+import { SEGMENTS } from './fixtures';
 
 const generalSegment = SEGMENTS.GENERAL;
 

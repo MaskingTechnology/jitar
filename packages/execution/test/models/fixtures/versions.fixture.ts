@@ -1,7 +1,7 @@
 
 import Version from '../../../src/models/Version';
 
-const VERSIONS =
+export const VERSIONS =
 {
     DEFAULT: Version.DEFAULT,
     ACTUAL: new Version(1, 2, 3),
@@ -11,7 +11,3 @@ const VERSIONS =
     MAJOR: new Version(1, 0, 0),
     MAJOR_MINOR: new Version(1, 2, 0)
 };
-
-Object.freeze(VERSIONS);
-
-export { VERSIONS };

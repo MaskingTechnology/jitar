@@ -7,7 +7,7 @@ import UnknownParameter from '../../src/errors/UnknownParameter';
 
 import ArgumentConstructor from '../../src/utils/ArgumentConstructor';
 
-import { PARAMETERS, ARGUMENTS } from '../_fixtures/utils/ArgumentConstructor.fixture';
+import { PARAMETERS, ARGUMENTS } from './fixtures';
 
 const argumentConstructor = new ArgumentConstructor();
 
