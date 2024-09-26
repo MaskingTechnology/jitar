@@ -10,9 +10,14 @@ const invalidName = { serialized: true, name: 'Map', value: '7124811545485115646
 const invalidBigIntValue = { serialized: true, name: 'BigInt', value: true };
 const invalidBigIntString = { serialized: true, name: 'BigInt', value: '1.3' };
 
-export
+export const BIG_INTEGERS =
 {
-    validBigInt,
-    serializedValidBigInt,
-    nonObject, nonBigInt, notSerialized, invalidName, invalidBigIntValue, invalidBigIntString
+    VALID: validBigInt,
+    VALID_SERIALIZED: serializedValidBigInt,
+    NON_OBJECT: nonObject,
+    NON_BIGINT: nonBigInt,
+    NOT_SERIALIZED: notSerialized,
+    INVALID_NAME: invalidName,
+    INVALID_BIGINT_VALUE: invalidBigIntValue,
+    INVALID_BIGINT_STRING: invalidBigIntString
 };

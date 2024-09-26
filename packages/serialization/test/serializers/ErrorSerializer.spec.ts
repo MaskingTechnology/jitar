@@ -3,12 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import ErrorSerializer from '../../src/serializers/ErrorSerializer';
 
-import {
-    plainError, evalError, rangeError, referenceError, syntaxError, typeError, uriError,
-    serializedPlainError, serializedEvalError, serializedRangeError, serializedReferenceError, serializedSyntaxError, serializedTypeError, serializedURIError,
-    customError, otherClass,
-    notSerialized, invalidName, invalidType
-} from '../_fixtures/serializers/ErrorSerializer.fixture';
+import { ERRORS } from './fixtures';
 
 const serializer = new ErrorSerializer();
 
@@ -18,13 +13,13 @@ describe('serializers/ErrorSerializer', () =>
     {
         it('should tell it can serialize an error', () =>
         {
-            const supportsPlainError = serializer.canSerialize(plainError);
-            const supportsEvalError = serializer.canSerialize(evalError);
-            const supportsRangeError = serializer.canSerialize(rangeError);
-            const supportsReferenceError = serializer.canSerialize(referenceError);
-            const supportsSyntaxError = serializer.canSerialize(syntaxError);
-            const supportsTypeError = serializer.canSerialize(typeError);
-            const supportsURIError = serializer.canSerialize(uriError);
+            const supportsPlainError = serializer.canSerialize(ERRORS.PLAIN);
+            const supportsEvalError = serializer.canSerialize(ERRORS.EVAL);
+            const supportsRangeError = serializer.canSerialize(ERRORS.RANGE);
+            const supportsReferenceError = serializer.canSerialize(ERRORS.REFERENCE);
+            const supportsSyntaxError = serializer.canSerialize(ERRORS.SYNTAX);
+            const supportsTypeError = serializer.canSerialize(ERRORS.TYPE);
+            const supportsURIError = serializer.canSerialize(ERRORS.URI);
 
             expect(supportsPlainError).toBeTruthy();
             expect(supportsEvalError).toBeTruthy();
@@ -37,11 +32,11 @@ describe('serializers/ErrorSerializer', () =>
 
         it('should tell it cannot serialize others', () =>
         {
-            const supportsCustomError = serializer.canSerialize(customError);
-            const supportsOtherClass = serializer.canSerialize(otherClass);
-            const supportsNotSerialized = serializer.canDeserialize(notSerialized);
-            const supportsInvalidName = serializer.canDeserialize(invalidName);
-            const supportsInvalidType = serializer.canDeserialize(invalidType);
+            const supportsCustomError = serializer.canSerialize(ERRORS.CUSTOM);
+            const supportsOtherClass = serializer.canSerialize(ERRORS.OTHER_CLASS);
+            const supportsNotSerialized = serializer.canDeserialize(ERRORS.NOT_SERIALIZED);
+            const supportsInvalidName = serializer.canDeserialize(ERRORS.INVALID_NAME);
+            const supportsInvalidType = serializer.canDeserialize(ERRORS.INVALID_TYPE);
 
             expect(supportsCustomError).toBeFalsy();
             expect(supportsOtherClass).toBeFalsy();
@@ -55,21 +50,21 @@ describe('serializers/ErrorSerializer', () =>
     {
         it('should serialize an error', async () =>
         {
-            const resultPlainError = await serializer.serialize(plainError);
-            const resultEvalError = await serializer.serialize(evalError);
-            const resultRangeError = await serializer.serialize(rangeError);
-            const resultReferenceError = await serializer.serialize(referenceError);
-            const resultSyntaxError = await serializer.serialize(syntaxError);
-            const resultTypeError = await serializer.serialize(typeError);
-            const resultURIError = await serializer.serialize(uriError);
+            const resultPlainError = await serializer.serialize(ERRORS.PLAIN);
+            const resultEvalError = await serializer.serialize(ERRORS.EVAL);
+            const resultRangeError = await serializer.serialize(ERRORS.RANGE);
+            const resultReferenceError = await serializer.serialize(ERRORS.REFERENCE);
+            const resultSyntaxError = await serializer.serialize(ERRORS.SYNTAX);
+            const resultTypeError = await serializer.serialize(ERRORS.TYPE);
+            const resultURIError = await serializer.serialize(ERRORS.URI);
 
-            expect(resultPlainError).toStrictEqual(serializedPlainError);
-            expect(resultEvalError).toStrictEqual(serializedEvalError);
-            expect(resultRangeError).toStrictEqual(serializedRangeError);
-            expect(resultReferenceError).toStrictEqual(serializedReferenceError);
-            expect(resultSyntaxError).toStrictEqual(serializedSyntaxError);
-            expect(resultTypeError).toStrictEqual(serializedTypeError);
-            expect(resultURIError).toStrictEqual(serializedURIError);
+            expect(resultPlainError).toStrictEqual(ERRORS.PLAIN_SERIALIZED);
+            expect(resultEvalError).toStrictEqual(ERRORS.EVAL_SERIALIZED);
+            expect(resultRangeError).toStrictEqual(ERRORS.RANGE_SERIALIZED);
+            expect(resultReferenceError).toStrictEqual(ERRORS.REFERENCE_SERIALIZED);
+            expect(resultSyntaxError).toStrictEqual(ERRORS.SYNTAX_SERIALIZED);
+            expect(resultTypeError).toStrictEqual(ERRORS.TYPE_SERIALIZED);
+            expect(resultURIError).toStrictEqual(ERRORS.URI_SERIALIZED);
         });
     });
 
@@ -77,21 +72,21 @@ describe('serializers/ErrorSerializer', () =>
     {
         it('should deserialize an error', async () =>
         {
-            const resultPlainError = await serializer.deserialize(serializedPlainError);
-            const resultEvalError = await serializer.deserialize(serializedEvalError);
-            const resultRangeError = await serializer.deserialize(serializedRangeError);
-            const resultReferenceError = await serializer.deserialize(serializedReferenceError);
-            const resultSyntaxError = await serializer.deserialize(serializedSyntaxError);
-            const resultTypeError = await serializer.deserialize(serializedTypeError);
-            const resultURIError = await serializer.deserialize(serializedURIError);
+            const resultPlainError = await serializer.deserialize(ERRORS.PLAIN_SERIALIZED);
+            const resultEvalError = await serializer.deserialize(ERRORS.EVAL_SERIALIZED);
+            const resultRangeError = await serializer.deserialize(ERRORS.RANGE_SERIALIZED);
+            const resultReferenceError = await serializer.deserialize(ERRORS.REFERENCE_SERIALIZED);
+            const resultSyntaxError = await serializer.deserialize(ERRORS.SYNTAX_SERIALIZED);
+            const resultTypeError = await serializer.deserialize(ERRORS.TYPE_SERIALIZED);
+            const resultURIError = await serializer.deserialize(ERRORS.URI_SERIALIZED);
 
-            expect(resultPlainError).toStrictEqual(plainError);
-            expect(resultEvalError).toStrictEqual(evalError);
-            expect(resultRangeError).toStrictEqual(rangeError);
-            expect(resultReferenceError).toStrictEqual(referenceError);
-            expect(resultSyntaxError).toStrictEqual(syntaxError);
-            expect(resultTypeError).toStrictEqual(typeError);
-            expect(resultURIError).toStrictEqual(uriError);
+            expect(resultPlainError).toStrictEqual(ERRORS.PLAIN);
+            expect(resultEvalError).toStrictEqual(ERRORS.EVAL);
+            expect(resultRangeError).toStrictEqual(ERRORS.RANGE);
+            expect(resultReferenceError).toStrictEqual(ERRORS.REFERENCE);
+            expect(resultSyntaxError).toStrictEqual(ERRORS.SYNTAX);
+            expect(resultTypeError).toStrictEqual(ERRORS.TYPE);
+            expect(resultURIError).toStrictEqual(ERRORS.URI);
         });
     });
 });

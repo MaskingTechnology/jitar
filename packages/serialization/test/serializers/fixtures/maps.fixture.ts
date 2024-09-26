@@ -1,12 +1,4 @@
 
-import Serializer from '../../../src/Serializer';
-import PrimitiveSerializer from '../../../src/serializers/PrimitiveSerializer';
-import MapSerializer from '../../../src/serializers/MapSerializer';
-
-const parent = new Serializer();
-parent.addSerializer(new MapSerializer());
-parent.addSerializer(new PrimitiveSerializer());
-
 const emptyMap: Map<unknown, unknown> = new Map();
 const mixedMap: Map<unknown, unknown> = new Map().set('a', 1).set('b', true);
 const nestedMap: Map<unknown, unknown> = new Map().set('b', 'hello').set('c', new Map().set('d', false));
@@ -22,9 +14,18 @@ const invalidName = { serialized: true, name: 'Set', entries: [], values: [] };
 const invalidKeys = { serialized: true, name: 'Map', entries: {}, values: [] };
 const invalidValues = { serialized: true, name: 'Map', entries: [], values: {} };
 
-export {
-    parent,
-    emptyMap, mixedMap, nestedMap,
-    serializedEmptyMap, serializedMixedMap, serializedNestedMap,
-    nonObject, nonMap, notSerialized, invalidName, invalidKeys, invalidValues
+export const MAPS =
+{
+    EMPTY: emptyMap,
+    EMPTY_SERIALIZED: serializedEmptyMap,
+    MIXED: mixedMap,
+    MIXED_SERIALIZED: serializedMixedMap,
+    NESTED: nestedMap,
+    NESTED_SERIALIZED: serializedNestedMap,
+    NON_OBJECT: nonObject,
+    NON_MAP: nonMap,
+    NOT_SERIALIZED: notSerialized,
+    INVALID_NAME: invalidName,
+    INVALID_KEYS: invalidKeys,
+    INVALID_VALUES: invalidValues
 };

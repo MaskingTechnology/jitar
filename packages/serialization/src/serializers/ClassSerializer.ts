@@ -51,6 +51,12 @@ export default class ClassSerializer extends ValueSerializer
 
         const name = 'class';
         const key = this.#classResolver.resolveKey(clazz);
+
+        if (key === undefined)
+        {
+            throw new ClassNotFound(clazz.name);
+        }
+
         const args: FlexObject = await this.#serializeConstructor(model, parameterNames, object);
         const fields: FlexObject = await this.#serializeFields(model, parameterNames, object);
 
@@ -112,11 +118,11 @@ export default class ClassSerializer extends ValueSerializer
 
         if (clazz === undefined)
         {
-            throw new ClassNotFound(object.name);
+            throw new ClassNotFound(object.key);
         }
         else if ((clazz instanceof Function) === false)
         {
-            throw new InvalidClass(object.name);
+            throw new InvalidClass(object.key);
         }
 
         const args = await this.#deserializeConstructor(clazz, object.args);
@@ -152,11 +158,7 @@ export default class ClassSerializer extends ValueSerializer
 
     async #getClass(resolvable: Resolvable): Promise<unknown>
     {
-        if (resolvable.key === undefined)
-        {
-            return (globalThis as FlexObject)[resolvable.key];
-        }
-
-        return this.#classResolver.resolveClass(resolvable.key);
+        return (globalThis as FlexObject)[resolvable.key]
+            ?? this.#classResolver.resolveClass(resolvable.key);
     }
 }

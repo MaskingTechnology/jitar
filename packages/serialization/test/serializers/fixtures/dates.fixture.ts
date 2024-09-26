@@ -12,8 +12,14 @@ const invalidName = { serialized: true, name: 'Map', value: DATE_TIME_STRING };
 const invalidDateValue = { serialized: true, name: 'Date', value: true };
 const invalidDateString = { serialized: true, name: 'Date', value: 'hello' };
 
-export {
-    fixedDate,
-    serializedFixedDate,
-    nonObject, nonDate, notSerialized, invalidName, invalidDateValue, invalidDateString
+export const DATES =
+{
+    FIXED: fixedDate,
+    FIXED_SERIALIZED: serializedFixedDate,
+    NON_OBJECT: nonObject,
+    NON_DATE: nonDate,
+    NOT_SERIALIZED: notSerialized,
+    INVALID_NAME: invalidName,
+    INVALID_DATE_VALUE: invalidDateValue,
+    INVALID_DATE_STRING: invalidDateString
 };

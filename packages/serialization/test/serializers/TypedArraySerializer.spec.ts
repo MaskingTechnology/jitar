@@ -3,11 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import TypedArraySerializer from '../../src/serializers/TypedArraySerializer';
 
-import {
-    viewUint16, viewInt8, viewBigInt64,
-    serializedViewUint16, serializedViewInt8, serializedViewBigInt64,
-    nonObject, plainObject, notSerialized, invalidName, invalidType, invalidBytes
-} from '../_fixtures/serializers/TypedArraySerializer.fixture';
+import { TYPED_ARRAYS } from './fixtures';
 
 const serializer = new TypedArraySerializer();
 
@@ -17,9 +13,9 @@ describe('serializers/TypedArraySerializer', () =>
     {
         it('should tell it can serialize an array buffer', () =>
         {
-            const supportsUint16 = serializer.canSerialize(viewUint16);
-            const supportsInt8 = serializer.canSerialize(viewInt8);
-            const supportsBigInt64 = serializer.canSerialize(viewBigInt64);
+            const supportsUint16 = serializer.canSerialize(TYPED_ARRAYS.UINT16);
+            const supportsInt8 = serializer.canSerialize(TYPED_ARRAYS.INT8);
+            const supportsBigInt64 = serializer.canSerialize(TYPED_ARRAYS.BIG_INT64);
 
             expect(supportsUint16).toBeTruthy();
             expect(supportsInt8).toBeTruthy();
@@ -28,8 +24,8 @@ describe('serializers/TypedArraySerializer', () =>
 
         it('should tell it cannot serialize others', () =>
         {
-            const supportsPlainObject = serializer.canSerialize(plainObject);
-            const supportsNonObject = serializer.canSerialize(nonObject);
+            const supportsPlainObject = serializer.canSerialize(TYPED_ARRAYS.PLAIN_OBJECT);
+            const supportsNonObject = serializer.canSerialize(TYPED_ARRAYS.NON_OBJECT);
 
             expect(supportsPlainObject).toBeFalsy();
             expect(supportsNonObject).toBeFalsy();
@@ -40,9 +36,9 @@ describe('serializers/TypedArraySerializer', () =>
     {
         it('should tell it can deserialize an array buffer', () =>
         {
-            const supportsUint16 = serializer.canDeserialize(serializedViewUint16);
-            const supportsInt8 = serializer.canDeserialize(serializedViewInt8);
-            const supportsBigInt64 = serializer.canDeserialize(serializedViewBigInt64);
+            const supportsUint16 = serializer.canDeserialize(TYPED_ARRAYS.UINT16_SERIALIZED);
+            const supportsInt8 = serializer.canDeserialize(TYPED_ARRAYS.INT8_SERIALIZED);
+            const supportsBigInt64 = serializer.canDeserialize(TYPED_ARRAYS.BIG_INT64_SERIALIZED);
 
             expect(supportsUint16).toBeTruthy();
             expect(supportsInt8).toBeTruthy();
@@ -51,11 +47,11 @@ describe('serializers/TypedArraySerializer', () =>
 
         it('should tell it cannot deserialize others', () =>
         {
-            const supportsNonObject = serializer.canDeserialize(nonObject);
-            const supportsNotSerialized = serializer.canDeserialize(notSerialized);
-            const supportsInvalidName = serializer.canDeserialize(invalidName);
-            const supportsInvalidType = serializer.canDeserialize(invalidType);
-            const supportsInvalidBytes = serializer.canDeserialize(invalidBytes);
+            const supportsNonObject = serializer.canDeserialize(TYPED_ARRAYS.NON_OBJECT);
+            const supportsNotSerialized = serializer.canDeserialize(TYPED_ARRAYS.NOT_SERIALIZED);
+            const supportsInvalidName = serializer.canDeserialize(TYPED_ARRAYS.INVALID_NAME);
+            const supportsInvalidType = serializer.canDeserialize(TYPED_ARRAYS.INVALID_TYPE);
+            const supportsInvalidBytes = serializer.canDeserialize(TYPED_ARRAYS.INVALID_BYTES);
 
             expect(supportsNonObject).toBeFalsy();
             expect(supportsNotSerialized).toBeFalsy();
@@ -69,13 +65,13 @@ describe('serializers/TypedArraySerializer', () =>
     {
         it('should serialize an array buffer', async () =>
         {
-            const resultUint16 = await serializer.serialize(viewUint16);
-            const resultInt8 = await serializer.serialize(viewInt8);
-            const resultBigInt64 = await serializer.serialize(viewBigInt64);
+            const resultUint16 = await serializer.serialize(TYPED_ARRAYS.UINT16);
+            const resultInt8 = await serializer.serialize(TYPED_ARRAYS.INT8);
+            const resultBigInt64 = await serializer.serialize(TYPED_ARRAYS.BIG_INT64);
 
-            expect(resultUint16).toStrictEqual(serializedViewUint16);
-            expect(resultInt8).toStrictEqual(serializedViewInt8);
-            expect(resultBigInt64).toStrictEqual(serializedViewBigInt64);
+            expect(resultUint16).toStrictEqual(TYPED_ARRAYS.UINT16_SERIALIZED);
+            expect(resultInt8).toStrictEqual(TYPED_ARRAYS.INT8_SERIALIZED);
+            expect(resultBigInt64).toStrictEqual(TYPED_ARRAYS.BIG_INT64_SERIALIZED);
         });
     });
 
@@ -83,13 +79,13 @@ describe('serializers/TypedArraySerializer', () =>
     {
         it('should deserialize an array buffer', async () =>
         {
-            const resultUint16 = await serializer.deserialize(serializedViewUint16);
-            const resultInt8 = await serializer.deserialize(serializedViewInt8);
-            const resultBigInt64 = await serializer.deserialize(serializedViewBigInt64);
+            const resultUint16 = await serializer.deserialize(TYPED_ARRAYS.UINT16_SERIALIZED);
+            const resultInt8 = await serializer.deserialize(TYPED_ARRAYS.INT8_SERIALIZED);
+            const resultBigInt64 = await serializer.deserialize(TYPED_ARRAYS.BIG_INT64_SERIALIZED);
 
-            expect(resultUint16).toStrictEqual(viewUint16);
-            expect(resultInt8).toStrictEqual(viewInt8);
-            expect(resultBigInt64).toStrictEqual(viewBigInt64);
+            expect(resultUint16).toStrictEqual(TYPED_ARRAYS.UINT16);
+            expect(resultInt8).toStrictEqual(TYPED_ARRAYS.INT8);
+            expect(resultBigInt64).toStrictEqual(TYPED_ARRAYS.BIG_INT64);
         });
     });
 });

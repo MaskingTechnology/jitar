@@ -12,10 +12,16 @@ const invalidRegExpFlag = { serialized: true, name: 'RegExp', source: 'w+', flag
 const serializedInvalidRegExpSource = { serialized: true, name: 'RegExp', source: 'sel/\\', flags: 'g' };
 const serializedInvalidRegExpFlag = { serialized: true, name: 'RegExp', source: 'w+', flags: 'true' };
 
-export
+export const REGULAR_EXPRESSIONS =
 {
-    validRegExp,
-    serializedValidRegExp,
-    nonObject, nonRegExp, notSerialized, invalidName, invalidRegExpSource, invalidRegExpFlag,
-    serializedInvalidRegExpSource, serializedInvalidRegExpFlag
+    VALID: validRegExp,
+    VALID_SERIALIZED: serializedValidRegExp,
+    NON_OBJECT: nonObject,
+    NON_REGEXP: nonRegExp,
+    NOT_SERIALIZED: notSerialized,
+    INVALID_NAME: invalidName,
+    INVALID_SOURCE: invalidRegExpSource,
+    INVALID_FLAG: invalidRegExpFlag,
+    INVALID_SOURCE_SERIALIZED: serializedInvalidRegExpSource,
+    INVALID_FLAG_SERIALIZED: serializedInvalidRegExpFlag
 };

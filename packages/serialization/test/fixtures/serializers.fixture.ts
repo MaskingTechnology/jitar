@@ -53,7 +53,10 @@ class StringSerializer extends ValueSerializer
     async deserialize(value: string): Promise<string> { return value; }
 }
 
-export {
-    FirstSerializer, SecondSerializer,
-    NumberSerializer, StringSerializer
+export const SERIALIZERS =
+{
+    FirstSerializer,
+    SecondSerializer,
+    NumberSerializer,
+    StringSerializer,
 };

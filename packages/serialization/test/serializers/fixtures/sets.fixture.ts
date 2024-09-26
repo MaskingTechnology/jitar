@@ -1,12 +1,4 @@
 
-import Serializer from '../../../src/Serializer';
-import PrimitiveSerializer from '../../../src/serializers/PrimitiveSerializer';
-import SetSerializer from '../../../src/serializers/SetSerializer';
-
-const parent = new Serializer();
-parent.addSerializer(new SetSerializer());
-parent.addSerializer(new PrimitiveSerializer());
-
 const emptySet: Set<unknown> = new Set();
 const mixedSet: Set<unknown> = new Set().add(1).add(true);
 const nestedSet: Set<unknown> = new Set().add('hello').add(new Set().add(false));
@@ -21,9 +13,17 @@ const notSerialized = { name: 'Set', bytes: [] };
 const invalidName = { serialized: true, name: 'Map', values: [] };
 const invalidValues = { serialized: true, name: 'Set', values: {} };
 
-export {
-    parent,
-    emptySet, mixedSet, nestedSet,
-    serializedEmptySet, serializedMixedSet, serializedNestedSet,
-    nonObject, nonSet, notSerialized, invalidName, invalidValues
+export const SETS =
+{
+    EMPTY: emptySet,
+    EMPTY_SERIALIZED: serializedEmptySet,
+    MIXED: mixedSet,
+    MIXED_SERIALIZED: serializedMixedSet,
+    NESTED: nestedSet,
+    NESTED_SERIALIZED: serializedNestedSet,
+    NON_OBJECT: nonObject,
+    NON_SET: nonSet,
+    NOT_SERIALIZED: notSerialized,
+    INVALID_NAME: invalidName,
+    INVALID_VALUES: invalidValues
 };

@@ -10,9 +10,14 @@ const invalidName = { serialized: true, name: 'Map', value: '2021-01-01T00:00:00
 const invalidUrlValue = { serialized: true, name: 'Url', value: true };
 const invalidUrlString = { serialized: true, name: 'Url', value: 'example' };
 
-export
+export const URLS =
 {
-    validUrl,
-    serializedValidUrl,
-    nonObject, nonUrl, notSerialized, invalidName, invalidUrlValue, invalidUrlString
+    VALID: validUrl,
+    VALID_SERIALIZED: serializedValidUrl,
+    NON_OBJECT: nonObject,
+    NON_URL: nonUrl,
+    NOT_SERIALIZED: notSerialized,
+    INVALID_NAME: invalidName,
+    INVALID_URL_VALUE: invalidUrlValue,
+    INVALID_URL_STRING: invalidUrlString
 };

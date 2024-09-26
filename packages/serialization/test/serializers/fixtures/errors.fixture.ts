@@ -32,9 +32,25 @@ const notSerialized = { name: 'Error', type: 'Error', stack: undefined, message:
 const invalidName = { serialized: true, name: 'CustomError', type: 'Error', stack: undefined, message: 'error', cause: undefined };
 const invalidType = { serialized: true, name: 'Error', type: 'CustomError', stack: undefined, message: 'error', cause: undefined };
 
-export {
-    plainError, evalError, rangeError, referenceError, syntaxError, typeError, uriError,
-    serializedPlainError, serializedEvalError, serializedRangeError, serializedReferenceError, serializedSyntaxError, serializedTypeError, serializedURIError,
-    customError, otherClass,
-    notSerialized, invalidName, invalidType
+export const ERRORS =
+{
+    PLAIN: plainError,
+    PLAIN_SERIALIZED: serializedPlainError,
+    EVAL: evalError,
+    EVAL_SERIALIZED: serializedEvalError,
+    RANGE: rangeError,
+    RANGE_SERIALIZED: serializedRangeError,
+    REFERENCE: referenceError,
+    REFERENCE_SERIALIZED: serializedReferenceError,
+    SYNTAX: syntaxError,
+    SYNTAX_SERIALIZED: serializedSyntaxError,
+    TYPE: typeError,
+    TYPE_SERIALIZED: serializedTypeError,
+    URI: uriError,
+    URI_SERIALIZED: serializedURIError,
+    CUSTOM: customError,
+    OTHER_CLASS: otherClass,
+    NOT_SERIALIZED: notSerialized,
+    INVALID_NAME: invalidName,
+    INVALID_TYPE: invalidType
 };
