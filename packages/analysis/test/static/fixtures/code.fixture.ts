@@ -1,5 +1,5 @@
 
-const CODE =
+export const CODE =
 {
     OPERATORS: `=====!=+=*!=`,
     LITERALS: '`foo\\`ter`"bar\\"becue"\'baz\'',
@@ -15,5 +15,3 @@ const CODE =
     REGEX_ARGUMENT: `doSomething(/[\\"]['"]/g)`,
     MINIFIED: 'return`foo`;identifier1=identifier2'
 };
-
-export { CODE };

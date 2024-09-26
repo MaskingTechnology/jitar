@@ -1,17 +1,10 @@
 
 import { describe, expect, it } from 'vitest';
 
-import ReflectionExpression from '../src/models/ReflectionExpression';
-import ReflectionField from '../src/models/ReflectionField';
-import Reflector from '../src/Reflector';
+import { ESExpression, ESField } from '../../src/models';
+import { Reflector } from '../../src/dynamic';
 
-import
-{
-    Person, CustomError,
-    johnDoe, janeDoe, plainError, customError,
-    optionalFunction,
-    testModule
-} from './_fixtures/Reflector.fixture';
+import { CLASSES, FUNCTIONS, OBJECTS, MODULES } from './fixtures';
 
 const reflector = new Reflector();
 
@@ -21,7 +14,7 @@ describe('Reflector', () =>
     {
         it('should get all members from a module', () =>
         {
-            const reflectionModule = reflector.fromModule(testModule, false);
+            const reflectionModule = reflector.fromModule(MODULES.MIXED, false);
             
             const members = reflectionModule.members;
             expect(members.length).toBe(3);
@@ -36,7 +29,7 @@ describe('Reflector', () =>
 
             const classes = reflectionModule.classes;
             expect(classes.length).toBe(1);
-            expect(classes[0].name).toBe('Person');
+            expect(classes[0].name).toBe('Child');
         });
     });
 
@@ -44,8 +37,8 @@ describe('Reflector', () =>
     {
         it('should get class reflection model without parent members from a class', () =>
         {
-            const reflectionClass = reflector.fromClass(Person, false);
-            expect(reflectionClass.name).toBe('Person');
+            const reflectionClass = reflector.fromClass(CLASSES.Child, false);
+            expect(reflectionClass.name).toBe('Child');
 
             const members = reflectionClass.members;
             expect(members.length).toBe(9);
@@ -74,8 +67,8 @@ describe('Reflector', () =>
 
         it('should get class reflection model with parent members from a class', () =>
         {
-            const reflectionClass = reflector.fromClass(Person, true);
-            expect(reflectionClass.name).toBe('Person');
+            const reflectionClass = reflector.fromClass(CLASSES.Child, true);
+            expect(reflectionClass.name).toBe('Child');
 
             const members = reflectionClass.members;
             expect(members.length).toBe(11);
@@ -124,7 +117,7 @@ describe('Reflector', () =>
 
         it('should get class reflection model from a class with function based parent class', () =>
         {
-            const reflectionClass = reflector.fromClass(CustomError, true);
+            const reflectionClass = reflector.fromClass(CLASSES.CustomError, true);
             expect(reflectionClass.name).toBe('CustomError');
 
             const members = reflectionClass.members;
@@ -151,8 +144,8 @@ describe('Reflector', () =>
     {
         it('should get class reflection model without parent members from an object', () =>
         {
-            const reflectionClass = reflector.fromObject(johnDoe, false);
-            expect(reflectionClass.name).toBe('Person');
+            const reflectionClass = reflector.fromObject(OBJECTS.CLASS, false);
+            expect(reflectionClass.name).toBe('Child');
 
             const members = reflectionClass.members;
             expect(members.length).toBe(9);
@@ -160,8 +153,8 @@ describe('Reflector', () =>
 
         it('should get class reflection model with parent members from an object', () =>
         {
-            const reflectionClass = reflector.fromObject(johnDoe, true);
-            expect(reflectionClass.name).toBe('Person');
+            const reflectionClass = reflector.fromObject(OBJECTS.CLASS, true);
+            expect(reflectionClass.name).toBe('Child');
 
             const members = reflectionClass.members;
             expect(members.length).toBe(11);
@@ -169,7 +162,7 @@ describe('Reflector', () =>
 
         it('should get class reflection model from a function based class object', () =>
         {
-            const reflectionClass = reflector.fromObject(plainError, true);
+            const reflectionClass = reflector.fromObject(OBJECTS.ERROR, true);
             expect(reflectionClass.name).toBe('Error');
 
             const members = reflectionClass.members;
@@ -178,7 +171,7 @@ describe('Reflector', () =>
 
         it('should get class reflection model from a a class object with function based parent class', () =>
         {
-            const reflectionClass = reflector.fromObject(customError, true);
+            const reflectionClass = reflector.fromObject(OBJECTS.CUSTOM_ERROR, true);
             expect(reflectionClass.name).toBe('CustomError');
 
             const members = reflectionClass.members;
@@ -190,25 +183,25 @@ describe('Reflector', () =>
     {
         it('should get function reflection model', () =>
         {
-            const functionFunction = reflector.fromFunction(optionalFunction);
+            const functionFunction = reflector.fromFunction(FUNCTIONS.OPTIONAL_ARGS);
             expect(functionFunction.name).toBe('optionalFunction');
             expect(functionFunction.body).toBe('{ return a + b + c ; }');
 
             const parameters = functionFunction.parameters;
             expect(parameters.length).toBe(3);
 
-            const first = parameters[0] as ReflectionField;
+            const first = parameters[0] as ESField;
             expect(first.name).toBe('a');
             expect(first.value).toBe(undefined);
 
-            const second = parameters[1] as ReflectionField;
+            const second = parameters[1] as ESField;
             expect(second.name).toBe('b');
-            expect(second.value).toBeInstanceOf(ReflectionExpression);
-            expect(second.value?.definition).toBe('new Person ( 1 , "Jane" , "Doe" , 42 )');
+            expect(second.value).toBeInstanceOf(ESExpression);
+            expect(second.value?.definition).toBe('new Child ( 1 , "Jane" , "Doe" , 42 )');
 
-            const third = parameters[2] as ReflectionField;
+            const third = parameters[2] as ESField;
             expect(third.name).toBe('c');
-            expect(third.value).toBeInstanceOf(ReflectionExpression);
+            expect(third.value).toBeInstanceOf(ESExpression);
             expect(third.value?.definition).toBe('0');
         });
     });
@@ -217,8 +210,9 @@ describe('Reflector', () =>
     {
         it('should get an instance class of a class', () =>
         {
-            const peter = reflector.createInstance(Person, [1, 'Peter', 'van Vliet', 24]) as Person;
-            expect(peter).toBeInstanceOf(Person);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const peter = reflector.createInstance(CLASSES.Child, [1, 'Peter', 'van Vliet', 24]) as any;
+            expect(peter).toBeInstanceOf(CLASSES.Child);
             expect(peter.id).toBe(1);
             expect(peter.fullName).toBe('Peter van Vliet');
             expect(peter.age).toBe(24);
@@ -229,13 +223,13 @@ describe('Reflector', () =>
     {
         it('should detect a class object', () =>
         {
-            const result = reflector.isClassObject(johnDoe);
+            const result = reflector.isClassObject(OBJECTS.CLASS);
             expect(result).toBe(true);
         });
 
         it('should detect a non class object', () =>
         {
-            const result = reflector.isClassObject(janeDoe);
+            const result = reflector.isClassObject(OBJECTS.PLAIN);
             expect(result).toBe(false);
         });
     });
@@ -244,9 +238,9 @@ describe('Reflector', () =>
     {
         it('should get the class of an object', () =>
         {
-            const result = reflector.getClass(johnDoe);
+            const result = reflector.getClass(OBJECTS.CLASS);
 
-            expect(result.name).toBe('Person');
+            expect(result.name).toBe('Child');
         });
     });
 
@@ -254,9 +248,9 @@ describe('Reflector', () =>
     {
         it('should get the parent of a class', () =>
         {
-            const result = reflector.getParentClass(Person);
+            const result = reflector.getParentClass(CLASSES.Child);
 
-            expect(result.name).toBe('Human');
+            expect(result.name).toBe('Parent');
         });
     });
 });

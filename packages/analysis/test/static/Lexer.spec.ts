@@ -1,16 +1,9 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { Divider } from '../../src/parser/definitions/Divider';
-import { Group } from '../../src/parser/definitions/Group';
-import { Keyword } from '../../src/parser/definitions/Keyword';
-import { List } from '../../src/parser/definitions/List';
-import { Operator } from '../../src/parser/definitions/Operator';
-import { Scope } from '../../src/parser/definitions/Scope';
-import { TokenType } from '../../src/parser/definitions/TokenType';
-import Lexer from '../../src/parser/Lexer';
+import { Divider, Group, Keyword, List, Operator, Scope, TokenType, Lexer } from '../../src/static';
 
-import { CODE } from '../_fixtures/parser/Lexer.fixture';
+import { CODE } from './fixtures';
 
 const lexer = new Lexer();
 

@@ -1,27 +1,20 @@
 
 import { describe, expect, it } from 'vitest';
 
-import ReflectionClass from '../../src/models/ReflectionClass';
-import ReflectionDeclaration from '../../src/models/ReflectionDeclaration';
-import ReflectionExport from '../../src/models/ReflectionExport';
-import ReflectionFunction from '../../src/models/ReflectionFunction';
-import ReflectionGenerator from '../../src/models/ReflectionGenerator';
-import ReflectionGetter from '../../src/models/ReflectionGetter';
-import ReflectionImport from '../../src/models/ReflectionImport';
-import ReflectionSetter from '../../src/models/ReflectionSetter';
+import { ESImport, ESDeclaration, ESFunction, ESGenerator, ESClass, ESExport, ESGetter, ESSetter } from '../../src/models';
 
-import { reflectionScope } from '../_fixtures/models/ReflectionScope.fixture';
+import { esScope } from './fixtures';
 
-describe('models/ReflectionScope', () =>
+describe('models/ESScope', () =>
 {
     describe('.imports', () =>
     {
         it('should filter import members', () =>
         {
-            const imports = reflectionScope.imports;
+            const imports = esScope.imports;
             expect(imports.length).toBe(1);
 
-            expect(imports[0]).toBeInstanceOf(ReflectionImport);
+            expect(imports[0]).toBeInstanceOf(ESImport);
             expect(imports[0].members.length).toBe(1);
         });
     });
@@ -30,10 +23,10 @@ describe('models/ReflectionScope', () =>
     {
         it('should filter export members', () =>
         {
-            const exports = reflectionScope.exports;
+            const exports = esScope.exports;
             expect(exports.length).toBe(1);
 
-            expect(exports[0]).toBeInstanceOf(ReflectionExport);
+            expect(exports[0]).toBeInstanceOf(ESExport);
             expect(exports[0].members.length).toBe(2);
         });
     });
@@ -42,13 +35,13 @@ describe('models/ReflectionScope', () =>
     {
         it('should filter field members', () =>
         {
-            const declarations = reflectionScope.declarations;
+            const declarations = esScope.declarations;
             expect(declarations.length).toBe(2);
 
-            expect(declarations[0]).toBeInstanceOf(ReflectionDeclaration);
+            expect(declarations[0]).toBeInstanceOf(ESDeclaration);
             expect(declarations[0].name).toBe('name');
 
-            expect(declarations[1]).toBeInstanceOf(ReflectionDeclaration);
+            expect(declarations[1]).toBeInstanceOf(ESDeclaration);
             expect(declarations[1].name).toBe('age');
         });
     });
@@ -57,13 +50,13 @@ describe('models/ReflectionScope', () =>
     {
         it('should filter function members', () =>
         {
-            const functions = reflectionScope.functions;
+            const functions = esScope.functions;
             expect(functions.length).toBe(2);
 
-            expect(functions[0]).toBeInstanceOf(ReflectionFunction);
+            expect(functions[0]).toBeInstanceOf(ESFunction);
             expect(functions[0].name).toBe('createJohn');
 
-            expect(functions[1]).toBeInstanceOf(ReflectionFunction);
+            expect(functions[1]).toBeInstanceOf(ESFunction);
             expect(functions[1].name).toBe('sum');
         });
     });
@@ -72,13 +65,13 @@ describe('models/ReflectionScope', () =>
     {
         it('should filter getter members', () =>
         {
-            const getters = reflectionScope.getters;
+            const getters = esScope.getters;
             expect(getters.length).toBe(2);
 
-            expect(getters[0]).toBeInstanceOf(ReflectionGetter);
+            expect(getters[0]).toBeInstanceOf(ESGetter);
             expect(getters[0].name).toBe('name');
 
-            expect(getters[1]).toBeInstanceOf(ReflectionGetter);
+            expect(getters[1]).toBeInstanceOf(ESGetter);
             expect(getters[1].name).toBe('age');
         });
     });
@@ -87,10 +80,10 @@ describe('models/ReflectionScope', () =>
     {
         it('should filter setter members', () =>
         {
-            const setters = reflectionScope.setters;
+            const setters = esScope.setters;
             expect(setters.length).toBe(1);
 
-            expect(setters[0]).toBeInstanceOf(ReflectionSetter);
+            expect(setters[0]).toBeInstanceOf(ESSetter);
             expect(setters[0].name).toBe('age');
         });
     });
@@ -99,10 +92,10 @@ describe('models/ReflectionScope', () =>
     {
         it('should filter generator members', () =>
         {
-            const generators = reflectionScope.generators;
+            const generators = esScope.generators;
             expect(generators.length).toBe(1);
 
-            expect(generators[0]).toBeInstanceOf(ReflectionGenerator);
+            expect(generators[0]).toBeInstanceOf(ESGenerator);
             expect(generators[0].name).toBe('createJohn');
         });
     });
@@ -111,10 +104,10 @@ describe('models/ReflectionScope', () =>
     {
         it('should filter class members', () =>
         {
-            const classes = reflectionScope.classes;
+            const classes = esScope.classes;
             expect(classes.length).toBe(1);
 
-            expect(classes[0]).toBeInstanceOf(ReflectionClass);
+            expect(classes[0]).toBeInstanceOf(ESClass);
             expect(classes[0].name).toBe('Customer');
         });
     });
@@ -123,8 +116,8 @@ describe('models/ReflectionScope', () =>
     {
         it('should get a member by its name', () =>
         {
-            const member = reflectionScope.getMember('sum');
-            expect(member).toBeInstanceOf(ReflectionFunction);
+            const member = esScope.getMember('sum');
+            expect(member).toBeInstanceOf(ESFunction);
             expect(member?.name).toBe('sum');
         });
     });
@@ -133,8 +126,8 @@ describe('models/ReflectionScope', () =>
     {
         it('should get a field by its name', () =>
         {
-            const member = reflectionScope.getDeclaration('name');
-            expect(member).toBeInstanceOf(ReflectionDeclaration);
+            const member = esScope.getDeclaration('name');
+            expect(member).toBeInstanceOf(ESDeclaration);
             expect(member?.name).toBe('name');
         });
     });
@@ -143,8 +136,8 @@ describe('models/ReflectionScope', () =>
     {
         it('should get a function by its name', () =>
         {
-            const member = reflectionScope.getFunction('createJohn');
-            expect(member).toBeInstanceOf(ReflectionFunction);
+            const member = esScope.getFunction('createJohn');
+            expect(member).toBeInstanceOf(ESFunction);
             expect(member?.name).toBe('createJohn');
         });
     });
@@ -153,8 +146,8 @@ describe('models/ReflectionScope', () =>
     {
         it('should get a getter by its name', () =>
         {
-            const member = reflectionScope.getGetter('name');
-            expect(member).toBeInstanceOf(ReflectionGetter);
+            const member = esScope.getGetter('name');
+            expect(member).toBeInstanceOf(ESGetter);
             expect(member?.name).toBe('name');
         });
     });
@@ -163,8 +156,8 @@ describe('models/ReflectionScope', () =>
     {
         it('should get a setter by its name', () =>
         {
-            const member = reflectionScope.getSetter('age');
-            expect(member).toBeInstanceOf(ReflectionSetter);
+            const member = esScope.getSetter('age');
+            expect(member).toBeInstanceOf(ESSetter);
             expect(member?.name).toBe('age');
         });
     });
@@ -173,8 +166,8 @@ describe('models/ReflectionScope', () =>
     {
         it('should get a generator by its name', () =>
         {
-            const member = reflectionScope.getGenerator('createJohn');
-            expect(member).toBeInstanceOf(ReflectionGenerator);
+            const member = esScope.getGenerator('createJohn');
+            expect(member).toBeInstanceOf(ESGenerator);
             expect(member?.name).toBe('createJohn');
         });
     });
@@ -183,8 +176,8 @@ describe('models/ReflectionScope', () =>
     {
         it('should get a class by its name', () =>
         {
-            const member = reflectionScope.getClass('Customer');
-            expect(member).toBeInstanceOf(ReflectionClass);
+            const member = esScope.getClass('Customer');
+            expect(member).toBeInstanceOf(ESClass);
             expect(member?.name).toBe('Customer');
         });
     });
@@ -193,13 +186,13 @@ describe('models/ReflectionScope', () =>
     {
         it('should have an existing member', () =>
         {
-            const result = reflectionScope.hasMember('sum');
+            const result = esScope.hasMember('sum');
             expect(result).toBe(true);
         });
 
         it('should not have a non-existing member', () =>
         {
-            const result = reflectionScope.hasMember('nonExisting');
+            const result = esScope.hasMember('nonExisting');
             expect(result).toBe(false);
         });
     });
@@ -208,13 +201,13 @@ describe('models/ReflectionScope', () =>
     {
         it('should have an existing field', () =>
         {
-            const result = reflectionScope.hasDeclaration('age');
+            const result = esScope.hasDeclaration('age');
             expect(result).toBe(true);
         });
 
         it('should not have a non-existing field', () =>
         {
-            const result = reflectionScope.hasDeclaration('Customer');
+            const result = esScope.hasDeclaration('Customer');
             expect(result).toBe(false);
         });
     });
@@ -223,13 +216,13 @@ describe('models/ReflectionScope', () =>
     {
         it('should have an existing function', () =>
         {
-            const result = reflectionScope.hasFunction('createJohn');
+            const result = esScope.hasFunction('createJohn');
             expect(result).toBe(true);
         });
 
         it('should not have a non-existing function', () =>
         {
-            const result = reflectionScope.hasFunction('name');
+            const result = esScope.hasFunction('name');
             expect(result).toBe(false);
         });
     });
@@ -238,13 +231,13 @@ describe('models/ReflectionScope', () =>
     {
         it('should have an existing getter', () =>
         {
-            const result = reflectionScope.hasGetter('name');
+            const result = esScope.hasGetter('name');
             expect(result).toBe(true);
         });
 
         it('should not have a non-existing getter', () =>
         {
-            const result = reflectionScope.hasGetter('createJohn');
+            const result = esScope.hasGetter('createJohn');
             expect(result).toBe(false);
         });
     });
@@ -253,13 +246,13 @@ describe('models/ReflectionScope', () =>
     {
         it('should have an existing setter', () =>
         {
-            const result = reflectionScope.hasSetter('age');
+            const result = esScope.hasSetter('age');
             expect(result).toBe(true);
         });
 
         it('should not have a non-existing setter', () =>
         {
-            const result = reflectionScope.hasSetter('name');
+            const result = esScope.hasSetter('name');
             expect(result).toBe(false);
         });
     });
@@ -268,13 +261,13 @@ describe('models/ReflectionScope', () =>
     {
         it('should have an existing generator', () =>
         {
-            const result = reflectionScope.hasGenerator('createJohn');
+            const result = esScope.hasGenerator('createJohn');
             expect(result).toBe(true);
         });
 
         it('should not have a non-existing generator', () =>
         {
-            const result = reflectionScope.hasGenerator('sum');
+            const result = esScope.hasGenerator('sum');
             expect(result).toBe(false);
         });
     });
@@ -283,13 +276,13 @@ describe('models/ReflectionScope', () =>
     {
         it('should have an existing class', () =>
         {
-            const result = reflectionScope.hasClass('Customer');
+            const result = esScope.hasClass('Customer');
             expect(result).toBe(true);
         });
 
         it('should not have a non-existing class', () =>
         {
-            const result = reflectionScope.hasClass('name');
+            const result = esScope.hasClass('name');
             expect(result).toBe(false);
         });
     });

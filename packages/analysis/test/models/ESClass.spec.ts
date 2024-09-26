@@ -1,14 +1,11 @@
 
 import { describe, expect, it } from 'vitest';
-import ReflectionDeclaration from '../../src/models/ReflectionDeclaration';
 
-import ReflectionFunction from '../../src/models/ReflectionFunction';
-import ReflectionGetter from '../../src/models/ReflectionGetter';
-import ReflectionSetter from '../../src/models/ReflectionSetter';
+import { ESDeclaration, ESFunction, ESGetter, ESSetter } from '../../src/models';
 
-import { reflectionClass } from '../_fixtures/models/ReflectionClass.fixture';
+import { esClass } from './fixtures';
 
-describe('models/ReflectionClass', () =>
+describe('models/ESClass', () =>
 {
     // Scope tests are omitted
     
@@ -16,17 +13,17 @@ describe('models/ReflectionClass', () =>
     {
         it('should return all readable members', () =>
         {
-            const readable = reflectionClass.readable;
+            const readable = esClass.readable;
             expect(readable.length).toBe(3);
 
             expect(readable[0].name).toBe('name');
-            expect(readable[0]).toBeInstanceOf(ReflectionGetter);
+            expect(readable[0]).toBeInstanceOf(ESGetter);
 
             expect(readable[1].name).toBe('age');
-            expect(readable[1]).toBeInstanceOf(ReflectionGetter);
+            expect(readable[1]).toBeInstanceOf(ESGetter);
 
             expect(readable[2].name).toBe('length');
-            expect(readable[2]).toBeInstanceOf(ReflectionDeclaration);
+            expect(readable[2]).toBeInstanceOf(ESDeclaration);
         });
     });
 
@@ -34,14 +31,14 @@ describe('models/ReflectionClass', () =>
     {
         it('should return all writable members', () =>
         {
-            const writable = reflectionClass.writable;
+            const writable = esClass.writable;
             expect(writable.length).toBe(2);
 
             expect(writable[0].name).toBe('age');
-            expect(writable[0]).toBeInstanceOf(ReflectionSetter);
+            expect(writable[0]).toBeInstanceOf(ESSetter);
 
             expect(writable[1].name).toBe('length');
-            expect(writable[1]).toBeInstanceOf(ReflectionDeclaration);
+            expect(writable[1]).toBeInstanceOf(ESDeclaration);
         });
     });
 
@@ -49,14 +46,14 @@ describe('models/ReflectionClass', () =>
     {
         it('should return all callable members', () =>
         {
-            const callable = reflectionClass.callable;
+            const callable = esClass.callable;
             expect(callable.length).toBe(2);
 
             expect(callable[0].name).toBe('constructor');
-            expect(callable[0]).toBeInstanceOf(ReflectionFunction);
+            expect(callable[0]).toBeInstanceOf(ESFunction);
 
             expect(callable[1].name).toBe('toString');
-            expect(callable[1]).toBeInstanceOf(ReflectionFunction);
+            expect(callable[1]).toBeInstanceOf(ESFunction);
         });
     });
 
@@ -64,21 +61,21 @@ describe('models/ReflectionClass', () =>
     {
         it('should read a public field', () =>
         {
-            const canRead = reflectionClass.canRead('length');
+            const canRead = esClass.canRead('length');
 
             expect(canRead).toBe(true);
         });
 
         it('should read a private field with getter', () =>
         {
-            const canRead = reflectionClass.canRead('name');
+            const canRead = esClass.canRead('name');
 
             expect(canRead).toBe(true);
         });
 
         it('should not read a private field without a getter', () =>
         {
-            const canRead = reflectionClass.canRead('secret');
+            const canRead = esClass.canRead('secret');
 
             expect(canRead).toBe(false);
         });
@@ -88,21 +85,21 @@ describe('models/ReflectionClass', () =>
     {
         it('should write a public field', () =>
         {
-            const canWrite = reflectionClass.canWrite('length');
+            const canWrite = esClass.canWrite('length');
 
             expect(canWrite).toBe(true);
         });
 
         it('should write a private field with setter', () =>
         {
-            const canWrite = reflectionClass.canWrite('age');
+            const canWrite = esClass.canWrite('age');
 
             expect(canWrite).toBe(true);
         });
 
         it('should not wite a private field without a setter', () =>
         {
-            const canWrite = reflectionClass.canWrite('secret');
+            const canWrite = esClass.canWrite('secret');
 
             expect(canWrite).toBe(false);
         });
@@ -112,14 +109,14 @@ describe('models/ReflectionClass', () =>
     {
         it('should call a public function', () =>
         {
-            const canCall = reflectionClass.canCall('toString');
+            const canCall = esClass.canCall('toString');
 
             expect(canCall).toBe(true);
         });
 
         it('should not call a private function', () =>
         {
-            const canCall = reflectionClass.canCall('secretStuff');
+            const canCall = esClass.canCall('secretStuff');
 
             expect(canCall).toBe(false);
         });
