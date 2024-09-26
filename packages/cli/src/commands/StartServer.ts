@@ -26,6 +26,9 @@ export default class StartServer implements Command
         const runtimeConfigFile = args.getOptionalArgument('--config', undefined);
         const serviceConfigFile = args.getRequiredArgument('--service');
 
+        const bodyLimitString = args.getOptionalArgument('--http-body-limit', undefined);
+        const bodyLimit = bodyLimitString !== undefined ? Number.parseInt(bodyLimitString) : undefined;
+
         const configurationManager = new ConfigurationManager();
 
         await configurationManager.configureEnvironment(environmentFile);
@@ -33,12 +36,12 @@ export default class StartServer implements Command
         const runtimeConfiguration = await configurationManager.getRuntimeConfiguration(runtimeConfigFile);
         const serverConfiguration = await configurationManager.getServerConfiguration(serviceConfigFile);
 
-        const httpServer = await this.#buildServer(runtimeConfiguration, serverConfiguration);
+        const httpServer = await this.#buildServer(runtimeConfiguration, serverConfiguration, bodyLimit);
 
         return this.#runServer(httpServer);        
     }
 
-    async #buildServer(runtimeConfiguration: RuntimeConfiguration, serverConfiguration: ServerConfiguration): Promise<HttpServer>
+    async #buildServer(runtimeConfiguration: RuntimeConfiguration, serverConfiguration: ServerConfiguration, bodyLimit?: number): Promise<HttpServer>
     {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [protocol, host, port] = serverConfiguration.url.split(':');
@@ -50,7 +53,7 @@ export default class StartServer implements Command
 
         const server = await serverBuilder.build(serverConfiguration);
 
-        return new HttpServer(server, port);
+        return new HttpServer(server, port, bodyLimit);
     }
 
     #runServer(httpServer: HttpServer): Promise<void>
