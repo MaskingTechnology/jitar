@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import { HEALTH_MANAGERS } from './fixtures';
 
-describe('services/LocalWorker', () =>
+describe('HealthManager', () =>
 {
     describe('.isHealthy()', () =>
     {
