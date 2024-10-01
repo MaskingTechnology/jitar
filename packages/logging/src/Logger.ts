@@ -1,39 +1,43 @@
 
+import type Writer from './Writer';
+
 export default class Logger
 {
     #debugEnabled: boolean;
+    #writer: Writer;
 
-    constructor(debugEnabled: boolean = false)
+    constructor(writer: Writer = console, debugEnabled: boolean = false)
     {
         this.#debugEnabled = debugEnabled;
+        this.#writer = writer;
     }
 
     info(...message: unknown[]): void
     {
         const messageString = this.#createMessage('[INFO]', ...message);
 
-        console.info(messageString);
+        this.#writer.info(messageString);
     }
 
     warn(...message: unknown[]): void
     {
         const messageString = this.#createMessage('[WARN]', ...message);
 
-        console.warn(messageString);
+        this.#writer.warn(messageString);
     }
 
     error(...message: unknown[]): void
     {
         const messageString = this.#createMessage('[ERROR]', ...message);
 
-        console.error(messageString);
+        this.#writer.error(messageString);
     }
 
     fatal(...message: unknown[]): void
     {
         const messageString = this.#createMessage('[FATAL]', ...message);
 
-        console.error(messageString);
+        this.#writer.error(messageString);
     }
 
     debug(...message: unknown[]): void
@@ -45,7 +49,7 @@ export default class Logger
 
         const messageString = this.#createMessage('[DEBUG]', ...message);
 
-        console.debug(messageString);
+        this.#writer.debug(messageString);
     }
 
     #createMessage(...message: unknown[]): string
@@ -66,7 +70,7 @@ export default class Logger
             default: result = String(value); break;
         }
 
-        const prefix = '  '.repeat(level);
+        const prefix = this.#indent(level);
 
         return `${prefix}${result}`;
     }
@@ -82,7 +86,9 @@ export default class Logger
         {
             const items = object.map(value => this.#interpretValue(value, level)).join(',\n');
 
-            return `[\n${items}\n]`;
+            const postfix = this.#indent(level - 1);
+
+            return `[\n${items}\n${postfix}]`;
         }
 
         if (object instanceof Error)
@@ -91,5 +97,10 @@ export default class Logger
         }
 
         return JSON.stringify(object);
+    }
+
+    #indent(level: number): string
+    {
+        return '  '.repeat(level);
     }
 }
