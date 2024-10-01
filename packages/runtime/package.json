@@ -6,17 +6,7 @@
   "license": "MIT",
   "type": "module",
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": "./dist/index.js"
-  },
-  "files": [
-    "CHANGELOG.md",
-    "README.md",
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "scripts": {
     "test": "vitest run",
     "test-coverage": "vitest run --coverage",
@@ -33,13 +23,5 @@
     "@jitar/services": "*",
     "@jitar/serialization": "*",
     "@jitar/sourcing": "*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MaskingTechnology/jitar.git"
-  },
-  "bugs": {
-    "url": "https://github.com/MaskingTechnology/jitar/issues"
-  },
-  "homepage": "https://jitar.dev"
+  }
 }

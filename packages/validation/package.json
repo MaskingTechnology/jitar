@@ -6,39 +6,16 @@
   "license": "MIT",
   "type": "module",
   "types": "dist/index.d.ts",
-  "exports": {
-    ".": "./dist/index.js"
-  },
-  "files": [
-    "CHANGELOG.md",
-    "README.md",
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "scripts": {
     "test": "vitest run",
     "test-coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist",
-    "prepublishOnly": "npm run clean && npm run build"
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "@jitar/errors": "*",
     "@jitar/execution": "*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MaskingTechnology/jitar.git"
-  },
-  "bugs": {
-    "url": "https://github.com/MaskingTechnology/jitar/issues"
-  },
-  "homepage": "https://jitar.dev",
-  "keywords": [
-    "configuration",
-    "jitar"
-  ]
+  }
 }

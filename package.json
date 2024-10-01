@@ -2,6 +2,7 @@
   "name": "jitar-monorepo",
   "version": "0.7.4",
   "private": true,
+  "description": "Monorepo configuration for Jitar.",
   "license": "MIT",
   "type": "module",
   "workspaces": [
