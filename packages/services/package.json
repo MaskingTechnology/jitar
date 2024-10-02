@@ -18,6 +18,7 @@
   "dependencies": {
     "@jitar/errors": "*",
     "@jitar/execution": "*",
+    "@jitar/serialization": "*",
     "@jitar/sourcing": "*"
   }
 }
