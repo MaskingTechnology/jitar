@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 
 import InvalidVersionNumber from '../../src/errors/InvalidVersionNumber';
-import VersionParser from '../../src/utils/versionParser';
+import VersionParser from '../../src/utils/VersionParser';
 
 import { VERSIONS } from './fixtures';
 
