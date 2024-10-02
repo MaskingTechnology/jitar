@@ -119,12 +119,13 @@ export default defineConfig({
 
     socialLinks: [
       { icon: 'github', link: 'https://github.com/MaskingTechnology/jitar' },
-      { icon: 'discord', link: 'https://discord.gg/Bqwy8azp5R' }
+      { icon: 'discord', link: 'https://discord.gg/Bqwy8azp5R' },
+      { icon: 'npm', link: 'https://www.npmjs.com/package/jitar' }
     ],
 
     footer: {
       message: 'Jitar is a project by Masking Technology',
-      copyright: 'Copyright © 2023 - Masking Technology B.V.'
+      copyright: 'Copyright © 2024 - Masking Technology B.V.'
     }
   }
 })
