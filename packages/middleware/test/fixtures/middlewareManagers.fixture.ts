@@ -1,5 +1,5 @@
 
-import MiddlewareManager from '../../src/middlewareManager';
+import MiddlewareManager from '../../src/MiddlewareManager';
 
 import { MIDDLEWARES } from './middlewares.fixture';
 
