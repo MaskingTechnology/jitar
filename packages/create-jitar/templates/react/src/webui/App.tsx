@@ -4,7 +4,7 @@ import './App.css'
 import reactLogo from './assets/react.svg'
 import jitarLogo from './assets/jitar.svg'
 
-import { sayHello } from './domain/sayHello'
+import { sayHello } from '../domain/sayHello'
 
 function App()
 {
