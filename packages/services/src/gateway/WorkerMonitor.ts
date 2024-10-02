@@ -17,6 +17,8 @@ export default class WorkerMonitor
         this.#frequency = frequency;
     }
 
+    get workerManager() { return this.#workerManager; }
+
     start(): void
     {
         this.#interval = setInterval(async () => this.#monitor(), this.#frequency);

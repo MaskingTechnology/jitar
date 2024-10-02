@@ -14,6 +14,8 @@ export default class WorkerManager implements Runner
         return [...this.#workers.values()];
     }
 
+    get balancers() { return this.#balancers; }
+
     getProcedureNames(): string[]
     {
         const procedureNames = this.workers.map(worker => worker.getProcedureNames());
@@ -77,7 +79,7 @@ export default class WorkerManager implements Runner
         return balancer;
     }
 
-    run(request: Request): Promise<Response>
+    async run(request: Request): Promise<Response>
     {
         const balancer = this.#getBalancer(request.fqn);
 

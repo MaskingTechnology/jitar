@@ -6,7 +6,7 @@ export default class Logger
     #debugEnabled: boolean;
     #writer: Writer;
 
-    constructor(writer: Writer = console, debugEnabled: boolean = false)
+    constructor(debugEnabled: boolean = false, writer: Writer = console)
     {
         this.#debugEnabled = debugEnabled;
         this.#writer = writer;

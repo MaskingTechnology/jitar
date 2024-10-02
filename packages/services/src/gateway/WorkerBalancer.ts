@@ -10,6 +10,8 @@ export default class WorkerBalancer
     #workers: Worker[] = [];
     #currentIndex = 0;
 
+    get workers() { return this.#workers; }
+
     addWorker(worker: Worker): void
     {
         if (this.#workers.includes(worker))
@@ -47,7 +49,7 @@ export default class WorkerBalancer
         return this.#workers[this.#currentIndex++];
     }
 
-    run(request: Request): Promise<Response>
+    async run(request: Request): Promise<Response>
     {
         const worker = this.getNextWorker();
 

@@ -56,7 +56,7 @@ export default class LocalGateway implements Gateway
         return new Map();
     }
 
-    addWorker(worker: Worker, trustKey?: string): Promise<void>
+    async addWorker(worker: Worker, trustKey?: string): Promise<void>
     {
         if (this.#isInvalidTrustKey(trustKey))
         {

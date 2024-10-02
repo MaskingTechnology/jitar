@@ -10,44 +10,27 @@ beforeEach(() =>
     writer.clear();
 });
 
-const logger = new Logger(writer);
-
 describe('Logger', () =>
 {
-    describe('.debug(...messages))', () =>
+    describe('Message creation', () =>
     {
-        it('should log messages when debug is enabled', () =>
+        const logger = new Logger(false, writer);
+
+        it('should log [CATEGORY] messages', () =>
         {
-            const DebugLogger = new Logger(writer, true);
+            logger.info('info');
+            logger.warn('warn');
+            logger.error('error');
+            logger.fatal('fatal');
 
-            DebugLogger.debug('message');
-            expect(writer.lastMessage).toEqual('[DEBUG] message');
+            expect(writer.messages).toEqual([
+                '[INFO] info',
+                '[WARN] warn',
+                '[ERROR] error',
+                '[FATAL] fatal'
+            ]);
         });
-
-        it('should not log messages when debug is disabled', () =>
-        {
-            logger.debug('message');
-            expect(writer.lastMessage).toEqual(undefined);
-        });
-    });
-
-    it('log [CATEGORY] messages', () =>
-    {
-        logger.info('info');
-        logger.warn('warn');
-        logger.error('error');
-        logger.fatal('fatal');
-
-        expect(writer.messages).toEqual([
-            '[INFO] info',
-            '[WARN] warn',
-            '[ERROR] error',
-            '[FATAL] fatal'
-        ]);
-    });
-
-    describe('.#createMessage()', () =>
-    {
+    
         it('should format string message', () =>
         {
             logger.info(INPUT.STRING);
@@ -121,6 +104,27 @@ describe('Logger', () =>
             logger.info(INPUT.ERROR_WITH_STACKTRACE);
             global.console.log(writer.lastMessage);
             expect(writer.lastMessage).toEqual(OUTPUT.ERROR_WITH_STACKTRACE);
+        });
+    });
+
+    describe('Debug mode', () =>
+    {
+        it('should log messages when debug is enabled', () =>
+        {
+            const logger = new Logger(true, writer);
+
+            logger.debug('message');
+
+            expect(writer.lastMessage).toEqual('[DEBUG] message');
+        });
+
+        it('should not log messages when debug is disabled', () =>
+        {
+            const logger = new Logger(false, writer);
+
+            logger.debug('message');
+
+            expect(writer.lastMessage).toEqual(undefined);
         });
     });
 });

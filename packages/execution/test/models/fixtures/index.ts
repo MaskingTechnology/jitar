@@ -1,4 +1,5 @@
 
+export * from './applications.fixture';
 export * from './executables.fixture';
 export * from './implementations.fixture';
 export * from './parameters.fixture';

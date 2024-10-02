@@ -1,7 +1,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { RUNTIMES } from '../_fixtures/services/Runtime.fixture';
+import { RUNTIMES } from './_fixtures/services/Runtime.fixture';
 
 const goodRuntime = RUNTIMES.GOOD;
 const badRuntime = RUNTIMES.BAD;

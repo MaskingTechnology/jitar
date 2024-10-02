@@ -56,7 +56,7 @@ export default class LocalRepository implements Repository
         return new Map();
     }
 
-    provide(filename: string): Promise<File>
+    async provide(filename: string): Promise<File>
     {
         if (this.#mustProvideIndex(filename))
         {
