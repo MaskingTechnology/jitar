@@ -13,6 +13,6 @@ next:
 
 # Get help
 
-Did you read through the docs, but still have questions? The community is here to help!
+Read through the docs but still have questions? The community is here to help!
 
 You can find us on [Discord](https://discord.gg/Bqwy8azp5R){target="_blank"}, or start a [discussion on Github](https://github.com/MaskingTechnology/jitar/discussions){target="_blank"}.
