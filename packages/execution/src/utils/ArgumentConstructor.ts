@@ -28,7 +28,7 @@ export default class ArgumentExtractor
 
         if (argsCopy.size > 0)
         {
-            const name = argsCopy.keys().next().value;
+            const name = argsCopy.keys().next().value as string;
 
             throw new UnknownParameter(name);
         }

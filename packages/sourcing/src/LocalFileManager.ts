@@ -1,6 +1,6 @@
 
 import fs from 'fs-extra';
-import glob from 'glob-promise';
+import { glob } from 'glob';
 import mime from 'mime-types';
 import path from 'path';
 

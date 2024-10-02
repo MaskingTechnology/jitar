@@ -18,7 +18,7 @@
   "dependencies": {
     "@jitar/errors": "*",
     "fs-extra": "^11.2.0",
-    "glob-promise": "6.0.5",
+    "glob": "11.0.0",
     "mime-types": "^2.1.35"
   }
 }
