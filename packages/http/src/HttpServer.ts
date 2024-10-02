@@ -124,8 +124,6 @@ export default class HttpServer
         const headers = this.#extractHeaders(request);
         const mode = RunModes.NORMAL;
 
-        console.log('VERSION', version);
-
         const serverResponse = await this.#server.run({ fqn, version, args, headers, mode });
 
         return this.#transformResponse(response, serverResponse);

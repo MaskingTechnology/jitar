@@ -1,4 +1,5 @@
 {
+    "./DatabaseError": { "default": {} },
     "./exportData": {
         "default": {
             "access": "public",
