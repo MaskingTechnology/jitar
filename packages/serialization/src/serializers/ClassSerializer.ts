@@ -1,14 +1,14 @@
 
 import { ESClass, ESField, Reflector } from '@jitar/analysis';
 
-import ValueSerializer from '../ValueSerializer.js';
-import ClassNotFound from '../errors/ClassNotFound.js';
-import InvalidClass from '../errors/InvalidClass.js';
-import ClassLoader from '../interfaces/ClassLoader.js';
-import Loadable from '../types/Loadable.js';
-import FlexObject from '../types/serialized/SerializableObject.js';
-import SerializableObject from '../types/serialized/SerializableObject.js';
-import SerializedClass from '../types/serialized/SerializedClass.js';
+import ValueSerializer from '../ValueSerializer';
+import ClassNotFound from '../errors/ClassNotFound';
+import InvalidClass from '../errors/InvalidClass';
+import ClassResolver from '../interfaces/ClassResolver';
+import FlexObject from '../types/serialized/SerializableObject';
+import SerializableObject from '../types/serialized/SerializableObject';
+import SerializedClass from '../types/serialized/SerializedClass';
+import Resolvable from '../types/Resolvable';
 
 const reflector = new Reflector();
 
@@ -49,8 +49,14 @@ export default class ClassSerializer extends ValueSerializer
         const model = reflector.fromClass(clazz, true);
         const parameterNames = this.#extractConstructorParameters(model);
 
-        const name = clazz.name;
-        const source = (clazz as Loadable).source;
+        const name = 'class';
+        const key = this.#classResolver.resolveKey(clazz);
+
+        if (key === undefined)
+        {
+            throw new ClassNotFound(clazz.name);
+        }
+
         const args: FlexObject = await this.#serializeConstructor(model, parameterNames, object);
         const fields: FlexObject = await this.#serializeFields(model, parameterNames, object);
 
@@ -65,15 +71,15 @@ export default class ClassSerializer extends ValueSerializer
         return parameters.map(parameter => parameter.name);
     }
 
-    async #serializeConstructor(model: ReflectionClass, includeNames: string[], object: object): Promise<FlexObject>
+    async #serializeConstructor(model: ESClass, includeNames: string[], object: object): Promise<FlexObject>
     {
         const args: SerializableObject = {};
 
         for (const [index, name] of includeNames.entries())
         {
             // Constructor parameters that can't be read make it impossible to fully reconstruct the object.
-
-            const objectValue = model.canRead(name)
+            
+            const value = model.canRead(name)
                 ? await this.serializeOther((object as FlexObject)[name])
                 : undefined;
 
@@ -85,7 +91,7 @@ export default class ClassSerializer extends ValueSerializer
         return args;
     }
 
-    async #serializeFields(model: ReflectionClass, excludeNames: string[], object: object): Promise<FlexObject>
+    async #serializeFields(model: ESClass, excludeNames: string[], object: object): Promise<FlexObject>
     {
         const fields: SerializableObject = {};
 
@@ -152,11 +158,7 @@ export default class ClassSerializer extends ValueSerializer
 
     async #getClass(resolvable: Resolvable): Promise<unknown>
     {
-        if (loadable.source === undefined)
-        {
-            return (globalThis as FlexObject)[loadable.name];
-        }
-
-        return this.#classLoader.loadClass(loadable);
+        return (globalThis as FlexObject)[resolvable.key]
+            ?? this.#classResolver.resolveClass(resolvable.key);
     }
 }
