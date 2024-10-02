@@ -6,6 +6,7 @@
   "license": "MIT",
   "type": "module",
   "types": "dist/index.d.ts",
+  "exports": "./dist/index.js",
   "private": true,
   "scripts": {
     "test": "vitest run",

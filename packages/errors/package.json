@@ -6,14 +6,12 @@
   "license": "MIT",
   "type": "module",
   "types": "dist/index.d.ts",
+  "exports": "./dist/index.js",
   "private": true,
   "scripts": {
     "test": "",
     "lint": "eslint . --ext .ts",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist"
-  },
-  "dependencies": {
-    "@jitar/serialization": "*"
   }
 }
