@@ -1,17 +1,17 @@
 
 import { describe, expect, it } from 'vitest';
 
+import Serializer from '../../src/Serializer';
+import PrimitiveSerializer from '../../src/serializers/PrimitiveSerializer';
 import MapSerializer from '../../src/serializers/MapSerializer';
 
-import {
-    parent,
-    emptyMap, mixedMap, nestedMap,
-    serializedEmptyMap, serializedMixedMap, serializedNestedMap,
-    nonObject, nonMap, notSerialized, invalidName, invalidKeys, invalidValues
-} from '../_fixtures/serializers/MapSerializer.fixture';
+import { MAPS } from './fixtures';
 
 const serializer = new MapSerializer();
-serializer.parent = parent;
+const parent = new Serializer();
+
+parent.addSerializer(serializer);
+parent.addSerializer(new PrimitiveSerializer());
 
 describe('serializers/MapSerializer', () =>
 {
@@ -19,15 +19,15 @@ describe('serializers/MapSerializer', () =>
     {
         it('should tell it can serialize a map', () =>
         {
-            const supportsMap = serializer.canSerialize(emptyMap);
+            const supportsMap = serializer.canSerialize(MAPS.EMPTY);
 
             expect(supportsMap).toBeTruthy();
         });
 
         it('should tell it cannot serialize others', () =>
         {
-            const supportsNonObject = serializer.canSerialize(nonObject);
-            const supportsNonMap = serializer.canSerialize(nonMap);
+            const supportsNonObject = serializer.canSerialize(MAPS.NON_OBJECT);
+            const supportsNonMap = serializer.canSerialize(MAPS.NON_MAP);
 
             expect(supportsNonObject).toBeFalsy();
             expect(supportsNonMap).toBeFalsy();
@@ -38,18 +38,18 @@ describe('serializers/MapSerializer', () =>
     {
         it('should tell it can deserialize a map', () =>
         {
-            const supportsMap = serializer.canDeserialize(serializedEmptyMap);
+            const supportsMap = serializer.canDeserialize(MAPS.EMPTY_SERIALIZED);
 
             expect(supportsMap).toBeTruthy();
         });
 
         it('should tell it cannot deserialize others', () =>
         {
-            const supportsNonObject = serializer.canDeserialize(nonObject);
-            const supportsNotSerialized = serializer.canDeserialize(notSerialized);
-            const supportsInvalidName = serializer.canDeserialize(invalidName);
-            const supportsInvalidKeys = serializer.canDeserialize(invalidKeys);
-            const supportsInvalidValues = serializer.canDeserialize(invalidValues);
+            const supportsNonObject = serializer.canDeserialize(MAPS.NON_OBJECT);
+            const supportsNotSerialized = serializer.canDeserialize(MAPS.NOT_SERIALIZED);
+            const supportsInvalidName = serializer.canDeserialize(MAPS.INVALID_NAME);
+            const supportsInvalidKeys = serializer.canDeserialize(MAPS.INVALID_KEYS);
+            const supportsInvalidValues = serializer.canDeserialize(MAPS.INVALID_VALUES);
 
             expect(supportsNonObject).toBeFalsy();
             expect(supportsNotSerialized).toBeFalsy();
@@ -63,13 +63,13 @@ describe('serializers/MapSerializer', () =>
     {
         it('should serialize a map', async () =>
         {
-            const resultEmptyMap = await serializer.serialize(emptyMap);
-            const resultMixedMap = await serializer.serialize(mixedMap);
-            const resultNestedMap = await serializer.serialize(nestedMap);
+            const resultEmptyMap = await serializer.serialize(MAPS.EMPTY);
+            const resultMixedMap = await serializer.serialize(MAPS.MIXED);
+            const resultNestedMap = await serializer.serialize(MAPS.NESTED);
 
-            expect(resultEmptyMap).toStrictEqual(serializedEmptyMap);
-            expect(resultMixedMap).toStrictEqual(serializedMixedMap);
-            expect(resultNestedMap).toStrictEqual(serializedNestedMap);
+            expect(resultEmptyMap).toStrictEqual(MAPS.EMPTY_SERIALIZED);
+            expect(resultMixedMap).toStrictEqual(MAPS.MIXED_SERIALIZED);
+            expect(resultNestedMap).toStrictEqual(MAPS.NESTED_SERIALIZED);
         });
     });
 
@@ -77,13 +77,13 @@ describe('serializers/MapSerializer', () =>
     {
         it('should deserialize a map', async () =>
         {
-            const resultEmptyMap = await serializer.deserialize(serializedEmptyMap);
-            const resultMixedMap = await serializer.deserialize(serializedMixedMap);
-            const resultNestedMap = await serializer.deserialize(serializedNestedMap);
+            const resultEmptyMap = await serializer.deserialize(MAPS.EMPTY_SERIALIZED);
+            const resultMixedMap = await serializer.deserialize(MAPS.MIXED_SERIALIZED);
+            const resultNestedMap = await serializer.deserialize(MAPS.NESTED_SERIALIZED);
 
-            expect(resultEmptyMap).toStrictEqual(emptyMap);
-            expect(resultMixedMap).toStrictEqual(mixedMap);
-            expect(resultNestedMap).toStrictEqual(nestedMap);
+            expect(resultEmptyMap).toStrictEqual(MAPS.EMPTY);
+            expect(resultMixedMap).toStrictEqual(MAPS.MIXED);
+            expect(resultNestedMap).toStrictEqual(MAPS.NESTED);
         });
     });
 });

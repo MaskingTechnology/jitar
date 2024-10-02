@@ -1,9 +1,9 @@
 
-import { Reflector } from '@jitar/reflection';
+import { Reflector } from '@jitar/analysis';
 
-import ValueSerializer from '../ValueSerializer.js';
-import SerializedTypedArray from '../types/serialized/SerializedTypedArray.js';
-import TypedArray from '../types/TypedArray.js';
+import ValueSerializer from '../ValueSerializer';
+import SerializedTypedArray from '../types/serialized/SerializedTypedArray';
+import TypedArray from '../types/TypedArray';
 
 const reflector = new Reflector();
 

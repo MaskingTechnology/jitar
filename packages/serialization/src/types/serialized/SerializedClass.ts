@@ -1,8 +1,8 @@
 
-import Loadable from '../Loadable.js';
-import Serialized from '../Serialized.js';
+import Resolvable from '../Resolvable';
+import Serialized from '../Serialized';
 
-type SerializedClass = Serialized & Loadable &
+type SerializedClass = Serialized & Resolvable &
 {
     args: Record<string, unknown>,
     fields: Record<string, unknown>

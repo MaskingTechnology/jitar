@@ -1,7 +1,7 @@
 
-import ValueSerializer from '../ValueSerializer.js';
-import SerializedDate from '../types/serialized/SerializedDate.js';
-import InvalidDateString from './errors/InvalidDateString.js';
+import ValueSerializer from '../ValueSerializer';
+import SerializedDate from '../types/serialized/SerializedDate';
+import InvalidDateString from './errors/InvalidDateString';
 
 export default class DateSerializer extends ValueSerializer
 {

@@ -1,17 +1,17 @@
 
 import { describe, expect, it } from 'vitest';
 
+import Serializer from '../../src/Serializer';
+import PrimitiveSerializer from '../../src/serializers/PrimitiveSerializer';
 import SetSerializer from '../../src/serializers/SetSerializer';
 
-import {
-    parent,
-    emptySet, mixedSet, nestedSet,
-    serializedEmptySet, serializedMixedSet, serializedNestedSet,
-    nonObject, nonSet, notSerialized, invalidName, invalidValues
-} from '../_fixtures/serializers/SetSerializer.fixture';
+import { SETS } from './fixtures';
 
 const serializer = new SetSerializer();
-serializer.parent = parent;
+const parent = new Serializer();
+
+parent.addSerializer(serializer);
+parent.addSerializer(new PrimitiveSerializer());
 
 describe('serializers/SetSerializer', () =>
 {
@@ -19,15 +19,15 @@ describe('serializers/SetSerializer', () =>
     {
         it('should tell it can serialize a set', () =>
         {
-            const supportsSet = serializer.canSerialize(emptySet);
+            const supportsSet = serializer.canSerialize(SETS.EMPTY);
 
             expect(supportsSet).toBeTruthy();
         });
 
         it('should tell it cannot serialize others', () =>
         {
-            const supportsNonObject = serializer.canSerialize(nonObject);
-            const supportsNonSet = serializer.canSerialize(nonSet);
+            const supportsNonObject = serializer.canSerialize(SETS.NON_OBJECT);
+            const supportsNonSet = serializer.canSerialize(SETS.NON_SET);
 
             expect(supportsNonObject).toBeFalsy();
             expect(supportsNonSet).toBeFalsy();
@@ -38,17 +38,17 @@ describe('serializers/SetSerializer', () =>
     {
         it('should tell it can deserialize a set', () =>
         {
-            const supportsSet = serializer.canDeserialize(serializedEmptySet);
+            const supportsSet = serializer.canDeserialize(SETS.EMPTY_SERIALIZED);
 
             expect(supportsSet).toBeTruthy();
         });
 
         it('should tell it cannot deserialize others', () =>
         {
-            const supportsNonObject = serializer.canDeserialize(nonObject);
-            const supportsNotSerialized = serializer.canDeserialize(notSerialized);
-            const supportsInvalidName = serializer.canDeserialize(invalidName);
-            const supportsInvalidValues = serializer.canDeserialize(invalidValues);
+            const supportsNonObject = serializer.canDeserialize(SETS.NON_OBJECT);
+            const supportsNotSerialized = serializer.canDeserialize(SETS.NOT_SERIALIZED);
+            const supportsInvalidName = serializer.canDeserialize(SETS.INVALID_NAME);
+            const supportsInvalidValues = serializer.canDeserialize(SETS.INVALID_VALUES);
 
             expect(supportsNonObject).toBeFalsy();
             expect(supportsNotSerialized).toBeFalsy();
@@ -61,13 +61,13 @@ describe('serializers/SetSerializer', () =>
     {
         it('should serialize a set', async () =>
         {
-            const resultEmptySet = await serializer.serialize(emptySet);
-            const resultMixedSet = await serializer.serialize(mixedSet);
-            const resultNestedSet = await serializer.serialize(nestedSet);
+            const resultEmptySet = await serializer.serialize(SETS.EMPTY);
+            const resultMixedSet = await serializer.serialize(SETS.MIXED);
+            const resultNestedSet = await serializer.serialize(SETS.NESTED);
 
-            expect(resultEmptySet).toStrictEqual(serializedEmptySet);
-            expect(resultMixedSet).toStrictEqual(serializedMixedSet);
-            expect(resultNestedSet).toStrictEqual(serializedNestedSet);
+            expect(resultEmptySet).toStrictEqual(SETS.EMPTY_SERIALIZED);
+            expect(resultMixedSet).toStrictEqual(SETS.MIXED_SERIALIZED);
+            expect(resultNestedSet).toStrictEqual(SETS.NESTED_SERIALIZED);
         });
     });
 
@@ -75,13 +75,13 @@ describe('serializers/SetSerializer', () =>
     {
         it('should deserialize a set', async () =>
         {
-            const resultEmptySet = await serializer.deserialize(serializedEmptySet);
-            const resultMixedSet = await serializer.deserialize(serializedMixedSet);
-            const resultNestedSet = await serializer.deserialize(serializedNestedSet);
+            const resultEmptySet = await serializer.deserialize(SETS.EMPTY_SERIALIZED);
+            const resultMixedSet = await serializer.deserialize(SETS.MIXED_SERIALIZED);
+            const resultNestedSet = await serializer.deserialize(SETS.NESTED_SERIALIZED);
 
-            expect(resultEmptySet).toStrictEqual(emptySet);
-            expect(resultMixedSet).toStrictEqual(mixedSet);
-            expect(resultNestedSet).toStrictEqual(nestedSet);
+            expect(resultEmptySet).toStrictEqual(SETS.EMPTY);
+            expect(resultMixedSet).toStrictEqual(SETS.MIXED);
+            expect(resultNestedSet).toStrictEqual(SETS.NESTED);
         });
     });
 });

@@ -3,12 +3,11 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "build": "tsc",
-        "standalone": "node --experimental-network-imports --env-file=.env dist/jitar.js --config=services/standalone.json",
-        "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
-        "gateway": "node --experimental-network-imports --env-file=.env dist/jitar.js --config=services/gateway.json",
-        "worker-web": "node --experimental-network-imports --env-file=.env dist/jitar.js --config=services/web.json",
-        "worker-game": "node --experimental-network-imports --env-file=.env dist/jitar.js --config=services/game.json"
+        "build": "rm -rf dist .jitar && tsc && jitar build",
+        "standalone": "jitar start --service=services/standalone.json",
+        "gateway": "jitar start --service=services/gateway.json",
+        "worker-public": "jitar start --service=services/public.json",
+        "worker-protected": "jitar start --service=services/protected.json"
     },
     "dependencies": {
         "jitar": "*"

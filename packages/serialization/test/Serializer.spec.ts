@@ -1,23 +1,13 @@
 
 import { describe, expect, it } from 'vitest';
 
-import Serializer from '../src/Serializer';
 import NoSerializerFound from '../src/errors/NoSerializerFound';
 import NoDeserializerFound from '../src/errors/NoDeserializerFound';
 
-import
-    {
-        FirstSerializer, SecondSerializer,
-        NumberSerializer, StringSerializer
-    } from './_fixtures/Serializer.fixture';
+import { SERIALIZERS } from './fixtures';
 
-const overrideSerializer = new Serializer();
-overrideSerializer.addSerializer(new FirstSerializer());
-overrideSerializer.addSerializer(new SecondSerializer());
-
-const typeSerializer = new Serializer();
-typeSerializer.addSerializer(new NumberSerializer());
-typeSerializer.addSerializer(new StringSerializer());
+const overrideSerializer = SERIALIZERS.OVERRIDE;
+const typeSerializer = SERIALIZERS.TYPE;
 
 describe('Serializer', () =>
 {

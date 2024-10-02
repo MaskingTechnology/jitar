@@ -1,7 +1,7 @@
 
-import ValueSerializer from '../ValueSerializer.js';
-import SerializedRegExp from '../types/serialized/SerializedRegExp.js';
-import InvalidRegExp from './errors/InvalidRegExp.js';
+import ValueSerializer from '../ValueSerializer';
+import SerializedRegExp from '../types/serialized/SerializedRegExp';
+import InvalidRegExp from './errors/InvalidRegExp';
 
 export default class RegExpSerializer extends ValueSerializer
 {

@@ -3,9 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import PrimitiveSerializer from '../../src/serializers/PrimitiveSerializer';
 
-import {
-    numberValue, boolValue, stringValue, nullValue, undefinedValue, objectValue
-} from '../_fixtures/serializers/PrimitiveSerializer.fixture';
+import { PRIMITIVES } from './fixtures';
 
 const serializer = new PrimitiveSerializer();
 
@@ -15,11 +13,11 @@ describe('serializers/PrimitiveSerializer', () =>
     {
         it('should tell it can serialize a primitive', () =>
         {
-            const supportsNumber = serializer.canSerialize(numberValue);
-            const supportsBool = serializer.canSerialize(boolValue);
-            const supportsString = serializer.canSerialize(stringValue);
-            const supportsNull = serializer.canSerialize(nullValue);
-            const supportsUndefined = serializer.canSerialize(undefinedValue);
+            const supportsNumber = serializer.canSerialize(PRIMITIVES.NUMBER);
+            const supportsBool = serializer.canSerialize(PRIMITIVES.BOOL);
+            const supportsString = serializer.canSerialize(PRIMITIVES.STRING);
+            const supportsNull = serializer.canSerialize(PRIMITIVES.NULL);
+            const supportsUndefined = serializer.canSerialize(PRIMITIVES.UNDEFINED);
 
             expect(supportsNumber).toBeTruthy();
             expect(supportsBool).toBeTruthy();
@@ -30,7 +28,7 @@ describe('serializers/PrimitiveSerializer', () =>
 
         it('should tell it cannot serialize others', () =>
         {
-            const supportsObject = serializer.canSerialize(objectValue);
+            const supportsObject = serializer.canSerialize(PRIMITIVES.OBJECT);
 
             expect(supportsObject).toBeFalsy();
         });
@@ -40,11 +38,11 @@ describe('serializers/PrimitiveSerializer', () =>
     {
         it('should tell it can deserialize a primitive', () =>
         {
-            const supportsNumber = serializer.canSerialize(numberValue);
-            const supportsBool = serializer.canSerialize(boolValue);
-            const supportsString = serializer.canSerialize(stringValue);
-            const supportsNull = serializer.canSerialize(nullValue);
-            const supportsUndefined = serializer.canSerialize(undefinedValue);
+            const supportsNumber = serializer.canSerialize(PRIMITIVES.NUMBER);
+            const supportsBool = serializer.canSerialize(PRIMITIVES.BOOL);
+            const supportsString = serializer.canSerialize(PRIMITIVES.STRING);
+            const supportsNull = serializer.canSerialize(PRIMITIVES.NULL);
+            const supportsUndefined = serializer.canSerialize(PRIMITIVES.UNDEFINED);
 
             expect(supportsNumber).toBeTruthy();
             expect(supportsBool).toBeTruthy();
@@ -55,7 +53,7 @@ describe('serializers/PrimitiveSerializer', () =>
 
         it('should tell it cannot deserialize others', () =>
         {
-            const supportsObject = serializer.canSerialize(objectValue);
+            const supportsObject = serializer.canSerialize(PRIMITIVES.OBJECT);
 
             expect(supportsObject).toBeFalsy();
         });
@@ -65,17 +63,17 @@ describe('serializers/PrimitiveSerializer', () =>
     {
         it('should serialize a primitive', async () =>
         {
-            const resultNumber = await serializer.serialize(numberValue);
-            const resultBool = await serializer.serialize(boolValue);
-            const resultString = await serializer.serialize(stringValue);
-            const resultNull = await serializer.serialize(nullValue);
-            const resultUndefined = await serializer.serialize(undefinedValue);
+            const resultNumber = await serializer.serialize(PRIMITIVES.NUMBER);
+            const resultBool = await serializer.serialize(PRIMITIVES.BOOL);
+            const resultString = await serializer.serialize(PRIMITIVES.STRING);
+            const resultNull = await serializer.serialize(PRIMITIVES.NULL);
+            const resultUndefined = await serializer.serialize(PRIMITIVES.UNDEFINED);
 
-            expect(resultNumber).toEqual(numberValue);
-            expect(resultBool).toEqual(boolValue);
-            expect(resultString).toEqual(stringValue);
-            expect(resultNull).toEqual(nullValue);
-            expect(resultUndefined).toEqual(undefinedValue);
+            expect(resultNumber).toEqual(PRIMITIVES.NUMBER);
+            expect(resultBool).toEqual(PRIMITIVES.BOOL);
+            expect(resultString).toEqual(PRIMITIVES.STRING);
+            expect(resultNull).toEqual(PRIMITIVES.NULL);
+            expect(resultUndefined).toEqual(PRIMITIVES.UNDEFINED);
         });
     });
 
@@ -83,17 +81,17 @@ describe('serializers/PrimitiveSerializer', () =>
     {
         it('should deserialize a primitive', async () =>
         {
-            const resultNumber = await serializer.deserialize(numberValue);
-            const resultBool = await serializer.deserialize(boolValue);
-            const resultString = await serializer.deserialize(stringValue);
-            const resultNull = await serializer.deserialize(nullValue);
-            const resultUndefined = await serializer.deserialize(undefinedValue);
+            const resultNumber = await serializer.deserialize(PRIMITIVES.NUMBER);
+            const resultBool = await serializer.deserialize(PRIMITIVES.BOOL);
+            const resultString = await serializer.deserialize(PRIMITIVES.STRING);
+            const resultNull = await serializer.deserialize(PRIMITIVES.NULL);
+            const resultUndefined = await serializer.deserialize(PRIMITIVES.UNDEFINED);
 
-            expect(resultNumber).toEqual(numberValue);
-            expect(resultBool).toEqual(boolValue);
-            expect(resultString).toEqual(stringValue);
-            expect(resultNull).toEqual(nullValue);
-            expect(resultUndefined).toEqual(undefinedValue);
+            expect(resultNumber).toEqual(PRIMITIVES.NUMBER);
+            expect(resultBool).toEqual(PRIMITIVES.BOOL);
+            expect(resultString).toEqual(PRIMITIVES.STRING);
+            expect(resultNull).toEqual(PRIMITIVES.NULL);
+            expect(resultUndefined).toEqual(PRIMITIVES.UNDEFINED);
         });
     });
 });

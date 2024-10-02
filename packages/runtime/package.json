@@ -1,44 +1,27 @@
 {
   "name": "@jitar/runtime",
-  "version": "0.7.5",
-  "description": "JavaScript runtime library for the Jitar runtime.",
+  "version": "0.7.4",
+  "description": "Client and server runtime library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
   "type": "module",
-  "types": "dist/lib.d.ts",
-  "exports": {
-    ".": "./dist/lib.js"
-  },
-  "files": [
-    "CHANGELOG.md",
-    "README.md",
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
+  "types": "dist/index.d.ts",
+  "exports": "./dist/index.js",
+  "private": true,
   "scripts": {
     "test": "vitest run",
     "test-coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist",
-    "prepublishOnly": "npm run clean && npm run build"
+    "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@jitar/serialization": "*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MaskingTechnology/jitar.git"
-  },
-  "bugs": {
-    "url": "https://github.com/MaskingTechnology/jitar/issues"
-  },
-  "homepage": "https://jitar.dev",
-  "keywords": [
-    "javascript",
-    "runtime",
-    "jitar"
-  ]
+    "@jitar/configuration": "*",
+    "@jitar/execution": "*",
+    "@jitar/health": "*",
+    "@jitar/middleware": "*",
+    "@jitar/services": "*",
+    "@jitar/serialization": "*",
+    "@jitar/sourcing": "*"
+  }
 }

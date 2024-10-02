@@ -1,6 +1,6 @@
 
-import ValueSerializer from '../ValueSerializer.js';
-import SerializedMap from '../types/serialized/SerializedMap.js';
+import ValueSerializer from '../ValueSerializer';
+import SerializedMap from '../types/serialized/SerializedMap';
 
 export default class MapSerializer extends ValueSerializer
 {

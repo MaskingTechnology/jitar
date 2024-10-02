@@ -2,12 +2,11 @@
     "url": "http://127.0.0.1:3001",
     "setUp": ["./integrations/jitar/setUpDatabase"],
     "tearDown": ["./integrations/jitar/tearDownDatabase"],
+    "middleware": ["./integrations/jitar/requestLogger"],
     "healthChecks": ["./integrations/jitar/databaseHealthCheck"],
     "worker":
     {
-        "gateway": "http://127.0.0.1:3000",
-        "repository": "http://127.0.0.1:2999",
         "segments": [ "server" ],
-        "middlewares": ["./integrations/jitar/requestLogger"]
+        "gateway": "http://127.0.0.1:3000"
     }
 }

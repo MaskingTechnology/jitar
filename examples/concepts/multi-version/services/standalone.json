@@ -1,7 +1,8 @@
 {
     "url": "http://127.0.0.1:3000",
-    "standalone":
+    "worker":
     {
-        
+        "segments": ["default"],
+        "trustKey": "MY_VERY_SECRET_KEY"
     }
 }

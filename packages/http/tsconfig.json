@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "rootDir": "./src/",
+    "moduleResolution": "node",
+    "declaration": true,
+    "outDir": "./dist",
+    "removeComments": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+  },
+  "exclude": [
+    "vite.config.ts",
+    "node_modules",
+    "dist",
+    "test"
+  ]
+}

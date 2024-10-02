@@ -1,5 +1,5 @@
 
-import Serialized from '../Serialized.js';
+import Serialized from '../Serialized';
 
 type SerializedSet = Serialized &
 {

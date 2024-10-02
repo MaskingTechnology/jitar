@@ -1,44 +1,21 @@
 {
   "name": "@jitar/serialization",
-  "version": "0.7.5",
-  "description": "JavaScript serialization library for the Jitar runtime.",
+  "version": "0.7.4",
+  "description": "Serialization library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
   "type": "module",
-  "types": "dist/lib.d.ts",
-  "exports": {
-    ".": "./dist/lib.js"
-  },
-  "files": [
-    "CHANGELOG.md",
-    "README.md",
-    "dist"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
+  "types": "dist/index.d.ts",
+  "exports": "./dist/index.js",
+  "private": true,
   "scripts": {
     "test": "vitest run",
     "test-coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist",
-    "prepublishOnly": "npm run clean && npm run build"
+    "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@jitar/reflection": "*"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MaskingTechnology/jitar.git"
-  },
-  "bugs": {
-    "url": "https://github.com/MaskingTechnology/jitar/issues"
-  },
-  "homepage": "https://jitar.dev",
-  "keywords": [
-    "javascript",
-    "serialization",
-    "jitar"
-  ]
+    "@jitar/analysis": "*"
+  }
 }

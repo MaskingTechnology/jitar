@@ -7,6 +7,15 @@ GET http://localhost:3000/rpc/helpdesk/register?firstName=John&lastName=Doe HTTP
 ###
 
 // Create an account for John Doe
+// This will return the non-serialized account object
+
+GET http://localhost:3000/rpc/account/createAccount?firstName=John&lastName=Doe HTTP/1.1
+
+
+###
+
+// Create an account for John Doe
 // This will return the serialized account object
 
-GET http://localhost:3000/rpc/account/createAccount?firstName=John&lastName=Doe&serialize=true HTTP/1.1 
+GET http://localhost:3000/rpc/account/createAccount?firstName=John&lastName=Doe HTTP/1.1
+X-Jitar-Data-Encoding: serialized

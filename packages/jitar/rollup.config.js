@@ -2,20 +2,19 @@
 import terser from '@rollup/plugin-terser';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
-import replace from '@rollup/plugin-replace';
-import dts from 'rollup-plugin-dts';
 
-import { SERVER_EXTERNALS, REPLACE_VALUES } from './rollup.definitions.js';
+import { SERVER_EXTERNALS } from './rollup.definitions.js';
 
-export default [
-	{
+function bundle(input, output, supportBrowser)
+{
+	return {
 		external: SERVER_EXTERNALS,
-		input: {
-			server: 'src/server.ts',
-			client: 'src/client.ts'
+		treeshake: {
+			moduleSideEffects: false
 		},
+		input,
 		output: {
-			dir: 'dist',
+			...output,
 			exports: 'named',
 			format: 'module',
 			plugins: [terser({
@@ -25,32 +24,14 @@ export default [
 		},
 		plugins: [
 			typescript(),
-			replace({
-				preventAssignment: true,
-				values: REPLACE_VALUES
-			}),
-			nodeResolve()
+			nodeResolve({
+				browser: supportBrowser
+			})
 		]
-	},
-	{
-		external: [
-			'./client.js',
-			'./server.js'
-		],
-		input: 'src/lib.ts',
-		output: {
-			file: 'dist/lib.js',
-			format: 'module'
-		},
-		plugins: [
-			typescript()
-		]
-	},
-	{
-		input: './dist/types/lib.d.ts',
-	 	output: [{ file: 'dist/lib.d.ts', format: 'module' }],
-	 	plugins: [dts({
-			respectExternal: true
-		})],
-	}
-]
+	};
+}
+
+export default [
+	bundle(['src/cli.ts', 'src/lib.ts'], { dir: 'dist' }, false),
+	bundle('src/client.ts', { file: 'dist/client.js' }, true)
+];

@@ -4,12 +4,7 @@ import { describe, expect, it } from 'vitest';
 import BigIntSerializer from '../../src/serializers/BigIntSerializer';
 import InvalidBigIntString from '../../src/serializers/errors/InvalidBigIntString';
 
-import
-{
-    validBigInt,
-    serializedValidBigInt,
-    nonObject, nonBigInt, notSerialized, invalidName, invalidBigIntValue, invalidBigIntString
-} from '../_fixtures/serializers/BigIntSerializer.fixture';
+import { BIG_INTEGERS } from './fixtures';
 
 const serializer = new BigIntSerializer();
 
@@ -19,15 +14,15 @@ describe('serializers/BigIntSerializer', () =>
     {
         it('should tell it can serialize a big int', () =>
         {
-            const supportsBigInt = serializer.canSerialize(validBigInt);
+            const supportsBigInt = serializer.canSerialize(BIG_INTEGERS.VALID);
 
             expect(supportsBigInt).toBeTruthy();
         });
 
         it('should tell it cannot serialize others', () =>
         {
-            const supportsNonObject = serializer.canSerialize(nonObject);
-            const supportsNonBigInt = serializer.canSerialize(nonBigInt);
+            const supportsNonObject = serializer.canSerialize(BIG_INTEGERS.NON_OBJECT);
+            const supportsNonBigInt = serializer.canSerialize(BIG_INTEGERS.NON_BIGINT);
 
             expect(supportsNonObject).toBeFalsy();
             expect(supportsNonBigInt).toBeFalsy();
@@ -38,17 +33,17 @@ describe('serializers/BigIntSerializer', () =>
     {
         it('should tell it can deserialize a big int', () =>
         {
-            const supportsBigInt = serializer.canDeserialize(serializedValidBigInt);
+            const supportsBigInt = serializer.canDeserialize(BIG_INTEGERS.VALID_SERIALIZED);
 
             expect(supportsBigInt).toBeTruthy();
         });
 
         it('should tell it cannot deserialize others', () =>
         {
-            const supportsNonObject = serializer.canDeserialize(nonObject);
-            const supportsNotSerialized = serializer.canDeserialize(notSerialized);
-            const supportsInvalidName = serializer.canDeserialize(invalidName);
-            const supportsInvalidBigIntValue = serializer.canDeserialize(invalidBigIntValue);
+            const supportsNonObject = serializer.canDeserialize(BIG_INTEGERS.NON_OBJECT);
+            const supportsNotSerialized = serializer.canDeserialize(BIG_INTEGERS.NOT_SERIALIZED);
+            const supportsInvalidName = serializer.canDeserialize(BIG_INTEGERS.INVALID_NAME);
+            const supportsInvalidBigIntValue = serializer.canDeserialize(BIG_INTEGERS.INVALID_BIGINT_VALUE);
 
             expect(supportsNonObject).toBeFalsy();
             expect(supportsNotSerialized).toBeFalsy();
@@ -61,9 +56,9 @@ describe('serializers/BigIntSerializer', () =>
     {
         it('should serialize a big int', async () =>
         {
-            const resultValidBigInt = await serializer.serialize(validBigInt);
+            const resultValidBigInt = await serializer.serialize(BIG_INTEGERS.VALID);
 
-            expect(resultValidBigInt).toStrictEqual(serializedValidBigInt);
+            expect(resultValidBigInt).toStrictEqual(BIG_INTEGERS.VALID_SERIALIZED);
         });
     });
 
@@ -71,14 +66,14 @@ describe('serializers/BigIntSerializer', () =>
     {
         it('should deserialize a big int', async () =>
         {
-            const resultValidBigInt = await serializer.deserialize(serializedValidBigInt);
+            const resultValidBigInt = await serializer.deserialize(BIG_INTEGERS.VALID_SERIALIZED);
 
-            expect(resultValidBigInt).toStrictEqual(validBigInt);
+            expect(resultValidBigInt).toStrictEqual(BIG_INTEGERS.VALID);
         });
 
         it('should not deserialize a big int with an invalid big int string', async () =>
         {
-            const deserialize = async () => serializer.deserialize(invalidBigIntString);
+            const deserialize = async () => serializer.deserialize(BIG_INTEGERS.INVALID_BIGINT_STRING);
 
             expect(deserialize).rejects.toStrictEqual(new InvalidBigIntString('1.3'));
         });

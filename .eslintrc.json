@@ -1,6 +1,6 @@
 {
     "root": true,
-    "ignorePatterns": ["**/dist/**/*", "**/node_modules/**/*","**/coverage/**/*", "**/*config*", "packages/create-jitar/templates/*"],
+    "ignorePatterns": ["**/dist/**/*", "**/node_modules/**/*","**/coverage/**/*", "packages/create-jitar/templates/*"],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "project": "./packages/**/tsconfig.json"

@@ -1,6 +1,6 @@
 
-import ValueSerializer from '../ValueSerializer.js';
-import SerializedSet from '../types/serialized/SerializedSet.js';
+import ValueSerializer from '../ValueSerializer';
+import SerializedSet from '../types/serialized/SerializedSet';
 
 export default class SetSerializer extends ValueSerializer
 {

@@ -3,10 +3,11 @@
     "setUp": ["./integrations/jitar/setUpDatabase"],
     "tearDown": ["./integrations/jitar/tearDownDatabase"],
     "healthChecks": ["./integrations/jitar/databaseHealthCheck"],
+    "middleware": ["./integrations/jitar/requestLogger"],
     "standalone":
     {
+        "segments": ["server"],
         "assets": [ "index.html", "assets/**/*" ],
-        "middlewares": ["./integrations/jitar/requestLogger"],
         "serveIndexOnNotFound": true
     }
 }

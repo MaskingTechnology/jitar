@@ -4,5 +4,8 @@
             "access": "public",
             "version": "0.0.0"
         }
+    },
+    "./account/Account": {
+        "default": { }
     }
 }

@@ -1,0 +1,2 @@
+
+GET http://localhost:3000/rpc/getWeatherForecast HTTP/1.1
