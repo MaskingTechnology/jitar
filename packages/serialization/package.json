@@ -12,8 +12,7 @@
     "test-coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist",
-    "prepublishOnly": "npm run clean && npm run build"
+    "clean": "rm -rf dist"
   },
   "dependencies": {
     "@jitar/analysis": "*"
