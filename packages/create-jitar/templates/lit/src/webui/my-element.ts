@@ -2,7 +2,7 @@ import { LitElement, css, html } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import litLogo from './assets/lit.svg'
 import jitarLogo from './assets/jitar.svg'
-import { sayHello } from './domain/sayHello'
+import { sayHello } from '../domain/sayHello'
 
 @customElement('my-element')
 export class MyElement extends LitElement
