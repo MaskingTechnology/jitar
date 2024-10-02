@@ -7,18 +7,19 @@ import NoWorkerAvailable from '../../src/gateway/errors/NoWorkerAvailable';
 
 import { WORKER_BALANCERS, REMOTE_WORKERS } from './fixtures';
 
+const emptyBalancer = WORKER_BALANCERS.EMPTY;
+const filledBalancer = WORKER_BALANCERS.FILLED;
+
 describe('services/WorkerBalancer', () =>
 {
     describe('.getNextWorker()', () =>
     {
         it('should select workers round robin', async () =>
         {
-            const balancer = WORKER_BALANCERS.FILLED;
-
-            const firstSelectedWorker = balancer.getNextWorker();
-            const secondSelectedWorker = balancer.getNextWorker();
-            const thirdSelectedWorker = balancer.getNextWorker();
-            const fourthSelectedWorker = balancer.getNextWorker();
+            const firstSelectedWorker = filledBalancer.getNextWorker();
+            const secondSelectedWorker = filledBalancer.getNextWorker();
+            const thirdSelectedWorker = filledBalancer.getNextWorker();
+            const fourthSelectedWorker = filledBalancer.getNextWorker();
 
             expect(firstSelectedWorker).toBe(REMOTE_WORKERS.FIRST);
             expect(secondSelectedWorker).toBe(REMOTE_WORKERS.SECOND);
@@ -31,10 +32,8 @@ describe('services/WorkerBalancer', () =>
     {
         it('should throw a worker not available error', async () =>
         {
-            const balancer = WORKER_BALANCERS.EMPTY;
-
             const request = new Request('nonExisting', Version.DEFAULT, new Map(), new Map(), RunModes.NORMAL);
-            const promise = balancer.run(request);
+            const promise = emptyBalancer.run(request);
 
             expect(promise).rejects.toEqual(new NoWorkerAvailable('nonExisting'));
         });

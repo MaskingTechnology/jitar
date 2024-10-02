@@ -326,7 +326,7 @@ describe('Validator', () =>
             expect(result.valid).toBe(false);
             expect(result.errors).toContain(VALUES.MESSAGES.EXTRA_FIELD);
         });
-    })
+    });
 
     describe('Lenient mode', () =>
     {

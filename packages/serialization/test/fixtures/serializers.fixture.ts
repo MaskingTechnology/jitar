@@ -1,4 +1,5 @@
 
+import Serializer from '../../src/Serializer';
 import ValueSerializer from '../../src/ValueSerializer';
 
 class FirstSerializer extends ValueSerializer
@@ -53,10 +54,16 @@ class StringSerializer extends ValueSerializer
     async deserialize(value: string): Promise<string> { return value; }
 }
 
+const overrideSerializer = new Serializer();
+overrideSerializer.addSerializer(new FirstSerializer());
+overrideSerializer.addSerializer(new SecondSerializer());
+
+const typeSerializer = new Serializer();
+typeSerializer.addSerializer(new NumberSerializer());
+typeSerializer.addSerializer(new StringSerializer());
+
 export const SERIALIZERS =
 {
-    FirstSerializer,
-    SecondSerializer,
-    NumberSerializer,
-    StringSerializer,
+    OVERRIDE: overrideSerializer,
+    TYPE: typeSerializer
 };

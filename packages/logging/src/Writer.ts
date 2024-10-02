@@ -1,5 +1,5 @@
 
-export default interface Writer
+interface Writer
 {
     log(message: string): void;
     debug(message: string): void;
@@ -7,3 +7,5 @@ export default interface Writer
     warn(message: string): void;
     error(message: string): void;
 }
+
+export default Writer;

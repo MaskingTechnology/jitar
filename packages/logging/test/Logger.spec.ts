@@ -3,7 +3,10 @@ import { beforeEach, describe, expect, it } from 'vitest';
 
 import { Logger } from '../src';
 
-import { writer, INPUT, OUTPUT } from './fixtures';
+import { LOGGERS, writer, INPUT, OUTPUT } from './fixtures';
+
+const normalLogger = LOGGERS.NORMAL;
+const debugLogger = LOGGERS.DEBUG;
 
 beforeEach(() =>
 {
@@ -18,10 +21,10 @@ describe('Logger', () =>
 
         it('should log [CATEGORY] messages', () =>
         {
-            logger.info('info');
-            logger.warn('warn');
-            logger.error('error');
-            logger.fatal('fatal');
+            normalLogger.info('info');
+            normalLogger.warn('warn');
+            normalLogger.error('error');
+            normalLogger.fatal('fatal');
 
             expect(writer.messages).toEqual([
                 '[INFO] info',
@@ -33,68 +36,68 @@ describe('Logger', () =>
     
         it('should format string message', () =>
         {
-            logger.info(INPUT.STRING);
+            normalLogger.info(INPUT.STRING);
             expect(writer.lastMessage).toEqual(OUTPUT.STRING);
         });
 
         it('should format number message', () =>
         {
-            logger.info(INPUT.NUMBER);
+            normalLogger.info(INPUT.NUMBER);
             expect(writer.lastMessage).toEqual(OUTPUT.NUMBER);
         });
 
         it('should format boolean message', () =>
         {
-            logger.info(INPUT.BOOLEAN);
+            normalLogger.info(INPUT.BOOLEAN);
             expect(writer.lastMessage).toEqual(OUTPUT.BOOLEAN);
         });
 
         it('should format object message', () =>
         {
-            logger.info(INPUT.OBJECT);
+            normalLogger.info(INPUT.OBJECT);
             expect(writer.lastMessage).toEqual(OUTPUT.OBJECT);
         });
 
         it('should format array', () =>
         {
-            logger.info(INPUT.ARRAY);
+            normalLogger.info(INPUT.ARRAY);
             expect(writer.lastMessage).toEqual(OUTPUT.ARRAY);
         });
 
         it('should format function', () =>
         {
-            logger.info(INPUT.FUNCTION);
+            normalLogger.info(INPUT.FUNCTION);
             expect(writer.lastMessage).toEqual(OUTPUT.FUNCTION);
         });
 
         it('should format undefined', () =>
         {
-            logger.info(INPUT.UNDEFINED);
+            normalLogger.info(INPUT.UNDEFINED);
             expect(writer.lastMessage).toEqual(OUTPUT.UNDEFINED);
         });
 
         it('should format null', () =>
         {
-            logger.info(INPUT.NULL);
+            normalLogger.info(INPUT.NULL);
             expect(writer.lastMessage).toEqual(OUTPUT.NULL);
         });
 
         it('should format nested object', () =>
         {
-            logger.info(INPUT.NESTED_OBJECT);
+            normalLogger.info(INPUT.NESTED_OBJECT);
             expect(writer.lastMessage).toEqual(OUTPUT.NESTED_OBJECT);
         });
 
         it('should format nested array', () =>
         {
-            logger.info(INPUT.NESTED_ARRAY);
+            normalLogger.info(INPUT.NESTED_ARRAY);
             global.console.log(writer.lastMessage);
             expect(writer.lastMessage).toEqual(OUTPUT.NESTED_ARRAY);
         });
 
         it('should format error without stacktrace', () =>
         {
-            logger.info(INPUT.ERROR_WITHOUT_STACKTRACE);
+            normalLogger.info(INPUT.ERROR_WITHOUT_STACKTRACE);
             global.console.log(writer.lastMessage);
             expect(writer.lastMessage).toEqual(OUTPUT.ERROR_WITHOUT_STACKTRACE);
         });
@@ -111,18 +114,14 @@ describe('Logger', () =>
     {
         it('should log messages when debug is enabled', () =>
         {
-            const logger = new Logger(true, writer);
-
-            logger.debug('message');
+            debugLogger.debug('message');
 
             expect(writer.lastMessage).toEqual('[DEBUG] message');
         });
 
         it('should not log messages when debug is disabled', () =>
         {
-            const logger = new Logger(false, writer);
-
-            logger.debug('message');
+            normalLogger.debug('message');
 
             expect(writer.lastMessage).toEqual(undefined);
         });

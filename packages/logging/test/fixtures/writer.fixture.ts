@@ -1,7 +1,7 @@
 
 import type { Writer } from '../../src';
 
-export default class MemoryWriter implements Writer
+class MemoryWriter implements Writer
 {
     #messages: string[] = [];
 
@@ -50,3 +50,5 @@ export default class MemoryWriter implements Writer
         this.#messages = [];
     }
 }
+
+export const writer = new MemoryWriter();

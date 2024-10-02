@@ -5,6 +5,8 @@ import { Request, RunModes, Version } from '@jitar/execution';
 
 import { MIDDLEWARE_MANAGERS } from './fixtures';
 
+const defaultManager = MIDDLEWARE_MANAGERS.DEFAULT;
+
 describe('MiddlewareManager', () =>
 {
     describe('.handle(fqn, version, args, headers', () =>
@@ -15,7 +17,7 @@ describe('MiddlewareManager', () =>
             const headers = new Map();
 
             const request = new Request('test', new Version(1, 0, 0), args, headers, RunModes.NORMAL);
-            const response = await MIDDLEWARE_MANAGERS.DEFAULT.handle(request);
+            const response = await defaultManager.handle(request);
 
             expect(response.result).toBe('123');
             expect(headers.get('first')).toBe('yes');

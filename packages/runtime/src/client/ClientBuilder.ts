@@ -1,7 +1,6 @@
 
 import { Segment, ExecutionManager } from '@jitar/execution';
 import { RemoteBuilder } from '@jitar/services';
-import { HealthCheck, HealthManager } from '@jitar/health';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
 
 import Client from './Client';
@@ -30,15 +29,6 @@ export default class ClientBuilder
         const executionManager = this.#buildExecutionManager(configuration.segments ?? []);
 
         return new Client({ remoteUrl, remote, middlewareManager, executionManager });
-    }
-
-    #buildHealthManager(healthChecks: HealthCheck[]): HealthManager
-    {
-        const manager = new HealthManager();
-
-        healthChecks.forEach(check => manager.addHealthCheck(check));
-
-        return manager;
     }
 
     #buildMiddlewareManager(middleware: Middleware[]): MiddlewareManager

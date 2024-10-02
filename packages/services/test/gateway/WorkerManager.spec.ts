@@ -5,15 +5,15 @@ import { Request, Response, RunModes, StatusCodes, Version, ProcedureNotFound } 
 
 import { WORKER_MANAGERS, REMOTE_WORKERS } from './fixtures';
 
+const filledManager = WORKER_MANAGERS.FILLED;
+
 describe('gateway/WorkerManager', () =>
 {
     describe('.getProcedureNames()', () =>
     {
         it('should get the unique procedure names', () =>
         {
-            const manager = WORKER_MANAGERS.FILLED;
-
-            const procedureNames = manager.getProcedureNames();
+            const procedureNames = filledManager.getProcedureNames();
             expect(procedureNames).toEqual(['first', 'second']);
         });
     });
@@ -22,20 +22,16 @@ describe('gateway/WorkerManager', () =>
     {
         it('should confirm containing existing procedure names', () =>
         {
-            const manager = WORKER_MANAGERS.FILLED;
-
-            const hasFirst = manager.hasProcedure('first');
+            const hasFirst = filledManager.hasProcedure('first');
             expect(hasFirst).toBeTruthy();
 
-            const hasSecond = manager.hasProcedure('second');
+            const hasSecond = filledManager.hasProcedure('second');
             expect(hasSecond).toBeTruthy();
         });
 
         it('should deny containing non-existing procedure names', () =>
         {
-            const manager = WORKER_MANAGERS.FILLED;
-
-            const hasThird = manager.hasProcedure('third');
+            const hasThird = filledManager.hasProcedure('third');
             expect(hasThird).toBeFalsy();
         });
     });
@@ -47,9 +43,7 @@ describe('gateway/WorkerManager', () =>
         
         it('should create balancers for added workers', () =>
         {
-            const manager = WORKER_MANAGERS.FILLED;
-
-            const balancers = manager.balancers;
+            const balancers = filledManager.balancers;
             expect(balancers.size).toBe(2);
 
             const firstBalancer = balancers.get('first');
@@ -66,20 +60,18 @@ describe('gateway/WorkerManager', () =>
     {
         it('should run an existing procedure', () =>
         {
-            const manager = WORKER_MANAGERS.FILLED;
             const request = new Request('first', Version.DEFAULT, new Map(), new Map(), RunModes.NORMAL);
 
-            const promise = manager.run(request);
+            const promise = filledManager.run(request);
 
             expect(promise).resolves.toEqual(new Response(StatusCodes.OK, 'test'));
         });
 
         it('should not run a non-existing procedure', () =>
         {
-            const manager = WORKER_MANAGERS.FILLED;
             const request = new Request('nonExisting', Version.DEFAULT, new Map(), new Map(), RunModes.NORMAL);
 
-            const promise = manager.run(request);
+            const promise = filledManager.run(request);
 
             expect(promise).rejects.toEqual(new ProcedureNotFound('nonExisting'));
         });

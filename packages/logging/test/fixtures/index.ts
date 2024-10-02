@@ -1,8 +1,4 @@
 
-import MemoryWriter from './MemoryWriter';
-
-const writer = new MemoryWriter();
-
-export { writer };
-
-export * from './values.fixtures';
+export * from './loggers.fixture';
+export * from './values.fixture';
+export * from './writer.fixture';

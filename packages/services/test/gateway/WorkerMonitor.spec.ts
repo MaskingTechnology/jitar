@@ -3,12 +3,12 @@ import { describe, expect, it } from 'vitest';
 
 import { WORKER_MONITORS, REMOTE_WORKERS } from './fixtures';
 
+const monitor = WORKER_MONITORS.EMPTY;
+
 describe('gateway/WorkerMonitor', () =>
 {
     it('should remove unhealthy workers', async () =>
     {
-        const monitor = WORKER_MONITORS.EMPTY;
-        
         const manager = monitor.workerManager;
         manager.addWorker(REMOTE_WORKERS.HEALTHY);
         manager.addWorker(REMOTE_WORKERS.UNHEALTHY);

@@ -4,17 +4,10 @@ import { describe, expect, it } from 'vitest';
 import NoSerializerFound from '../src/errors/NoSerializerFound';
 import NoDeserializerFound from '../src/errors/NoDeserializerFound';
 
-import Serializer from '../src/Serializer';
-
 import { SERIALIZERS } from './fixtures';
 
-const overrideSerializer = new Serializer();
-overrideSerializer.addSerializer(new SERIALIZERS.FirstSerializer());
-overrideSerializer.addSerializer(new SERIALIZERS.SecondSerializer());
-
-const typeSerializer = new Serializer();
-typeSerializer.addSerializer(new SERIALIZERS.NumberSerializer());
-typeSerializer.addSerializer(new SERIALIZERS.StringSerializer());
+const overrideSerializer = SERIALIZERS.OVERRIDE;
+const typeSerializer = SERIALIZERS.TYPE;
 
 describe('Serializer', () =>
 {

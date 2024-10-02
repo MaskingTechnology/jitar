@@ -1,4 +1,5 @@
 
+import { NotImplemented } from '@jitar/errors';
 import { Request, Response, StatusCodes } from '@jitar/execution';
 import { File } from '@jitar/sourcing';
 
@@ -8,34 +9,34 @@ class DummyRemote implements Remote
 {
     connect(): Promise<void>
     {
-        throw new Error('Method not implemented.');
+        throw new NotImplemented();
     }
 
     disconnect(): Promise<void>
     {
-        throw new Error('Method not implemented.');
+        throw new NotImplemented();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     provide(filename: string): Promise<File>
     {
-        throw new Error('Method not implemented.');
+        throw new NotImplemented();
     }
 
     isHealthy(): Promise<boolean>
     {
-        throw new Error('Method not implemented.');
+        throw new NotImplemented();
     }
 
     getHealth(): Promise<Map<string, boolean>>
     {
-        throw new Error('Method not implemented.');
+        throw new NotImplemented();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     addWorker(workerUrl: string, procedureNames: string[], trustKey?: string): Promise<void>
     {
-        throw new Error('Method not implemented.');
+        throw new NotImplemented();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

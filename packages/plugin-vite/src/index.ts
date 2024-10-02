@@ -37,7 +37,7 @@ function assureExtension(filename: string)
 
 function makeShared(filename: string)
 {
-    return assureExtension(filename).replace('.js', '.shared.js')
+    return assureExtension(filename).replace('.js', '.shared.js');
 }
 
 type PluginConfig =
@@ -181,8 +181,10 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             const imports = [jitarImport, segmentImports, middlewareImports].join('\n');
 
             const remoteUrl = 'const remoteUrl = document.location.origin;';
-            const segmentsArray = `const segments = [${segments.map((_, index) => `$S${index}`).join(', ')}];`;
-            const middlewareArray = `const middleware = [${middlewares.map((_, index) => `$M${index}`).join(', ')}];`;
+            const segmentsItems = segments.map((_, index) => `$S${index}`).join(', ');
+            const segmentsArray = `const segments = [${segmentsItems}];`;
+            const middlewareItems = middlewares.map((_, index) => `$M${index}`).join(', ');
+            const middlewareArray = `const middleware = [${middlewareItems}];`;
             const declarations = [remoteUrl, segmentsArray, middlewareArray].join('\n');
 
             const remoteBuilder = 'const remoteBuilder = new HttpRemoteBuilder();';
