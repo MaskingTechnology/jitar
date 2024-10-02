@@ -160,7 +160,7 @@ export default class Parser
         {
             const next = tokenList.next;
 
-            if (next !== undefined && next.hasValue(Operator.ARROW))
+            if (next?.hasValue(Operator.ARROW))
             {
                 return this.#parseArrowFunction(tokenList, isAsync);
             }
@@ -201,7 +201,7 @@ export default class Parser
         {
             const next = this.#peekAfterBlock(tokenList, Group.OPEN, Group.CLOSE);
 
-            if (next !== undefined && next.hasValue(Operator.ARROW))
+            if (next?.hasValue(Operator.ARROW))
             {
                 return this.#parseArrowFunction(tokenList, isAsync);
             }
@@ -378,7 +378,7 @@ export default class Parser
 
         token = tokenList.step(); // Read away the name
 
-        if (token !== undefined && token.hasValue(Keyword.FROM))
+        if (token?.hasValue(Keyword.FROM))
         {
             token = tokenList.step(); // Read away the FROM keyword
 
@@ -404,7 +404,7 @@ export default class Parser
         let from: string | undefined = undefined;
         let token = tokenList.current;
 
-        if (token !== undefined && token.hasValue(Keyword.FROM))
+        if (token?.hasValue(Keyword.FROM))
         {
             token = tokenList.step(); // Read away the FROM keyword
             from = token.value;

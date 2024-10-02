@@ -35,7 +35,7 @@ async function execute()
     const argTargetDir = formatTargetDir(argv._[0]);
     const argTemplate = argv.template || argv.t;
 
-    let targetDir = argTargetDir || defaultTargetDir;
+    let targetDir = argTargetDir ?? defaultTargetDir;
 
     const getProjectName = () => targetDir === '.'
         ? path.basename(path.resolve())
@@ -54,7 +54,7 @@ async function execute()
                     initial: defaultTargetDir,
                     onState: (state) =>
                     {
-                        targetDir = formatTargetDir(state.value) || defaultTargetDir;
+                        targetDir = formatTargetDir(state.value) ?? defaultTargetDir;
                     },
                 },
                 {

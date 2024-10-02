@@ -27,7 +27,7 @@ This returns a list of registered workers. Per worker the url and procedure name
         "url": "http://worker.example.com:3002",
         "procedureNames": [
             "procedure1",
-            “procedure2”
+            "procedure2"
         ]
     }
 ]

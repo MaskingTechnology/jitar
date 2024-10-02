@@ -125,23 +125,21 @@ export default class ESClass extends ESMember
     {
         const declaration = this.getDeclaration(name);
 
-        return (declaration !== undefined && declaration.isPublic)
-            || this.hasGetter(name);
+        return declaration?.isPublic || this.hasGetter(name);
     }
 
     canWrite(name: string): boolean
     {
         const declaration = this.getDeclaration(name);
         
-        return (declaration !== undefined && declaration.isPublic)
-            || this.hasSetter(name);
+        return declaration?.isPublic || this.hasSetter(name);
     }
 
     canCall(name: string): boolean
     {
         const funktion = this.getFunction(name);
 
-        return funktion !== undefined && funktion.isPublic;
+        return funktion?.isPublic ?? false;
     }
 
     toString(): string

@@ -14,7 +14,7 @@ export default class ErrorSerializer extends ValueSerializer
             return false;
         }
 
-        const error = value as Object;
+        const error = value;
 
         return error.constructor === Error
             || error.constructor === EvalError
@@ -52,7 +52,7 @@ export default class ErrorSerializer extends ValueSerializer
     {
         const clazz = (globalThis as Record<string, unknown>)[object.type] as (new () => Error);
 
-        const error = new clazz() as Error;
+        const error = new clazz();
         error.stack = object.stack;
         error.message = object.message;
         error.cause = object.cause;
