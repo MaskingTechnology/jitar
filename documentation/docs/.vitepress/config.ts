@@ -93,8 +93,7 @@ export default defineConfig({
       {
         text: 'EXAMPLES',
         items: [
-          { text: 'Concepts', link: '/examples/concepts' },
-          { text: 'Apps', link: '/examples/apps' }
+          { text: 'Concepts', link: '/examples/concepts' }
         ]
       },
       {

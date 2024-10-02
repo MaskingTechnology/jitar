@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: App examples
-    link: /examples/apps
+    text: Concept examples
+    link: /examples/concepts
 
 next:
     text: Give feedback
