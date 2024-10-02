@@ -15,6 +15,5 @@
     "outDir": "dist"
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
-  "exclude": ["src/main.ts"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": ["src/webui/main.ts"]
 }
