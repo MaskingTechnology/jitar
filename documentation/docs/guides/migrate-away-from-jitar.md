@@ -7,7 +7,7 @@ prev:
 
 next:
     text: Caching
-    link: /internals/caching
+    link: /examples/concepts
 
 ---
 

@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Reflection
-    link: /internals/reflection
+    text: Migrate away from Jitar
+    link: /guides/migrate-away-from-jitar
 
 next:
     text: Get help

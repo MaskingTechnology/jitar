@@ -83,14 +83,6 @@ export default defineConfig({
         ]
       },
       {
-        text: 'INTERNALS',
-        items: [
-          { text: 'Caching', link: '/internals/caching' },
-          { text: 'Data serialization', link: '/internals/data-serialization' },
-          { text: 'Reflection', link: '/internals/reflection' }
-        ]
-      },
-      {
         text: 'EXAMPLES',
         items: [
           { text: 'Concepts', link: '/examples/concepts' }
@@ -118,8 +110,8 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/MaskingTechnology/jitar' },
       { icon: 'discord', link: 'https://discord.gg/Bqwy8azp5R' },
+      { icon: 'github', link: 'https://github.com/MaskingTechnology/jitar' },
       { icon: 'npm', link: 'https://www.npmjs.com/package/jitar' }
     ],
 
