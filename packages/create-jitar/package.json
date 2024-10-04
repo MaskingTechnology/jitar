@@ -1,6 +1,6 @@
 {
   "name": "create-jitar",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "type": "module",
   "license": "MIT",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
@@ -50,5 +50,5 @@
     "url": "https://github.com/MaskingTechnology/jitar/issues"
   },
   "homepage": "https://jitar.dev",
-  "gitHead": "cb82f7e31ef4015e0d569a70f1e990859dc0f870"
+  "gitHead": "0bff066d2b51e97e910486e72b9f6b089bae96b1"
 }
