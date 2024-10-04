@@ -37,9 +37,9 @@
         "@jitar/errors": "*",
         "@jitar/execution": "*",
         "@jitar/health": "*",
+        "@jitar/http": "*",
         "@jitar/logging": "*",
-        "@jitar/middleware": "*",
-        "@jitar/http": "*"
+        "@jitar/middleware": "*"
     },
     "engines": {
         "node": ">=20.0"
@@ -61,5 +61,6 @@
         "monolith",
         "full stack",
         "web applications"
-    ]
+    ],
+    "gitHead": "d6f5681e138635537b2145f04e3f36947807a7be"
 }
