@@ -15,10 +15,6 @@ next:
 
 Middleware provides a way to hook into Jitars automated communication system. It allows you to add additional logic to incoming and outgoing requests. Common use cases are adding authentication and logging to applications.
 
-::: warning BREAKING CHANGES
-Version 0.5 introduced breaking changes. Please check our [migration guide](https://github.com/MaskingTechnology/jitar/blob/main/migrations/migrate-from-0.4.x-to-0.5.0.md) for more information.
-:::
-
 In this section you'll learn how to create and add your own middleware.
 
 ## Creating middleware

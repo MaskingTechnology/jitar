@@ -65,7 +65,6 @@ Utility classes provide common logic used throughout the whole application. For 
 
 ```ts
 // src/domain/Logger.ts
-
 export class Logger
 {
     log(level: string, message: string)
@@ -89,21 +88,19 @@ Let's look at an example.
 
 ```ts
 // src/domain/Person.ts
-
 export class Person
 {
     #name: string;
-    #age: int;
+    #age: number;
 
-    constructor(name: string, age: int)
+    constructor(name: string, age: number)
     {
         this.#name = name;
         this.#age = age;
     }
 
-    get name() { return name; }
-
-    get age() { return age; }
+    get name(): string { return this.#name; }
+    get age(): number { return this.#age; }
 }
 ```
 
