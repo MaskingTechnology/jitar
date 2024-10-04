@@ -13,7 +13,7 @@
         "minify-css": "minify src/css/*.css src/css/**/*.css src/fonts/**/*.css > dist/site.css"
     },
     "devDependencies": {
-        "cpx2": "^7.0.1",
+        "cpx2": "^8.0.0",
         "minify": "^11.4.1"
     }
 }
