@@ -1,5 +1,16 @@
-# v0.7.5
-[2024-06-03]
+# v0.8.0
+[2024-10-04]
+
+### Features
+
+* \[[550](https://github.com/MaskingTechnology/jitar/pull/550)] feat: application builds (#550) by Peter van Vliet
+
+# v0.7.6
+[2024-09-20]
+
+### Features
+
+* \[[542](https://github.com/MaskingTechnology/jitar/pull/542)] feat(runtime): gateway as runtime (#542) by Bas Meeuwissen
 
 ### Fixes
 
@@ -7,6 +18,11 @@
 
 ### Chores
 
+* \[[533](https://github.com/MaskingTechnology/jitar/pull/533)] chore(deps): august updates (#533) by dependabot[bot]
+* \[[532](https://github.com/MaskingTechnology/jitar/pull/532)] chore(dependencies): july updates (#532) by dependabot[bot]
+* \[[530](https://github.com/MaskingTechnology/jitar/pull/530)] chore: sonar properties (#530) by Bas Meeuwissen
+* \[[531](https://github.com/MaskingTechnology/jitar/pull/531)] chore(dependencies): bump braces from 3.0.2 to 3.0.3 (#531) by dependabot[bot]
+* \[[528](https://github.com/MaskingTechnology/jitar/pull/528)] chore: release 0.7.5 (#528) by Bas Meeuwissen
 * \[[526](https://github.com/MaskingTechnology/jitar/pull/526)] chore: sonar issues (#526) by Bas Meeuwissen
 * \[[524](https://github.com/MaskingTechnology/jitar/pull/524)] chore(deps): june updates (#524) by dependabot[bot]
 * \[[522](https://github.com/MaskingTechnology/jitar/pull/522)] chore(examples): exclude webui folder (#522) by Bas Meeuwissen
