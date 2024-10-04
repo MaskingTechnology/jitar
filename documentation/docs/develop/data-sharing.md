@@ -21,7 +21,7 @@ Most of what you're learning here is not Jitar specific and applies to building 
 
 ## Automatic (de)serialization
 
-All parameters and return values are (de)serialized automatically for remote functions. Jitar provides a [powerful (de)serializer](../internals/data-serialization) that is able to transport any (complex) data type. By default all built-in JavaScript objects are supported like maps, sets, dates, etc. There's also support for custom classes.
+All parameters and return values are (de)serialized automatically for remote functions. Jitar provides a powerful (de)serializer that is able to transport any (complex) data type. By default all built-in JavaScript objects are supported like maps, sets, dates, etc. There's also support for custom classes.
 
 ## Using objects
 When working with objects it's important to know that the other end always receives a copy of the object, and not the actual object itself. If you don't take this into account the application behaves differently in a distributed setup. Take for example the following setup.
