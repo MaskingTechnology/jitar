@@ -8,7 +8,7 @@
     "esModuleInterop": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],
     "noEmit": false, /* update this property */
     "outDir": "dist", /* add this property */
     "isolatedModules": true

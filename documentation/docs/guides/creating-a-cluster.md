@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Worker monitoring
-    link: /monitor/workers
+    text: Health
+    link: /monitor/health
 
 next:
     text: Add Jitar to an existing project

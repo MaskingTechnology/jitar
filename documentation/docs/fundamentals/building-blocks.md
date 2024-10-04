@@ -13,11 +13,11 @@ next:
 
 # Building blocks
 
-If you're familiar with modern JavaScript / TypeScript, then you already know a lot. Because Jitar is a runtime, applications are built with pure JavaScript / TypeScript. The only thing you need to know is that Jitar applications are procedural by nature and functions are the primary building blocks for building them.
+If you're familiar with modern JavaScript / TypeScript, then you already know a lot. Because Jitar is a runtime, applications are built with pure JavaScript / TypeScript. The only thing you need to know is that Jitar applications are procedural by nature and functions are the primary building blocks for building them. Classes can be used as secondary building blocks for utils and state.
 
-For breaking applications into distributable pieces, Jitar uses a segmentation system. A segment defines what modules need to be deployed together. Jitar connects these segments by creating [RPC endpoints](../integrate/rpc-api) and requests under the hood.
+For breaking applications into distributable pieces, Jitar uses a segmentation system. A segment defines what modules need to be deployed together. Jitar connects these segments by creating [RPC endpoints](../integrate/rpc-api) and requests for function calls under the hood. Class instance arguments will be shared using Jitar's [automatic (de)serialization](../develop/data-sharing#automatic-de-serialization) system.
 
-In this section you'll learn about using functions and creating segments to create scalable applications.
+In this section you'll learn about using functions and classes, and creating segments to create scalable applications.
 
 ## Functions
 
@@ -55,6 +55,57 @@ Every function has a unique name used for internal and external identification. 
 
 For the simple sayHello function the FQN of this function is `domain/sayHello`. **Note** that there is no leading / in the name.
 
+## Classes
+
+Plain classes can be used for creating utilities or sharing state between the functions. Both use-cases are explained in detail below.
+
+### Utility
+
+Utility classes provide common logic used throughout the whole application. For example, a logger:
+
+```ts
+// src/domain/Logger.ts
+export class Logger
+{
+    log(level: string, message: string)
+    {
+        console.log(`[${level}] ${message}`);
+    }
+}
+```
+
+These kinds of classes typically do not hold any state, and their instances are not shared between functions.
+
+### State
+
+For sharing state, class instances can be used as long as the instance is reconstructible at the other end. By this we mean that the exposed values can be put back in the instance via:
+
+* The constructor
+* Public field
+* Setter
+
+Let's look at an example.
+
+```ts
+// src/domain/Person.ts
+export class Person
+{
+    #name: string;
+    #age: number;
+
+    constructor(name: string, age: number)
+    {
+        this.#name = name;
+        this.#age = age;
+    }
+
+    get name(): string { return this.#name; }
+    get age(): number { return this.#age; }
+}
+```
+
+This class complies with the rules because all the exposed values (name and age) can be set via the constructor. More information about this can be found on the [data sharing page](../develop/data-sharing).
+
 ## Segments
 
 Segments are used to break applications down into distributable pieces. Jitar's segmentation system is module oriented. This means that a segment groups module files that need to be deployed together.
@@ -72,7 +123,8 @@ For the definition of a segment, JSON files are used with the '.segment.json' ex
             "version": "0.0.0",
             "as": "sayHello"
         }
-    }
+    },
+    "./domain/Person": {},
 }
 ```
 
@@ -86,6 +138,10 @@ This configuration connects very well with the JavaScript module system. It incl
 1. Alternative name (optional, default the name of the function)
 
 The example configuration exposes the `sayHello` function from the `./domain/sayHello` module file. The function has public access, meaning that it's accessible from other segments. Both the version and as properties have the default value, so these can optionally be removed.
+
+::: info CLASSES
+These configuration options do NOT apply to classes because they are not a functional part of Jitar. Therefore, classes only need to be registered. Keep in mind that state classes need to be registered in all dependent segments (sender and receiver) to be (de)serializable. Utility classes are commonly used across multiple segments and, therefore, do not require segmentation.
+:::
 
 More in depth information on segments and the configuration can be found in the [DEPLOY section](../deploy/segmentation).
 

@@ -20,8 +20,6 @@ Assets like images, documents, etc. can be placed in any location inside the sou
     "url": "http://repository.example.com:3000",
     "repository":
     {
-        "source": "./src",
-        "cache": "./.jitar",
         "index": "index.html",
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"]
     }
@@ -29,4 +27,3 @@ Assets like images, documents, etc. can be placed in any location inside the sou
 ```
 
 Assets can be whitelisted per file, or by using glob patterns. For example the pattern `assets/**/*` whitelists all files and subfolder files in the assets folder.
-

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig } from 'vitepress';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -69,9 +69,7 @@ export default defineConfig({
         text: 'MONITOR',
         items: [
           { text: 'Logging', link: '/monitor/logging' },
-          { text: 'Health', link: '/monitor/health' },
-          { text: 'Procedures', link: '/monitor/procedures' },
-          { text: 'Workers', link: '/monitor/workers' }
+          { text: 'Health', link: '/monitor/health' }
         ]
       },
       {
@@ -83,18 +81,10 @@ export default defineConfig({
         ]
       },
       {
-        text: 'INTERNALS',
-        items: [
-          { text: 'Caching', link: '/internals/caching' },
-          { text: 'Data serialization', link: '/internals/data-serialization' },
-          { text: 'Reflection', link: '/internals/reflection' }
-        ]
-      },
-      {
         text: 'EXAMPLES',
         items: [
           { text: 'Concepts', link: '/examples/concepts' },
-          { text: 'Apps', link: '/examples/apps' }
+          { text: 'Full stack', link: '/examples/full-stack' }
         ]
       },
       {
@@ -119,13 +109,14 @@ export default defineConfig({
     },
 
     socialLinks: [
+      { icon: 'discord', link: 'https://discord.gg/Bqwy8azp5R' },
       { icon: 'github', link: 'https://github.com/MaskingTechnology/jitar' },
-      { icon: 'discord', link: 'https://discord.gg/Bqwy8azp5R' }
+      { icon: 'npm', link: 'https://www.npmjs.com/package/jitar' }
     ],
 
     footer: {
       message: 'Jitar is a project by Masking Technology',
-      copyright: 'Copyright © 2023 - Masking Technology B.V.'
+      copyright: 'Copyright © 2024 - Masking Technology B.V.'
     }
   }
-})
+});

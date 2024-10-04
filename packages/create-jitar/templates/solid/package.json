@@ -5,22 +5,22 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "vite",
     "dev": "vite",
-    "build": "vite build && tsc",
-    "serve": "vite preview",
-    "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json"
+    "build": "npm run build-domain && npm run build-webui",
+    "build-domain": "rm -rf dist && tsc -p tsconfig.build.json && jitar build",
+    "build-webui": "vite build",
+    "standalone": "jitar start --service=services/standalone.json"
   },
   "license": "MIT",
   "devDependencies": {
-    "@jitar/plugin-vite": "^0.7.5",
+    "@jitar/plugin-vite": "^0.8.0",
     "@types/express": "^4.17.21",
     "typescript": "^5.5.3",
     "vite": "^5.3.3",
     "vite-plugin-solid": "^2.10.2"
   },
   "dependencies": {
-    "jitar": "^0.7.5",
+    "jitar": "^0.8.0",
     "solid-js": "^1.8.18"
   }
 }

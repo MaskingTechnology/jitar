@@ -1,12 +1,12 @@
 
 import { BadRequest, Forbidden, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized } from '@jitar/errors';
-import { Request, Version, VersionParser } from '@jitar/execution';
 import type { Response } from '@jitar/execution';
-import type { MiddlewareManager } from '@jitar/middleware';
+import { Request, Version, VersionParser } from '@jitar/execution';
 import type { HealthManager } from '@jitar/health';
-import type { File, SourcingManager } from '@jitar/sourcing';
-import { LocalGateway, LocalWorker, RemoteWorker, Proxy, RemoteBuilder } from '@jitar/services';
 import { Logger } from '@jitar/logging';
+import type { MiddlewareManager } from '@jitar/middleware';
+import { LocalGateway, LocalWorker, Proxy, RemoteBuilder, RemoteWorker } from '@jitar/services';
+import type { File, SourcingManager } from '@jitar/sourcing';
 
 import ProcedureRunner from '../ProcedureRunner';
 import Runtime from '../Runtime';
@@ -14,21 +14,22 @@ import Runtime from '../Runtime';
 import ContentTypes from './definitions/ContentTypes';
 import StatusCodes from './definitions/StatusCodes';
 
-import type ServerResponse from './types/ServerResponse';
 import type AddWorkerRequest from './types/AddWorkerRequest';
 import type ProvideRequest from './types/ProvideRequest';
 import type RunRequest from './types/RunRequest';
+import type ServerResponse from './types/ServerResponse';
 
 type Configuration =
-{
-    proxy: Proxy;
-    sourcingManager: SourcingManager;
-    remoteBuilder: RemoteBuilder;
-    middlewareManager: MiddlewareManager;
-    healthManager: HealthManager;
-    setUpScripts?: string[];
-    tearDownScripts?: string[];
-};
+    {
+        proxy: Proxy;
+        sourcingManager: SourcingManager;
+        remoteBuilder: RemoteBuilder;
+        middlewareManager: MiddlewareManager;
+        healthManager: HealthManager;
+        setUpScripts?: string[];
+        tearDownScripts?: string[];
+        logger: Logger;
+    };
 
 export default class Server extends Runtime
 {
@@ -40,13 +41,13 @@ export default class Server extends Runtime
     #setUpScripts: string[];
     #tearDownScripts: string[];
 
-    #logger: Logger = new Logger();
+    #logger: Logger;
     #versionParser = new VersionParser();
 
     constructor(configuration: Configuration)
     {
         super();
-        
+
         this.#proxy = configuration.proxy;
         this.#sourcingManager = configuration.sourcingManager;
         this.#remoteBuilder = configuration.remoteBuilder;
@@ -54,6 +55,8 @@ export default class Server extends Runtime
         this.#healthManager = configuration.healthManager;
         this.#setUpScripts = configuration.setUpScripts ?? [];
         this.#tearDownScripts = configuration.tearDownScripts ?? [];
+
+        this.#logger = configuration.logger;
 
         const procedureRunner = new ProcedureRunner(this.#proxy);
         this.#middlewareManager.addMiddleware(procedureRunner);
@@ -73,7 +76,7 @@ export default class Server extends Runtime
         await this.#proxy.start();
 
         this.#logger.info(`Server started at ${this.#proxy.url}`);
-        
+
         if (this.#proxy.runner instanceof LocalWorker)
         {
             this.#logger.info('RPC procedures:', this.#proxy.runner.getProcedureNames());
@@ -97,7 +100,7 @@ export default class Server extends Runtime
             const externalHealth = await this.#healthManager.getHealth();
             const health = new Map([...internalHealth, ...externalHealth]);
 
-            this.#logger.info('Got health');
+            this.#logger.debug('Got health');
 
             return this.#respondHealth(health);
         }

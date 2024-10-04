@@ -47,16 +47,15 @@ export async function sayHello(name: string): Promise<string>
 }
 ```
 
-
 Looks like a normal function, right? The `async` might seem unnecessary, but is actually an important addition. The caller of the function does not know about its location. The function might be locally available, but can also be on another server. Making a function `async` ensures that it can be run, no matter where it resides.
 
 Functions can be imported and called like any normal async function.
 
 ```ts
-// src/App.tsx
+// src/webui/App.tsx
 /* other imports */
 
-import { sayHello } from './domain/sayHello';
+import { sayHello } from '../domain/sayHello';
 
 const message = await sayHello('World');
 
@@ -102,41 +101,21 @@ Jitar provides multiple types of services that can be configured to fit your nee
     "url": "http://127.0.0.1:3000",
     "standalone":
     {
-        "source": "./dist",
+        "segments": ["default"],
         "assets": ["index.html", "main.js", "App.js", "vite.svg", "assets/**/*"]
     }
 }
 ```
 
-Jitar creates segment bundles and local and remote implementations required to run the application in any setup. To boost performance the output will be cached. By default the cache will be stored in the `.jitar` folder, but you can configure another folder if desired.
+Jitar creates segment bundles required to run the application in any setup. By default the bundles will be stored in the `.jitar` folder, but you can configure another folder if desired.
 
-Jitar also acts like a web server to serve the frontend components. By default it serves the `index.html` file when no specific file is requested, but you can configure another file. For [security reasons](../develop/security.md#file-access-protection), all assets must be specified in order to become accessible.
-
-The configuration needs to be supplied when starting a Jitar instance. To start Jitar, a simple bootstrapper script is required that starts a server.
-
-```ts
-//src/jitar.ts
-import { buildServer } from 'jitar';
-
-const moduleImporter = async (specifier: string) => import(specifier);
-const server = await buildServer(moduleImporter);
-
-process.on('SIGINT', async () => server.stop());
-
-server.start();
-```
-
-This script can be reused for every application running on Jitar.
+Jitar can also act like a web server to serve the frontend components. By default it serves the `index.html` file when no specific file is requested, but you can configure another file. For [security reasons](../develop/security.md#file-access-protection), all assets must be specified in order to become accessible.
 
 With everything in place we can run the application with the following command.
 
 ```bash
-node --experimental-network-imports dist/jitar.js --config=services/standalone.json
+jitar start --service=services/standalone.json
 ```
-
-::: info NOTE
-Node needs the `--experimental-network-imports` flag in order to import functions and other components from a remote location.
-:::
 
 The project provides a script containing the command in the `package.json` file, so we can also start Jitar like this:
 

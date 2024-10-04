@@ -1,12 +1,7 @@
 
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { Logger } from '../src';
-
-import { LOGGERS, writer, INPUT, OUTPUT } from './fixtures';
-
-const normalLogger = LOGGERS.NORMAL;
-const debugLogger = LOGGERS.DEBUG;
+import { INPUT, LOGGERS, OUTPUT, writer } from './fixtures';
 
 beforeEach(() =>
 {
@@ -15,124 +10,237 @@ beforeEach(() =>
 
 describe('Logger', () =>
 {
+    describe('.debug(...message)', () =>
+    {
+        const debugLogger = LOGGERS.DEBUG;
+
+        it('should log DEBUG and above when DEBUG level is set', () =>
+        {
+            debugLogger.debug(INPUT.STRING);
+            expect(writer.messages).toHaveLength(1);
+
+            debugLogger.info(INPUT.STRING);
+            expect(writer.messages).toHaveLength(2);
+
+            debugLogger.warn(INPUT.STRING);
+            expect(writer.messages).toHaveLength(3);
+
+            debugLogger.error(INPUT.STRING);
+            expect(writer.messages).toHaveLength(4);
+
+            debugLogger.fatal(INPUT.STRING);
+            expect(writer.messages).toHaveLength(5);
+        });
+
+        it('should log [DEBUG] messages', () =>
+        {
+            debugLogger.debug(INPUT.DEBUG_CATEGORY);
+            expect(writer.lastMessage).toMatch(OUTPUT.DEBUG_CATEGORY);
+        });
+    });
+
+    describe('.info(...message)', () => 
+    {
+        const infoLogger = LOGGERS.INFO;
+
+        it('should log INFO and above when INFO level is set', () =>
+        {
+            infoLogger.debug(INPUT.STRING);
+            expect(writer.messages).toHaveLength(0);
+
+            infoLogger.info(INPUT.STRING);
+            expect(writer.messages).toHaveLength(1);
+
+            infoLogger.warn(INPUT.STRING);
+            expect(writer.messages).toHaveLength(2);
+
+            infoLogger.error(INPUT.STRING);
+            expect(writer.messages).toHaveLength(3);
+
+            infoLogger.fatal(INPUT.STRING);
+            expect(writer.messages).toHaveLength(4);
+        });
+
+        it('should log [INFO] messages', () =>
+        {
+            infoLogger.info(INPUT.INFO_CATEGORY);
+            expect(writer.lastMessage).toMatch(OUTPUT.INFO_CATEGORY);
+        });
+    });
+
+    describe('.warn(...message)', () => 
+    {
+        const warnLogger = LOGGERS.WARN;
+
+        it('should log WARN and above when WARN level is set', () =>
+        {
+            warnLogger.debug(INPUT.STRING);
+            expect(writer.messages).toHaveLength(0);
+
+            warnLogger.info(INPUT.STRING);
+            expect(writer.messages).toHaveLength(0);
+
+            warnLogger.warn(INPUT.STRING);
+            expect(writer.messages).toHaveLength(1);
+
+            warnLogger.error(INPUT.STRING);
+            expect(writer.messages).toHaveLength(2);
+
+            warnLogger.fatal(INPUT.STRING);
+            expect(writer.messages).toHaveLength(3);
+        });
+
+        it('should log [WARN] messages', () =>
+        {
+            warnLogger.warn(INPUT.WARN_CATEGORY);
+            expect(writer.lastMessage).toMatch(OUTPUT.WARN_CATEGORY);
+        });
+    });
+
+    describe('.error(...message)', () => 
+    {
+        const errorLogger = LOGGERS.ERROR;
+
+        it('should log ERROR and above when ERROR level is set', () =>
+        {
+            errorLogger.debug(INPUT.STRING);
+            expect(writer.messages).toHaveLength(0);
+
+            errorLogger.info(INPUT.STRING);
+            expect(writer.messages).toHaveLength(0);
+
+            errorLogger.warn(INPUT.STRING);
+            expect(writer.messages).toHaveLength(0);
+
+            errorLogger.error(INPUT.STRING);
+            expect(writer.messages).toHaveLength(1);
+
+            errorLogger.fatal(INPUT.STRING);
+            expect(writer.messages).toHaveLength(2);
+        });
+
+        it('should log [ERROR] messages', () =>
+        {
+            errorLogger.error(INPUT.ERROR_CATEGORY);
+            expect(writer.lastMessage).toMatch(OUTPUT.ERROR_CATEGORY);
+        });
+    });
+
+    describe('.fatal(...message)', () => 
+    {
+        const fatalLogger = LOGGERS.FATAL;
+
+        it('should log FATAL and above when FATAL level is set', () =>
+        {
+            fatalLogger.debug(INPUT.STRING);
+            expect(writer.messages).toHaveLength(0);
+
+            fatalLogger.info(INPUT.STRING);
+            expect(writer.messages).toHaveLength(0);
+
+            fatalLogger.warn(INPUT.STRING);
+            expect(writer.messages).toHaveLength(0);
+
+            fatalLogger.error(INPUT.STRING);
+            expect(writer.messages).toHaveLength(0);
+
+            fatalLogger.fatal(INPUT.STRING);
+            expect(writer.messages).toHaveLength(1);
+        });
+
+        it('should log [FATAL] messages', () =>
+        {
+            fatalLogger.fatal(INPUT.FATAL_CATEGORY);
+            expect(writer.lastMessage).toMatch(OUTPUT.FATAL_CATEGORY);
+        });
+    });
+
     describe('Message creation', () =>
     {
-        const logger = new Logger(false, writer);
+        const logger = LOGGERS.INFO;
 
-        it('should log [CATEGORY] messages', () =>
-        {
-            normalLogger.info('info');
-            normalLogger.warn('warn');
-            normalLogger.error('error');
-            normalLogger.fatal('fatal');
-
-            expect(writer.messages).toEqual([
-                '[INFO] info',
-                '[WARN] warn',
-                '[ERROR] error',
-                '[FATAL] fatal'
-            ]);
-        });
-    
         it('should format string message', () =>
         {
-            normalLogger.info(INPUT.STRING);
+            logger.info(INPUT.STRING);
 
-            expect(writer.lastMessage).toEqual(OUTPUT.STRING);
+            expect(writer.lastMessage).toMatch(OUTPUT.STRING);
         });
 
         it('should format number message', () =>
         {
-            normalLogger.info(INPUT.NUMBER);
+            logger.info(INPUT.NUMBER);
 
-            expect(writer.lastMessage).toEqual(OUTPUT.NUMBER);
+            expect(writer.lastMessage).toMatch(OUTPUT.NUMBER);
         });
 
         it('should format boolean message', () =>
         {
-            normalLogger.info(INPUT.BOOLEAN);
+            logger.info(INPUT.BOOLEAN);
 
-            expect(writer.lastMessage).toEqual(OUTPUT.BOOLEAN);
+            expect(writer.lastMessage).toMatch(OUTPUT.BOOLEAN);
         });
 
         it('should format object message', () =>
         {
-            normalLogger.info(INPUT.OBJECT);
+            logger.info(INPUT.OBJECT);
 
-            expect(writer.lastMessage).toEqual(OUTPUT.OBJECT);
+            expect(writer.lastMessage).toMatch(OUTPUT.OBJECT);
         });
 
         it('should format array', () =>
         {
-            normalLogger.info(INPUT.ARRAY);
+            logger.info(INPUT.ARRAY);
 
-            expect(writer.lastMessage).toEqual(OUTPUT.ARRAY);
+            expect(writer.lastMessage).toMatch(OUTPUT.ARRAY);
         });
 
         it('should format function', () =>
         {
-            normalLogger.info(INPUT.FUNCTION);
+            logger.info(INPUT.FUNCTION);
 
-            expect(writer.lastMessage).toEqual(OUTPUT.FUNCTION);
+            expect(writer.lastMessage).toMatch(OUTPUT.FUNCTION);
         });
 
         it('should format undefined', () =>
         {
-            normalLogger.info(INPUT.UNDEFINED);
+            logger.info(INPUT.UNDEFINED);
 
-            expect(writer.lastMessage).toEqual(OUTPUT.UNDEFINED);
+            expect(writer.lastMessage).toMatch(OUTPUT.UNDEFINED);
         });
 
         it('should format null', () =>
         {
-            normalLogger.info(INPUT.NULL);
+            logger.info(INPUT.NULL);
 
-            expect(writer.lastMessage).toEqual(OUTPUT.NULL);
+            expect(writer.lastMessage).toMatch(OUTPUT.NULL);
         });
 
         it('should format nested object', () =>
         {
-            normalLogger.info(INPUT.NESTED_OBJECT);
+            logger.info(INPUT.NESTED_OBJECT);
 
-            expect(writer.lastMessage).toEqual(OUTPUT.NESTED_OBJECT);
+            expect(writer.lastMessage).toMatch(OUTPUT.NESTED_OBJECT);
         });
 
         it('should format nested array', () =>
         {
-            normalLogger.info(INPUT.NESTED_ARRAY);
-            
-            expect(writer.lastMessage).toEqual(OUTPUT.NESTED_ARRAY);
+            logger.info(INPUT.NESTED_ARRAY);
+
+            expect(writer.lastMessage).toMatch(OUTPUT.NESTED_ARRAY);
         });
 
         it('should format error without stacktrace', () =>
         {
-            normalLogger.info(INPUT.ERROR_WITHOUT_STACKTRACE);
-            
-            expect(writer.lastMessage).toEqual(OUTPUT.ERROR_WITHOUT_STACKTRACE);
+            logger.info(INPUT.ERROR_WITHOUT_STACKTRACE);
+
+            expect(writer.lastMessage).toMatch(OUTPUT.ERROR_WITHOUT_STACKTRACE);
         });
 
         it('should format error with stacktrace', () =>
         {
             logger.info(INPUT.ERROR_WITH_STACKTRACE);
-            
-            expect(writer.lastMessage).toEqual(OUTPUT.ERROR_WITH_STACKTRACE);
-        });
-    });
 
-    describe('Debug mode', () =>
-    {
-        it('should log messages when debug is enabled', () =>
-        {
-            debugLogger.debug('message');
-
-            expect(writer.lastMessage).toEqual('[DEBUG] message');
-        });
-
-        it('should not log messages when debug is disabled', () =>
-        {
-            normalLogger.debug('message');
-
-            expect(writer.lastMessage).toEqual(undefined);
+            expect(writer.lastMessage).toMatch(OUTPUT.ERROR_WITH_STACKTRACE);
         });
     });
 });

@@ -6,8 +6,8 @@ prev:
     link: /monitor/Logging
 
 next:
-    text: Procedures
-    link: /monitor/procedures
+    text: Creating a cluster
+    link: /guides/creating-a-cluster
 
 ---
 

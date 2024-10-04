@@ -23,6 +23,10 @@ Jitar automatically creates an endpoint for every segmented public function. The
 GET http://{ server address }/rpc/{ FQN }?{ parameters } HTTP/1.1
 ```
 
+::: tip TIP
+For protected functions the RPC endpoint is also available. To call these functions a [custom header](../deploy/segmentation.html#trusted-clients) is required. 
+:::
+
 Let's see how this works for the following simple [function](../fundamentals/building-blocks#functions).
 
 ```ts
@@ -108,7 +112,7 @@ GET http://localhost:3000/rpc/domain/sayHello?name=John&city=Rome HTTP/1.1
 ```
 
 ::: warning IMPORTANT
-Nested parameter destructuring is on the [known limitations list](../internals/reflection#known-limitations) and will be supported in future versions.
+Nested parameter destructuring is a known limitation and will be supported in future versions.
 :::
 
 ### Rest parameters
@@ -171,39 +175,42 @@ export class Person
 This class is immutable, so it can only be constructed with constructor arguments. To call this function we need to provide all information required to construct the instance.
 
 ```http
-POST http://example.com:3000/rpc/domain/sayHello?serialize=true HTTP/1.1
+POST http://example.com:3000/rpc/domain/sayHello HTTP/1.1
 content-type: application/json
+x-jitar-data-encoding: serialized
 
 {
     "person":
     {
         "serialized": true,
-        "name": "Person",
-        "source": "domain/Person.js",
-        "args": ["John", 42],
+        "key": "person/Person",
+        "name": "class",
+        "args": {
+            "0": "John", 
+            "1": 44
+        },
         "fields": { }
     }
 }
 ```
 
-Note that the query string now contains a `serialize` parameter. This tells Jitar to use the serializer for the request body that defines the instance of the Person class:
+Note that headers now contains a `serialized` value. This tells Jitar to use the serializer for the request body that defines the instance of the Person class:
 
 * serialized - tells the serializer that this is an serialized object
-* name - the name of the class
-* source - the module file containing the class definition (relative to the source folder)
-* args - the constructor arguments
+* key - the FQN of the class definition (relative to the source root)
+* name - the serializer name
+* args - the constructor arguments in the parameter order
 * fields - the public field values
-
-More information on serialization like how to deal with built-in classes can be found in the [data serialization](../internals/data-serialization) section of the Jitar internals.
 
 ## Response result
 
 The RPC API translates the returned value of a function to a response. Non-object values will be translated to a string, object values to a JSON string.
 
-Object values can be requested with or without the use of the serializer using the serialize query parameter.
+Object values can be requested with or without the use of the serializer using the `data encoding` header.
 
 ```http
-GET http://localhost:3000/rpc/person/getPerson?serialize={true | false} HTTP/1.1
+GET http://localhost:3000/rpc/person/getPerson HTTP/1.1
+x-jitar-data-encoding: serialized | undefined
 ```
 
 For plain objects the result will be the same in both cases, but for class instances with private fields it makes a big difference. For example returning an instance of the following class.
@@ -239,14 +246,17 @@ With the serializer the response looks very different.
 ```bash
 {
     "serialized": true,
-    "name": "Person",
-    "source": "domain/Person.js",
-     "args": ["John", 42],
+    "key": "person/Person",
+    "name": "class",
+    "args": {
+        "0": "John", 
+        "1": 44
+    },
     "fields": { }
 }
 ```
 
-The serializer creates an object with a full description of the instance that is internally used for sharing data between servers. More information on serialization can be found in the [data serialization](../internals/data-serialization) section of the Jitar internals.
+The serializer creates an object with a full description of the instance that is internally used for sharing data between servers.
 
 ## Error handling
 

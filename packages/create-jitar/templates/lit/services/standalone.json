@@ -1,11 +1,7 @@
 {
     "url": "http://127.0.0.1:3000",
     "standalone": {
-        "assets": [
-            "index.html",
-            "my-element.js",
-            "style.css",
-            "vite.svg"
-        ]
+        "segments": ["default"],
+        "assets": ["index.html", "my-element.js", "style.css", "vite.svg", "assets/**/*"]
     }
 }

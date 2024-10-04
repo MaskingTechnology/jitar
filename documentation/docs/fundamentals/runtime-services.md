@@ -29,6 +29,7 @@ Configurations are placed in JSON files. The basic structure looks like this.
     "setUp": ["SET_UP_SCRIPT"],
     "tearDown": ["TEAR_DOWN_SCRIPT"],
     "healthChecks": ["HEALTH_CHECK_SCRIPT"],
+    "middlewares": ["MIDDLEWARE_SCRIPT"],
     "SERVICE_TYPE":
     {
         "PROPERTY_1": "…",
@@ -51,56 +52,11 @@ There are four properties at root level:
 * url - service url containing protocol, address and port (e.g. `http://service.example.com:3000`).
 * setUp - optional list of [set up scripts](../develop/setup-and-teardown.md) that gets executed on startup.
 * tearDown - optional list of [tear down scripts](../develop/setup-and-teardown.md) that gets executed on shutdown.
-* healthChecks - optional list of [health check scripts](../deploy/health-checks.md) for checking the service health.
+* healthChecks - optional list of [health check modules](../deploy/health-checks.md) for checking the service health.
+* middlewares - optional list of [middleware modules](../develop/middleware.md) to load.
 * SERVICE_TYPE - configuration of the specific service (differs per type).
 
 An instance can only run one type of service. Each service has its own configuration properties. All types and their properties are explained next.
-
-## Repository
-
-The repository holds and serves application files like a web server, with addition that it's segment aware.
-
-### File serving
-
-The repository keeps track of every client and their segments. When a client requests a module file, the repository determines if it needs to serve the actual module or a remote implementation. It will only provide the actual module in case the module is unsegmented or gets requested from the same segment.
-
-Besides serving modules to clients, it also serves application assets like images, documents, etc.. To protect the access to the application files, assets need to be whitelisted. This can be done per file, or by using glob patterns. For example the pattern `assets/**/*` whitelists all files and subfolder files in the assets folder.
-
-### Caching
-
-All application files are served from a cache folder created by Jitar. This folder contains a copy of the application with additional generated files like segmentation information, remote module implementations and more. Detailed information can be found in the [INTERNALS section](../internals/caching.md).
-
-### Configuration properties
-
-The following configuration properties are available:
-
-* source - location of the application code (optional, default `./src`).
-* cache - location of the application cache (optional, default `./.jitar`).
-* index - file to serve when accessed by a web browser (optional, default `index.html`).
-* serveIndexOnNotFound - when true, the index file will be served if the requested file is not found (default `false`).
-* assets - list of whitelisted assets (optional, default `undefined`).
-* overrides - map with import overrides (optional, default `undefined`).
-
-A full configuration example looks like this.
-
-```json
-{
-    "url": "http://repository.example.com:3000",
-    "repository":
-    {
-        "source": "./src",
-        "cache": "./.jitar",
-        "index": "index.html",
-        "serveIndexOnNotFound": false,
-        "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
-        "overrides": { "./my-module": "./alternative-module" }
-    }
-}
-```
-
-### When to use
-
-This is a core service that is always required, except when running Jitar as a [standalone service](#standalone).
 
 ## Worker
 
@@ -122,10 +78,8 @@ When configured, a worker can register itself to a [gateway service](#gateway) t
 
 The following configuration properties are available:
 
-* gateway - url of the gateway (optional, in case no gateway is used).
-* repository - url of the repository (required).
-* segments - list of segment names to load (optional, loads all segments by default).
-* middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
+* gateway - url of the gateway (optional, in case a gateway is used).
+* segments - list of segment names to load (required).
 * trustKey - key for creating trusted client (optional).
 
 A full configuration example looks like this:
@@ -136,9 +90,7 @@ A full configuration example looks like this:
     "worker":
     {
         "gateway": "http://gateway.example.com:3000",
-        "repository": "http://repository.example.com:3000",
         "segments": ["segment1", "segment2"],
-        "middlewares": ["./middleware1", "./middleware2"],
         "trustKey": "${MY_TRUST_KEY}"
     }
 }
@@ -164,17 +116,11 @@ If a function is available on multiple workers, the gateway will automatically b
 
 The availability of workers is actively monitored. If a worker cannot be reached or replies to have [an unhealthy state](../monitor/health.md), it will be removed from the gateway.
 
-### Caching
-
-There aren't any caching options yet, but we are planning on implementing them. Please [let us know](../community/contribute.md) if you need this, it will help us prioritize our work!
-
 ### Configuration properties
 
 The following configuration properties are available:
 
-* repository - url of the repository (required).
 * monitor - worker monitoring interval in milliseconds (optional, default `5000`).
-* middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
 * trustKey - key for creating trusted clients (optional).
 
 A full configuration example looks like this:
@@ -184,9 +130,7 @@ A full configuration example looks like this:
     "url": "http://gateway.example.com:3000",
     "gateway":
     {
-        "repository": "http://repository.example.com:3000",
         "monitor": 5000,
-        "middlewares": ["./middleware1", "./middleware2"],
         "trustKey": "${MY_TRUST_KEY}"
     }
 }
@@ -195,6 +139,41 @@ A full configuration example looks like this:
 ### When to use
 
 This service is used for creating a cluster and is only useful when working with multiple workers. It also works with a single worker, but adds a lot of overhead.
+
+## Repository
+
+The repository holds and serves application files like a web server.
+
+### Access protection
+
+To protect the access to the application files, assets need to be whitelisted. This can be done per file, or by using glob patterns. For example the pattern `assets/**/*` whitelists all files and subfolder files in the assets folder.
+
+### Configuration properties
+
+The following configuration properties are available:
+
+* index - file to serve when accessed by a web browser (optional, default `index.html`).
+* serveIndexOnNotFound - when true, the index file will be served if the requested file is not found (default `false`).
+* assets - list of whitelisted assets (optional, default `undefined`).
+
+A full configuration example looks like this.
+
+```json
+{
+    "url": "http://repository.example.com:3000",
+    "repository":
+    {
+        "index": "index.html",
+        "serveIndexOnNotFound": false,
+        "assets": ["*.html", "*.js", "*.css", "assets/**/*"]
+    }
+}
+```
+
+### When to use
+
+This service is useful for full-stack applications.
+The [standalone service](#standalone) service includes this service.
 
 ## Proxy
 
@@ -211,7 +190,6 @@ The following configuration properties are available:
 * gateway - url of the gateway (optional if worker property set).
 * worker - url of the worker (optional if gateway property set).
 * repository - url of the repository (required).
-* middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
 
 A full configuration example looks like this:
 
@@ -221,8 +199,7 @@ A full configuration example looks like this:
     "proxy":
     {
         "gateway": "http://gateway.example.com:3000",
-        "repository": "http://repository.example.com:3000",
-        "middlewares": ["./middleware1", "./middleware2"]
+        "repository": "http://repository.example.com:3000"
     }
 }
 ```
@@ -242,13 +219,10 @@ Combines the repository and worker core services into a single instance.
 
 The standalone service has the same configuration properties as the repository service:
 
-* source - location of the application code (optional, default `./src`).
-* cache - location of the application cache (optional, default `./.jitar`).
 * index - file to serve when accessed by a web browser (optional, default `index.html`).
 * serveIndexOnNotFound - when true, the index file will be served if the requested file is not found (default `false`).
 * assets - list of whitelisted assets (optional, default `undefined`).
-* middlewares - list of [middleware modules](../develop/middleware.md) to load (optional).
-* overrides - map with import overrides (optional, default `undefined`).
+* segments - list of segment names to load (required).
 * trustKey - key for creating trusted clients (optional).
 
 A full configuration example looks like this:
@@ -258,13 +232,10 @@ A full configuration example looks like this:
     "url": "http://standalone.example.com:3000",
     "standalone":
     {
-        "source": "./src",
-        "cache": "./.jitar",
         "index": "index.html",
         "serveIndexOnNotFound": false,
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
-        "middlewares": ["./middleware1", "./middleware2"],
-        "overrides": { "./my-module": "./alternative-module" },
+        "segments": ["segment1", "segment2"],
         "trustKey": "${MY_TRUST_KEY}"
     }
 }

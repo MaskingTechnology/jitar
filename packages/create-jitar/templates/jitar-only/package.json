@@ -3,14 +3,13 @@
     "type": "module",
     "private": true,
     "scripts": {
-        "build": "tsc -p tsconfig.json",
-        "repo": "node --experimental-network-imports dist/jitar.js --config=services/repository.json",
-        "gateway": "node --experimental-network-imports dist/jitar.js --config=services/gateway.json",
-        "hi": "node --experimental-network-imports dist/jitar.js --config=services/hi.json",
-        "hello": "node --experimental-network-imports dist/jitar.js --config=services/hello.json",
-        "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json"
+        "build": "rm -rf dist .jitar && tsc -p tsconfig.json && jitar build",
+        "standalone": "jitar start --service=services/standalone.json",
+        "gateway": "jitar start --service=services/gateway.json",
+        "hi": "jitar start --service=services/hi.json",
+        "hello": "jitar start --service=services/hello.json"
     },
     "dependencies": {
-        "jitar": "^0.7.5"
+        "jitar": "^0.8.0"
     }
 }

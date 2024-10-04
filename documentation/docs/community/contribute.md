@@ -13,22 +13,22 @@ next:
 
 # Contribute
 
-We are thrilled that you are interested in contributing to Jitar! We welcome all sorts of contributions, and there are several valuable ways to contribute.
+We’re thrilled that you're interested in contributing to Jitar! We welcome all kinds of contributions, and there are many valuable ways to get involved.
 
 ## Issues
 
-Feel free to add issues to our [issue board](https://github.com/MaskingTechnology/jitar/issues){target="_blank"}. Before adding an issue, we advise you to look at the current [discussions](https://github.com/MaskingTechnology/jitar/discussions){target="_blank"} to see if your issue is already being discussed.
+Feel free to add issues to our [issue board](https://github.com/MaskingTechnology/jitar/issues){target="_blank"}. Before adding an issue, we recommend checking the current [discussions](https://github.com/MaskingTechnology/jitar/discussions){target="_blank"} to see if your issue is already being addressed.
 
 You can also vote on existing issues to help us prioritize the work that needs to be done.
 
 ## Pull requests
 
-Jitar is an open source project and it’s open for contributions. You can pick up issues and/or submit a pull request.
+Jitar is an open-source project, open to contributions. You can pick up issues or submit a pull request.
 
 ## Documentation
 
-Did you spot a mistake in the documentation? Is the grammar of the texts incorrect? Please help us to improve the documentation. We’re non native English speakers and appreciate the help.
+Did you spot a mistake in the documentation? Is the grammar incorrect? Please help us improve it. We’re non-native English speakers and would appreciate your help.
 
 ## Translation
 
-Do you miss your native language here? The documentation is written in English only, but you’re more than welcome to translate it to your native language.
+Is your native language missing here? The documentation is written only in English, but you’re more than welcome to translate it into your native language.

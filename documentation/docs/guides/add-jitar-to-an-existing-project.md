@@ -33,7 +33,7 @@ Adding Jitar to your project takes a few steps. In these steps we use the applic
 The first thing we need to do is to add Jitar as a dependency in the current project.
 
 ```bash
-npm install Jitar
+npm install jitar
 ```
 
 There are also a few requirements for the `tsconfig.json` file. Make sure to use ESNext as target and module, and to output all transpiled code in a separate folder (we use `dist` by default).

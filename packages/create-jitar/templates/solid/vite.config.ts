@@ -5,9 +5,10 @@ import jitar from '@jitar/plugin-vite'
 export default defineConfig({
   plugins: [
     solidPlugin(),
-    jitar('src', 'domain', 'http://localhost:3000')
+    jitar({ sourceDir: 'src', targetDir: 'dist', jitarDir: 'domain', jitarUrl: 'http://localhost:3000', segments: [] })
   ],
   build: {
+    emptyOutDir: false,
     target: 'esnext',
   }
 })

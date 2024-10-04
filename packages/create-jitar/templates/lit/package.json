@@ -14,16 +14,18 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc",
-    "standalone": "node --experimental-network-imports dist/jitar.js --config=services/standalone.json"
+    "build": "npm run build-domain && npm run build-webui",
+    "build-domain": "rm -rf dist && tsc -p tsconfig.build.json && jitar build",
+    "build-webui": "vite build",
+    "standalone": "jitar start --service=services/standalone.json"
   },
   "dependencies": {
-    "jitar": "^0.7.5",
-    "lit": "^3.1.4"
+    "jitar": "^0.8.0",
+    "lit": "^3.2.0"
   },
   "devDependencies": {
-    "@jitar/plugin-vite": "^0.7.5",
+    "@jitar/plugin-vite": "^0.8.0",
     "typescript": "^5.5.3",
-    "vite": "^5.3.3"
+    "vite": "^5.4.8"
   }
 }
