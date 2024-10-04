@@ -1,13 +1,16 @@
 
 import type { RuntimeConfiguration } from '@jitar/configuration';
-import { Files, LocalFileManager } from '@jitar/sourcing';
+import { Logger, LogLevel } from '@jitar/logging';
 import type { FileManager } from '@jitar/sourcing';
+import { Files, LocalFileManager } from '@jitar/sourcing';
 
 import { ApplicationReader } from './source';
 import { ApplicationBuilder } from './target';
 
 export default class BuildManager
 {
+    #logger: Logger;
+
     #projectFileManager: FileManager;
     #sourceFileManager: FileManager;
     #targetFileManager: FileManager;
@@ -15,14 +18,16 @@ export default class BuildManager
     #applicationReader: ApplicationReader;
     #applicationBuilder: ApplicationBuilder;
 
-    constructor(configuration: RuntimeConfiguration)
+    constructor(configuration: RuntimeConfiguration, logLevel?: LogLevel)
     {
+        this.#logger = new Logger(logLevel);
+
         this.#projectFileManager = new LocalFileManager('./');
         this.#sourceFileManager = new LocalFileManager(configuration.source);
         this.#targetFileManager = new LocalFileManager(configuration.target);
 
         this.#applicationReader = new ApplicationReader(this.#sourceFileManager);
-        this.#applicationBuilder = new ApplicationBuilder(this.#targetFileManager);
+        this.#applicationBuilder = new ApplicationBuilder(this.#targetFileManager, this.#logger);
     }
 
     async build(): Promise<void>

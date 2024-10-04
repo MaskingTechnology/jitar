@@ -1,11 +1,12 @@
 
 import { ConfigurationManager, RuntimeConfiguration, ServerConfiguration } from '@jitar/configuration';
-import { LocalFileManager, SourcingManager } from '@jitar/sourcing';
+import { HttpRemoteBuilder, HttpServer } from '@jitar/http';
+import { LogLevel, LogLevelParser } from '@jitar/logging';
 import { ServerBuilder } from '@jitar/runtime';
-import { HttpServer, HttpRemoteBuilder } from '@jitar/http';
+import { LocalFileManager, SourcingManager } from '@jitar/sourcing';
 
-import Command from '../Command';
 import ArgumentProcessor from '../ArgumentProcessor';
+import Command from '../Command';
 
 const banner = `
      ██╗██╗████████╗ █████╗ ██████╗ 
@@ -26,8 +27,11 @@ export default class StartServer implements Command
         const runtimeConfigFile = args.getOptionalArgument('--config', undefined);
         const serviceConfigFile = args.getRequiredArgument('--service');
 
+        const logLevelString = args.getOptionalArgument('--log-level', undefined);
+        const logLevel = this.#parseLogLevel(logLevelString);
+
         const bodyLimitString = args.getOptionalArgument('--http-body-limit', undefined);
-        const bodyLimit = bodyLimitString !== undefined ? Number.parseInt(bodyLimitString) : undefined;
+        const bodyLimit = this.#parseBodyLimit(bodyLimitString);
 
         const configurationManager = new ConfigurationManager();
 
@@ -36,12 +40,12 @@ export default class StartServer implements Command
         const runtimeConfiguration = await configurationManager.getRuntimeConfiguration(runtimeConfigFile);
         const serverConfiguration = await configurationManager.getServerConfiguration(serviceConfigFile);
 
-        const httpServer = await this.#buildServer(runtimeConfiguration, serverConfiguration, bodyLimit);
+        const httpServer = await this.#buildServer(runtimeConfiguration, serverConfiguration, bodyLimit, logLevel);
 
-        return this.#runServer(httpServer);        
+        return this.#runServer(httpServer);
     }
 
-    async #buildServer(runtimeConfiguration: RuntimeConfiguration, serverConfiguration: ServerConfiguration, bodyLimit?: number): Promise<HttpServer>
+    async #buildServer(runtimeConfiguration: RuntimeConfiguration, serverConfiguration: ServerConfiguration, bodyLimit?: number, logLevel?: LogLevel): Promise<HttpServer>
     {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [protocol, host, port] = serverConfiguration.url.split(':');
@@ -51,7 +55,7 @@ export default class StartServer implements Command
         const remoteBuilder = new HttpRemoteBuilder();
         const serverBuilder = new ServerBuilder(sourcingManager, remoteBuilder);
 
-        const server = await serverBuilder.build(serverConfiguration);
+        const server = await serverBuilder.build(serverConfiguration, logLevel);
 
         return new HttpServer(server, port, bodyLimit);
     }
@@ -63,5 +67,27 @@ export default class StartServer implements Command
         console.log(banner);
 
         return httpServer.start();
+    }
+
+    #parseLogLevel(logLevel: string | undefined): LogLevel | undefined
+    {
+        if (logLevel === undefined)
+        {
+            return;
+        }
+
+        const logLevelParser = new LogLevelParser();
+
+        return logLevelParser.parse(logLevel);
+    }
+
+    #parseBodyLimit(bodyLimit: string | undefined): number | undefined
+    {
+        if (Number.isInteger(bodyLimit) === false)
+        {
+            return undefined;
+        }
+
+        return Number.parseInt(bodyLimit!);
     }
 }

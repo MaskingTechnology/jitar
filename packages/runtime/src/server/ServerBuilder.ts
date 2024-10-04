@@ -1,9 +1,10 @@
 
-import { ServerConfiguration, GatewayConfiguration, WorkerConfiguration, RepositoryConfiguration, ProxyConfiguration, StandaloneConfiguration } from '@jitar/configuration';
-import { Segment, ExecutionManager } from '@jitar/execution';
+import { GatewayConfiguration, ProxyConfiguration, RepositoryConfiguration, ServerConfiguration, StandaloneConfiguration, WorkerConfiguration } from '@jitar/configuration';
+import { ExecutionManager, Segment } from '@jitar/execution';
 import { HealthCheck, HealthManager } from '@jitar/health';
+import { Logger, LogLevel } from '@jitar/logging';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
-import { RemoteRepository, LocalRepository, RemoteGateway, LocalGateway, LocalWorker, Proxy, DummyProvider, DummyRunner, RemoteBuilder } from '@jitar/services';
+import { DummyProvider, DummyRunner, LocalGateway, LocalRepository, LocalWorker, Proxy, RemoteBuilder, RemoteGateway, RemoteRepository } from '@jitar/services';
 import { SourcingManager } from '@jitar/sourcing';
 
 import UnknownServiceConfigured from './errors/UnknownServiceConfigured';
@@ -20,7 +21,7 @@ export default class RuntimeBuilder
         this.#remoteBuilder = remoteBuilder;
     }
 
-    async build(configuration: ServerConfiguration): Promise<Server>
+    async build(configuration: ServerConfiguration, logLevel?: LogLevel): Promise<Server>
     {
         const setUp = configuration.setUp ?? [];
         const tearDown = configuration.tearDown ?? [];
@@ -35,7 +36,9 @@ export default class RuntimeBuilder
         const setUpScripts = setUp.map(filename => this.#makeSharedFilename(filename));
         const tearDownScripts = tearDown.map(filename => this.#makeSharedFilename(filename));
 
-        return new Server({ proxy, sourcingManager, remoteBuilder, middlewareManager, healthManager, setUpScripts, tearDownScripts });
+        const logger = new Logger(logLevel);
+
+        return new Server({ proxy, sourcingManager, remoteBuilder, middlewareManager, healthManager, setUpScripts, tearDownScripts, logger });
     }
 
     #buildService(configuration: ServerConfiguration): Promise<Proxy>
@@ -175,7 +178,7 @@ export default class RuntimeBuilder
     async #buildAssetSet(patterns?: string[]): Promise<Set<string>>
     {
         if (patterns === undefined) return new Set();
-        
+
         const filenames = await this.#sourcingManager.filter(...patterns);
 
         return new Set(filenames);

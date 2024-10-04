@@ -1,60 +1,79 @@
 
+import { LogLevel, LogLevels } from './definitions/LogLevel';
 import type Writer from './Writer';
 
 export default class Logger
 {
-    #debugEnabled: boolean;
+    #logLevel: LogLevel;
     #writer: Writer;
 
-    constructor(debugEnabled: boolean = false, writer: Writer = console)
+    constructor(logLevel: LogLevel = LogLevels.INFO, writer: Writer = console)
     {
-        this.#debugEnabled = debugEnabled;
+        this.#logLevel = logLevel;
         this.#writer = writer;
+    }
+
+    debug(...message: unknown[]): void
+    {
+        if (this.#logLevel > LogLevels.DEBUG)
+        {
+            return;
+        }
+
+        const messageString = this.#createMessage('DEBUG', message);
+
+        this.#writer.debug(messageString);
     }
 
     info(...message: unknown[]): void
     {
-        const messageString = this.#createMessage('[INFO]', ...message);
+        if (this.#logLevel > LogLevels.INFO)
+        {
+            return;
+        }
+
+        const messageString = this.#createMessage('INFO', message);
 
         this.#writer.info(messageString);
     }
 
     warn(...message: unknown[]): void
     {
-        const messageString = this.#createMessage('[WARN]', ...message);
+        if (this.#logLevel > LogLevels.WARN)
+        {
+            return;
+        }
+
+        const messageString = this.#createMessage('WARN', message);
 
         this.#writer.warn(messageString);
     }
 
     error(...message: unknown[]): void
     {
-        const messageString = this.#createMessage('[ERROR]', ...message);
+        if (this.#logLevel > LogLevels.ERROR)
+        {
+            return;
+        }
+
+        const messageString = this.#createMessage('ERROR', message);
 
         this.#writer.error(messageString);
     }
 
     fatal(...message: unknown[]): void
     {
-        const messageString = this.#createMessage('[FATAL]', ...message);
+        const messageString = this.#createMessage('FATAL', message);
 
         this.#writer.error(messageString);
     }
 
-    debug(...message: unknown[]): void
+    #createMessage(logLevel: string, messages: unknown[]): string
     {
-        if (this.#debugEnabled === false)
-        {
-            return;
-        }
+        const moment = new Date().toISOString();
+        const message = messages.map(value => this.#interpretValue(value)).join(' ');
 
-        const messageString = this.#createMessage('[DEBUG]', ...message);
-
-        this.#writer.debug(messageString);
-    }
-
-    #createMessage(...message: unknown[]): string
-    {
-        return message.map(value => this.#interpretValue(value)).join(' ');
+        return `[${logLevel}][${moment}] ${message}`;
     }
 
     #interpretValue(value: unknown, level: number = 0): string

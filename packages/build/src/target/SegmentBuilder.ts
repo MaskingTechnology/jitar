@@ -1,9 +1,9 @@
 
-import { VersionParser } from '@jitar/execution';
-import type { FileManager } from '@jitar/sourcing';
-import { ESDestructuredArray, ESDestructuredObject } from '@jitar/analysis';
 import type { ESField, ESFunction, ESParameter } from '@jitar/analysis';
+import { ESDestructuredArray, ESDestructuredObject } from '@jitar/analysis';
+import { VersionParser } from '@jitar/execution';
 import { Logger } from '@jitar/logging';
+import type { FileManager } from '@jitar/sourcing';
 
 import type { Application, Segment, SegmentModule } from '../source';
 import { FileHelper } from '../utils';
@@ -15,13 +15,14 @@ export default class SegmentBuilder
 {
     #fileManager: FileManager;
 
-    #logger = new Logger();
+    #logger: Logger;
     #fileHelper = new FileHelper();
     #versionParser = new VersionParser();
 
-    constructor(fileManager: FileManager)
+    constructor(fileManager: FileManager, logger: Logger)
     {
         this.#fileManager = fileManager;
+        this.#logger = logger;
     }
 
     async build(application: Application): Promise<void>
@@ -30,12 +31,13 @@ export default class SegmentBuilder
 
         const builds = segmentation.segments.map(segment => this.#buildSegment(segment));
 
-        await Promise.all(builds);  
+        await Promise.all(builds);
     }
 
     async #buildSegment(segment: Segment): Promise<void>
     {
         const filename = `${segment.name}.segment.js`;
+
         const code = this.#createCode(segment);
 
         await this.#fileManager.write(filename, code);
@@ -96,7 +98,7 @@ export default class SegmentBuilder
     #createSegmentCode(segment: Segment): string
     {
         const lines: string[] = [];
-        
+
         lines.push(`export default new Segment("${segment.name}")`);
 
         for (const clazz of segment.classes)

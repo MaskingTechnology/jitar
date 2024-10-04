@@ -20,6 +20,7 @@
     "@jitar/configuration": "*",
     "@jitar/sourcing": "*",
     "@jitar/http": "*",
+    "@jitar/logging": "*",
     "@jitar/runtime": "*"
   }
 }
