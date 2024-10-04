@@ -79,7 +79,7 @@ When configured, a worker can register itself to a [gateway service](#gateway) t
 The following configuration properties are available:
 
 * gateway - url of the gateway (optional, in case a gateway is used).
-* segments - list of segment names to load (optional, loads all segments by default).
+* segments - list of segment names to load (required).
 * trustKey - key for creating trusted client (optional).
 
 A full configuration example looks like this:
@@ -222,6 +222,7 @@ The standalone service has the same configuration properties as the repository s
 * index - file to serve when accessed by a web browser (optional, default `index.html`).
 * serveIndexOnNotFound - when true, the index file will be served if the requested file is not found (default `false`).
 * assets - list of whitelisted assets (optional, default `undefined`).
+* segments - list of segment names to load (required).
 * trustKey - key for creating trusted clients (optional).
 
 A full configuration example looks like this:
@@ -234,6 +235,7 @@ A full configuration example looks like this:
         "index": "index.html",
         "serveIndexOnNotFound": false,
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
+        "segments": ["segment1", "segment2"],
         "trustKey": "${MY_TRUST_KEY}"
     }
 }

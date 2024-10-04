@@ -22,10 +22,10 @@ We like to use a standalone service for development. This requires only one Jita
 ```json
 {
     "url": "http://localhost:3000",
+    "middlewares": [...],
     "standalone":
     {
         "assets": [...],
-        "middlewares": [...]
     }
 }
 ```

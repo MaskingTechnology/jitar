@@ -105,14 +105,13 @@ We can use this module file for the registration at the service:
 // services/worker.json
 {
     "url": "http://localhost:3000",
+    "middlewares": ["./defaultRequestLogger"],
     "worker":
     {
-        "middlewares": ["./defaultRequestLogger"]
+        ...
     }
 }
 ```
-
-**Note** that middleware can only be added to a worker, gateway, proxy and standalone service because they are actively involved with the communication system.
 
 It's likely that different services require different middleware. For example, you might want to add authentication middleware to the gateway and authorization middleware to the worker.
 
