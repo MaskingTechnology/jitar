@@ -64,7 +64,7 @@ We can use this module file for the registration at the service:
     "healthChecks": ["./databaseHealthCheck"],
     "worker":
     {
-        // ...
+        ...
     }
 }
 ```

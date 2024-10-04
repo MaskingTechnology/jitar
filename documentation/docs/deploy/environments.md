@@ -33,7 +33,7 @@ We like to use a standalone service for development. This requires only one Jita
 Next you need to add a script in the `package.json` file.
 
 ```json
-"standalone": "node --experimental-network-imports dist/standalone.js --config=services/standalone.json",
+"standalone": "jitar start --service=services/standalone.json",
 ```
 
 Now you can start the environment with NPM.
