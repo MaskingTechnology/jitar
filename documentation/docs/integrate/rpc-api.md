@@ -112,7 +112,7 @@ GET http://localhost:3000/rpc/domain/sayHello?name=John&city=Rome HTTP/1.1
 ```
 
 ::: warning IMPORTANT
-Nested parameter destructuring is on the [known limitations list](../internals/reflection#known-limitations) and will be supported in future versions.
+Nested parameter destructuring is a known limitation and will be supported in future versions.
 :::
 
 ### Rest parameters
@@ -202,8 +202,6 @@ Note that headers now contains a `serialized` value. This tells Jitar to use the
 * args - the constructor arguments in the parameter order
 * fields - the public field values
 
-More information on serialization like how to deal with built-in classes can be found in the [data serialization](../internals/data-serialization) section of the Jitar internals.
-
 ## Response result
 
 The RPC API translates the returned value of a function to a response. Non-object values will be translated to a string, object values to a JSON string.
@@ -258,7 +256,7 @@ With the serializer the response looks very different.
 }
 ```
 
-The serializer creates an object with a full description of the instance that is internally used for sharing data between servers. More information on serialization can be found in the [data serialization](../internals/data-serialization) section of the Jitar internals.
+The serializer creates an object with a full description of the instance that is internally used for sharing data between servers.
 
 ## Error handling
 

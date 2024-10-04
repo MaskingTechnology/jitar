@@ -63,7 +63,7 @@ async function sayHello({ name }: Person): Promise<string> { /* … */ }
 ```
 
 ::: warning IMPORTANT
-Nested parameter destructuring is on the [known limitations](../internals/reflection#known-limitations) list and will be supported in future versions.
+Nested parameter destructuring is a known limitation and will be supported in future versions.
 :::
 
 ### Return value
