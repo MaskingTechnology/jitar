@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig } from 'vitepress';
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -83,7 +83,8 @@ export default defineConfig({
       {
         text: 'EXAMPLES',
         items: [
-          { text: 'Concepts', link: '/examples/concepts' }
+          { text: 'Concepts', link: '/examples/concepts' },
+          { text: 'Full stack', link: '/examples/full-stack' }
         ]
       },
       {
@@ -118,4 +119,4 @@ export default defineConfig({
       copyright: 'Copyright © 2024 - Masking Technology B.V.'
     }
   }
-})
+});

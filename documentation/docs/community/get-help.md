@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Concept examples
-    link: /examples/concepts
+    text: Full stack examples
+    link: /examples/full-stack
 
 next:
     text: Give feedback

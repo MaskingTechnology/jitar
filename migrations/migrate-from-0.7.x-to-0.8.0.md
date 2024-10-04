@@ -98,7 +98,7 @@ The build and start script should be updated to use the CLI.
 
 ## Vite plugin
 
-The output folder of the Vite build is added to the configuration of the Vite plugin. This output folder should be the same as the `source` property in the `jitar.json` file.
+The output folder of the Vite build is added to the configuration of the Vite plugin.
 
 ```javascript
 export default defineConfig({
@@ -114,3 +114,5 @@ export default defineConfig({
     ]
 });
 ```
+
+For a full description of the Vite plugin, see the [Vite plugin](https://docs.jitar.dev/integrate/vite-plugin.html) documentation.

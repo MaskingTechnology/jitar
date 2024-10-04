@@ -6,8 +6,8 @@ prev:
     link: /guides/migrate-away-from-jitar
 
 next:
-    text: Get help
-    link: /community/get-help
+    text: Full stack example
+    link: /examples/full-stack
 
 ---
 
