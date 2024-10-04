@@ -1,8 +1,8 @@
 
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
 
-import { PluginOption, normalizePath, ResolvedConfig } from 'vite';
+import { normalizePath, PluginOption, ResolvedConfig } from 'vite';
 
 const JITAR_SOURCE_ID = 'jitar';
 const JITAR_CLIENT_ID = 'jitar/client';
@@ -40,8 +40,7 @@ function makeShared(filename: string)
     return assureExtension(filename).replace('.js', '.shared.js');
 }
 
-type PluginConfig =
-{
+type PluginConfig = {
     sourceDir: string;
     targetDir: string;
     jitarDir: string;
@@ -49,6 +48,8 @@ type PluginConfig =
     segments?: string[];
     middleware?: string[];
 };
+
+export type { PluginConfig as JitarConfig };
 
 export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 {
@@ -77,7 +78,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
         {
             return {
                 build: { target: 'esnext' },
-                server: { proxy: { '/rpc': jitarUrl }}
+                server: { proxy: { '/rpc': jitarUrl } }
             };
         },
 
@@ -133,7 +134,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                     {
                         // Flag that the jitar bundle was imported by the application
                         // so we can avoid adding it to the HTML
-                        
+
                         jitarBundleImported = true;
                     }
 
@@ -166,7 +167,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
         load(id)
         {
             // Create the jitar client bundle content
-            
+
             if (id !== JITAR_BUNDLE_ID)
             {
                 return null;
@@ -236,7 +237,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                 }
 
                 const filenames = fs.readdirSync(outputPath);
-                
+
                 const jitarFilename = filenames.find(fileName => fileName.startsWith(JITAR_BUNDLE_ID) && fileName.endsWith('.js'));
 
                 if (jitarFilename === undefined)
