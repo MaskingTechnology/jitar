@@ -36,12 +36,12 @@ export default class ESClass extends ESMember
 
     get generators(): ESGenerator[] { return this.#scope.generators; }
 
-    get readable(): Array<ESDeclaration | ESGetter>
+    get readable(): (ESDeclaration | ESGetter)[]
     {
         const members = new Map<string, ESDeclaration | ESGetter>();
 
         this.getters.forEach(getter => { members.set(getter.name, getter); });
-        this.declarations.forEach(declaration => { if(declaration.isPublic) members.set(declaration.name, declaration); });
+        this.declarations.forEach(declaration => { if (declaration.isPublic) members.set(declaration.name, declaration); });
 
         return [...members.values()];
     }
@@ -51,7 +51,7 @@ export default class ESClass extends ESMember
         const members = new Map<string, ESDeclaration | ESSetter>();
 
         this.setters.forEach(setter => { members.set(setter.name, setter); });
-        this.declarations.forEach(declaration => { if(declaration.isPublic) members.set(declaration.name, declaration); });
+        this.declarations.forEach(declaration => { if (declaration.isPublic) members.set(declaration.name, declaration); });
 
         return [...members.values()];
     }
@@ -131,7 +131,7 @@ export default class ESClass extends ESMember
     canWrite(name: string): boolean
     {
         const declaration = this.getDeclaration(name);
-        
+
         return declaration?.isPublic || this.hasSetter(name);
     }
 

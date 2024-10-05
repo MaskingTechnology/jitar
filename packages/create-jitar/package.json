@@ -27,7 +27,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist build",
     "prepublishOnly": "npm run clean && npm run build"
