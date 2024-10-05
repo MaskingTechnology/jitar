@@ -8,7 +8,7 @@ export default class Request
     #fqn: string;
     #version: Version;
     #args: Map<string, unknown>;
-    #headers: Map<string, string> = new Map();
+    #headers = new Map<string, string>();
     #mode: RunMode;
 
     constructor(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, mode: RunMode)
@@ -34,7 +34,7 @@ export default class Request
     {
         this.#args.clear();
     }
-    
+
     setArgument(name: string, value: unknown): void
     {
         this.#args.set(name, value);

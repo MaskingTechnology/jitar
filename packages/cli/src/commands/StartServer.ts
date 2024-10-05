@@ -47,8 +47,7 @@ export default class StartServer implements Command
 
     async #buildServer(runtimeConfiguration: RuntimeConfiguration, serverConfiguration: ServerConfiguration, bodyLimit?: number, logLevel?: LogLevel): Promise<HttpServer>
     {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const [protocol, host, port] = serverConfiguration.url.split(':');
+        const [, , port] = serverConfiguration.url.split(':');
 
         const fileManager = new LocalFileManager(runtimeConfiguration.target);
         const sourcingManager = new SourcingManager(fileManager);

@@ -1,5 +1,5 @@
 
-import { ExecutionManager, Request, Response, Implementation, ProcedureNotFound } from '@jitar/execution';
+import { ExecutionManager, Implementation, ProcedureNotFound, Request, Response } from '@jitar/execution';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
 import Gateway from '../gateway/Gateway';
@@ -13,12 +13,12 @@ const JITAR_DATA_ENCODING_KEY = 'X-Jitar-Data-Encoding';
 const JITAR_DATA_ENCODING_VALUE = 'serialized';
 
 type Configuration =
-{
-    url: string;
-    trustKey?: string;
-    gateway?: Gateway;
-    executionManager: ExecutionManager;
-};
+    {
+        url: string;
+        trustKey?: string;
+        gateway?: Gateway;
+        executionManager: ExecutionManager;
+    };
 
 export default class LocalWorker implements Worker
 {
@@ -71,7 +71,7 @@ export default class LocalWorker implements Worker
     {
         return this.#executionManager.hasProcedure(name);
     }
-    
+
     async isHealthy(): Promise<boolean>
     {
         return true;
@@ -109,7 +109,7 @@ export default class LocalWorker implements Worker
         {
             throw new RequestNotTrusted();
         }
-        
+
         const dataEncoding = request.getHeader(JITAR_DATA_ENCODING_KEY);
 
         if (dataEncoding === JITAR_DATA_ENCODING_VALUE)
@@ -163,7 +163,7 @@ export default class LocalWorker implements Worker
 
     async #serializeRequest(request: Request): Promise<Request>
     {
-        const serializedArgs: Map<string, unknown> = new Map();
+        const serializedArgs = new Map<string, unknown>();
 
         for (const [key, value] of request.args)
         {
@@ -177,7 +177,7 @@ export default class LocalWorker implements Worker
 
     async #deserializeRequest(request: Request): Promise<Request>
     {
-        const deserializedArgs: Map<string, unknown> = new Map();
+        const deserializedArgs = new Map<string, unknown>();
 
         for (const [key, value] of request.args)
         {

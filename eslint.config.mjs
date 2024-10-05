@@ -9,7 +9,8 @@ export default tseslint.config({
         "**/dist/**/*",
         "**/node_modules/**/*",
         "**/coverage/**/*",
-        "packages/create-jitar/templates/*"
+        "packages/create-jitar/templates/**/*",
+        "**/*config*",
     ],
     extends: [
         eslint.configs.recommended,
@@ -18,17 +19,20 @@ export default tseslint.config({
         sonarjs.configs.recommended,
     ],
     languageOptions: {
-        parser: tsparser,
+        parser: tsparser
     },
     plugins: {
         'jitar': jitar
     },
     rules: {
         "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/consistent-type-definitions": "off",
         "no-return-await": "error",
         "semi": ["error", "always"],
         "eol-last": ["error", "always"],
         "brace-style": ["error", "allman", { "allowSingleLine": true }],
         "jitar/empty-first-line": "error",
+
+        "sonarjs/todo-tag": "off"
     }
 });

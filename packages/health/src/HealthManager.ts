@@ -4,7 +4,7 @@ import type HealthCheck from './interfaces/HealthCheck';
 
 export default class HealthManager
 {
-    #healthChecks: Map<string, HealthCheck> = new Map();
+    #healthChecks = new Map<string, HealthCheck>();
 
     addHealthCheck(healthCheck: HealthCheck): void
     {
@@ -39,7 +39,7 @@ export default class HealthManager
 
     async getHealth(): Promise<Map<string, boolean>>
     {
-        const promises: Promise<{ name: string, isHealthy: boolean }>[] = [];
+        const promises: Promise<{ name: string, isHealthy: boolean; }>[] = [];
 
         for (const [name, healthCheck] of this.#healthChecks)
         {
