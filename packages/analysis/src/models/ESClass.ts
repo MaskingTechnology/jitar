@@ -46,7 +46,7 @@ export default class ESClass extends ESMember
         return [...members.values()];
     }
 
-    get writable(): Array<ESDeclaration | ESSetter>
+    get writable(): (ESDeclaration | ESSetter)[]
     {
         const members = new Map<string, ESDeclaration | ESSetter>();
 
