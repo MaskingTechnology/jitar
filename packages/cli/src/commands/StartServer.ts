@@ -87,6 +87,6 @@ export default class StartServer implements Command
             return undefined;
         }
 
-        return Number.parseInt(bodyLimit!);
+        return Number.parseInt(bodyLimit as string);
     }
 }
