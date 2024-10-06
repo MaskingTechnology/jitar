@@ -105,7 +105,7 @@ export default class LocalWorker implements Worker
             throw new ProcedureNotFound(request.fqn);
         }
 
-        if (this.#requestNotTrusted(request, implementation!))
+        if (this.#requestNotTrusted(request, implementation as Implementation))
         {
             throw new RequestNotTrusted();
         }
@@ -156,7 +156,7 @@ export default class LocalWorker implements Worker
             request.setHeader(JITAR_TRUST_HEADER_KEY, this.#trustKey);
         }
 
-        const response = await this.#gateway!.run(request);
+        const response = await (this.#gateway as Gateway).run(request);
 
         return this.#deserializeResponse(response);
     }
