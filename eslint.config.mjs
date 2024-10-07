@@ -10,11 +10,11 @@ export default tseslint.config({
         "**/node_modules/**/*",
         "**/coverage/**/*",
         "packages/create-jitar/templates/**/*",
-        "**/*config*",
+        "*config*"
     ],
     extends: [
         eslint.configs.recommended,
-        ...tseslint.configs.strict,
+        ...tseslint.configs.recommended,
         ...tseslint.configs.stylistic,
         sonarjs.configs.recommended,
     ],
@@ -25,7 +25,7 @@ export default tseslint.config({
         'jitar': jitar
     },
     rules: {
-        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/no-unsafe-function-type": "off",
         "@typescript-eslint/consistent-type-definitions": "off",
         "no-return-await": "error",
         "semi": ["error", "always"],
@@ -33,6 +33,8 @@ export default tseslint.config({
         "brace-style": ["error", "allman", { "allowSingleLine": true }],
         "jitar/empty-first-line": "error",
 
-        "sonarjs/todo-tag": "off"
+        "sonarjs/todo-tag": "off",
+        "sonarjs/slow-regex": "off",
+        "sonarjs/duplicates-in-character-class": "off"
     }
 });

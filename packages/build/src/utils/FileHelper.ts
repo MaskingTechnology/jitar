@@ -9,11 +9,11 @@ export default class FileHelper
         const parts = filename.split('/');
         const translated = [];
 
-        for (let index = 0; index < parts.length; index++)
+        for (const part of parts)
         {
-            const part = parts[index].trim();
+            const cleanPart = part.trim();
 
-            switch (part)
+            switch (cleanPart)
             {
                 case '': continue;
                 case '.': continue;

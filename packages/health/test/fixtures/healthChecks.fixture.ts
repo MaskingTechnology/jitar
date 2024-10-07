@@ -1,4 +1,5 @@
 
+/* eslint-disable @typescript-eslint/class-literal-property-style */
 import HealthCheck from '../../src/interfaces/HealthCheck';
 
 class HealthyCheck implements HealthCheck
