@@ -9,7 +9,7 @@ export default tseslint.config({
         "**/dist/**/*",
         "**/node_modules/**/*",
         "**/coverage/**/*",
-        "packages/create-jitar/templates/**/*",
+        "**/templates/**/*",
         "*config*"
     ],
     extends: [
