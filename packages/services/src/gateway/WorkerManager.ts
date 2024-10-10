@@ -1,13 +1,13 @@
 
-import { Request, Response, Runner, ProcedureNotFound } from '@jitar/execution';
+import { ProcedureNotFound, Request, Response, Runner } from '@jitar/execution';
 
 import Worker from '../worker/Worker';
 import WorkerBalancer from './WorkerBalancer';
 
 export default class WorkerManager implements Runner
 {
-    #workers: Set<Worker> = new Set();
-    #balancers: Map<string, WorkerBalancer> = new Map();
+    #workers = new Set<Worker>();
+    #balancers = new Map<string, WorkerBalancer>();
 
     get workers()
     {

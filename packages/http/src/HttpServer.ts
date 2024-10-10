@@ -1,15 +1,15 @@
 
-import express, { Express, Request, Response, NextFunction } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
 import { Server as Http } from 'http';
 
 import { RunModes } from '@jitar/execution';
-import { Server, ServerResponse, ContentTypes } from '@jitar/runtime';
+import { ContentTypes, Server, ServerResponse } from '@jitar/runtime';
 import { Validator } from '@jitar/validation';
 
 import Defaults from './definitions/Defaults';
 import HeaderKeys from './definitions/HeaderKeys';
-import IgnoredHeaderKeys from './definitions/IgnoredHeaderKeys';
 import HeaderValues from './definitions/HeaderValues';
+import IgnoredHeaderKeys from './definitions/IgnoredHeaderKeys';
 
 export default class HttpServer
 {
@@ -46,7 +46,7 @@ export default class HttpServer
 
     #setupExpress(bodyLimit: number): void
     {
-        this.#app.use(express.json({limit: bodyLimit }));
+        this.#app.use(express.json({ limit: bodyLimit }));
         this.#app.use(express.urlencoded({ extended: true }));
         this.#app.use(this.#addDefaultHeaders.bind(this));
 
@@ -75,9 +75,9 @@ export default class HttpServer
         }
 
         return new Promise((resolve, reject) => 
-        { 
+        {
             this.#http = this.#app.listen(this.#port, resolve);
-            
+
             this.#http.on('error', reject);
         });
     }
@@ -92,7 +92,6 @@ export default class HttpServer
         return new Promise(resolve => { this.#http!.close(() => resolve()); });
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     #addDefaultHeaders(request: Request, response: Response, next: NextFunction): void
     {
         response.setHeader(HeaderKeys.CONTENT_TYPE_OPTIONS, HeaderValues.NO_SNIFF);
@@ -100,7 +99,6 @@ export default class HttpServer
         next();
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async #getHealth(request: Request, response: Response): Promise<Response>
     {
         const serverResponse = await this.#server.getHealth();
@@ -108,7 +106,6 @@ export default class HttpServer
         return this.#transformResponse(response, serverResponse);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async #isHealthy(request: Request, response: Response): Promise<Response>
     {
         const serverResponse = await this.#server.isHealthy();
@@ -162,11 +159,11 @@ export default class HttpServer
         const args = this.#extractBodyArguments(request);
 
         const validation = this.#validator.validate(args,
-        {
-            url: { type: 'url', required: true },
-            procedureNames: { type: 'list', required: true, items: { type: 'string' } },
-            trustKey: { type: 'string', required: false }
-        });
+            {
+                url: { type: 'url', required: true },
+                procedureNames: { type: 'list', required: true, items: { type: 'string' } },
+                trustKey: { type: 'string', required: false }
+            });
 
         if (validation.valid === false)
         {
@@ -211,7 +208,7 @@ export default class HttpServer
     #extractVersion(request: Request): string | undefined
     {
         const versionString = request.headers[HeaderKeys.JITAR_PROCEDURE_VERSION];
-        
+
         return Array.isArray(versionString) ? versionString[0] : versionString;
     }
 
@@ -258,7 +255,7 @@ export default class HttpServer
     {
         const status = this.#transformStatus(serverResponse);
         const contentType = this.#transformContentType(serverResponse);
-        
+
         response.status(status);
         response.setHeader(HeaderKeys.CONTENT_TYPE, contentType);
         response.setHeader(HeaderKeys.JITAR_CONTENT_TYPE, serverResponse.contentType);
@@ -303,16 +300,11 @@ export default class HttpServer
     {
         const result = serverResponse.result;
 
-        // if (result === undefined || result === null)
-        // {
-        //     return '';
-        // }
-
         if (typeof result === 'number' || typeof result === 'boolean')
         {
             return String(result);
         }
-        
+
         return result;
     }
 }

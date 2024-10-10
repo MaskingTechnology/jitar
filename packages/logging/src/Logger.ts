@@ -76,7 +76,7 @@ export default class Logger
         return `[${logLevel}][${moment}] ${message}`;
     }
 
-    #interpretValue(value: unknown, level: number = 0): string
+    #interpretValue(value: unknown, level = 0): string
     {
         let result: string;
 

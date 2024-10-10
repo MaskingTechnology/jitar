@@ -20,18 +20,18 @@ export default class BigIntSerializer extends ValueSerializer
             && typeof bigInt.value === 'string';
     }
 
-    async serialize(bigInt: BigInt): Promise<SerializedBigInt>
+    async serialize(bigInt: bigint): Promise<SerializedBigInt>
     {
         return { serialized: true, name: 'BigInt', value: bigInt.toString() };
     }
 
-    async deserialize(object: SerializedBigInt): Promise<BigInt>
+    async deserialize(object: SerializedBigInt): Promise<bigint>
     {
         try
         {
             return BigInt(object.value);
         }
-        catch (error)
+        catch
         {
             throw new InvalidBigIntString(object.value);
         }

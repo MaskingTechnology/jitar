@@ -32,7 +32,7 @@ export default class RegExpSerializer extends ValueSerializer
         {
             return new RegExp(object.source, object.flags);
         }
-        catch (error)
+        catch
         {
             throw new InvalidRegExp(object.source, object.flags);
         }

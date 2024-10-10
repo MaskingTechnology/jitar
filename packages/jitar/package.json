@@ -19,7 +19,7 @@
     ],
     "bin": "./dist/cli.js",
     "scripts": {
-        "lint": "eslint . --ext .ts",
+        "lint": "eslint",
         "validate": "tsc -p tsconfig.json --noEmit",
         "build": "npm run clean && rollup -c && chmod +x dist/cli.js",
         "clean": "rm -rf dist",

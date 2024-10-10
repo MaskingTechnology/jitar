@@ -1,6 +1,6 @@
 
-import ValidationScheme, { FieldValidation, PrimitiveValidation, GroupValidation, ListValidation } from './types/ValidationScheme';
 import ValidationResult from './types/ValidationResult';
+import ValidationScheme, { FieldValidation, GroupValidation, ListValidation, PrimitiveValidation } from './types/ValidationScheme';
 
 type Data = Record<string, unknown>;
 
@@ -8,7 +8,7 @@ export default class Validator
 {
     #strict: boolean;
 
-    public constructor(strict: boolean = true)
+    public constructor(strict = true)
     {
         this.#strict = strict;
     }
@@ -16,7 +16,7 @@ export default class Validator
     validate(data: Data, scheme: ValidationScheme): ValidationResult
     {
         const errors: string[] = [];
-        
+
         this.#validateData('', data, scheme, errors);
 
         const valid = errors.length === 0;

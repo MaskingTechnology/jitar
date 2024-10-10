@@ -43,7 +43,9 @@ class Nested
 class PrivateFieldClass
 {
     #a: number;
+    // eslint-disable-next-line no-unused-private-class-members, sonarjs/no-unused-private-class-members
     #b: boolean;
+    // eslint-disable-next-line no-unused-private-class-members, sonarjs/no-unused-private-class-members
     #c?: string;
 
     constructor(a: number, b: boolean, c?: string)

@@ -173,7 +173,7 @@ export default class Parser
             {
                 const next = tokenList.next;
                 const nextIsFunction = next !== undefined && (next.hasValue(Keyword.FUNCTION) || next.hasValue(Group.OPEN));
-                
+
                 if (token.hasValue(Keyword.ASYNC) && nextIsFunction)
                 {
                     tokenList.step(); // Read away the async keyword
@@ -185,7 +185,7 @@ export default class Parser
                     return this.#parseExpression(tokenList);
                 }
             }
-            
+
             if (token.hasValue(Keyword.RETURN))
             {
                 return this.#parseExpression(tokenList);
@@ -294,7 +294,7 @@ export default class Parser
         {
             // Keep the * indicator, otherwise use the default identifier
             const name = token.hasValue(Operator.MULTIPLY) ? Operator.MULTIPLY : DEFAULT_IDENTIFIER;
-            
+
             let as = token.value;
 
             token = tokenList.step(); // Read away the name
@@ -466,7 +466,7 @@ export default class Parser
     #parseDeclaration(tokenList: TokenList, isStatic: boolean, parseMultiple = false): ESMember
     {
         let token = tokenList.current;
-        let identifier: ESIdentifier = ANONYMOUS_IDENTIFIER;
+        let identifier: ESIdentifier;
         let isPrivate = false;
 
         if (token.hasValue(List.OPEN))
@@ -491,7 +491,7 @@ export default class Parser
         if (token.hasValue(Operator.ASSIGN))
         {
             tokenList.step(); // Read away the assignment operator
-            
+
             value = this.#parseNext(tokenList, false);
             token = tokenList.current;
         }
@@ -506,9 +506,9 @@ export default class Parser
             {
                 // Parse away the next declaration without saving it.
                 // Note that this is a known limitation as described in the readme.
-    
+
                 tokenList.step(); // Read away the separator
-    
+
                 this.#parseDeclaration(tokenList, isStatic, true);
             }
         }
@@ -803,7 +803,7 @@ export default class Parser
         if (token.hasValue(Operator.ASSIGN))
         {
             tokenList.step(); // Read away the assignment operator
-            
+
             value = this.#parseNext(tokenList, false) as ESValue;
         }
 

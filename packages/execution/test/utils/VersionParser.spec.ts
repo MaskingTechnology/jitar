@@ -42,8 +42,10 @@ describe('utils/versionParser', () =>
 
         it('should not parse an invalid number', () =>
         {
+            // eslint-disable-next-line sonarjs/no-hardcoded-ip
             const run = () => versionParser.parse('1.2.3.4');
 
+            // eslint-disable-next-line sonarjs/no-hardcoded-ip
             expect(run).toThrow(new InvalidVersionNumber('1.2.3.4'));
         });
 

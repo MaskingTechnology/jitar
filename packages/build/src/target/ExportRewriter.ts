@@ -49,7 +49,7 @@ export default class ExportRewriter
 
     #isApplicationModule(dependency: ESExport): boolean
     {
-        return APPLICATION_MODULE_INDICATORS.some(indicator => dependency.from!.startsWith(indicator, 1));
+        return APPLICATION_MODULE_INDICATORS.some(indicator => (dependency.from as string).startsWith(indicator, 1));
     }
 
     #rewriteApplicationExport(dependency: ESExport): string
@@ -103,7 +103,7 @@ export default class ExportRewriter
 
     #rewriteRuntimeFrom(dependency: ESExport): string
     {
-        return this.#stripFrom(dependency.from!);
+        return this.#stripFrom(dependency.from as string);
     }
 
     #rewriteToStaticExport(dependency: ESExport, from: string): string
@@ -136,7 +136,7 @@ export default class ExportRewriter
 
     #getTargetModuleFilename(dependency: ESExport): string
     {
-        const from = this.#stripFrom(dependency.from!);
+        const from = this.#stripFrom(dependency.from as string);
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
 

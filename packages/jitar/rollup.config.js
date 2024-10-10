@@ -6,7 +6,8 @@ import dts from 'rollup-plugin-dts';
 
 import { SERVER_EXTERNALS } from './rollup.definitions.js';
 
-function bundle(input, output, supportBrowser) {
+function bundle(input, output, supportBrowser)
+{
 	return {
 		external: SERVER_EXTERNALS,
 		treeshake: {
@@ -28,10 +29,11 @@ function bundle(input, output, supportBrowser) {
 				browser: supportBrowser
 			})
 		]
-	}
+	};
 }
 
-function type(input, output) {
+function type(input, output)
+{
 	return {
 		input,
 		output: [{ file: output, format: 'module' }],

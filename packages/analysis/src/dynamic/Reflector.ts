@@ -20,7 +20,7 @@ export default class Reflector
             {
                 continue;
             }
-        
+
             const code = member.toString();
 
             if (code.startsWith('class'))
@@ -38,7 +38,7 @@ export default class Reflector
                 members.push(new ESDeclaration(key, expression));
             }
         }
-        
+
         return new ESModule(new ESScope(members));
     }
 
@@ -132,7 +132,7 @@ export default class Reflector
         return new ESClass(clazz.name, undefined, scope);
     }
 
-    #getMembers(clazz: Function, object: Object): ESMember[]
+    #getMembers(clazz: Function, object: object): ESMember[]
     {
         const declarations = this.#getDeclarations(object);
         const functions = this.#getFunctions(clazz);
@@ -140,7 +140,7 @@ export default class Reflector
         return [...declarations, ...functions];
     }
 
-    #getDeclarations(object: Object): ESDeclaration[]
+    #getDeclarations(object: object): ESDeclaration[]
     {
         const fieldNames = Object.getOwnPropertyNames(object);
         const values = object as Record<string, unknown>;
