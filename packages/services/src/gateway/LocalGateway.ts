@@ -19,10 +19,10 @@ type Configuration =
 
 export default class LocalGateway implements Gateway
 {
-    #url: string;
-    #trustKey?: string;
-    #workerManager: WorkerManager;
-    #workerMonitor: WorkerMonitor;
+    readonly #url: string;
+    readonly #trustKey?: string;
+    readonly #workerManager: WorkerManager;
+    readonly #workerMonitor: WorkerMonitor;
 
     constructor(configuration: Configuration)
     {

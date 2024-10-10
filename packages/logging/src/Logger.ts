@@ -4,8 +4,8 @@ import type Writer from './Writer';
 
 export default class Logger
 {
-    #logLevel: LogLevel;
-    #writer: Writer;
+    readonly #logLevel: LogLevel;
+    readonly #writer: Writer;
 
     constructor(logLevel: LogLevel = LogLevels.INFO, writer: Writer = console)
     {

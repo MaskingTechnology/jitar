@@ -10,7 +10,7 @@ import ESScope from './ESScope.js';
 
 export default class ESModule
 {
-    #scope: ESScope;
+    readonly #scope: ESScope;
 
     constructor(scope: ESScope)
     {

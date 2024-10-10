@@ -33,16 +33,16 @@ type Configuration =
 
 export default class Server extends Runtime
 {
-    #proxy: Proxy;
-    #sourcingManager: SourcingManager;
-    #remoteBuilder: RemoteBuilder;
-    #middlewareManager: MiddlewareManager;
-    #healthManager: HealthManager;
-    #setUpScripts: string[];
-    #tearDownScripts: string[];
+    readonly #proxy: Proxy;
+    readonly #sourcingManager: SourcingManager;
+    readonly #remoteBuilder: RemoteBuilder;
+    readonly #middlewareManager: MiddlewareManager;
+    readonly #healthManager: HealthManager;
+    readonly #setUpScripts: string[];
+    readonly #tearDownScripts: string[];
 
-    #logger: Logger;
-    #versionParser = new VersionParser();
+    readonly #logger: Logger;
+    readonly #versionParser = new VersionParser();
 
     constructor(configuration: Configuration)
     {

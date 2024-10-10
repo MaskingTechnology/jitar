@@ -5,7 +5,7 @@ import type Procedure from './Procedure';
 
 export default class Application
 {
-    #segments: Map<string, Segment> = new Map();
+    readonly #segments = new Map<string, Segment>();
 
     addSegment(segment: Segment): void
     {

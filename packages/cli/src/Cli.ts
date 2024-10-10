@@ -4,8 +4,8 @@ import CommandRunner from './CommandRunner';
 
 export default class Cli
 {
-    #argumentProcessor: ArgumentProcessor;
-    #commandRunner: CommandRunner;
+    readonly #argumentProcessor: ArgumentProcessor;
+    readonly #commandRunner: CommandRunner;
 
     constructor()
     {

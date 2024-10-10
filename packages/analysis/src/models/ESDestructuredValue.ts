@@ -3,7 +3,7 @@ import ESParameter from './ESParameter.js';
 
 export default class ESDestructuredValue
 {
-    #members: ESParameter[];
+    readonly #members: ESParameter[];
 
     constructor(members: ESParameter[])
     {

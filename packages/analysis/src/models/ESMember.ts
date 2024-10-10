@@ -1,9 +1,9 @@
 
 export default class ESMember
 {
-    #name: string;
-    #isStatic: boolean;
-    #isPrivate: boolean;
+    readonly #name: string;
+    readonly #isStatic: boolean;
+    readonly #isPrivate: boolean;
 
     constructor(name: string, isStatic = false, isPrivate = false)
     {

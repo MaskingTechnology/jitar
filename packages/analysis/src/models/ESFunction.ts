@@ -4,9 +4,9 @@ import ESParameter from './ESParameter.js';
 
 export default class ESFunction extends ESMember
 {
-    #parameters: ESParameter[];
-    #body: string;
-    #isAsync: boolean;
+    readonly #parameters: ESParameter[];
+    readonly #body: string;
+    readonly #isAsync: boolean;
 
     constructor(name: string, parameters: ESParameter[], body: string, isStatic = false, isAsync = false, isPrivate = false)
     {

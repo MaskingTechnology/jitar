@@ -5,11 +5,11 @@ import type Version from './Version';
 
 export default class Request
 {
-    #fqn: string;
-    #version: Version;
-    #args: Map<string, unknown>;
-    #headers: Map<string, string> = new Map();
-    #mode: RunMode;
+    readonly #fqn: string;
+    readonly #version: Version;
+    readonly #args: Map<string, unknown>;
+    readonly #headers = new Map<string, string>();
+    readonly #mode: RunMode;
 
     constructor(fqn: string, version: Version, args: Map<string, unknown>, headers: Map<string, string>, mode: RunMode)
     {

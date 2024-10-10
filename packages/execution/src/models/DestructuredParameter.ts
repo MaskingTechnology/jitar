@@ -3,7 +3,7 @@ import Parameter from './Parameter';
 
 export default class DestructuredParameter extends Parameter
 {
-    #variables: Parameter[];
+    readonly #variables: Parameter[];
 
     constructor(variables: Parameter[], name?: string, isOptional?: boolean)
     {

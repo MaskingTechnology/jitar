@@ -10,7 +10,7 @@ import File from './models/File';
 
 export default class LocalFileManager implements FileManager
 {
-    #location: string;
+    readonly #location: string;
 
     constructor(location: string)
     {

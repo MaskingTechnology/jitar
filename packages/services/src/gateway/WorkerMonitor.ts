@@ -7,8 +7,8 @@ const DEFAULT_FREQUENCY = 5000;
 
 export default class WorkerMonitor
 {
-    #workerManager: WorkerManager;
-    #frequency: number;
+    readonly #workerManager: WorkerManager;
+    readonly #frequency: number;
     #interval: ReturnType<typeof setInterval> | null = null;
 
     constructor(workerManager: WorkerManager, frequency = DEFAULT_FREQUENCY)

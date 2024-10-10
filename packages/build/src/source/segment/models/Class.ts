@@ -5,7 +5,7 @@ import Member from './Member';
 
 export default class Class extends Member
 {
-    #model: ESClass;
+    readonly #model: ESClass;
 
     constructor(id: string, importKey: string, fqn: string, model: ESClass)
     {

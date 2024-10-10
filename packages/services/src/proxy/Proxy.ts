@@ -14,9 +14,9 @@ type Configuration =
 
 export default class Proxy implements ProviderService, RunnerService
 {
-    #url: string;
-    #provider: ProviderService;
-    #runner: RunnerService;
+    readonly #url: string;
+    readonly #provider: ProviderService;
+    readonly #runner: RunnerService;
 
     constructor(configuration: Configuration)
     {

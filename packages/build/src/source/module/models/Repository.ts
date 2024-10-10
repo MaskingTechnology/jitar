@@ -3,7 +3,7 @@ import type Module from './Module';
 
 export default class Repository
 {
-    #modules: Module[];
+    readonly #modules: Module[];
 
     constructor(modules: Module[])
     {

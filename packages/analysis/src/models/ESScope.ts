@@ -21,7 +21,7 @@ const CLASS_NAME = ESClass.name;
 
 export default class ESScope
 {
-    #members: ESMember[];
+    readonly #members: ESMember[];
 
     constructor(members: ESMember[])
     {

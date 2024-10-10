@@ -4,7 +4,7 @@ import type HealthCheck from './interfaces/HealthCheck';
 
 export default class HealthManager
 {
-    #healthChecks: Map<string, HealthCheck> = new Map();
+    readonly #healthChecks = new Map<string, HealthCheck>();
 
     addHealthCheck(healthCheck: HealthCheck): void
     {

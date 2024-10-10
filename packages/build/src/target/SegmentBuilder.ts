@@ -13,11 +13,11 @@ const RUNTIME_IMPORTS = 'import { Segment, Class, Procedure, Implementation, Ver
 
 export default class SegmentBuilder
 {
-    #fileManager: FileManager;
+    readonly #fileManager: FileManager;
 
-    #logger: Logger;
-    #fileHelper = new FileHelper();
-    #versionParser = new VersionParser();
+    readonly #logger: Logger;
+    readonly #fileHelper = new FileHelper();
+    readonly #versionParser = new VersionParser();
 
     constructor(fileManager: FileManager, logger: Logger)
     {

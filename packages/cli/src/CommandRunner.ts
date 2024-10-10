@@ -11,7 +11,7 @@ import ArgumentManager from './ArgumentProcessor';
 
 export default class CommandRunner
 {
-    #commands: Map<string, Command> = new Map<string, Command>();
+    readonly #commands: Map<string, Command> = new Map<string, Command>();
 
     constructor()
     {

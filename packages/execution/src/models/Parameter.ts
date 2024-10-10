@@ -1,8 +1,8 @@
 
 export default class Parameter
 {
-    #name: string;
-    #isOptional: boolean;
+    readonly #name: string;
+    readonly #isOptional: boolean;
 
     constructor(name: string, isOptional = false)
     {

@@ -5,8 +5,8 @@ import ESValue from './ESValue.js';
 
 export default class ESDeclaration extends ESMember
 {
-    #identifier: ESIdentifier;
-    #value: ESValue | undefined;
+    readonly #identifier: ESIdentifier;
+    readonly #value: ESValue | undefined;
 
     constructor(identifier: ESIdentifier, value: ESValue | undefined, isStatic = false, isPrivate = false)
     {

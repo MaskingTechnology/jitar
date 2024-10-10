@@ -4,9 +4,9 @@ import type Procedure from './Procedure';
 
 export default class Segment
 {
-    #id: string;
-    #classes: Map<string, Class> = new Map();
-    #procedures: Map<string, Procedure> = new Map();
+    readonly #id: string;
+    readonly #classes = new Map<string, Class>();
+    readonly #procedures = new Map<string, Procedure>();
 
     constructor(id: string)
     {

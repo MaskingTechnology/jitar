@@ -7,10 +7,10 @@ import type Member from './Member';
 
 export default class Module
 {
-    #filename: string;
-    #location: string;
-    #imports: Imports;
-    #members: Member[] = [];
+    readonly #filename: string;
+    readonly #location: string;
+    readonly #imports: Imports;
+    readonly #members: Member[] = [];
 
     constructor(filename: string, location: string, imports: Imports)
     {
@@ -34,7 +34,7 @@ export default class Module
 
     getClasses(): Class[]
     {
-        return this.#members.filter(member => member instanceof Class) as Class[];
+        return this.#members.filter(member => member instanceof Class);
     }
 
     hasImplementations(): boolean
@@ -44,7 +44,7 @@ export default class Module
 
     getImplementations(): Implementation[]
     {
-        return this.#members.filter(member => member instanceof Implementation) as Implementation[];
+        return this.#members.filter(member => member instanceof Implementation);
     }
 
     addMember(members: Member): void

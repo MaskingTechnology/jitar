@@ -8,8 +8,8 @@ import ServerConfigurationInvalid from './errors/ServerConfigurationInvalid';
 
 export default class ConfigurationBuilder
 {
-    #reader: ConfigurationReader;
-    #validator: Validator;
+    readonly #reader: ConfigurationReader;
+    readonly #validator: Validator;
 
     constructor(reader: ConfigurationReader, validator: Validator)
     {

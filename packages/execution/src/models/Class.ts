@@ -1,8 +1,8 @@
 
 export default class Class
 {
-    #fqn: string;
-    #implementation: Function;
+    readonly #fqn: string;
+    readonly #implementation: Function;
 
     constructor(fqn: string, implementation: Function)
     {

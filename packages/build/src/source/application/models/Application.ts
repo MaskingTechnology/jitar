@@ -4,8 +4,8 @@ import type { Segmentation } from '../../segment';
 
 export default class Application
 {
-    #repository: ModuleRepository;
-    #segmentation: Segmentation;
+    readonly #repository: ModuleRepository;
+    readonly #segmentation: Segmentation;
 
     constructor(repository: ModuleRepository, segmentation: Segmentation)
     {

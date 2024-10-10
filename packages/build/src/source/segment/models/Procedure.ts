@@ -3,8 +3,8 @@ import type Implementation from './Implementation';
 
 export default class Procedure
 {
-    #fqn: string;
-    #implementations: Implementation[] = [];
+    readonly #fqn: string;
+    readonly #implementations: Implementation[] = [];
 
     constructor(fqn: string, implementations: Implementation[] = [])
     {

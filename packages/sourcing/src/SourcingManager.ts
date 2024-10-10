@@ -6,7 +6,7 @@ import type Module from './types/Module';
 
 export default class SourceManager
 {
-    #fileManager: FileManager;
+    readonly #fileManager: FileManager;
 
     constructor(fileManager: FileManager)
     {

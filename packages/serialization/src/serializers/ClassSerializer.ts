@@ -14,7 +14,7 @@ const reflector = new Reflector();
 
 export default class ClassSerializer extends ValueSerializer
 {
-    #classResolver: ClassResolver;
+    readonly #classResolver: ClassResolver;
 
     constructor(classResolver: ClassResolver)
     {

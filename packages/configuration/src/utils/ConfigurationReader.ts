@@ -6,7 +6,7 @@ const ENVIRONMENT_VARIABLE_REGEX = /\${([^}]*)}/g;
 
 export default class ConfigurationReader
 {
-    #fileManager: FileManager;
+    readonly #fileManager: FileManager;
 
     constructor(rootPath: string)
     {

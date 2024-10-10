@@ -8,7 +8,7 @@ import Application from './models/Application.js';
 
 export default class Reader
 {
-    #fileManager: FileManager;
+    readonly #fileManager: FileManager;
 
     constructor(fileManager: FileManager)
     {

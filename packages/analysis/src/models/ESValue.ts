@@ -1,7 +1,7 @@
 
 export default class ESValue
 {
-    #definition: string;
+    readonly #definition: string;
 
     constructor(definition: string)
     {

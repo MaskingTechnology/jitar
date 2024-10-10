@@ -22,11 +22,11 @@ type Configuration =
 
 export default class LocalWorker implements Worker
 {
-    #url: string;
-    #trustKey?: string;
-    #gateway?: Gateway;
-    #executionManager: ExecutionManager;
-    #serializer: Serializer;
+    readonly #url: string;
+    readonly #trustKey?: string;
+    readonly #gateway?: Gateway;
+    readonly #executionManager: ExecutionManager;
+    readonly #serializer: Serializer;
 
     constructor(configuration: Configuration)
     {

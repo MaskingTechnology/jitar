@@ -13,9 +13,9 @@ import HeaderValues from './definitions/HeaderValues';
 
 export default class HttpServer
 {
-    #server: Server;
-    #port: string;
-    #app: Express;
+    readonly #server: Server;
+    readonly #port: string;
+    readonly #app: Express;
     #http?: Http;
 
     #validator = new Validator();

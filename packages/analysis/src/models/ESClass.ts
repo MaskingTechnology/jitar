@@ -9,8 +9,8 @@ import ESSetter from './ESSetter.js';
 
 export default class ESClass extends ESMember
 {
-    #parentName: string | undefined;
-    #scope: ESScope;
+    readonly #parentName: string | undefined;
+    readonly #scope: ESScope;
 
     constructor(name: string, parentName: string | undefined, scope: ESScope)
     {
