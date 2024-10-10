@@ -15,7 +15,7 @@ export default class Segment
 
     get id() { return this.#id; }
 
-    addClass(clazz: Class): Segment
+    addClass(clazz: Class): this
     {
         this.#classes.set(clazz.fqn, clazz);
 
@@ -46,7 +46,7 @@ export default class Segment
         return [...this.#classes.values()];
     }
 
-    addProcedure(procedure: Procedure): Segment
+    addProcedure(procedure: Procedure): this
     {
         this.#procedures.set(procedure.fqn, procedure);
 

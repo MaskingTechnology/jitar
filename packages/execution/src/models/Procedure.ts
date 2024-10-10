@@ -29,7 +29,7 @@ export default class Procedure
         return implementations.some(implementation => implementation.protected);
     }
 
-    addImplementation(implementation: Implementation): Procedure
+    addImplementation(implementation: Implementation): this
     {
         this.#implementations.set(implementation.version, implementation);
 

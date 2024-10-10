@@ -78,7 +78,7 @@ export default class ArgumentExtractor
     #extractArgumentValue(parameter: Parameter, args: Map<string, unknown>, parent?: Parameter): unknown
     {
         return parameter instanceof NamedParameter
-            ? this.#extractNamedArgumentValue(parameter as NamedParameter, args, parent)
+            ? this.#extractNamedArgumentValue(parameter, args, parent)
             : this.#extractDestructedArgumentValue(parameter as DestructuredParameter, args);
     }
 
