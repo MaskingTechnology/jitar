@@ -31,7 +31,7 @@ export default class BigIntSerializer extends ValueSerializer
         {
             return BigInt(object.value);
         }
-        catch (error)
+        catch
         {
             throw new InvalidBigIntString(object.value);
         }
