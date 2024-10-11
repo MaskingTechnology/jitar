@@ -37,7 +37,7 @@ export default class Segment
     getClassByImplementation(implementation: Function): Class | undefined
     {
         const classes = this.getClasses();
-        
+
         return classes.find(clazz => clazz.implementation === implementation);
     }
 

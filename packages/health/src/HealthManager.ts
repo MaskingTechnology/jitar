@@ -2,6 +2,12 @@
 import InvalidHealthCheck from './errors/InvalidHealthCheck';
 import type HealthCheck from './interfaces/HealthCheck';
 
+type HealthCheckResult =
+{
+    name: string;
+    isHealthy: boolean;
+}
+
 export default class HealthManager
 {
     readonly #healthChecks = new Map<string, HealthCheck>();
@@ -39,7 +45,7 @@ export default class HealthManager
 
     async getHealth(): Promise<Map<string, boolean>>
     {
-        const promises: Promise<{ name: string, isHealthy: boolean }>[] = [];
+        const promises: Promise<{ name: string, isHealthy: boolean; }>[] = [];
 
         for (const [name, healthCheck] of this.#healthChecks)
         {
@@ -53,13 +59,20 @@ export default class HealthManager
         const healthChecks = new Map<string, boolean>();
 
         return Promise.allSettled(promises)
-            .then(results => results.forEach(result =>
-            {
-                result.status === 'fulfilled'
-                    ? healthChecks.set(result.value.name, result.value.isHealthy)
-                    : healthChecks.set(result.reason.name, false);
-            }))
+            .then(results => results.forEach(result => this.#handleHealthCheckResult(result, healthChecks)))
             .then(() => healthChecks);
+    }
+
+    #handleHealthCheckResult(result: PromiseSettledResult<HealthCheckResult>, healthChecks: Map<string, boolean>): void
+    {
+        if (result.status !== 'fulfilled')
+        {
+            healthChecks.set(result.reason.name, false);
+
+            return;
+        }
+
+        healthChecks.set(result.value.name, result.value.isHealthy);
     }
 
     async #executeHealthCheck(healthCheck: HealthCheck): Promise<boolean>

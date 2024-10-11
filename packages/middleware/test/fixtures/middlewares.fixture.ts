@@ -5,7 +5,6 @@ import Middleware from '../../src/interfaces/Middleware';
 
 class FirstMiddleware implements Middleware
 {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async handle(request: Request, next: () => Promise<Response>): Promise<Response>
     {
         request.setHeader('first', 'yes');
@@ -20,7 +19,6 @@ class FirstMiddleware implements Middleware
 
 class SecondMiddleware implements Middleware
 {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async handle(request: Request, next: () => Promise<Response>): Promise<Response>
     {
         request.setHeader('second', 'yes');

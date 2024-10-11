@@ -31,7 +31,7 @@ export default class UrlSerializer extends ValueSerializer
         {
             return new URL(object.value);
         }
-        catch (error)
+        catch
         {
             throw new InvalidUrlString(object.value);
         }

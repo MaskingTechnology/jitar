@@ -1,7 +1,7 @@
 
 import { File, FileNotFound, SourcingManager } from '@jitar/sourcing';
 
-import Repository from './Repository.js';
+import Repository from './Repository';
 
 type Configuration =
 {

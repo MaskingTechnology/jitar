@@ -1,7 +1,7 @@
 
-import type Segment from './Segment';
 import type Class from './Class';
 import type Procedure from './Procedure';
+import type Segment from './Segment';
 
 export default class Application
 {
@@ -14,7 +14,7 @@ export default class Application
 
     getClassNames(): string[]
     {
-        const names: Set<string> = new Set();
+        const names = new Set<string>();
 
         for (const segment of this.#segments.values())
         {
@@ -63,7 +63,7 @@ export default class Application
 
     getProcedureNames(): string[]
     {
-        const names: Set<string> = new Set();
+        const names = new Set<string>();
 
         for (const segment of this.#segments.values())
         {

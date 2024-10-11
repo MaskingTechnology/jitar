@@ -34,7 +34,7 @@ export default class Request
     {
         this.#args.clear();
     }
-    
+
     setArgument(name: string, value: unknown): void
     {
         this.#args.set(name, value);

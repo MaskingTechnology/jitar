@@ -8,7 +8,6 @@ export { default as RemoteGateway } from './gateway/RemoteGateway';
 
 export { default as Proxy } from './proxy/Proxy';
 
-export { default as Repository } from './repository/Repository';
 export { default as LocalRepository } from './repository/LocalRepository';
 export { default as RemoteRepository } from './repository/RemoteRepository';
 
