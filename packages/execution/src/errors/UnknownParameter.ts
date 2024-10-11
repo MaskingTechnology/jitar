@@ -3,7 +3,7 @@ import { BadRequest } from '@jitar/errors';
 
 export default class UnknownParameter extends BadRequest
 {
-    #parameterName: string;
+    readonly #parameterName: string;
 
     constructor(parameterName: string)
     {

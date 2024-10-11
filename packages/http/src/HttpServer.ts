@@ -18,7 +18,7 @@ export default class HttpServer
     readonly #app: Express;
     #http?: Http;
 
-    #validator = new Validator();
+    readonly #validator = new Validator();
 
     constructor(server: Server, port: string = Defaults.PORT_NUMBER, bodyLimit: number = Defaults.BODY_LIMIT)
     {

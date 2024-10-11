@@ -3,7 +3,7 @@ import { NotFound } from '@jitar/errors';
 
 export default class ProcedureNotFound extends NotFound
 {
-    #fqn: string;
+    readonly #fqn: string;
 
     constructor(fqn: string)
     {
