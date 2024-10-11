@@ -12,8 +12,8 @@ import Server from './Server';
 
 export default class RuntimeBuilder
 {
-    #sourcingManager: SourcingManager;
-    #remoteBuilder: RemoteBuilder;
+    readonly #sourcingManager: SourcingManager;
+    readonly  #remoteBuilder: RemoteBuilder;
 
     constructor(sourcingManager: SourcingManager, remoteBuilder: RemoteBuilder)
     {

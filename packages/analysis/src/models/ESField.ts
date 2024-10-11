@@ -3,8 +3,8 @@ import ESValue from './ESValue.js';
 
 export default class ESField
 {
-    #name: string;
-    #value: ESValue | undefined;
+    readonly #name: string;
+    readonly #value: ESValue | undefined;
 
     constructor(name: string, value: ESValue | undefined)
     {

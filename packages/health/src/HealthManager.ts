@@ -10,7 +10,7 @@ type HealthCheckResult =
 
 export default class HealthManager
 {
-    #healthChecks = new Map<string, HealthCheck>();
+    readonly #healthChecks = new Map<string, HealthCheck>();
 
     addHealthCheck(healthCheck: HealthCheck): void
     {

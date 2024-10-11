@@ -5,8 +5,8 @@ const COMMAND_INDEX = 2;
 
 export default class ArgumentProcessor
 {
-    #command: string | undefined;
-    #args: Map<string, string>;
+    readonly #command: string | undefined;
+    readonly #args: Map<string, string>;
 
     constructor(args: string[])
     {

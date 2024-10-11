@@ -4,8 +4,8 @@ import Version from './Version';
 
 export default class Procedure
 {
-    #fqn: string;
-    #implementations = new Map<Version, Implementation>();
+    readonly #fqn: string;
+    readonly #implementations = new Map<Version, Implementation>();
     #latestImplementation?: Implementation;
 
     constructor(fqn: string)
@@ -29,7 +29,7 @@ export default class Procedure
         return implementations.some(implementation => implementation.protected);
     }
 
-    addImplementation(implementation: Implementation): Procedure
+    addImplementation(implementation: Implementation): this
     {
         this.#implementations.set(implementation.version, implementation);
 

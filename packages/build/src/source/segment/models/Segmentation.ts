@@ -3,7 +3,7 @@ import type Segment from './Segment';
 
 export default class Segmentation
 {
-    #segments: Segment[];
+    readonly #segments: Segment[];
 
     constructor(segments: Segment[])
     {

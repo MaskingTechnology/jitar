@@ -1,9 +1,9 @@
 
 export default class Response
 {
-    #status: number;
+    readonly #status: number;
     #result: unknown;
-    #headers: Map<string, string>;
+    readonly #headers: Map<string, string>;
 
     constructor(status: number, result: unknown = undefined, headers = new Map())
     {

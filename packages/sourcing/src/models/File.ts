@@ -1,9 +1,9 @@
 
 export default class File
 {
-    #location: string;
-    #type: string;
-    #content: Buffer | string;
+    readonly #location: string;
+    readonly #type: string;
+    readonly #content: Buffer | string;
 
     constructor(location: string, type: string, content: Buffer | string)
     {

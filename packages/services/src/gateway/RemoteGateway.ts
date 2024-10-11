@@ -15,8 +15,8 @@ type Configuration =
 
 export default class RemoteGateway implements Gateway
 {
-    #url: string;
-    #remote: Remote;
+    readonly #url: string;
+    readonly #remote: Remote;
 
     constructor(configuration: Configuration)
     {

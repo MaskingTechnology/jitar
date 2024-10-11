@@ -7,7 +7,7 @@ import NoWorkerAvailable from './errors/NoWorkerAvailable';
 
 export default class WorkerBalancer
 {
-    #workers: Worker[] = [];
+    readonly #workers: Worker[] = [];
     #currentIndex = 0;
 
     get workers() { return this.#workers; }

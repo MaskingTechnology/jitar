@@ -17,12 +17,12 @@ const DEFAULT_SERVE_INDEX_ON_NOT_FOUND = false;
 
 export default class LocalRepository implements Repository
 {
-    #url: string;
-    #sourcingManager: SourcingManager;
-    #assets: Set<string>;
+    readonly #url: string;
+    readonly #sourcingManager: SourcingManager;
+    readonly #assets: Set<string>;
 
-    #indexFilename: string;
-    #serveIndexOnNotFound: boolean;
+    readonly #indexFilename: string;
+    readonly #serveIndexOnNotFound: boolean;
 
     constructor(configuration: Configuration)
     {

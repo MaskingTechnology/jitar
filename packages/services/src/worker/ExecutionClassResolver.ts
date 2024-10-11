@@ -4,7 +4,7 @@ import type { ExecutionManager } from '@jitar/execution';
 
 export default class ExecutionClassResolver implements ClassResolver
 {
-    #executionManager: ExecutionManager;
+    readonly #executionManager: ExecutionManager;
 
     constructor(executionManager: ExecutionManager)
     {

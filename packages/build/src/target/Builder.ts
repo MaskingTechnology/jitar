@@ -9,8 +9,8 @@ import SegmentBuilder from './SegmentBuilder';
 
 export default class Builder
 {
-    #moduleBuilder: ModuleBuilder;
-    #segmentBuilder: SegmentBuilder;
+    readonly #moduleBuilder: ModuleBuilder;
+    readonly #segmentBuilder: SegmentBuilder;
 
     constructor(fileManager: FileManager, logger: Logger)
     {

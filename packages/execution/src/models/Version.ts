@@ -3,9 +3,9 @@ export default class Version
 {
     static get DEFAULT(): Version { return new Version(0, 0, 0); }
 
-    #major: number;
-    #minor: number;
-    #patch: number;
+    readonly #major: number;
+    readonly #minor: number;
+    readonly #patch: number;
 
     constructor(major = 0, minor = 0, patch = 0)
     {

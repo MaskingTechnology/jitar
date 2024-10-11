@@ -16,8 +16,8 @@ type Configuration =
 
 export default class Client extends Runtime
 {
-    #worker: LocalWorker;
-    #middlewareManager: MiddlewareManager;
+    readonly #worker: LocalWorker;
+    readonly #middlewareManager: MiddlewareManager;
 
     constructor(configuration: Configuration)
     {

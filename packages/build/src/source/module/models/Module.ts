@@ -3,9 +3,9 @@ import type { ESModule } from '@jitar/analysis';
 
 export default class Module
 {
-    #filename: string;
-    #code: string;
-    #model: ESModule;
+    readonly #filename: string;
+    readonly #code: string;
+    readonly #model: ESModule;
 
     constructor(filename: string, code: string, model: ESModule)
     {

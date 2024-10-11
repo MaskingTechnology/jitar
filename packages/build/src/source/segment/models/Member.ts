@@ -1,9 +1,9 @@
 
 export default class Member
 {
-    #id: string;
-    #importKey: string;
-    #fqn: string;
+    readonly #id: string;
+    readonly #importKey: string;
+    readonly #fqn: string;
 
     public constructor(id: string, importKey: string, fqn: string)
     {

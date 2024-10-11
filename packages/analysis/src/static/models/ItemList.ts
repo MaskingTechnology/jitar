@@ -1,7 +1,7 @@
 
 export default class ItemList<T>
 {
-    #items: T[];
+    readonly #items: T[];
     #position: number;
 
     constructor(items: T[])

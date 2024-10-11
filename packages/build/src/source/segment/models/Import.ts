@@ -1,8 +1,8 @@
 
 export default class Import
 {
-    #members: string[];
-    #from: string;
+    readonly #members: string[];
+    readonly #from: string;
 
     constructor(members: string[], from: string)
     {

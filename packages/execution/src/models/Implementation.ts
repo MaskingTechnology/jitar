@@ -6,10 +6,10 @@ import type Version from './Version';
 
 export default class Implementation
 {
-    #version: Version;
-    #access: AccessLevel;
-    #parameters: Parameter[];
-    #executable: Function;
+    readonly #version: Version;
+    readonly #access: AccessLevel;
+    readonly #parameters: Parameter[];
+    readonly #executable: Function;
 
     constructor(version: Version, access: AccessLevel, parameters: Parameter[], executable: Function)
     {

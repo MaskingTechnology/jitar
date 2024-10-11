@@ -11,12 +11,12 @@ const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 export default class ImportRewriter
 {
-    #module: Module;
-    #segmentation: Segmentation;
-    #segment: Segment | undefined;
+    readonly #module: Module;
+    readonly #segmentation: Segmentation;
+    readonly #segment: Segment | undefined;
 
-    #parser = new Parser();
-    #fileHelper = new FileHelper();
+    readonly #parser = new Parser();
+    readonly #fileHelper = new FileHelper();
 
     constructor(module: Module, segmentation: Segmentation, segment?: Segment)
     {

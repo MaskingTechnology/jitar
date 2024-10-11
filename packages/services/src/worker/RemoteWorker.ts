@@ -14,9 +14,9 @@ type Configuration =
 
 export default class RemoteWorker implements Worker
 {
-    #url: string;
-    #procedureNames: Set<string>;
-    #remote: Remote;
+    readonly #url: string;
+    readonly #procedureNames: Set<string>;
+    readonly #remote: Remote;
 
     constructor(configuration: Configuration)
     {

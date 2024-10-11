@@ -5,7 +5,6 @@ import ValueSerializer from '../ValueSerializer';
 import ClassNotFound from '../errors/ClassNotFound';
 import InvalidClass from '../errors/InvalidClass';
 import ClassResolver from '../interfaces/ClassResolver';
-import FlexObject from '../types/serialized/SerializableObject';
 import SerializableObject from '../types/serialized/SerializableObject';
 import SerializedClass from '../types/serialized/SerializedClass';
 import Resolvable from '../types/Resolvable';
@@ -14,7 +13,7 @@ const reflector = new Reflector();
 
 export default class ClassSerializer extends ValueSerializer
 {
-    #classResolver: ClassResolver;
+    readonly #classResolver: ClassResolver;
 
     constructor(classResolver: ClassResolver)
     {
@@ -57,8 +56,8 @@ export default class ClassSerializer extends ValueSerializer
             throw new ClassNotFound(clazz.name);
         }
 
-        const args: FlexObject = await this.#serializeConstructor(model, parameterNames, object);
-        const fields: FlexObject = await this.#serializeFields(model, parameterNames, object);
+        const args: SerializableObject = await this.#serializeConstructor(model, parameterNames, object);
+        const fields: SerializableObject = await this.#serializeFields(model, parameterNames, object);
 
         return { serialized: true, key, name, args, fields };
     }
@@ -71,7 +70,7 @@ export default class ClassSerializer extends ValueSerializer
         return parameters.map(parameter => parameter.name);
     }
 
-    async #serializeConstructor(model: ESClass, includeNames: string[], object: object): Promise<FlexObject>
+    async #serializeConstructor(model: ESClass, includeNames: string[], object: object): Promise<SerializableObject>
     {
         const args: SerializableObject = {};
 
@@ -80,7 +79,7 @@ export default class ClassSerializer extends ValueSerializer
             // Constructor parameters that can't be read make it impossible to fully reconstruct the object.
             
             const value = model.canRead(name)
-                ? await this.serializeOther((object as FlexObject)[name])
+                ? await this.serializeOther((object as SerializableObject)[name])
                 : undefined;
 
             const key = index.toString();
@@ -91,7 +90,7 @@ export default class ClassSerializer extends ValueSerializer
         return args;
     }
 
-    async #serializeFields(model: ESClass, excludeNames: string[], object: object): Promise<FlexObject>
+    async #serializeFields(model: ESClass, excludeNames: string[], object: object): Promise<SerializableObject>
     {
         const fields: SerializableObject = {};
 
@@ -158,7 +157,7 @@ export default class ClassSerializer extends ValueSerializer
 
     async #getClass(resolvable: Resolvable): Promise<unknown>
     {
-        return (globalThis as FlexObject)[resolvable.key]
+        return (globalThis as SerializableObject)[resolvable.key]
             ?? this.#classResolver.resolveClass(resolvable.key);
     }
 }

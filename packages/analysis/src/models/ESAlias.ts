@@ -1,8 +1,8 @@
 
 export default class ESAlias
 {
-    #name: string;
-    #as: string;
+    readonly #name: string;
+    readonly #as: string;
 
     constructor(name: string, as: string)
     {

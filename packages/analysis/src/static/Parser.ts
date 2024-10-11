@@ -62,7 +62,7 @@ export default class Parser
             throw new UnexpectedParseResult('a value definition');
         }
 
-        return model as ESValue;
+        return model;
     }
 
     parseImport(code: string): ESImport
@@ -74,7 +74,7 @@ export default class Parser
             throw new UnexpectedParseResult('an import definition');
         }
 
-        return model as ESImport;
+        return model;
     }
 
     parseExport(code: string): ESExport
@@ -86,7 +86,7 @@ export default class Parser
             throw new UnexpectedParseResult('an export definition');
         }
 
-        return model as ESExport;
+        return model;
     }
 
     parseDeclaration(code: string): ESDeclaration

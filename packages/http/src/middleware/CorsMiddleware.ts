@@ -4,9 +4,9 @@ import { Middleware, NextHandler } from '@jitar/middleware';
 
 export default class CorsMiddleware implements Middleware
 {
-    #allowOrigin: string;
-    #allowMethods = 'GET, POST';
-    #allowHeaders: string;
+    readonly #allowOrigin: string;
+    readonly #allowMethods = 'GET, POST';
+    readonly #allowHeaders: string;
 
     constructor(origin = '*', headers = '*')
     {

@@ -14,7 +14,7 @@ type ClientConfiguration =
 
 export default class ClientBuilder
 {
-    #remoteBuilder: RemoteBuilder;
+    readonly #remoteBuilder: RemoteBuilder;
 
     constructor(remoteBuilder: RemoteBuilder)
     {

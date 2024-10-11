@@ -6,8 +6,8 @@ import WorkerBalancer from './WorkerBalancer';
 
 export default class WorkerManager implements Runner
 {
-    #workers = new Set<Worker>();
-    #balancers = new Map<string, WorkerBalancer>();
+    readonly #workers = new Set<Worker>();
+    readonly #balancers = new Map<string, WorkerBalancer>();
 
     get workers()
     {

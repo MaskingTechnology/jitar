@@ -5,10 +5,10 @@ import type Procedure from './Procedure';
 
 export default class Segment
 {
-    #name: string;
-    #modules: Module[];
-    #classes: Class[];
-    #procedures: Procedure[];
+    readonly #name: string;
+    readonly #modules: Module[];
+    readonly #classes: Class[];
+    readonly #procedures: Procedure[];
 
     constructor(name: string, modules: Module[], classes: Class[], procedures: Procedure[])
     {

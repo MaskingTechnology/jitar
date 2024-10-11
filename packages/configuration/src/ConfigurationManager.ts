@@ -11,9 +11,9 @@ const DEFAULT_ENVIRONMENT_FILE = '.env';
 
 export default class ConfigurationManager
 {
-    #environmentConfigurator: EnvironmentConfigurator;
-    #runtimeConfigurationBuilder: RuntimeConfigurationBuilder;
-    #serverConfigurationBuilder : ServerConfigurationBuilder;
+    readonly #environmentConfigurator: EnvironmentConfigurator;
+    readonly #runtimeConfigurationBuilder: RuntimeConfigurationBuilder;
+    readonly #serverConfigurationBuilder : ServerConfigurationBuilder;
 
     constructor(rootPath: string = DEFAULT_ROOT_PATH)
     {

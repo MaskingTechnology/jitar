@@ -6,8 +6,8 @@ import ClassMerger from './ClassMerger';
 
 export default class Reflector
 {
-    #parser = new Parser();
-    #merger = new ClassMerger();
+    readonly #parser = new Parser();
+    readonly #merger = new ClassMerger();
 
     fromModule(module: object, inherit = false): ESModule
     {

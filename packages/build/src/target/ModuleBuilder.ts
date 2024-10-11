@@ -9,11 +9,11 @@ import RemoteModuleBuilder from './RemoteModuleBuilder';
 
 export default class ModuleBuilder
 {
-    #fileManager: FileManager;
+    readonly #fileManager: FileManager;
 
-    #localModuleBuilder = new LocalModuleBuilder();
-    #remoteModuleBuilder = new RemoteModuleBuilder();
-    #fileHelper = new FileHelper();
+    readonly #localModuleBuilder = new LocalModuleBuilder();
+    readonly #remoteModuleBuilder = new RemoteModuleBuilder();
+    readonly #fileHelper = new FileHelper();
 
     constructor(fileManager: FileManager)
     {

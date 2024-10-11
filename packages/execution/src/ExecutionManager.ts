@@ -22,9 +22,9 @@ import ErrorConverter from './utils/ErrorConverter';
 
 export default class ExecutionManager implements Runner
 {
-    #argumentConstructor: ArgumentConstructor = new ArgumentConstructor();
-    #errorConverter: ErrorConverter = new ErrorConverter();
-    #application: Application = new Application();
+    readonly #argumentConstructor: ArgumentConstructor = new ArgumentConstructor();
+    readonly #errorConverter: ErrorConverter = new ErrorConverter();
+    readonly #application: Application = new Application();
 
     async addSegment(segment: Segment): Promise<void>
     {

@@ -4,8 +4,8 @@ import ESMember from './ESMember.js';
 
 export default class ESImport extends ESMember
 {
-    #members: ESAlias[];
-    #from: string;
+    readonly #members: ESAlias[];
+    readonly #from: string;
 
     constructor(members: ESAlias[], from: string)
     {

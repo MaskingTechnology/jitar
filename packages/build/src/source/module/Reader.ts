@@ -9,8 +9,8 @@ import Repository from './models/Repository';
 
 export default class Reader
 {
-    #fileManager: FileManager;
-    #parser: Parser;
+    readonly #fileManager: FileManager;
+    readonly #parser: Parser;
 
     constructor(fileManager: FileManager, parser: Parser = new Parser())
     {

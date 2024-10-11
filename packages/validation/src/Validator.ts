@@ -6,7 +6,7 @@ type Data = Record<string, unknown>;
 
 export default class Validator
 {
-    #strict: boolean;
+    readonly #strict: boolean;
 
     public constructor(strict = true)
     {

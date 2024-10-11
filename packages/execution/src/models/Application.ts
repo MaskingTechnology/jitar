@@ -5,7 +5,7 @@ import type Segment from './Segment';
 
 export default class Application
 {
-    #segments = new Map<string, Segment>();
+    readonly #segments = new Map<string, Segment>();
 
     addSegment(segment: Segment): void
     {

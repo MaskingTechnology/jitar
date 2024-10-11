@@ -5,7 +5,7 @@ import NoSerializerFound from './errors/NoSerializerFound';
 
 export default class Serializer
 {
-    #serializers: ValueSerializer[] = [];
+    readonly #serializers: ValueSerializer[] = [];
 
     addSerializer(serializer: ValueSerializer): void
     {

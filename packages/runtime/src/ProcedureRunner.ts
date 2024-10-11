@@ -4,7 +4,7 @@ import type { Middleware, NextHandler } from '@jitar/middleware';
 
 export default class ProcedureRunner implements Middleware
 {
-    #runner: Runner;
+    readonly #runner: Runner;
 
     constructor(runner: Runner)
     {

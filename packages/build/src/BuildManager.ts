@@ -9,14 +9,14 @@ import { ApplicationBuilder } from './target';
 
 export default class BuildManager
 {
-    #logger: Logger;
+    readonly #logger: Logger;
 
-    #projectFileManager: FileManager;
-    #sourceFileManager: FileManager;
-    #targetFileManager: FileManager;
+    readonly #projectFileManager: FileManager;
+    readonly #sourceFileManager: FileManager;
+    readonly #targetFileManager: FileManager;
 
-    #applicationReader: ApplicationReader;
-    #applicationBuilder: ApplicationBuilder;
+    readonly #applicationReader: ApplicationReader;
+    readonly #applicationBuilder: ApplicationBuilder;
 
     constructor(configuration: RuntimeConfiguration, logLevel?: LogLevel)
     {

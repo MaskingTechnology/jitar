@@ -3,7 +3,7 @@ import { Request, Response, RunModes, StatusCodes, VersionParser, ProcedureNotAc
 
 export default abstract class Runtime
 {
-    #versionParser = new VersionParser();
+    readonly #versionParser = new VersionParser();
 
     constructor()
     {

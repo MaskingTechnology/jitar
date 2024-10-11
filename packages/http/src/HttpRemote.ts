@@ -8,9 +8,9 @@ import HeaderValues from './definitions/HeaderValues';
 
 export default class HttpRemote implements Remote
 {
-    #url: string;
+    readonly #url: string;
     
-    #errorConverter = new ErrorConverter();
+    readonly #errorConverter = new ErrorConverter();
 
     constructor(url: string)
     {
