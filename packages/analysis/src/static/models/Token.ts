@@ -1,10 +1,10 @@
 
 export default class Token
 {
-    #type: string;
-    #value: string;
-    #start: number;
-    #end: number;
+    readonly #type: string;
+    readonly #value: string;
+    readonly #start: number;
+    readonly #end: number;
 
     constructor(type: string, value: string, start: number, end: number)
     {

@@ -1,8 +1,8 @@
 
 export default class ModuleNotLoaded extends Error
 {
-    #url: string;
-    #reason?: string;
+    readonly #url: string;
+    readonly #reason?: string;
 
     constructor(url: string, reason?: string)
     {
