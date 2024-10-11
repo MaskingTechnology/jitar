@@ -5,8 +5,8 @@ import type Procedure from './Procedure';
 export default class Segment
 {
     #id: string;
-    #classes: Map<string, Class> = new Map();
-    #procedures: Map<string, Procedure> = new Map();
+    #classes = new Map<string, Class>();
+    #procedures = new Map<string, Procedure>();
 
     constructor(id: string)
     {
@@ -37,7 +37,7 @@ export default class Segment
     getClassByImplementation(implementation: Function): Class | undefined
     {
         const classes = this.getClasses();
-        
+
         return classes.find(clazz => clazz.implementation === implementation);
     }
 

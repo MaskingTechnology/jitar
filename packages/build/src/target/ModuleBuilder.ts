@@ -1,11 +1,11 @@
 
 import type { FileManager } from '@jitar/sourcing';
 
-import type { Application, Module, Segmentation, Segment, SegmentImplementation as Implementation } from '../source';
+import type { Application, SegmentImplementation as Implementation, Module, Segment, Segmentation } from '../source';
 import { FileHelper } from '../utils';
 
-import RemoteModuleBuilder from './RemoteModuleBuilder';
 import LocalModuleBuilder from './LocalModuleBuilder';
+import RemoteModuleBuilder from './RemoteModuleBuilder';
 
 export default class ModuleBuilder
 {
@@ -27,7 +27,7 @@ export default class ModuleBuilder
 
         const builds = repository.modules.map(module => this.#buildModule(module, segmentation));
 
-        await Promise.all(builds);  
+        await Promise.all(builds);
     }
 
     async #buildModule(module: Module, segmentation: Segmentation): Promise<void>
@@ -49,10 +49,10 @@ export default class ModuleBuilder
             const firstModuleSegment = moduleSegments[0];
             const segmentModule = firstModuleSegment.getModule(module.filename);
 
-            const remoteBuild= segmentModule!.hasImplementations()
+            const remoteBuild = segmentModule!.hasImplementations()
                 ? this.#buildRemoteModule(module, moduleSegments)
                 : [];
-            
+
             await Promise.all([...segmentBuilds, remoteBuild]);
         }
 
@@ -94,7 +94,7 @@ export default class ModuleBuilder
         // Implementation can be duplicated across segments
         // We need to ensure that each implementation is unique
 
-        const unique: Map<string, Implementation> = new Map();
+        const unique = new Map<string, Implementation>();
 
         for (const implementation of implementations)
         {

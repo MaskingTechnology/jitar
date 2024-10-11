@@ -5,7 +5,7 @@ import Version from './Version';
 export default class Procedure
 {
     #fqn: string;
-    #implementations: Map<Version, Implementation> = new Map();
+    #implementations = new Map<Version, Implementation>();
     #latestImplementation?: Implementation;
 
     constructor(fqn: string)

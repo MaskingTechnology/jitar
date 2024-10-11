@@ -10,7 +10,7 @@
   "private": true,
   "scripts": {
     "test": "",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist"
   }
