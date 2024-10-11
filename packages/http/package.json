@@ -16,10 +16,11 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@jitar/errors": "*",
     "@jitar/execution": "*",
+    "@jitar/middleware": "*",
     "@jitar/runtime": "*",
     "@jitar/services": "*",
+    "@jitar/sourcing": "*",
     "@jitar/validation": "*"
   }
 }

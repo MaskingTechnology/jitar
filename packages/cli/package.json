@@ -18,9 +18,9 @@
   "dependencies": {
     "@jitar/build": "*",
     "@jitar/configuration": "*",
-    "@jitar/sourcing": "*",
     "@jitar/http": "*",
     "@jitar/logging": "*",
-    "@jitar/runtime": "*"
+    "@jitar/runtime": "*",
+    "@jitar/sourcing": "*"
   }
 }

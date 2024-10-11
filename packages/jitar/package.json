@@ -39,7 +39,8 @@
         "@jitar/health": "*",
         "@jitar/http": "*",
         "@jitar/logging": "*",
-        "@jitar/middleware": "*"
+        "@jitar/middleware": "*",
+        "@jitar/runtime": "*"
     },
     "engines": {
         "node": ">=20.0"
