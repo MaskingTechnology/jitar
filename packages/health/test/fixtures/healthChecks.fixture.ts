@@ -1,8 +1,6 @@
 
 import HealthCheck from '../../src/interfaces/HealthCheck';
 
-/* eslint-disable @typescript-eslint/class-literal-property-style */
-
 class HealthyCheck implements HealthCheck
 {
     get name() { return 'good'; }

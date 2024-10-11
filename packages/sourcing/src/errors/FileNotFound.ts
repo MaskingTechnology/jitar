@@ -1,7 +1,7 @@
 
 export default class FileNotFound extends Error
 {
-    #filename: string;
+    readonly #filename: string;
 
     constructor(filename: string)
     {

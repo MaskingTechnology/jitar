@@ -3,8 +3,8 @@ import { NotFound } from '@jitar/errors';
 
 export default class ImplementationNotFound extends NotFound
 {
-    #fqn: string;
-    #version: string;
+    readonly #fqn: string;
+    readonly #version: string;
 
     constructor(fqn: string, version: string)
     {
