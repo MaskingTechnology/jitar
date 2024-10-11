@@ -43,10 +43,10 @@ const DEFAULT_VERSION_NUMBER = '0.0.0';
 
 export default class SegmentReader
 {
-    #fileManager: FileManager;
-    #repository: ModuleRepository;
+    readonly #fileManager: FileManager;
+    readonly #repository: ModuleRepository;
 
-    #fileHelper = new FileHelper();
+    readonly #fileHelper = new FileHelper();
 
     constructor(fileManager: FileManager, repository: ModuleRepository)
     {

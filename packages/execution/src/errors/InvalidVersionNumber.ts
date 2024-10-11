@@ -3,7 +3,7 @@ import { BadRequest } from '@jitar/errors';
 
 export default class InvalidVersionNumber extends BadRequest
 {
-    #number: string;
+    readonly #number: string;
 
     constructor(number: string)
     {

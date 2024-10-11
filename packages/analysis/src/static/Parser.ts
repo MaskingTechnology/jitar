@@ -98,7 +98,7 @@ export default class Parser
             throw new UnexpectedParseResult('a declaration definition');
         }
 
-        return model as ESDeclaration;
+        return model;
     }
 
     parseFunction(code: string): ESFunction
@@ -111,7 +111,7 @@ export default class Parser
             throw new UnexpectedParseResult('a function definition');
         }
 
-        return model as ESFunction;
+        return model;
     }
 
     parseClass(code: string): ESClass
@@ -124,7 +124,7 @@ export default class Parser
             throw new UnexpectedParseResult('a class definition');
         }
 
-        return model as ESClass;
+        return model;
     }
 
     #parseScope(tokenList: TokenList): ESScope
