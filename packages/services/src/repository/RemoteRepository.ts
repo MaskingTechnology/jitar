@@ -3,7 +3,7 @@ import { File } from '@jitar/sourcing';
 
 import Remote from '../Remote';
 
-import ProviderService from '../ProviderService';
+import Repository from './Repository';
 
 type Configuration =
 {
@@ -11,7 +11,7 @@ type Configuration =
     remote: Remote;
 };
 
-export default class RemoteRepository implements ProviderService
+export default class RemoteRepository implements Repository
 {
     #url: string;
     #remote: Remote;

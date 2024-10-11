@@ -65,14 +65,14 @@ export default class HealthManager
 
     #handleHealthCheckResult(result: PromiseSettledResult<HealthCheckResult>, healthChecks: Map<string, boolean>): void
     {
-        if (result.status === 'fulfilled')
-        {
-            healthChecks.set(result.value.name, result.value.isHealthy);
-        }
-        else
+        if (result.status !== 'fulfilled')
         {
             healthChecks.set(result.reason.name, false);
+
+            return;
         }
+
+        healthChecks.set(result.value.name, result.value.isHealthy);
     }
 
     async #executeHealthCheck(healthCheck: HealthCheck): Promise<boolean>

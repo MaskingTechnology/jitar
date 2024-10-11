@@ -1,7 +1,7 @@
 
 import { File, FileNotFound, SourcingManager } from '@jitar/sourcing';
 
-import ProviderService from '../ProviderService';
+import Repository from './Repository';
 
 type Configuration =
 {
@@ -15,7 +15,7 @@ type Configuration =
 const DEFAULT_INDEX_FILENAME = 'index.html';
 const DEFAULT_SERVE_INDEX_ON_NOT_FOUND = false;
 
-export default class LocalRepository implements ProviderService
+export default class LocalRepository implements Repository
 {
     #url: string;
     #sourcingManager: SourcingManager;
