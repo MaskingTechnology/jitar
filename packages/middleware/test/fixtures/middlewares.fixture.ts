@@ -33,7 +33,6 @@ class SecondMiddleware implements Middleware
 
 class ThirdMiddleware implements Middleware
 {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async handle(request: Request, next: () => Promise<Response>): Promise<Response>
     {
         request.setHeader('third', 'yes');

@@ -4,31 +4,23 @@ import ValueSerializer from '../../src/ValueSerializer';
 
 class FirstSerializer extends ValueSerializer
 {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     canSerialize(value: unknown): boolean { return true; }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     canDeserialize(value: unknown): boolean { return true; }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async serialize(value: unknown): Promise<number> { return 1; }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async deserialize(value: unknown): Promise<number> { return 1; }
 }
 
 class SecondSerializer extends ValueSerializer
 {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     canSerialize(value: unknown): boolean { return true; }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     canDeserialize(value: unknown): boolean { return true; }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async serialize(value: unknown): Promise<number> { return 2; }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async deserialize(value: unknown): Promise<number> { return 2; }
 }
 
