@@ -66,7 +66,7 @@ export default class RemoteGateway implements Gateway
 
     removeWorker(worker: Worker): Promise<void>
     {
-        return this.#remote.removeWorker(worker.url, worker.getProcedureNames(), worker.trustKey);
+        return this.#remote.removeWorker(worker.url, worker.trustKey);
     }
 
     run(request: Request): Promise<Response>

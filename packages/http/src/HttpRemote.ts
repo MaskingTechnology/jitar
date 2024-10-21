@@ -76,10 +76,10 @@ export default class HttpRemote implements Remote
         await this.#callRemote(remoteUrl, options);
     }
 
-    async removeWorker(url: string, procedureNames: string[], trustKey?: string): Promise<void>
+    async removeWorker(url: string, trustKey?: string): Promise<void>
     {
         const remoteUrl = `${this.#url}/workers`;
-        const body = { url, procedureNames, trustKey };
+        const body = { url, trustKey };
         const options =
         {
             method: 'DELETE',

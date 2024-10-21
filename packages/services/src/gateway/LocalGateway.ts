@@ -9,6 +9,7 @@ import WorkerManager from './WorkerManager';
 import WorkerMonitor from './WorkerMonitor';
 
 import InvalidTrustKey from './errors/InvalidTrustKey';
+import UnknownWorker from './errors/UnknownWorker';
 
 type Configuration =
 {
@@ -56,9 +57,9 @@ export default class LocalGateway implements Gateway
         return new Map();
     }
 
-    async addWorker(worker: Worker, trustKey?: string): Promise<void>
+    async addWorker(worker: Worker): Promise<void>
     {
-        if (this.#isInvalidTrustKey(trustKey))
+        if (this.#isInvalidTrustKey(worker.trustKey))
         {
             throw new InvalidTrustKey();
         }
@@ -66,14 +67,21 @@ export default class LocalGateway implements Gateway
         return this.#workerManager.addWorker(worker);
     }
 
-    async removeWorker(worker: Worker, trustKey?: string): Promise<void>
+    async removeWorker(worker: Worker): Promise<void>
     {
-        if (this.#isInvalidTrustKey(trustKey))
+        if (this.#isInvalidTrustKey(worker.trustKey))
         {
             throw new InvalidTrustKey();
         }
+
+        const registeredWorker = this.#workerManager.workers.find(registeredWorker => registeredWorker.url === worker.url);
         
-        return this.#workerManager.removeWorker(worker);
+        if (registeredWorker === undefined)
+        {
+            throw new UnknownWorker(worker.url);
+        }
+
+        return this.#workerManager.removeWorker(registeredWorker);
     }
 
     getProcedureNames(): string[]

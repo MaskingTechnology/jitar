@@ -2,7 +2,6 @@
 type RemoveWorkerRequest =
 {
     url: string;
-    procedureNames: string[];
     trustKey?: string;
 };
 

@@ -16,7 +16,7 @@ interface Remote
 
     addWorker(workerUrl: string, procedureNames: string[], trustKey?: string): Promise<void>
 
-    removeWorker(workerUrl: string, procedureNames: string[], trustKey?: string): Promise<void>
+    removeWorker(workerUrl: string, trustKey?: string): Promise<void>
 
     run(request: Request): Promise<ResultResponse>;
 }

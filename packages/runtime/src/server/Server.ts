@@ -197,9 +197,9 @@ export default class Server extends Runtime
                 throw new BadRequest('Cannot add worker to remote gateway');
             }
 
-            const worker = this.#buildRemoteWorker(addRequest.url, addRequest.procedureNames);
+            const worker = this.#buildRemoteWorker(addRequest.url, addRequest.procedureNames, addRequest.trustKey);
 
-            await runner.addWorker(worker, addRequest.trustKey);
+            await runner.addWorker(worker);
 
             this.#logger.info('Added worker:', worker.url);
 
@@ -226,9 +226,9 @@ export default class Server extends Runtime
                 throw new BadRequest('Cannot remove worker from remote gateway');
             }
 
-            const worker = this.#buildRemoteWorker(removeRequest.url, removeRequest.procedureNames);
+            const worker = this.#buildRemoteWorker(removeRequest.url, [], removeRequest.trustKey);
 
-            await runner.removeWorker(worker, removeRequest.trustKey);
+            await runner.removeWorker(worker);
 
             this.#logger.info('Removed worker:', worker.url);
 
@@ -408,11 +408,11 @@ export default class Server extends Runtime
         return StatusCodes.SERVER_ERROR;
     }
 
-    #buildRemoteWorker(url: string, procedures: string[]): RemoteWorker
+    #buildRemoteWorker(url: string, procedures: string[], trustKey?: string): RemoteWorker
     {
         const remote = this.#remoteBuilder.build(url);
         const procedureNames = new Set<string>(procedures);
 
-        return new RemoteWorker({ url, remote, procedureNames });
+        return new RemoteWorker({ url, trustKey, remote, procedureNames });
     }
 }

@@ -196,7 +196,6 @@ export default class HttpServer
         const validation = this.#validator.validate(args,
         {
             url: { type: 'url', required: true },
-            procedureNames: { type: 'list', required: true, items: { type: 'string' } },
             trustKey: { type: 'string', required: false }
         });
 
@@ -206,12 +205,11 @@ export default class HttpServer
         }
 
         const url = args.url as string;
-        const procedureNames = args.procedureNames as string[];
         const trustKey = args.trustKey as string | undefined;
 
         try
         {
-            const serverResponse = await this.#server.removeWorker({ url, procedureNames, trustKey });
+            const serverResponse = await this.#server.removeWorker({ url, trustKey });
 
             return this.#transformResponse(response, serverResponse);
         }
