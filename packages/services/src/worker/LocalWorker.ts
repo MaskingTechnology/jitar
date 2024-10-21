@@ -57,7 +57,7 @@ export default class LocalWorker implements Worker
     {
         if (this.#gateway !== undefined)
         {
-            // TODO: Remove worker from gateway (Github issue #410)
+            await this.#gateway.removeWorker(this);
             await this.#gateway.stop();
         }
     }

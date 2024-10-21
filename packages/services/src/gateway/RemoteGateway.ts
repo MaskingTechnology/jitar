@@ -64,6 +64,11 @@ export default class RemoteGateway implements Gateway
         return this.#remote.addWorker(worker.url, worker.getProcedureNames(), worker.trustKey);
     }
 
+    removeWorker(worker: Worker): Promise<void>
+    {
+        return this.#remote.removeWorker(worker.url, worker.getProcedureNames(), worker.trustKey);
+    }
+
     run(request: Request): Promise<Response>
     {
         return this.#remote.run(request);

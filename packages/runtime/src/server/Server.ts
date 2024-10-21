@@ -14,10 +14,11 @@ import Runtime from '../Runtime';
 import ContentTypes from './definitions/ContentTypes';
 import StatusCodes from './definitions/StatusCodes';
 
-import type AddWorkerRequest from './types/AddWorkerRequest';
-import type ProvideRequest from './types/ProvideRequest';
-import type RunRequest from './types/RunRequest';
-import type ServerResponse from './types/ServerResponse';
+import AddWorkerRequest from './types/AddWorkerRequest';
+import ProvideRequest from './types/ProvideRequest';
+import RemoveWorkerRequest from './types/RemoveWorkerRequest';
+import RunRequest from './types/RunRequest';
+import ServerResponse from './types/ServerResponse';
 
 type Configuration =
     {
@@ -209,6 +210,35 @@ export default class Server extends Runtime
             const message = error instanceof Error ? error.message : String(error);
 
             this.#logger.error('Failed to add worker:', message);
+
+            return this.#respondError(error);
+        }
+    }
+
+    async removeWorker(removeRequest: RemoveWorkerRequest): Promise<ServerResponse>
+    {
+        try
+        {
+            const runner = this.#proxy.runner;
+
+            if ((runner instanceof LocalGateway) === false)
+            {
+                throw new BadRequest('Cannot remove worker from remote gateway');
+            }
+
+            const worker = this.#buildRemoteWorker(removeRequest.url, removeRequest.procedureNames);
+
+            await runner.removeWorker(worker, removeRequest.trustKey);
+
+            this.#logger.info('Removed worker:', worker.url);
+
+            return this.#respondSuccess();
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.error('Failed to remove worker:', message);
 
             return this.#respondError(error);
         }

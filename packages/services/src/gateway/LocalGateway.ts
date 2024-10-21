@@ -66,6 +66,16 @@ export default class LocalGateway implements Gateway
         return this.#workerManager.addWorker(worker);
     }
 
+    async removeWorker(worker: Worker, trustKey?: string): Promise<void>
+    {
+        if (this.#isInvalidTrustKey(trustKey))
+        {
+            throw new InvalidTrustKey();
+        }
+        
+        return this.#workerManager.removeWorker(worker);
+    }
+
     getProcedureNames(): string[]
     {
         return this.#workerManager.getProcedureNames();

@@ -76,6 +76,20 @@ export default class HttpRemote implements Remote
         await this.#callRemote(remoteUrl, options);
     }
 
+    async removeWorker(url: string, procedureNames: string[], trustKey?: string): Promise<void>
+    {
+        const remoteUrl = `${this.#url}/workers`;
+        const body = { url, procedureNames, trustKey };
+        const options =
+        {
+            method: 'DELETE',
+            headers: { 'Content-Type': HeaderValues.APPLICATION_JSON },
+            body: JSON.stringify(body)
+        };
+
+        await this.#callRemote(remoteUrl, options);
+    }
+
     async run(request: Request): Promise<ResultResponse>
     {
         request.setHeader(HeaderKeys.CONTENT_TYPE, HeaderValues.APPLICATION_JSON);
