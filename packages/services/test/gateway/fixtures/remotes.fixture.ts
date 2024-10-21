@@ -40,6 +40,12 @@ class DummyRemote implements Remote
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    removeWorker(workerUrl: string, trustKey?: string): Promise<void>
+    {
+        throw new NotImplemented();    
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async run(request: Request): Promise<Response>
     {
         return new Response(StatusCodes.OK, 'test');
