@@ -2,8 +2,8 @@
 import { NotImplemented } from '@jitar/errors';
 import { Request, Response } from '@jitar/execution';
 
-import Remote from '../Remote';
-import Worker from '../worker/Worker';
+import type Remote from '../Remote';
+import type Worker from '../worker/Worker';
 
 import Gateway from './Gateway';
 
@@ -59,14 +59,14 @@ export default class RemoteGateway implements Gateway
         throw new NotImplemented();
     }
 
-    addWorker(worker: Worker): Promise<void>
+    addWorker(worker: Worker): Promise<string>
     {
         return this.#remote.addWorker(worker.url, worker.getProcedureNames(), worker.trustKey);
     }
 
     removeWorker(worker: Worker): Promise<void>
     {
-        return this.#remote.removeWorker(worker.url, worker.trustKey);
+        return this.#remote.removeWorker(worker.id as string);
     }
 
     run(request: Request): Promise<Response>

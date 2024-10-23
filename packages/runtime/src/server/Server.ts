@@ -21,16 +21,16 @@ import RunRequest from './types/RunRequest';
 import ServerResponse from './types/ServerResponse';
 
 type Configuration =
-    {
-        proxy: Proxy;
-        sourcingManager: SourcingManager;
-        remoteBuilder: RemoteBuilder;
-        middlewareManager: MiddlewareManager;
-        healthManager: HealthManager;
-        setUpScripts?: string[];
-        tearDownScripts?: string[];
-        logger: Logger;
-    };
+{
+    proxy: Proxy;
+    sourcingManager: SourcingManager;
+    remoteBuilder: RemoteBuilder;
+    middlewareManager: MiddlewareManager;
+    healthManager: HealthManager;
+    setUpScripts?: string[];
+    tearDownScripts?: string[];
+    logger: Logger;
+};
 
 export default class Server extends Runtime
 {
@@ -199,11 +199,11 @@ export default class Server extends Runtime
 
             const worker = this.#buildRemoteWorker(addRequest.url, addRequest.procedureNames, addRequest.trustKey);
 
-            await runner.addWorker(worker);
+            const id = await runner.addWorker(worker);
 
             this.#logger.info('Added worker:', worker.url);
 
-            return this.#respondSuccess();
+            return this.#respondSuccess({ id });
         }
         catch (error: unknown)
         {
@@ -226,8 +226,8 @@ export default class Server extends Runtime
                 throw new BadRequest('Cannot remove worker from remote gateway');
             }
 
-            const worker = this.#buildRemoteWorker(removeRequest.url, [], removeRequest.trustKey);
-
+            const worker = runner.getWorker(removeRequest.id);
+            
             await runner.removeWorker(worker);
 
             this.#logger.info('Removed worker:', worker.url);
@@ -366,10 +366,9 @@ export default class Server extends Runtime
         return { result, contentType, headers, status };
     }
 
-    #respondSuccess(): ServerResponse
+    #respondSuccess(result?: unknown): ServerResponse
     {
-        const result = undefined;
-        const contentType = ContentTypes.TEXT;
+        const contentType = this.#determineContentType(result);
         const headers = {};
         const status = StatusCodes.OK;
 

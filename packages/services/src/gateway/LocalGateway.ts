@@ -2,14 +2,13 @@
 import { Response } from '@jitar/execution';
 import type { Request } from '@jitar/execution';
 
-import Worker from '../worker/Worker';
+import type Worker from '../worker/Worker';
 
 import Gateway from './Gateway';
 import WorkerManager from './WorkerManager';
 import WorkerMonitor from './WorkerMonitor';
 
 import InvalidTrustKey from './errors/InvalidTrustKey';
-import UnknownWorker from './errors/UnknownWorker';
 
 type Configuration =
 {
@@ -57,7 +56,7 @@ export default class LocalGateway implements Gateway
         return new Map();
     }
 
-    async addWorker(worker: Worker): Promise<void>
+    async addWorker(worker: Worker): Promise<string>
     {
         if (this.#isInvalidTrustKey(worker.trustKey))
         {
@@ -67,21 +66,14 @@ export default class LocalGateway implements Gateway
         return this.#workerManager.addWorker(worker);
     }
 
+    getWorker(id: string): Worker
+    {
+        return this.#workerManager.getWorker(id);
+    }
+
     async removeWorker(worker: Worker): Promise<void>
     {
-        if (this.#isInvalidTrustKey(worker.trustKey))
-        {
-            throw new InvalidTrustKey();
-        }
-
-        const registeredWorker = this.#workerManager.workers.find(registeredWorker => registeredWorker.url === worker.url);
-        
-        if (registeredWorker === undefined)
-        {
-            throw new UnknownWorker(worker.url);
-        }
-
-        return this.#workerManager.removeWorker(registeredWorker);
+        return this.#workerManager.removeWorker(worker);
     }
 
     getProcedureNames(): string[]

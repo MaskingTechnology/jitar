@@ -2,6 +2,8 @@
 import { Request, Response as ResultResponse } from '@jitar/execution';
 import { File } from '@jitar/sourcing';
 
+import type Worker from './worker/Worker';
+
 interface Remote
 {
     connect(): Promise<void>;
@@ -14,9 +16,9 @@ interface Remote
 
     getHealth(): Promise<Map<string, boolean>>;
 
-    addWorker(workerUrl: string, procedureNames: string[], trustKey?: string): Promise<void>
+    addWorker(workerUrl: string, procedureNames: string[], trustKey?: string): Promise<string>
 
-    removeWorker(workerUrl: string, trustKey?: string): Promise<void>
+    removeWorker(id: string): Promise<void>
 
     run(request: Request): Promise<ResultResponse>;
 }

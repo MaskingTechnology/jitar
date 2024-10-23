@@ -191,12 +191,11 @@ export default class HttpServer
 
     async #removeWorker(request: Request, response: Response): Promise<Response>
     {
-        const args = this.#extractBodyArguments(request);
+        const args = this.#extractQueryArguments(request);
 
         const validation = this.#validator.validate(args,
         {
-            url: { type: 'url', required: true },
-            trustKey: { type: 'string', required: false }
+            id: { type: 'string', required: true },
         });
 
         if (validation.valid === false)
@@ -204,12 +203,11 @@ export default class HttpServer
             return response.status(400).send(validation.errors.join('\n'));
         }
 
-        const url = args.url as string;
-        const trustKey = args.trustKey as string | undefined;
+        const id = args.id as string;
 
         try
         {
-            const serverResponse = await this.#server.removeWorker({ url, trustKey });
+            const serverResponse = await this.#server.removeWorker({ id });
 
             return this.#transformResponse(response, serverResponse);
         }

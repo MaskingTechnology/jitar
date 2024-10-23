@@ -1,8 +1,7 @@
 
 type RemoveWorkerRequest =
 {
-    url: string;
-    trustKey?: string;
+    id: string
 };
 
 export default RemoveWorkerRequest;

@@ -3,7 +3,9 @@ import { describe, expect, it } from 'vitest';
 
 import { Request, Response, RunModes, StatusCodes, Version, ProcedureNotFound } from '@jitar/execution';
 
-import { WORKER_MANAGERS, REMOTE_WORKERS } from './fixtures';
+import { WORKER_MANAGERS, REMOTE_WORKERS, VALUES, WORKER_ID } from './fixtures';
+
+import UnknownWorker from '../../src/gateway/errors/UnknownWorker';
 
 const filledManager = WORKER_MANAGERS.FILLED;
 
@@ -53,6 +55,23 @@ describe('gateway/WorkerManager', () =>
             const secondBalancer = balancers.get('second');
             expect(secondBalancer).toBeDefined();
             expect(secondBalancer?.workers).toEqual([REMOTE_WORKERS.SECOND]);
+        });
+    });
+
+    describe('.getWorker(id)', () =>
+    {
+        it('should get a known worker by id', () =>
+        {
+            const worker = filledManager.getWorker(WORKER_ID);
+
+            expect(worker).toEqual(REMOTE_WORKERS.FIRST)
+        });
+
+        it('should throw an error when worker id is unknown', () =>
+        {
+            const result = () => filledManager.getWorker(VALUES.UNKNOWN_WORKER_ID);
+
+            expect(result).toThrow(UnknownWorker);
         });
     });
 

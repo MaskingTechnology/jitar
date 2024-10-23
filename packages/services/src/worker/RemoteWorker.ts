@@ -15,6 +15,7 @@ type Configuration =
 
 export default class RemoteWorker implements Worker
 {
+    #id?: string;
     readonly #url: string;
     readonly #trustKey?: string;
     readonly #procedureNames: Set<string>;
@@ -27,6 +28,10 @@ export default class RemoteWorker implements Worker
         this.#procedureNames = configuration.procedureNames;
         this.#remote = configuration.remote;
     }
+
+    get id(): string | undefined { return this.#id; }
+
+    set id(id: string) { this.#id = id; }
     
     get url() { return this.#url; }
 

@@ -20,14 +20,14 @@ describe('gateway/LocalGateway', () =>
             {
                 const promise = publicGateway.addWorker(emptyWorker);
     
-                expect(promise).resolves.toBeUndefined();
+                expect(promise).resolves.toBeDefined();
             });
 
         it('should add a worker with a valid trust key to a protected gateway', () =>
         {
             const promise = protectedGateway.addWorker(trustedWorker);
 
-            expect(promise).resolves.toBeUndefined();
+            expect(promise).resolves.toBeDefined();
         });
 
         it('should not add a worker with an invalid trust key to a protected gateway', () =>

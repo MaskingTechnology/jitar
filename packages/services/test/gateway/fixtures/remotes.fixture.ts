@@ -34,7 +34,7 @@ class DummyRemote implements Remote
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    addWorker(workerUrl: string, procedureNames: string[], trustKey?: string): Promise<void>
+    addWorker(workerUrl: string, procedureNames: string[], trustKey?: string): Promise<string>
     {
         throw new NotImplemented();
     }

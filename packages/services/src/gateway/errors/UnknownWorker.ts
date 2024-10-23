@@ -7,7 +7,7 @@ export default class UnknownWorker extends ServerError
 
     constructor(url: string)
     {
-        super(`Unknown worker for '${url}'`);
+        super(`Unknown worker id '${url}'`);
 
         this.#url = url;
     }
