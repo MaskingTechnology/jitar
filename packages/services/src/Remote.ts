@@ -2,8 +2,6 @@
 import { Request, Response as ResultResponse } from '@jitar/execution';
 import { File } from '@jitar/sourcing';
 
-import type Worker from './worker/Worker';
-
 interface Remote
 {
     connect(): Promise<void>;

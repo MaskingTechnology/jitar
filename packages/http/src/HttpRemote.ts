@@ -1,6 +1,6 @@
 
 import { ErrorConverter, Request, Response as ResultResponse } from '@jitar/execution';
-import type { Remote, Worker } from '@jitar/services';
+import type { Remote } from '@jitar/services';
 import { File } from '@jitar/sourcing';
 
 import HeaderKeys from './definitions/HeaderKeys';

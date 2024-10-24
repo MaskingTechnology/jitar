@@ -64,7 +64,7 @@ describe('gateway/WorkerManager', () =>
         {
             const worker = filledManager.getWorker(WORKER_ID);
 
-            expect(worker).toEqual(REMOTE_WORKERS.FIRST)
+            expect(worker).toEqual(REMOTE_WORKERS.FIRST);
         });
 
         it('should throw an error when worker id is unknown', () =>

@@ -12,4 +12,4 @@ const WORKER_MANAGERS =
     FILLED: filledManager
 };
 
-export { WORKER_MANAGERS, WORKER_ID }
+export { WORKER_MANAGERS, WORKER_ID };
