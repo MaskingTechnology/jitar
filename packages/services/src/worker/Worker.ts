@@ -3,7 +3,9 @@ import RunnerService from '../RunnerService';
 
 interface Worker extends RunnerService
 {
-   get trustKey(): string | undefined;
+   get id(): string | undefined;
+
+   set id(id: string);
 }
 
 export default Worker;

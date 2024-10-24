@@ -61,7 +61,16 @@ export default class StartServer implements Command
 
     #runServer(httpServer: HttpServer): Promise<void>
     {
-        process.on('SIGINT', async () => httpServer.stop());
+        let isShuttingDown = false;
+
+        process.on('SIGINT', async () => 
+        {
+            if (isShuttingDown) return;
+
+            isShuttingDown = true;
+
+            httpServer.stop();
+        });
 
         console.log(banner);
 
