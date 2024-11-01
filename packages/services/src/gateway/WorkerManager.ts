@@ -38,7 +38,7 @@ export default class WorkerManager implements Runner
 
     addWorker(worker: Worker): string
     {
-        worker.id = this.#idGenerator.generateUUID();
+        worker.id = this.#idGenerator.generate();
 
         this.#workers.set(worker.id, worker);
 

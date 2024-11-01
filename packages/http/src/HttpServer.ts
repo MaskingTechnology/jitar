@@ -63,7 +63,7 @@ export default class HttpServer
         this.#app.options('/rpc/*', this.#runOptions.bind(this));
 
         this.#app.post('/workers', this.#addWorker.bind(this));
-        this.#app.delete('/workers', this.#removeWorker.bind(this));
+        this.#app.delete('/workers/:id', this.#removeWorker.bind(this));
 
         this.#app.get('*', this.#provide.bind(this));
     }
@@ -191,7 +191,7 @@ export default class HttpServer
 
     async #removeWorker(request: Request, response: Response): Promise<Response>
     {
-        const args = this.#extractQueryArguments(request);
+        const args = { id: request.params.id };
 
         const validation = this.#validator.validate(args,
         {

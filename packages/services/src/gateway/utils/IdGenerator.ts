@@ -3,7 +3,7 @@ import crypto from 'crypto';
 
 export default class IdGenerator
 {
-    generateUUID(): string
+    generate(): string
     {
         return crypto.randomUUID();
     }

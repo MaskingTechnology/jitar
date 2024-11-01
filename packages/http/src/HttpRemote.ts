@@ -102,7 +102,7 @@ export default class HttpRemote implements Remote
 
     async removeWorker(id: string): Promise<void>
     {
-        const remoteUrl = `${this.#url}/workers?id=${id}`;
+        const remoteUrl = `${this.#url}/workers/${id}`;
         const options =
         {
             method: 'DELETE',

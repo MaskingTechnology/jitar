@@ -3,14 +3,14 @@ import { ServerError } from '@jitar/errors';
 
 export default class UnknownWorker extends ServerError
 {
-    #url: string;
+    #id: string;
 
-    constructor(url: string)
+    constructor(id: string)
     {
-        super(`Unknown worker id '${url}'`);
+        super(`Unknown worker id '${id}'`);
 
-        this.#url = url;
+        this.#id = id;
     }
-
-    get url() { return this.#url; }
+    
+    get id() { return this.#id; }
 }
