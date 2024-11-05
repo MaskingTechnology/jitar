@@ -14,22 +14,23 @@ import Runtime from '../Runtime';
 import ContentTypes from './definitions/ContentTypes';
 import StatusCodes from './definitions/StatusCodes';
 
-import type AddWorkerRequest from './types/AddWorkerRequest';
-import type ProvideRequest from './types/ProvideRequest';
-import type RunRequest from './types/RunRequest';
-import type ServerResponse from './types/ServerResponse';
+import AddWorkerRequest from './types/AddWorkerRequest';
+import ProvideRequest from './types/ProvideRequest';
+import RemoveWorkerRequest from './types/RemoveWorkerRequest';
+import RunRequest from './types/RunRequest';
+import ServerResponse from './types/ServerResponse';
 
 type Configuration =
-    {
-        proxy: Proxy;
-        sourcingManager: SourcingManager;
-        remoteBuilder: RemoteBuilder;
-        middlewareManager: MiddlewareManager;
-        healthManager: HealthManager;
-        setUpScripts?: string[];
-        tearDownScripts?: string[];
-        logger: Logger;
-    };
+{
+    proxy: Proxy;
+    sourcingManager: SourcingManager;
+    remoteBuilder: RemoteBuilder;
+    middlewareManager: MiddlewareManager;
+    healthManager: HealthManager;
+    setUpScripts?: string[];
+    tearDownScripts?: string[];
+    logger: Logger;
+};
 
 export default class Server extends Runtime
 {
@@ -196,11 +197,40 @@ export default class Server extends Runtime
                 throw new BadRequest('Cannot add worker to remote gateway');
             }
 
-            const worker = this.#buildRemoteWorker(addRequest.url, addRequest.procedureNames);
+            const worker = this.#buildRemoteWorker(addRequest.url, addRequest.procedureNames, addRequest.trustKey);
 
-            await runner.addWorker(worker, addRequest.trustKey);
+            const id = await runner.addWorker(worker);
 
             this.#logger.info('Added worker:', worker.url);
+
+            return this.#respondSuccess({ id });
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.error('Failed to add worker:', message);
+
+            return this.#respondError(error);
+        }
+    }
+
+    async removeWorker(removeRequest: RemoveWorkerRequest): Promise<ServerResponse>
+    {
+        try
+        {
+            const runner = this.#proxy.runner;
+
+            if ((runner instanceof LocalGateway) === false)
+            {
+                throw new BadRequest('Cannot remove worker from remote gateway');
+            }
+
+            const worker = runner.getWorker(removeRequest.id);
+            
+            await runner.removeWorker(worker);
+
+            this.#logger.info('Removed worker:', worker.url);
 
             return this.#respondSuccess();
         }
@@ -208,7 +238,7 @@ export default class Server extends Runtime
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error('Failed to add worker:', message);
+            this.#logger.error('Failed to remove worker:', message);
 
             return this.#respondError(error);
         }
@@ -336,10 +366,9 @@ export default class Server extends Runtime
         return { result, contentType, headers, status };
     }
 
-    #respondSuccess(): ServerResponse
+    #respondSuccess(result?: unknown): ServerResponse
     {
-        const result = undefined;
-        const contentType = ContentTypes.TEXT;
+        const contentType = this.#determineContentType(result);
         const headers = {};
         const status = StatusCodes.OK;
 
@@ -378,11 +407,11 @@ export default class Server extends Runtime
         return StatusCodes.SERVER_ERROR;
     }
 
-    #buildRemoteWorker(url: string, procedures: string[]): RemoteWorker
+    #buildRemoteWorker(url: string, procedures: string[], trustKey?: string): RemoteWorker
     {
         const remote = this.#remoteBuilder.build(url);
         const procedureNames = new Set<string>(procedures);
 
-        return new RemoteWorker({ url, remote, procedureNames });
+        return new RemoteWorker({ url, trustKey, remote, procedureNames });
     }
 }

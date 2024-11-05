@@ -8,26 +8,34 @@ import Worker from './Worker';
 type Configuration =
 {
     url: string;
+    trustKey?: string;
     procedureNames: Set<string>;
     remote: Remote;
 };
 
 export default class RemoteWorker implements Worker
 {
+    #id?: string;
     readonly #url: string;
+    readonly #trustKey?: string;
     readonly #procedureNames: Set<string>;
     readonly #remote: Remote;
 
     constructor(configuration: Configuration)
     {
         this.#url = configuration.url;
+        this.#trustKey = configuration.trustKey;
         this.#procedureNames = configuration.procedureNames;
         this.#remote = configuration.remote;
     }
+
+    get id(): string | undefined { return this.#id; }
+
+    set id(id: string) { this.#id = id; }
     
     get url() { return this.#url; }
 
-    get trustKey() { return undefined; }
+    get trustKey() { return this.#trustKey; }
 
     start(): Promise<void>
     {

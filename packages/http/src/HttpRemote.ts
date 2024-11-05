@@ -1,16 +1,19 @@
 
 import { ErrorConverter, Request, Response as ResultResponse } from '@jitar/execution';
-import { Remote } from '@jitar/services';
+import type { Remote } from '@jitar/services';
 import { File } from '@jitar/sourcing';
 
 import HeaderKeys from './definitions/HeaderKeys';
 import HeaderValues from './definitions/HeaderValues';
+import { Validator } from '@jitar/validation';
+import InvalidWorkerId from './errors/InvalidWorkerId';
 
 export default class HttpRemote implements Remote
 {
     readonly #url: string;
     
     readonly #errorConverter = new ErrorConverter();
+    readonly #validator = new Validator();
 
     constructor(url: string)
     {
@@ -62,7 +65,7 @@ export default class HttpRemote implements Remote
         return new Map(Object.entries(health));
     }
 
-    async addWorker(url: string, procedureNames: string[], trustKey?: string): Promise<void>
+    async addWorker(url: string, procedureNames: string[], trustKey?: string): Promise<string>
     {
         const remoteUrl = `${this.#url}/workers`;
         const body = { url, procedureNames, trustKey };
@@ -71,6 +74,39 @@ export default class HttpRemote implements Remote
             method: 'POST',
             headers: { 'Content-Type': HeaderValues.APPLICATION_JSON },
             body: JSON.stringify(body)
+        };
+
+        const response = await this.#callRemote(remoteUrl, options);
+
+        const contentType = response.headers.get(HeaderKeys.CONTENT_TYPE);
+
+        if (contentType === null || contentType.includes(HeaderValues.APPLICATION_JSON) === false)
+        {
+            throw new InvalidWorkerId();
+        }
+
+        const result = await response.json();
+
+        const validation = this.#validator.validate(result,
+        {
+            id: { type: 'string', required: true }
+        });
+
+        if (validation.valid === false)
+        {
+            throw new InvalidWorkerId();
+        }
+
+        return result.id;
+    }
+
+    async removeWorker(id: string): Promise<void>
+    {
+        const remoteUrl = `${this.#url}/workers/${id}`;
+        const options =
+        {
+            method: 'DELETE',
+            headers: { 'Content-Type': HeaderValues.APPLICATION_JSON }
         };
 
         await this.#callRemote(remoteUrl, options);

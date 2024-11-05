@@ -63,6 +63,7 @@ export default class HttpServer
         this.#app.options('/rpc/*', this.#runOptions.bind(this));
 
         this.#app.post('/workers', this.#addWorker.bind(this));
+        this.#app.delete('/workers/:id', this.#removeWorker.bind(this));
 
         this.#app.get('*', this.#provide.bind(this));
     }
@@ -177,6 +178,36 @@ export default class HttpServer
         try
         {
             const serverResponse = await this.#server.addWorker({ url, procedureNames, trustKey });
+
+            return this.#transformResponse(response, serverResponse);
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : 'Server error';
+
+            return response.status(500).send(message);
+        }
+    }
+
+    async #removeWorker(request: Request, response: Response): Promise<Response>
+    {
+        const args = { id: request.params.id };
+
+        const validation = this.#validator.validate(args,
+        {
+            id: { type: 'string', required: true },
+        });
+
+        if (validation.valid === false)
+        {
+            return response.status(400).send(validation.errors.join('\n'));
+        }
+
+        const id = args.id as string;
+
+        try
+        {
+            const serverResponse = await this.#server.removeWorker({ id });
 
             return this.#transformResponse(response, serverResponse);
         }

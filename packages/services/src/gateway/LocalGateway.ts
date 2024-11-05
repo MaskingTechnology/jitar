@@ -2,7 +2,7 @@
 import { Response } from '@jitar/execution';
 import type { Request } from '@jitar/execution';
 
-import Worker from '../worker/Worker';
+import type Worker from '../worker/Worker';
 
 import Gateway from './Gateway';
 import WorkerManager from './WorkerManager';
@@ -56,14 +56,24 @@ export default class LocalGateway implements Gateway
         return new Map();
     }
 
-    async addWorker(worker: Worker, trustKey?: string): Promise<void>
+    async addWorker(worker: Worker): Promise<string>
     {
-        if (this.#isInvalidTrustKey(trustKey))
+        if (this.#isInvalidTrustKey(worker.trustKey))
         {
             throw new InvalidTrustKey();
         }
 
         return this.#workerManager.addWorker(worker);
+    }
+
+    getWorker(id: string): Worker
+    {
+        return this.#workerManager.getWorker(id);
+    }
+
+    async removeWorker(worker: Worker): Promise<void>
+    {
+        return this.#workerManager.removeWorker(worker);
     }
 
     getProcedureNames(): string[]

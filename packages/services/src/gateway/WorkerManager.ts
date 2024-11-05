@@ -4,10 +4,15 @@ import { ProcedureNotFound, Request, Response, Runner } from '@jitar/execution';
 import Worker from '../worker/Worker';
 import WorkerBalancer from './WorkerBalancer';
 
+import IdGenerator from './utils/IdGenerator';
+import UnknownWorker from './errors/UnknownWorker';
+
 export default class WorkerManager implements Runner
 {
-    readonly #workers = new Set<Worker>();
+    readonly #workers = new Map<string, Worker>();
     readonly #balancers = new Map<string, WorkerBalancer>();
+
+    readonly #idGenerator = new IdGenerator();
 
     get workers()
     {
@@ -31,9 +36,11 @@ export default class WorkerManager implements Runner
         return procedureNames.includes(fqn);
     }
 
-    async addWorker(worker: Worker): Promise<void>
+    addWorker(worker: Worker): string
     {
-        this.#workers.add(worker);
+        worker.id = this.#idGenerator.generate();
+
+        this.#workers.set(worker.id, worker);
 
         for (const name of worker.getProcedureNames())
         {
@@ -41,11 +48,25 @@ export default class WorkerManager implements Runner
 
             balancer.addWorker(worker);
         }
+
+        return worker.id;
+    }
+
+    getWorker(id: string)
+    {
+        const worker = this.#workers.get(id);
+
+        if (worker === undefined)
+        {
+            throw new UnknownWorker(id);
+        }
+
+        return worker;
     }
 
     removeWorker(worker: Worker): void
     {
-        this.#workers.delete(worker);
+        this.#workers.delete(worker.id as string);
 
         for (const name of worker.getProcedureNames())
         {

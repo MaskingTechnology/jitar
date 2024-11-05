@@ -13,15 +13,16 @@ const JITAR_DATA_ENCODING_KEY = 'X-Jitar-Data-Encoding';
 const JITAR_DATA_ENCODING_VALUE = 'serialized';
 
 type Configuration =
-    {
-        url: string;
-        trustKey?: string;
-        gateway?: Gateway;
-        executionManager: ExecutionManager;
-    };
+{
+    url: string;
+    trustKey?: string;
+    gateway?: Gateway;
+    executionManager: ExecutionManager;
+};
 
 export default class LocalWorker implements Worker
 {
+    #id: string | undefined;
     readonly #url: string;
     readonly #trustKey?: string;
     readonly #gateway?: Gateway;
@@ -40,6 +41,10 @@ export default class LocalWorker implements Worker
         this.#serializer = SerializerBuilder.build(classResolver);
     }
 
+    get id(): string | undefined { return this.#id; }
+
+    set id(id: string) { this.#id = id; }
+
     get url() { return this.#url; }
 
     get trustKey() { return this.#trustKey; }
@@ -49,15 +54,15 @@ export default class LocalWorker implements Worker
         if (this.#gateway !== undefined)
         {
             await this.#gateway.start();
-            await this.#gateway.addWorker(this);
+            this.#id = await this.#gateway.addWorker(this);
         }
     }
 
     async stop(): Promise<void>
     {
-        if (this.#gateway !== undefined)
+        if (this.#gateway !== undefined && this.#id !== undefined)
         {
-            // TODO: Remove worker from gateway (Github issue #410)
+            await this.#gateway.removeWorker(this);
             await this.#gateway.stop();
         }
     }
