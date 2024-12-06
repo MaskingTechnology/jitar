@@ -26,6 +26,9 @@ const remote = REMOTES.DUMMY;
 const noProcedureNames = new Set<string>();
 const emptyWorker = new RemoteWorker({ url, procedureNames: noProcedureNames, remote });
 
+const trustedWorker = new RemoteWorker({ url, procedureNames: noProcedureNames, remote, trustKey: VALUES.VALID_TRUST_KEY });
+const untrustedWorker = new RemoteWorker({ url, procedureNames: noProcedureNames, remote, trustKey: VALUES.INVALID_TRUST_KEY });
+
 const firstProcedureNames = new Set<string>(['first']);
 const firstWorker = new RemoteWorker({ url, procedureNames: firstProcedureNames, remote });
 
@@ -38,6 +41,8 @@ const unhealthyWorker = new UnhealthyWorker({ url, procedureNames: noProcedureNa
 export const REMOTE_WORKERS =
 {
     EMPTY: emptyWorker,
+    TRUSTED: trustedWorker,
+    UNTRUSTED: untrustedWorker,
     FIRST: firstWorker,
     SECOND: secondWorker,
     HEALTHY: healthyWorker,

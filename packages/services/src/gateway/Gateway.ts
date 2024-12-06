@@ -1,10 +1,12 @@
 
 import RunnerService from '../RunnerService';
-import Worker from '../worker/Worker';
+import type Worker from '../worker/Worker';
 
 interface Gateway extends RunnerService
 {
-    addWorker(worker: Worker): Promise<void>;
+    addWorker(worker: Worker): Promise<string>;
+
+    removeWorker(worker: Worker): Promise<void>;
 }
 
 export default Gateway;

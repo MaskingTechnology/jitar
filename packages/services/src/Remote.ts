@@ -14,7 +14,9 @@ interface Remote
 
     getHealth(): Promise<Map<string, boolean>>;
 
-    addWorker(workerUrl: string, procedureNames: string[], trustKey?: string): Promise<void>
+    addWorker(workerUrl: string, procedureNames: string[], trustKey?: string): Promise<string>
+
+    removeWorker(id: string): Promise<void>
 
     run(request: Request): Promise<ResultResponse>;
 }
