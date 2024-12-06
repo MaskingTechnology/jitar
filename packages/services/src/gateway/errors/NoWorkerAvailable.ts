@@ -3,7 +3,7 @@ import { ServerError } from '@jitar/errors';
 
 export default class NoWorkerAvailable extends ServerError
 {
-    #name: string;
+    readonly #name: string;
 
     constructor(name: string)
     {

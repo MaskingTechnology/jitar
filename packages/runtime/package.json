@@ -17,11 +17,12 @@
   },
   "dependencies": {
     "@jitar/configuration": "*",
+    "@jitar/errors": "*",
     "@jitar/execution": "*",
     "@jitar/health": "*",
+    "@jitar/logging": "*",
     "@jitar/middleware": "*",
     "@jitar/services": "*",
-    "@jitar/serialization": "*",
     "@jitar/sourcing": "*"
   }
 }

@@ -14,9 +14,5 @@
     "lint": "eslint",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist"
-  },
-  "dependencies": {
-    "@jitar/errors": "*",
-    "@jitar/execution": "*"
   }
 }

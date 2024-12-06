@@ -31,7 +31,7 @@ const DEFINITION_SEPARATOR = ' ';
 
 export default class Parser
 {
-    #lexer: Lexer;
+    readonly #lexer: Lexer;
 
     constructor(lexer = new Lexer())
     {

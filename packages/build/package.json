@@ -16,10 +16,10 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@jitar/configuration": "*",
     "@jitar/analysis": "*",
+    "@jitar/configuration": "*",
     "@jitar/execution": "*",
-    "@jitar/sourcing": "*",
-    "@jitar/logging": "*"
+    "@jitar/logging": "*",
+    "@jitar/sourcing": "*"
   }
 }
