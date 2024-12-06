@@ -11,7 +11,7 @@ export default tseslint.config({
         "**/node_modules/**/*",
         "**/coverage/**/*",
         "**/templates/**/*",
-        "**/test/fixtures/**/*",
+        "**/test/**/fixtures/**/*",
         "*config*"
     ],
     extends: [
