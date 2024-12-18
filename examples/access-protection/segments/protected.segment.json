@@ -1,5 +1,5 @@
 {
-    "./game/secret/checkSecret": {
+    "./game/checkSecret": {
         "default": {
             "access": "protected"
         }
