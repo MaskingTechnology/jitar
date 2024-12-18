@@ -9,7 +9,7 @@ export default class LocalModuleBuilder
     build(resources: ResourceList, module: Module, segmentation: Segmentation, segment?: Segment): string
     {
         const importRewriter = new ImportRewriter(resources, module, segmentation, segment);
-        const exportRewriter = new ExportRewriter(resources, module, segmentation, segment);
+        const exportRewriter = new ExportRewriter(module, segmentation, segment);
 
         const importCode = importRewriter.rewrite(module.code);
 

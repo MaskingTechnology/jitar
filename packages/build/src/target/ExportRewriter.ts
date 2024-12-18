@@ -12,7 +12,6 @@ const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 export default class ExportRewriter
 {
-    readonly #resources: ResourceList;
     readonly #module: Module;
     readonly #segmentation: Segmentation;
     readonly #segment: Segment | undefined;
@@ -20,9 +19,8 @@ export default class ExportRewriter
     readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
 
-    constructor(resources: ResourceList, module: Module, segmentation: Segmentation, segment?: Segment)
+    constructor(module: Module, segmentation: Segmentation, segment?: Segment)
     {
-        this.#resources = resources;  // nodig ??
         this.#module = module;
         this.#segmentation = segmentation;
         this.#segment = segment;
