@@ -56,9 +56,10 @@ export default class ImportRewriter
 
         if (this.#resources.isModuleResource(targetModuleFilename))
         {
-            const from = targetModuleFilename;
+            const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
+            const relativeFilename = this.#fileHelper.makePathRelative(targetModuleFilename, callingModulePath);
 
-            return this.#rewriteToDynamicImport(dependency, from);
+            return this.#rewriteToDynamicImport(dependency, relativeFilename);
         }
 
         if (this.#segmentation.isModuleSegmented(targetModuleFilename))

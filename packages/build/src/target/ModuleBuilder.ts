@@ -39,7 +39,7 @@ export default class ModuleBuilder
 
         if (resources.isModuleResource(module.filename))
         {
-            return this.#buildResourceModule(module);
+            return this.#buildResourceModule(resources, module, segmentation);
         }
         
         // If the module is not part of any segment, it is an application module
@@ -67,10 +67,10 @@ export default class ModuleBuilder
         this.#fileManager.delete(module.filename);
     }
 
-    async #buildResourceModule(module: Module): Promise<void>
+    async #buildResourceModule(resources: ResourceList, module: Module, segmentation: Segmentation): Promise<void>
     {
         const filename = module.filename;
-        const code = module.code;
+        const code = this.#localModuleBuilder.build(resources, module, segmentation);
 
         return this.#fileManager.write(filename, code);
     }

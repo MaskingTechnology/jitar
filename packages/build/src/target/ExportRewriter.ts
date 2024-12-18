@@ -2,7 +2,7 @@
 import { Parser } from '@jitar/analysis';
 import type { ESExport } from '@jitar/analysis';
 
-import type { Module, Segmentation, Segment } from '../source';
+import { Module, Segmentation, Segment, ResourceList } from '../source';
 import { FileHelper } from '../utils';
 
 const EXPORTS_ALL = '*';
@@ -12,6 +12,7 @@ const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 export default class ExportRewriter
 {
+    readonly #resources: ResourceList;
     readonly #module: Module;
     readonly #segmentation: Segmentation;
     readonly #segment: Segment | undefined;
@@ -19,8 +20,9 @@ export default class ExportRewriter
     readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
 
-    constructor(module: Module, segmentation: Segmentation, segment?: Segment)
+    constructor(resources: ResourceList, module: Module, segmentation: Segmentation, segment?: Segment)
     {
+        this.#resources = resources;  // nodig ??
         this.#module = module;
         this.#segmentation = segmentation;
         this.#segment = segment;
@@ -41,6 +43,8 @@ export default class ExportRewriter
         {
             return statement;
         }
+
+        if (dependency.from.includes('integrations')) console.log('Exporting integration:', dependency.from);
 
         return this.#isApplicationModule(dependency)
             ? this.#rewriteApplicationExport(dependency)

@@ -3,11 +3,13 @@ import type { FileManager } from '@jitar/sourcing';
 
 import ResourceList from './models/ResourceList';
 import FileNotLoaded from './errors/FileNotLoaded';
+import { FileHelper } from '../../utils';
 
 export default class ResourceReader
 {
     readonly #fileManager: FileManager;
-
+    readonly #fileHelper = new FileHelper();
+    
     constructor(fileManager: FileManager)
     {
         this.#fileManager = fileManager;
@@ -28,7 +30,7 @@ export default class ResourceReader
 
             const result = JSON.parse(content.toString()) as string[];
 
-            return result;
+            return result.map(resource => this.#makeResourceFilename(resource));
         }
         catch (error: unknown)
         {
@@ -36,5 +38,15 @@ export default class ResourceReader
 
             throw new FileNotLoaded(filename, message);
         }
+    }
+
+    #makeResourceFilename(filename: string): string
+    {
+        const fullFilename = this.#fileHelper.assureExtension(filename);
+
+        if (fullFilename.startsWith('./')) return fullFilename.substring(2);
+        if (fullFilename.startsWith('/')) return fullFilename.substring(1);
+
+        return fullFilename;
     }
 }
