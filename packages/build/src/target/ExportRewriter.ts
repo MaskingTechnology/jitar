@@ -74,14 +74,14 @@ export default class ExportRewriter
             return this.#rewriteToStaticExport(dependency, from); // different segments
         }
 
-        // export shared (unsegmented) module
+        // export common (unsegmented) module
 
         if (this.#segment !== undefined)
         {
-            console.warn('Exporting shared module from a segmented module!');
+            console.warn('Exporting common module from a segmented module!');
         }
 
-        const from = this.#rewriteApplicationFrom(targetModuleFilename, 'shared');
+        const from = this.#rewriteApplicationFrom(targetModuleFilename, 'common');
 
         return this.#rewriteToStaticExport(dependency, from);
     }
