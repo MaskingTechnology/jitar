@@ -2,7 +2,7 @@
 import { Parser } from '@jitar/analysis';
 import type { ESExport } from '@jitar/analysis';
 
-import { Module, Segmentation, Segment, ResourceList } from '../source';
+import type { Module, Segmentation, Segment } from '../source';
 import { FileHelper } from '../utils';
 
 const EXPORTS_ALL = '*';

@@ -26,12 +26,12 @@ export default class ModuleBuilder
         const segmentation = application.segmentation;
         const resources = application.resources;
 
-        const builds = repository.modules.map(module => this.#buildModule(module, resources, segmentation));
+        const builds = repository.modules.map(module => this.#buildModule(resources, module, segmentation));
 
         await Promise.all(builds);
     }
 
-    async #buildModule(module: Module, resources: ResourceList, segmentation: Segmentation): Promise<void>
+    async #buildModule(resources: ResourceList, module: Module, segmentation: Segmentation): Promise<void>
     {
         const moduleSegments = segmentation.getSegments(module.filename);
 

@@ -52,15 +52,16 @@ export default class ImportRewriter
     {
         const targetModuleFilename = this.#getTargetModuleFilename(dependency);
 
-        // if target module is resource, imports as dynamic
+        // if target module is a resource, always import as dynamic to prevent bundling
 
         if (this.#resources.isModuleResource(targetModuleFilename))
         {
-            const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
-            const relativeFilename = this.#fileHelper.makePathRelative(targetModuleFilename, callingModulePath);
+            const from = this.#rewriteApplicationFrom(targetModuleFilename);
 
-            return this.#rewriteToDynamicImport(dependency, relativeFilename);
+            return this.#rewriteToDynamicImport(dependency, from);
         }
+
+        // the other imports are always static (bundled)
 
         if (this.#segmentation.isModuleSegmented(targetModuleFilename))
         {
@@ -92,12 +93,14 @@ export default class ImportRewriter
         return this.#rewriteToStaticImport(dependency, from);
     }
 
-    #rewriteApplicationFrom(filename: string, scope: string): string
+    #rewriteApplicationFrom(filename: string, scope?: string): string
     {
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         const relativeFilename = this.#fileHelper.makePathRelative(filename, callingModulePath);
 
-        return this.#fileHelper.addSubExtension(relativeFilename, scope);
+        return scope === undefined
+            ? relativeFilename
+            : this.#fileHelper.addSubExtension(relativeFilename, scope);
     }
 
     #rewriteRuntimeFrom(dependency: ESImport): string
