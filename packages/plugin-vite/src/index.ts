@@ -35,9 +35,9 @@ function assureExtension(filename: string)
     return `${filename}.js`;
 }
 
-function makeShared(filename: string)
+function makeCommon(filename: string)
 {
-    return assureExtension(filename).replace('.js', '.shared.js');
+    return assureExtension(filename).replace('.js', '.common.js');
 }
 
 type PluginConfig = {
@@ -60,7 +60,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
     const segments = pluginConfig.segments ?? [];
     const middlewares = pluginConfig.middleware ?? [];
 
-    const scopes = ['shared', ...segments, 'remote'];
+    const scopes = ['common', ...segments, 'remote'];
 
     let rootPath: string | undefined;
     let sourcePath: string | undefined;
@@ -174,7 +174,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             }
 
             const segmentFiles = segments.map(name => `${targetPath}/${name}.segment.js`);
-            const middlewareFiles = middlewares.map(name => makeShared(`${targetPath}/${name}`));
+            const middlewareFiles = middlewares.map(name => makeCommon(`${targetPath}/${name}`));
 
             const jitarImport = `import { ClientBuilder, HttpRemoteBuilder } from "${JITAR_CLIENT_ID}";`;
             const segmentImports = segmentFiles.map((filename, index) => `import { default as $S${index} } from "${filename}";`).join('');

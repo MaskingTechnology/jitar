@@ -66,13 +66,13 @@ export default class ImportRewriter
             return this.#rewriteToStaticImport(dependency, from); // different segments
         }
 
-        // import shared (unsegmented) module
+        // import common (unsegmented) module
 
-        const from = this.#rewriteApplicationFrom(targetModuleFilename, 'shared');
+        const from = this.#rewriteApplicationFrom(targetModuleFilename, 'common');
 
         return this.#segment === undefined
-            ? this.#rewriteToStaticImport(dependency, from) // shared to shared
-            : this.#rewriteToDynamicImport(dependency, from); // segmented to shared (prevent bundling)
+            ? this.#rewriteToStaticImport(dependency, from) // common to common
+            : this.#rewriteToDynamicImport(dependency, from); // segmented to common (prevent bundling)
     }
 
     #rewriteRuntimeImport(dependency: ESImport): string

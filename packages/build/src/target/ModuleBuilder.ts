@@ -38,7 +38,7 @@ export default class ModuleBuilder
 
         if (moduleSegments.length === 0)
         {
-            await this.#buildSharedModule(module, segmentation);
+            await this.#buildCommonModule(module, segmentation);
         }
         else
         {
@@ -59,9 +59,9 @@ export default class ModuleBuilder
         this.#fileManager.delete(module.filename);
     }
 
-    async #buildSharedModule(module: Module, segmentation: Segmentation): Promise<void>
+    async #buildCommonModule(module: Module, segmentation: Segmentation): Promise<void>
     {
-        const filename = this.#fileHelper.addSubExtension(module.filename, 'shared');
+        const filename = this.#fileHelper.addSubExtension(module.filename, 'common');
         const code = this.#localModuleBuilder.build(module, segmentation);
 
         return this.#fileManager.write(filename, code);
