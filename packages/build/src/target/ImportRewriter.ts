@@ -2,7 +2,7 @@
 import { Parser } from '@jitar/analysis';
 import type { ESImport } from '@jitar/analysis';
 
-import type { Module, Segmentation, Segment } from '../source';
+import type { Module, Segmentation, Segment, ResourceList } from '../source';
 import { FileHelper } from '../utils';
 
 const KEYWORD_DEFAULT = 'default';
@@ -11,6 +11,7 @@ const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 export default class ImportRewriter
 {
+    readonly #resources: ResourceList;
     readonly #module: Module;
     readonly #segmentation: Segmentation;
     readonly #segment: Segment | undefined;
@@ -18,8 +19,9 @@ export default class ImportRewriter
     readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
 
-    constructor(module: Module, segmentation: Segmentation, segment?: Segment)
+    constructor(resources: ResourceList, module: Module, segmentation: Segmentation, segment?: Segment)
     {
+        this.#resources = resources;
         this.#module = module;
         this.#segmentation = segmentation;
         this.#segment = segment;
@@ -50,6 +52,15 @@ export default class ImportRewriter
     {
         const targetModuleFilename = this.#getTargetModuleFilename(dependency);
 
+        // if target module is resource, imports as dynamic
+
+        if (this.#resources.isModuleResource(targetModuleFilename))
+        {
+            const from = targetModuleFilename;
+
+            return this.#rewriteToDynamicImport(dependency, from);
+        }
+
         if (this.#segmentation.isModuleSegmented(targetModuleFilename))
         {
             // import segmented module
@@ -70,9 +81,7 @@ export default class ImportRewriter
 
         const from = this.#rewriteApplicationFrom(targetModuleFilename, 'common');
 
-        return this.#segment === undefined
-            ? this.#rewriteToStaticImport(dependency, from) // common to common
-            : this.#rewriteToDynamicImport(dependency, from); // segmented to common (prevent bundling)
+        return this.#rewriteToStaticImport(dependency, from);
     }
 
     #rewriteRuntimeImport(dependency: ESImport): string
