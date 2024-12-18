@@ -35,7 +35,7 @@ export default class ModuleBuilder
     {
         const moduleSegments = segmentation.getSegments(module.filename);
 
-        // For resource files we don't want to rewrite the file, just copy it
+        // For resource files we don't want to delete the file, because it is not renamed
 
         if (resources.isModuleResource(module.filename))
         {

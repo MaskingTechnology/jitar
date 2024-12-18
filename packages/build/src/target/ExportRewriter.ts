@@ -42,8 +42,6 @@ export default class ExportRewriter
             return statement;
         }
 
-        if (dependency.from.includes('integrations')) console.log('Exporting integration:', dependency.from);
-
         return this.#isApplicationModule(dependency)
             ? this.#rewriteApplicationExport(dependency)
             : this.#rewriteRuntimeExport(dependency);

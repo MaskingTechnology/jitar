@@ -8,8 +8,6 @@ export default class ResourceList
         this.#resources = resources;
     }
 
-    get resources() { return this.#resources; }
-
     isModuleResource(moduleFilename: string): boolean
     {
         return this.#resources.includes(moduleFilename);
