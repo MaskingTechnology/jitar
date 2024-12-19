@@ -18,15 +18,15 @@ export default class Reader
 
     async read(resourceFile: string[], moduleFiles: string[], segmentFiles: string[]): Promise<Application>
     {
-        const resourceReader = new ResourceReader(this.#fileManager);
-        const resources = await resourceReader.readAll(resourceFile);
-
         const moduleReader = new ModuleReader(this.#fileManager);
         const repository = await moduleReader.readAll(moduleFiles);
+
+        const resourceReader = new ResourceReader(this.#fileManager);
+        const resources = await resourceReader.readAll(resourceFile);
 
         const segmentReader = new SegmentReader(this.#fileManager, repository);
         const segmentation = await segmentReader.readAll(segmentFiles);
 
-        return new Application(resources, repository, segmentation);
+        return new Application(repository, resources, segmentation);
     }
 }

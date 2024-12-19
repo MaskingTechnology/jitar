@@ -2,7 +2,7 @@
 import { Parser } from '@jitar/analysis';
 import type { ESImport } from '@jitar/analysis';
 
-import type { Module, Segmentation, Segment, ResourceList } from '../source';
+import type { Module, Segmentation, Segment, ResourcesList } from '../source';
 import { FileHelper } from '../utils';
 
 const KEYWORD_DEFAULT = 'default';
@@ -11,18 +11,18 @@ const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 export default class ImportRewriter
 {
-    readonly #resources: ResourceList;
     readonly #module: Module;
+    readonly #resources: ResourcesList;
     readonly #segmentation: Segmentation;
     readonly #segment: Segment | undefined;
 
     readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
 
-    constructor(resources: ResourceList, module: Module, segmentation: Segmentation, segment?: Segment)
+    constructor(module: Module, resources: ResourcesList, segmentation: Segmentation, segment?: Segment)
     {
-        this.#resources = resources;
         this.#module = module;
+        this.#resources = resources;
         this.#segmentation = segmentation;
         this.#segment = segment;
     }
@@ -54,7 +54,7 @@ export default class ImportRewriter
 
         // if target module is a resource, always import as dynamic to prevent bundling
 
-        if (this.#resources.isModuleResource(targetModuleFilename))
+        if (this.#resources.isResourceModule(targetModuleFilename))
         {
             const from = this.#rewriteApplicationFrom(targetModuleFilename);
 
@@ -81,7 +81,7 @@ export default class ImportRewriter
 
         // import common (unsegmented) module
 
-        const from = this.#rewriteApplicationFrom(targetModuleFilename, 'common');
+        const from = this.#rewriteApplicationFrom(targetModuleFilename);
 
         return this.#rewriteToStaticImport(dependency, from);
     }

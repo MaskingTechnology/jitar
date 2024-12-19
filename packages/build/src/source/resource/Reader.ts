@@ -1,8 +1,9 @@
 
 import type { FileManager } from '@jitar/sourcing';
 
-import ResourceList from './models/ResourceList';
+import ResourcesList from './models/ResourcesList';
 import FileNotLoaded from './errors/FileNotLoaded';
+import type ResourceFile from './types/File';
 import { FileHelper } from '../../utils';
 
 export default class ResourceReader
@@ -15,20 +16,20 @@ export default class ResourceReader
         this.#fileManager = fileManager;
     }
 
-    async readAll(filenames: string[]): Promise<ResourceList>
+    async readAll(filenames: string[]): Promise<ResourcesList>
     {
         const resources = await Promise.all(filenames.map(filename => this.#loadResourceDefinition(filename)));
 
-        return new ResourceList(resources.flat());
+        return new ResourcesList(resources.flat());
     }
 
-    async #loadResourceDefinition(filename: string): Promise<string[]>
+    async #loadResourceDefinition(filename: string): Promise<ResourceFile>
     {
         try
         {
             const content = await this.#fileManager.getContent(filename);
 
-            const result = JSON.parse(content.toString()) as string[];
+            const result = JSON.parse(content.toString()) as ResourceFile;
 
             return result.map(resource => this.#makeResourceFilename(resource));
         }

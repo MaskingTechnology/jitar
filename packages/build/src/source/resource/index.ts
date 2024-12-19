@@ -1,3 +1,3 @@
 
-export { default as ResourceList } from './models/ResourceList';
+export { default as ResourcesList } from './models/ResourcesList';
 export { default as ResourceReader } from './Reader';

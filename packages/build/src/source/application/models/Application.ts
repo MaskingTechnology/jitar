@@ -1,18 +1,18 @@
 
-import type { ResourceList } from '../../resource';
+import type { ResourcesList } from '../../resource';
 import type { ModuleRepository } from '../../module';
 import type { Segmentation } from '../../segment';
 
 export default class Application
 {
-    readonly #resources: ResourceList;
     readonly #repository: ModuleRepository;
+    readonly #resources: ResourcesList;
     readonly #segmentation: Segmentation;
 
-    constructor(resources: ResourceList, repository: ModuleRepository, segmentation: Segmentation)
+    constructor(repository: ModuleRepository, resources: ResourcesList, segmentation: Segmentation)
     {
-        this.#resources = resources;
         this.#repository = repository;
+        this.#resources = resources;
         this.#segmentation = segmentation;
     }
 

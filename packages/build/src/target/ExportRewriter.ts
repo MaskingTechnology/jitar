@@ -81,7 +81,7 @@ export default class ExportRewriter
             console.warn('Exporting common module from a segmented module!');
         }
 
-        const from = this.#rewriteApplicationFrom(targetModuleFilename, 'common');
+        const from = this.#rewriteApplicationFrom(targetModuleFilename);
 
         return this.#rewriteToStaticExport(dependency, from);
     }
@@ -93,12 +93,14 @@ export default class ExportRewriter
         return this.#rewriteToStaticExport(dependency, from);
     }
 
-    #rewriteApplicationFrom(filename: string, scope: string): string
+    #rewriteApplicationFrom(filename: string, scope?: string): string
     {
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         const relativeFilename = this.#fileHelper.makePathRelative(filename, callingModulePath);
 
-        return this.#fileHelper.addSubExtension(relativeFilename, scope);
+        return scope === undefined
+            ? relativeFilename
+            : this.#fileHelper.addSubExtension(relativeFilename, scope);
     }
 
     #rewriteRuntimeFrom(dependency: ESExport): string

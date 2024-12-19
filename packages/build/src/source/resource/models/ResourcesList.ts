@@ -1,5 +1,5 @@
 
-export default class ResourceList
+export default class ResourcesList
 {
     readonly #resources: string[];
 
@@ -8,7 +8,7 @@ export default class ResourceList
         this.#resources = resources;
     }
 
-    isModuleResource(moduleFilename: string): boolean
+    isResourceModule(moduleFilename: string): boolean
     {
         return this.#resources.includes(moduleFilename);
     }
