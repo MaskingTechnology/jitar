@@ -78,4 +78,9 @@ export default class FileHelper
     {
         return filename.replace(EXTENSION_PATTERN, `.${subExtension}.${DEFAULT_EXTENSION}`);
     }
+
+    hasExtension(filename: string): boolean
+    {
+        return EXTENSION_PATTERN.test(filename);
+    }
 }

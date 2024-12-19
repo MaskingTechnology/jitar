@@ -62,6 +62,22 @@ export default class LocalFileManager implements FileManager
         return fs.exists(location);
     }
 
+    isDirectorySync(filename: string): boolean
+    {
+        const location = this.getAbsoluteLocation(filename);
+
+        try
+        {
+            const stats = fs.statSync(location);
+
+            return stats.isDirectory();
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     async read(filename: string): Promise<File>
     {
         const rootPath = this.getRootLocation();

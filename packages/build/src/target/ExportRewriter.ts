@@ -1,6 +1,7 @@
 
 import { Parser } from '@jitar/analysis';
 import type { ESExport } from '@jitar/analysis';
+import type { FileManager } from '@jitar/sourcing';
 
 import type { Module, Segmentation, Segment } from '../source';
 import { FileHelper } from '../utils';
@@ -12,6 +13,8 @@ const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 export default class ExportRewriter
 {
+    readonly #fileManager: FileManager;
+
     readonly #module: Module;
     readonly #segmentation: Segmentation;
     readonly #segment: Segment | undefined;
@@ -19,8 +22,10 @@ export default class ExportRewriter
     readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
 
-    constructor(module: Module, segmentation: Segmentation, segment?: Segment)
+    constructor(fileManager: FileManager, module: Module, segmentation: Segmentation, segment?: Segment)
     {
+        this.#fileManager = fileManager;
+
         this.#module = module;
         this.#segmentation = segmentation;
         this.#segment = segment;
@@ -138,7 +143,12 @@ export default class ExportRewriter
     {
         const from = this.#stripFrom(dependency.from as string);
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
-        const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
+        let translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
+
+        if (this.#fileHelper.hasExtension(translated) === false && this.#fileManager.isDirectorySync(translated))
+        {
+            translated = `${translated}/index`;
+        }
 
         return this.#fileHelper.assureExtension(translated);
     }

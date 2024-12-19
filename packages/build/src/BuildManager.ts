@@ -27,7 +27,7 @@ export default class BuildManager
         this.#targetFileManager = new LocalFileManager(configuration.target);
 
         this.#applicationReader = new ApplicationReader(this.#sourceFileManager);
-        this.#applicationBuilder = new ApplicationBuilder(this.#targetFileManager, this.#logger);
+        this.#applicationBuilder = new ApplicationBuilder(this.#sourceFileManager, this.#targetFileManager, this.#logger);
     }
 
     async build(): Promise<void>

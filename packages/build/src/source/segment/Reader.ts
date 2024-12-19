@@ -93,7 +93,18 @@ export default class SegmentReader
         {
             const content = await this.#fileManager.getContent(filename);
 
-            return JSON.parse(content.toString()) as SegmentFile;
+            const segmentFile = JSON.parse(content.toString()) as SegmentFile;
+
+            const result = {} as SegmentFile;
+
+            for (const key in segmentFile)
+            {
+                const newKey = this.#makeModuleFilename(key);
+
+                result[newKey] = segmentFile[key];
+            }
+
+            return result;
         }
         catch (error: unknown)
         {
@@ -122,6 +133,11 @@ export default class SegmentReader
 
     #makeModuleFilename(filename: string): string
     {
+        if (this.#fileHelper.hasExtension(filename) === false && this.#fileManager.isDirectorySync(filename))
+        {
+            filename = `${filename}/index`;
+        }
+
         const fullFilename = this.#fileHelper.assureExtension(filename);
 
         if (fullFilename.startsWith('./')) return fullFilename.substring(2);

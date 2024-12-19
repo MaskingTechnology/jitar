@@ -15,6 +15,8 @@ interface FileManager
 
     exists(filename: string): Promise<boolean>;
 
+    isDirectorySync(filename: string): boolean;
+
     read(filename: string): Promise<File>;
 
     write(filename: string, content: string): Promise<void>;

@@ -12,10 +12,10 @@ export default class Builder
     readonly #moduleBuilder: ModuleBuilder;
     readonly #segmentBuilder: SegmentBuilder;
 
-    constructor(fileManager: FileManager, logger: Logger)
+    constructor(sourceFileManager: FileManager, targetFileManager: FileManager, logger: Logger)
     {
-        this.#moduleBuilder = new ModuleBuilder(fileManager);
-        this.#segmentBuilder = new SegmentBuilder(fileManager, logger);
+        this.#moduleBuilder = new ModuleBuilder(sourceFileManager, targetFileManager);
+        this.#segmentBuilder = new SegmentBuilder(targetFileManager, logger);
     }
 
     async build(application: Application): Promise<void>
