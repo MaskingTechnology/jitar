@@ -24,7 +24,7 @@ Jitar will search for resource definitions files in the project directory. The f
 The file has the following structure:
 
 ```json
-// app.resource.json
+// app.resources.json
 [
     "./integrations/authentication/entry-file",
     "./integrations/database/index",
