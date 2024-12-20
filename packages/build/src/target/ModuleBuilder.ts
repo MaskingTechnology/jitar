@@ -39,7 +39,7 @@ export default class ModuleBuilder
 
         if (resources.isResourceModule(module.filename))
         {
-            return this.#buildResourceModule(module, resources, segmentation);
+            return this.#buildPlainModule(module, resources, segmentation);
         }
         
         // If the module is not part of any segment, it is an application module
@@ -47,7 +47,7 @@ export default class ModuleBuilder
 
         if (moduleSegments.length === 0)
         {
-            return this.#buildCommonModule(module, resources, segmentation);
+            return this.#buildPlainModule(module, resources, segmentation);
         }
 
         // Otherwise, it is a segment module that can be called remotely
@@ -67,15 +67,7 @@ export default class ModuleBuilder
         this.#fileManager.delete(module.filename);
     }
 
-    async #buildResourceModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
-    {
-        const filename = module.filename;
-        const code = this.#localModuleBuilder.build(module, resources, segmentation);
-
-        return this.#fileManager.write(filename, code);
-    }
-
-    async #buildCommonModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
+    async #buildPlainModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
         const filename = module.filename;
         const code = this.#localModuleBuilder.build(module, resources, segmentation);
