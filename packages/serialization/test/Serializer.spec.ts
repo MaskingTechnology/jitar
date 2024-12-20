@@ -33,7 +33,7 @@ describe('Serializer', () =>
         {
             const serialize = async () => typeSerializer.serialize(true);
 
-            expect(serialize).rejects.toStrictEqual(new NoSerializerFound('boolean'));
+            await expect(serialize).rejects.toStrictEqual(new NoSerializerFound('boolean'));
         });
     });
 
@@ -59,7 +59,7 @@ describe('Serializer', () =>
         {
             const deserialize = async () => typeSerializer.deserialize(true);
 
-            expect(deserialize).rejects.toStrictEqual(new NoDeserializerFound('boolean'));
+            await expect(deserialize).rejects.toStrictEqual(new NoDeserializerFound('boolean'));
         });
     });
 });

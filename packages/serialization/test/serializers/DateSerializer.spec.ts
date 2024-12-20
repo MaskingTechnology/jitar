@@ -75,7 +75,7 @@ describe('serializers/DateSerializer', () =>
         {
             const deserialize = async () => serializer.deserialize(DATES.INVALID_DATE_STRING);
 
-            expect(deserialize).rejects.toStrictEqual(new InvalidDateString('hello'));
+            await expect(deserialize).rejects.toStrictEqual(new InvalidDateString('hello'));
         });
     });
 });
