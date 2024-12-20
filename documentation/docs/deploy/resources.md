@@ -13,22 +13,29 @@ next:
 
 # Resources
 
-Unsegmented files are not shared between different segments. This is a powerful feature that allows you to create isolated segments that can be deployed independently. To enable different segments to share state, i.e. a database connection, Jitar uses a resource system.
+Resources are objects that maintain state. For example, a database connection or a connection to a file store. These resources are usually machine-wide and could be shared between different segments when they are deployed on the same machine.
 
-## Resource files
+In Jitar's [segmentation model](/deploy/segmentation), each segment is isolated from the others. This means that each segment has its own copy of any shared code. This feature is useful for creating independent deployable packages. However, it also means that resources cannot be shared between segments by default. By defining which modules are resources, Jitar won't duplicate the code and will share the resource between segments.
 
-Jitar will search for resource files in the project directory. The resource files are named `*.resource.json`. Each file defines the `module` that should be used as a resource. It's not possible to define a specific function or class from a module as a resource. 
+### Resource files
 
-The file has the following structure.
+Jitar will search for resource definitions files in the project directory. The files are named `*.resources.json`. Each entry defines the entry point of the `module` that should be used as a resource.
+
+The file has the following structure:
 
 ```json
 // app.resource.json
 [
-    "./integrations/authentication/module",
-    "./integrations/database/module",
-    "./integrations/filestore/module",
-    "./integrations/notification/module"
+    "./integrations/authentication/entry-file",
+    "./integrations/database/index",
+    "./integrations/filestore
 ]
 ```
 
+::: info
+The `/index` part is optional. If the module is a directory, Jitar will automatically look for the index file.
+:::
+
+::: tip
 It's possible to define multiple resource files within a project. This is useful in a monorepo setup where different modules might be managed by different teams.
+:::

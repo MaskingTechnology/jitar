@@ -145,6 +145,8 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
                 const cacheId = resolution.id.replace(`/${sourceDir}/`, `/${targetDir}/`);
 
+                // First check if the module is a scoped module (segmented file)
+
                 for (const scope of scopes)
                 {
                     const scopeId = cacheId.replace('.ts', `.${scope}.js`);
@@ -155,12 +157,16 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                     }
                 }
 
+                // Next, check if the module is a common module (unscoped file)
+
                 const scopeId = cacheId.replace('.ts', '.js');
 
                 if (fs.existsSync(scopeId))
                 {
                     return scopeId;
                 }
+
+                // It's doesn't seem to be a cached file, so we can return the original resolution id
 
                 return resolution.id;
             }
