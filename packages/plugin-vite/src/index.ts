@@ -169,7 +169,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             }
 
             const segmentFiles = segments.map(name => `${targetPath}/${name}.segment.js`);
-            const middlewareFiles = middlewares.map(name => `${targetPath}/${name}`);
+            const middlewareFiles = middlewares.map(name => assureExtension(`${targetPath}/${name}`));
 
             const jitarImport = `import { ClientBuilder, HttpRemoteBuilder } from "${JITAR_CLIENT_ID}";`;
             const segmentImports = segmentFiles.map((filename, index) => `import { default as $S${index} } from "${filename}";`).join('');
