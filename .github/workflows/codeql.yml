@@ -5,20 +5,18 @@ on:
     branches: [ "main" ]
     paths:
       - 'packages/**'
-    paths-ignore:
-      - 'packages/**/node_modules/**'
-      - 'packages/**/dist/**'
-      - 'packages/jitar'
-      - 'packages/create-jitar'
+      - '!packages/**/node_modules/**'
+      - '!packages/**/dist/**'
+      - '!packages/jitar'
+      - '!packages/create-jitar'
   pull_request:
     branches: [ "main" ]
     paths:
       - 'packages/**'
-    paths-ignore:
-      - 'packages/**/node_modules/**'
-      - 'packages/**/dist/**'
-      - 'packages/jitar'
-      - 'packages/create-jitar'
+      - '!packages/**/node_modules/**'
+      - '!packages/**/dist/**'
+      - '!packages/jitar'
+      - '!packages/create-jitar'
   schedule:
     - cron: '39 10 * * 1'
 
@@ -39,7 +37,7 @@ jobs:
           - 'packages/analysis'
           - 'packages/build'
           - 'packages/cli'
-          - 'packages/configurations'
+          - 'packages/configuration'
           - 'packages/errors'
           - 'packages/execution'
           - 'packages/health'
