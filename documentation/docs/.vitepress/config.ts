@@ -52,6 +52,7 @@ export default defineConfig({
         text: 'DEPLOY',
         items: [
           { text: 'Segmentation', link: '/deploy/segmentation' },
+          { text: 'Resources', link: '/deploy/resources' },
           { text: 'Environments', link: '/deploy/environments' },
           { text: 'Load balancing', link: '/deploy/load-balancing' },
           { text: 'Health checks', link: '/deploy/health-checks' },
