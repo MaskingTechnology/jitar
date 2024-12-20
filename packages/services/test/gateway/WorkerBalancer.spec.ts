@@ -35,7 +35,7 @@ describe('services/WorkerBalancer', () =>
             const request = new Request('nonExisting', Version.DEFAULT, new Map(), new Map(), RunModes.NORMAL);
             const promise = emptyBalancer.run(request);
 
-            expect(promise).rejects.toEqual(new NoWorkerAvailable('nonExisting'));
+            await expect(promise).rejects.toEqual(new NoWorkerAvailable('nonExisting'));
         });
     });
 });

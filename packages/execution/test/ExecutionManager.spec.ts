@@ -23,7 +23,7 @@ describe('ExecutionManager', () =>
         {
             const promise = executionManager.addSegment({} as Segment);
 
-            expect(promise).rejects.toEqual(new InvalidSegment());
+            await expect(promise).rejects.toEqual(new InvalidSegment());
         });
     });
 
@@ -35,16 +35,16 @@ describe('ExecutionManager', () =>
 
             const response = await executionManager.run(request);
 
-            expect(response.result).toBe('public');
+            await expect(response.result).toBe('public');
         });
 
-        it('should not run a non-existing procedure', () =>
+        it('should not run a non-existing procedure', async () =>
         {
             const request = new Request('nonExisting', Version.DEFAULT, new Map(), new Map(), RunModes.NORMAL);
 
             const promise = executionManager.run(request);
 
-            expect(promise).rejects.toEqual(new ProcedureNotFound('nonExisting'));
+            await expect(promise).rejects.toEqual(new ProcedureNotFound('nonExisting'));
         });
 
         it('should not run a non-existing implementation', async () =>
@@ -53,7 +53,7 @@ describe('ExecutionManager', () =>
 
             const promise = executionManager.run(request);
 
-            expect(promise).rejects.toEqual(new ImplementationNotFound('versioned', Version.DEFAULT.toString()));
+            await expect(promise).rejects.toEqual(new ImplementationNotFound('versioned', Version.DEFAULT.toString()));
         });
 
         it('should perform a dry-run', async () =>
@@ -62,7 +62,7 @@ describe('ExecutionManager', () =>
 
             const response = await executionManager.run(request);
 
-            expect(response.result).toBeUndefined();
+            await expect(response.result).toBeUndefined();
         });
     });
 });

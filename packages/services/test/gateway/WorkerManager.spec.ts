@@ -77,22 +77,22 @@ describe('gateway/WorkerManager', () =>
 
     describe('.run(request)', () =>
     {
-        it('should run an existing procedure', () =>
+        it('should run an existing procedure', async () =>
         {
             const request = new Request('first', Version.DEFAULT, new Map(), new Map(), RunModes.NORMAL);
 
             const promise = filledManager.run(request);
 
-            expect(promise).resolves.toEqual(new Response(StatusCodes.OK, 'test'));
+            await expect(promise).resolves.toEqual(new Response(StatusCodes.OK, 'test'));
         });
 
-        it('should not run a non-existing procedure', () =>
+        it('should not run a non-existing procedure', async () =>
         {
             const request = new Request('nonExisting', Version.DEFAULT, new Map(), new Map(), RunModes.NORMAL);
 
             const promise = filledManager.run(request);
 
-            expect(promise).rejects.toEqual(new ProcedureNotFound('nonExisting'));
+            await expect(promise).rejects.toEqual(new ProcedureNotFound('nonExisting'));
         });
     });
 });
