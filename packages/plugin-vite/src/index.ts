@@ -155,6 +155,13 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                     }
                 }
 
+                const scopeId = cacheId.replace('.ts', '.js');
+
+                if (fs.existsSync(scopeId))
+                {
+                    return scopeId;
+                }
+
                 return resolution.id;
             }
         },

@@ -60,7 +60,7 @@ export default class ModuleBuilder
 
         const remoteBuild = segmentModule!.hasImplementations()
             ? this.#buildRemoteModule(module, moduleSegments)
-            : [];
+            : Promise.resolve();
 
         await Promise.all([...segmentBuilds, remoteBuild]);
 

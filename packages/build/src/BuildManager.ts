@@ -32,11 +32,11 @@ export default class BuildManager
 
     async build(): Promise<void>
     {
-        const resourceFiles = await this.#projectFileManager.filter(Files.RESOURCE_PATTERN);
         const moduleFiles = await this.#sourceFileManager.filter(Files.MODULE_PATTERN);
+        const resourceFiles = await this.#projectFileManager.filter(Files.RESOURCE_PATTERN);
         const segmentFiles = await this.#projectFileManager.filter(Files.SEGMENT_PATTERN);
 
-        const applicationModel = await this.#applicationReader.read(resourceFiles, moduleFiles, segmentFiles);
+        const applicationModel = await this.#applicationReader.read(moduleFiles, resourceFiles, segmentFiles);
 
         return this.#applicationBuilder.build(applicationModel);
     }
