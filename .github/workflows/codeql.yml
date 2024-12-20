@@ -37,7 +37,7 @@ jobs:
           - 'packages/analysis'
           - 'packages/build'
           - 'packages/cli'
-          - 'packages/configurations'
+          - 'packages/configuration'
           - 'packages/errors'
           - 'packages/execution'
           - 'packages/health'
