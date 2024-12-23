@@ -33,7 +33,7 @@ export default class ConfigurationReader
         const content = file.content.toString();
         const configuration = this.#replaceEnvironmentVariables(content);
 
-        return this.#parseJson(configuration)
+        return this.#parseJson(configuration);
     }
 
     #replaceEnvironmentVariables(content: string): string
