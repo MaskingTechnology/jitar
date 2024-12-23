@@ -12,25 +12,25 @@ describe('repository/LocalRepository', () =>
 {
     describe('.provide(filename)', () =>
     {
-        it('should provide a existing file', () =>
+        it('should provide a existing file', async () =>
         {
             const promise = fileRepository.provide(FILENAMES.PNG);
 
-            expect(promise).resolves.toEqual(FILES.PNG);
+            await expect(promise).resolves.toEqual(FILES.PNG);
         });
 
-        it('should not provide a non-existing file', () =>
+        it('should not provide a non-existing file', async () =>
         {
             const promise = fileRepository.provide(FILENAMES.TXT);
 
-            expect(promise).rejects.toEqual(new FileNotFound(FILENAMES.TXT));
+            await expect(promise).rejects.toEqual(new FileNotFound(FILENAMES.TXT));
         });
 
-        it('should provide index file when file not found', () =>
+        it('should provide index file when file not found', async () =>
         {
             const promise = webRepository.provide(FILENAMES.TXT);
 
-            expect(promise).resolves.toEqual(FILES.HTML);
+            await expect(promise).resolves.toEqual(FILES.HTML);
         });
     });
 });

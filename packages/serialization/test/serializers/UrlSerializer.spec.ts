@@ -75,7 +75,7 @@ describe('serializers/UrlSerializer', () =>
         {
             const deserialize = async () => serializer.deserialize(URLS.INVALID_URL_STRING);
 
-            expect(deserialize).rejects.toStrictEqual(new InvalidUrlString('example'));
+            await expect(deserialize).rejects.toStrictEqual(new InvalidUrlString('example'));
         });
     });
 });

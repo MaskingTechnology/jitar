@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Segmentation
-    link: /deploy/segmentation
+    text: Resources
+    link: /deploy/resources
 
 next:
     text: Load balancing

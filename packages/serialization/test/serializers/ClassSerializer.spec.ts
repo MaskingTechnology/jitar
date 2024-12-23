@@ -98,14 +98,14 @@ describe('serializers/ClassSerializer', () =>
         {
             const deserialize = async () => serializer.deserialize(CLASSES.INVALID_SERIALIZED);
 
-            expect(deserialize).rejects.toStrictEqual(new ClassNotFound('Invalid'));
+            await expect(deserialize).rejects.toStrictEqual(new ClassNotFound('Invalid'));
         });
 
         it('should not deserialize non-function instances', async () =>
         {
             const deserialize = async () => serializer.deserialize(CLASSES.UNSERIALIZABLE);
 
-            expect(deserialize).rejects.toStrictEqual(new InvalidClass('Infinity'));
+            await expect(deserialize).rejects.toStrictEqual(new InvalidClass('Infinity'));
         });
     });
 });

@@ -16,32 +16,32 @@ describe('gateway/LocalGateway', () =>
 {
     describe('.addWorker(worker, trustKey?)', () =>
     {
-        it('should add a worker without a trust key to a public gateway', () =>
+        it('should add a worker without a trust key to a public gateway', async () =>
             {
                 const promise = publicGateway.addWorker(emptyWorker);
     
-                expect(promise).resolves.toBeDefined();
+                await expect(promise).resolves.toBeDefined();
             });
 
-        it('should add a worker with a valid trust key to a protected gateway', () =>
+        it('should add a worker with a valid trust key to a protected gateway', async () =>
         {
             const promise = protectedGateway.addWorker(trustedWorker);
 
-            expect(promise).resolves.toBeDefined();
+            await expect(promise).resolves.toBeDefined();
         });
 
-        it('should not add a worker with an invalid trust key to a protected gateway', () =>
+        it('should not add a worker with an invalid trust key to a protected gateway', async () =>
         {
             const promise = protectedGateway.addWorker(untrustedWorker);
 
-            expect(promise).rejects.toEqual(new InvalidTrustKey());
+            await expect(promise).rejects.toEqual(new InvalidTrustKey());
         });
 
-        it('should not add a worker with a missing trust key to a protected gateway', () =>
+        it('should not add a worker with a missing trust key to a protected gateway', async () =>
         {
             const promise = protectedGateway.addWorker(emptyWorker);
 
-            expect(promise).rejects.toEqual(new InvalidTrustKey());
+            await expect(promise).rejects.toEqual(new InvalidTrustKey());
         });
     });
 });

@@ -40,7 +40,7 @@ describe('worker/LocalWorker', () =>
 
             const promise = protectedWorker.run(request);
 
-            expect(promise).rejects.toEqual(new ProcedureNotFound('nonExisting'));
+            await expect(promise).rejects.toEqual(new ProcedureNotFound('nonExisting'));
         });
 
         it('should not run a protected procedure with invalid trust key', async () =>
@@ -50,7 +50,7 @@ describe('worker/LocalWorker', () =>
 
             const promise = protectedWorker.run(request);
 
-            expect(promise).rejects.toEqual(new RequestNotTrusted());
+            await expect(promise).rejects.toEqual(new RequestNotTrusted());
         });
 
         it('should not run a protected procedure without trust key', async () =>
@@ -59,7 +59,7 @@ describe('worker/LocalWorker', () =>
 
             const promise = protectedWorker.run(request);
 
-            expect(promise).rejects.toEqual(new RequestNotTrusted());
+            await expect(promise).rejects.toEqual(new RequestNotTrusted());
         });
 
         // TODO: Add tests for remote execution

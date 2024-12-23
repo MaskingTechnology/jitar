@@ -68,14 +68,14 @@ describe('serializers/BigIntSerializer', () =>
         {
             const resultValidBigInt = await serializer.deserialize(BIG_INTEGERS.VALID_SERIALIZED);
 
-            expect(resultValidBigInt).toStrictEqual(BIG_INTEGERS.VALID);
+            await expect(resultValidBigInt).toStrictEqual(BIG_INTEGERS.VALID);
         });
 
         it('should not deserialize a big int with an invalid big int string', async () =>
         {
             const deserialize = async () => serializer.deserialize(BIG_INTEGERS.INVALID_BIGINT_STRING);
 
-            expect(deserialize).rejects.toStrictEqual(new InvalidBigIntString('1.3'));
+            await expect(deserialize).rejects.toStrictEqual(new InvalidBigIntString('1.3'));
         });
     });
 });

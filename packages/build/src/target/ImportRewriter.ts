@@ -3,7 +3,7 @@ import { Parser } from '@jitar/analysis';
 import type { ESImport } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
-import type { Module, Segmentation, Segment } from '../source';
+import type { Module, Segmentation, Segment, ResourcesList } from '../source';
 import { FileHelper } from '../utils';
 
 const KEYWORD_DEFAULT = 'default';
@@ -15,17 +15,19 @@ export default class ImportRewriter
     readonly #fileManager: FileManager;
 
     readonly #module: Module;
+    readonly #resources: ResourcesList;
     readonly #segmentation: Segmentation;
     readonly #segment: Segment | undefined;
 
     readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
 
-    constructor(fleManager: FileManager, module: Module, segmentation: Segmentation, segment?: Segment)
+    constructor(fleManager: FileManager, module: Module, resources: ResourcesList, segmentation: Segmentation, segment?: Segment)
     {
         this.#fileManager = fleManager;
 
         this.#module = module;
+        this.#resources = resources;
         this.#segmentation = segmentation;
         this.#segment = segment;
     }
@@ -55,6 +57,17 @@ export default class ImportRewriter
     {
         const targetModuleFilename = this.#getTargetModuleFilename(dependency);
 
+        // if target module is a resource, always import as dynamic to prevent bundling
+
+        if (this.#resources.isResourceModule(targetModuleFilename))
+        {
+            const from = this.#rewriteApplicationFrom(targetModuleFilename);
+
+            return this.#rewriteToDynamicImport(dependency, from);
+        }
+
+        // the other imports are always static (bundled)
+
         if (this.#segmentation.isModuleSegmented(targetModuleFilename))
         {
             // import segmented module
@@ -71,13 +84,11 @@ export default class ImportRewriter
             return this.#rewriteToStaticImport(dependency, from); // different segments
         }
 
-        // import shared (unsegmented) module
+        // import common (unsegmented) module
 
-        const from = this.#rewriteApplicationFrom(targetModuleFilename, 'shared');
+        const from = this.#rewriteApplicationFrom(targetModuleFilename);
 
-        return this.#segment === undefined
-            ? this.#rewriteToStaticImport(dependency, from) // shared to shared
-            : this.#rewriteToDynamicImport(dependency, from); // segmented to shared (prevent bundling)
+        return this.#rewriteToStaticImport(dependency, from);
     }
 
     #rewriteRuntimeImport(dependency: ESImport): string
@@ -87,12 +98,14 @@ export default class ImportRewriter
         return this.#rewriteToStaticImport(dependency, from);
     }
 
-    #rewriteApplicationFrom(filename: string, scope: string): string
+    #rewriteApplicationFrom(filename: string, scope?: string): string
     {
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         const relativeFilename = this.#fileHelper.makePathRelative(filename, callingModulePath);
 
-        return this.#fileHelper.addSubExtension(relativeFilename, scope);
+        return scope === undefined
+            ? relativeFilename
+            : this.#fileHelper.addSubExtension(relativeFilename, scope);
     }
 
     #rewriteRuntimeFrom(dependency: ESImport): string
