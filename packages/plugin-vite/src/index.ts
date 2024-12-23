@@ -35,11 +35,6 @@ function assureExtension(filename: string)
     return `${filename}.js`;
 }
 
-function makeShared(filename: string)
-{
-    return assureExtension(filename).replace('.js', '.shared.js');
-}
-
 type PluginConfig = {
     sourceDir: string;
     targetDir: string;
@@ -60,7 +55,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
     const segments = pluginConfig.segments ?? [];
     const middlewares = pluginConfig.middleware ?? [];
 
-    const scopes = ['shared', ...segments, 'remote'];
+    const scopes = [ ...segments, 'remote'];
 
     let rootPath: string | undefined;
     let sourcePath: string | undefined;
@@ -150,6 +145,8 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
                 const cacheId = resolution.id.replace(`/${sourceDir}/`, `/${targetDir}/`);
 
+                // First check if the module is a scoped module (segmented file)
+
                 for (const scope of scopes)
                 {
                     const scopeId = cacheId.replace('.ts', `.${scope}.js`);
@@ -159,6 +156,17 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                         return scopeId;
                     }
                 }
+
+                // Next, check if the module is a common module (unscoped file)
+
+                const scopeId = cacheId.replace('.ts', '.js');
+
+                if (fs.existsSync(scopeId))
+                {
+                    return scopeId;
+                }
+
+                // It's doesn't seem to be a cached file, so we can return the original resolution id
 
                 return resolution.id;
             }
@@ -174,7 +182,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             }
 
             const segmentFiles = segments.map(name => `${targetPath}/${name}.segment.js`);
-            const middlewareFiles = middlewares.map(name => makeShared(`${targetPath}/${name}`));
+            const middlewareFiles = middlewares.map(name => assureExtension(`${targetPath}/${name}`));
 
             const jitarImport = `import { ClientBuilder, HttpRemoteBuilder } from "${JITAR_CLIENT_ID}";`;
             const segmentImports = segmentFiles.map((filename, index) => `import { default as $S${index} } from "${filename}";`).join('');

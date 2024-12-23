@@ -1,7 +1,7 @@
 
 import type { FileManager } from '@jitar/sourcing';
 
-import type { Application, SegmentImplementation as Implementation, Module, Segment, Segmentation } from '../source';
+import type { Application, SegmentImplementation as Implementation, Module, Segment, Segmentation, ResourcesList } from '../source';
 import { FileHelper } from '../utils';
 
 import LocalModuleBuilder from './LocalModuleBuilder';
@@ -24,53 +24,61 @@ export default class ModuleBuilder
     {
         const repository = application.repository;
         const segmentation = application.segmentation;
+        const resources = application.resources;
 
-        const builds = repository.modules.map(module => this.#buildModule(module, segmentation));
+        const builds = repository.modules.map(module => this.#buildModule(module, resources, segmentation));
 
         await Promise.all(builds);
     }
 
-    async #buildModule(module: Module, segmentation: Segmentation): Promise<void>
+    async #buildModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
         const moduleSegments = segmentation.getSegments(module.filename);
 
+        // For resource files we don't want to delete the file, because it is not renamed
+
+        if (resources.isResourceModule(module.filename))
+        {
+            return this.#buildPlainModule(module, resources, segmentation);
+        }
+        
         // If the module is not part of any segment, it is an application module
+        // and these are also not renamed, therefore we don't want to delete them
 
         if (moduleSegments.length === 0)
         {
-            await this.#buildSharedModule(module, segmentation);
+            return this.#buildPlainModule(module, resources, segmentation);
         }
-        else
-        {
-            // Otherwise, it is a segment module that can be called remotely
 
-            const segmentBuilds = moduleSegments.map(segment => this.#buildSegmentModule(module, segment, segmentation));
+        // Otherwise, it is a segment module that can be called remotely
+        // these are renamed and we need to delete the original file that we copied
 
-            const firstModuleSegment = moduleSegments[0];
-            const segmentModule = firstModuleSegment.getModule(module.filename);
+        const segmentBuilds = moduleSegments.map(segment => this.#buildSegmentModule(module, resources, segment, segmentation));
 
-            const remoteBuild = segmentModule!.hasImplementations()
-                ? this.#buildRemoteModule(module, moduleSegments)
-                : [];
+        const firstModuleSegment = moduleSegments[0];
+        const segmentModule = firstModuleSegment.getModule(module.filename);
 
-            await Promise.all([...segmentBuilds, remoteBuild]);
-        }
+        const remoteBuild = segmentModule!.hasImplementations()
+            ? this.#buildRemoteModule(module, moduleSegments)
+            : Promise.resolve();
+
+        await Promise.all([...segmentBuilds, remoteBuild]);
 
         this.#fileManager.delete(module.filename);
     }
 
-    async #buildSharedModule(module: Module, segmentation: Segmentation): Promise<void>
+    async #buildPlainModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
-        const filename = this.#fileHelper.addSubExtension(module.filename, 'shared');
-        const code = this.#localModuleBuilder.build(module, segmentation);
+        const filename = module.filename;
+        const code = this.#localModuleBuilder.build(module, resources, segmentation);
 
         return this.#fileManager.write(filename, code);
     }
 
-    async #buildSegmentModule(module: Module, segment: Segment, segmentation: Segmentation): Promise<void>
+    async #buildSegmentModule(module: Module, resources: ResourcesList, segment: Segment, segmentation: Segmentation): Promise<void>
     {
         const filename = this.#fileHelper.addSubExtension(module.filename, segment.name);
-        const code = this.#localModuleBuilder.build(module, segmentation, segment);
+        const code = this.#localModuleBuilder.build(module, resources, segmentation, segment);
 
         return this.#fileManager.write(filename, code);
     }

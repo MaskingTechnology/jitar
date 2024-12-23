@@ -33,8 +33,8 @@ export default class RuntimeBuilder
         const remoteBuilder = this.#remoteBuilder;
         const middlewareManager = await this.#buildMiddlewareManager(middleware);
         const healthManager = await this.#buildHealthManager(healthChecks);
-        const setUpScripts = setUp.map(filename => this.#makeSharedFilename(filename));
-        const tearDownScripts = tearDown.map(filename => this.#makeSharedFilename(filename));
+        const setUpScripts = setUp.map(filename => this.#assureExtension(filename));
+        const tearDownScripts = tearDown.map(filename => this.#assureExtension(filename));
 
         const logger = new Logger(logLevel);
 
@@ -139,8 +139,8 @@ export default class RuntimeBuilder
 
         if (filenames !== undefined)
         {
-            const sharedFilenames = filenames.map(filename => this.#makeSharedFilename(filename));
-            const modules = await Promise.all(sharedFilenames.map(filename => this.#sourcingManager.import(filename)));
+            const translatedFilenames = filenames.map(filename => this.#assureExtension(filename));
+            const modules = await Promise.all(translatedFilenames.map(filename => this.#sourcingManager.import(filename)));
 
             modules.forEach(module => manager.addHealthCheck(module.default as HealthCheck));
         }
@@ -154,8 +154,8 @@ export default class RuntimeBuilder
 
         if (filenames !== undefined)
         {
-            const sharedFilenames = filenames.map(filename => this.#makeSharedFilename(filename));
-            const modules = await Promise.all(sharedFilenames.map(filename => this.#sourcingManager.import(filename)));
+            const translatedFilenames = filenames.map(filename => this.#assureExtension(filename));
+            const modules = await Promise.all(translatedFilenames.map(filename => this.#sourcingManager.import(filename)));
 
             modules.forEach(module => manager.addMiddleware(module.default as Middleware));
         }
@@ -184,13 +184,10 @@ export default class RuntimeBuilder
         return new Set(filenames);
     }
 
-    #makeSharedFilename(filename: string): string
+    #assureExtension(filename: string): string
     {
-        if (filename.endsWith('.js') === false)
-        {
-            filename += '.js';
-        }
-
-        return filename.replace('.js', '.shared.js');
+        return filename.endsWith('.js')
+            ? filename 
+            : filename + '.js';
     }
 }

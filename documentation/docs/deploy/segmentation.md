@@ -6,8 +6,8 @@ prev:
     link: /develop/debugging
 
 next:
-    text: Environments
-    link: /deploy/environments
+    text: Resources
+    link: /deploy/resources
 
 ---
 
