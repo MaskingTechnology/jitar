@@ -6,8 +6,8 @@ const assets = ['index.html', 'favicon.ico'];
 const segments = ['segment'];
 const indexFilename = 'index.html';
 const trustKey = 'trust-key';
-const gateway = 'http://gateway';
-const repository = 'http://repository';
+const gateway = 'https://gateway';
+const repository = 'https://repository';
 
 const gatewayConfiguration: GatewayConfiguration = { monitor: 5000, trustKey } as const;
 const proxyConfiguration: ProxyConfiguration = { gateway, repository } as const;
@@ -17,7 +17,7 @@ const workerConfiguration: WorkerConfiguration = { gateway, segments, trustKey }
 
 export const SERVER_CONFIGURATION: ServerConfiguration = 
 { 
-    url: 'http://server', 
+    url: 'https://server', 
     setUp: ['setup'],
     tearDown: ['tearDown'],
     middleware: ['middleware'],
