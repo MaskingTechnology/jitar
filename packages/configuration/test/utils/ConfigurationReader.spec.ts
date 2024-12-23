@@ -5,27 +5,27 @@ import { reader, FILENAMES, CONFIGURATIONS, InvalidConfigurationFile } from "./f
 
 describe('ConfigurationReader', () =>
 {
-    it('should return default configuration for non-existing config file', async () =>
+    it('should return an empty configuration for non-existing config file', async () =>
     {
         const configuration = await reader.read(FILENAMES.NON_EXISTING);
 
-        expect(configuration).toEqual(CONFIGURATIONS.default);
+        expect(configuration).toEqual(CONFIGURATIONS.EMPTY);
     });
 
     it('should read json configuration', async () =>
     {
         const configuration = await reader.read(FILENAMES.CORRECT_TYPE);
 
-        expect(configuration).toEqual(CONFIGURATIONS.result);
+        expect(configuration).toEqual(CONFIGURATIONS.RESULT);
     });
 
     it('should read json configuration with environment variables', async () =>
     {
-        vi.stubEnv(CONFIGURATIONS.envVariables.TARGET_PATH_ENV_UTIL_KEY, CONFIGURATIONS.envVariables.TARGET_PATH_ENV_UTIL_VALUE);
+        vi.stubEnv(CONFIGURATIONS.ENV_VARIABLES.TARGET_PATH_ENV_UTIL_KEY, CONFIGURATIONS.ENV_VARIABLES.TARGET_PATH_ENV_UTIL_VALUE);
 
         const configuration = await reader.read(FILENAMES.ENV_VARIABLES);
 
-        expect(configuration).toEqual(CONFIGURATIONS.envResult);
+        expect(configuration).toEqual(CONFIGURATIONS.ENV_RESULT);
 
         vi.unstubAllEnvs();
     });

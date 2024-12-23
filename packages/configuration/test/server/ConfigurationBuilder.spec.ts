@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import { configurationBuilder, FILENAMES, SERVER_CONFIGURATION, ServerConfigurationInvalid, VALIDATION_RESULT } from './fixtures';
 
-describe('ConfigurationBuilder', () =>
+describe('server/ConfigurationBuilder', () =>
 {
     it('should build a valid server configuration', async () =>
     {

@@ -3,9 +3,8 @@ import { describe, expect, it } from 'vitest';
 
 import { configurationBuilder, FILENAMES, CONFIGURATIONS, RuntimeConfigurationInvalid, VALIDATION_RESULT } from './fixtures';
 
-describe('ConfigurationBuilder', () =>
+describe('runtime/ConfigurationBuilder', () =>
 {
-
     it('should build a default runtime configuration without configuration file', async () =>
     {
         const promise = configurationBuilder.build();
@@ -13,7 +12,7 @@ describe('ConfigurationBuilder', () =>
         await expect(promise).resolves.toEqual(CONFIGURATIONS.DEFAULT);
     });
 
-    it('should build a valid runtime configuration', async () =>
+    it('should build a valid runtime configuration from a valid file', async () =>
     {
         const promise = configurationBuilder.build(FILENAMES.VALID);
 

@@ -1,12 +1,12 @@
 
 import { ValidationResult } from "@jitar/validation";
 
-const VALIDATION_RESULT = 
+const VALIDATION_RESULT: ValidationResult = 
 {
     valid: false,
     errors: [
         "Field 'url' is required",
-    ],
-} as ValidationResult;
+    ]
+} as const;
 
 export { VALIDATION_RESULT };

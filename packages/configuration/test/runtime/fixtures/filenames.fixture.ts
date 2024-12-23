@@ -4,4 +4,4 @@ export const FILENAMES = {
     VALID: 'valid-runtime-configuration.json',
     INVALID: 'invalid-runtime-configuration.json',
     MISSING: 'missing-runtime-configuration.json',
-};
+} as const;
