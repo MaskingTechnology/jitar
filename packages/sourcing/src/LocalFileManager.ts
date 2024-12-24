@@ -109,4 +109,20 @@ export default class LocalFileManager implements FileManager
 
         return glob(`${location}/${pattern}`);
     }
+
+    isDirectory(filename: string): boolean
+    {
+        const location = this.getAbsoluteLocation(filename);
+
+        try
+        {
+            const stats = fs.statSync(location);
+
+            return stats.isDirectory();
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }

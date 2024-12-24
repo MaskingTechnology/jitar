@@ -1,6 +1,7 @@
 
 const DEFAULT_EXTENSION = 'js';
 const EXTENSION_PATTERN = /\.js$/;
+const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 export default class FileHelper
 {
@@ -77,5 +78,10 @@ export default class FileHelper
     addSubExtension(filename: string, subExtension: string): string
     {
         return filename.replace(EXTENSION_PATTERN, `.${subExtension}.${DEFAULT_EXTENSION}`);
+    }
+
+    isApplicationModule(from: string): boolean
+    {
+        return APPLICATION_MODULE_INDICATORS.some(indicator => from.startsWith(indicator));
     }
 }

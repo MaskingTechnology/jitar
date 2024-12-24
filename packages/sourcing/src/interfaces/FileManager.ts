@@ -22,6 +22,8 @@ interface FileManager
     delete(filename: string): Promise<void>;
 
     filter(pattern: string): Promise<string[]>;
+
+    isDirectory(filename: string): boolean;
 }
 
 export default FileManager;
