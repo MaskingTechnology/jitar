@@ -1,6 +1,7 @@
 
-import { LocalFileManager } from '@jitar/sourcing';
 import type { FileManager } from '@jitar/sourcing';
+
+import InvalidFileType from './errors/InvalidConfigurationFile';
 
 const ENVIRONMENT_VARIABLE_REGEX = /\${([^}]*)}/g;
 
@@ -8,9 +9,9 @@ export default class ConfigurationReader
 {
     readonly #fileManager: FileManager;
 
-    constructor(rootPath: string)
+    constructor(fileManager: FileManager)
     {
-        this.#fileManager = new LocalFileManager(rootPath);
+        this.#fileManager = fileManager;
     }
 
     async read(filename: string): Promise<Record<string, unknown>>
@@ -23,12 +24,16 @@ export default class ConfigurationReader
         }
 
         const file = await this.#fileManager.read(filename);
+
+        if (file.type.includes('json') === false)
+        {
+            throw new InvalidFileType(filename);
+        }
+
         const content = file.content.toString();
         const configuration = this.#replaceEnvironmentVariables(content);
-        
-        return file.type.includes('json')
-            ? this.#parseJson(configuration)
-            : this.#parseText(configuration);
+
+        return this.#parseJson(configuration);
     }
 
     #replaceEnvironmentVariables(content: string): string
@@ -42,11 +47,5 @@ export default class ConfigurationReader
     #parseJson(configuration: string): Record<string, unknown>
     {
         return JSON.parse(configuration);
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    #parseText(configuration: string): Record<string, unknown>
-    {
-        return {};
     }
 }
