@@ -4,6 +4,7 @@ import { glob } from 'glob';
 import mime from 'mime-types';
 import path from 'path';
 
+import InvalidPath from './errors/InvalidPath';
 import FileNotFound from './errors/FileNotFound';
 import type FileManager from './interfaces/FileManager';
 import File from './models/File';
@@ -11,22 +12,22 @@ import File from './models/File';
 export default class LocalFileManager implements FileManager
 {
     readonly #location: string;
+    readonly #rootLocation: string;
 
     constructor(location: string)
     {
         this.#location = location;
-    }
-
-    getRootLocation(): string
-    {
-        return path.resolve(this.#location);
+        this.#rootLocation = path.resolve(location);
     }
 
     getAbsoluteLocation(filename: string): string
     {
         const location = filename.startsWith('/') ? filename : path.join(this.#location, filename);
+        const absolutePath = path.resolve(location);
 
-        return path.resolve(location);
+        this.#validatePath(absolutePath);
+
+        return absolutePath;
     }
 
     getRelativeLocation(filename: string): string
@@ -64,13 +65,7 @@ export default class LocalFileManager implements FileManager
 
     async read(filename: string): Promise<File>
     {
-        const rootPath = this.getRootLocation();
         const absoluteFilename = this.getAbsoluteLocation(filename);
-
-        if (absoluteFilename.startsWith(rootPath) === false)
-        {
-            throw new FileNotFound(filename);
-        }
 
         const type = await this.getType(absoluteFilename);
         const content = await this.getContent(absoluteFilename);
@@ -108,5 +103,13 @@ export default class LocalFileManager implements FileManager
         const location = this.getAbsoluteLocation('./');
 
         return glob(`${location}/${pattern}`);
+    }
+
+    #validatePath(path: string): void
+    {
+        if (path.startsWith(this.#rootLocation) === false)
+        {
+            throw new InvalidPath(path);
+        }
     }
 }

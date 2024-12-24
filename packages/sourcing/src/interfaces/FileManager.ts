@@ -3,8 +3,6 @@ import type File from '../models/File';
 
 interface FileManager
 {
-    getRootLocation(): string;
-
     getAbsoluteLocation(filename: string): string;
 
     getRelativeLocation(filename: string): string;
