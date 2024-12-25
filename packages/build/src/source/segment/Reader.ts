@@ -122,7 +122,9 @@ export default class SegmentReader
 
     #makeModuleFilename(filename: string): string
     {
-        const fullFilename = this.#fileHelper.assureExtension(filename);
+        const fullFilename = this.#fileManager.isDirectory(filename)
+            ? `${filename}/index.js`
+            : this.#fileHelper.assureExtension(filename);
 
         if (fullFilename.startsWith('./')) return fullFilename.substring(2);
         if (fullFilename.startsWith('/')) return fullFilename.substring(1);
