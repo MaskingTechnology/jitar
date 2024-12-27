@@ -11,10 +11,9 @@ vi.mock('fs-extra', () =>
 {
     return {
         default: {
-            readFile: vi.fn(),
             existsSync: vi.fn()
         }
-    }
+    };
 });
 
 vi.mock('path', () =>
@@ -24,7 +23,7 @@ vi.mock('path', () =>
             resolve: vi.fn(),
             join: vi.fn()
         }
-    }
+    };
 });
 
 vi.mock('mime-types', () =>
@@ -33,7 +32,7 @@ vi.mock('mime-types', () =>
         default: {
             lookup: vi.fn()
         }
-    }
+    };
 });
 
 vi.mocked(path.resolve).mockReturnValue(PATHS.CONFIGS.ABSOLUTE_PATH);
@@ -56,6 +55,7 @@ describe('LocalFileManager', () =>
             const absolutePath = fileManager.getAbsoluteLocation(PATHS.INPUTS.RELATIVE_FILE_PATH);
 
             expect(absolutePath).toBe(PATHS.OUTPUTS.RELATIVE_FILE_PATH);
+            expect(path.join).toHaveBeenCalledWith(PATHS.CONFIGS.BASE_LOCATION, PATHS.INPUTS.RELATIVE_FILE_PATH);
         });
 
         it('should not return the absolute file path when outside the base location', () =>
@@ -75,7 +75,6 @@ describe('LocalFileManager', () =>
             const result = () => fileManager.getAbsoluteLocation(PATHS.INPUTS.PATH_TRAVERSAL);
 
             expect(result).toThrow(new InvalidPath(PATHS.OUTPUTS.PATH_TRAVERSAL));
-            expect(path.join).toHaveBeenCalledWith(PATHS.CONFIGS.BASE_LOCATION, PATHS.INPUTS.PATH_TRAVERSAL);
         });
     });
 
