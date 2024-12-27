@@ -1,6 +1,5 @@
 
-import { LocalFileManager } from '@jitar/sourcing';
-import type { FileManager } from '@jitar/sourcing';
+import { FileManager } from '@jitar/sourcing';
 
 const ENVIRONMENT_VARIABLE_REGEX = /\${([^}]*)}/g;
 
@@ -10,7 +9,7 @@ export default class ConfigurationReader
 
     constructor(rootPath: string)
     {
-        this.#fileManager = new LocalFileManager(rootPath);
+        this.#fileManager = new FileManager(rootPath);
     }
 
     async read(filename: string): Promise<Record<string, unknown>>

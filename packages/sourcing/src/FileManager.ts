@@ -1,25 +1,26 @@
 
-import fs from 'fs-extra';
-import { glob } from 'glob';
-import mime from 'mime-types';
-import path from 'path';
-
 import InvalidPath from './errors/InvalidPath';
 import FileNotFound from './errors/FileNotFound';
-import type FileManager from './interfaces/FileManager';
+
+import FileSystem from './interfaces/FileSystem';
+
 import File from './models/File';
+
+import LocalFileSystem from './LocalFileSystem';
 
 const DEFAULT_MIME_TYPE = 'application/octet-stream';
 
-export default class LocalFileManager implements FileManager
+export default class FileManager
 {
     readonly #location: string;
     readonly #rootLocation: string;
+    readonly #fileSystem: FileSystem;
 
-    constructor(location: string)
+    constructor(location: string, fileSystem = new LocalFileSystem())
     {
         this.#location = location;
-        this.#rootLocation = path.resolve(location);
+        this.#fileSystem = fileSystem;
+        this.#rootLocation = fileSystem.resolve(location);
     }
 
     // This method must be used by every function that needs to access
@@ -27,45 +28,47 @@ export default class LocalFileManager implements FileManager
     // and prevents access to files outside of the base location.
     getAbsoluteLocation(filename: string): string
     {
-        const location = filename.startsWith('/') ? filename : path.join(this.#location, filename);
-        const absolutePath = path.resolve(location);
+        const location = filename.startsWith('/') ? filename : this.#fileSystem.join(this.#location, filename);
+        const absolutePath = this.#fileSystem.resolve(location);
 
-        this.#validatePath(absolutePath, filename);
+        this.#validateLocation(absolutePath, filename);
 
         return absolutePath;
     }
 
     getRelativeLocation(filename: string): string
     {
-        return path.relative(this.#location, filename);
+        return this.#fileSystem.relative(this.#location, filename);
     }
 
     async getType(filename: string): Promise<string>
     {
         const location = this.getAbsoluteLocation(filename);
-
-        return mime.lookup(location) || DEFAULT_MIME_TYPE;
+        const type = await this.#fileSystem.mimeType(location)
+        
+        return type ?? DEFAULT_MIME_TYPE;
     }
 
     async getContent(filename: string): Promise<Buffer>
     {
         const location = this.getAbsoluteLocation(filename);
+        const exists = await this.#fileSystem.exists(location);
 
-        if (fs.existsSync(location) === false)
+        if (exists === false)
         {
             // Do NOT use the location in the error message,
             // as it may contain sensitive information.
             throw new FileNotFound(filename);
         }
 
-        return fs.readFile(location);
+        return this.#fileSystem.read(location);
     }
 
     async exists(filename: string): Promise<boolean>
     {
         const location = this.getAbsoluteLocation(filename);
 
-        return fs.exists(location);
+        return this.#fileSystem.exists(location);
     }
 
     async read(filename: string): Promise<File>
@@ -81,11 +84,8 @@ export default class LocalFileManager implements FileManager
     async write(filename: string, content: string): Promise<void>
     {
         const location = this.getAbsoluteLocation(filename);
-        const directory = path.dirname(location);
-
-        await fs.mkdir(directory, { recursive: true });
-
-        return fs.writeFile(location, content);
+        
+        return this.#fileSystem.write(location, content);
     }
 
     async copy(source: string, destination: string): Promise<void>
@@ -93,26 +93,26 @@ export default class LocalFileManager implements FileManager
         const sourceLocation = this.getAbsoluteLocation(source);
         const destinationLocation = this.getAbsoluteLocation(destination);
 
-        return fs.copy(sourceLocation, destinationLocation, { overwrite: true });
+        return this.#fileSystem.copy(sourceLocation, destinationLocation);
     }
 
     async delete(filename: string): Promise<void>
     {
         const location = this.getAbsoluteLocation(filename);
 
-        return fs.remove(location);
+        return this.#fileSystem.delete(location);
     }
 
     async filter(pattern: string): Promise<string[]>
     {
         const location = this.getAbsoluteLocation('./');
 
-        return glob(`${location}/${pattern}`);
+        return this.#fileSystem.filter(location, pattern);
     }
 
-    #validatePath(path: string, filename: string): void
+    #validateLocation(location: string, filename: string): void
     {
-        if (path.startsWith(this.#rootLocation) === false)
+        if (location.startsWith(this.#rootLocation) === false)
         {
             // The filename is only needed for the error message. This
             // ensures that the error message does not contain sensitive
