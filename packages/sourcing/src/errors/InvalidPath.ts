@@ -1,7 +1,7 @@
 
 export default class InvalidPath extends Error
 {
-    #path: string;
+    readonly #path: string;
 
     constructor(path: string)
     {
