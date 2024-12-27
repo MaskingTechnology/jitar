@@ -25,4 +25,4 @@ const PATHS =
     }
 } as const;
 
-export default PATHS;
+export { PATHS };

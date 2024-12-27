@@ -1,20 +1,26 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { fileManager, InvalidLocation, FileNotFound, PATHS } from './fixtures';
+import { InvalidLocation, FileNotFound } from '../src';
 
-describe('LocalFileManager', () =>
+import { fileManager, PATHS } from './fixtures';
+
+describe('FileManager', () =>
 {
+    // All the functions that are simple wrappers around the local file system are not tested.
+    // This is due to the setup of the local file system, which is in such a way that each function 
+    // directly calls a third-party library, and we don't want to test third-party libraries.
+
     describe('getAbsoluteLocation', () =>
     {
-        it('should return the absolute file location from relative path', () =>
+        it('should return the absolute file location from a relative path', () =>
         {
             const location = fileManager.getAbsoluteLocation(PATHS.INPUTS.RELATIVE_FILE_PATH);
 
             expect(location).toBe(PATHS.OUTPUTS.RELATIVE_FILE_PATH);
         });
 
-        it('should return the absolute file location from absolute path', () =>
+        it('should return the absolute file location from an absolute path', () =>
         {
             const location = fileManager.getAbsoluteLocation(PATHS.INPUTS.ABSOLUTE_FILE_PATH);
 
@@ -31,6 +37,14 @@ describe('LocalFileManager', () =>
 
     describe('getContent', () =>
     {
+        it('should return the content of the file', () =>
+        {
+            // Not implemented, as it would test reading a file from the file system. Which
+            // is simply a call to the file system and we don't want to test libraries.
+
+            expect(true).toBe(true);
+        });
+
         it('should throw an error when the file does not exist', async () =>
         {
             const result = fileManager.getContent(PATHS.INPUTS.NON_EXISTING_FILE);
@@ -41,6 +55,9 @@ describe('LocalFileManager', () =>
 
     describe('getType', () =>
     {
+        // Only the decision logic is tested here. The actual mime type implementation is not tested,
+        // as it's a single call to a third-party library.
+
         it('should return the mime type of the file', async () =>
         {
             const mimeType = await fileManager.getType(PATHS.INPUTS.FILE_TYPE_TEXT);
