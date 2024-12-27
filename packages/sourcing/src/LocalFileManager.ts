@@ -20,12 +20,15 @@ export default class LocalFileManager implements FileManager
         this.#rootLocation = path.resolve(location);
     }
 
+    // This method must be used by every function that needs to access
+    // the file system. This ensures that the path is always validated
+    // and prevents access to files outside of the base location.
     getAbsoluteLocation(filename: string): string
     {
         const location = filename.startsWith('/') ? filename : path.join(this.#location, filename);
         const absolutePath = path.resolve(location);
 
-        this.#validatePath(absolutePath);
+        this.#validatePath(absolutePath, filename);
 
         return absolutePath;
     }
@@ -105,11 +108,14 @@ export default class LocalFileManager implements FileManager
         return glob(`${location}/${pattern}`);
     }
 
-    #validatePath(path: string): void
+    #validatePath(path: string, filename: string): void
     {
         if (path.startsWith(this.#rootLocation) === false)
         {
-            throw new InvalidPath(path);
+            // The filename is only needed for the error message. This
+            // ensures that the error message does not contain sensitive
+            // information.
+            throw new InvalidPath(filename);
         }
     }
 }
