@@ -1,5 +1,8 @@
 
-import { InvalidPath, FileNotFound } from '../../src';
-import PATHS from './paths';
+import { InvalidLocation, FileNotFound } from '../../src';
 
-export { InvalidPath, FileNotFound, PATHS };
+import PATHS from './paths.fixture';
+
+import { fileManager } from './fileManagers.fixture';
+
+export { fileManager, InvalidLocation, FileNotFound, PATHS };

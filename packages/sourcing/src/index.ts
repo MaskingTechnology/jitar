@@ -1,6 +1,6 @@
 
 export { default as Files } from './definitions/Files';
-export { default as InvalidPath } from './errors/InvalidPath';
+export { default as InvalidLocation } from './errors/InvalidLocation';
 export { default as FileNotFound } from './errors/FileNotFound';
 export { default as ModuleNotLoaded } from './errors/ModuleNotLoaded';
 export { default as File } from './models/File';

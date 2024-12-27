@@ -1,5 +1,5 @@
 
-import InvalidPath from './errors/InvalidPath';
+import InvalidLocation from './errors/InvalidLocation';
 import FileNotFound from './errors/FileNotFound';
 
 import FileSystem from './interfaces/FileSystem';
@@ -44,7 +44,7 @@ export default class FileManager
     async getType(filename: string): Promise<string>
     {
         const location = this.getAbsoluteLocation(filename);
-        const type = await this.#fileSystem.mimeType(location)
+        const type = await this.#fileSystem.mimeType(location);
         
         return type ?? DEFAULT_MIME_TYPE;
     }
@@ -117,7 +117,7 @@ export default class FileManager
             // The filename is only needed for the error message. This
             // ensures that the error message does not contain sensitive
             // information.
-            throw new InvalidPath(filename);
+            throw new InvalidLocation(filename);
         }
     }
 }
