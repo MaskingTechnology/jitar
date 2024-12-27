@@ -9,6 +9,8 @@ import FileNotFound from './errors/FileNotFound';
 import type FileManager from './interfaces/FileManager';
 import File from './models/File';
 
+const DEFAULT_MIME_TYPE = 'application/octet-stream';
+
 export default class LocalFileManager implements FileManager
 {
     readonly #location: string;
@@ -42,7 +44,7 @@ export default class LocalFileManager implements FileManager
     {
         const location = this.getAbsoluteLocation(filename);
 
-        return mime.lookup(location) || 'application/octet-stream';
+        return mime.lookup(location) || DEFAULT_MIME_TYPE;
     }
 
     async getContent(filename: string): Promise<Buffer>
