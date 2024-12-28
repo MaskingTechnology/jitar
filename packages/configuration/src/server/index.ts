@@ -1,6 +1,4 @@
 
-export { default as ServerConfigurationInvalid } from './errors/ServerConfigurationInvalid';
-
 export { default as ServerConfiguration } from './definitions/ServerConfiguration';
 export { default as StandaloneConfiguration } from './definitions/StandaloneConfiguration';
 export { default as ProxyConfiguration } from './definitions/ProxyConfiguration';
