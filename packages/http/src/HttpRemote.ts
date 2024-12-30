@@ -1,23 +1,26 @@
 
 import { ErrorConverter, Request, Response as ResultResponse } from '@jitar/execution';
+import { AddWorkerRequest } from '@jitar/runtime';
 import type { Remote } from '@jitar/services';
 import { File } from '@jitar/sourcing';
+import { Validator } from '@jitar/validation';
 
 import HeaderKeys from './definitions/HeaderKeys';
 import HeaderValues from './definitions/HeaderValues';
-import { Validator } from '@jitar/validation';
 import InvalidWorkerId from './errors/InvalidWorkerId';
 
 export default class HttpRemote implements Remote
 {
     readonly #url: string;
+    readonly #fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>;
     
     readonly #errorConverter = new ErrorConverter();
     readonly #validator = new Validator();
 
-    constructor(url: string)
+    constructor(url: string, fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>)
     {
         this.#url = url;
+        this.#fetch = fetch;
     }
 
     connect(): Promise<void>
@@ -68,7 +71,7 @@ export default class HttpRemote implements Remote
     async addWorker(url: string, procedureNames: string[], trustKey?: string): Promise<string>
     {
         const remoteUrl = `${this.#url}/workers`;
-        const body = { url, procedureNames, trustKey };
+        const body: AddWorkerRequest = { url, procedureNames, trustKey };
         const options =
         {
             method: 'POST',
@@ -143,7 +146,7 @@ export default class HttpRemote implements Remote
 
     async #callRemote(remoteUrl: string, options: object, throwOnError = true): Promise<Response>
     {
-        const response = await fetch(remoteUrl, options);
+        const response = await this.#fetch(remoteUrl, options);
 
         if (throwOnError && this.#isErrorResponse(response))
         {

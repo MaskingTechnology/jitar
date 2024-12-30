@@ -7,6 +7,6 @@ export default class HttpRemoteBuilder implements RemoteBuilder
 {
     build(url: string): Remote
     {
-        return new HttpRemote(url);
+        return new HttpRemote(url, fetch);
     }
 }
