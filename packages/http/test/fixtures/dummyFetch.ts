@@ -1,5 +1,5 @@
 
-import { RESPONSES } from './Responses.fixture';
+import { HTTP_RESPONSES, NOT_FOUND } from './httpResponses.fixture';
 
 export function dummyFetch(input: RequestInfo, init?: RequestInit): Promise<Response>
 {
@@ -7,5 +7,5 @@ export function dummyFetch(input: RequestInfo, init?: RequestInit): Promise<Resp
         ? input.url 
         : input;
 
-    return Promise.resolve(RESPONSES[url] ?? new Response(null, { status: 404 }));
+    return Promise.resolve(HTTP_RESPONSES.get(url) ?? NOT_FOUND);
 }

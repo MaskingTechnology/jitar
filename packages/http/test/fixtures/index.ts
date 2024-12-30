@@ -1,8 +1,5 @@
 
-import { HttpRemote } from '../../src';
-
+import { VALUES } from './values';
 import { dummyFetch } from './DummyFetch';
 
-const remote = new HttpRemote('http://dummy.remote', dummyFetch);
-
-export { remote };
+export { dummyFetch, VALUES };
