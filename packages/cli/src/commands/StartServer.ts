@@ -3,7 +3,7 @@ import { ConfigurationManager, RuntimeConfiguration, ServerConfiguration } from 
 import { HttpRemoteBuilder, HttpServer } from '@jitar/http';
 import { LogLevel, LogLevelParser } from '@jitar/logging';
 import { ServerBuilder } from '@jitar/runtime';
-import { LocalFileManager, SourcingManager } from '@jitar/sourcing';
+import { FileManager, SourcingManager } from '@jitar/sourcing';
 
 import ArgumentProcessor from '../ArgumentProcessor';
 import Command from '../Command';
@@ -49,7 +49,7 @@ export default class StartServer implements Command
     {
         const [, , port] = serverConfiguration.url.split(':');
 
-        const fileManager = new LocalFileManager(runtimeConfiguration.target);
+        const fileManager = new FileManager(runtimeConfiguration.target);
         const sourcingManager = new SourcingManager(fileManager);
         const remoteBuilder = new HttpRemoteBuilder();
         const serverBuilder = new ServerBuilder(sourcingManager, remoteBuilder);
