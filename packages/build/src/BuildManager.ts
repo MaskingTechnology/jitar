@@ -1,8 +1,7 @@
 
 import type { RuntimeConfiguration } from '@jitar/configuration';
 import { Logger, LogLevel } from '@jitar/logging';
-import type { FileManager } from '@jitar/sourcing';
-import { Files, LocalFileManager } from '@jitar/sourcing';
+import { Files, FileManager } from '@jitar/sourcing';
 
 import { ApplicationReader } from './source';
 import { ApplicationBuilder } from './target';
@@ -22,9 +21,9 @@ export default class BuildManager
     {
         this.#logger = new Logger(logLevel);
 
-        this.#projectFileManager = new LocalFileManager('./');
-        this.#sourceFileManager = new LocalFileManager(configuration.source);
-        this.#targetFileManager = new LocalFileManager(configuration.target);
+        this.#projectFileManager = new FileManager('./');
+        this.#sourceFileManager = new FileManager(configuration.source);
+        this.#targetFileManager = new FileManager(configuration.target);
 
         this.#applicationReader = new ApplicationReader(this.#sourceFileManager);
         this.#applicationBuilder = new ApplicationBuilder(this.#targetFileManager, this.#logger);

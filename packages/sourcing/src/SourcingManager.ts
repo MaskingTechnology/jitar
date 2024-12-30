@@ -1,10 +1,10 @@
 
 import type File from './models/File';
-import type FileManager from './interfaces/FileManager';
 import ModuleNotLoaded from './errors/ModuleNotLoaded';
 import type Module from './types/Module';
+import type FileManager from './FileManager';
 
-export default class SourceManager
+export default class SourcingManager
 {
     readonly #fileManager: FileManager;
 
