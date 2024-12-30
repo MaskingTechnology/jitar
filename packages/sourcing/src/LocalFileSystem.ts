@@ -23,6 +23,27 @@ export default class LocalFileSystem implements FileSystem
         return fs.exists(location);
     }
 
+    // This method is synchronous because it's used in the
+    // LocationRewriter. This class uses a replacer function
+    // in a replaceAll method that only accepts synchronous functions.
+    isDirectory(location: string): boolean
+    {
+        try
+        {
+            const stats = fs.statSync(location);
+
+            return stats.isDirectory();
+        }
+        catch
+        {
+            // We might reference a locations that doesn't exist
+            // because it's a file without an extension and that 
+            // is not a reason to throw an error.
+
+            return false;
+        }
+    }
+
     filter(location: string, pattern: string): Promise<string[]>
     {
         return glob(`${location}/${pattern}`);

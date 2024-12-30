@@ -71,6 +71,13 @@ export default class FileManager
         return this.#fileSystem.exists(location);
     }
 
+    isDirectory(filename: string): boolean
+    {
+        const location = this.getAbsoluteLocation(filename);
+
+        return this.#fileSystem.isDirectory(location);
+    }
+
     async read(filename: string): Promise<File>
     {
         const absoluteFilename = this.getAbsoluteLocation(filename);
