@@ -1,6 +1,6 @@
 
 import { Validator } from '@jitar/validation';
-import { LocalFileManager } from '@jitar/sourcing';
+import { FileManager } from '@jitar/sourcing';
 
 import { EnvironmentConfigurator } from './environment';
 import { RuntimeConfiguration, RuntimeConfigurationBuilder } from './runtime';
@@ -18,7 +18,7 @@ export default class ConfigurationManager
 
     constructor(rootPath: string = DEFAULT_ROOT_PATH)
     {
-        const fileManager = new LocalFileManager(rootPath);
+        const fileManager = new FileManager(rootPath);
         const reader = new ConfigurationReader(fileManager);
         const validator = new Validator();
 
