@@ -1,5 +1,5 @@
 
 import { VALUES } from './values';
-import { dummyFetch } from './DummyFetch';
+import { dummyFetch } from './dummyFetch';
 
 export { dummyFetch, VALUES };
