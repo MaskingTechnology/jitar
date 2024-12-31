@@ -3,31 +3,31 @@ import { Request, RunModes, Version } from '@jitar/execution';
 
 const VALUES = {
     REMOTE: {
-        DUMMY: 'http://dummy.remote',
-        IS_HEALTHY: 'http://is.healthy',
-        IS_UNHEALTHY: 'http://is.unhealthy',
-        ADD_WORKER_VALID: 'http://valid.add.worker.remote',
-        ADD_WORKER_INVALID_ID: 'http://invalid.add.worker.id.remote',
-        ADD_WORKER_INVALID_REQUEST: 'http://invalid.add.worker.request.remote'
+        DUMMY: 'https://dummy.remote',
+        IS_HEALTHY: 'https://is.healthy',
+        IS_UNHEALTHY: 'https://is.unhealthy',
+        ADD_WORKER_VALID: 'https://valid.add.worker.remote',
+        ADD_WORKER_INVALID_ID: 'https://invalid.add.worker.id.remote',
+        ADD_WORKER_INVALID_REQUEST: 'https://invalid.add.worker.request.remote'
     },
 
     URI: {
-        FILE_WITH_CONTENT_TYPE: 'http://dummy.remote/index.html',
-        FILE_WITH_DEFAULT_CONTENT_TYPE: 'http://dummy.remote/index.bin',
-        IS_HEALTHY: 'http://is.healthy/health/status',
-        IS_UNHEALTHY: 'http://is.unhealthy/health/status',
-        GET_HEALTH: 'http://dummy.remote/health',
-        ADD_WORKER_VALID: 'http://valid.add.worker.remote/workers',
-        ADD_WORKER_INVALID_ID: 'http://invalid.add.worker.id.remote/workers',
-        ADD_WORKER_INVALID_REQUEST: 'http://invalid.add.worker.request.remote/workers',
-        RUN_VALID: 'http://dummy.remote/rpc/helloWorld',
-        RUN_BAD_REQUEST: 'http://dummy.remote/rpc/badRequest'
+        FILE_WITH_CONTENT_TYPE: 'https://dummy.remote/index.html',
+        FILE_WITH_DEFAULT_CONTENT_TYPE: 'https://dummy.remote/index.bin',
+        IS_HEALTHY: 'https://is.healthy/health/status',
+        IS_UNHEALTHY: 'https://is.unhealthy/health/status',
+        GET_HEALTH: 'https://dummy.remote/health',
+        ADD_WORKER_VALID: 'https://valid.add.worker.remote/workers',
+        ADD_WORKER_INVALID_ID: 'https://invalid.add.worker.id.remote/workers',
+        ADD_WORKER_INVALID_REQUEST: 'https://invalid.add.worker.request.remote/workers',
+        RUN_VALID: 'https://dummy.remote/rpc/helloWorld',
+        RUN_BAD_REQUEST: 'https://dummy.remote/rpc/badRequest'
     },
 
     INPUT: {
         FILE_WITH_CONTENT_TYPE: 'index.html',
         FILE_WITH_DEFAULT_CONTENT_TYPE: 'index.bin',
-        ADD_WORKER: 'http://worker.remote',
+        ADD_WORKER: 'https://worker.remote',
         RUN_VALID: new Request(
             'helloWorld', 
             new Version(1, 0, 0),
