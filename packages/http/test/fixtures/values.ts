@@ -4,6 +4,8 @@ import { Request, RunModes, Version } from '@jitar/execution';
 const VALUES = {
     REMOTE: {
         DUMMY: 'http://dummy.remote',
+        IS_HEALTHY: 'http://is.healthy',
+        IS_UNHEALTHY: 'http://is.unhealthy',
         ADD_WORKER_VALID: 'http://valid.add.worker.remote',
         ADD_WORKER_INVALID_ID: 'http://invalid.add.worker.id.remote',
         ADD_WORKER_INVALID_REQUEST: 'http://invalid.add.worker.request.remote'
@@ -12,6 +14,9 @@ const VALUES = {
     URI: {
         FILE_WITH_CONTENT_TYPE: 'http://dummy.remote/index.html',
         FILE_WITH_DEFAULT_CONTENT_TYPE: 'http://dummy.remote/index.bin',
+        IS_HEALTHY: 'http://is.healthy/health/status',
+        IS_UNHEALTHY: 'http://is.unhealthy/health/status',
+        GET_HEALTH: 'http://dummy.remote/health',
         ADD_WORKER_VALID: 'http://valid.add.worker.remote/workers',
         ADD_WORKER_INVALID_ID: 'http://invalid.add.worker.id.remote/workers',
         ADD_WORKER_INVALID_REQUEST: 'http://invalid.add.worker.request.remote/workers',
@@ -50,6 +55,21 @@ const VALUES = {
             { status: 200 } 
         ),
 
+        IS_HEALTHY: new Response(
+            'true',
+            { status: 200, headers: { 'Content-Type': 'text/plain' } }
+        ),
+
+        IS_UNHEALTHY: new Response(
+            'false',
+            { status: 200, headers: { 'Content-Type': 'text/plain' } }
+        ),
+
+        GET_HEALTH: new Response(
+            '{ "database": true, "filestore": false }',
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
+        ),
+
         ADD_WORKER_VALID: new Response(
             '{ "id": "1" }',
             { status: 200, headers: { 'Content-Type': 'application/json' } }
@@ -84,6 +104,18 @@ const VALUES = {
         FILE_WITH_DEFAULT_CONTENT_TYPE: {
             location: 'index.bin',
             type: 'application/octet-stream'
+        },
+        IS_HEALTHY: true,
+        IS_UNHEALTHY: false,
+        GET_HEALTH: {
+            database: {
+                key: 'database',
+                value: true
+            },
+            filestore: {
+                key: 'filestore',
+                value: false
+            }
         },
         ADD_WORKER_VALID: '1',
         RUN_VALID: {

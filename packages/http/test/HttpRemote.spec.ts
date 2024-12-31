@@ -31,6 +31,38 @@ describe('HttpRemote', () =>
         });
     });
 
+    describe('isHealthy', () =>
+    {
+        it('should return true when the server is healthy', async () =>
+        {
+            const remote = new HttpRemote(VALUES.REMOTE.IS_HEALTHY, dummyFetch);
+            const healthy = await remote.isHealthy();
+
+            expect(healthy).toBe(true);
+        });
+
+        it('should return false when the server is unhealthy', async () =>
+        {
+            const remote = new HttpRemote(VALUES.REMOTE.IS_UNHEALTHY, dummyFetch);
+            const healthy = await remote.isHealthy();
+
+            expect(healthy).toBe(false);
+        });
+    });
+
+    describe('getHealth', () =>
+    {
+        it('should return health status per health check', async () =>
+        {
+            const remote = new HttpRemote(VALUES.REMOTE.DUMMY, dummyFetch);
+            const health = await remote.getHealth();
+
+            expect(health).toBeDefined();
+            expect(health.get(VALUES.OUTPUT.GET_HEALTH.database.key)).toBe(VALUES.OUTPUT.GET_HEALTH.database.value);
+            expect(health.get(VALUES.OUTPUT.GET_HEALTH.filestore.key)).toBe(VALUES.OUTPUT.GET_HEALTH.filestore.value);
+        });
+    });
+
     describe('addWorker', () =>
     {
         it('should add a worker with a valid response', async () =>
