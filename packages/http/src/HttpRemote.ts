@@ -54,7 +54,7 @@ export default class HttpRemote implements Remote
         const response = await this.#callRemote(remoteUrl, options);
         const healthy = await response.text();
 
-        return Boolean(healthy);
+        return healthy === 'true';
     }
 
     async getHealth(): Promise<Map<string, boolean>>
