@@ -29,6 +29,8 @@ export default class ConfigurationBuilder
 
         configuration.source ??= DefaultValues.SOURCE;
         configuration.target ??= DefaultValues.TARGET;
+        configuration.segments ??= DefaultValues.SEGMENTS;
+        configuration.resources ??= DefaultValues.RESOURCES;
 
         return configuration;
     }
