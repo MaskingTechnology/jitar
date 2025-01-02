@@ -10,17 +10,17 @@ import LocationRewriter from './LocationRewriter';
 
 export default class Reader
 {
-    readonly #fileManager: FileManager;
+    readonly #sourceFileManager: FileManager;
     readonly #parser: Parser;
 
     readonly #locationRewriter: LocationRewriter;
 
-    constructor(fileManager: FileManager, parser: Parser = new Parser())
+    constructor(sourceFileManager: FileManager, parser: Parser = new Parser())
     {
-        this.#fileManager = fileManager;
+        this.#sourceFileManager = sourceFileManager;
         this.#parser = parser;
 
-        this.#locationRewriter = new LocationRewriter(fileManager);
+        this.#locationRewriter = new LocationRewriter(sourceFileManager);
     }
 
     async readAll(filenames: string[]): Promise<Repository>
@@ -32,7 +32,7 @@ export default class Reader
 
     async read(filename: string): Promise<Module>
     {
-        const relativeLocation = this.#fileManager.getRelativeLocation(filename);
+        const relativeLocation = this.#sourceFileManager.getRelativeLocation(filename);
         const code = await this.#loadCode(filename);
         const rewrittenCode = this.#locationRewriter.rewrite(relativeLocation, code);
         const module = this.#parser.parse(rewrittenCode);
@@ -44,7 +44,7 @@ export default class Reader
     {
         try
         {
-            const content = await this.#fileManager.getContent(filename);
+            const content = await this.#sourceFileManager.getContent(filename);
 
             return content.toString();
         }

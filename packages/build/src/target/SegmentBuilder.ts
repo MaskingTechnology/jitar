@@ -13,15 +13,15 @@ const RUNTIME_IMPORTS = 'import { Segment, Class, Procedure, Implementation, Ver
 
 export default class SegmentBuilder
 {
-    readonly #fileManager: FileManager;
+    readonly #targetFileManager: FileManager;
 
     readonly #logger: Logger;
     readonly #fileHelper = new FileHelper();
     readonly #versionParser = new VersionParser();
 
-    constructor(fileManager: FileManager, logger: Logger)
+    constructor(targetFileManager: FileManager, logger: Logger)
     {
-        this.#fileManager = fileManager;
+        this.#targetFileManager = targetFileManager;
         this.#logger = logger;
     }
 
@@ -40,7 +40,7 @@ export default class SegmentBuilder
 
         const code = this.#createCode(segment);
 
-        await this.#fileManager.write(filename, code);
+        await this.#targetFileManager.write(filename, code);
 
         this.#logger.info(`Built ${segment.name} segment (${segment.modules.length} modules, ${segment.procedures.length} procedures, ${segment.classes.length} classes)`);
     }

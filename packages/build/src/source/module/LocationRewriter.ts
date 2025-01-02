@@ -6,15 +6,15 @@ import { FileHelper, LocationReplacer } from '../../utils';
 
 export default class LocationRewriter
 {
-    readonly #fileManager: FileManager;
+    readonly #sourceFileManager: FileManager;  // source file manager
 
     readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
     readonly #locationReplacer = new LocationReplacer();
 
-    constructor(fileManager: FileManager)
+    constructor(sourceFileManager: FileManager)
     {
-        this.#fileManager = fileManager;
+        this.#sourceFileManager = sourceFileManager;
     }
 
     rewrite(filename: string, code: string): string
@@ -79,7 +79,7 @@ export default class LocationRewriter
         const callingModulePath = this.#fileHelper.extractPath(filename);
         const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
 
-        return this.#fileManager.isDirectory(translated)
+        return this.#sourceFileManager.isDirectory(translated) // needs source file manager
             ? `${from}/index.js`
             : this.#fileHelper.assureExtension(from);
     }

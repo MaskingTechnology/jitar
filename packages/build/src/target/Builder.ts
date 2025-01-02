@@ -1,9 +1,9 @@
 
 import { Logger } from '@jitar/logging';
-import type { FileManager } from '@jitar/sourcing';
 
 import type { Application } from '../source';
 
+import type ProjectFileManager from '../ProjectFileManager';
 import ModuleBuilder from './ModuleBuilder';
 import SegmentBuilder from './SegmentBuilder';
 
@@ -12,10 +12,12 @@ export default class Builder
     readonly #moduleBuilder: ModuleBuilder;
     readonly #segmentBuilder: SegmentBuilder;
 
-    constructor(fileManager: FileManager, logger: Logger)
+    constructor(projectFileManager: ProjectFileManager, logger: Logger)
     {
-        this.#moduleBuilder = new ModuleBuilder(fileManager);
-        this.#segmentBuilder = new SegmentBuilder(fileManager, logger);
+        const targetFileManager = projectFileManager.targetFileManager;
+
+        this.#moduleBuilder = new ModuleBuilder(targetFileManager);
+        this.#segmentBuilder = new SegmentBuilder(targetFileManager, logger);
     }
 
     async build(application: Application): Promise<void>

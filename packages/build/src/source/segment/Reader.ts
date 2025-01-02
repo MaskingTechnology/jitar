@@ -37,20 +37,22 @@ type MemberProperties =
     fqn: string;
 }
 
-const SEGMENT_FILE_EXTENSION = '.segment.json';
+const SEGMENT_FILE_EXTENSION = '.json';
 const DEFAULT_ACCESS_LEVEL = 'private';
 const DEFAULT_VERSION_NUMBER = '0.0.0';
 
 export default class SegmentReader
 {
-    readonly #fileManager: FileManager;
+    readonly #segmentsFileManager: FileManager;
+    readonly #sourceFileManager: FileManager;
     readonly #repository: ModuleRepository;
 
     readonly #fileHelper = new FileHelper();
 
-    constructor(fileManager: FileManager, repository: ModuleRepository)
+    constructor(segmentsFileManager: FileManager, sourceFileManager: FileManager, repository: ModuleRepository)
     {
-        this.#fileManager = fileManager;
+        this.#segmentsFileManager = segmentsFileManager;
+        this.#sourceFileManager = sourceFileManager;
         this.#repository = repository;
     }
 
@@ -91,7 +93,10 @@ export default class SegmentReader
     {
         try
         {
-            const content = await this.#fileManager.getContent(filename);
+            // The content of the segment file is located in a different folder than the source files.
+            // The segment file manager has access to this location, the source file manager does not.
+
+            const content = await this.#segmentsFileManager.getContent(filename);
 
             return JSON.parse(content.toString()) as SegmentFile;
         }
@@ -122,7 +127,10 @@ export default class SegmentReader
 
     #makeModuleFilename(filename: string): string
     {
-        const fullFilename = this.#fileManager.isDirectory(filename)
+        // For index resolution we need to read the source files and check
+        // if the given filename is a directory.
+
+        const fullFilename = this.#sourceFileManager.isDirectory(filename)
             ? `${filename}/index.js`
             : this.#fileHelper.assureExtension(filename);
 
