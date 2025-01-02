@@ -1,9 +1,9 @@
 
 const Files =
 {
-    RESOURCES_PATTERN: '**/*.resources.json',
     MODULE_PATTERN: '**/*.js',
-    SEGMENT_PATTERN: '**/*.segment.json'
+    RESOURCES_PATTERN: '**/*.json',
+    SEGMENT_PATTERN: '**/*.json'
 };
 
 export default Files;
