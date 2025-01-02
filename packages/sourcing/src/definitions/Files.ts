@@ -2,7 +2,7 @@
 const Files =
 {
     MODULE_PATTERN: '**/*.js',
-    RESOURCES_PATTERN: '**/*.json',
+    RESOURCE_PATTERN: '**/*.json',
     SEGMENT_PATTERN: '**/*.json'
 };
 

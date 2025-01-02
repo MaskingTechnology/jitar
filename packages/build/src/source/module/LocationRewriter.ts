@@ -6,7 +6,7 @@ import { FileHelper, LocationReplacer } from '../../utils';
 
 export default class LocationRewriter
 {
-    readonly #sourceFileManager: FileManager;  // source file manager
+    readonly #sourceFileManager: FileManager;
 
     readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
@@ -79,7 +79,7 @@ export default class LocationRewriter
         const callingModulePath = this.#fileHelper.extractPath(filename);
         const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
 
-        return this.#sourceFileManager.isDirectory(translated) // needs source file manager
+        return this.#sourceFileManager.isDirectory(translated)
             ? `${from}/index.js`
             : this.#fileHelper.assureExtension(from);
     }

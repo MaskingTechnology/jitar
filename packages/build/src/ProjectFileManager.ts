@@ -3,24 +3,24 @@ import type { FileManager } from '@jitar/sourcing';
 
 export default class ProjectFileManager
 {
-    readonly #sourceFileManager: FileManager;
-    readonly #targetFileManager: FileManager;
-    readonly #resourcesFileManager: FileManager;
-    readonly #segmentsFileManager: FileManager;
+    readonly #source: FileManager;
+    readonly #target: FileManager;
+    readonly #resource: FileManager;
+    readonly #segment: FileManager;
 
-    constructor(sourceFileManager: FileManager, targetFileManager: FileManager, resourcesFileManager: FileManager, segmentsFileManager: FileManager)
+    constructor(source: FileManager, target: FileManager, resource: FileManager, segment: FileManager)
     {
-        this.#sourceFileManager = sourceFileManager;
-        this.#targetFileManager = targetFileManager;
-        this.#resourcesFileManager = resourcesFileManager;
-        this.#segmentsFileManager = segmentsFileManager;
+        this.#source = source;
+        this.#target = target;
+        this.#resource = resource;
+        this.#segment = segment;
     }
 
-    get sourceFileManager() { return this.#sourceFileManager; }
+    get source() { return this.#source; }
 
-    get targetFileManager() { return this.#targetFileManager; }
+    get target() { return this.#target; }
 
-    get resourcesFileManager() { return this.#resourcesFileManager; }
+    get resource() { return this.#resource; }
 
-    get segmentsFileManager() { return this.#segmentsFileManager; }
+    get segment() { return this.#segment; }
 }

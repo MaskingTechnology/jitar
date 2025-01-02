@@ -14,7 +14,7 @@ export default class Builder
 
     constructor(projectFileManager: ProjectFileManager, logger: Logger)
     {
-        const targetFileManager = projectFileManager.targetFileManager;
+        const targetFileManager = projectFileManager.target;
 
         this.#moduleBuilder = new ModuleBuilder(targetFileManager);
         this.#segmentBuilder = new SegmentBuilder(targetFileManager, logger);
