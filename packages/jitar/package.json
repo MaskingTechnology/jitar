@@ -26,7 +26,7 @@
         "prepublishOnly": "npm run clean && npm run build"
     },
     "dependencies": {
-        "dotenv": "^16.4.5",
+        "dotenv": "^16.4.7",
         "express": "^4.21.2",
         "fs-extra": "^11.2.0",
         "glob": "11.0.0",

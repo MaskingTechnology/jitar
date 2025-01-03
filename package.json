@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
-    "@nx/eslint-plugin": "^20.2.2",
+    "@nx/eslint-plugin": "^20.3.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-replace": "^6.0.2",
     "@rollup/plugin-terser": "^0.4.4",
@@ -33,7 +33,7 @@
     "@types/fs-extra": "^11.0.4",
     "@types/mime-types": "^2.1.4",
     "@types/prompts": "^2.4.9",
-    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/eslint-plugin": "^8.19.0",
     "@vitest/coverage-v8": "^2.1.8",
     "auto-changelog": "^2.5.0",
     "degit": "^2.8.4",
@@ -41,10 +41,10 @@
     "eslint-plugin-jitar": "0.0.1",
     "eslint-plugin-sonarjs": "^3.0.1",
     "lerna": "^8.1.9",
-    "rollup": "^4.28.1",
+    "rollup": "^4.29.1",
     "rollup-plugin-dts": "^6.1.1",
     "typescript": "^5.6.2",
-    "typescript-eslint": "^8.18.1",
+    "typescript-eslint": "^8.19.0",
     "vitest": "^2.1.8"
   },
   "optionalDependencies": {
