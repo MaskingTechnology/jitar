@@ -1,7 +1,7 @@
 
 interface HttpClient
 {
-    execute(url: string, options: object): Promise<Response>;
+    execute(url: string, options?: RequestInit): Promise<Response>;
 }
 
 export default HttpClient;

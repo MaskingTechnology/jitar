@@ -9,9 +9,9 @@ export default class HttpRemoteBuilder implements RemoteBuilder
 {
     readonly #httpClient: HttpClient;
 
-    constructor()
+    constructor(httpClient: HttpClient = new FetchHttpClient())
     {
-        this.#httpClient = new FetchHttpClient();
+        this.#httpClient = httpClient;
     }
 
     build(url: string): Remote
