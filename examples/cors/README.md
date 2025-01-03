@@ -16,7 +16,7 @@ Because Jitar and the web server both run on a different port, a CORS rule is re
 
 **Segments**
 
-* Server - contains the *server* procedures (`segments/server.segment.json`)
+* Server - contains the *server* procedures (`segments/server.json`)
 
 **Services**
 

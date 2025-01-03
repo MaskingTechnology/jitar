@@ -20,8 +20,8 @@ It contains a registration process that creates and transports a data object.
 
 **Segments**
 
-* Account - contains the *account* procedures (`segments/account.segment.json`)
-* Helpdesk - contains the *helpdesk* procedures (`segments/greeting.segment.json`)
+* Account - contains the *account* procedures (`segments/account.json`)
+* Helpdesk - contains the *helpdesk* procedures (`segments/greeting.json`)
 
 **Services**
 

@@ -15,7 +15,7 @@ Both versions can be requested independently.
 
 **Segments**
 
-* Default - contains all procedures (`segments/default.segment.json`)
+* Default - contains all procedures (`segments/default.json`)
 
 **Services**
 

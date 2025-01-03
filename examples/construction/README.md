@@ -14,7 +14,7 @@ When the application gets shut down, the database gets cleared.
 
 **Segments**
 
-* Default - contains the *getData* procedure (`segments/default.segment.json`)
+* Default - contains the *getData* procedure (`segments/default.json`)
 
 **Services**
 
