@@ -15,7 +15,7 @@ The application implements a simple logging middleware.
 
 **Segments**
 
-* Default - contains all the procedures (`src/segments/default.segment.json`)
+* Default - contains all the procedures (`src/segments/default.json`)
 
 **Services**
 

@@ -153,9 +153,9 @@ import { modify } from './modify';
 export async function test(): Promise<void>
 {
     // create new instance
-    const person: Person = new Person( 'John Doe', 42);
+    const person = new Person( 'John Doe', 42);
 
-    modify(person);
+    await modify(person);
 
     console.log(person);
 }

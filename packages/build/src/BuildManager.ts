@@ -5,14 +5,13 @@ import { Files, FileManager } from '@jitar/sourcing';
 
 import { ApplicationReader } from './source';
 import { ApplicationBuilder } from './target';
+import ProjectFileManager from './ProjectFileManager';
 
 export default class BuildManager
 {
     readonly #logger: Logger;
 
-    readonly #projectFileManager: FileManager;
-    readonly #sourceFileManager: FileManager;
-    readonly #targetFileManager: FileManager;
+    readonly #fileManager: ProjectFileManager;
 
     readonly #applicationReader: ApplicationReader;
     readonly #applicationBuilder: ApplicationBuilder;
@@ -21,19 +20,26 @@ export default class BuildManager
     {
         this.#logger = new Logger(logLevel);
 
-        this.#projectFileManager = new FileManager('./');
-        this.#sourceFileManager = new FileManager(configuration.source);
-        this.#targetFileManager = new FileManager(configuration.target);
+        const sourceFileManager = new FileManager(configuration.source);
+        const targetFileManager = new FileManager(configuration.target);
+        const resourceFileManager = new FileManager(configuration.resources);
+        const segmentFileManager = new FileManager(configuration.segments);
 
-        this.#applicationReader = new ApplicationReader(this.#sourceFileManager);
-        this.#applicationBuilder = new ApplicationBuilder(this.#targetFileManager, this.#logger);
+        this.#fileManager = new ProjectFileManager(sourceFileManager, targetFileManager, resourceFileManager, segmentFileManager);
+
+        this.#applicationReader = new ApplicationReader(this.#fileManager);
+        this.#applicationBuilder = new ApplicationBuilder(this.#fileManager, this.#logger);
     }
 
     async build(): Promise<void>
     {
-        const moduleFiles = await this.#sourceFileManager.filter(Files.MODULE_PATTERN);
-        const resourceFiles = await this.#projectFileManager.filter(Files.RESOURCES_PATTERN);
-        const segmentFiles = await this.#projectFileManager.filter(Files.SEGMENT_PATTERN);
+        const sourceFileManager = this.#fileManager.source;
+        const resourceFileManager = this.#fileManager.resource;
+        const segmentFileManager = this.#fileManager.segment;
+
+        const moduleFiles = await sourceFileManager.filter(Files.MODULE_PATTERN);
+        const resourceFiles = await resourceFileManager.filter(Files.RESOURCE_PATTERN);
+        const segmentFiles = await segmentFileManager.filter(Files.SEGMENT_PATTERN);
 
         const applicationModel = await this.#applicationReader.read(moduleFiles, resourceFiles, segmentFiles);
 

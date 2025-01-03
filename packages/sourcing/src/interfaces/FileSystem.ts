@@ -9,6 +9,8 @@ interface FileSystem
 
     filter(location: string, pattern: string): Promise<string[]>;
 
+    isDirectory(location: string): boolean;
+
     join(...paths: string[]): string;
 
     read(location: string): Promise<Buffer>;

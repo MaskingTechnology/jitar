@@ -1,30 +1,33 @@
 
-import type { FileManager } from '@jitar/sourcing';
-
 import { ResourceReader } from '../resource';
 import { ModuleReader } from '../module';
 import { SegmentReader } from '../segment';
 
+import type ProjectFileManager from '../../ProjectFileManager';
 import Application from './models/Application';
 
 export default class Reader
 {
-    readonly #fileManager: FileManager;
+    readonly #projectFileManager: ProjectFileManager;
 
-    constructor(fileManager: FileManager)
+    constructor(projectFileManager: ProjectFileManager)
     {
-        this.#fileManager = fileManager;
+        this.#projectFileManager = projectFileManager;
     }
 
     async read(moduleFiles: string[], resourceFiles: string[], segmentFiles: string[]): Promise<Application>
     {
-        const moduleReader = new ModuleReader(this.#fileManager);
+        const sourceFileManager = this.#projectFileManager.source;
+        const resourceFileManager = this.#projectFileManager.resource;
+        const segmentFileManager = this.#projectFileManager.segment;
+
+        const moduleReader = new ModuleReader(sourceFileManager);
         const repository = await moduleReader.readAll(moduleFiles);
 
-        const resourceReader = new ResourceReader(this.#fileManager);
+        const resourceReader = new ResourceReader(resourceFileManager, sourceFileManager);
         const resources = await resourceReader.readAll(resourceFiles);
 
-        const segmentReader = new SegmentReader(this.#fileManager, repository);
+        const segmentReader = new SegmentReader(segmentFileManager, sourceFileManager, repository);
         const segmentation = await segmentReader.readAll(segmentFiles);
 
         return new Application(repository, resources, segmentation);

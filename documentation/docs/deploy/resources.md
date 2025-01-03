@@ -19,12 +19,12 @@ In Jitar's [segmentation model](/deploy/segmentation), each segment is isolated 
 
 ### Resource files
 
-Jitar will search for resource definitions files in the project directory. The files are named `*.resources.json`. Each entry defines the entry point of the `module` that should be used as a resource.
+Jitar reads resource definitions files from the `resources` directory. The files are in JSON format. Each entry defines the entry point of the `module` that should be used as a resource.
 
 The file has the following structure:
 
 ```json
-// app.resources.json
+// app.json
 [
     "./integrations/authentication/entry-file",
     "./integrations/database/index",

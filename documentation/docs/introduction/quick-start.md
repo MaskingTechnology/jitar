@@ -73,13 +73,13 @@ Besides functions there are more useful building blocks. You can find out more i
 To tell Jitar if a function runs on the client or the server, the application is split into groups of modules, called segments. Each segment has its own configuration file. In the project we can find one in the `segments` folder.
 
 ```json
-// segments/default.segment.json
+// segments/default.json
 {
     "./domain/sayHello": { "sayHello": { "access": "public" } }
 }
 ```
 
-Segments are named, and their names are stored in the filename. In this case the segment is called ‘default’. The rest of the filename makes it a detectable segment configuration, because Jitar scans the project to find them.
+Segments are named, and their names are stored in the filename. In this case the segment is called ‘default’.
 
 Segment configurations work like the JavaScript module system. In this case we export the `sayHello` function from `./domain/sayHello` module file. Additionally we set the access level to public so it can be called from the client. The configuration can be extended by simply adding functions.
 

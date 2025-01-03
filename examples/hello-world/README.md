@@ -13,7 +13,7 @@ The application says hello to the given name.
 
 **Segments**
 
-* Default - contains the *sayHello* procedure (`segments/default.segment.json`)
+* Default - contains the *sayHello* procedure (`segments/default.json`)
 
 **Services**
 

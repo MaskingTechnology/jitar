@@ -21,6 +21,7 @@ At the root level of a project we use at least the following subfolders.
 
 ```txt
 .
+├─ resources
 ├─ segments
 ├─ services
 ├─ src
@@ -29,6 +30,7 @@ At the root level of a project we use at least the following subfolders.
 
 Although the names are quite self explanatory, this how we use them:
 
+* resources - contains all resource configuration files;
 * segments - contains all segment configuration files;
 * services - contains all service configuration files;
 * src - contains all application code;
@@ -54,11 +56,10 @@ src
 │  ├─ downloads
 │  ├─ images
 │  ├─ ...
-├─ integrations
-│  ├─ database
-│  ├─ notifications
-│  ├─ ...
-└─ jitar.ts
+└─ integrations
+   ├─ database
+   ├─ notifications
+   ├─ ...
 ```
 
 Each folder has it's own responsibility:
@@ -100,23 +101,22 @@ test
 │  ├─ downloads
 │  ├─ images
 │  ├─ ...
-├─ integrations
-│  ├─ database
-│  ├─ notifications
-│  ├─ ...
-└─ jitar.ts
+└─ integrations
+   ├─ database
+   ├─ notifications
+   ├─ ...
 ```
 
 By keeping a 1-on-1 relation with the source files makes it easy to find the associated tests.
 
 ## Segments
 
-The `segments` folder contains all [segment configuration](../fundamentals/building-blocks#segments) files. Although Jitar doesn't care about their location, we find it more clear to group them here.
+The `segments` folder contains all [segment configuration](../fundamentals/building-blocks#segments) files.
 
 ```txt
 segments
-├─ first.segment.json
-└─ second.segment.json
+├─ first.json
+└─ second.json
 ```
 
 Defining the right segments heavily depends on the application and how it is used. A single client / server application may suffice with a 'client' and 'server' segment. Other (larger) applications might benefit from segmentation by concept like 'account' or 'reporting'.
@@ -125,7 +125,7 @@ We recommend defining the segments as late as possible, and only add them for re
 
 ## Services
 
-The `services` folder contains all [service configuration](../fundamentals/runtime-services) files. Just like the segments, Jitar doesn't care about their location, but we do.
+The `services` folder contains all [service configuration](../fundamentals/runtime-services) files. Jitar doesn't care about their location, but we do.
 
 ```txt
 services
@@ -140,3 +140,14 @@ services
 The required services depend on the segmentation needs of the application. Applications that do not need any scaling or replication can suffice with a standalone service. Otherwise multiple services are needed to run the application. We always make sure the configuration name reflects its service type.
 
 We always add a standalone configuration, even if the application is deployed with multiple services. We use this configuration for developing the application to simplify the development setup.
+
+## Resources
+
+The `resources` folder contains all [resource configuration](../deploy/resources) files.
+
+```txt
+services
+└─ global.json
+```
+
+Any resource that needs to be initialized in a startup or stopped in a teardown phase must be defined here.

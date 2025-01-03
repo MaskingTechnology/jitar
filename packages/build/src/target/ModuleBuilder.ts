@@ -9,15 +9,15 @@ import RemoteModuleBuilder from './RemoteModuleBuilder';
 
 export default class ModuleBuilder
 {
-    readonly #fileManager: FileManager;
+    readonly #targetFileManager: FileManager;
 
     readonly #localModuleBuilder = new LocalModuleBuilder();
     readonly #remoteModuleBuilder = new RemoteModuleBuilder();
     readonly #fileHelper = new FileHelper();
 
-    constructor(fileManager: FileManager)
+    constructor(targetFileManager: FileManager)
     {
-        this.#fileManager = fileManager;
+        this.#targetFileManager = targetFileManager;
     }
 
     async build(application: Application): Promise<void>
@@ -64,7 +64,7 @@ export default class ModuleBuilder
 
         await Promise.all([...segmentBuilds, remoteBuild]);
 
-        this.#fileManager.delete(module.filename);
+        this.#targetFileManager.delete(module.filename);
     }
 
     async #buildPlainModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
@@ -72,7 +72,7 @@ export default class ModuleBuilder
         const filename = module.filename;
         const code = this.#localModuleBuilder.build(module, resources, segmentation);
 
-        return this.#fileManager.write(filename, code);
+        return this.#targetFileManager.write(filename, code);
     }
 
     async #buildSegmentModule(module: Module, resources: ResourcesList, segment: Segment, segmentation: Segmentation): Promise<void>
@@ -80,7 +80,7 @@ export default class ModuleBuilder
         const filename = this.#fileHelper.addSubExtension(module.filename, segment.name);
         const code = this.#localModuleBuilder.build(module, resources, segmentation, segment);
 
-        return this.#fileManager.write(filename, code);
+        return this.#targetFileManager.write(filename, code);
     }
 
     async #buildRemoteModule(module: Module, segments: Segment[]): Promise<void>
@@ -91,7 +91,7 @@ export default class ModuleBuilder
         const filename = this.#fileHelper.addSubExtension(module.filename, 'remote');
         const code = this.#remoteModuleBuilder.build(implementations);
 
-        return this.#fileManager.write(filename, code);
+        return this.#targetFileManager.write(filename, code);
     }
 
     #getImplementations(module: Module, segments: Segment[]): Implementation[]

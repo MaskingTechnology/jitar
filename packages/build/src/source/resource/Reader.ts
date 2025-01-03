@@ -8,12 +8,14 @@ import { FileHelper } from '../../utils';
 
 export default class ResourceReader
 {
-    readonly #fileManager: FileManager;
+    readonly #resourcesFileManager: FileManager;
+    readonly #sourceFileManager: FileManager;
     readonly #fileHelper = new FileHelper();
     
-    constructor(fileManager: FileManager)
+    constructor(resourcesFileManager: FileManager, sourceFileManager: FileManager)
     {
-        this.#fileManager = fileManager;
+        this.#resourcesFileManager = resourcesFileManager;
+        this.#sourceFileManager = sourceFileManager;
     }
 
     async readAll(filenames: string[]): Promise<ResourcesList>
@@ -27,7 +29,10 @@ export default class ResourceReader
     {
         try
         {
-            const content = await this.#fileManager.getContent(filename);
+            // The content of the resource file is located in a different folder than the source files.
+            // The resource file manager has access to this location, the source file manager does not.
+
+            const content = await this.#resourcesFileManager.getContent(filename);
 
             const result = JSON.parse(content.toString()) as ResourceFile;
 
@@ -43,7 +48,12 @@ export default class ResourceReader
 
     #makeResourceFilename(filename: string): string
     {
-        const fullFilename = this.#fileHelper.assureExtension(filename);
+        // For index resolution we need to read the source files and check
+        // if the given filename is a directory.
+
+        const fullFilename = this.#sourceFileManager.isDirectory(filename)
+            ? `${filename}/index.js`
+            : this.#fileHelper.assureExtension(filename);
 
         if (fullFilename.startsWith('./')) return fullFilename.substring(2);
         if (fullFilename.startsWith('/')) return fullFilename.substring(1);
