@@ -51,7 +51,7 @@ export default defineConfig({
       {
         text: 'BUILD',
         items: [
-          { text: 'Settings', link: '/build/settings' },
+          { text: 'Arguments', link: '/build/arguments' },
           { text: 'Configuration', link: '/build/configuration' }
         ]
       },

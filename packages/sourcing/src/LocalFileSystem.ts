@@ -26,6 +26,9 @@ export default class LocalFileSystem implements FileSystem
     // This method is synchronous because it's used in the
     // LocationRewriter. This class uses a replacer function
     // in a replaceAll method that only accepts synchronous functions.
+    
+    // This is a limitation of the current implementation and must be
+    // addressed in the future.
     isDirectory(location: string): boolean
     {
         try

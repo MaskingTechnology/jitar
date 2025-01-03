@@ -6,8 +6,8 @@ prev:
     link: /develop/assets
 
 next:
-    text: Build settings
-    link: /build/settings
+    text: Build arguments
+    link: /build/arguments
 
 ---
 

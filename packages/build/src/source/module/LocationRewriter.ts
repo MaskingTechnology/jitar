@@ -4,6 +4,9 @@ import type { FileManager } from '@jitar/sourcing';
 
 import { FileHelper, LocationReplacer } from '../../utils';
 
+// The location rewriter ensures the '.js' for all application imports and re-exports
+// and appends the 'index.js' reference for all directory imports.
+
 export default class LocationRewriter
 {
     readonly #sourceFileManager: FileManager;

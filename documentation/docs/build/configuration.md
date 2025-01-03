@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Build settings
-    link: /build/settings
+    text: Build arguments
+    link: /build/arguments
 
 next:
     text: Segmentation
@@ -28,25 +28,25 @@ The `jitar.json` file is a JSON file that contains the following properties:
 }
 ```
 
-There are four properties in the configuration file:
-* `source` - the location of the source files (default `./src`).
-* `target` - the location of the target files (default `./dist`).
-* `segments` - the location of the segment configuration files (default `./segments`).
-* `resources` - the location of the resource files (default `./resources`).
-
-::: tip NOTE
-For a TypeScript project, the `source` folder should be the target folder after transpilation, so it should be `./dist` instead of `./src`. The `target` folder can be the same as the `source` folder in this case, but it can also be a different folder.
-:::
-
-::: tip NOTE
-The build process deletes the files in the `target` folder during the build process. Make sure that it doesn't point to the `src` folder.
-:::
-
-::: tip NOTE
+::: tip INFO
 The configuration also supports environment variables. They can be used by wrapping the variable name in `${}`. For example, `${source}`.
 ```json
 {
     "source": "${source}"
 }
 ```
+:::
+
+There are four properties in the configuration file:
+* `source` - the location of the source files (default `./src`).
+* `target` - the location of the target files (default `./dist`).
+* `segments` - the location of the segment configuration files (default `./segments`).
+* `resources` - the location of the resource files (default `./resources`).
+
+::: tip
+For a TypeScript project, the `source` folder should be the target folder after transpilation, so it should be `./dist` instead of `./src`. The `target` folder can be the same as the `source` folder in this case, but it can also be a different folder.
+:::
+
+::: warning IMPORTANT
+The build process deletes the files in the `target` folder during the build process. Make sure that it doesn't point to the `src` folder.
 :::
