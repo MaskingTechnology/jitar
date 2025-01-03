@@ -17,7 +17,7 @@ Each of its functions can be used independently.
 
 **Segments**
 
-* Calculator - contains all procedures (`segments/calculator.segment.json`)
+* Calculator - contains all procedures (`segments/calculator.json`)
 
 **Services**
 

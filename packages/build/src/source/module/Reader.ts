@@ -6,16 +6,21 @@ import FileNotLoaded from './errors/FileNotLoaded';
 
 import Module from './models/Module';
 import Repository from './models/Repository';
+import LocationRewriter from './LocationRewriter';
 
 export default class Reader
 {
-    readonly #fileManager: FileManager;
+    readonly #sourceFileManager: FileManager;
     readonly #parser: Parser;
 
-    constructor(fileManager: FileManager, parser: Parser = new Parser())
+    readonly #locationRewriter: LocationRewriter;
+
+    constructor(sourceFileManager: FileManager, parser: Parser = new Parser())
     {
-        this.#fileManager = fileManager;
+        this.#sourceFileManager = sourceFileManager;
         this.#parser = parser;
+
+        this.#locationRewriter = new LocationRewriter(sourceFileManager);
     }
 
     async readAll(filenames: string[]): Promise<Repository>
@@ -27,18 +32,19 @@ export default class Reader
 
     async read(filename: string): Promise<Module>
     {
-        const relativeLocation = this.#fileManager.getRelativeLocation(filename);
+        const relativeLocation = this.#sourceFileManager.getRelativeLocation(filename);
         const code = await this.#loadCode(filename);
-        const module = this.#parser.parse(code);
+        const rewrittenCode = this.#locationRewriter.rewrite(relativeLocation, code);
+        const module = this.#parser.parse(rewrittenCode);
 
-        return new Module(relativeLocation, code, module);
+        return new Module(relativeLocation, rewrittenCode, module);
     }
 
     async #loadCode(filename: string): Promise<string>
     {
         try
         {
-            const content = await this.#fileManager.getContent(filename);
+            const content = await this.#sourceFileManager.getContent(filename);
 
             return content.toString();
         }

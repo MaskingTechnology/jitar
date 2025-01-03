@@ -17,7 +17,7 @@ There is no application for this example, only a health check that is registered
 
 **Services**
 
-* Standalone - loads no segments (`services/default.segment.json`)
+* Standalone - loads no segments (`services/default.json`)
 
 ## Running the example
 

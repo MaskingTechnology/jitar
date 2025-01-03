@@ -19,8 +19,8 @@ Getting the data results into an error that is caught when trying to export it.
 
 **Segments**
 
-* Data - contains the *data* procedures (`segments/data.segment.json`)
-* Process - contains the *process* procedures (`segments/process.segment.json`)
+* Data - contains the *data* procedures (`segments/data.json`)
+* Process - contains the *process* procedures (`segments/process.json`)
 
 **Services**
 

@@ -47,7 +47,7 @@ More in depth information on writing functions and the rules can be found in the
 
 ### Fully qualified name (FQN)
 
-Every function has a unique name used for internal and external identification. This name is called a fully qualified name (FQN) and constructed with the location and the name of the function in the following format.
+Every function has a unique name used for internal and external identification. This name is called the fully qualified name (FQN) and constructed with the location and the name of the function in the following format.
 
 ```txt
 { location relative to the source folder }/{ function name }
@@ -110,10 +110,10 @@ This class complies with the rules because all the exposed values (name and age)
 
 Segments are used to break applications down into distributable pieces. Jitar's segmentation system is module oriented. This means that a segment groups module files that need to be deployed together.
 
-For the definition of a segment, JSON files are used with the '.segment.json' extension. These files contain the segment configuration. Let's see how a simple configuration looks like.
+For the definition of a segment, JSON files are used and placed in a `segments` folder. These files contain the segment configuration. Let's see how a simple configuration looks like.
 
 ```json
-// default.segment.json
+// segments/default.json
 {
     "./domain/sayHello":
     {
@@ -133,7 +133,7 @@ For the definition of a segment, JSON files are used with the '.segment.json' ex
 This configuration connects very well with the JavaScript module system. It includes exported functions from one or more module files with four configuration options:
 
 1. Exposed functions per module file
-1. Access level per function (public / private, default private)
+1. Access level per function (public / protected / private, default private)
 1. Version number per function (optional, default 0.0.0)
 1. Alternative name (optional, default the name of the function)
 

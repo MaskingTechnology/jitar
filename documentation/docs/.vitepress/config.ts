@@ -49,6 +49,13 @@ export default defineConfig({
         ]
       },
       {
+        text: 'BUILD',
+        items: [
+          { text: 'Arguments', link: '/build/arguments' },
+          { text: 'Configuration', link: '/build/configuration' }
+        ]
+      },
+      {
         text: 'DEPLOY',
         items: [
           { text: 'Segmentation', link: '/deploy/segmentation' },

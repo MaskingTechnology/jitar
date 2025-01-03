@@ -3,12 +3,9 @@ import { Parser } from '@jitar/analysis';
 import type { ESExport } from '@jitar/analysis';
 
 import type { Module, Segmentation, Segment } from '../source';
-import { FileHelper } from '../utils';
+import { FileHelper, LocationReplacer } from '../utils';
 
 const EXPORTS_ALL = '*';
-
-const EXPORT_PATTERN = /export\s(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/._-]+)["'\s].*/g;
-const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 export default class ExportRewriter
 {
@@ -18,6 +15,7 @@ export default class ExportRewriter
 
     readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
+    readonly #locationReplacer = new LocationReplacer();
 
     constructor(module: Module, segmentation: Segmentation, segment?: Segment)
     {
@@ -30,7 +28,7 @@ export default class ExportRewriter
     {
         const replacer = (statement: string) => this.#replaceExport(statement);
 
-        return code.replaceAll(EXPORT_PATTERN, replacer);
+        return this.#locationReplacer.replaceExports(code, replacer);
     }
 
     #replaceExport(statement: string): string
@@ -49,7 +47,9 @@ export default class ExportRewriter
 
     #isApplicationModule(dependency: ESExport): boolean
     {
-        return APPLICATION_MODULE_INDICATORS.some(indicator => (dependency.from as string).startsWith(indicator, 1));
+        const from = this.#stripFrom(dependency.from as string);
+
+        return this.#fileHelper.isApplicationModule(from);
     }
 
     #rewriteApplicationExport(dependency: ESExport): string
@@ -140,9 +140,8 @@ export default class ExportRewriter
     {
         const from = this.#stripFrom(dependency.from as string);
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
-        const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
-
-        return this.#fileHelper.assureExtension(translated);
+        
+        return this.#fileHelper.makePathAbsolute(from, callingModulePath);
     }
 
     #stripFrom(from: string): string

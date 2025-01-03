@@ -3,11 +3,9 @@ import { Parser } from '@jitar/analysis';
 import type { ESImport } from '@jitar/analysis';
 
 import type { Module, Segmentation, Segment, ResourcesList } from '../source';
-import { FileHelper } from '../utils';
+import { FileHelper, LocationReplacer } from '../utils';
 
 const KEYWORD_DEFAULT = 'default';
-const IMPORT_PATTERN = /import\s(?:["'\s]*([\w*{}\n, ]+)from\s*)?["'\s]*([@\w/._-]+)["'\s].*/g;
-const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 export default class ImportRewriter
 {
@@ -18,6 +16,7 @@ export default class ImportRewriter
 
     readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
+    readonly #locationReplacer = new LocationReplacer();
 
     constructor(module: Module, resources: ResourcesList, segmentation: Segmentation, segment?: Segment)
     {
@@ -31,7 +30,7 @@ export default class ImportRewriter
     {
         const replacer = (statement: string) => this.#replaceImport(statement);
 
-        return code.replaceAll(IMPORT_PATTERN, replacer);
+        return this.#locationReplacer.replaceImports(code, replacer);
     }
 
     #replaceImport(statement: string): string
@@ -45,7 +44,9 @@ export default class ImportRewriter
 
     #isApplicationModule(dependency: ESImport): boolean
     {
-        return APPLICATION_MODULE_INDICATORS.some(indicator => dependency.from.startsWith(indicator, 1));
+        const from = this.#stripFrom(dependency.from);
+
+        return this.#fileHelper.isApplicationModule(from);
     }
 
     #rewriteApplicationImport(dependency: ESImport): string
@@ -165,9 +166,8 @@ export default class ImportRewriter
     {
         const from = this.#stripFrom(dependency.from);
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
-        const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
-
-        return this.#fileHelper.assureExtension(translated);
+        
+        return this.#fileHelper.makePathAbsolute(from, callingModulePath);
     }
 
     #doesImportAll(dependency: ESImport): boolean

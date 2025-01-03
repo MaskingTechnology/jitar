@@ -18,8 +18,8 @@ The procedure to get the secret has been made private to ensure it isn't accessi
 
 **Segments**
 
-* Web - contains the *web* procedures (`segments/web.segment.json`)
-* Game - contains the *game* procedures (`segments/game.segment.json`)
+* Web - contains the *web* procedures (`segments/web.json`)
+* Game - contains the *game* procedures (`segments/game.json`)
 
 **Services**
 
