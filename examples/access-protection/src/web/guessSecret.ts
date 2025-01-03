@@ -1,5 +1,5 @@
 
-import checkSecret from '../game/checkSecret';
+import { checkSecret } from '../game';
 
 export default async function guessSecret(secret: number): Promise<string>
 {

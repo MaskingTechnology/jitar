@@ -129,6 +129,11 @@ export default class ESModule
         return false;
     }
 
+    getExport(name: string): ESExport | undefined
+    {
+        return this.exports.find(exportItem => exportItem.hasMember(name));
+    }
+
     getExported(name: string): ESMember | undefined
     {
         for (const exportItem of this.exports)

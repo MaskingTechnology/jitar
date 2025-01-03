@@ -235,13 +235,35 @@ export default class SegmentReader
             throw new ModuleNotFound(filename);
         }
 
-        const member = module.model.getExported(importKey);
+        const exportItem = module.model.getExport(importKey);
+        const exportAlias = exportItem?.getMember(importKey);
+
+        if (exportAlias === undefined)
+        {
+            throw new MissingModuleExport(filename, importKey);
+        }
+
+        if (exportItem?.from !== undefined)
+        {
+            // Re-export from another module.
+
+            const from = exportItem.from.substring(1, exportItem.from.length - 1);
+            const path = this.#fileHelper.extractPath(module.filename);
+
+            const absolutePath = this.#fileHelper.makePathAbsolute(from, path);
+
+            return this.#getMember(absolutePath, exportAlias.name);
+        }
+
+        // Direct export from the module.
+
+        const member = module.model.getMember(exportAlias.name);
 
         if (member === undefined)
         {
             throw new MissingModuleExport(filename, importKey);
         }
-
+        
         return member;
     }
 }

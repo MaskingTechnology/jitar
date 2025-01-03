@@ -19,6 +19,16 @@ export default class ESExport extends ESMember
 
     get from() { return this.#from; }
 
+    hasMember(name: string): boolean
+    {
+        return this.#members.some(member => member.as === name);
+    }
+
+    getMember(name: string): ESAlias | undefined
+    {
+        return this.#members.find(member => member.as === name);
+    }
+
     toString(): string
     {
         const postfix = this.#from ? ` from '${this.#from}'` : '';
