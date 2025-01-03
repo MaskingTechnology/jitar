@@ -19,7 +19,7 @@ In Jitar's [segmentation model](/deploy/segmentation), each segment is isolated 
 
 ### Resource files
 
-Jitar will search for resource definitions files in the project directory. The files are named `*.json`. Each entry defines the entry point of the `module` that should be used as a resource.
+Jitar will search for resource definitions files in the `resources` directory. The files are named `*.json`. Each entry defines the entry point of the `module` that should be used as a resource.
 
 The file has the following structure:
 

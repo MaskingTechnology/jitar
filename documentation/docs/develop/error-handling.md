@@ -31,11 +31,11 @@ export DatabaseError extends Error
 ```ts
 // src/domain/account/storeAccount.ts
 import { Account } from './Account';
-import { DatabaseError } from '../DatabaseError';
+import { DatabaseError } from '../../DatabaseError';
 
 export async function storeAccount(account: Account): Promise<void>
 {
-    throw new Error('Not implemented');
+    throw new DatabaseError('Not implemented');
 }
 ```
 

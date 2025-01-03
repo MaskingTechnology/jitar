@@ -79,7 +79,7 @@ To tell Jitar if a function runs on the client or the server, the application is
 }
 ```
 
-Segments are named, and their names are stored in the filename. In this case the segment is called ‘default’. The rest of the filename makes it a detectable segment configuration, because Jitar scans the project to find them.
+Segments are named, and their names are stored in the filename. In this case the segment is called ‘default’.
 
 Segment configurations work like the JavaScript module system. In this case we export the `sayHello` function from `./domain/sayHello` module file. Additionally we set the access level to public so it can be called from the client. The configuration can be extended by simply adding functions.
 

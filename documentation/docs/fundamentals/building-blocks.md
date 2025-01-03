@@ -47,7 +47,7 @@ More in depth information on writing functions and the rules can be found in the
 
 ### Fully qualified name (FQN)
 
-Every function has a unique name used for internal and external identification. This name is called a fully qualified name (FQN) and constructed with the location and the name of the function in the following format.
+Every function has a unique name used for internal and external identification. This name is called the fully qualified name (FQN) and constructed with the location and the name of the function in the following format.
 
 ```txt
 { location relative to the source folder }/{ function name }
@@ -133,7 +133,7 @@ For the definition of a segment, JSON files are used and placed in a `segments` 
 This configuration connects very well with the JavaScript module system. It includes exported functions from one or more module files with four configuration options:
 
 1. Exposed functions per module file
-1. Access level per function (public / private, default private)
+1. Access level per function (public / protected / private, default private)
 1. Version number per function (optional, default 0.0.0)
 1. Alternative name (optional, default the name of the function)
 

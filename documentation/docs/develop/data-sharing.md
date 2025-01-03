@@ -153,11 +153,11 @@ import { modify } from './modify';
 export async function test(): Promise<void>
 {
     // create new instance
-    const person: Person = new Person( 'John Doe', 42);
+    const original = new Person( 'John Doe', 42);
 
-    modify(person);
+    const copy = await modify(original);
 
-    console.log(person);
+    console.log(copy);
 }
 ```
 

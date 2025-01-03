@@ -28,22 +28,25 @@ The `jitar.json` file is a JSON file that contains the following properties:
 }
 ```
 
-All properties are optional and have default values. The defaults are based on a JavaScript project, so the `source` and `target` folders are `./src` and `./dist` respectively. For the `segments` and `resources` folders  the defaults are `./segments` and `./resources`.
+There are four properties in the configuration file:
+* `source` - the location of the source files (default `./src`).
+* `target` - the location of the target files (default `./dist`).
+* `segments` - the location of the segment configuration files (default `./segments`).
+* `resources` - the location of the resource files (default `./resources`).
 
+::: tip NOTE
 For a TypeScript project, the `source` folder should be the target folder after transpilation, so it should be `./dist` instead of `./src`. The `target` folder can be the same as the `source` folder in this case, but it can also be a different folder.
-
-::: tip
-The build process deletes the files in the `target` folder during the build process. Make sure that it doesn't point to the src folder.
 :::
 
-## Environment variables
-The `jitar.json` file can also contain environment variables. The values of the properties can be environment variables. For example:
+::: tip NOTE
+The build process deletes the files in the `target` folder during the build process. Make sure that it doesn't point to the `src` folder.
+:::
 
+::: tip NOTE
+The configuration also supports environment variables. They can be used by wrapping the variable name in `${}`. For example, `${source}`.
 ```json
 {
-    "source": "${SOURCE}",
-    "target": "${TARGET}",
-    "segments": "${SEGMENTS}",
-    "resources": "${RESOURCES}"
+    "source": "${source}"
 }
 ```
+:::
