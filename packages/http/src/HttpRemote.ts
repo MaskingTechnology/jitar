@@ -1,23 +1,27 @@
 
 import { ErrorConverter, Request, Response as ResultResponse } from '@jitar/execution';
+import { AddWorkerRequest } from '@jitar/runtime';
 import type { Remote } from '@jitar/services';
 import { File } from '@jitar/sourcing';
+import { Validator } from '@jitar/validation';
 
 import HeaderKeys from './definitions/HeaderKeys';
 import HeaderValues from './definitions/HeaderValues';
-import { Validator } from '@jitar/validation';
 import InvalidWorkerId from './errors/InvalidWorkerId';
+import type HttpClient from './interfaces/HttpClient';
 
 export default class HttpRemote implements Remote
 {
     readonly #url: string;
+    readonly #httpClient: HttpClient;
     
     readonly #errorConverter = new ErrorConverter();
     readonly #validator = new Validator();
 
-    constructor(url: string)
+    constructor(url: string, httpClient: HttpClient)
     {
         this.#url = url;
+        this.#httpClient = httpClient;
     }
 
     connect(): Promise<void>
@@ -51,7 +55,7 @@ export default class HttpRemote implements Remote
         const response = await this.#callRemote(remoteUrl, options);
         const healthy = await response.text();
 
-        return Boolean(healthy);
+        return healthy === 'true';
     }
 
     async getHealth(): Promise<Map<string, boolean>>
@@ -68,7 +72,7 @@ export default class HttpRemote implements Remote
     async addWorker(url: string, procedureNames: string[], trustKey?: string): Promise<string>
     {
         const remoteUrl = `${this.#url}/workers`;
-        const body = { url, procedureNames, trustKey };
+        const body: AddWorkerRequest = { url, procedureNames, trustKey };
         const options =
         {
             method: 'POST',
@@ -143,7 +147,7 @@ export default class HttpRemote implements Remote
 
     async #callRemote(remoteUrl: string, options: object, throwOnError = true): Promise<Response>
     {
-        const response = await fetch(remoteUrl, options);
+        const response = await this.#httpClient.execute(remoteUrl, options);
 
         if (throwOnError && this.#isErrorResponse(response))
         {
