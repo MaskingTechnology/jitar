@@ -110,10 +110,10 @@ This class complies with the rules because all the exposed values (name and age)
 
 Segments are used to break applications down into distributable pieces. Jitar's segmentation system is module oriented. This means that a segment groups module files that need to be deployed together.
 
-For the definition of a segment, JSON files are used with the '.segment.json' extension. These files contain the segment configuration. Let's see how a simple configuration looks like.
+For the definition of a segment, JSON files are used and placed in a `segments` folder. These files contain the segment configuration. Let's see how a simple configuration looks like.
 
 ```json
-// default.segment.json
+// segments/default.json
 {
     "./domain/sayHello":
     {

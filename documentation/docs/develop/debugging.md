@@ -6,8 +6,8 @@ prev:
     link: /develop/assets
 
 next:
-    text: Segmentation
-    link: /deploy/segmentation
+    text: Build configuration
+    link: /build/configuration
 
 ---
 

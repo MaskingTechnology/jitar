@@ -73,7 +73,7 @@ Besides functions there are more useful building blocks. You can find out more i
 To tell Jitar if a function runs on the client or the server, the application is split into groups of modules, called segments. Each segment has its own configuration file. In the project we can find one in the `segments` folder.
 
 ```json
-// segments/default.segment.json
+// segments/default.json
 {
     "./domain/sayHello": { "sayHello": { "access": "public" } }
 }

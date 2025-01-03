@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Debugging
-    link: /develop/debugging
+    text: Build configuration
+    link: /build/configuration
 
 next:
     text: Resources
@@ -13,7 +13,7 @@ next:
 
 # Segmentation
 
-Segments are used to break applications down into distributable pieces. A segment groups module files that need to be deployed together. Its definition is placed into a JSON segment file. Let's look at a simple example file named `default.segment.json`.
+Segments are used to break applications down into distributable pieces. A segment groups module files that need to be deployed together. Its definition is placed into a JSON segment file. Let's look at a simple example file named `default.json`.
 
 ```json
 {
@@ -28,13 +28,9 @@ This example includes the `sayHello` function from the `domain/sayHello.ts` modu
 
 ### Naming and placement
 
-Jitar uses the configuration filename for identifying segments. There is no mandatory location for placing segment configuration files, so Jitar uses the `.segment.json` extension for scanning them in the project.
+Jitar uses the configuration filename for identifying segments. The default location for placing segment configuration files is `./segments`.
 
-Segments are named, and their names are derived from the filename. Everything that is in front of the `.segment.json` extension is used as the name. So for the filename `default.segment.json` the segment is named 'default'.
-
-::: info NOTE
-Although there is no mandatory location for these files, we always place them in a segment folder in the root directory of the project. We've done this for all our projects and examples and made finding them very easy.
-:::
+Segments are named, and their names are derived from the filename. Everything that is in front of the `.json` extension is used as the name. So for the filename `default.json` the segment is named 'default'.
 
 ### Configuration structure
 
