@@ -1,5 +1,3 @@
 
-import { VALUES } from './values';
-import { dummyFetch } from './dummyFetch';
-
-export { dummyFetch, VALUES };
+export * from './values.fixtures';
+export * from './TestHttpClient';

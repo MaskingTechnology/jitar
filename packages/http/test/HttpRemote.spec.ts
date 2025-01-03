@@ -4,13 +4,15 @@ import { describe, expect, it } from 'vitest';
 import { HttpRemote } from '../src';
 import InvalidWorkerId from '../src/errors/InvalidWorkerId';
 
-import { dummyFetch, VALUES } from './fixtures';
+import { TestHttpClient, VALUES } from './fixtures';
+
+const testHttpClient = new TestHttpClient();
 
 describe('HttpRemote', () =>
 {
     describe('provide', () =>
     {
-        const remote = new HttpRemote(VALUES.REMOTE.DUMMY, dummyFetch);
+        const remote = new HttpRemote(VALUES.REMOTE.DUMMY, testHttpClient);
 
         it('should provide a file with actual content type', async () =>
         {
@@ -35,7 +37,7 @@ describe('HttpRemote', () =>
     {
         it('should return true when the server is healthy', async () =>
         {
-            const remote = new HttpRemote(VALUES.REMOTE.IS_HEALTHY, dummyFetch);
+            const remote = new HttpRemote(VALUES.REMOTE.IS_HEALTHY, testHttpClient);
             const healthy = await remote.isHealthy();
 
             expect(healthy).toBe(true);
@@ -43,7 +45,7 @@ describe('HttpRemote', () =>
 
         it('should return false when the server is unhealthy', async () =>
         {
-            const remote = new HttpRemote(VALUES.REMOTE.IS_UNHEALTHY, dummyFetch);
+            const remote = new HttpRemote(VALUES.REMOTE.IS_UNHEALTHY, testHttpClient);
             const healthy = await remote.isHealthy();
 
             expect(healthy).toBe(false);
@@ -54,7 +56,7 @@ describe('HttpRemote', () =>
     {
         it('should return health status per health check', async () =>
         {
-            const remote = new HttpRemote(VALUES.REMOTE.DUMMY, dummyFetch);
+            const remote = new HttpRemote(VALUES.REMOTE.DUMMY, testHttpClient);
             const health = await remote.getHealth();
 
             expect(health).toBeDefined();
@@ -67,7 +69,7 @@ describe('HttpRemote', () =>
     {
         it('should add a worker with a valid response', async () =>
         {
-            const remote = new HttpRemote(VALUES.REMOTE.ADD_WORKER_VALID, dummyFetch);
+            const remote = new HttpRemote(VALUES.REMOTE.ADD_WORKER_VALID, testHttpClient);
             const id = await remote.addWorker(VALUES.INPUT.ADD_WORKER, []);
 
             expect(id).toBe(VALUES.OUTPUT.ADD_WORKER_VALID);
@@ -75,7 +77,7 @@ describe('HttpRemote', () =>
 
         it('should reject when the response id is not valid', async () =>
         {
-            const remote = new HttpRemote(VALUES.REMOTE.ADD_WORKER_INVALID_ID, dummyFetch);
+            const remote = new HttpRemote(VALUES.REMOTE.ADD_WORKER_INVALID_ID, testHttpClient);
             const promise = remote.addWorker(VALUES.INPUT.ADD_WORKER, []);
 
             await expect(promise).rejects.toThrowError(InvalidWorkerId);
@@ -83,7 +85,7 @@ describe('HttpRemote', () =>
 
         it('should reject when the response type is not valid', async () =>
         {
-            const remote = new HttpRemote(VALUES.REMOTE.ADD_WORKER_INVALID_REQUEST, dummyFetch);
+            const remote = new HttpRemote(VALUES.REMOTE.ADD_WORKER_INVALID_REQUEST, testHttpClient);
             const promise = remote.addWorker(VALUES.INPUT.ADD_WORKER, []);
 
             await expect(promise).rejects.toThrowError(InvalidWorkerId);
@@ -94,7 +96,7 @@ describe('HttpRemote', () =>
     {
         it('should run a valid request', async () =>
         {
-            const remote = new HttpRemote(VALUES.REMOTE.DUMMY, dummyFetch);
+            const remote = new HttpRemote(VALUES.REMOTE.DUMMY, testHttpClient);
             const response = await remote.run(VALUES.INPUT.RUN_VALID);
 
             expect(response).toBeDefined();
@@ -104,7 +106,7 @@ describe('HttpRemote', () =>
 
         it('should run an invalid request', async () =>
         {
-            const remote = new HttpRemote(VALUES.REMOTE.DUMMY, dummyFetch);
+            const remote = new HttpRemote(VALUES.REMOTE.DUMMY, testHttpClient);
             const response =  await remote.run(VALUES.INPUT.RUN_BAD_REQUEST);
 
             expect(response).toBeDefined();

@@ -8,19 +8,20 @@ import { Validator } from '@jitar/validation';
 import HeaderKeys from './definitions/HeaderKeys';
 import HeaderValues from './definitions/HeaderValues';
 import InvalidWorkerId from './errors/InvalidWorkerId';
+import type HttpClient from './interfaces/HttpClient';
 
 export default class HttpRemote implements Remote
 {
     readonly #url: string;
-    readonly #fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>;
+    readonly #httpClient: HttpClient;
     
     readonly #errorConverter = new ErrorConverter();
     readonly #validator = new Validator();
 
-    constructor(url: string, fetch: (input: RequestInfo, init?: RequestInit) => Promise<Response>)
+    constructor(url: string, httpClient: HttpClient)
     {
         this.#url = url;
-        this.#fetch = fetch;
+        this.#httpClient = httpClient;
     }
 
     connect(): Promise<void>
@@ -146,7 +147,7 @@ export default class HttpRemote implements Remote
 
     async #callRemote(remoteUrl: string, options: object, throwOnError = true): Promise<Response>
     {
-        const response = await this.#fetch(remoteUrl, options);
+        const response = await this.#httpClient.execute(remoteUrl, options);
 
         if (throwOnError && this.#isErrorResponse(response))
         {
