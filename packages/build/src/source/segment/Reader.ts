@@ -175,7 +175,7 @@ export default class SegmentReader
             const access = properties.access ?? DEFAULT_ACCESS_LEVEL;
             const version = properties.version ?? DEFAULT_VERSION_NUMBER;
 
-            const fqn = module.location !== '' ? `${module.location}/${name}` : name;
+            const fqn = this.#constructFqn(module, name, importKey);
 
             const memberProperties = { id, importKey, name, access, version, fqn };
 
@@ -195,6 +195,21 @@ export default class SegmentReader
             
             throw new InvalidModuleExport(module.filename, importKey);
         }
+    }
+
+    #constructFqn(module: Module, name: string, importKey: string): string
+    {
+        if (module.location === '')
+        {
+            return name;
+        }
+
+        if (module.filename.endsWith('index.js') && importKey === 'default')
+        {
+            return module.location;
+        }
+
+        return `${module.location}/${name}`;
     }
 
     #registerClassMember(module: Module, members: Members, model: ESClass, properties: MemberProperties): void
@@ -247,12 +262,11 @@ export default class SegmentReader
         {
             // Re-export from another module.
 
-            const from = exportItem.from.substring(1, exportItem.from.length - 1);
-            const path = this.#fileHelper.extractPath(module.filename);
+            const callingModulePath = this.#fileHelper.extractPath(module.filename);
+            const relativeFrom = this.#fileHelper.stripPath(exportItem.from);
+            const absoluteFrom = this.#fileHelper.makePathAbsolute(relativeFrom, callingModulePath);
 
-            const absolutePath = this.#fileHelper.makePathAbsolute(from, path);
-
-            return this.#getMember(absolutePath, exportAlias.name);
+            return this.#getMember(absoluteFrom, exportAlias.name);
         }
 
         // Direct export from the module.
