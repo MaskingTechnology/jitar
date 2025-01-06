@@ -47,7 +47,7 @@ export default class ExportRewriter
 
     #isApplicationModule(dependency: ESExport): boolean
     {
-        const from = this.#stripFrom(dependency.from as string);
+        const from = this.#fileHelper.stripPath(dependency.from as string);
 
         return this.#fileHelper.isApplicationModule(from);
     }
@@ -105,7 +105,7 @@ export default class ExportRewriter
 
     #rewriteRuntimeFrom(dependency: ESExport): string
     {
-        return this.#stripFrom(dependency.from as string);
+        return this.#fileHelper.stripPath(dependency.from as string);
     }
 
     #rewriteToStaticExport(dependency: ESExport, from: string): string
@@ -138,14 +138,9 @@ export default class ExportRewriter
 
     #getTargetModuleFilename(dependency: ESExport): string
     {
-        const from = this.#stripFrom(dependency.from as string);
+        const from = this.#fileHelper.stripPath(dependency.from as string);
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         
         return this.#fileHelper.makePathAbsolute(from, callingModulePath);
-    }
-
-    #stripFrom(from: string): string
-    {
-        return from.substring(1, from.length - 1);
     }
 }
