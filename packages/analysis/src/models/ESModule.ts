@@ -113,6 +113,27 @@ export default class ESModule
         return this.#scope.hasClass(name);
     }
 
+    getImport(name: string): ESImport | undefined
+    {
+        return this.imports.find(importItem => importItem.hasMember(name));
+    }
+
+    getImported(name: string): ESMember | undefined
+    {
+        for (const importItem of this.imports)
+        {
+            for (const alias of importItem.members)
+            {
+                if (alias.as === name)
+                {
+                    return this.getMember(alias.name);
+                }
+            }
+        }
+
+        return undefined;
+    }
+
     isExported(member: ESMember): boolean
     {
         for (const exportItem of this.exports)
