@@ -67,19 +67,12 @@ export default class ExportRewriter
                 return this.#rewriteToStaticExport(dependency, from); // same segment
             }
 
-            console.warn('Exporting a module from another segment!');
-
             const from = this.#rewriteApplicationFrom(targetModuleFilename, 'remote');
 
             return this.#rewriteToStaticExport(dependency, from); // different segments
         }
 
         // export common (unsegmented) module
-
-        if (this.#segment !== undefined)
-        {
-            console.warn('Exporting common module from a segmented module!');
-        }
 
         const from = this.#rewriteApplicationFrom(targetModuleFilename);
 

@@ -1,5 +1,5 @@
 
-import { ESFunction, ESClass, ESMember } from '@jitar/analysis';
+import { ESFunction, ESClass } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
 import { FileHelper, IdGenerator } from '../../utils';
@@ -7,10 +7,8 @@ import type { ModuleRepository } from '../module';
 
 import FunctionNotAsync from './errors/FunctionNotAsync';
 import InvalidFilename from './errors/InvalidFilename';
-import MissingModuleExport from './errors/MissingModuleExport';
 import FileNotLoaded from './errors/FileNotLoaded';
 import InvalidModuleExport from './errors/InvalidModuleExport';
-import ModuleNotFound from './errors/ModuleNotFound';
 
 import Segmentation from './models/Segmentation';
 import Segment from './models/Segment';
@@ -242,58 +240,4 @@ export default class SegmentReader
 
         members.procedures.set(implementation.fqn, procedure);
     }
-
-    // #getMember(filename: string, importKey: string): ESMember
-    // {
-    //     const module = this.#repository.get(filename);
-
-    //     if (module === undefined)
-    //     {
-    //         throw new ModuleNotFound(filename);
-    //     }
-
-    //     const exportItem = module.model.getExport(importKey);
-    //     const exportAlias = exportItem?.getMember(importKey);
-
-    //     if (exportAlias === undefined)
-    //     {
-    //         throw new MissingModuleExport(filename, importKey);
-    //     }
-
-    //     if (exportItem?.from !== undefined)
-    //     {
-    //         // Direct re-export from another module.
-
-    //         const callingModulePath = this.#fileHelper.extractPath(module.filename);
-    //         const relativeFrom = this.#fileHelper.stripPath(exportItem.from);
-    //         const absoluteFrom = this.#fileHelper.makePathAbsolute(relativeFrom, callingModulePath);
-
-    //         return this.#getMember(absoluteFrom, exportAlias.name);
-    //     }
-
-    //     // Direct export from the module.
-
-    //     const member = module.model.getMember(exportAlias.name);
-
-    //     if (member === undefined)
-    //     {
-    //         const importItem = module.model.getImport(importKey);
-    //         const importAlias = importItem?.getMember(importKey);
-
-    //         if (importAlias === undefined)
-    //         {
-    //             throw new MissingModuleExport(filename, importKey);
-    //         }
-
-    //         // Indirect re-export from another module.
-
-    //         const callingModulePath = this.#fileHelper.extractPath(module.filename);
-    //         const relativeFrom = this.#fileHelper.stripPath(importItem?.from ?? '');
-    //         const absoluteFrom = this.#fileHelper.makePathAbsolute(relativeFrom, callingModulePath);
-
-    //         return this.#getMember(absoluteFrom, importAlias.name);
-    //     }
-        
-    //     return member;
-    // }
 }
