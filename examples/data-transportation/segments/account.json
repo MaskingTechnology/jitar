@@ -1,11 +1,6 @@
 {
-    "./account/createAccount": {
-        "default": {
-            "access": "public",
-            "version": "0.0.0"
-        }
-    },
-    "./account/Account": {
-        "default": { }
+    "./account": {
+        "createAccount": { "access": "public", "version": "0.0.0" },
+        "Account": { }
     }
 }

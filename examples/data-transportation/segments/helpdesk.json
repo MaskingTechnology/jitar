@@ -1,11 +1,8 @@
 {
-    "./helpdesk/register": {
-        "default": {
-            "access": "public",
-            "version": "0.0.0"
-        }
+    "./helpdesk": {
+        "register": { "access": "public", "version": "0.0.0" }
     },
-    "./account/Account": {
-        "default": { }
+    "./account": {
+        "Account": { }
     }
 }
