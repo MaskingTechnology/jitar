@@ -1,2 +1,2 @@
 
-export { default as ApplicationBuilder } from './Builder';
+export { default as ApplicationBuilder } from './application/Builder';

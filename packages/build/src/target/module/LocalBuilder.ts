@@ -1,10 +1,10 @@
 
-import { Module, Segmentation, Segment, ResourcesList } from '../source';
+import { Module, Segmentation, Segment, ResourcesList } from '../../source';
 
 import ImportRewriter from './ImportRewriter';
 import ExportRewriter from './ExportRewriter';
 
-export default class LocalModuleBuilder
+export default class LocalBuilder
 {
     build(module: Module, resources: ResourcesList, segmentation: Segmentation, segment?: Segment): string
     {

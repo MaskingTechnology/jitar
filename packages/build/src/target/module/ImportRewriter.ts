@@ -2,8 +2,8 @@
 import { Parser } from '@jitar/analysis';
 import type { ESImport } from '@jitar/analysis';
 
-import type { Module, Segmentation, Segment, ResourcesList } from '../source';
-import { FileHelper, LocationReplacer } from '../utils';
+import type { Module, Segmentation, Segment, ResourcesList } from '../../source';
+import { FileHelper, LocationReplacer } from '../../utils';
 
 const KEYWORD_DEFAULT = 'default';
 
@@ -64,7 +64,7 @@ export default class ImportRewriter
 
         // the other imports are always static (bundled)
 
-        if (this.#segmentation.isModuleSegmented(targetModuleFilename))
+        if (this.#segmentation.isSegmentedModule(targetModuleFilename))
         {
             // import segmented module
 

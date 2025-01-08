@@ -2,8 +2,8 @@
 import { Parser } from '@jitar/analysis';
 import type { ESExport } from '@jitar/analysis';
 
-import type { Module, Segmentation, Segment } from '../source';
-import { FileHelper, LocationReplacer } from '../utils';
+import type { Module, Segmentation, Segment } from '../../source';
+import { FileHelper, LocationReplacer } from '../../utils';
 
 const EXPORTS_ALL = '*';
 
@@ -56,7 +56,7 @@ export default class ExportRewriter
     {
         const targetModuleFilename = this.#getTargetModuleFilename(dependency);
 
-        if (this.#segmentation.isModuleSegmented(targetModuleFilename))
+        if (this.#segmentation.isSegmentedModule(targetModuleFilename))
         {
             // export segmented module
 

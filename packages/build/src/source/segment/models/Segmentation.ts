@@ -17,7 +17,7 @@ export default class Segmentation
         return this.#segments.find(segment => segment.name === segmentName);
     }
 
-    isModuleSegmented(moduleFilename: string): boolean
+    isSegmentedModule(moduleFilename: string): boolean
     {
         return this.#segments.some(segment => segment.hasModule(moduleFilename));
     }
