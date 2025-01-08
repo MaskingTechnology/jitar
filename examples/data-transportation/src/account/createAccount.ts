@@ -1,5 +1,5 @@
 
-import Account from './Account.js';
+import Account from './Account';
 
 export default async function createAccount(firstName: string, lastName: string): Promise<Account>
 {
