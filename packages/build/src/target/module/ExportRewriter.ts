@@ -7,6 +7,8 @@ import { FileHelper, LocationReplacer } from '../../utils';
 
 const EXPORTS_ALL = '*';
 
+type ModuleImportKeys = { segmentKeys: string[], remoteKeys: string[], commonKeys: string[] };
+
 export default class ExportRewriter
 {
     readonly #module: Module;
@@ -45,6 +47,7 @@ export default class ExportRewriter
             : this.#rewriteRuntimeExport(dependency);
     }
 
+    // Duplicate of ImportRewriter.ts
     #isApplicationModule(dependency: ESExport): boolean
     {
         const from = this.#fileHelper.stripPath(dependency.from as string);
@@ -56,34 +59,60 @@ export default class ExportRewriter
     {
         const targetModuleFilename = this.#getTargetModuleFilename(dependency);
 
-        if (this.#segmentation.isSegmentedModule(targetModuleFilename))
+        return this.#rewriteModuleExport(targetModuleFilename, dependency);
+    }
+
+    #rewriteModuleExport(targetModuleFilename: string, dependency: ESExport): string
+    {
+        const { segmentKeys, remoteKeys, commonKeys } = this.#getModuleImportKeys(targetModuleFilename, dependency);
+
+        const imports: string[] = [];
+
+        if (segmentKeys.length > 0)
         {
-            // export segmented module
-
-            if (this.#segment?.hasModule(targetModuleFilename))
-            {
-                const from = this.#rewriteApplicationFrom(targetModuleFilename, this.#segment.name);
-
-                return this.#rewriteToStaticExport(dependency, from); // same segment
-            }
-
-            const from = this.#rewriteApplicationFrom(targetModuleFilename, 'remote');
-
-            return this.#rewriteToStaticExport(dependency, from); // different segments
+            imports.push(this.#rewriteSegmentExport(targetModuleFilename, dependency, segmentKeys));
         }
 
-        // export common (unsegmented) module
+        if (remoteKeys.length > 0)
+        {
+            imports.push(this.#rewriteRemoteExport(targetModuleFilename, dependency, remoteKeys));
+        }
 
+        if (commonKeys.length > 0)
+        {
+            imports.push(this.#rewriteCommonExport(targetModuleFilename, dependency, commonKeys));
+        }
+
+        return imports.join('\n');
+    }
+
+    #rewriteSegmentExport(targetModuleFilename: string, dependency: ESExport, keys: string[]): string
+    {
+        const from = this.#rewriteApplicationFrom(targetModuleFilename, this.#segment!.name);
+
+        return this.#rewriteToStaticExport(dependency, from, keys);
+    }
+
+    #rewriteRemoteExport(targetModuleFilename: string, dependency: ESExport, keys: string[]): string
+    {
+        const from = this.#rewriteApplicationFrom(targetModuleFilename, 'remote');
+
+        return this.#rewriteToStaticExport(dependency, from, keys);
+    }
+
+    #rewriteCommonExport(targetModuleFilename: string, dependency: ESExport, keys: string[]): string
+    {
         const from = this.#rewriteApplicationFrom(targetModuleFilename);
 
-        return this.#rewriteToStaticExport(dependency, from);
+        return this.#rewriteToStaticExport(dependency, from, keys);
     }
 
     #rewriteRuntimeExport(dependency: ESExport): string
     {
         const from = this.#rewriteRuntimeFrom(dependency);
+        const keys = dependency.members.map(member => member.name);
 
-        return this.#rewriteToStaticExport(dependency, from);
+        return this.#rewriteToStaticExport(dependency, from, keys);
     }
 
     #rewriteApplicationFrom(filename: string, scope?: string): string
@@ -101,21 +130,21 @@ export default class ExportRewriter
         return this.#fileHelper.stripPath(dependency.from as string);
     }
 
-    #rewriteToStaticExport(dependency: ESExport, from: string): string
+    #rewriteToStaticExport(dependency: ESExport, from: string, keys: string[]): string
     {
         if (dependency.members.length === 0)
         {
             return `export "${from}";`;
         }
 
-        const members = this.#rewriteStaticExportMembers(dependency);
+        const members = this.#rewriteStaticExportMembers(dependency, keys);
 
         return `export ${members} from "${from}";`;
     }
 
-    #rewriteStaticExportMembers(dependency: ESExport): string
+    #rewriteStaticExportMembers(dependency: ESExport, keys: string[]): string
     {
-        const members = dependency.members;
+        const members = dependency.members.filter(member => keys.includes(member.name));
 
         if (members.length === 1 && members[0].name === '')
         {
@@ -135,5 +164,46 @@ export default class ExportRewriter
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         
         return this.#fileHelper.makePathAbsolute(from, callingModulePath);
+    }
+
+    /// COPIED FROM ImportRewriter.ts ///
+
+    #getModuleImportKeys(targetModuleFilename: string, dependency: ESExport): ModuleImportKeys
+    {
+        const segmentKeys = this.#getSegmentImportKeys(targetModuleFilename, this.#segment);
+        const remoteKeys = this.#getRemoteImportKeys(targetModuleFilename, segmentKeys);
+        const commonKeys = this.#extractUnsegmentedImportKeys(dependency, [...segmentKeys, ...remoteKeys]);
+
+        return { segmentKeys, remoteKeys, commonKeys };
+    }
+
+    #getSegmentImportKeys(targetModuleFilename: string, segment?: Segment): string[]
+    {
+        if (segment === undefined)
+        {
+            return [];
+        }
+
+        const module = segment.getModule(targetModuleFilename);
+
+        return module !== undefined
+            ? Object.keys(module.imports)
+            : [];
+    }
+
+    #getRemoteImportKeys(targetModuleFilename: string, segmentKeys: string[]): string[]
+    {
+        const segments = this.#segmentation.getSegments(targetModuleFilename).filter(segment => segment !== this.#segment);
+        const importKeys = segments.map(segment => this.#getSegmentImportKeys(targetModuleFilename, segment)).flat();
+        const uniqueKeys = [...new Set(importKeys)];
+
+        return uniqueKeys.filter(key => segmentKeys.includes(key) === false);
+    }
+
+    #extractUnsegmentedImportKeys(dependency: ESExport, segmentedKeys: string[]): string[]
+    {
+        return dependency.members
+            .filter(member => segmentedKeys.includes(member.name) === false)
+            .map(member => member.name);
     }
 }
