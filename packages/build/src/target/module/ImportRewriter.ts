@@ -7,6 +7,8 @@ import { FileHelper, LocationReplacer } from '../../utils';
 
 const KEYWORD_DEFAULT = 'default';
 
+type ModuleImportKeys = { segmentKeys: string[], remoteKeys: string[], commonKeys: string[] };
+
 export default class ImportRewriter
 {
     readonly #module: Module;
@@ -53,45 +55,74 @@ export default class ImportRewriter
     {
         const targetModuleFilename = this.#getTargetModuleFilename(dependency);
 
-        // if target module is a resource, always import as dynamic to prevent bundling
-
         if (this.#resources.isResourceModule(targetModuleFilename))
         {
-            const from = this.#rewriteApplicationFrom(targetModuleFilename);
-
-            return this.#rewriteToDynamicImport(dependency, from);
+            return this.#rewriteResourceImport(targetModuleFilename, dependency);
         }
 
-        // the other imports are always static (bundled)
+        return this.#rewriteModuleImport(targetModuleFilename, dependency);
+    }
 
-        if (this.#segmentation.isSegmentedModule(targetModuleFilename))
-        {
-            // import segmented module
-
-            if (this.#segment?.hasModule(targetModuleFilename))
-            {
-                const from = this.#rewriteApplicationFrom(targetModuleFilename, this.#segment.name);
-
-                return this.#rewriteToStaticImport(dependency, from); // same segment
-            }
-
-            const from = this.#rewriteApplicationFrom(targetModuleFilename, 'remote');
-
-            return this.#rewriteToStaticImport(dependency, from); // different segments
-        }
-
-        // import common (unsegmented) module
+    #rewriteResourceImport(targetModuleFilename: string, dependency: ESImport): string
+    {
+        // Resource modules are always imported as dynamic to prevent bundling
 
         const from = this.#rewriteApplicationFrom(targetModuleFilename);
 
-        return this.#rewriteToStaticImport(dependency, from);
+        return this.#rewriteToDynamicImport(dependency, from);
+    }
+
+    #rewriteModuleImport(targetModuleFilename: string, dependency: ESImport): string
+    {
+        const { segmentKeys, remoteKeys, commonKeys } = this.#getModuleImportKeys(targetModuleFilename, dependency);
+
+        const imports: string[] = [];
+
+        if (segmentKeys.length > 0)
+        {
+            imports.push(this.#rewriteSegmentImport(targetModuleFilename, dependency, segmentKeys));
+        }
+
+        if (remoteKeys.length > 0)
+        {
+            imports.push(this.#rewriteRemoteImport(targetModuleFilename, dependency, remoteKeys));
+        }
+
+        if (commonKeys.length > 0)
+        {
+            imports.push(this.#rewriteCommonImport(targetModuleFilename, dependency, commonKeys));
+        }
+
+        return imports.join('\n');
+    }
+
+    #rewriteSegmentImport(targetModuleFilename: string, dependency: ESImport, keys: string[]): string
+    {
+        const from = this.#rewriteApplicationFrom(targetModuleFilename, this.#segment!.name);
+
+        return this.#rewriteToStaticImport(dependency, from, keys);
+    }
+
+    #rewriteRemoteImport(targetModuleFilename: string, dependency: ESImport, keys: string[]): string
+    {
+        const from = this.#rewriteApplicationFrom(targetModuleFilename, 'remote');
+
+        return this.#rewriteToStaticImport(dependency, from, keys);
+    }
+
+    #rewriteCommonImport(targetModuleFilename: string, dependency: ESImport, keys: string[]): string
+    {
+        const from = this.#rewriteApplicationFrom(targetModuleFilename);
+
+        return this.#rewriteToStaticImport(dependency, from, keys);
     }
 
     #rewriteRuntimeImport(dependency: ESImport): string
     {
         const from = this.#rewriteRuntimeFrom(dependency);
+        const keys = dependency.members.map(member => member.name);
 
-        return this.#rewriteToStaticImport(dependency, from);
+        return this.#rewriteToStaticImport(dependency, from, keys);
     }
 
     #rewriteApplicationFrom(filename: string, scope?: string): string
@@ -99,9 +130,9 @@ export default class ImportRewriter
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         const relativeFilename = this.#fileHelper.makePathRelative(filename, callingModulePath);
 
-        return scope === undefined
-            ? relativeFilename
-            : this.#fileHelper.addSubExtension(relativeFilename, scope);
+        return scope !== undefined
+            ? this.#fileHelper.addSubExtension(relativeFilename, scope)
+            : relativeFilename;
     }
 
     #rewriteRuntimeFrom(dependency: ESImport): string
@@ -109,14 +140,14 @@ export default class ImportRewriter
         return this.#fileHelper.stripPath(dependency.from);
     }
 
-    #rewriteToStaticImport(dependency: ESImport, from: string): string
+    #rewriteToStaticImport(dependency: ESImport, from: string, keys: string[]): string
     {
         if (dependency.members.length === 0)
         {
             return `import "${from}";`;
         }
 
-        const members = this.#rewriteStaticImportMembers(dependency);
+        const members = this.#rewriteStaticImportMembers(dependency, keys);
 
         return `import ${members} from "${from}";`;
     }
@@ -133,13 +164,15 @@ export default class ImportRewriter
         return `const ${members} = await import("${from}");`;
     }
 
-    #rewriteStaticImportMembers(dependency: ESImport): string
+    #rewriteStaticImportMembers(dependency: ESImport, keys: string[]): string
     {
-        const defaultMember = dependency.members.find(member => member.name === KEYWORD_DEFAULT);
+        const members = dependency.members.filter(member => keys.includes(member.name));
+
+        const defaultMember = members.find(member => member.name === KEYWORD_DEFAULT);
         const hasDefaultMember = defaultMember !== undefined;
         const defaultMemberImport = hasDefaultMember ? defaultMember.as : '';
 
-        const namedMembers = dependency.members.filter(member => member.name !== KEYWORD_DEFAULT);
+        const namedMembers = members.filter(member => member.name !== KEYWORD_DEFAULT);
         const namedMemberImports = namedMembers.map(member => member.name !== member.as ? `${member.name} as ${member.as}` : member.name);
         const hasNamedMembers = namedMemberImports.length > 0;
         const groupedNamedMemberImports = hasNamedMembers ? `{ ${namedMemberImports.join(', ')} }` : '';
@@ -168,6 +201,45 @@ export default class ImportRewriter
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         
         return this.#fileHelper.makePathAbsolute(from, callingModulePath);
+    }
+
+    #getModuleImportKeys(targetModuleFilename: string, dependency: ESImport): ModuleImportKeys
+    {
+        const segmentKeys = this.#getSegmentImportKeys(targetModuleFilename, this.#segment);
+        const remoteKeys = this.#getRemoteImportKeys(targetModuleFilename, segmentKeys);
+        const commonKeys = this.#extractUnsegmentedImportKeys(dependency, [...segmentKeys, ...remoteKeys]);
+
+        return { segmentKeys, remoteKeys, commonKeys };
+    }
+
+    #getSegmentImportKeys(targetModuleFilename: string, segment?: Segment): string[]
+    {
+        if (segment === undefined)
+        {
+            return [];
+        }
+
+        const module = segment.getModule(targetModuleFilename);
+
+        return module !== undefined
+            ? Object.keys(module.imports)
+            : [];
+    }
+
+    #getRemoteImportKeys(targetModuleFilename: string, segmentKeys: string[]): string[]
+    {
+        const segments = this.#segmentation.getSegments(targetModuleFilename).filter(segment => segment !== this.#segment);
+        const importKeys = segments.map(segment => this.#getSegmentImportKeys(targetModuleFilename, segment)).flat();
+        const uniqueKeys = [...new Set(importKeys)];
+
+        return uniqueKeys.filter(key => segmentKeys.includes(key) === false);
+    }
+
+    #extractUnsegmentedImportKeys(dependency: ESImport, segmentedKeys: string[]): string[]
+    {
+        return dependency.members
+            .filter(member => segmentedKeys.includes(member.name) === false)
+            .map(member => member.name);
     }
 
     #doesImportAll(dependency: ESImport): boolean
