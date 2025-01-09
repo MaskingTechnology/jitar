@@ -2,8 +2,8 @@
 import { Parser } from '@jitar/analysis';
 import type { ESImport } from '@jitar/analysis';
 
-import type { Module, Segmentation, Segment, ResourcesList } from '../source';
-import { FileHelper, LocationReplacer } from '../utils';
+import type { Module, Segmentation, Segment, ResourcesList } from '../../source';
+import { FileHelper, LocationReplacer } from '../../utils';
 
 const KEYWORD_DEFAULT = 'default';
 
@@ -44,7 +44,7 @@ export default class ImportRewriter
 
     #isApplicationModule(dependency: ESImport): boolean
     {
-        const from = this.#stripFrom(dependency.from);
+        const from = this.#fileHelper.stripPath(dependency.from);
 
         return this.#fileHelper.isApplicationModule(from);
     }
@@ -64,7 +64,7 @@ export default class ImportRewriter
 
         // the other imports are always static (bundled)
 
-        if (this.#segmentation.isModuleSegmented(targetModuleFilename))
+        if (this.#segmentation.isSegmentedModule(targetModuleFilename))
         {
             // import segmented module
 
@@ -106,7 +106,7 @@ export default class ImportRewriter
 
     #rewriteRuntimeFrom(dependency: ESImport): string
     {
-        return this.#stripFrom(dependency.from);
+        return this.#fileHelper.stripPath(dependency.from);
     }
 
     #rewriteToStaticImport(dependency: ESImport, from: string): string
@@ -164,7 +164,7 @@ export default class ImportRewriter
 
     #getTargetModuleFilename(dependency: ESImport): string
     {
-        const from = this.#stripFrom(dependency.from);
+        const from = this.#fileHelper.stripPath(dependency.from);
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         
         return this.#fileHelper.makePathAbsolute(from, callingModulePath);
@@ -174,10 +174,5 @@ export default class ImportRewriter
     {
         return dependency.members.length === 1
             && dependency.members[0].name === '*';
-    }
-
-    #stripFrom(from: string): string
-    {
-        return from.substring(1, from.length - 1);
     }
 }

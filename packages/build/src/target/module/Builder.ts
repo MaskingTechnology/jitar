@@ -1,18 +1,18 @@
 
 import type { FileManager } from '@jitar/sourcing';
 
-import type { Application, SegmentImplementation as Implementation, Module, Segment, Segmentation, ResourcesList } from '../source';
-import { FileHelper } from '../utils';
+import type { Application, SegmentImplementation as Implementation, Module, Segment, Segmentation, ResourcesList } from '../../source';
+import { FileHelper } from '../../utils';
 
-import LocalModuleBuilder from './LocalModuleBuilder';
-import RemoteModuleBuilder from './RemoteModuleBuilder';
+import LocalBuilder from './LocalBuilder';
+import RemoteBuilder from './RemoteBuilder';
 
-export default class ModuleBuilder
+export default class Builder
 {
     readonly #targetFileManager: FileManager;
 
-    readonly #localModuleBuilder = new LocalModuleBuilder();
-    readonly #remoteModuleBuilder = new RemoteModuleBuilder();
+    readonly #localBuilder = new LocalBuilder();
+    readonly #remoteBuilder = new RemoteBuilder();
     readonly #fileHelper = new FileHelper();
 
     constructor(targetFileManager: FileManager)
@@ -70,7 +70,7 @@ export default class ModuleBuilder
     async #buildPlainModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
         const filename = module.filename;
-        const code = this.#localModuleBuilder.build(module, resources, segmentation);
+        const code = this.#localBuilder.build(module, resources, segmentation);
 
         return this.#targetFileManager.write(filename, code);
     }
@@ -78,7 +78,7 @@ export default class ModuleBuilder
     async #buildSegmentModule(module: Module, resources: ResourcesList, segment: Segment, segmentation: Segmentation): Promise<void>
     {
         const filename = this.#fileHelper.addSubExtension(module.filename, segment.name);
-        const code = this.#localModuleBuilder.build(module, resources, segmentation, segment);
+        const code = this.#localBuilder.build(module, resources, segmentation, segment);
 
         return this.#targetFileManager.write(filename, code);
     }
@@ -89,7 +89,7 @@ export default class ModuleBuilder
 
         const implementations = this.#getImplementations(module, segments);
         const filename = this.#fileHelper.addSubExtension(module.filename, 'remote');
-        const code = this.#remoteModuleBuilder.build(implementations);
+        const code = this.#remoteBuilder.build(implementations);
 
         return this.#targetFileManager.write(filename, code);
     }

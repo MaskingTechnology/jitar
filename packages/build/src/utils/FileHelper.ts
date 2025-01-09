@@ -65,6 +65,11 @@ export default class FileHelper
         return filename.split('/').slice(0, -1).join('/');
     }
 
+    stripPath(path: string): string
+    {
+        return path.substring(1, path.length - 1);
+    }
+
     extractFilename(filename: string)
     {
         return filename.split('/').pop();

@@ -44,7 +44,7 @@ export default class LocationRewriter
     #replaceImport(filename: string, statement: string): string
     {
         const dependency = this.#parser.parseImport(statement);
-        const from = this.#stripFrom(dependency.from);
+        const from = this.#fileHelper.stripPath(dependency.from);
 
         if (this.#fileHelper.isApplicationModule(from) === false)
         {
@@ -65,7 +65,7 @@ export default class LocationRewriter
             return statement;
         }
 
-        const from = this.#stripFrom(dependency.from);
+        const from = this.#fileHelper.stripPath(dependency.from);
 
         if (this.#fileHelper.isApplicationModule(from) === false)
         {
@@ -85,10 +85,5 @@ export default class LocationRewriter
         return this.#sourceFileManager.isDirectory(translated)
             ? `${from}/index.js`
             : this.#fileHelper.assureExtension(from);
-    }
-
-    #stripFrom(from: string): string
-    {
-        return from.substring(1, from.length - 1);
     }
 }

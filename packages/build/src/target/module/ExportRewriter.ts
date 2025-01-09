@@ -2,8 +2,8 @@
 import { Parser } from '@jitar/analysis';
 import type { ESExport } from '@jitar/analysis';
 
-import type { Module, Segmentation, Segment } from '../source';
-import { FileHelper, LocationReplacer } from '../utils';
+import type { Module, Segmentation, Segment } from '../../source';
+import { FileHelper, LocationReplacer } from '../../utils';
 
 const EXPORTS_ALL = '*';
 
@@ -47,7 +47,7 @@ export default class ExportRewriter
 
     #isApplicationModule(dependency: ESExport): boolean
     {
-        const from = this.#stripFrom(dependency.from as string);
+        const from = this.#fileHelper.stripPath(dependency.from as string);
 
         return this.#fileHelper.isApplicationModule(from);
     }
@@ -56,7 +56,7 @@ export default class ExportRewriter
     {
         const targetModuleFilename = this.#getTargetModuleFilename(dependency);
 
-        if (this.#segmentation.isModuleSegmented(targetModuleFilename))
+        if (this.#segmentation.isSegmentedModule(targetModuleFilename))
         {
             // export segmented module
 
@@ -67,19 +67,12 @@ export default class ExportRewriter
                 return this.#rewriteToStaticExport(dependency, from); // same segment
             }
 
-            console.warn('Exporting a module from another segment!');
-
             const from = this.#rewriteApplicationFrom(targetModuleFilename, 'remote');
 
             return this.#rewriteToStaticExport(dependency, from); // different segments
         }
 
         // export common (unsegmented) module
-
-        if (this.#segment !== undefined)
-        {
-            console.warn('Exporting common module from a segmented module!');
-        }
 
         const from = this.#rewriteApplicationFrom(targetModuleFilename);
 
@@ -105,7 +98,7 @@ export default class ExportRewriter
 
     #rewriteRuntimeFrom(dependency: ESExport): string
     {
-        return this.#stripFrom(dependency.from as string);
+        return this.#fileHelper.stripPath(dependency.from as string);
     }
 
     #rewriteToStaticExport(dependency: ESExport, from: string): string
@@ -138,14 +131,9 @@ export default class ExportRewriter
 
     #getTargetModuleFilename(dependency: ESExport): string
     {
-        const from = this.#stripFrom(dependency.from as string);
+        const from = this.#fileHelper.stripPath(dependency.from as string);
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         
         return this.#fileHelper.makePathAbsolute(from, callingModulePath);
-    }
-
-    #stripFrom(from: string): string
-    {
-        return from.substring(1, from.length - 1);
     }
 }

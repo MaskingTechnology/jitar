@@ -5,13 +5,13 @@ import { VersionParser } from '@jitar/execution';
 import { Logger } from '@jitar/logging';
 import type { FileManager } from '@jitar/sourcing';
 
-import type { Application, Segment, SegmentModule } from '../source';
-import { FileHelper } from '../utils';
+import type { Application, Segment, SegmentModule } from '../../source';
+import { FileHelper } from '../../utils';
 
 const KEYWORD_DEFAULT = 'default';
 const RUNTIME_IMPORTS = 'import { Segment, Class, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } from "jitar";';
 
-export default class SegmentBuilder
+export default class Builder
 {
     readonly #targetFileManager: FileManager;
 

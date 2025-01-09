@@ -19,6 +19,16 @@ export default class ESImport extends ESMember
 
     get from() { return this.#from; }
 
+    hasMember(name: string): boolean
+    {
+        return this.#members.some(member => member.as === name);
+    }
+
+    getMember(name: string): ESAlias | undefined
+    {
+        return this.#members.find(member => member.as === name);
+    }
+
     toString(): string
     {
         return `import { ${this.#members.map(member => member.toString()).join(', ')} } from '${this.#from}';`;

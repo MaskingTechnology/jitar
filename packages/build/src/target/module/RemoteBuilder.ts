@@ -3,9 +3,9 @@ import { ESDestructuredArray, ESDestructuredObject, ESDestructuredValue, ESField
 import type { ESParameter } from '@jitar/analysis';
 import { AccessLevels } from '@jitar/execution';
 
-import type { SegmentImplementation as Implementation } from '../source';
+import type { SegmentImplementation as Implementation } from '../../source';
 
-export default class RemoteModuleBuilder
+export default class RemoteBuilder
 {
     build(implementations: Implementation[]): string
     {

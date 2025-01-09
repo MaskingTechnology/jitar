@@ -1,11 +1,11 @@
 
 import { Logger } from '@jitar/logging';
 
-import type { Application } from '../source';
+import type { Application } from '../../source';
 
-import type ProjectFileManager from '../ProjectFileManager';
-import ModuleBuilder from './ModuleBuilder';
-import SegmentBuilder from './SegmentBuilder';
+import type ProjectFileManager from '../../ProjectFileManager';
+import ModuleBuilder from '../module/Builder';
+import SegmentBuilder from '../segment/Builder';
 
 export default class Builder
 {

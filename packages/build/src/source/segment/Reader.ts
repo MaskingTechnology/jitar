@@ -1,5 +1,5 @@
 
-import { ESFunction, ESClass, ESMember } from '@jitar/analysis';
+import { ESFunction, ESClass } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
 import { FileHelper, IdGenerator } from '../../utils';
@@ -7,10 +7,8 @@ import type { ModuleRepository } from '../module';
 
 import FunctionNotAsync from './errors/FunctionNotAsync';
 import InvalidFilename from './errors/InvalidFilename';
-import MissingModuleExport from './errors/MissingModuleExport';
 import FileNotLoaded from './errors/FileNotLoaded';
 import InvalidModuleExport from './errors/InvalidModuleExport';
-import ModuleNotFound from './errors/ModuleNotFound';
 
 import Segmentation from './models/Segmentation';
 import Segment from './models/Segment';
@@ -20,6 +18,8 @@ import Procedure from './models/Procedure';
 import Implementation from './models/Implementation';
 
 import SegmentFile from './types/File';
+
+import MemberLocator from './MemberLocator';
 
 type Members =
 {
@@ -45,7 +45,7 @@ export default class SegmentReader
 {
     readonly #segmentsFileManager: FileManager;
     readonly #sourceFileManager: FileManager;
-    readonly #repository: ModuleRepository;
+    readonly #memberLocator: MemberLocator;
 
     readonly #fileHelper = new FileHelper();
 
@@ -53,7 +53,7 @@ export default class SegmentReader
     {
         this.#segmentsFileManager = segmentsFileManager;
         this.#sourceFileManager = sourceFileManager;
-        this.#repository = repository;
+        this.#memberLocator = new MemberLocator(repository);
     }
 
     async readAll(filenames: string[]): Promise<Segmentation>
@@ -167,7 +167,7 @@ export default class SegmentReader
         for (const importKey in module.imports)
         {
             const id = idGenerator.next();
-            const model = this.#getMember(module.filename, importKey);
+            const model = this.#memberLocator.locate(module.filename, importKey);
 
             const properties = module.imports[importKey];
 
@@ -175,7 +175,7 @@ export default class SegmentReader
             const access = properties.access ?? DEFAULT_ACCESS_LEVEL;
             const version = properties.version ?? DEFAULT_VERSION_NUMBER;
 
-            const fqn = module.location !== '' ? `${module.location}/${name}` : name;
+            const fqn = this.#constructFqn(module, name, importKey);
 
             const memberProperties = { id, importKey, name, access, version, fqn };
 
@@ -195,6 +195,21 @@ export default class SegmentReader
             
             throw new InvalidModuleExport(module.filename, importKey);
         }
+    }
+
+    #constructFqn(module: Module, name: string, importKey: string): string
+    {
+        if (module.location === '')
+        {
+            return name;
+        }
+
+        if (module.filename.endsWith('index.js') && importKey === 'default')
+        {
+            return module.location;
+        }
+
+        return `${module.location}/${name}`;
     }
 
     #registerClassMember(module: Module, members: Members, model: ESClass, properties: MemberProperties): void
@@ -224,24 +239,5 @@ export default class SegmentReader
         procedure.addImplementation(implementation);
 
         members.procedures.set(implementation.fqn, procedure);
-    }
-
-    #getMember(filename: string, importKey: string): ESMember
-    {
-        const module = this.#repository.get(filename);
-
-        if (module === undefined)
-        {
-            throw new ModuleNotFound(filename);
-        }
-
-        const member = module.model.getExported(importKey);
-
-        if (member === undefined)
-        {
-            throw new MissingModuleExport(filename, importKey);
-        }
-
-        return member;
     }
 }
