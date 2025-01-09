@@ -60,7 +60,7 @@ export default class MemberLocator
         const relocateKey = relocateInfo?.name as string;
 
         const callingModulePath = this.#fileHelper.extractPath(module.filename);
-        const relativeFrom = this.#fileHelper.stripPath(relocatePath as string);
+        const relativeFrom = this.#fileHelper.stripPath(relocatePath);
         const absoluteFrom = this.#fileHelper.makePathAbsolute(relativeFrom, callingModulePath);
 
         return this.locate(absoluteFrom, relocateKey);
