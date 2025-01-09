@@ -33,13 +33,15 @@ export default class Builder
 
     async #buildModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
+        await this.#buildCommonModule(module, resources, segmentation);
+
         const moduleSegments = segmentation.getSegments(module.filename);
 
         // For resource files we don't want to delete the file, because it is not renamed
 
         if (resources.isResourceModule(module.filename))
         {
-            return this.#buildPlainModule(module, resources, segmentation);
+            return;
         }
         
         // If the module is not part of any segment, it is an application module
@@ -47,7 +49,7 @@ export default class Builder
 
         if (moduleSegments.length === 0)
         {
-            return this.#buildPlainModule(module, resources, segmentation);
+            return;
         }
 
         // Otherwise, it is a segment module that can be called remotely
@@ -63,11 +65,9 @@ export default class Builder
             : Promise.resolve();
 
         await Promise.all([...segmentBuilds, remoteBuild]);
-
-        this.#targetFileManager.delete(module.filename);
     }
 
-    async #buildPlainModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
+    async #buildCommonModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
         const filename = module.filename;
         const code = this.#localBuilder.build(module, resources, segmentation);
