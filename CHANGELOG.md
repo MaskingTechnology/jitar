@@ -1,9 +1,40 @@
+# v0.9.0
+[2025-01-10]
+
+### Features
+
+* \[[599](https://github.com/MaskingTechnology/jitar/pull/599)] feat: fractional module segmentation (#599) by Peter van Vliet
+* \[[596](https://github.com/MaskingTechnology/jitar/pull/596)] feat: module re-export support (#596) by Peter van Vliet
+* \[[590](https://github.com/MaskingTechnology/jitar/pull/590)] feat: index resolution (#590) by Bas Meeuwissen
+* \[[571](https://github.com/MaskingTechnology/jitar/pull/571)] feat: resource configuration (#571) by Bas Meeuwissen
+* \[[563](https://github.com/MaskingTechnology/jitar/pull/563)] feat(services): deregister worker on exit (#563) by Bas Meeuwissen
+
+### Chores
+
+* \[[591](https://github.com/MaskingTechnology/jitar/pull/591)] chore: http tests (#591) by Bas Meeuwissen
+* \[[594](https://github.com/MaskingTechnology/jitar/pull/594)] chore(deps): january updates (#594) by Bas Meeuwissen
+* \[[589](https://github.com/MaskingTechnology/jitar/pull/589)] chore: add tests for the sourcing package (#589) by Bas Meeuwissen
+* \[[588](https://github.com/MaskingTechnology/jitar/pull/588)] chore: configuration test additions (#588) by Bas Meeuwissen
+* \[[582](https://github.com/MaskingTechnology/jitar/pull/582)] chore: await uncaught promises (#582) by Bas Meeuwissen
+* \[[579](https://github.com/MaskingTechnology/jitar/pull/579)] chore(deps): website and docs (#579) by Bas Meeuwissen
+* \[[577](https://github.com/MaskingTechnology/jitar/pull/577)] chore(build): run codeql in parallel (#577) by Bas Meeuwissen
+* \[[575](https://github.com/MaskingTechnology/jitar/pull/575)] chore(deps): vulnerabilities update (#575) by Bas Meeuwissen
+* \[[569](https://github.com/MaskingTechnology/jitar/pull/569)] chore: fix sonar warnings (#569) by Bas Meeuwissen
+* \[[566](https://github.com/MaskingTechnology/jitar/pull/566)] npm: bump cross-spawn from 7.0.3 to 7.0.6 (#566) by dependabot[bot]
+* \[[558](https://github.com/MaskingTechnology/jitar/pull/558)] chore(build): more sonar issues (#558) by Bas Meeuwissen
+* \[[556](https://github.com/MaskingTechnology/jitar/pull/556)] chore(build): sonar issues (#556) by Bas Meeuwissen
+* \[[554](https://github.com/MaskingTechnology/jitar/pull/554)] chore(build): eslint 9 (#554) by Bas Meeuwissen
+
 # v0.8.0
-[2024-10-04]
+[2024-10-05]
 
 ### Features
 
 * \[[550](https://github.com/MaskingTechnology/jitar/pull/550)] feat: application builds (#550) by Peter van Vliet
+
+### Chores
+
+* \[[553](https://github.com/MaskingTechnology/jitar/pull/553)] chore: release v0.8.0 (#553) by Bas Meeuwissen
 
 # v0.7.6
 [2024-09-20]

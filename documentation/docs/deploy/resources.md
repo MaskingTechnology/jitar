@@ -32,7 +32,7 @@ The file has the following structure:
 ]
 ```
 
-::: info
+::: info NOTE
 The `/index` part is optional. If the module is a directory, Jitar will automatically look for the index file.
 :::
 

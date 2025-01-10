@@ -74,6 +74,19 @@ The import names must correspond with the export names in the module. You can al
 
 ```
 
+Index files are also supported. Instead of specifying a module file, just specify the folder containing the index file.
+
+```json
+{
+    "./domain/some-folder":
+    {
+        "first": { "access": "public" },
+        "second": { "access": "public" },
+       …
+    }
+}
+```
+
 Imports have multiple properties that can be configured. These properties will be explained next.
 
 ### Trusted clients
@@ -82,7 +95,7 @@ When building a distributed application, you don't want all functions to be avai
 
 Any client that wants to access a protected function must provide a valid key. It needs to be added to the http header `X-Jitar-Trust-Key`. Any worker that has a valid key is automatically considered a trusted client, and adds the access key to the http header of outgoing requests. Any worker that doesn't have a valid access key is considered an untrusted client and can only access `public` functions.
 
-::: info Note
+::: info NOTE
 To enable trusted clients, the gateway must always have a trusted key configured. Any worker that wants to register itself as a trusted client, must have the same value for the `trustKey` in its configuration.
 :::
 
