@@ -98,8 +98,6 @@ export default abstract class LocationRewriter
 
     #rewriteToResource(targetModuleFilename: string, dependency: ESImport | ESExport): string
     {
-        // Resource modules are always imported as dynamic to prevent bundling
-
         const from = this.#rewriteApplicationFrom(targetModuleFilename);
 
         return this.excludeFromBundle(dependency, from);

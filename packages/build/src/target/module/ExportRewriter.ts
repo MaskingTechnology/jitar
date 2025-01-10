@@ -2,6 +2,7 @@
 import type { ESExport } from '@jitar/analysis';
 
 import { Patterns, Values } from '../../definitions';
+
 import LocationRewriter from './LocationRewriter';
 
 export default class ExportRewriter extends LocationRewriter
