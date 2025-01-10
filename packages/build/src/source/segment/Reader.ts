@@ -2,6 +2,7 @@
 import { ESFunction, ESClass } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
+import { Defaults, Files, Keywords } from '../../definitions';
 import { FileHelper, IdGenerator } from '../../utils';
 import type { ModuleRepository } from '../module';
 
@@ -36,10 +37,6 @@ type MemberProperties =
     version: string;
     fqn: string;
 }
-
-const SEGMENT_FILE_EXTENSION = '.json';
-const DEFAULT_ACCESS_LEVEL = 'private';
-const DEFAULT_VERSION_NUMBER = '0.0.0';
 
 export default class SegmentReader
 {
@@ -86,7 +83,7 @@ export default class SegmentReader
             throw new InvalidFilename(filename);
         }
 
-        return file.replace(SEGMENT_FILE_EXTENSION, '');
+        return file.replace(Files.JSON, '');
     }
 
     async #loadSegmentDefinition(filename: string): Promise<SegmentFile>
@@ -131,7 +128,7 @@ export default class SegmentReader
         // if the given filename is a directory.
 
         const fullFilename = this.#sourceFileManager.isDirectory(filename)
-            ? `${filename}/index.js`
+            ? `${filename}/${Files.INDEX}`
             : this.#fileHelper.assureExtension(filename);
 
         if (fullFilename.startsWith('./')) return fullFilename.substring(2);
@@ -172,8 +169,8 @@ export default class SegmentReader
             const properties = module.imports[importKey];
 
             const name = properties.as ?? model.name;
-            const access = properties.access ?? DEFAULT_ACCESS_LEVEL;
-            const version = properties.version ?? DEFAULT_VERSION_NUMBER;
+            const access = properties.access ?? Defaults.ACCESS_LEVEL;
+            const version = properties.version ?? Defaults.VERSION_NUMBER;
 
             const fqn = this.#constructFqn(module, name, importKey);
 
@@ -204,7 +201,7 @@ export default class SegmentReader
             return name;
         }
 
-        if (module.filename.endsWith('index.js') && importKey === 'default')
+        if (module.filename.endsWith(Files.INDEX) && importKey === Keywords.DEFAULT)
         {
             return module.location;
         }

@@ -1,10 +1,12 @@
 
 import type { FileManager } from '@jitar/sourcing';
 
+import { Files } from '../../definitions';
+import { FileHelper } from '../../utils';
+
 import ResourcesList from './models/ResourcesList';
 import FileNotLoaded from './errors/FileNotLoaded';
 import type ResourceFile from './types/File';
-import { FileHelper } from '../../utils';
 
 export default class ResourceReader
 {
@@ -52,7 +54,7 @@ export default class ResourceReader
         // if the given filename is a directory.
 
         const fullFilename = this.#sourceFileManager.isDirectory(filename)
-            ? `${filename}/index.js`
+            ? `${filename}/${Files.INDEX}`
             : this.#fileHelper.assureExtension(filename);
 
         if (fullFilename.startsWith('./')) return fullFilename.substring(2);

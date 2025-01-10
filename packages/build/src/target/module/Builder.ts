@@ -33,26 +33,17 @@ export default class Builder
 
     async #buildModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
+        await this.#buildCommonModule(module, resources, segmentation);
+
         const moduleSegments = segmentation.getSegments(module.filename);
-
-        // For resource files we don't want to delete the file, because it is not renamed
-
-        if (resources.isResourceModule(module.filename))
-        {
-            return this.#buildPlainModule(module, resources, segmentation);
-        }
-        
-        // If the module is not part of any segment, it is an application module
-        // and these are also not renamed, therefore we don't want to delete them
 
         if (moduleSegments.length === 0)
         {
-            return this.#buildPlainModule(module, resources, segmentation);
+            // For unsegmented modules we only need to build the common module.
+
+            return;
         }
-
-        // Otherwise, it is a segment module that can be called remotely
-        // these are renamed and we need to delete the original file that we copied
-
+        
         const segmentBuilds = moduleSegments.map(segment => this.#buildSegmentModule(module, resources, segment, segmentation));
 
         const firstModuleSegment = moduleSegments[0];
@@ -63,11 +54,9 @@ export default class Builder
             : Promise.resolve();
 
         await Promise.all([...segmentBuilds, remoteBuild]);
-
-        this.#targetFileManager.delete(module.filename);
     }
 
-    async #buildPlainModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
+    async #buildCommonModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
         const filename = module.filename;
         const code = this.#localBuilder.build(module, resources, segmentation);

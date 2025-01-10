@@ -5,10 +5,10 @@ import { VersionParser } from '@jitar/execution';
 import { Logger } from '@jitar/logging';
 import type { FileManager } from '@jitar/sourcing';
 
+import { Keywords } from '../../definitions';
 import type { Application, Segment, SegmentModule } from '../../source';
 import { FileHelper } from '../../utils';
 
-const KEYWORD_DEFAULT = 'default';
 const RUNTIME_IMPORTS = 'import { Segment, Class, Procedure, Implementation, Version, NamedParameter, ArrayParameter, ObjectParameter } from "jitar";';
 
 export default class Builder
@@ -81,11 +81,11 @@ export default class Builder
     {
         const members = module.members;
 
-        const defaultImplementation = members.find(member => member.importKey === KEYWORD_DEFAULT);
+        const defaultImplementation = members.find(member => member.importKey === Keywords.DEFAULT);
         const hasDefaultImplementation = defaultImplementation !== undefined;
         const defaultMemberImport = hasDefaultImplementation ? defaultImplementation.id : '';
 
-        const namedImplementations = members.filter(member => member.importKey !== KEYWORD_DEFAULT);
+        const namedImplementations = members.filter(member => member.importKey !== Keywords.DEFAULT);
         const nameImplementationImports = namedImplementations.map(member => `${member.importKey} as ${member.id}`);
         const hasNamedImplementations = namedImplementations.length > 0;
         const groupedNamedMemberImports = hasNamedImplementations ? `{ ${nameImplementationImports.join(', ')} }` : '';
