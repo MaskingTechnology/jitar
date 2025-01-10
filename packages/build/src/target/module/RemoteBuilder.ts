@@ -3,6 +3,7 @@ import { ESDestructuredArray, ESDestructuredObject, ESDestructuredValue, ESField
 import type { ESParameter } from '@jitar/analysis';
 import { AccessLevels } from '@jitar/execution';
 
+import { Keywords } from '../../definitions';
 import type { SegmentImplementation as Implementation } from '../../source';
 
 export default class RemoteBuilder
@@ -116,7 +117,7 @@ export default class RemoteBuilder
         const name = implementation.model.name;
         const parameters = this.#createParameters(implementation.model.parameters);
 
-        const prefix = implementation.importKey === 'default' ? 'default ' : '';
+        const prefix = implementation.importKey === Keywords.DEFAULT ? `${Keywords.DEFAULT} ` : '';
 
         return `\nexport ${prefix}async function ${name}(${parameters})`;
     }

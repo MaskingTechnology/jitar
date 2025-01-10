@@ -2,7 +2,8 @@
 import { Parser } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
-import { FileHelper, LocationReplacer } from '../../utils';
+import { Files, Patterns } from '../../definitions';
+import { FileHelper } from '../../utils';
 
 // The location rewriter ensures the '.js' for all application imports and re-exports
 // and appends the 'index.js' reference for all directory imports.
@@ -13,7 +14,6 @@ export default class LocationRewriter
 
     readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
-    readonly #locationReplacer = new LocationReplacer();
 
     constructor(sourceFileManager: FileManager)
     {
@@ -31,14 +31,14 @@ export default class LocationRewriter
     {
         const replacer = (statement: string) => this.#replaceImport(filename, statement);
 
-        return this.#locationReplacer.replaceImports(code, replacer);
+        return code.replaceAll(Patterns.IMPORT, replacer);
     }
 
     #rewriteExports(filename: string, code: string): string
     {
         const replacer = (statement: string) => this.#replaceExport(filename, statement);
 
-        return this.#locationReplacer.replaceExports(code, replacer);
+        return code.replaceAll(Patterns.EXPORT, replacer);
     }
 
     #replaceImport(filename: string, statement: string): string
@@ -83,7 +83,7 @@ export default class LocationRewriter
         const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
 
         return this.#sourceFileManager.isDirectory(translated)
-            ? `${from}/index.js`
+            ? `${from}/${Files.INDEX}`
             : this.#fileHelper.assureExtension(from);
     }
 }

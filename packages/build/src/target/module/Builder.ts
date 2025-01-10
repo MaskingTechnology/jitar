@@ -37,24 +37,13 @@ export default class Builder
 
         const moduleSegments = segmentation.getSegments(module.filename);
 
-        // For resource files we don't want to delete the file, because it is not renamed
-
-        if (resources.isResourceModule(module.filename))
+        if (moduleSegments.length === 0)
         {
+            // For unsegmented modules we only need to build the common module.
+
             return;
         }
         
-        // If the module is not part of any segment, it is an application module
-        // and these are also not renamed, therefore we don't want to delete them
-
-        if (moduleSegments.length === 0)
-        {
-            return;
-        }
-
-        // Otherwise, it is a segment module that can be called remotely
-        // these are renamed and we need to delete the original file that we copied
-
         const segmentBuilds = moduleSegments.map(segment => this.#buildSegmentModule(module, resources, segment, segmentation));
 
         const firstModuleSegment = moduleSegments[0];
