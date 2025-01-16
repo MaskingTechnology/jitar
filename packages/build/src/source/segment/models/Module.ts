@@ -51,4 +51,14 @@ export default class Module
     {
         this.#members.push(members);
     }
+
+    addImports(imports: Imports): void
+    {
+        const keys = Object.keys(imports);
+
+        for (const key of keys)
+        {
+            this.#imports[key] = imports[key];
+        }
+    }
 }
