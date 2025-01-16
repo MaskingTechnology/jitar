@@ -103,36 +103,22 @@ export default class SegmentReader
     {
         for (const [filename, moduleImports] of Object.entries(definition))
         {
-            this.#createModule(segment, filename, moduleImports);
+            this.#createModule(segment, filename, moduleImports, true);
         }
     }
 
-    #createModule(segment: Segment, filename: string, moduleImports: Imports): Module
+    #createModule(segment: Segment, filename: string, moduleImports: Imports, segmented: boolean): void
     {
         const moduleFilename = this.#makeModuleFilename(filename);
         const location = this.#fileHelper.extractPath(moduleFilename);
 
         const module = segment.hasModule(moduleFilename)
             ? segment.getModule(moduleFilename) as Module
-            : new Module(moduleFilename, location, {});
+            : new Module(moduleFilename, location, {}, segmented);
 
         module.addImports(moduleImports);
 
         segment.setModule(module);
-
-        return module;
-    }
-
-    #createProcedure(segment: Segment, module: Module, implementation: Implementation): void
-    {
-        const procedure = segment.hasProcedure(implementation.fqn)
-            ? segment.getProcedure(implementation.fqn) as Procedure
-            : new Procedure(implementation.fqn);
-
-        procedure.addImplementation(implementation);
-
-        module.addMember(implementation);
-        segment.setProcedure(procedure);
     }
 
     #makeModuleFilename(filename: string): string
@@ -171,16 +157,13 @@ export default class SegmentReader
 
         this.#createMember(segment, module, model, properties);
 
-        trace.shift();
+        trace.shift(); // Remove the first entry, as it is the module itself.
 
         for (const entry of trace)
         {
             const entryImport = { [entry.importKey]: { access: properties.access } };
-            const entryProperties = { ...properties, importKey: entry.importKey };
 
-            const module = this.#createModule(segment, entry.filename, entryImport);
-
-            this.#createMember(segment, module, model, entryProperties);
+            this.#createModule(segment, entry.filename, entryImport, false);
         }
     }
 
@@ -247,6 +230,7 @@ export default class SegmentReader
         const clazz = new Class(properties.id, properties.importKey, properties.fqn, model);
 
         module.addMember(clazz);
+
         segment.setClass(clazz);
     }
 
@@ -260,5 +244,18 @@ export default class SegmentReader
         const implementation = new Implementation(properties.id, properties.importKey, properties.fqn, properties.access, properties.version, model);
 
         this.#createProcedure(segment, module, implementation);
+    }
+
+    #createProcedure(segment: Segment, module: Module, implementation: Implementation): void
+    {
+        const procedure = segment.hasProcedure(implementation.fqn)
+            ? segment.getProcedure(implementation.fqn) as Procedure
+            : new Procedure(implementation.fqn);
+
+        procedure.addImplementation(implementation);
+
+        module.addMember(implementation);
+
+        segment.setProcedure(procedure);
     }
 }

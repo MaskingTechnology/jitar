@@ -33,6 +33,11 @@ export default class Segment
         return this.#modules.get(filename);
     }
 
+    getSegmentedModules(): Module[]
+    {
+        return this.modules.filter(module => module.segmented);
+    }
+
     setModule(module: Module): void
     {
         this.#modules.set(module.filename, module);

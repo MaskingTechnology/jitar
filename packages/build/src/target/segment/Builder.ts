@@ -64,7 +64,11 @@ export default class Builder
     {
         const imports = [];
 
-        for (const module of segment.modules)
+        // We only want to include modules that are defined in the segment configuration.
+        // The other modules contain classes and procedures that are re-exported by at least one segmented module.
+        // Adding them would cause a duplicate declaration error.
+
+        for (const module of segment.getSegmentedModules())
         {
             const filename = this.#fileHelper.addSubExtension(module.filename, segment.name);
             const members = this.#createModuleImportMembers(module);

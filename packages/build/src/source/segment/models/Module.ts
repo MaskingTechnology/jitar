@@ -11,12 +11,14 @@ export default class Module
     readonly #location: string;
     readonly #imports: Imports;
     readonly #members: Member[] = [];
+    readonly #segmented: boolean;
 
-    constructor(filename: string, location: string, imports: Imports)
+    constructor(filename: string, location: string, imports: Imports, segmented: boolean)
     {
         this.#filename = filename;
         this.#location = location;
         this.#imports = imports;
+        this.#segmented = segmented;
     }
 
     get filename() { return this.#filename; }
@@ -26,6 +28,8 @@ export default class Module
     get imports() { return this.#imports; }
 
     get members() { return this.#members; }
+
+    get segmented() { return this.#segmented; }
     
     hasClasses(): boolean
     {
