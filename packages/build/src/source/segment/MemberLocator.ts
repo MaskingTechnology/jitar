@@ -10,6 +10,10 @@ import ModuleNotFound from './errors/ModuleNotFound';
 import ExportInfo from './types/ExportInfo';
 import ImportInfo from './types/ImportInfo';
 
+type TraceEntry = { filename: string, importKey: string };
+type Trace = TraceEntry[];
+type LocatedMember = { trace: Trace, model: ESMember};
+
 export default class MemberLocator
 {
     readonly #repository: ModuleRepository;
@@ -21,12 +25,22 @@ export default class MemberLocator
         this.#repository = repository;
     }
 
-    locate(moduleFilename: string, importKey: string): ESMember
+    locate(filename: string, importKey: string): LocatedMember
     {
-        const module = this.#getModule(moduleFilename);
+        const trace: Trace = [];
+        const model = this.#locate(filename, importKey, trace);
+
+        return { trace, model };
+    }
+
+    #locate(filename: string, importKey: string, trace: Trace): ESMember
+    {
+        trace.push({ filename, importKey });
+
+        const module = this.#getModule(filename);
 
         return this.#isReexported(module, importKey)
-            ? this.#relocate(module, importKey)
+            ? this.#relocate(module, importKey, trace)
             : this.#extract(module, importKey);
     }
 
@@ -51,7 +65,7 @@ export default class MemberLocator
             || exportItem?.from !== undefined;
     }
 
-    #relocate(module: Module, importKey: string): ESMember
+    #relocate(module: Module, importKey: string, trace: Trace): ESMember
     {
         const relocateInfo = this.#getImportInfo(module, importKey)
                           ?? this.#getExportInfo(module, importKey);
@@ -63,7 +77,7 @@ export default class MemberLocator
         const relativeFrom = this.#fileHelper.stripPath(relocatePath);
         const absoluteFrom = this.#fileHelper.makePathAbsolute(relativeFrom, callingModulePath);
 
-        return this.locate(absoluteFrom, relocateKey);
+        return this.#locate(absoluteFrom, relocateKey, trace);
     }
 
     #extract(module: Module, importKey: string): ESMember
