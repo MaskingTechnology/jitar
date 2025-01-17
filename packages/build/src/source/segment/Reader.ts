@@ -1,5 +1,5 @@
 
-import { ESFunction, ESClass } from '@jitar/analysis';
+import { ESFunction, ESClass, ESMember } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
 import { Defaults, Files, Keywords } from '../../definitions';
@@ -19,14 +19,9 @@ import Procedure from './models/Procedure';
 import Implementation from './models/Implementation';
 
 import SegmentFile from './types/File';
+import Imports from './types/Imports';
 
 import MemberLocator from './MemberLocator';
-
-type Members =
-{
-    classes: Map<string, Class>;
-    procedures: Map<string, Procedure>
-}
 
 type MemberProperties =
 {
@@ -55,23 +50,22 @@ export default class SegmentReader
 
     async readAll(filenames: string[]): Promise<Segmentation>
     {
-        const segments = await Promise.all(filenames.map(filename => this.read(filename)));
+        const segments = await Promise.all(filenames.map(filename => this.#read(filename)));
 
         return new Segmentation(segments);
     }
 
-    async read(filename: string): Promise<Segment>
+    async #read(filename: string): Promise<Segment>
     {
         const definition = await this.#loadSegmentDefinition(filename);
-
         const name = this.#extractSegmentName(filename);
-        const modules = this.#createModules(definition);
-        const members = this.#createMembers(modules);
 
-        const classes = [...members.classes.values()];
-        const procedures = [...members.procedures.values()];
+        const segment = new Segment(name);
 
-        return new Segment(name, modules, classes, procedures);
+        this.#registerModules(segment, definition);
+        this.#registerMembers(segment);
+
+        return segment;
     }
 
     #extractSegmentName(filename: string): string
@@ -105,21 +99,26 @@ export default class SegmentReader
         }
     }
 
-    #createModules(definition: SegmentFile): Module[]
+    #registerModules(segment: Segment, definition: SegmentFile): void
     {
-        const modules: Module[] = [];
-
         for (const [filename, moduleImports] of Object.entries(definition))
         {
-            const moduleFilename = this.#makeModuleFilename(filename);
-            const location = this.#extractLocation(moduleFilename);
-            
-            const module = new Module(moduleFilename, location, moduleImports);
-
-            modules.push(module);
+            this.#createModule(segment, filename, moduleImports, true);
         }
+    }
 
-        return modules;
+    #createModule(segment: Segment, filename: string, moduleImports: Imports, segmented: boolean): void
+    {
+        const moduleFilename = this.#makeModuleFilename(filename);
+        const location = this.#fileHelper.extractPath(moduleFilename);
+
+        const module = segment.hasModule(moduleFilename)
+            ? segment.getModule(moduleFilename) as Module
+            : new Module(moduleFilename, location, {}, segmented);
+
+        module.addImports(moduleImports);
+
+        segment.setModule(module);
     }
 
     #makeModuleFilename(filename: string): string
@@ -137,71 +136,58 @@ export default class SegmentReader
         return fullFilename;
     }
 
-    #extractLocation(filename: string): string
+    #registerMembers(segment: Segment): void
     {
-        const moduleParts = filename.split('/');
-        moduleParts.pop();
-
-        return moduleParts.join('/');
-    }
-
-    #createMembers(modules: Module[]): Members
-    {
-        const members: Members = { classes: new Map(), procedures: new Map() };
-
         const idGenerator = new IdGenerator();
 
-        for (const module of modules)
+        for (const module of segment.modules)
         {
-            this.#extractModuleMembers(module, members, idGenerator);
+            for (const importKey in module.imports)
+            {
+                this.#registerModuleMember(segment, module, importKey, idGenerator);
+            }
         }
-
-        return members;
     }
 
-    #extractModuleMembers(module: Module, members: Members, idGenerator: IdGenerator): void
+    #registerModuleMember(segment: Segment, module: Module, importKey: string, idGenerator: IdGenerator): void
     {
-        for (const importKey in module.imports)
+        const { model, trace } = this.#memberLocator.locate(module.filename, importKey);
+        
+        const properties = this.#constructProperties(module, model, importKey, idGenerator);
+
+        this.#createMember(segment, module, model, properties);
+
+        trace.shift(); // Remove the first entry, as it is the module itself.
+
+        for (const entry of trace)
         {
-            const id = idGenerator.next();
-            const model = this.#memberLocator.locate(module.filename, importKey);
+            const entryImport = { [entry.importKey]: { access: properties.access } };
 
-            const properties = module.imports[importKey];
-
-            const name = properties.as ?? model.name;
-            const access = properties.access ?? Defaults.ACCESS_LEVEL;
-            const version = properties.version ?? Defaults.VERSION_NUMBER;
-
-            const fqn = this.#constructFqn(module, name, importKey);
-
-            const memberProperties = { id, importKey, name, access, version, fqn };
-
-            if (model instanceof ESClass)
-            {
-                this.#registerClassMember(module, members, model, memberProperties);
-
-                continue;
-            }
-
-            if (model instanceof ESFunction)
-            {
-                this.#registerProcedureMember(module, members, model, memberProperties);
-
-                continue;
-            }
-            
-            throw new InvalidModuleExport(module.filename, importKey);
+            this.#createModule(segment, entry.filename, entryImport, false);
         }
+    }
+
+    #constructProperties(module: Module, model: ESMember, importKey: string, idGenerator: IdGenerator): MemberProperties
+    {
+        const configuration = module.imports[importKey];
+
+        const id = idGenerator.next();
+        const name = configuration.as ?? model.name;
+        const access = configuration.access ?? Defaults.ACCESS_LEVEL;
+        const version = configuration.version ?? Defaults.VERSION_NUMBER;
+        const fqn = this.#constructFqn(module, name, importKey);
+
+        return { id, importKey, name, access, version, fqn };
     }
 
     #constructFqn(module: Module, name: string, importKey: string): string
     {
-        if (module.location === '')
+        if (this.#isRootModule(module))
         {
             return name;
         }
 
-        if (module.filename.endsWith(Files.INDEX) && importKey === Keywords.DEFAULT)
+        if (this.#isIndexModule(module) && this.#isDefaultImport(importKey))
         {
             return module.location;
         }
@@ -209,16 +195,46 @@ export default class SegmentReader
         return `${module.location}/${name}`;
     }
 
-    #registerClassMember(module: Module, members: Members, model: ESClass, properties: MemberProperties): void
+    #isRootModule(module: Module): boolean
+    {
+        return module.location === '';
+    }
+
+    #isIndexModule(module: Module): boolean
+    {
+        return module.filename.endsWith(Files.INDEX);
+    }
+
+    #isDefaultImport(importKey: string): boolean
+    {
+        return importKey === Keywords.DEFAULT;
+    }
+
+    #createMember(segment: Segment, module: Module, model: ESMember, properties: MemberProperties): void
+    {
+        if (model instanceof ESClass)
+        {
+            return this.#createClass(segment, module, model, properties);
+        }
+        
+        if (model instanceof ESFunction)
+        {
+            return this.#createImplementation(segment, module, model, properties);
+        }
+        
+        throw new InvalidModuleExport(module.filename, properties.importKey);
+    }
+
+    #createClass(segment: Segment, module: Module, model: ESClass, properties: MemberProperties): void
     {
         const clazz = new Class(properties.id, properties.importKey, properties.fqn, model);
 
         module.addMember(clazz);
 
-        members.classes.set(properties.fqn, clazz);
+        segment.setClass(clazz);
     }
 
-    #registerProcedureMember(module: Module, members: Members, model: ESFunction, properties: MemberProperties): void
+    #createImplementation(segment: Segment, module: Module, model: ESFunction, properties: MemberProperties): void
     {
         if (model.isAsync === false)
         {
@@ -227,14 +243,19 @@ export default class SegmentReader
 
         const implementation = new Implementation(properties.id, properties.importKey, properties.fqn, properties.access, properties.version, model);
 
-        module.addMember(implementation);
+        this.#createProcedure(segment, module, implementation);
+    }
 
-        const procedure = members.procedures.has(implementation.fqn)
-            ? members.procedures.get(implementation.fqn) as Procedure
+    #createProcedure(segment: Segment, module: Module, implementation: Implementation): void
+    {
+        const procedure = segment.hasProcedure(implementation.fqn)
+            ? segment.getProcedure(implementation.fqn) as Procedure
             : new Procedure(implementation.fqn);
 
         procedure.addImplementation(implementation);
 
-        members.procedures.set(implementation.fqn, procedure);
+        module.addMember(implementation);
+
+        segment.setProcedure(procedure);
     }
 }

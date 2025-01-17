@@ -33,15 +33,14 @@ export default class Builder
 
     async #buildModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
-        await this.#buildCommonModule(module, resources, segmentation);
-
         const moduleSegments = segmentation.getSegments(module.filename);
 
         if (moduleSegments.length === 0)
         {
             // For unsegmented modules we only need to build the common module.
+            // This will overwrite the original module file.
 
-            return;
+            return this.#buildCommonModule(module, resources, segmentation);
         }
         
         const segmentBuilds = moduleSegments.map(segment => this.#buildSegmentModule(module, resources, segment, segmentation));
@@ -54,6 +53,10 @@ export default class Builder
             : Promise.resolve();
 
         await Promise.all([...segmentBuilds, remoteBuild]);
+
+        // The segment files will replace the original module file, so we can delete it.
+
+        this.#targetFileManager.delete(module.filename);
     }
 
     async #buildCommonModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
