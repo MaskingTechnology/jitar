@@ -74,6 +74,11 @@ export default abstract class LocationRewriter
 
     #rewriteModule(targetModuleFilename: string, dependency: ESImport | ESExport): string
     {
+        if (dependency.members.length === 0)
+        {
+            return this.#rewriteToCommon(targetModuleFilename, dependency, []);
+        }
+
         const { segmentKeys, remoteKeys, commonKeys } = this.#getModuleImportKeys(targetModuleFilename, dependency);
 
         const imports: string[] = [];
@@ -93,7 +98,7 @@ export default abstract class LocationRewriter
             imports.push(this.#rewriteToCommon(targetModuleFilename, dependency, commonKeys));
         }
 
-        return imports.join('\n');
+        return imports.filter(item => item.length > 0).join('\n');
     }
 
     #rewriteToResource(targetModuleFilename: string, dependency: ESImport | ESExport): string
@@ -141,8 +146,11 @@ export default abstract class LocationRewriter
 
     #getModuleImportKeys(targetModuleFilename: string, dependency: ESImport | ESExport): ModuleImportKeys
     {
-        const segmentKeys = this.#getSegmentImportKeys(targetModuleFilename, this.#segment);
-        const remoteKeys = this.#getRemoteImportKeys(targetModuleFilename, segmentKeys);
+        const moduleSegmentKeys = this.#getSegmentImportKeys(targetModuleFilename, this.#segment);
+        const moduleRemoteKeys = this.#getRemoteImportKeys(targetModuleFilename, moduleSegmentKeys);
+
+        const segmentKeys = this.#filterMemberKeys(dependency, moduleSegmentKeys);
+        const remoteKeys = this.#filterMemberKeys(dependency, moduleRemoteKeys);
         const commonKeys = this.#extractUnsegmentedImportKeys(dependency, [...segmentKeys, ...remoteKeys]);
 
         return { segmentKeys, remoteKeys, commonKeys };
@@ -169,6 +177,13 @@ export default abstract class LocationRewriter
         const uniqueKeys = [...new Set(importKeys)];
 
         return uniqueKeys.filter(key => segmentKeys.includes(key) === false);
+    }
+
+    #filterMemberKeys(dependency: ESImport | ESExport, keys: string[]): string[]
+    {
+        return dependency.members
+            .filter(member => keys.includes(member.name))
+            .map(member => member.name);
     }
 
     #extractUnsegmentedImportKeys(dependency: ESImport | ESExport, segmentedKeys: string[]): string[]
