@@ -55,17 +55,14 @@ export default class HttpServer
 
     #setupRoutes(): void
     {
-        this.#app.get('/health', this.#getHealth.bind(this));
-        this.#app.get('/health/status', this.#isHealthy.bind(this));
-
-        this.#app.get('/rpc/*', this.#runGet.bind(this));
-        this.#app.post('/rpc/*', this.#runPost.bind(this));
-        this.#app.options('/rpc/*', this.#runOptions.bind(this));
-
-        this.#app.post('/workers', this.#addWorker.bind(this));
-        this.#app.delete('/workers/:id', this.#removeWorker.bind(this));
-
-        this.#app.get('*', this.#provide.bind(this));
+        this.#app.get('/health', (request, response) => { this.#getHealth(request, response); });
+        this.#app.get('/health/status', (request, response) => { this.#isHealthy(request, response); });
+        this.#app.get('/rpc/*procedure', (request, response) => { this.#runGet(request, response); });
+        this.#app.post('/rpc/*procedure', (request, response) => { this.#runPost(request, response); });
+        this.#app.options('/rpc/*procedure', (request, response) => { this.#runOptions(request, response); });
+        this.#app.post('/workers', (request, response) => { this.#addWorker(request, response); });
+        this.#app.delete('/workers/:id', (request, response) => { this.#removeWorker(request, response); });
+        this.#app.use((request, response) => { this.#provide(request, response); });
     }
 
     #startHttp(): Promise<void>
@@ -77,9 +74,9 @@ export default class HttpServer
 
         return new Promise((resolve, reject) => 
         {
-            this.#http = this.#app.listen(this.#port, resolve);
+            this.#http = this.#app.listen(this.#port, reject);
 
-            this.#http.on('error', reject);
+            resolve();
         });
     }
 

@@ -50,12 +50,10 @@ export default class ErrorSerializer extends ValueSerializer
 
     async deserialize(object: SerializedError): Promise<Error>
     {
-        const clazz = (globalThis as Record<string, unknown>)[object.type] as (new () => Error);
+        const clazz = (globalThis as Record<string, unknown>)[object.type] as (new (message: string, options?: ErrorOptions) => Error);
 
-        const error = new clazz();
+        const error = new clazz(object.message, { cause: object.cause });
         error.stack = object.stack;
-        error.message = object.message;
-        error.cause = object.cause;
 
         return error;
     }
