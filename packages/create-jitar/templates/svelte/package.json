@@ -18,7 +18,7 @@
     "svelte-check": "^4.0.4",
     "tslib": "^2.6.3",
     "typescript": "^5.5.3",
-    "vite": "^5.3.3"
+    "vite": "^5.4.14"
   },
   "dependencies": {
     "jitar": "^0.9.0"
