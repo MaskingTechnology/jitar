@@ -57,11 +57,14 @@ export default class HttpServer
     {
         this.#app.get('/health', (request, response) => { this.#getHealth(request, response); });
         this.#app.get('/health/status', (request, response) => { this.#isHealthy(request, response); });
+
         this.#app.get('/rpc/*procedure', (request, response) => { this.#runGet(request, response); });
         this.#app.post('/rpc/*procedure', (request, response) => { this.#runPost(request, response); });
         this.#app.options('/rpc/*procedure', (request, response) => { this.#runOptions(request, response); });
+
         this.#app.post('/workers', (request, response) => { this.#addWorker(request, response); });
         this.#app.delete('/workers/:id', (request, response) => { this.#removeWorker(request, response); });
+        
         this.#app.use((request, response) => { this.#provide(request, response); });
     }
 
