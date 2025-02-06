@@ -89,13 +89,10 @@ export default class StartServer implements Command
         return logLevelParser.parse(logLevel);
     }
 
-    #parseBodyLimit(bodyLimit: string | undefined): number | undefined
+    #parseBodyLimit(bodyLimitString: string | undefined): number | undefined
     {
-        if (Number.isInteger(bodyLimit) === false)
-        {
-            return undefined;
-        }
+        const bodyLimit = Number.parseInt(bodyLimitString as string);
 
-        return Number.parseInt(bodyLimit as string);
+        return Number.isNaN(bodyLimit) ? undefined : bodyLimit;
     }
 }
