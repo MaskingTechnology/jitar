@@ -38,7 +38,11 @@ export default class SerializerBuilder
         serializer.addSerializer(new MapSerializer());
         serializer.addSerializer(new ArraySerializer());
         serializer.addSerializer(new TypedArraySerializer());
-        serializer.addSerializer(new BufferSerializer());
+
+        if (typeof Buffer !== 'undefined')
+        {
+            serializer.addSerializer(new BufferSerializer());
+        }
 
         return serializer;
     }
