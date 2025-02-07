@@ -1,6 +1,7 @@
 
 export * from './arrays.fixture';
 export * from './bigIntegers.fixture';
+export * from './buffers.fixture';
 export * from './classes.fixture';
 export * from './classResolver.fixture';
 export * from './dates.fixture';
