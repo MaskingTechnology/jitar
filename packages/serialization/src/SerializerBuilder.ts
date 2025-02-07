@@ -3,6 +3,7 @@ import Serializer from './Serializer';
 import ClassResolver from './interfaces/ClassResolver';
 import ArraySerializer from './serializers/ArraySerializer';
 import BigIntSerializer from './serializers/BigIntSerializer';
+import BufferSerializer from './serializers/BufferSerializer';
 import ClassSerializer from './serializers/ClassSerializer';
 import DateSerializer from './serializers/DateSerializer';
 import ErrorSerializer from './serializers/ErrorSerializer';
@@ -37,6 +38,7 @@ export default class SerializerBuilder
         serializer.addSerializer(new MapSerializer());
         serializer.addSerializer(new ArraySerializer());
         serializer.addSerializer(new TypedArraySerializer());
+        serializer.addSerializer(new BufferSerializer());
 
         return serializer;
     }
