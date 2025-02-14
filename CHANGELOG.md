@@ -1,3 +1,22 @@
+# v0.9.1
+[2025-02-14]
+
+### Features
+
+* \[[615](https://github.com/MaskingTechnology/jitar/pull/615)] feat: buffer serialization (#615) by Peter van Vliet
+* \[[603](https://github.com/MaskingTechnology/jitar/pull/603)] feat: implicit segmentation support (#603) by Peter van Vliet
+
+### Fixes
+
+* \[[617](https://github.com/MaskingTechnology/jitar/pull/617)] fix: add buffer serializer only if Buffer class available (#617) by Peter van Vliet
+* \[[613](https://github.com/MaskingTechnology/jitar/pull/613)] fix: parsing the body limit value (#613) by Peter van Vliet
+* \[[607](https://github.com/MaskingTechnology/jitar/pull/607)] fix: import rewrite issues (#607) by Peter van Vliet
+
+### Chores
+
+* \[[611](https://github.com/MaskingTechnology/jitar/pull/611)] npm: bump vitest and @vitest/coverage-v8 (#611) by dependabot[bot]
+* \[[610](https://github.com/MaskingTechnology/jitar/pull/610)] chore(deps): february updates (#610) by Bas Meeuwissen
+
 # v0.9.0
 [2025-01-10]
 
@@ -11,6 +30,7 @@
 
 ### Chores
 
+* \[[601](https://github.com/MaskingTechnology/jitar/pull/601)] chore: release v0.9 (#601) by Bas Meeuwissen
 * \[[591](https://github.com/MaskingTechnology/jitar/pull/591)] chore: http tests (#591) by Bas Meeuwissen
 * \[[594](https://github.com/MaskingTechnology/jitar/pull/594)] chore(deps): january updates (#594) by Bas Meeuwissen
 * \[[589](https://github.com/MaskingTechnology/jitar/pull/589)] chore: add tests for the sourcing package (#589) by Bas Meeuwissen
