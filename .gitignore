@@ -1,4 +1,4 @@
 .vscode
-.nx
+.turbo
 node_modules
 **/*.tgz
