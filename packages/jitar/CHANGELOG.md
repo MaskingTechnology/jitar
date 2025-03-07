@@ -1,3 +1,14 @@
+## 0.9.2
+
+## 0.9.3
+
+### Patch Changes
+
+- Bla bla bla
+
+### Patch Changes
+
+- Test it
 
 # Changelog
 

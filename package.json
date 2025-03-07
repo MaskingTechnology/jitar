@@ -22,6 +22,8 @@
     "changelog-debug": "auto-changelog --template changelog.hbs -p --template json --output changelog-data.json"
   },
   "devDependencies": {
+    "@changesets/changelog-git": "^0.2.1",
+    "@changesets/cli": "^2.28.1",
     "@eslint/js": "^9.19.0",
     "@nx/eslint-plugin": "^20.4.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
