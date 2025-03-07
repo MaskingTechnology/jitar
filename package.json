@@ -18,11 +18,12 @@
     "test": "turbo run test",
     "review": "turbo run test lint",
     "publish": "npx turbo publish --no-git-tag-version --no-private",
-    "changelog": "auto-changelog --template changelog.hbs -p -u --commit-limit false --hide-empty-releases true",
-    "changelog-debug": "auto-changelog --template changelog.hbs -p --template json --output changelog-data.json"
+    "changeset": "npx changeset",
+    "changeset-version": "npx changeset version"
   },
   "devDependencies": {
     "@changesets/changelog-git": "^0.2.1",
+    "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.28.1",
     "@eslint/js": "^9.19.0",
     "@nx/eslint-plugin": "^20.4.0",
@@ -37,7 +38,6 @@
     "@types/prompts": "^2.4.9",
     "@typescript-eslint/eslint-plugin": "^8.22.0",
     "@vitest/coverage-v8": "^3.0.5",
-    "auto-changelog": "^2.5.0",
     "degit": "^2.8.4",
     "eslint": "^9.19.0",
     "eslint-plugin-jitar": "0.0.1",
