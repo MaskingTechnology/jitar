@@ -17,9 +17,8 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "review": "turbo run test lint",
-    "publish": "npx turbo publish --no-git-tag-version --no-private",
-    "changeset": "npx changeset",
-    "changeset-version": "npx changeset version"
+    "publish-packages": "turbo run build lint test && changeset version && changeset publish",
+    "changeset": "npx changeset"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
