@@ -10,10 +10,6 @@
         "standalone": "jitar start --service=services/standalone.json",
         "client": "node dist/client.js"
     },
-    "dependencies": {
-        "jitar": "*",
-        "express": "*"
-    },
     "devDependencies": {
         "cpx2": "*"
     }

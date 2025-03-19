@@ -8,8 +8,5 @@
         "gateway": "jitar start --service=services/gateway.json",
         "worker-public": "jitar start --service=services/public.json",
         "worker-protected": "jitar start --service=services/protected.json"
-    },
-    "dependencies": {
-        "jitar": "*"
     }
 }
