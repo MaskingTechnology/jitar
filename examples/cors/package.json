@@ -9,12 +9,5 @@
         "build": "npm run clean && npm run copy && npm run compile",
         "standalone": "jitar start --service=services/standalone.json",
         "client": "node dist/client.js"
-    },
-    "dependencies": {
-        "jitar": "*",
-        "express": "*"
-    },
-    "devDependencies": {
-        "cpx2": "*"
     }
 }
