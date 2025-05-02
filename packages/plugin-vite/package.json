@@ -26,7 +26,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
+  "devDependencies": {
     "vite": "^6.3.4"
   },
   "peerDependencies": {
