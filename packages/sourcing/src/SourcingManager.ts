@@ -1,16 +1,17 @@
 
-import type File from './models/File';
-import ModuleNotLoaded from './errors/ModuleNotLoaded';
-import type Module from './types/Module';
-import type FileManager from './FileManager';
 
-export default class SourcingManager
+import { File, FileManager, FileReader } from './files';
+import { Module, ImportManager, ModuleImporter } from './modules';
+
+export default class SourcingManager implements FileReader, ModuleImporter
 {
     readonly #fileManager: FileManager;
+    readonly #importManager: ImportManager;
 
-    constructor(fileManager: FileManager)
+    constructor(fileManager: FileManager, importManager: ImportManager)
     {
         this.#fileManager = fileManager;
+        this.#importManager = importManager;
     }
 
     async filter(...patterns: string[]): Promise<string[]>
@@ -20,34 +21,18 @@ export default class SourcingManager
         return files.flat().map(file => this.#fileManager.getRelativeLocation(file));
     }
 
-    async exists(filename: string): Promise<boolean>
+    exists(filename: string): Promise<boolean>
     {
         return this.#fileManager.exists(filename);
     }
 
-    async read(filename: string): Promise<File>
+    read(filename: string): Promise<File>
     {
         return this.#fileManager.read(filename);
     }
 
-    async import(filename: string): Promise<Module>
+    import(filename: string): Promise<Module>
     {
-        // If the specifier is an absolute path, we need to convert it to a path
-        // relative to the cache folder.
-        
-        const specifier = filename.startsWith('/')
-            ? this.#fileManager.getAbsoluteLocation(`.${filename}`)
-            : this.#fileManager.getAbsoluteLocation(filename);
-        
-        try
-        {
-            return await import(specifier);
-        }
-        catch (error: unknown)
-        {
-            const message = error instanceof Error ? error.message : String(error);
-
-            throw new ModuleNotLoaded(specifier, message);
-        }
+        return this.#importManager.import(filename);
     }
 }

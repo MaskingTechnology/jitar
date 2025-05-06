@@ -33,21 +33,18 @@ export default class Client extends Runtime
         });
 
         this.#middlewareManager = configuration.middlewareManager;
-
-        const procedureRunner = new ProcedureRunner(this.#worker);
-        this.#middlewareManager.addMiddleware(procedureRunner);
     }
 
     get worker() { return this.#worker; }
 
     start(): Promise<void>
     {
-        return this.#worker.start();
+        return this.#setUp();
     }
 
     stop(): Promise<void>
     {
-        return this.#worker.stop();
+        return this.#tearDown();
     }
 
     getTrustKey(): string | undefined
@@ -63,5 +60,26 @@ export default class Client extends Runtime
     runInternal(request: Request): Promise<Response>
     {
         return this.#middlewareManager.handle(request);
+    }
+
+    async #setUp(): Promise<void>
+    {
+        await Promise.all(
+        [
+            this.#worker.start(),
+            this.#middlewareManager.start()
+        ]);
+
+        const procedureRunner = new ProcedureRunner(this.#worker);
+        this.#middlewareManager.addMiddleware(procedureRunner);
+    }
+
+    async #tearDown(): Promise<void>
+    {
+        await Promise.all(
+        [
+            this.#middlewareManager.stop(),
+            this.#worker.stop()
+        ]);
     }
 }

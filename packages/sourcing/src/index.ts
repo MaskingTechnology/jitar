@@ -1,10 +1,9 @@
 
-export { default as Files } from './definitions/Files';
-export { default as InvalidLocation } from './errors/InvalidLocation';
-export { default as FileNotFound } from './errors/FileNotFound';
-export { default as ModuleNotLoaded } from './errors/ModuleNotLoaded';
-export { default as File } from './models/File';
-export { default as Module } from './types/Module';
+export type { FileReader, FileManager } from './files';
+export { Files, File, LocalFileManager, RemoteFileManager, InvalidLocation, FileNotFound } from './files';
 
-export { default as FileManager } from './FileManager';
-export { default as SourcingManager } from './SourcingManager';
+export { Module, ModuleImporter, ImportManager, ModuleNotLoaded } from './modules';
+
+export type { default as SourcingManager } from './SourcingManager';
+export { default as LocalSourcingManager } from './LocalSourcingManager';
+export { default as RemoteSourcingManager } from './RemoteSourcingManager';

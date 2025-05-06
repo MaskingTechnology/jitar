@@ -12,6 +12,11 @@ export default class Application
         this.#segments.set(segment.id, segment);
     }
 
+    clearSegments(): void
+    {
+        this.#segments.clear();
+    }
+
     getClassNames(): string[]
     {
         const names = new Set<string>();

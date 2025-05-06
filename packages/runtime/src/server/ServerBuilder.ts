@@ -1,13 +1,14 @@
 
 import { GatewayConfiguration, ProxyConfiguration, RepositoryConfiguration, ServerConfiguration, StandaloneConfiguration, WorkerConfiguration } from '@jitar/configuration';
-import { ExecutionManager, Segment } from '@jitar/execution';
-import { HealthCheck, HealthManager } from '@jitar/health';
+import { ExecutionManager } from '@jitar/execution';
+import { HealthManager } from '@jitar/health';
 import { Logger, LogLevel } from '@jitar/logging';
-import { Middleware, MiddlewareManager } from '@jitar/middleware';
+import { MiddlewareManager } from '@jitar/middleware';
 import { DummyProvider, DummyRunner, LocalGateway, LocalRepository, LocalWorker, Proxy, RemoteBuilder, RemoteGateway, RemoteRepository } from '@jitar/services';
 import { SourcingManager } from '@jitar/sourcing';
 
 import UnknownServiceConfigured from './errors/UnknownServiceConfigured';
+import ResourceManager from './ResourceManager';
 import Server from './Server';
 
 export default class RuntimeBuilder
@@ -23,22 +24,21 @@ export default class RuntimeBuilder
 
     async build(configuration: ServerConfiguration, logLevel?: LogLevel): Promise<Server>
     {
-        const setUp = configuration.setUp ?? [];
-        const tearDown = configuration.tearDown ?? [];
+        const setUp = configuration.setUp;
+        const tearDown = configuration.tearDown;
         const middleware = configuration.middleware;
         const healthChecks = configuration.healthChecks;
 
         const proxy = await this.#buildService(configuration);
         const sourcingManager = this.#sourcingManager;
         const remoteBuilder = this.#remoteBuilder;
-        const middlewareManager = await this.#buildMiddlewareManager(middleware);
-        const healthManager = await this.#buildHealthManager(healthChecks);
-        const setUpScripts = setUp.map(filename => this.#assureExtension(filename));
-        const tearDownScripts = tearDown.map(filename => this.#assureExtension(filename));
+        const resourceManager = this.#buildResourceManager(setUp, tearDown);
+        const middlewareManager = this.#buildMiddlewareManager(middleware);
+        const healthManager = this.#buildHealthManager(healthChecks);
 
         const logger = new Logger(logLevel);
 
-        return new Server({ proxy, sourcingManager, remoteBuilder, middlewareManager, healthManager, setUpScripts, tearDownScripts, logger });
+        return new Server({ proxy, sourcingManager, remoteBuilder, resourceManager, middlewareManager, healthManager, logger });
     }
 
     #buildService(configuration: ServerConfiguration): Promise<Proxy>
@@ -55,7 +55,7 @@ export default class RuntimeBuilder
     async #buildGatewayProxy(url: string, configuration: GatewayConfiguration): Promise<Proxy>
     {
         const provider = new DummyProvider();
-        const runner = await this.#buildLocalGateway(url, configuration);
+        const runner = this.#buildLocalGateway(url, configuration);
 
         return new Proxy({ url, provider, runner });
     }
@@ -63,7 +63,7 @@ export default class RuntimeBuilder
     async #buildWorkerProxy(url: string, configuration: WorkerConfiguration): Promise<Proxy>
     {
         const provider = new DummyProvider();
-        const runner = await this.#buildLocalWorker(url, configuration);
+        const runner = this.#buildLocalWorker(url, configuration);
 
         return new Proxy({ url, provider, runner });
     }
@@ -76,7 +76,7 @@ export default class RuntimeBuilder
         return new Proxy({ url, provider, runner });
     }
 
-    async #buildLocalGateway(url: string, configuration: GatewayConfiguration): Promise<LocalGateway>
+    #buildLocalGateway(url: string, configuration: GatewayConfiguration): LocalGateway
     {
         const trustKey = configuration.trustKey;
         const monitorInterval = configuration.monitor;
@@ -91,13 +91,14 @@ export default class RuntimeBuilder
         return new RemoteGateway({ url, remote });
     }
 
-    async #buildLocalWorker(url: string, configuration: WorkerConfiguration): Promise<LocalWorker>
+    #buildLocalWorker(url: string, configuration: WorkerConfiguration): LocalWorker
     {
         const trustKey = configuration.trustKey;
         const gateway = configuration.gateway ? this.#buildRemoteGateway(configuration.gateway) : undefined;
-        const executionManager = await this.#buildExecutionManager(configuration.segments);
+        const registerAtGateway = gateway !== undefined;
+        const executionManager = this.#buildExecutionManager(configuration.segments);
 
-        return new LocalWorker({ url, trustKey, gateway, executionManager });
+        return new LocalWorker({ url, trustKey, gateway, registerAtGateway, executionManager });
     }
 
     async #buildLocalRepository(url: string, configuration: RepositoryConfiguration): Promise<LocalRepository>
@@ -128,51 +129,38 @@ export default class RuntimeBuilder
     async #buildStandalone(url: string, configuration: StandaloneConfiguration): Promise<Proxy>
     {
         const provider = await this.#buildLocalRepository(url, configuration);
-        const runner = await this.#buildLocalWorker(url, configuration);
+        const runner = this.#buildLocalWorker(url, configuration);
 
         return new Proxy({ url, provider, runner });
     }
 
-    async #buildHealthManager(filenames?: string[]): Promise<HealthManager>
+    #buildResourceManager(setUp: string[] = [], tearDown: string[] = []): ResourceManager
     {
-        const manager = new HealthManager();
+        const translatedSetUp = setUp.map(filename => this.#assureExtension(filename));
+        const translatedTearDown = tearDown.map(filename => this.#assureExtension(filename));
 
-        if (filenames !== undefined)
-        {
-            const translatedFilenames = filenames.map(filename => this.#assureExtension(filename));
-            const modules = await Promise.all(translatedFilenames.map(filename => this.#sourcingManager.import(filename)));
-
-            modules.forEach(module => manager.addHealthCheck(module.default as HealthCheck));
-        }
-
-        return manager;
+        return new ResourceManager(this.#sourcingManager, translatedSetUp, translatedTearDown);
     }
 
-    async #buildMiddlewareManager(filenames?: string[]): Promise<MiddlewareManager>
+    #buildHealthManager(filenames: string[] = []): HealthManager
     {
-        const manager = new MiddlewareManager();
+        const translatedFilenames = filenames.map(filename => this.#assureExtension(filename));
 
-        if (filenames !== undefined)
-        {
-            const translatedFilenames = filenames.map(filename => this.#assureExtension(filename));
-            const modules = await Promise.all(translatedFilenames.map(filename => this.#sourcingManager.import(filename)));
-
-            modules.forEach(module => manager.addMiddleware(module.default as Middleware));
-        }
-
-        return manager;
+        return new HealthManager(this.#sourcingManager, translatedFilenames);
     }
 
-    async #buildExecutionManager(segmentNames: string[]): Promise<ExecutionManager>
+    #buildMiddlewareManager(filenames: string[] = []): MiddlewareManager
     {
-        const manager = new ExecutionManager();
+        const translatedFilenames = filenames.map(filename => this.#assureExtension(filename));
+
+        return new MiddlewareManager(this.#sourcingManager, translatedFilenames);
+    }
+
+    #buildExecutionManager(segmentNames: string[]): ExecutionManager
+    {
         const filenames = segmentNames.map(name => `./${name}.segment.js`);
 
-        const modules = await Promise.all(filenames.map(filename => this.#sourcingManager.import(filename)));
-
-        modules.forEach(module => manager.addSegment(module.default as Segment));
-
-        return manager;
+        return new ExecutionManager(this.#sourcingManager, filenames);
     }
 
     async #buildAssetSet(patterns?: string[]): Promise<Set<string>>
