@@ -95,7 +95,7 @@ export default class RuntimeBuilder
     {
         const trustKey = configuration.trustKey;
         const gateway = configuration.gateway ? this.#buildRemoteGateway(configuration.gateway) : undefined;
-        const registerAtGateway = gateway !== undefined;
+        const registerAtGateway = gateway !== undefined; // if we have a gateway, the worker needs to register itself at it.
         const executionManager = this.#buildExecutionManager(configuration.segments);
 
         return new LocalWorker({ url, trustKey, gateway, registerAtGateway, executionManager });

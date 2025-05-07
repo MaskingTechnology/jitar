@@ -1,6 +1,6 @@
 
 import { NotImplemented } from '@jitar/errors';
-import { File, FileNotFound, Module, LocalSourcingManager } from '@jitar/sourcing';
+import { File, FileNotFound, LocalSourcingManager } from '@jitar/sourcing';
 
 import { FILENAMES } from './filenames.fixture';
 import { FILES } from './files.fixtures';

@@ -74,7 +74,14 @@ export default class LocalFileSystem implements FileSystem
 
     async mimeType(location: string): Promise<string | undefined>
     {
-        return mime.lookup(location) || undefined;
+        const mimeType = mime.lookup(location);
+
+        if (mimeType === false)
+        {
+            return undefined;
+        }
+
+        return mimeType;
     }
 
     async write(location: string, content: string): Promise<void>

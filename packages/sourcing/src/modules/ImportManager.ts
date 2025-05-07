@@ -6,7 +6,7 @@ import Module from './types/Module';
 
 export default class ImportManager implements ModuleImporter
 {
-    #moduleLocator: ModuleLocator;
+    readonly #moduleLocator: ModuleLocator;
 
     constructor(moduleLocator: ModuleLocator)
     {
