@@ -156,7 +156,7 @@ export default class RuntimeBuilder
         return new MiddlewareManager(this.#sourcingManager, translatedFilenames);
     }
 
-    #buildExecutionManager(segmentNames: string[]): ExecutionManager
+    #buildExecutionManager(segmentNames: string[] = []): ExecutionManager
     {
         const filenames = segmentNames.map(name => `./${name}.segment.js`);
 

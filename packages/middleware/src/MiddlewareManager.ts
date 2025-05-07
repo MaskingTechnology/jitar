@@ -26,7 +26,7 @@ export default class MiddlewareManager
 
     async stop(): Promise<void>
     {
-        return this.#clearMiddlewares();
+        return this.clearMiddlewares();
     }
 
     async loadMiddleware(filename:string): Promise<void>
@@ -68,11 +68,6 @@ export default class MiddlewareManager
     async #loadMiddlewares(): Promise<void>
     {
         await Promise.all(this.#middlewareFiles.map(filename => this.loadMiddleware(filename)));
-    }
-
-    #clearMiddlewares(): void
-    {
-        this.#middlewares.slice();
     }
 
     #getNextHandler(request: Request, index: number): NextHandler

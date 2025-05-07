@@ -34,12 +34,6 @@ class DummySourcingManager extends LocalSourcingManager
     {
         throw new NotImplemented();
     }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    import(filename: string): Promise<Module>
-    {
-        throw new NotImplemented();
-    }
 }
 
 export const sourcingManager = new DummySourcingManager('');

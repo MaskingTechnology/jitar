@@ -30,7 +30,7 @@ export default class HealthManager
 
     async stop(): Promise<void>
     {
-        return this.#clearHealthChecks();
+        return this.clearHealthChecks();
     }
 
     async loadHealthCheck(filename: string): Promise<void>
@@ -94,11 +94,6 @@ export default class HealthManager
     async #loadHealthChecks(): Promise<void>
     {
         await Promise.all(this.#healthCheckFiles.map(filename => this.loadHealthCheck(filename)));
-    }
-
-    #clearHealthChecks(): void
-    {
-        this.#healthChecks.clear();
     }
 
     #handleHealthCheckResult(result: PromiseSettledResult<HealthCheckResult>, healthChecks: Map<string, boolean>): void

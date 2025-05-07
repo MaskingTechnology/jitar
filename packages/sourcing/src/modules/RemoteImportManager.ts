@@ -2,7 +2,7 @@
 import ImportManager from './ImportManager';
 import RemoteModuleLocator from './RemoteModuleLocator';
 
-export default class LocalImportManager extends ImportManager
+export default class RemoteImportManager extends ImportManager
 {
     constructor(location: string)
     {
