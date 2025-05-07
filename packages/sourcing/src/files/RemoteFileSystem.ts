@@ -1,4 +1,5 @@
 
+import RemoteFilesNotSupported from './errors/RemoteFilesNotSupported';
 import FileSystem from './interfaces/FileSystem';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -12,17 +13,17 @@ export default class RemoteFileSystem implements FileSystem
 
     copy(source: string, destination: string): Promise<void>
     {
-        throw new Error('Method  1 not implemented.');
+        throw new RemoteFilesNotSupported();
     }
 
     delete(location: string): Promise<void>
     {
-        throw new Error('Method  2 not implemented.');
+        throw new RemoteFilesNotSupported();
     }
 
     exists(location: string): Promise<boolean>
     {
-        throw new Error('Method 3 not implemented.');
+        throw new RemoteFilesNotSupported();
     }
 
     async filter(location: string, pattern: string): Promise<string[]>
@@ -32,17 +33,17 @@ export default class RemoteFileSystem implements FileSystem
 
     isDirectory(location: string): boolean
     {
-        throw new Error('Method 5 not implemented.');
+        throw new RemoteFilesNotSupported();
     }
 
     join(...paths: string[]): string
     {
-        throw new Error('Method 6 not implemented.');
+        throw new RemoteFilesNotSupported();
     }
 
     read(location: string): Promise<Buffer>
     {
-        throw new Error('Method 7 not implemented.');
+        throw new RemoteFilesNotSupported();
     }
 
     resolve(location: string): string
@@ -52,16 +53,16 @@ export default class RemoteFileSystem implements FileSystem
 
     relative(from: string, to: string): string
     {
-        throw new Error('Method 9 not implemented.');
+        throw new RemoteFilesNotSupported();
     }
 
     mimeType(location: string): Promise<string | undefined>
     {
-        throw new Error('Method 10 not implemented.');
+        throw new RemoteFilesNotSupported();
     }
 
     write(location: string, content: string): Promise<void>
     {
-        throw new Error('Method 11 not implemented.');
+        throw new RemoteFilesNotSupported();
     }
 }
