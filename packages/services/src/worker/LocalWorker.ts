@@ -17,6 +17,7 @@ type Configuration =
     url: string;
     trustKey?: string;
     gateway?: Gateway;
+    registerAtGateway?: boolean;
     executionManager: ExecutionManager;
 };
 
@@ -26,6 +27,7 @@ export default class LocalWorker implements Worker
     readonly #url: string;
     readonly #trustKey?: string;
     readonly #gateway?: Gateway;
+    readonly #registerAtGateway: boolean;
     readonly #executionManager: ExecutionManager;
     readonly #serializer: Serializer;
 
@@ -34,6 +36,7 @@ export default class LocalWorker implements Worker
         this.#url = configuration.url;
         this.#trustKey = configuration.trustKey;
         this.#gateway = configuration.gateway;
+        this.#registerAtGateway = configuration.registerAtGateway === true;
 
         this.#executionManager = configuration.executionManager;
 
@@ -51,20 +54,32 @@ export default class LocalWorker implements Worker
 
     async start(): Promise<void>
     {
+        await this.#executionManager.start();
+
         if (this.#gateway !== undefined)
         {
             await this.#gateway.start();
-            this.#id = await this.#gateway.addWorker(this);
+
+            if (this.#registerAtGateway)
+            {
+                this.#id = await this.#gateway.addWorker(this);
+            }
         }
     }
 
     async stop(): Promise<void>
     {
-        if (this.#gateway !== undefined && this.#id !== undefined)
+        if (this.#gateway !== undefined)
         {
-            await this.#gateway.removeWorker(this);
+            if (this.#id !== undefined)
+            {
+                await this.#gateway.removeWorker(this);
+            }
+
             await this.#gateway.stop();
         }
+        
+        await this.#executionManager.stop();
     }
 
     getProcedureNames(): string[]

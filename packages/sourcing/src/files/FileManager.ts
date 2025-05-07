@@ -2,21 +2,20 @@
 import InvalidLocation from './errors/InvalidLocation';
 import FileNotFound from './errors/FileNotFound';
 
+import FileReader from './interfaces/FileReader';
 import FileSystem from './interfaces/FileSystem';
 
 import File from './models/File';
 
-import LocalFileSystem from './LocalFileSystem';
-
 const DEFAULT_MIME_TYPE = 'application/octet-stream';
 
-export default class FileManager
+export default class FileManager implements FileReader
 {
     readonly #location: string;
     readonly #rootLocation: string;
     readonly #fileSystem: FileSystem;
 
-    constructor(location: string, fileSystem = new LocalFileSystem())
+    constructor(location: string, fileSystem: FileSystem)
     {
         this.#location = location;
         this.#fileSystem = fileSystem;

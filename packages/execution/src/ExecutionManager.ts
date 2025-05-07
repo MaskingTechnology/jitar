@@ -1,4 +1,6 @@
 
+import type { ModuleImporter } from '@jitar/sourcing';
+
 import StatusCodes from './definitions/StatusCodes';
 import RunModes from './definitions/RunModes';
 
@@ -22,9 +24,35 @@ import ErrorConverter from './utils/ErrorConverter';
 
 export default class ExecutionManager implements Runner
 {
+    readonly #moduleImporter: ModuleImporter;
+    readonly #segmentFiles: string[];
+
     readonly #argumentConstructor: ArgumentConstructor = new ArgumentConstructor();
     readonly #errorConverter: ErrorConverter = new ErrorConverter();
     readonly #application: Application = new Application();
+
+    constructor(moduleImporter: ModuleImporter, segmentFiles: string[] = [])
+    {
+        this.#moduleImporter = moduleImporter;
+        this.#segmentFiles = segmentFiles;
+    }
+
+    async start(): Promise<void>
+    {
+        return this.#loadSegments();
+    }
+
+    async stop(): Promise<void>
+    {
+        return this.#clearSegments();
+    }
+
+    async loadSegment(filename: string): Promise<void>
+    {
+        const module = await this.#moduleImporter.import(filename);
+
+        this.addSegment(module.default as Segment);
+    }
 
     async addSegment(segment: Segment): Promise<void>
     {
@@ -83,6 +111,16 @@ export default class ExecutionManager implements Runner
         }
 
         return this.#runImplementation(request, implementation, args);
+    }
+
+    async #loadSegments(): Promise<void>
+    {
+        await Promise.all(this.#segmentFiles.map(filename => this.loadSegment(filename)));
+    }
+
+    #clearSegments(): void
+    {
+        this.#application.clearSegments();
     }
 
     #getImplementation(fqn: string, version: Version): Implementation

@@ -2,6 +2,7 @@
 import { Segment, ExecutionManager } from '@jitar/execution';
 import { RemoteBuilder } from '@jitar/services';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
+import { RemoteSourcingManager } from '@jitar/sourcing';
 
 import Client from './Client';
 
@@ -24,25 +25,29 @@ export default class ClientBuilder
     build(configuration: ClientConfiguration): Client
     {
         const remoteUrl = configuration.remoteUrl;
+        const middleware = configuration.middleware;
+        const segments = configuration.segments;
+
         const remote = this.#remoteBuilder.build(remoteUrl);
-        const middlewareManager = this.#buildMiddlewareManager(configuration.middleware ?? []);
-        const executionManager = this.#buildExecutionManager(configuration.segments ?? []);
+        const sourcingManager = new RemoteSourcingManager(remoteUrl);
+        const middlewareManager = this.#buildMiddlewareManager(sourcingManager, middleware);
+        const executionManager = this.#buildExecutionManager(sourcingManager, segments);
 
         return new Client({ remoteUrl, remote, middlewareManager, executionManager });
     }
 
-    #buildMiddlewareManager(middleware: Middleware[]): MiddlewareManager
+    #buildMiddlewareManager(sourcingManager: RemoteSourcingManager, middleware: Middleware[] = []): MiddlewareManager
     {
-        const manager = new MiddlewareManager();
+        const manager = new MiddlewareManager(sourcingManager);
 
         middleware.forEach(middleware => manager.addMiddleware(middleware));
 
         return manager;
     }
 
-    #buildExecutionManager(segments: Segment[]): ExecutionManager
+    #buildExecutionManager(sourcingManager: RemoteSourcingManager, segments: Segment[] = []): ExecutionManager
     {
-        const manager = new ExecutionManager();
+        const manager = new ExecutionManager(sourcingManager);
 
         segments.forEach(segment => manager.addSegment(segment));
 

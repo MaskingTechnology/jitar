@@ -198,8 +198,9 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
             const remoteBuilder = 'const remoteBuilder = new HttpRemoteBuilder();';
             const clientBuilder = 'const clientBuilder = new ClientBuilder(remoteBuilder);';
-            const build = 'clientBuilder.build({remoteUrl, segments, middleware});';
-            const client = [remoteBuilder, clientBuilder, build].join('\n');
+            const build = 'const client = clientBuilder.build({remoteUrl, segments, middleware});';
+            const start = 'client.start();';
+            const client = [remoteBuilder, clientBuilder, build, start].join('\n');
 
             const exports = `export * from "${JITAR_CLIENT_ID}";`;
 

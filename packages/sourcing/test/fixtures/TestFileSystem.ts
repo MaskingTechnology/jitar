@@ -1,7 +1,7 @@
 
 import path from 'path';
 
-import LocalFileSystem from '../../src/LocalFileSystem';
+import LocalFileSystem from '../../src/files/LocalFileSystem';
 
 export default class TestFileSystem extends LocalFileSystem
 {
