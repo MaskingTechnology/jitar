@@ -1,7 +1,7 @@
 
-# Jitar | Construction example
+# Jitar | Resources example
 
-This example demonstrates how to construct and deconstruct a Jitar application.
+This example demonstrates how to use resources in a Jitar application.
 
 The application creates and fills a database before the server starts.
 When the application gets shut down, the database gets cleared.
