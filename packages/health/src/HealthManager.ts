@@ -1,4 +1,6 @@
 
+import type { ModuleImporter } from '@jitar/sourcing';
+
 import InvalidHealthCheck from './errors/InvalidHealthCheck';
 import type HealthCheck from './interfaces/HealthCheck';
 
@@ -10,7 +12,33 @@ type HealthCheckResult =
 
 export default class HealthManager
 {
+    readonly #moduleImporter: ModuleImporter;
+    readonly #healthCheckFiles: string[];
+
     readonly #healthChecks = new Map<string, HealthCheck>();
+
+    constructor(moduleImporter: ModuleImporter, healthCheckFiles: string[] = [])
+    {
+        this.#moduleImporter = moduleImporter;
+        this.#healthCheckFiles = healthCheckFiles;
+    }
+
+    async start(): Promise<void>
+    {
+        return this.#loadHealthChecks();
+    }
+
+    async stop(): Promise<void>
+    {
+        return this.clearHealthChecks();
+    }
+
+    async loadHealthCheck(filename: string): Promise<void>
+    {
+        const module = await this.#moduleImporter.import(filename);
+
+        this.addHealthCheck(module.default as HealthCheck);
+    }
 
     addHealthCheck(healthCheck: HealthCheck): void
     {
@@ -61,6 +89,11 @@ export default class HealthManager
         return Promise.allSettled(promises)
             .then(results => results.forEach(result => this.#handleHealthCheckResult(result, healthChecks)))
             .then(() => healthChecks);
+    }
+
+    async #loadHealthChecks(): Promise<void>
+    {
+        await Promise.all(this.#healthCheckFiles.map(filename => this.loadHealthCheck(filename)));
     }
 
     #handleHealthCheckResult(result: PromiseSettledResult<HealthCheckResult>, healthChecks: Map<string, boolean>): void

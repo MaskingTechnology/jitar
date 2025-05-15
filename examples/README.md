@@ -34,4 +34,4 @@ The following projects focus on one particular concept at a time. The examples a
 1. [Health checks](health-checks/README.md) - Demonstrates how to use health checks.
 1. [Middleware](middleware/README.md) - Demonstrates how to use middleware.
 1. [Cors](cors/README.md) - Demonstrates how to enable cors.
-1. [Construction](construction/README.md) - Demonstrates how to use a set up and tear down scripts.
+1. [Resources](resources/README.md) - Demonstrates how to use resources.

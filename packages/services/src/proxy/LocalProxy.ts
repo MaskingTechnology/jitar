@@ -12,7 +12,7 @@ type Configuration =
     runner: RunnerService;
 };
 
-export default class Proxy implements ProviderService, RunnerService
+export default class LocalProxy implements ProviderService, RunnerService
 {
     readonly #url: string;
     readonly #provider: ProviderService;

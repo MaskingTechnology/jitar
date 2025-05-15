@@ -1,5 +1,6 @@
 
 import { Request, Response, StatusCodes } from '@jitar/execution';
+import type { ModuleImporter } from '@jitar/sourcing';
 
 import InvalidMiddleware from './errors/InvalidMiddleware';
 import type Middleware from './interfaces/Middleware';
@@ -7,7 +8,33 @@ import type NextHandler from './types/NextHandler';
 
 export default class MiddlewareManager
 {
+    readonly #moduleImporter: ModuleImporter;
+    readonly #middlewareFiles: string[];
+
     #middlewares: Middleware[] = [];
+
+    constructor(moduleImporter: ModuleImporter, middlewareFiles: string[] = [])
+    {
+        this.#moduleImporter = moduleImporter;
+        this.#middlewareFiles = middlewareFiles;
+    }
+
+    async start(): Promise<void>
+    {
+        return this.#loadMiddlewares();
+    }
+
+    async stop(): Promise<void>
+    {
+        return this.clearMiddlewares();
+    }
+
+    async loadMiddleware(filename:string): Promise<void>
+    {
+        const module = await this.#moduleImporter.import(filename);
+
+        this.addMiddleware(module.default as Middleware);
+    }
 
     addMiddleware(middleware: Middleware): void
     {
@@ -36,6 +63,11 @@ export default class MiddlewareManager
         const startHandler = this.#getNextHandler(request, 0);
 
         return startHandler();
+    }
+
+    async #loadMiddlewares(): Promise<void>
+    {
+        await Promise.all(this.#middlewareFiles.map(filename => this.loadMiddleware(filename)));
     }
 
     #getNextHandler(request: Request, index: number): NextHandler

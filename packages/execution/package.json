@@ -16,6 +16,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@jitar/errors": "*"
+    "@jitar/errors": "*",
+    "@jitar/sourcing": "*"
   }
 }

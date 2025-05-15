@@ -1,37 +1,14 @@
 
 import { NotImplemented } from '@jitar/errors';
-import { File, FileManager, FileNotFound, SourcingManager } from '@jitar/sourcing';
+import { File, FileNotFound, LocalSourcingManager } from '@jitar/sourcing';
 
 import { FILENAMES } from './filenames.fixture';
 import { FILES } from './files.fixtures';
 
-class DummyFileManager implements FileManager
+class DummySourcingManager extends LocalSourcingManager
 {
-    getRootLocation(): string
-    {
-        throw new NotImplemented();
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getAbsoluteLocation(filename: string): string
-    {
-        throw new NotImplemented();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getRelativeLocation(filename: string): string
-    {
-        throw new NotImplemented();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getType(filename: string): Promise<string>
-    {
-        throw new NotImplemented();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    getContent(filename: string): Promise<Buffer | string>
+    filter(pattern: string): Promise<string[]>
     {
         throw new NotImplemented();
     }
@@ -53,24 +30,10 @@ class DummyFileManager implements FileManager
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    write(filename: string, content: string): Promise<void>
-    {
-        throw new NotImplemented();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     delete(filename: string): Promise<void>
-    {
-        throw new NotImplemented();
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    filter(pattern: string): Promise<string[]>
     {
         throw new NotImplemented();
     }
 }
 
-const fileManager = new DummyFileManager();
-
-export const sourcingManager = new SourcingManager(fileManager);
+export const sourcingManager = new DummySourcingManager('');

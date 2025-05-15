@@ -5,7 +5,7 @@ import { Request, Version, VersionParser } from '@jitar/execution';
 import type { HealthManager } from '@jitar/health';
 import { Logger } from '@jitar/logging';
 import type { MiddlewareManager } from '@jitar/middleware';
-import { LocalGateway, LocalWorker, Proxy, RemoteBuilder, RemoteWorker } from '@jitar/services';
+import { LocalGateway, LocalWorker, LocalProxy, RemoteBuilder, RemoteWorker } from '@jitar/services';
 import type { File, SourcingManager } from '@jitar/sourcing';
 
 import ProcedureRunner from '../ProcedureRunner';
@@ -20,27 +20,26 @@ import RemoveWorkerRequest from './types/RemoveWorkerRequest';
 import RunRequest from './types/RunRequest';
 import ServerResponse from './types/ServerResponse';
 
+import ResourceManager from './ResourceManager';
+
 type Configuration =
 {
-    proxy: Proxy;
+    proxy: LocalProxy;
     sourcingManager: SourcingManager;
     remoteBuilder: RemoteBuilder;
+    resourceManager: ResourceManager;
     middlewareManager: MiddlewareManager;
     healthManager: HealthManager;
-    setUpScripts?: string[];
-    tearDownScripts?: string[];
     logger: Logger;
 };
 
 export default class Server extends Runtime
 {
-    readonly #proxy: Proxy;
-    readonly #sourcingManager: SourcingManager;
+    readonly #proxy: LocalProxy;
     readonly #remoteBuilder: RemoteBuilder;
+    readonly #resourceManager: ResourceManager;
     readonly #middlewareManager: MiddlewareManager;
     readonly #healthManager: HealthManager;
-    readonly #setUpScripts: string[];
-    readonly #tearDownScripts: string[];
 
     readonly #logger: Logger;
     readonly #versionParser = new VersionParser();
@@ -50,17 +49,12 @@ export default class Server extends Runtime
         super();
 
         this.#proxy = configuration.proxy;
-        this.#sourcingManager = configuration.sourcingManager;
         this.#remoteBuilder = configuration.remoteBuilder;
+        this.#resourceManager = configuration.resourceManager;
         this.#middlewareManager = configuration.middlewareManager;
         this.#healthManager = configuration.healthManager;
-        this.#setUpScripts = configuration.setUpScripts ?? [];
-        this.#tearDownScripts = configuration.tearDownScripts ?? [];
 
         this.#logger = configuration.logger;
-
-        const procedureRunner = new ProcedureRunner(this.#proxy);
-        this.#middlewareManager.addMiddleware(procedureRunner);
     }
 
     get proxy() { return this.#proxy; }
@@ -74,8 +68,6 @@ export default class Server extends Runtime
     {
         await this.#setUp();
 
-        await this.#proxy.start();
-
         this.#logger.info(`Server started at ${this.#proxy.url}`);
 
         if (this.#proxy.runner instanceof LocalWorker)
@@ -86,8 +78,6 @@ export default class Server extends Runtime
 
     async stop(): Promise<void>
     {
-        await this.#proxy.stop();
-
         await this.#tearDown();
 
         this.#logger.info('Server stopped');
@@ -244,19 +234,31 @@ export default class Server extends Runtime
         }
     }
 
-    #setUp(): Promise<void>
+    async #setUp(): Promise<void>
     {
-        return this.#runScripts(this.#setUpScripts);
+        await this.#resourceManager.start();
+
+        await Promise.all(
+        [
+            this.#proxy.start(),
+            this.#healthManager.start(),
+            this.#middlewareManager.start()
+        ]);
+
+        const procedureRunner = new ProcedureRunner(this.#proxy);
+        this.#middlewareManager.addMiddleware(procedureRunner);
     }
 
-    #tearDown(): Promise<void>
+    async #tearDown(): Promise<void>
     {
-        return this.#runScripts(this.#tearDownScripts);
-    }
+        await Promise.all(
+        [
+            this.#middlewareManager.stop(),
+            this.#healthManager.stop(),
+            this.#proxy.stop()
+        ]);
 
-    async #runScripts(scripts: string[]): Promise<void>
-    {
-        await Promise.all(scripts.map(script => this.#sourcingManager.import(script)));
+        await this.#resourceManager.stop();
     }
 
     #transformRunRequest(request: RunRequest): Request
