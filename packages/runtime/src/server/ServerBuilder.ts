@@ -4,7 +4,7 @@ import { ExecutionManager } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
 import { Logger, LogLevel } from '@jitar/logging';
 import { MiddlewareManager } from '@jitar/middleware';
-import { DummyProvider, DummyRunner, LocalGateway, LocalRepository, LocalWorker, Proxy, RemoteBuilder, RemoteGateway, RemoteRepository } from '@jitar/services';
+import { DummyProvider, DummyRunner, LocalGateway, LocalRepository, LocalWorker, LocalProxy, RemoteBuilder, RemoteGateway, RemoteRepository } from '@jitar/services';
 import { SourcingManager } from '@jitar/sourcing';
 
 import UnknownServiceConfigured from './errors/UnknownServiceConfigured';
@@ -41,7 +41,7 @@ export default class RuntimeBuilder
         return new Server({ proxy, sourcingManager, remoteBuilder, resourceManager, middlewareManager, healthManager, logger });
     }
 
-    #buildService(configuration: ServerConfiguration): Promise<Proxy>
+    #buildService(configuration: ServerConfiguration): Promise<LocalProxy>
     {
         if (configuration.gateway !== undefined) return this.#buildGatewayProxy(configuration.url, configuration.gateway);
         if (configuration.worker !== undefined) return this.#buildWorkerProxy(configuration.url, configuration.worker);
@@ -52,28 +52,28 @@ export default class RuntimeBuilder
         throw new UnknownServiceConfigured();
     }
 
-    async #buildGatewayProxy(url: string, configuration: GatewayConfiguration): Promise<Proxy>
+    async #buildGatewayProxy(url: string, configuration: GatewayConfiguration): Promise<LocalProxy>
     {
         const provider = new DummyProvider();
         const runner = this.#buildLocalGateway(url, configuration);
 
-        return new Proxy({ url, provider, runner });
+        return new LocalProxy({ url, provider, runner });
     }
 
-    async #buildWorkerProxy(url: string, configuration: WorkerConfiguration): Promise<Proxy>
+    async #buildWorkerProxy(url: string, configuration: WorkerConfiguration): Promise<LocalProxy>
     {
         const provider = new DummyProvider();
         const runner = this.#buildLocalWorker(url, configuration);
 
-        return new Proxy({ url, provider, runner });
+        return new LocalProxy({ url, provider, runner });
     }
 
-    async #buildRepositoryProxy(url: string, configuration: RepositoryConfiguration): Promise<Proxy>
+    async #buildRepositoryProxy(url: string, configuration: RepositoryConfiguration): Promise<LocalProxy>
     {
         const provider = await this.#buildLocalRepository(url, configuration);
         const runner = new DummyRunner();
 
-        return new Proxy({ url, provider, runner });
+        return new LocalProxy({ url, provider, runner });
     }
 
     #buildLocalGateway(url: string, configuration: GatewayConfiguration): LocalGateway
@@ -118,20 +118,20 @@ export default class RuntimeBuilder
         return new RemoteRepository({ url, remote });
     }
 
-    async #buildProxy(url: string, configuration: ProxyConfiguration): Promise<Proxy>
+    async #buildProxy(url: string, configuration: ProxyConfiguration): Promise<LocalProxy>
     {
         const provider = this.#buildRemoteRepository(configuration.repository);
         const runner = this.#buildRemoteGateway(configuration.gateway);
 
-        return new Proxy({ url, provider, runner });
+        return new LocalProxy({ url, provider, runner });
     }
 
-    async #buildStandalone(url: string, configuration: StandaloneConfiguration): Promise<Proxy>
+    async #buildStandalone(url: string, configuration: StandaloneConfiguration): Promise<LocalProxy>
     {
         const provider = await this.#buildLocalRepository(url, configuration);
         const runner = this.#buildLocalWorker(url, configuration);
 
-        return new Proxy({ url, provider, runner });
+        return new LocalProxy({ url, provider, runner });
     }
 
     #buildResourceManager(setUp: string[] = [], tearDown: string[] = []): ResourceManager

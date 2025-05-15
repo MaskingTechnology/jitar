@@ -6,7 +6,7 @@ export { default as Gateway } from './gateway/Gateway';
 export { default as LocalGateway } from './gateway/LocalGateway';
 export { default as RemoteGateway } from './gateway/RemoteGateway';
 
-export { default as Proxy } from './proxy/Proxy';
+export { default as LocalProxy } from './proxy/LocalProxy';
 
 export { default as LocalRepository } from './repository/LocalRepository';
 export { default as RemoteRepository } from './repository/RemoteRepository';

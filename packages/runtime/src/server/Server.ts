@@ -5,7 +5,7 @@ import { Request, Version, VersionParser } from '@jitar/execution';
 import type { HealthManager } from '@jitar/health';
 import { Logger } from '@jitar/logging';
 import type { MiddlewareManager } from '@jitar/middleware';
-import { LocalGateway, LocalWorker, Proxy, RemoteBuilder, RemoteWorker } from '@jitar/services';
+import { LocalGateway, LocalWorker, LocalProxy, RemoteBuilder, RemoteWorker } from '@jitar/services';
 import type { File, SourcingManager } from '@jitar/sourcing';
 
 import ProcedureRunner from '../ProcedureRunner';
@@ -24,7 +24,7 @@ import ResourceManager from './ResourceManager';
 
 type Configuration =
 {
-    proxy: Proxy;
+    proxy: LocalProxy;
     sourcingManager: SourcingManager;
     remoteBuilder: RemoteBuilder;
     resourceManager: ResourceManager;
@@ -35,7 +35,7 @@ type Configuration =
 
 export default class Server extends Runtime
 {
-    readonly #proxy: Proxy;
+    readonly #proxy: LocalProxy;
     readonly #remoteBuilder: RemoteBuilder;
     readonly #resourceManager: ResourceManager;
     readonly #middlewareManager: MiddlewareManager;
