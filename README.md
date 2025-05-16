@@ -59,7 +59,7 @@ For existing applications, Jitar can be of great assistance for load balancing (
 
 Getting started with Jitar is as easy as pie. It only takes a few simple steps.
 
-1. **Create new project** - Start fast with our creator and pick one of our templates for Vue, React, SolidJS and more.
+1. **Create new project** - Start fast with our creator and pick one of our templates for Vue, React or Jitar only.
 1. **Add your functions** - Write functions and export them like you are used to.
 1. **Configure what runs on the server** - Add the exported functions to a server segment configuration file.
 1. **Run your application** - Jitar will take care of the rest.
