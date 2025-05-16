@@ -1,5 +1,5 @@
 
-import { cyan, green, magenta, red, yellow, blue } from 'kolorist';
+import { cyan, green, yellow } from 'kolorist';
 
 import { Framework } from '../types/Framework.js';
 
@@ -18,21 +18,6 @@ const Frameworks: Framework[] = [
         name: 'react',
         display: 'React',
         color: cyan
-    },
-    {
-        name: 'solid',
-        display: 'SolidJS',
-        color: blue
-    },
-    {
-        name: 'lit',
-        display: 'Lit',
-        color: magenta
-    },
-    {
-        name: 'svelte',
-        display: 'Svelte',
-        color: red
     }
 ];
 
