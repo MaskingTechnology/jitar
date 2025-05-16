@@ -1,5 +1,5 @@
 {
     "source": "./dist",
-    "target": "./.jitar",
+    "target": "./dist",
     "segments": "./segments"
 }
