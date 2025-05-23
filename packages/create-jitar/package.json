@@ -1,6 +1,6 @@
 {
   "name": "create-jitar",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "type": "module",
   "license": "MIT",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
@@ -38,7 +38,7 @@
     "prompts": "^2.4.2"
   },
   "devDependencies": {
-    "@types/minimist":"^1.2.5"
+    "@types/minimist": "^1.2.5"
   },
   "repository": {
     "type": "git",
