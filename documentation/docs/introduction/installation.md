@@ -16,7 +16,7 @@ Jitar can be used in new and existing projects.
 
 ## New projects
 
-We provide a CLI tool to quickly create a project with or without a frontend framework. We currently support React, Vue, Svelte, SolidJs and Lit. To create a Jitar application, run in your terminal:
+We provide a CLI tool to quickly create a project with or without a frontend framework. We currently support React and Vue. To create a Jitar application, run in your terminal:
 
 ```bash
 npm create jitar@latest

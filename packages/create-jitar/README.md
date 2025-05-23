@@ -44,7 +44,4 @@ npm create jitar@latest -- --template=value
 The following templates are available:
 * react
 * vue
-* svelte
-* lit
-* solid
 * none (jitar-only)
