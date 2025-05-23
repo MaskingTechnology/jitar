@@ -1,3 +1,10 @@
+# v0.9.2
+[2025-05-23]
+
+### Features
+
+* \[[638](https://github.com/MaskingTechnology/jitar/pull/638)] feat: improved resource loading (#608) by Peter van Vliet
+
 # v0.9.1
 [2025-02-14]
 
