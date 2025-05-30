@@ -21,7 +21,7 @@ runComponent()
     <a href="https://vuejs.org/" target="_blank">
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
-    <a href="https://jitar.dev/" target="_blank">
+    <a href="https://jitar.dev" target="_blank">
       <img src="./assets/jitar.svg" class="logo jitar" alt="Jitar logo" />
     </a>
   </div>

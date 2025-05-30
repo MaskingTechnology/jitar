@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react'
 
-import './App.css'
-import reactLogo from './assets/react.svg'
-import jitarLogo from './assets/jitar.svg'
+import { useEffect, useState } from 'react';
 
-import { sayHello } from '../domain/sayHello'
+import './App.css';
+import reactLogo from './assets/react.svg';
+import jitarLogo from './assets/jitar.svg';
 
-function App()
+import { sayHello } from '../domain/sayHello';
+
+export default function App()
 {
   const [message, setMessage] = useState<string>('Loading...');
 
@@ -32,5 +33,3 @@ function App()
     </div>
   )
 }
-
-export default App
