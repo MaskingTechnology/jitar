@@ -9,7 +9,7 @@ async function runComponent() {
   message.value = await sayHello('Vite + Vue + Jitar');
 }
 
-runComponent()
+runComponent();
 
 </script>
 

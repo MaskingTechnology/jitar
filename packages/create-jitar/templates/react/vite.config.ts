@@ -11,4 +11,4 @@ export default defineConfig({
     react(),
     jitar({ sourceDir: 'src', targetDir: 'dist', jitarDir: 'domain', jitarUrl: 'http://localhost:3000', segments: [] })
   ]
-})
+});
