@@ -1,3 +1,11 @@
+# 0.9.3
+[2025-06-02]
+
+### Chores
+
+* \[[647](https://github.com/MaskingTechnology/jitar/pull/647)] chore(deps): june updates (#646) by Peter van Vliet
+* \[[644](https://github.com/MaskingTechnology/jitar/pull/644)] chore: clean up templates (#643) by Bas Meeuwissen
+
 # v0.9.2
 [2025-05-23]
 
