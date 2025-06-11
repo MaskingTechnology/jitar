@@ -6,7 +6,7 @@ This plugin allows you to use [Vite](https://vitejs.dev/) to build your [Jitar](
 ## Installation
 
 ```bash
-npm install --save-dev @jitar/vite-plugin
+npm install --save-dev @jitar/plugin-vite
 ```
 
 ## Usage
