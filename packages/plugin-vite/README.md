@@ -6,28 +6,39 @@ This plugin allows you to use [Vite](https://vitejs.dev/) to build your [Jitar](
 ## Installation
 
 ```bash
-npm install --save-dev @jitar/vite-plugin
+npm install --save-dev @jitar/plugin-vite
 ```
 
 ## Usage
 
 The plugin needs to be added to the vite config file.
 
-```js
-// vite.config.js
+```ts
+// vite.config.ts
 import { defineConfig } from 'vite'
-import jitar from '@jitar/plugin-vite'
+import jitar, { JitarConfig } from '@jitar/plugin-vite'
+
+const jitarConfig: JitarConfig = {
+  sourceDir: 'src',
+  targetDir: 'dist',
+  jitarDir: 'domain',
+  jitarUrl: 'http://localhost:3000',
+  segments: [],
+  middleware: []
+}
 
 export default defineConfig({
   plugins: [
-    jitar(srcPath, jitarPath, jitarUrl, [segments])
+    jitar(jitarConfig)
   ]
 })
 ```
 
-The plugin takes 4 arguments:
+The plugin accepts a configuration object with the following properties:
 
-* **srcPath** - The path to the app source files. In most cases this is the `src` folder.
-* **jitarPath** - The path to the source files used by Jitar. This path is relative to the source root. We like to use `shared` (which points to `src/shared`), but feel free to use something else.
-* **jitarUrl** - The URL of the Jitar instance. Jitar uses by default `http://localhost:3000`, but can be configured differently in the Jitar config.
-* **segments** - The segments to use for the client app. This is an array of strings. The default is an empty array.
+* **sourceDir** - The folder containing the app’s source files. In most cases, this is the `src` folder.
+* **targetDir** - The folder where the app’s distribution files are output. In most cases, this is the `dist` folder.
+* **jitarDir** - The folder containing the source files used by Jitar, relative to the source root. We typically use `domain` (which refers to `src/domain`), but feel free to use a different path.
+* **jitarUrl** - The URL of the Jitar instance. By default, Jitar uses `http://localhost:3000`, but this can be changed in the Jitar configuration.
+* **segments** - The segments to use for the client app. This should be an array of strings. The default value is an empty array.
+* **middleware** - The middleware to use for the client app. This should be an array of strings. The default value is an empty array.
