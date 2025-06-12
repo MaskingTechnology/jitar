@@ -21,6 +21,3 @@ updates:
     pull-request-branch-name:
       # Separate sections of the branch name with a hyphen
       separator: "-"
-    reviewers:
-      - "basmasking"
-      - "petermasking"
