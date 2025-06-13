@@ -12,9 +12,6 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "dependencies": {
-    "express": "^4.19.2",
-  },
   "exclude": [
     "vite.config.ts",
     "node_modules",

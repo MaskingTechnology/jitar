@@ -21,6 +21,7 @@
     "@jitar/runtime": "*",
     "@jitar/services": "*",
     "@jitar/sourcing": "*",
-    "@jitar/validation": "*"
+    "@jitar/validation": "*",
+    "express": "^5.1.0"
   }
 }
