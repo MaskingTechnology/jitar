@@ -1,0 +1,15 @@
+{
+    "name": "jitar-only-starter",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "rm -rf dist .jitar && tsc -p tsconfig.json && jitar build",
+        "standalone": "jitar start --service=services/standalone.json",
+        "gateway": "jitar start --service=services/gateway.json",
+        "hi": "jitar start --service=services/hi.json",
+        "hello": "jitar start --service=services/hello.json"
+    },
+    "dependencies": {
+        "jitar": "^0.9.0"
+    }
+}

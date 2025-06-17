@@ -1,0 +1,12 @@
+{
+    "./greetings/sayHi": {
+        "default": {
+            "access": "public"
+        }
+    },
+    "./greetings/sayBoth": {
+        "default": {
+            "access": "public"
+        }
+    }
+}

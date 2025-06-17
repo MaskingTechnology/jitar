@@ -1,0 +1,3 @@
+{
+    "./domain/sayHello": { "sayHello": { "access": "public" } }
+}

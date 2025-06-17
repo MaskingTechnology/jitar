@@ -1,0 +1,7 @@
+{
+    "./greetings/sayHello": {
+        "default": {
+            "access": "public"
+        }
+    }
+}
