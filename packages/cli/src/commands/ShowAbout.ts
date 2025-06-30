@@ -12,6 +12,10 @@ More information can be found at:
 
 export default class ShowAbout implements Command
 {
+    readonly name = 'about';
+    readonly description = 'Shows information about Jitar.';
+    readonly options = [];
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async execute(args: ArgumentProcessor): Promise<void>
     {
