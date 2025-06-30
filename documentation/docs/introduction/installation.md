@@ -16,13 +16,16 @@ Jitar can be used in new and existing projects.
 
 ## New projects
 
-We provide a CLI tool to quickly create a project with or without a frontend framework. We currently support React and Vue. To create a Jitar application, run in your terminal:
+We provide a CLI tool to quickly create a project with or without a frontend framework. To create a Jitar application, run in your terminal:
 
 ```bash
-npm create jitar@latest
+npm install -g jitar
+jitar init --name=project-name --template=react
 ```
 
-Enter the project name, select a frontend framework (or none) and run the prompted commands.
+You can also use our `vue` template, or `jitar-only` if you don't need a frontend framework.
+
+Next, run the prompted commands.
 
 ```bash
 cd [project-name]
