@@ -14,12 +14,11 @@
       "email": "bas@masking.tech"
     }
   ],
-  "description": "npm creator for jitar",
+  "description": "npm creator for jitar (deprecated)",
   "bin": {
     "create-jitar": "index.js"
   },
   "files": [
-    "templates/**/*",
     "dist"
   ],
   "engines": {
@@ -31,14 +30,6 @@
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist build",
     "prepublishOnly": "npm run clean && npm run build"
-  },
-  "dependencies": {
-    "kolorist": "^1.8.0",
-    "minimist": "^1.2.8",
-    "prompts": "^2.4.2"
-  },
-  "devDependencies": {
-    "@types/minimist": "^1.2.5"
   },
   "repository": {
     "type": "git",
