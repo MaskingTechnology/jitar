@@ -3,10 +3,13 @@ import path from 'path';
 import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
 
+import InvalidName from './errors/InvalidName';
 import UnknownTemplate from './errors/UnknownTemplate';
 
 const TEMPLATES_LOCATION = 'templates';
 const DEFAULT_PROJECT_ROOT_PATH = './';
+
+const NAME_REGEX = /^[a-zA-Z.\-_]+$/;
 
 const RENAME_FILES =
 {
@@ -15,8 +18,8 @@ const RENAME_FILES =
 
 export default class InitManager
 {
-    #templateRootPath: string;
-    #projectRootPath: string;
+    readonly #templateRootPath: string;
+    readonly #projectRootPath: string;
 
     constructor(rootPath: string = DEFAULT_PROJECT_ROOT_PATH)
     {
@@ -26,6 +29,9 @@ export default class InitManager
 
     async init(projectName: string, templateName: string): Promise<void>
     {
+        this.#validateName(projectName, 'project');
+        this.#validateName(templateName, 'template');
+
         const templateVerified = await this.#verifyTemplateName(templateName);
 
         if (templateVerified === false)
@@ -48,6 +54,14 @@ export default class InitManager
     #createProjectRootPath(rootPath: string): string
     {
         return path.resolve(rootPath);
+    }
+
+    #validateName(name: string, type: string): void
+    {
+        if (NAME_REGEX.test(name) === false)
+        {
+            throw new InvalidName(name, type);
+        }
     }
 
     async #verifyTemplateName(templateName: string): Promise<boolean>

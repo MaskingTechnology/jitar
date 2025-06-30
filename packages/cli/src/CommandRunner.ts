@@ -8,6 +8,8 @@ import InitApp from './commands/InitApp';
 import BuildApp from './commands/BuildApp';
 import StartServer from './commands/StartServer';
 
+import CommandNotFound from './errors/CommandNotFound';
+
 import ArgumentManager from './ArgumentProcessor';
 
 export default class CommandRunner
@@ -26,13 +28,14 @@ export default class CommandRunner
 
     run(name: string, args: ArgumentManager): Promise<void>
     {
-        const command = [...this.#commands.values()].find(command => command.name === name);
-
-        if (command === undefined)
+        for (const command of this.#commands)
         {
-            throw new Error(`Command ${name} not found`);
+            if (command.name === name)
+            {
+                return command.execute(args);
+            }
         }
 
-        return command.execute(args);
+        throw new CommandNotFound(name);
     }
 }

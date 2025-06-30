@@ -16,7 +16,7 @@ In this short guide, you'll learn Jitar's key concepts and experience the setup 
 
 ## 1. Create a new project
 
-The fastest way to get started is creating a new project with our CLI tool. We'll use the React template in this section, but you can also use one of our other templates: `vue` or `jitar-only`. Also, we use jitar-react as the project name, but feel free to use any other name.
+The fastest way to get started is creating a new project with our CLI tool. We'll use the React template in this section, but you can also use one of our other templates: `vue` or `jitar-only`. Also, we use jitar-react as the project name, but you can choose any other name.
 
 ```bash
 npm install -g jitar

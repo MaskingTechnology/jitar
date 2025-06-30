@@ -1,7 +1,5 @@
 
-import { ServerError } from '@jitar/errors';
-
-export default class UnknownTemplate extends ServerError
+export default class UnknownTemplate extends Error
 {
     constructor(templateName: string)
     {

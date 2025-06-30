@@ -9,7 +9,6 @@
   "exports": "./dist/index.js",
   "private": true,
   "scripts": {
-    "test": "",
     "lint": "eslint",
     "build": "tsc -p tsconfig.json",
     "clean": "rm -rf dist"
