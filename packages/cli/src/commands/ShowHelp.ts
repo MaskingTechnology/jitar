@@ -2,30 +2,93 @@
 import ArgumentProcessor from '../ArgumentProcessor';
 import Command from '../Command';
 
-const message = `
-Usage: jitar <command> [options]
-
-Commands:
-  build     Builds the application (creates segment bundles)
-  start     Starts a server with the configured service
-  about     Shows information about Jitar
-  version   Shows the installed version of Jitar
-  help      Shows help (this message)
-
-Options:
-  --config            Path to the configuration file (default: jitar.json)
-  --service           Path to the service configuration file (required for 'start' command)
-  --env-file          Path to the environment file (default: none)
-  --log-level         Optional for 'start' and 'build' commands (default: info, other options: debug, warn, error, fatal)
-  --http-body-limit   Optional for 'start' command (default: 204,800 bytes)
-More information can be found at https://docs.jitar.dev
-`;
+const LABEL_PADDING = 3;
 
 export default class ShowHelp implements Command
 {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async execute(args: ArgumentProcessor): Promise<void>
-  {
-    console.log(message);
-  }
+    readonly name = 'help';
+    readonly description = 'Shows all available commands (this message).';
+    readonly options =
+    [
+        { key: '[command]', required: false, description: 'The command name to show more details for' }
+    ];
+
+    readonly #commands: Set<Command>;
+
+    constructor(commands: Set<Command>)
+    {
+        this.#commands = commands;
+    }
+
+    async execute(args: ArgumentProcessor): Promise<void>
+    {
+        for (const command of this.#commands.values())
+        {
+            if (args.containsKey(command.name))
+            {
+                return this.#showCommandDetails(command);
+            }
+        }
+
+        this.#listCommands();
+    }
+
+    #listCommands(): void
+    {
+        console.log('\njitar <command>\n');
+        console.log('Available commands:');
+
+        const commands = [...this.#commands.values()];
+        const commandNames = commands.map(command => command.name);
+        const paddingSize = this.#determinePaddingSize(commandNames);
+        
+        for (const command of commands)
+        {
+            const name = command.name.padEnd(paddingSize, ' ');
+            const description = command.description;
+
+            console.log(`  ${name} ${description}`);
+        }
+
+        console.log('\nFor the options per command, use:');
+        console.log('  jitar help [command]\n');
+    }
+
+    #showCommandDetails(command: Command): void
+    {
+        console.log(`\n${command.description}\n`);
+        
+        const options = command.options;
+
+        if (options.length === 0)
+        {
+            console.log('No options available.\n');
+
+            return;
+        }
+
+        console.log('Options:');
+
+        const optionKeys = options.map(option => option.key);
+        const paddingSize = this.#determinePaddingSize(optionKeys);
+        
+        for (const option of options)
+        {
+            const key = option.key.padEnd(paddingSize, ' ');
+            const description = option.description;
+            const defaultValue = option.defaultValue ? `default: ${option.defaultValue}` : 'no default value';
+            const required = option.required ? 'required' : `optional - ${defaultValue}`;
+
+            console.log(`  ${key} ${description} (${required})`);
+        }
+
+        console.log();
+    }
+
+    #determinePaddingSize(labels: string[]): number
+    {
+        const maxLength = labels.reduce((maxSize, label) => label.length > maxSize ? label.length : maxSize, 0);
+
+        return maxLength + LABEL_PADDING;
+    }
 }

@@ -19,6 +19,11 @@ export default class ArgumentProcessor
         return this.#command;
     }
 
+    containsKey(key: string): boolean
+    {
+        return this.#args.has(key);
+    }
+
     getRequiredArgument(name: string): string
     {
         const value = this.#args.get(name);

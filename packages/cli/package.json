@@ -19,6 +19,7 @@
     "@jitar/build": "*",
     "@jitar/configuration": "*",
     "@jitar/http": "*",
+    "@jitar/init": "*",
     "@jitar/logging": "*",
     "@jitar/runtime": "*",
     "@jitar/sourcing": "*"

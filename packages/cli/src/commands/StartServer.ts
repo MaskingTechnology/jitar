@@ -21,6 +21,18 @@ ____________________________________
 
 export default class StartServer implements Command
 {
+    readonly name = 'start';
+    readonly description = 'Starts a server with the configured service.';
+    readonly options =
+    [
+        { key: '--service', required: true, description: 'Path to the service configuration file' },
+
+        { key: '--env-file', required: false, description: 'Path to the environment file' },
+        { key: '--config', required: false, description: 'Path to the configuration file', defaultValue: 'jitar.json' },
+        { key: '--log-level', required: false, description: 'Level of logging [info, debug, warn, error, fatal]', defaultValue: 'info' },
+        { key: '--http-body-limit', required: false, description: 'Maximum HTTP body size in bytes', defaultValue: 204_800 }
+    ];
+
     async execute(args: ArgumentProcessor): Promise<void>
     {
         const environmentFile = args.getOptionalArgument('--env-file', undefined);
