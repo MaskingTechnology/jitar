@@ -43,7 +43,7 @@
     "turbo": "^2.5.4",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.34.0",
-    "vitest": "^3.2.3"
+    "vitest": "^3.2.4"
   },
   "optionalDependencies": {
     "@nrwl/nx-linux-x64-gnu": "^15.9.3"
