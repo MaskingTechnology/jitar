@@ -29,11 +29,11 @@ export default class MiddlewareManager
         return this.clearMiddlewares();
     }
 
-    async loadMiddleware(filename:string): Promise<void>
+    async loadMiddleware(filename: string): Promise<void>
     {
-        const module = await this.#moduleImporter.import(filename);
+        const middleware = await this.#loadMiddleware(filename);
 
-        this.addMiddleware(module.default as Middleware);
+        this.addMiddleware(middleware);
     }
 
     addMiddleware(middleware: Middleware): void
@@ -67,7 +67,16 @@ export default class MiddlewareManager
 
     async #loadMiddlewares(): Promise<void>
     {
-        await Promise.all(this.#middlewareFiles.map(filename => this.loadMiddleware(filename)));
+        const middlewares = await Promise.all(this.#middlewareFiles.map(filename => this.#loadMiddleware(filename)));
+
+        middlewares.forEach(middleware => this.addMiddleware(middleware));
+    }
+
+    async #loadMiddleware(filename: string): Promise<Middleware>
+    {
+        const module = await this.#moduleImporter.import(filename);
+
+        return module.default as Middleware;
     }
 
     #getNextHandler(request: Request, index: number): NextHandler

@@ -35,9 +35,9 @@ export default class HealthManager
 
     async loadHealthCheck(filename: string): Promise<void>
     {
-        const module = await this.#moduleImporter.import(filename);
+        const healthCheck = await this.#loadHealthCheck(filename);
 
-        this.addHealthCheck(module.default as HealthCheck);
+        this.addHealthCheck(healthCheck);
     }
 
     addHealthCheck(healthCheck: HealthCheck): void
@@ -93,7 +93,16 @@ export default class HealthManager
 
     async #loadHealthChecks(): Promise<void>
     {
-        await Promise.all(this.#healthCheckFiles.map(filename => this.loadHealthCheck(filename)));
+        const healthChecks = await Promise.all(this.#healthCheckFiles.map(filename => this.#loadHealthCheck(filename)));
+
+        healthChecks.forEach(healthCheck => this.addHealthCheck(healthCheck));
+    }
+
+    async #loadHealthCheck(filename: string): Promise<HealthCheck>
+    {
+        const module = await this.#moduleImporter.import(filename);
+
+        return module.default as HealthCheck;
     }
 
     #handleHealthCheckResult(result: PromiseSettledResult<HealthCheckResult>, healthChecks: Map<string, boolean>): void
