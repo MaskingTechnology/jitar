@@ -2,7 +2,8 @@
 import { NotImplemented } from '@jitar/errors';
 import { Request, Response } from '@jitar/execution';
 
-import type Remote from '../Remote';
+import type Remote from '../common/Remote';
+import type { State } from '../common/definitions/States';
 import type Worker from '../worker/Worker';
 
 import Gateway from './Gateway';
@@ -64,9 +65,14 @@ export default class RemoteGateway implements Gateway
         return this.#remote.addWorker(worker.url, worker.getProcedureNames(), worker.trustKey);
     }
 
-    removeWorker(worker: Worker): Promise<void>
+    reportWorker(id: string, state: State): Promise<void>
     {
-        return this.#remote.removeWorker(worker.id as string);
+        return this.#remote.reportWorker(id, state);
+    }
+
+    removeWorker(id: string): Promise<void>
+    {
+        return this.#remote.removeWorker(id);
     }
 
     run(request: Request): Promise<Response>

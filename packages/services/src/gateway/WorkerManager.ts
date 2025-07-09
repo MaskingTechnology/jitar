@@ -1,9 +1,10 @@
 
 import { ProcedureNotFound, Request, Response, Runner } from '@jitar/execution';
 
+import type { State } from '../common/definitions/States';
 import Worker from '../worker/Worker';
-import WorkerBalancer from './WorkerBalancer';
 
+import WorkerBalancer from './WorkerBalancer';
 import IdGenerator from './utils/IdGenerator';
 import UnknownWorker from './errors/UnknownWorker';
 
@@ -64,9 +65,18 @@ export default class WorkerManager implements Runner
         return worker;
     }
 
-    removeWorker(worker: Worker): void
+    reportWorker(id: string, state: State): void
     {
-        this.#workers.delete(worker.id as string);
+        const worker = this.getWorker(id);
+
+        worker.state = state;
+    }
+
+    removeWorker(id: string): void
+    {
+        const worker = this.getWorker(id);
+
+        this.#workers.delete(id);
 
         for (const name of worker.getProcedureNames())
         {

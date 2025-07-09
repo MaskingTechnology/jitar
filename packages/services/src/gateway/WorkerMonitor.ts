@@ -1,5 +1,6 @@
 
 import type Worker from '../worker/Worker';
+import States from '../common/definitions/States';
 
 import type WorkerManager from './WorkerManager';
 
@@ -9,6 +10,7 @@ export default class WorkerMonitor
 {
     readonly #workerManager: WorkerManager;
     readonly #frequency: number;
+
     #interval: ReturnType<typeof setInterval> | null = null;
 
     constructor(workerManager: WorkerManager, frequency = DEFAULT_FREQUENCY)
@@ -34,33 +36,18 @@ export default class WorkerMonitor
         clearInterval(this.#interval);
     }
 
-    async #monitor(): Promise<void>
+    #monitor(): void
     {
-        const workers = this.#workerManager.workers;
-        const promises = workers.map(worker => this.#monitorWorker(worker));
-
-        await Promise.all(promises);
+        this.#workerManager.workers.forEach(worker => this.#checkWorker(worker));
     }
 
-    async #monitorWorker(worker: Worker): Promise<void>
+    async #checkWorker(worker: Worker): Promise<void>
     {
-        const available = await this.#checkWorkerAvailable(worker);
-
-        if (available === false)
+        const state = await worker.updateState();
+        
+        if (state === States.DISCONNECTED)
         {
-            this.#workerManager.removeWorker(worker);
-        }
-    }
-
-    async #checkWorkerAvailable(worker: Worker): Promise<boolean>
-    {
-        try
-        {
-            return await worker.isHealthy();
-        }
-        catch
-        {
-            return false;
+            this.#workerManager.removeWorker(worker.id as string);
         }
     }
 }

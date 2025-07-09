@@ -1,6 +1,7 @@
 
 import { Segment, ExecutionManager } from '@jitar/execution';
 import { RemoteBuilder } from '@jitar/services';
+import { HealthManager } from '@jitar/health';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
 import { RemoteSourcingManager } from '@jitar/sourcing';
 
@@ -30,10 +31,16 @@ export default class ClientBuilder
 
         const remote = this.#remoteBuilder.build(remoteUrl);
         const sourcingManager = new RemoteSourcingManager(remoteUrl);
+        const healthManager = this.#buildHealthManager(sourcingManager);
         const middlewareManager = this.#buildMiddlewareManager(sourcingManager, middleware);
         const executionManager = this.#buildExecutionManager(sourcingManager, segments);
 
-        return new Client({ remoteUrl, remote, middlewareManager, executionManager });
+        return new Client({ remoteUrl, remote, healthManager, middlewareManager, executionManager });
+    }
+
+    #buildHealthManager(sourcingManager: RemoteSourcingManager): HealthManager
+    {
+        return new HealthManager(sourcingManager);
     }
 
     #buildMiddlewareManager(sourcingManager: RemoteSourcingManager, middleware: Middleware[] = []): MiddlewareManager

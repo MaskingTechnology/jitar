@@ -2,10 +2,9 @@
 import { BadRequest, Forbidden, NotFound, NotImplemented, PaymentRequired, Teapot, Unauthorized } from '@jitar/errors';
 import type { Response } from '@jitar/execution';
 import { Request, Version, VersionParser } from '@jitar/execution';
-import type { HealthManager } from '@jitar/health';
 import { Logger } from '@jitar/logging';
 import type { MiddlewareManager } from '@jitar/middleware';
-import { LocalGateway, LocalWorker, LocalProxy, RemoteBuilder, RemoteWorker } from '@jitar/services';
+import { LocalGateway, LocalWorker, LocalProxy, RemoteBuilder, RemoteWorker, State, States } from '@jitar/services';
 import type { File, SourcingManager } from '@jitar/sourcing';
 
 import ProcedureRunner from '../ProcedureRunner';
@@ -17,6 +16,7 @@ import StatusCodes from './definitions/StatusCodes';
 import AddWorkerRequest from './types/AddWorkerRequest';
 import ProvideRequest from './types/ProvideRequest';
 import RemoveWorkerRequest from './types/RemoveWorkerRequest';
+import ReportWorkerRequest from './types/ReportWorkerRequest';
 import RunRequest from './types/RunRequest';
 import ServerResponse from './types/ServerResponse';
 
@@ -29,7 +29,6 @@ type Configuration =
     remoteBuilder: RemoteBuilder;
     resourceManager: ResourceManager;
     middlewareManager: MiddlewareManager;
-    healthManager: HealthManager;
     logger: Logger;
 };
 
@@ -39,7 +38,6 @@ export default class Server extends Runtime
     readonly #remoteBuilder: RemoteBuilder;
     readonly #resourceManager: ResourceManager;
     readonly #middlewareManager: MiddlewareManager;
-    readonly #healthManager: HealthManager;
 
     readonly #logger: Logger;
     readonly #versionParser = new VersionParser();
@@ -52,7 +50,6 @@ export default class Server extends Runtime
         this.#remoteBuilder = configuration.remoteBuilder;
         this.#resourceManager = configuration.resourceManager;
         this.#middlewareManager = configuration.middlewareManager;
-        this.#healthManager = configuration.healthManager;
 
         this.#logger = configuration.logger;
     }
@@ -87,9 +84,7 @@ export default class Server extends Runtime
     {
         try
         {
-            const internalHealth = await this.#proxy.getHealth();
-            const externalHealth = await this.#healthManager.getHealth();
-            const health = new Map([...internalHealth, ...externalHealth]);
+            const health = await this.#proxy.getHealth();
 
             this.#logger.debug('Got health');
 
@@ -109,9 +104,7 @@ export default class Server extends Runtime
     {
         try
         {
-            const internalsHealthy = await this.#proxy.isHealthy();
-            const externalsHealthy = await this.#healthManager.isHealthy();
-            const healthy = internalsHealthy && externalsHealthy;
+            const healthy = await this.#proxy.isHealthy();
 
             this.#logger.debug('Got health status');
 
@@ -180,16 +173,11 @@ export default class Server extends Runtime
     {
         try
         {
-            const runner = this.#proxy.runner;
-
-            if ((runner instanceof LocalGateway) === false)
-            {
-                throw new BadRequest('Cannot add worker to remote gateway');
-            }
+            const gateway = this.#extractLocalGatewayFromProxy();
 
             const worker = this.#buildRemoteWorker(addRequest.url, addRequest.procedureNames, addRequest.trustKey);
 
-            const id = await runner.addWorker(worker);
+            const id = await gateway.addWorker(worker);
 
             this.#logger.info('Added worker:', worker.url);
 
@@ -205,22 +193,39 @@ export default class Server extends Runtime
         }
     }
 
+    async reportWorker(reportRequest: ReportWorkerRequest): Promise<ServerResponse>
+    {
+        try
+        {
+            const state = this.#translateState(reportRequest.state);
+
+            const gateway = this.#extractLocalGatewayFromProxy();
+
+            gateway.reportWorker(reportRequest.id, state);
+
+            this.#logger.debug('Reported worker:', reportRequest.id);
+
+            return this.#respondSuccess();
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : String(error);
+
+            this.#logger.error('Failed to add worker:', message);
+
+            return this.#respondError(error);
+        }
+    }
+
     async removeWorker(removeRequest: RemoveWorkerRequest): Promise<ServerResponse>
     {
         try
         {
-            const runner = this.#proxy.runner;
+            const gateway = this.#extractLocalGatewayFromProxy();
 
-            if ((runner instanceof LocalGateway) === false)
-            {
-                throw new BadRequest('Cannot remove worker from remote gateway');
-            }
+            await gateway.removeWorker(removeRequest.id);
 
-            const worker = runner.getWorker(removeRequest.id);
-            
-            await runner.removeWorker(worker);
-
-            this.#logger.info('Removed worker:', worker.url);
+            this.#logger.info('Removed worker:', removeRequest.id);
 
             return this.#respondSuccess();
         }
@@ -241,7 +246,6 @@ export default class Server extends Runtime
         await Promise.all(
         [
             this.#proxy.start(),
-            this.#healthManager.start(),
             this.#middlewareManager.start()
         ]);
 
@@ -254,7 +258,6 @@ export default class Server extends Runtime
         await Promise.all(
         [
             this.#middlewareManager.stop(),
-            this.#healthManager.stop(),
             this.#proxy.stop()
         ]);
 
@@ -316,6 +319,18 @@ export default class Server extends Runtime
         }
 
         return map;
+    }
+
+    #translateState(state: string): State
+    {
+        const states = Object.values(States) as string[];
+
+        if (states.includes(state) === false)
+        {
+            throw new BadRequest('Invalid state value');
+        }
+
+        return state as State;
     }
 
     #respondHealth(health: Map<string, boolean>): ServerResponse
@@ -407,6 +422,18 @@ export default class Server extends Runtime
         if (error instanceof Unauthorized) return StatusCodes.UNAUTHORIZED;
 
         return StatusCodes.SERVER_ERROR;
+    }
+
+    #extractLocalGatewayFromProxy(): LocalGateway
+    {
+        const runner = this.#proxy.runner;
+
+        if ((runner instanceof LocalGateway) === false)
+        {
+            throw new BadRequest('Cannot remove worker from remote gateway');
+        }
+
+        return runner;
     }
 
     #buildRemoteWorker(url: string, procedures: string[], trustKey?: string): RemoteWorker

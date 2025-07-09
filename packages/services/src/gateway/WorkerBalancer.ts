@@ -1,6 +1,7 @@
 
 import type { Request, Response } from '@jitar/execution';
 
+import States from '../common/definitions/States';
 import type Worker from '../worker/Worker';
 
 import NoWorkerAvailable from './errors/NoWorkerAvailable';
@@ -36,17 +37,19 @@ export default class WorkerBalancer
 
     getNextWorker(): Worker | undefined
     {
-        if (this.#workers.length === 0)
+        const workers = this.#workers.filter(worker => worker.state === States.HEALTHY);
+
+        if (workers.length === 0)
         {
             return;
         }
 
-        if (this.#currentIndex >= this.#workers.length)
+        if (this.#currentIndex >= workers.length)
         {
             this.#currentIndex = 0;
         }
 
-        return this.#workers[this.#currentIndex++];
+        return workers[this.#currentIndex++];
     }
 
     async run(request: Request): Promise<Response>

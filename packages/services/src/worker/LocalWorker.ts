@@ -1,11 +1,15 @@
 
 import { ExecutionManager, Implementation, ProcedureNotFound, Request, Response } from '@jitar/execution';
+import { HealthManager } from '@jitar/health';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
 import Gateway from '../gateway/Gateway';
 import Worker from './Worker';
 
 import ExecutionClassResolver from './ExecutionClassResolver';
+import ReportManager from './ReportManager';
+import States from '../common/definitions/States';
+import type { State } from '../common/definitions/States';
 import RequestNotTrusted from './errors/RequestNotTrusted';
 
 const JITAR_TRUST_HEADER_KEY = 'X-Jitar-Trust-Key';
@@ -19,16 +23,22 @@ type Configuration =
     gateway?: Gateway;
     registerAtGateway?: boolean;
     executionManager: ExecutionManager;
+    healthManager: HealthManager;
+    reportFrequency?: number;
 };
 
 export default class LocalWorker implements Worker
 {
     #id: string | undefined;
+    #state: State = States.DISCONNECTED;
+
     readonly #url: string;
     readonly #trustKey?: string;
     readonly #gateway?: Gateway;
     readonly #registerAtGateway: boolean;
     readonly #executionManager: ExecutionManager;
+    readonly #healthManager: HealthManager;
+    readonly #reportManager: ReportManager;
     readonly #serializer: Serializer;
 
     constructor(configuration: Configuration)
@@ -39,6 +49,8 @@ export default class LocalWorker implements Worker
         this.#registerAtGateway = configuration.registerAtGateway === true;
 
         this.#executionManager = configuration.executionManager;
+        this.#healthManager = configuration.healthManager;
+        this.#reportManager = new ReportManager(this, configuration.reportFrequency);
 
         const classResolver = new ExecutionClassResolver(this.#executionManager);
         this.#serializer = SerializerBuilder.build(classResolver);
@@ -48,13 +60,22 @@ export default class LocalWorker implements Worker
 
     set id(id: string) { this.#id = id; }
 
+    get state(): State { return this.#state; }
+    
+    set state(state: State) { this.#state = state; }
+
     get url() { return this.#url; }
 
     get trustKey() { return this.#trustKey; }
 
     async start(): Promise<void>
     {
-        await this.#executionManager.start();
+        this.#state = States.STARTING;
+
+        await Promise.all([
+            this.#executionManager.start(),
+            this.#healthManager.start()
+        ]);
 
         if (this.#gateway !== undefined)
         {
@@ -63,23 +84,36 @@ export default class LocalWorker implements Worker
             if (this.#registerAtGateway)
             {
                 this.#id = await this.#gateway.addWorker(this);
+
+                this.#reportManager.start();
             }
         }
+
+        await this.updateState();
     }
 
     async stop(): Promise<void>
     {
+        this.#state = States.STOPPING;
+
         if (this.#gateway !== undefined)
         {
             if (this.#id !== undefined)
             {
-                await this.#gateway.removeWorker(this);
+                this.#reportManager.stop();
+
+                await this.#gateway.removeWorker(this.#id);
             }
 
             await this.#gateway.stop();
         }
         
-        await this.#executionManager.stop();
+        await Promise.all([
+            this.#healthManager.stop(),
+            this.#executionManager.stop()
+        ]);
+
+        this.#state = States.DISCONNECTED;
     }
 
     getProcedureNames(): string[]
@@ -92,14 +126,33 @@ export default class LocalWorker implements Worker
         return this.#executionManager.hasProcedure(name);
     }
 
-    async isHealthy(): Promise<boolean>
+    isHealthy(): Promise<boolean>
     {
-        return true;
+        return this.#healthManager.isHealthy();
     }
 
-    async getHealth(): Promise<Map<string, boolean>>
+    getHealth(): Promise<Map<string, boolean>>
     {
-        return new Map();
+        return this.#healthManager.getHealth();
+    }
+
+    async updateState(): Promise<State>
+    {
+        const healthy = await this.isHealthy();
+
+        this.#state = healthy ? States.HEALTHY : States.UNHEALTHY;
+
+        return this.#state;
+    }
+
+    async reportAtGateway(): Promise<void>
+    {
+        if (this.#gateway === undefined || this.#id === undefined)
+        {
+            return;
+        }
+
+        return this.#gateway.reportWorker(this.#id, this.#state);
     }
 
     async run(request: Request): Promise<Response>

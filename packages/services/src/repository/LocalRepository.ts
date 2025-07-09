@@ -1,4 +1,5 @@
 
+import { HealthManager } from '@jitar/health';
 import { File, FileNotFound, SourcingManager } from '@jitar/sourcing';
 
 import Repository from './Repository';
@@ -7,6 +8,7 @@ type Configuration =
 {
     url: string;
     assets: Set<string>;
+    healthManager: HealthManager;
     sourcingManager: SourcingManager;
     indexFilename?: string;
     serveIndexOnNotFound?: boolean;
@@ -18,6 +20,7 @@ const DEFAULT_SERVE_INDEX_ON_NOT_FOUND = false;
 export default class LocalRepository implements Repository
 {
     readonly #url: string;
+    readonly #healthManager: HealthManager;
     readonly #sourcingManager: SourcingManager;
     readonly #assets: Set<string>;
 
@@ -27,6 +30,7 @@ export default class LocalRepository implements Repository
     constructor(configuration: Configuration)
     {
         this.#url = configuration.url;
+        this.#healthManager = configuration.healthManager;
         this.#sourcingManager = configuration.sourcingManager;
         this.#assets = configuration.assets;
 
@@ -38,22 +42,22 @@ export default class LocalRepository implements Repository
 
     start(): Promise<void>
     {
-        return Promise.resolve();
+        return this.#healthManager.start();
     }
 
     stop(): Promise<void>
     {
-        return Promise.resolve();
+        return this.#healthManager.stop();
     }
 
-    async isHealthy(): Promise<boolean>
+    isHealthy(): Promise<boolean>
     {
-        return true;
+        return this.#healthManager.isHealthy();
     }
 
-    async getHealth(): Promise<Map<string, boolean>>
+    getHealth(): Promise<Map<string, boolean>>
     {
-        return new Map();
+        return this.#healthManager.getHealth();
     }
 
     async provide(filename: string): Promise<File>

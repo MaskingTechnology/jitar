@@ -63,6 +63,7 @@ export default class HttpServer
         this.#app.options('/rpc/*procedure', (request, response) => { this.#runOptions(request, response); });
 
         this.#app.post('/workers', (request, response) => { this.#addWorker(request, response); });
+        this.#app.post('/workers/:id/report', (request, response) => { this.#reportWorker(request, response); });
         this.#app.delete('/workers/:id', (request, response) => { this.#removeWorker(request, response); });
         
         this.#app.use((request, response) => { this.#provide(request, response); });
@@ -178,6 +179,38 @@ export default class HttpServer
         try
         {
             const serverResponse = await this.#server.addWorker({ url, procedureNames, trustKey });
+
+            return this.#transformResponse(response, serverResponse);
+        }
+        catch (error: unknown)
+        {
+            const message = error instanceof Error ? error.message : 'Server error';
+
+            return response.status(500).send(message);
+        }
+    }
+
+    async #reportWorker(request: Request, response: Response): Promise<Response>
+    {
+        const args = { id: request.params.id, state: request.body.state };
+
+        const validation = this.#validator.validate(args,
+        {
+            id: { type: 'string', required: true },
+            state: { type: 'string', required: true }
+        });
+
+        if (validation.valid === false)
+        {
+            return response.status(400).send(validation.errors.join('\n'));
+        }
+
+        const id = args.id as string;
+        const state = args.state as string;
+
+        try
+        {
+            const serverResponse = await this.#server.reportWorker({ id, state });
 
             return this.#transformResponse(response, serverResponse);
         }

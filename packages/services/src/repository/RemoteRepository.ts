@@ -1,7 +1,7 @@
 
 import { File } from '@jitar/sourcing';
 
-import Remote from '../Remote';
+import Remote from '../common/Remote';
 
 import Repository from './Repository';
 

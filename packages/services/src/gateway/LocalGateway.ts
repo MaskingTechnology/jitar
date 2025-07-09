@@ -1,7 +1,9 @@
 
 import { Response } from '@jitar/execution';
 import type { Request } from '@jitar/execution';
+import { HealthManager } from '@jitar/health';
 
+import type { State } from '../common/definitions/States';
 import type Worker from '../worker/Worker';
 
 import Gateway from './Gateway';
@@ -15,12 +17,14 @@ type Configuration =
     url: string;
     trustKey?: string;
     monitorInterval?: number;
+    healthManager: HealthManager;
 };
 
 export default class LocalGateway implements Gateway
 {
     readonly #url: string;
     readonly #trustKey?: string;
+    readonly #healthManager: HealthManager;
     readonly #workerManager: WorkerManager;
     readonly #workerMonitor: WorkerMonitor;
 
@@ -28,6 +32,7 @@ export default class LocalGateway implements Gateway
     {
         this.#url = configuration.url;
         this.#trustKey = configuration.trustKey;
+        this.#healthManager = configuration.healthManager;
         this.#workerManager = new WorkerManager();
         this.#workerMonitor = new WorkerMonitor(this.#workerManager, configuration.monitorInterval);
     }
@@ -38,22 +43,28 @@ export default class LocalGateway implements Gateway
 
     async start(): Promise<void>
     {
-        return this.#workerMonitor.start();
+        await Promise.all([
+            this.#healthManager.start(),
+            this.#workerMonitor.start()
+        ]);
     }
 
     async stop(): Promise<void>
     {
-        return this.#workerMonitor.stop();
+        await Promise.all([
+            this.#workerMonitor.start(),
+            this.#healthManager.start()
+        ]);
     }
 
     async isHealthy(): Promise<boolean>
     {
-        return true;
+        return this.#healthManager.isHealthy();
     }
 
     async getHealth(): Promise<Map<string, boolean>>
     {
-        return new Map();
+        return this.#healthManager.getHealth();
     }
 
     async addWorker(worker: Worker): Promise<string>
@@ -71,9 +82,14 @@ export default class LocalGateway implements Gateway
         return this.#workerManager.getWorker(id);
     }
 
-    async removeWorker(worker: Worker): Promise<void>
+    async reportWorker(id: string, state: State): Promise<void>
     {
-        return this.#workerManager.removeWorker(worker);
+        return this.#workerManager.reportWorker(id, state);
+    }
+
+    async removeWorker(id: string): Promise<void>
+    {
+        return this.#workerManager.removeWorker(id);
     }
 
     getProcedureNames(): string[]
