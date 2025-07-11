@@ -1,4 +1,6 @@
 
+import path from 'path';
+
 import InvalidLocation from './errors/InvalidLocation';
 import FileNotFound from './errors/FileNotFound';
 
@@ -27,7 +29,7 @@ export default class FileManager implements FileReader
     // and prevents access to files outside of the base location.
     getAbsoluteLocation(filename: string): string
     {
-        const location = filename.startsWith('/') ? filename : this.#fileSystem.join(this.#location, filename);
+        const location = path.isAbsolute(filename) ? filename : this.#fileSystem.join(this.#location, filename);
         const absolutePath = this.#fileSystem.resolve(location);
 
         this.#validateLocation(absolutePath, filename);
