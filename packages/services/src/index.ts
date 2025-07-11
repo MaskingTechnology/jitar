@@ -1,6 +1,7 @@
 
 export { default as Remote } from './common/Remote';
 export { default as RemoteBuilder } from './common/RemoteBuilder';
+export { default as RequestPool } from './common/RequestPool';
 export { default as States, type State } from './common/definitions/States';
 
 export { default as DummyProvider } from './dummy/DummyProvider';
