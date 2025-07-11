@@ -169,7 +169,9 @@ export default class RuntimeBuilder
 
         const filenames = await this.#sourcingManager.filter(...patterns);
 
-        return new Set(filenames);
+        const translated = filenames.map(filename => filename.replaceAll('\\', '/'))
+
+        return new Set(translated);
     }
 
     #assureExtension(filename: string): string
