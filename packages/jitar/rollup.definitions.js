@@ -5,5 +5,6 @@ export const SERVER_EXTERNALS =
     'fs-extra',
     'glob',
     'mime-types',
-    'dotenv'
+    'dotenv',
+    'path'
 ];

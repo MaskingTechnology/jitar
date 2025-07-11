@@ -31,6 +31,11 @@ export default class RemoteFileSystem implements FileSystem
         return [];
     }
 
+    isAbsolute(location: string): boolean
+    {
+        throw new RemoteFilesNotSupported();    
+    }
+
     isDirectory(location: string): boolean
     {
         throw new RemoteFilesNotSupported();
