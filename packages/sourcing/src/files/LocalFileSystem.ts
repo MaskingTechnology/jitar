@@ -47,9 +47,15 @@ export default class LocalFileSystem implements FileSystem
         }
     }
 
+    // glob uses '/' as a path separator, even on Windows machines.
+    // before handing the location to glob we must replace
+    // any '\\' with '/'
     filter(location: string, pattern: string): Promise<string[]>
     {
-        return glob(`${location}/${pattern}`);
+        const raw = `${location}/${pattern}`;
+        const translated = raw.replaceAll(path.win32.sep, path.posix.sep);
+
+        return glob(translated);
     }
 
     join(...paths: string[]): string
