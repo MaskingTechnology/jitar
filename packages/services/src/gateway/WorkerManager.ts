@@ -72,7 +72,7 @@ export default class WorkerManager implements Runner
         worker.state = state;
     }
 
-    removeWorker(id: string): void
+    removeWorker(id: string): Worker
     {
         const worker = this.getWorker(id);
 
@@ -89,6 +89,8 @@ export default class WorkerManager implements Runner
 
             balancer.removeWorker(worker);
         }
+
+        return worker;
     }
 
     #getBalancer(fqn: string): WorkerBalancer | undefined

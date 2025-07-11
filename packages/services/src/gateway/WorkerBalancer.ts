@@ -37,7 +37,7 @@ export default class WorkerBalancer
 
     getNextWorker(): Worker | undefined
     {
-        const workers = this.#workers.filter(worker => worker.state === States.HEALTHY);
+        const workers = this.#workers.filter(worker => worker.state === States.AVAILABLE);
 
         if (workers.length === 0)
         {

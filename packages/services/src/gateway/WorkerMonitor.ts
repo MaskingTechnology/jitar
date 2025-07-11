@@ -45,7 +45,7 @@ export default class WorkerMonitor
     {
         const state = await worker.updateState();
         
-        if (state === States.DISCONNECTED)
+        if (state === States.STOPPED)
         {
             this.#workerManager.removeWorker(worker.id as string);
         }

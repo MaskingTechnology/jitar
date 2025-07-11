@@ -18,7 +18,7 @@ export default class ReportManager
 
     start(): void
     {
-        this.#interval = setInterval(async () => this.#report(), this.#frequency);
+        this.#interval = setInterval(() => this.#report(), this.#frequency);
     }
 
     stop(): void

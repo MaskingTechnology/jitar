@@ -201,7 +201,7 @@ export default class Server extends Runtime
 
             const gateway = this.#extractLocalGatewayFromProxy();
 
-            gateway.reportWorker(reportRequest.id, state);
+            await gateway.reportWorker(reportRequest.id, state);
 
             this.#logger.debug('Reported worker:', reportRequest.id);
 
@@ -211,7 +211,7 @@ export default class Server extends Runtime
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error('Failed to add worker:', message);
+            this.#logger.error('Failed to report worker:', message);
 
             return this.#respondError(error);
         }

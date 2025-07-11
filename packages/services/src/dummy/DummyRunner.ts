@@ -3,12 +3,19 @@ import { NotImplemented } from '@jitar/errors';
 import { Request, Response } from '@jitar/execution';
 
 import RunnerService from '../RunnerService';
+import States from '../common/definitions/States';
+import type { State } from '../common/definitions/States';
 
 export default class DummyRunner implements RunnerService
 {
     get url(): string
     {
         throw new NotImplemented();
+    }
+
+    get state(): State
+    {
+        return States.AVAILABLE;
     }
 
     get trustKey(): string | undefined
@@ -34,6 +41,11 @@ export default class DummyRunner implements RunnerService
     async getHealth(): Promise<Map<string, boolean>>
     {
         return new Map();
+    }
+
+    async updateState(): Promise<State>
+    {
+        return States.AVAILABLE;
     }
 
     getProcedureNames(): string[]

@@ -1,7 +1,11 @@
 
+import type { State } from './common/definitions/States';
+
 interface Service
 {
     get url(): string;
+
+    get state(): State;
 
     start(): Promise<void>;
 
@@ -10,6 +14,8 @@ interface Service
     isHealthy(): Promise<boolean>;
 
     getHealth(): Promise<Map<string, boolean>>
+
+    updateState(): Promise<State>;
 }
 
 export default Service;

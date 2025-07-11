@@ -2,7 +2,7 @@
 import { Request, Response } from '@jitar/execution';
 
 import Remote from '../common/Remote';
-import StateManager from '../common/StateManager';
+import ReportedStateManager from '../common/ReportedStateManager';
 import type { State } from '../common/definitions/States';
 
 import Worker from './Worker';
@@ -25,8 +25,7 @@ export default class RemoteWorker implements Worker
     readonly #trustKey?: string;
     readonly #procedureNames: Set<string>;
     readonly #remote: Remote;
-
-    readonly #stateManager: StateManager;
+    readonly #stateManager: ReportedStateManager;
 
     constructor(configuration: Configuration)
     {
@@ -34,7 +33,7 @@ export default class RemoteWorker implements Worker
         this.#trustKey = configuration.trustKey;
         this.#procedureNames = configuration.procedureNames;
         this.#remote = configuration.remote;
-        this.#stateManager = new StateManager(configuration.unavailableThreshold, configuration.disconnectedThreshold);
+        this.#stateManager = new ReportedStateManager(configuration.unavailableThreshold, configuration.disconnectedThreshold);
     }
 
     get id(): string | undefined { return this.#id; }
@@ -43,20 +42,38 @@ export default class RemoteWorker implements Worker
 
     get state() { return this.#stateManager.state; }
 
-    set state(state: State) { this.#stateManager.setState(state);}
+    set state(state: State) { this.#stateManager.report(state);}
 
     get url() { return this.#url; }
 
     get trustKey() { return this.#trustKey; }
 
-    start(): Promise<void>
+    async start(): Promise<void>
     {
-        return this.#remote.connect();
+        if (this.#stateManager.isNotStopped())
+        {
+            return;
+        }
+
+        this.#stateManager.setStarting();
+
+        await this.#remote.connect();
+
+        await this.updateState();
     }
-    
-    stop(): Promise<void>
+
+    async stop(): Promise<void>
     {
-        return this.#remote.disconnect();
+        if (this.#stateManager.isNotStarted())
+        {
+            return;
+        }
+
+        this.#stateManager.setStopping();
+
+        await this.#remote.disconnect();
+
+        this.#stateManager.setStopped();
     }
 
     getProcedureNames(): string[]

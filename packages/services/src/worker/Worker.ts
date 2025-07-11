@@ -1,6 +1,5 @@
 
 import RunnerService from '../RunnerService';
-
 import type { State } from '../common/definitions/States';
 
 interface Worker extends RunnerService
@@ -9,11 +8,7 @@ interface Worker extends RunnerService
 
    set id(id: string);
 
-   get state(): State;
-
    set state(state: State);
-
-   updateState(): Promise<State>;
 }
 
 export default Worker;

@@ -3,6 +3,7 @@ import { Response } from '@jitar/execution';
 import type { Request } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
 
+import StateManager from '../common/StateManager';
 import type { State } from '../common/definitions/States';
 import type Worker from '../worker/Worker';
 
@@ -28,6 +29,8 @@ export default class LocalGateway implements Gateway
     readonly #workerManager: WorkerManager;
     readonly #workerMonitor: WorkerMonitor;
 
+    readonly #stateManager = new StateManager();
+
     constructor(configuration: Configuration)
     {
         this.#url = configuration.url;
@@ -39,22 +42,42 @@ export default class LocalGateway implements Gateway
     
     get url() { return this.#url; }
 
+    get state() { return this.#stateManager.state; }
+
     get trustKey() { return this.#trustKey; }
 
     async start(): Promise<void>
     {
+        if (this.#stateManager.isNotStopped())
+        {
+            return;
+        }
+
+        this.#stateManager.setStarting();
+
         await Promise.all([
             this.#healthManager.start(),
             this.#workerMonitor.start()
         ]);
+
+        await this.updateState();
     }
 
     async stop(): Promise<void>
     {
+        if (this.#stateManager.isNotStarted())
+        {
+            return;
+        }
+
+        this.#stateManager.setStopping();
+
         await Promise.all([
-            this.#workerMonitor.start(),
-            this.#healthManager.start()
+            this.#workerMonitor.stop(),
+            this.#healthManager.stop()
         ]);
+
+        this.#stateManager.setStopped();
     }
 
     async isHealthy(): Promise<boolean>
@@ -67,12 +90,21 @@ export default class LocalGateway implements Gateway
         return this.#healthManager.getHealth();
     }
 
+    async updateState(): Promise<State>
+    {
+        const healthy = await this.isHealthy();
+
+        return this.#stateManager.setAvailability(healthy);
+    }
+
     async addWorker(worker: Worker): Promise<string>
     {
         if (this.#isInvalidTrustKey(worker.trustKey))
         {
             throw new InvalidTrustKey();
         }
+
+        await worker.start();
 
         return this.#workerManager.addWorker(worker);
     }
@@ -89,7 +121,9 @@ export default class LocalGateway implements Gateway
 
     async removeWorker(id: string): Promise<void>
     {
-        return this.#workerManager.removeWorker(id);
+        const worker = this.#workerManager.removeWorker(id);
+
+        return worker.stop();
     }
 
     getProcedureNames(): string[]

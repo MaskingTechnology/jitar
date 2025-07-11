@@ -3,13 +3,13 @@ import { ExecutionManager, Implementation, ProcedureNotFound, Request, Response 
 import { HealthManager } from '@jitar/health';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
+import StateManager from '../common/StateManager';
+import type { State } from '../common/definitions/States';
 import Gateway from '../gateway/Gateway';
 import Worker from './Worker';
 
 import ExecutionClassResolver from './ExecutionClassResolver';
 import ReportManager from './ReportManager';
-import States from '../common/definitions/States';
-import type { State } from '../common/definitions/States';
 import RequestNotTrusted from './errors/RequestNotTrusted';
 
 const JITAR_TRUST_HEADER_KEY = 'X-Jitar-Trust-Key';
@@ -30,7 +30,6 @@ type Configuration =
 export default class LocalWorker implements Worker
 {
     #id: string | undefined;
-    #state: State = States.DISCONNECTED;
 
     readonly #url: string;
     readonly #trustKey?: string;
@@ -40,6 +39,8 @@ export default class LocalWorker implements Worker
     readonly #healthManager: HealthManager;
     readonly #reportManager: ReportManager;
     readonly #serializer: Serializer;
+
+    readonly #stateManager = new StateManager();
 
     constructor(configuration: Configuration)
     {
@@ -60,9 +61,9 @@ export default class LocalWorker implements Worker
 
     set id(id: string) { this.#id = id; }
 
-    get state(): State { return this.#state; }
+    get state(): State { return this.#stateManager.state; }
     
-    set state(state: State) { this.#state = state; }
+    set state(state: State) { this.#stateManager.state = state; }
 
     get url() { return this.#url; }
 
@@ -70,7 +71,12 @@ export default class LocalWorker implements Worker
 
     async start(): Promise<void>
     {
-        this.#state = States.STARTING;
+        if (this.#stateManager.isNotStopped())
+        {
+            return;
+        }
+
+        this.#stateManager.setStarting();
 
         await Promise.all([
             this.#executionManager.start(),
@@ -94,7 +100,12 @@ export default class LocalWorker implements Worker
 
     async stop(): Promise<void>
     {
-        this.#state = States.STOPPING;
+        if (this.#stateManager.isNotStarted())
+        {
+            return;
+        }
+
+        this.#stateManager.setStopping();
 
         if (this.#gateway !== undefined)
         {
@@ -113,7 +124,7 @@ export default class LocalWorker implements Worker
             this.#executionManager.stop()
         ]);
 
-        this.#state = States.DISCONNECTED;
+        this.#stateManager.setStopped();
     }
 
     getProcedureNames(): string[]
@@ -140,9 +151,7 @@ export default class LocalWorker implements Worker
     {
         const healthy = await this.isHealthy();
 
-        this.#state = healthy ? States.HEALTHY : States.UNHEALTHY;
-
-        return this.#state;
+        return this.#stateManager.setAvailability(healthy);
     }
 
     async reportAtGateway(): Promise<void>
@@ -152,7 +161,7 @@ export default class LocalWorker implements Worker
             return;
         }
 
-        return this.#gateway.reportWorker(this.#id, this.#state);
+        return this.#gateway.reportWorker(this.#id, this.state);
     }
 
     async run(request: Request): Promise<Response>

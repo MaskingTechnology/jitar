@@ -2,11 +2,10 @@
 const States =
 {
     STARTING: 'starting',
-    HEALTHY: 'healthy',
-    UNHEALTHY: 'unhealthy',
+    AVAILABLE: 'available',
     UNAVAILABLE: 'unavailable',
     STOPPING: 'stopping',
-    DISCONNECTED: 'disconnected'
+    STOPPED: 'stopped'
 } as const;
 
 type Keys = keyof typeof States;

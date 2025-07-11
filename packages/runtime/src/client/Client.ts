@@ -2,7 +2,7 @@
 import type { ExecutionManager, Request, Response } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
 import type { MiddlewareManager } from '@jitar/middleware';
-import { LocalWorker, RemoteGateway, Remote } from '@jitar/services';
+import { LocalWorker, RemoteGateway, Remote, RequestPool } from '@jitar/services';
 
 import ProcedureRunner from '../ProcedureRunner';
 import Runtime from '../Runtime';
@@ -20,6 +20,8 @@ export default class Client extends Runtime
 {
     readonly #worker: LocalWorker;
     readonly #middlewareManager: MiddlewareManager;
+
+    readonly #requestPool = new RequestPool(this);
 
     constructor(configuration: Configuration)
     {
@@ -40,14 +42,18 @@ export default class Client extends Runtime
 
     get worker() { return this.#worker; }
 
-    start(): Promise<void>
+    async start(): Promise<void>
     {
-        return this.#setUp();
+        await this.#setUp();
+
+        this.#requestPool.start();
     }
 
-    stop(): Promise<void>
+    async stop(): Promise<void>
     {
-        return this.#tearDown();
+        this.#requestPool.stop();
+
+        await this.#tearDown();
     }
 
     getTrustKey(): string | undefined
@@ -57,12 +63,12 @@ export default class Client extends Runtime
 
     run(request: Request): Promise<Response>
     {
-        return this.runInternal(request);
+        return this.#middlewareManager.handle(request);
     }
 
-    runInternal(request: Request): Promise<Response>
+    async runInternal(request: Request): Promise<Response>
     {
-        return this.#middlewareManager.handle(request);
+        return this.#requestPool.run(request);
     }
 
     async #setUp(): Promise<void>

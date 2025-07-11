@@ -4,6 +4,9 @@ import { File, FileNotFound, SourcingManager } from '@jitar/sourcing';
 
 import Repository from './Repository';
 
+import StateManager from '../common/StateManager';
+import { State } from '../common/definitions/States';
+
 type Configuration =
 {
     url: string;
@@ -27,6 +30,8 @@ export default class LocalRepository implements Repository
     readonly #indexFilename: string;
     readonly #serveIndexOnNotFound: boolean;
 
+    readonly #stateManager = new StateManager();
+
     constructor(configuration: Configuration)
     {
         this.#url = configuration.url;
@@ -40,14 +45,34 @@ export default class LocalRepository implements Repository
 
     get url() { return this.#url; }
 
-    start(): Promise<void>
+    get state() { return this.#stateManager.state; }
+
+    async start(): Promise<void>
     {
-        return this.#healthManager.start();
+        if (this.#stateManager.isNotStopped())
+        {
+            return;
+        }
+
+        this.#stateManager.setStarting();
+
+        await this.#healthManager.start();
+
+        await this.updateState();
     }
 
-    stop(): Promise<void>
+    async stop(): Promise<void>
     {
-        return this.#healthManager.stop();
+        if (this.#stateManager.isNotStarted())
+        {
+            return;
+        }
+
+        this.#stateManager.setStopping();
+
+        await this.#healthManager.stop();
+
+        this.#stateManager.setStopped();
     }
 
     isHealthy(): Promise<boolean>
@@ -58,6 +83,13 @@ export default class LocalRepository implements Repository
     getHealth(): Promise<Map<string, boolean>>
     {
         return this.#healthManager.getHealth();
+    }
+
+    async updateState(): Promise<State>
+    {
+        const healthy = await this.isHealthy();
+
+        return this.#stateManager.setAvailability(healthy);
     }
 
     async provide(filename: string): Promise<File>

@@ -2,47 +2,63 @@
 import States from './definitions/States';
 import type { State } from './definitions/States';
 
-const DEFAULT_UNAVAILABLE_THRESHOLD = 6000;
-const DEFAULT_DISCONNECTED_THRESHOLD = 12000;
-
 export default class StateManager
 {
-    #state: State = States.HEALTHY;
-
-    #unavailableThreshold: number;
-    #disconnectedThreshold: number;
-
-    #lastSet: number = Date.now();
-    #lastUpdate: number = Date.now();
-
-    constructor(unavailableThreshold = DEFAULT_UNAVAILABLE_THRESHOLD, disconnectedThreshold = DEFAULT_DISCONNECTED_THRESHOLD)
-    {
-        this.#unavailableThreshold = unavailableThreshold;
-        this.#disconnectedThreshold = disconnectedThreshold;
-    }
+    #state: State = States.STOPPED;
 
     get state() { return this.#state; }
 
-    setState(state: State): void
-    {
-        this.#lastSet = Date.now();
+    set state(state: State) { this.#state = state; }
 
-        this.#state = state;
+    isNotStopped(): boolean
+    {
+        return this.#notHasState(States.STOPPED);
     }
 
-    update(): State
+    isNotStarted(): boolean
     {
-        this.#lastUpdate = Date.now();
+        return this.#hasState(States.STOPPING, States.STOPPED);
+    }
 
-        const interval = this.#lastUpdate - this.#lastSet;
+    setStarting(): void
+    {
+        this.#state = States.STARTING;
+    }
 
-        if (interval >= this.#unavailableThreshold)
-        {
-            this.#state = interval >= this.#disconnectedThreshold
-                ? States.DISCONNECTED
-                : States.UNAVAILABLE;
-        }
+    setAvailable(): void
+    {
+        this.#state = States.AVAILABLE;
+    }
+
+    setUnavailable(): void
+    {
+        this.#state = States.UNAVAILABLE;
+    }
+
+    setAvailability(available: boolean): State
+    {
+        this.#state = available ? States.AVAILABLE : States.UNAVAILABLE;
 
         return this.#state;
+    }
+
+    setStopping(): void
+    {
+        this.#state = States.STOPPING;
+    }
+
+    setStopped(): void
+    {
+        this.#state = States.STOPPED;
+    }
+
+    #hasState(...states: State[]): boolean
+    {
+        return states.includes(this.#state);
+    }
+
+    #notHasState(...states: State[]): boolean
+    {
+        return this.#hasState(...states) === false;
     }
 }
