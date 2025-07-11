@@ -33,11 +33,13 @@ export default class Reader
     async read(filename: string): Promise<Module>
     {
         const relativeLocation = this.#sourceFileManager.getRelativeLocation(filename);
+        const translatedLocation = this.#sourceFileManager.translateInternal(relativeLocation);
+
         const code = await this.#loadCode(filename);
         const rewrittenCode = this.#locationRewriter.rewrite(relativeLocation, code);
         const module = this.#parser.parse(rewrittenCode);
 
-        return new Module(relativeLocation, rewrittenCode, module);
+        return new Module(translatedLocation, rewrittenCode, module);
     }
 
     async #loadCode(filename: string): Promise<string>

@@ -36,6 +36,11 @@ export default class RemoteFileSystem implements FileSystem
         throw new RemoteFilesNotSupported();    
     }
 
+    translateInternal(location: string): string
+    {
+        throw new RemoteFilesNotSupported();
+    }
+
     isDirectory(location: string): boolean
     {
         throw new RemoteFilesNotSupported();

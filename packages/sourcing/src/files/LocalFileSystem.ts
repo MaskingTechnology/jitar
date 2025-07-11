@@ -28,6 +28,11 @@ export default class LocalFileSystem implements FileSystem
         return path.isAbsolute(location);    
     }
 
+    translateInternal(location: string): string
+    {
+        return location.replaceAll(path.win32.sep, path.posix.sep);
+    }
+
     // This method is synchronous because it's used in the
     // LocationRewriter. This class uses a replacer function
     // in a replaceAll method that only accepts synchronous functions.

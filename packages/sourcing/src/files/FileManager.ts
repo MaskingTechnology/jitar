@@ -40,6 +40,11 @@ export default class FileManager implements FileReader
         return this.#fileSystem.relative(this.#location, filename);
     }
 
+    translateInternal(filename: string): string
+    {
+        return this.#fileSystem.translateInternal(filename);
+    }
+
     async getType(filename: string): Promise<string>
     {
         const location = this.getAbsoluteLocation(filename);

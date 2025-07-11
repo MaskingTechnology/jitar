@@ -11,6 +11,8 @@ interface FileSystem
 
     isAbsolute(location: string): boolean;
 
+    translateInternal(location: string): string;
+
     isDirectory(location: string): boolean;
 
     join(...paths: string[]): string;

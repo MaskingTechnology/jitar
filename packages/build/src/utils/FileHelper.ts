@@ -7,7 +7,12 @@ const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
 
 export default class FileHelper
 {
-    translatePath(filename: string)
+    translateInternal(filename: string): string
+    {
+        return filename.replaceAll(path.win32.sep, path.posix.sep);
+    }
+
+    translatePath(filename: string): string
     {
         const parts = filename.split('/');
         const translated = [];

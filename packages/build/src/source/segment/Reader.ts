@@ -70,7 +70,9 @@ export default class SegmentReader
 
     #extractSegmentName(filename: string): string
     {
-        const file = filename.split('/').pop();
+        const translated = this.#fileHelper.translateInternal(filename);
+
+        const file = translated.split('/').pop();
 
         if (file === undefined || file === '')
         {
@@ -126,14 +128,13 @@ export default class SegmentReader
         // For index resolution we need to read the source files and check
         // if the given filename is a directory.
 
-        if (this.#sourceFileManager.isDirectory(filename))
-        {
-            return this.#fileHelper.join(filename, Files.INDEX);
-        }
+        const fullFilename = this.#sourceFileManager.isDirectory(filename)
+            ? this.#fileHelper.join(filename, Files.INDEX)
+            : this.#fileHelper.assureExtension(filename);
 
-        const fullFilename = this.#fileHelper.assureExtension(filename);
-
-        return this.#fileHelper.normalize(fullFilename);
+        const normalized = this.#fileHelper.normalize(fullFilename);
+        
+        return this.#fileHelper.translateInternal(normalized);
     }
 
     #registerMembers(segment: Segment): void

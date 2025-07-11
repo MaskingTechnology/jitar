@@ -53,13 +53,12 @@ export default class ResourceReader
         // For index resolution we need to read the source files and check
         // if the given filename is a directory.
 
-        if (this.#sourceFileManager.isDirectory(filename))
-        {
-            return this.#fileHelper.join(filename, Files.INDEX);
-        }
+        const fullFilename = this.#sourceFileManager.isDirectory(filename)
+            ? this.#fileHelper.join(filename, Files.INDEX)
+            : this.#fileHelper.assureExtension(filename);
 
-        const fullFilename = this.#fileHelper.assureExtension(filename);
-
-        return this.#fileHelper.normalize(fullFilename);
+        const normalized = this.#fileHelper.normalize(fullFilename);
+        
+        return this.#fileHelper.translateInternal(normalized);
     }
 }
