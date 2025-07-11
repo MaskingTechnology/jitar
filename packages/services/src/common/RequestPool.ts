@@ -7,7 +7,7 @@ type QueueItem =
 {
     request: Request,
     resolve: (value: Response | PromiseLike<Response>) => void,
-    reject: (reason?: any) => void
+    reject: (reason?: unknown) => void
 };
 
 export default class RequestPool implements Runner

@@ -3,18 +3,19 @@ import { NotImplemented } from '@jitar/errors';
 import { Request, Response, StatusCodes } from '@jitar/execution';
 import { File } from '@jitar/sourcing';
 
-import Remote from '../../../src/Remote';
+import Remote from '../../../src/common/Remote';
+import { State } from '../../../src/common/definitions/States';
 
 class DummyRemote implements Remote
 {
     connect(): Promise<void>
     {
-        throw new NotImplemented();
+        return Promise.resolve();
     }
 
     disconnect(): Promise<void>
     {
-        throw new NotImplemented();
+        return Promise.resolve();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -25,24 +26,30 @@ class DummyRemote implements Remote
 
     isHealthy(): Promise<boolean>
     {
-        throw new NotImplemented();
+        return Promise.resolve(true);
     }
 
     getHealth(): Promise<Map<string, boolean>>
     {
-        throw new NotImplemented();
+        return Promise.resolve(new Map());
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     addWorker(workerUrl: string, procedureNames: string[], trustKey?: string): Promise<string>
     {
-        throw new NotImplemented();
+        return Promise.resolve('1234');
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    reportWorker(id: string, state: State): Promise<void>
+    {
+        return Promise.resolve();
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     removeWorker(workerUrl: string, trustKey?: string): Promise<void>
     {
-        throw new NotImplemented();    
+        return Promise.resolve();  
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

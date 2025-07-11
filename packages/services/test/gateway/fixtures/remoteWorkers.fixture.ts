@@ -1,5 +1,6 @@
 
 import RemoteWorker from '../../../src/worker/RemoteWorker';
+import States from '../../../src/common/definitions/States';
 
 import { VALUES } from './values.fixture';
 import { REMOTES } from './remotes.fixture';
@@ -31,12 +32,17 @@ const untrustedWorker = new RemoteWorker({ url, procedureNames: noProcedureNames
 
 const firstProcedureNames = new Set<string>(['first']);
 const firstWorker = new RemoteWorker({ url, procedureNames: firstProcedureNames, remote });
+firstWorker.state = States.AVAILABLE;
 
 const secondProcedureNames = new Set<string>(['first', 'second']);
 const secondWorker = new RemoteWorker({ url, procedureNames: secondProcedureNames, remote });
+secondWorker.state = States.AVAILABLE;
 
 const healthyWorker = new HealthyWorker({ url, procedureNames: noProcedureNames, remote });
+healthyWorker.state = States.AVAILABLE;
+
 const unhealthyWorker = new UnhealthyWorker({ url, procedureNames: noProcedureNames, remote });
+unhealthyWorker.state = States.STOPPED;
 
 export const REMOTE_WORKERS =
 {

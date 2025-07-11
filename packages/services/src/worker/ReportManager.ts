@@ -18,7 +18,7 @@ export default class ReportManager
 
     start(): void
     {
-        this.#interval = setInterval(() => this.#report(), this.#frequency);
+        this.#interval = setInterval(async () => this.#report(), this.#frequency);
     }
 
     stop(): void
@@ -31,15 +31,8 @@ export default class ReportManager
         clearInterval(this.#interval);
     }
 
-    async #report(): Promise<void>
+    #report(): Promise<void>
     {
-        try
-        {
-            await this.#worker.reportAtGateway();
-        }
-        catch (error)
-        {
-            // TODO: log error
-        }
+        return this.#worker.reportAtGateway();
     }
 }
