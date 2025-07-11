@@ -1,4 +1,6 @@
 
+import path from 'path';
+
 const DEFAULT_EXTENSION = 'js';
 const EXTENSION_PATTERN = /\.js$/;
 const APPLICATION_MODULE_INDICATORS = ['.', '/', 'http:', 'https:'];
@@ -58,6 +60,16 @@ export default class FileHelper
             : relativeFilename;
 
         return this.translatePath(fullPath);
+    }
+
+    join(...paths: string[]): string
+    {
+        return path.join(...paths);
+    }
+
+    normalize(location: string): string
+    {
+        return path.normalize(location);
     }
 
     extractPath(filename: string)
