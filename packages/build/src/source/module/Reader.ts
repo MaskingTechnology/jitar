@@ -36,7 +36,7 @@ export default class Reader
         const translatedLocation = this.#sourceFileManager.translateInternal(relativeLocation);
 
         const code = await this.#loadCode(filename);
-        const rewrittenCode = this.#locationRewriter.rewrite(relativeLocation, code);
+        const rewrittenCode = this.#locationRewriter.rewrite(translatedLocation, code);
         const module = this.#parser.parse(rewrittenCode);
 
         return new Module(translatedLocation, rewrittenCode, module);

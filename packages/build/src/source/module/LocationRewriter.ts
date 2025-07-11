@@ -41,40 +41,48 @@ export default class LocationRewriter
         return code.replaceAll(Patterns.EXPORT, replacer);
     }
 
+    // On Windows the imports might have \\ as path separators. In our
+    // internal model we only deal with / path separators.
     #replaceImport(filename: string, statement: string): string
     {
-        const dependency = this.#parser.parseImport(statement);
+        const normalizedStatement = this.#fileHelper.translateInternal(statement);
+
+        const dependency = this.#parser.parseImport(normalizedStatement);
         const from = this.#fileHelper.stripPath(dependency.from);
 
         if (this.#fileHelper.isApplicationModule(from) === false)
         {
-            return statement;
+            return normalizedStatement;
         }
 
         const rewrittenFrom = this.#rewriteFrom(filename, from);
 
-        return statement.replace(from, rewrittenFrom);
+        return normalizedStatement.replace(from, rewrittenFrom);
     }
 
+    // On Windows the exports might have \\ as path separators. In our
+    // internal model we only deal with / path separators.
     #replaceExport(filename: string, statement: string): string
     {
-        const dependency = this.#parser.parseExport(statement);
+        const normalizedStatement = this.#fileHelper.translateInternal(statement);
+
+        const dependency = this.#parser.parseExport(normalizedStatement);
 
         if (dependency.from === undefined)
         {
-            return statement;
+            return normalizedStatement;
         }
 
         const from = this.#fileHelper.stripPath(dependency.from);
 
         if (this.#fileHelper.isApplicationModule(from) === false)
         {
-            return statement;
+            return normalizedStatement;
         }
 
         const rewrittenFrom = this.#rewriteFrom(filename, from);
 
-        return statement.replace(from, rewrittenFrom);
+        return normalizedStatement.replace(from, rewrittenFrom);
     }
 
     #rewriteFrom(filename: string, from: string): string

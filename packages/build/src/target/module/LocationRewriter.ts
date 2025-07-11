@@ -38,11 +38,13 @@ export default abstract class LocationRewriter
 
     replaceStatement(statement: string): string
     {
-        const dependency = this.parseStatement(statement);
+        const normalizedStatement = this.#fileHelper.translateInternal(statement);
+
+        const dependency = this.parseStatement(normalizedStatement);
 
         if (dependency.from === undefined)
         {
-            return statement;
+            return normalizedStatement;
         }
 
         return this.#isApplicationModule(dependency)
