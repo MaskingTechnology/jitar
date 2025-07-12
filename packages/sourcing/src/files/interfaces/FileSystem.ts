@@ -9,6 +9,8 @@ interface FileSystem
 
     filter(location: string, pattern: string): Promise<string[]>;
 
+    isAbsolute(location: string): boolean;
+
     isDirectory(location: string): boolean;
 
     join(...paths: string[]): string;
@@ -18,6 +20,8 @@ interface FileSystem
     resolve(location: string): string;
 
     relative(from: string, to: string): string;
+
+    normalize(location: string): string;
 
     mimeType(location: string): Promise<string | undefined>;
 

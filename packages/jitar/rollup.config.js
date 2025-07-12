@@ -18,10 +18,7 @@ function bundle(input, output, supportBrowser)
 			...output,
 			exports: 'named',
 			format: 'module',
-			plugins: [terser({
-				module: true,
-				mangle: false
-			})]
+			plugins: []
 		},
 		plugins: [
 			typescript(),

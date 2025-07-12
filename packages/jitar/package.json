@@ -21,7 +21,8 @@
     "scripts": {
         "lint": "eslint",
         "validate": "tsc -p tsconfig.json --noEmit",
-        "build": "npm run clean && npm run bundle && npm run copy && npm run finalize",
+        "build": "npm run clean && npm run bundle && npm run copy && npm run finalize && npm run comify",
+        "comify": "cp -R dist /c/source-code/comify/node_modules/jitar",
         "clean": "rm -rf dist",
         "bundle": "rollup -c",
         "copy": "cp -R ../init/templates dist/templates",

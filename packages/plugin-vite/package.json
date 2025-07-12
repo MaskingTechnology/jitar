@@ -18,7 +18,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "tsc -p tsconfig.json && npm run comify",
+    "comify": "cp -R dist /c/source-code/comify/node_modules/@jitar/plugin-vite",
     "lint": "eslint",
     "clean": "rm -rf dist build",
     "prepublishOnly": "npm run clean && npm run build"
