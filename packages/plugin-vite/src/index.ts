@@ -79,11 +79,11 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
         configResolved(resolvedConfig: ResolvedConfig)
         {
-            rootPath = path.join(resolvedConfig.root);
-            sourcePath = path.join(rootPath, sourceDir);
-            targetPath = path.join(rootPath, targetDir);
-            outputPath = path.join(targetPath, resolvedConfig.build.assetsDir);
-            jitarPath = path.join(sourcePath, jitarDir);
+            rootPath = normalizePath(path.join(resolvedConfig.root));
+            sourcePath = normalizePath(path.join(rootPath, sourceDir));
+            targetPath = normalizePath(path.join(rootPath, targetDir));
+            outputPath = normalizePath(path.join(targetPath, resolvedConfig.build.assetsDir));
+            jitarPath = normalizePath(path.join(sourcePath, jitarDir));
         },
 
         options(options)

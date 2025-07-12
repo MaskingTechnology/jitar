@@ -72,4 +72,8 @@ describe('FileManager', () =>
             expect(mimeType).toBe(PATHS.OUTPUTS.FILE_TYPE_UNKNOWN);
         });
     });
+
+    // TODO: add tests for getRelativeLocation
+    
+    // TODO: add tests for windows paths
 });

@@ -17,9 +17,11 @@ export default class FileManager implements FileReader
 
     constructor(location: string, fileSystem: FileSystem)
     {
-        this.#location = location;
+        const rootLocation = fileSystem.resolve(location);
+        
+        this.#location = fileSystem.normalize(location);
+        this.#rootLocation = fileSystem.normalize(rootLocation);
         this.#fileSystem = fileSystem;
-        this.#rootLocation = fileSystem.resolve(location);
     }
 
     // This method must be used by every function that needs to access
@@ -27,17 +29,25 @@ export default class FileManager implements FileReader
     // and prevents access to files outside of the base location.
     getAbsoluteLocation(filename: string): string
     {
-        const location = filename.startsWith('/') ? filename : this.#fileSystem.join(this.#location, filename);
+        const location = this.#fileSystem.isAbsolute(filename) ? filename : this.#fileSystem.join(this.#location, filename);
         const absolutePath = this.#fileSystem.resolve(location);
+        const normalizedPath = this.#fileSystem.normalize(absolutePath);
 
-        this.#validateLocation(absolutePath, filename);
+        this.#validateLocation(normalizedPath, filename);
 
-        return absolutePath;
+        return normalizedPath;
     }
 
     getRelativeLocation(filename: string): string
     {
-        return this.#fileSystem.relative(this.#location, filename);
+        const location = this.#fileSystem.relative(this.#location, filename);
+
+        return this.#fileSystem.normalize(location);
+    }
+
+    normalizeLocation(location: string): string
+    {
+        return this.#fileSystem.normalize(location);
     }
 
     async getType(filename: string): Promise<string>
@@ -112,8 +122,12 @@ export default class FileManager implements FileReader
     async filter(pattern: string): Promise<string[]>
     {
         const location = this.getAbsoluteLocation('./');
+        
+        const normalizedPattern = this.#fileSystem.normalize(pattern);
 
-        return this.#fileSystem.filter(location, pattern);
+        const filenames = await this.#fileSystem.filter(location, normalizedPattern);
+
+        return filenames.map(filename => this.#fileSystem.normalize(filename));
     }
 
     #validateLocation(location: string, filename: string): void

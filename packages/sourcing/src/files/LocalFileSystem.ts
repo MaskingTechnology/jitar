@@ -23,6 +23,11 @@ export default class LocalFileSystem implements FileSystem
         return fs.exists(location);
     }
 
+    isAbsolute(location: string): boolean
+    {
+        return path.isAbsolute(location); 
+    }
+
     // This method is synchronous because it's used in the
     // LocationRewriter. This class uses a replacer function
     // in a replaceAll method that only accepts synchronous functions.
@@ -70,6 +75,11 @@ export default class LocalFileSystem implements FileSystem
     relative(from: string, to: string): string
     {
         return path.relative(from, to);
+    }
+
+    normalize(location: string): string
+    {
+        return location.replaceAll(path.win32.sep, path.posix.sep);
     }
 
     async mimeType(location: string): Promise<string | undefined>
