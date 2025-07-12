@@ -28,3 +28,12 @@ Jitar is a great tool for building applications that are expected to grow and ch
 * Deploying an application as (micro)services when it needs scaling,  load-balancing and/or failover.
 
 For existing applications, Jitar can be of great assistance for load balancing (parts) of the application, or adding multi-version support.
+
+## Prerequisites
+
+A Jitar project has a few requirements to function properly. Before installing Jitar make sure the the following conditions are met:
+
+* Node version 20.0 or higher
+* TypeScript 4.7 or higher
+* Use of ESM (CommonJS is not supported)
+* Vite, if a frontend needs to be hooked in
