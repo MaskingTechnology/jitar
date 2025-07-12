@@ -1,4 +1,16 @@
-# 0.9.3
+# v0.9.4
+[2025-07-12]
+
+### Features
+
+* \[[655](https://github.com/MaskingTechnology/jitar/pull/655)] feat: implement init command (#560) by Peter van Vliet
+* \[[663](https://github.com/MaskingTechnology/jitar/pull/663)] feat: windows support (#643) by Bas Meeuwissen
+
+### Fixes
+
+* \[[661](https://github.com/MaskingTechnology/jitar/pull/661)] fix: plugin loading order (#660) by Peter van Vliet
+
+# v0.9.3
 [2025-06-02]
 
 ### Chores
