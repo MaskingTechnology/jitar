@@ -24,7 +24,7 @@ type Configuration =
     registerAtGateway?: boolean;
     executionManager: ExecutionManager;
     healthManager: HealthManager;
-    reportFrequency?: number;
+    reportInterval?: number;
 };
 
 export default class LocalWorker implements Worker
@@ -51,7 +51,7 @@ export default class LocalWorker implements Worker
 
         this.#executionManager = configuration.executionManager;
         this.#healthManager = configuration.healthManager;
-        this.#reportManager = new ReportManager(this, configuration.reportFrequency);
+        this.#reportManager = new ReportManager(this, configuration.reportInterval);
 
         const classResolver = new ExecutionClassResolver(this.#executionManager);
         this.#serializer = SerializerBuilder.build(classResolver);

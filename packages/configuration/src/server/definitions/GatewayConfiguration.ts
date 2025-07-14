@@ -3,7 +3,7 @@ import type { ValidationScheme } from '@jitar/validation';
 
 type GatewayConfiguration =
 {
-    monitor?: number;
+    monitorInterval?: number;
     trustKey?: string;
 };
 
@@ -11,7 +11,7 @@ export default GatewayConfiguration;
 
 const validationScheme: ValidationScheme =
 {
-    monitor: { type: 'integer', required: false },
+    monitorInterval: { type: 'integer', required: false },
     trustKey: { type: 'string', required: false }
 } as const;
 

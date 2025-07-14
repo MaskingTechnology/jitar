@@ -4,36 +4,36 @@ import States from '../common/definitions/States';
 
 import type WorkerManager from './WorkerManager';
 
-const DEFAULT_FREQUENCY = 5000;
+const DEFAULT_INTERVAL = 5000;
 
 export default class WorkerMonitor
 {
     readonly #workerManager: WorkerManager;
-    readonly #frequency: number;
+    readonly #interval: number;
 
-    #interval: ReturnType<typeof setInterval> | null = null;
+    #timeout: ReturnType<typeof setInterval> | null = null;
 
-    constructor(workerManager: WorkerManager, frequency = DEFAULT_FREQUENCY)
+    constructor(workerManager: WorkerManager, interval = DEFAULT_INTERVAL)
     {
         this.#workerManager = workerManager;
-        this.#frequency = frequency;
+        this.#interval = interval;
     }
 
     get workerManager() { return this.#workerManager; }
 
     start(): void
     {
-        this.#interval = setInterval(async () => this.#monitor(), this.#frequency);
+        this.#timeout = setInterval(async () => this.#monitor(), this.#interval);
     }
 
     stop(): void
     {
-        if (this.#interval === null)
+        if (this.#timeout === null)
         {
             return;
         }
 
-        clearInterval(this.#interval);
+        clearInterval(this.#timeout);
     }
 
     #monitor(): void

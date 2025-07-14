@@ -13,8 +13,8 @@ type Configuration =
     trustKey?: string;
     procedureNames: Set<string>;
     remote: Remote;
-    unavailableThreshold?: number,
-    disconnectedThreshold?: number
+    unavailableThreshold?: number;
+    stoppedThreshold?: number;
 };
 
 export default class RemoteWorker implements Worker
@@ -33,7 +33,7 @@ export default class RemoteWorker implements Worker
         this.#trustKey = configuration.trustKey;
         this.#procedureNames = configuration.procedureNames;
         this.#remote = configuration.remote;
-        this.#stateManager = new ReportedStateManager(configuration.unavailableThreshold, configuration.disconnectedThreshold);
+        this.#stateManager = new ReportedStateManager(configuration.unavailableThreshold, configuration.stoppedThreshold);
     }
 
     get id(): string | undefined { return this.#id; }

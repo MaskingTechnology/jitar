@@ -6,6 +6,7 @@ import ProxyConfiguration, { validationScheme as proxyValidationScheme } from '.
 import RepositoryConfiguration, { validationScheme as repositoryValidationScheme } from './RepositoryConfiguration';
 import StandaloneConfiguration, { validationScheme as standaloneValidationScheme } from './StandaloneConfiguration';
 import WorkerConfiguration, { validationScheme as workerValidationScheme } from './WorkerConfiguration';
+import RemoteWorkerConfiguration, { validationScheme as remoteWorkerValidationScheme } from './RemoteWorkerConfiguration';
 
 type ServerConfiguration =
 {
@@ -20,6 +21,7 @@ type ServerConfiguration =
     repository?: RepositoryConfiguration;
     standalone?: StandaloneConfiguration;
     worker?: WorkerConfiguration;
+    remoteWorker?: RemoteWorkerConfiguration;
 };
 
 export default ServerConfiguration;
@@ -36,7 +38,8 @@ const validationScheme: ValidationScheme =
     proxy: { type: 'group', required: false, fields: proxyValidationScheme },
     repository: { type: 'group', required: false, fields: repositoryValidationScheme },
     standalone: { type: 'group', required: false, fields: standaloneValidationScheme },
-    worker: { type: 'group', required: false, fields: workerValidationScheme }
+    worker: { type: 'group', required: false, fields: workerValidationScheme },
+    remoteWorker: { type: 'group', required: false, fields: remoteWorkerValidationScheme }
 } as const;
 
 export { validationScheme };

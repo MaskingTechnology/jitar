@@ -4,7 +4,7 @@ import { ExecutionManager } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
 import { Logger, LogLevel } from '@jitar/logging';
 import { MiddlewareManager } from '@jitar/middleware';
-import { DummyProvider, DummyRunner, LocalGateway, LocalRepository, LocalWorker, LocalProxy, RemoteBuilder, RemoteGateway, RemoteRepository } from '@jitar/services';
+import { DummyProvider, DummyRunner, LocalGateway, LocalRepository, LocalWorker, LocalProxy, RemoteBuilder, RemoteWorkerBuilder, RemoteGateway, RemoteRepository } from '@jitar/services';
 import { SourcingManager } from '@jitar/sourcing';
 
 import UnknownServiceConfigured from './errors/UnknownServiceConfigured';
@@ -31,15 +31,14 @@ export default class RuntimeBuilder
 
         const healthManager = this.#buildHealthManager(healthChecks);
         const proxy = await this.#buildService(configuration, healthManager);
+
         const sourcingManager = this.#sourcingManager;
-        const remoteBuilder = this.#remoteBuilder;
         const resourceManager = this.#buildResourceManager(setUp, tearDown);
         const middlewareManager = this.#buildMiddlewareManager(middleware);
-        
-
+        const remoteWorkerBuilder = this.#buildRemoteWorkerBuilder(configuration);
         const logger = new Logger(logLevel);
 
-        return new Server({ proxy, sourcingManager, remoteBuilder, resourceManager, middlewareManager, logger });
+        return new Server({ proxy, sourcingManager, resourceManager, middlewareManager, remoteWorkerBuilder, logger });
     }
 
     #buildService(configuration: ServerConfiguration, healthManager: HealthManager): Promise<LocalProxy>
@@ -80,7 +79,7 @@ export default class RuntimeBuilder
     #buildLocalGateway(url: string, configuration: GatewayConfiguration, healthManager: HealthManager): LocalGateway
     {
         const trustKey = configuration.trustKey;
-        const monitorInterval = configuration.monitor;
+        const monitorInterval = configuration.monitorInterval;
 
         return new LocalGateway({ url, trustKey, monitorInterval, healthManager });
     }
@@ -96,10 +95,11 @@ export default class RuntimeBuilder
     {
         const trustKey = configuration.trustKey;
         const gateway = configuration.gateway ? this.#buildRemoteGateway(configuration.gateway) : undefined;
+        const reportInterval = configuration.reportInterval;
         const registerAtGateway = gateway !== undefined; // if we have a gateway, the worker needs to register itself at it.
         const executionManager = this.#buildExecutionManager(configuration.segments);
 
-        return new LocalWorker({ url, trustKey, gateway, registerAtGateway, executionManager, healthManager });
+        return new LocalWorker({ url, trustKey, gateway, registerAtGateway, executionManager, healthManager, reportInterval });
     }
 
     async #buildLocalRepository(url: string, configuration: RepositoryConfiguration, healthManager: HealthManager): Promise<LocalRepository>
@@ -162,6 +162,14 @@ export default class RuntimeBuilder
         const filenames = segmentNames.map(name => `./${name}.segment.js`);
 
         return new ExecutionManager(this.#sourcingManager, filenames);
+    }
+
+    #buildRemoteWorkerBuilder(configuration: ServerConfiguration): RemoteWorkerBuilder
+    {
+        const unavailableThreshold = configuration.remoteWorker?.unavailableThreshold;
+        const stoppedThreshold = configuration.remoteWorker?.stoppedThreshold;
+        
+        return new RemoteWorkerBuilder(this.#remoteBuilder, unavailableThreshold, stoppedThreshold);
     }
 
     async #buildAssetSet(patterns?: string[]): Promise<Set<string>>

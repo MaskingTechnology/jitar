@@ -1,34 +1,34 @@
 
 import LocalWorker from './LocalWorker';
 
-const DEFAULT_FREQUENCY = 5000;
+const DEFAULT_INTERVAL = 5000;
 
 export default class ReportManager
 {
     readonly #worker: LocalWorker;
-    readonly #frequency: number;
+    readonly #interval: number;
 
-    #interval: ReturnType<typeof setInterval> | null = null;
+    #timeout: ReturnType<typeof setInterval> | null = null;
 
-    constructor(worker: LocalWorker, frequency = DEFAULT_FREQUENCY)
+    constructor(worker: LocalWorker, interval = DEFAULT_INTERVAL)
     {
         this.#worker = worker;
-        this.#frequency = frequency;
+        this.#interval = interval;
     }
 
     start(): void
     {
-        this.#interval = setInterval(async () => this.#report(), this.#frequency);
+        this.#timeout = setInterval(async () => this.#report(), this.#interval);
     }
 
     stop(): void
     {
-        if (this.#interval === null)
+        if (this.#timeout === null)
         {
             return;
         }
 
-        clearInterval(this.#interval);
+        clearInterval(this.#timeout);
     }
 
     #report(): Promise<void>

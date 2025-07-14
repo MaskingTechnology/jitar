@@ -4,7 +4,7 @@ import type { Response } from '@jitar/execution';
 import { Request, Version, VersionParser } from '@jitar/execution';
 import { Logger } from '@jitar/logging';
 import type { MiddlewareManager } from '@jitar/middleware';
-import { LocalGateway, LocalWorker, LocalProxy, RemoteBuilder, RemoteWorker, State, States } from '@jitar/services';
+import { LocalGateway, LocalWorker, LocalProxy, RemoteWorkerBuilder, State, States } from '@jitar/services';
 import type { File, SourcingManager } from '@jitar/sourcing';
 
 import ProcedureRunner from '../ProcedureRunner';
@@ -26,7 +26,7 @@ type Configuration =
 {
     proxy: LocalProxy;
     sourcingManager: SourcingManager;
-    remoteBuilder: RemoteBuilder;
+    remoteWorkerBuilder: RemoteWorkerBuilder;
     resourceManager: ResourceManager;
     middlewareManager: MiddlewareManager;
     logger: Logger;
@@ -35,7 +35,7 @@ type Configuration =
 export default class Server extends Runtime
 {
     readonly #proxy: LocalProxy;
-    readonly #remoteBuilder: RemoteBuilder;
+    readonly #remoteWorkerBuilder: RemoteWorkerBuilder;
     readonly #resourceManager: ResourceManager;
     readonly #middlewareManager: MiddlewareManager;
 
@@ -47,7 +47,7 @@ export default class Server extends Runtime
         super();
 
         this.#proxy = configuration.proxy;
-        this.#remoteBuilder = configuration.remoteBuilder;
+        this.#remoteWorkerBuilder = configuration.remoteWorkerBuilder;
         this.#resourceManager = configuration.resourceManager;
         this.#middlewareManager = configuration.middlewareManager;
 
@@ -175,7 +175,7 @@ export default class Server extends Runtime
         {
             const gateway = this.#extractLocalGatewayFromProxy();
 
-            const worker = this.#buildRemoteWorker(addRequest.url, addRequest.procedureNames, addRequest.trustKey);
+            const worker = this.#remoteWorkerBuilder.build(addRequest.url, addRequest.procedureNames, addRequest.trustKey);
 
             const id = await gateway.addWorker(worker);
 
@@ -434,13 +434,5 @@ export default class Server extends Runtime
         }
 
         return runner;
-    }
-
-    #buildRemoteWorker(url: string, procedures: string[], trustKey?: string): RemoteWorker
-    {
-        const remote = this.#remoteBuilder.build(url);
-        const procedureNames = new Set<string>(procedures);
-
-        return new RemoteWorker({ url, trustKey, remote, procedureNames });
     }
 }

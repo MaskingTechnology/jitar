@@ -19,6 +19,7 @@ export { default as RemoteRepository } from './repository/RemoteRepository';
 export { default as Worker } from './worker/Worker';
 export { default as LocalWorker } from './worker/LocalWorker';
 export { default as RemoteWorker } from './worker/RemoteWorker';
+export { default as RemoteWorkerBuilder } from './worker/RemoteWorkerBuilder';
 
 export { default as Service } from './Service';
 export { default as RunnerService } from './RunnerService';

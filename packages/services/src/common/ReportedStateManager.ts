@@ -5,7 +5,7 @@ import type { State } from './definitions/States';
 import StateManager from './StateManager';
 
 const DEFAULT_UNAVAILABLE_THRESHOLD = 6000;
-const DEFAULT_STOPPED_THRESHOLD = 12000;
+const DEFAULT_STOPPED_THRESHOLD = 18000;
 
 export default class ReportedStateManager extends StateManager
 {
