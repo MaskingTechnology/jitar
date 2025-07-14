@@ -13,7 +13,7 @@ next:
 
 # Health checks
 
-The [gateway service](../fundamentals/runtime-services#gateway) determines if a worker still can be used safely by frequently checking its health. Health checks are used for health determination. Jitar has no out-of-the-box health checks, but you can create and add your own. A common use case is for checking database availability. In case a worker can't access its database, we want the gateway to stop using it. Health checks can be added to any of the services.
+The [gateway service](../fundamentals/runtime-services#gateway) determines if a worker still can be used safely by frequently checking its availability status. Health checks provide essential information used to determine worker availability. Jitar has no out-of-the-box health checks, but you can create and add your own. A common use case is for checking database availability. In case a worker can't access its database, we want the gateway to stop using it. Health checks can be added to any of the services.
 
 In this section you'll learn how to create and add your own health checks.
 

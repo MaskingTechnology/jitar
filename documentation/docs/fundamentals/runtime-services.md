@@ -40,11 +40,13 @@ Configurations are placed in JSON files. The basic structure looks like this.
 
 ::: tip NOTE
 The configuration also supports environment variables. They can be used by wrapping the variable name in `${}`. For example, `${ENVIRONMENT_VARIABLE_1}`.
+
 ```json
 {
     "PROPERTY_3": "${ENVIRONMENT_VARIABLE_3}"
 }
 ```
+
 :::
 
 There are four properties at root level:
@@ -81,6 +83,7 @@ The following configuration properties are available:
 * gateway - url of the gateway (optional, in case a gateway is used).
 * segments - list of segment names to load (required).
 * trustKey - key for creating trusted client (optional).
+* reportInterval - time in milliseconds between the status reports at the gateway (optional, default `5000`).
 
 A full configuration example looks like this:
 
@@ -91,7 +94,8 @@ A full configuration example looks like this:
     {
         "gateway": "http://gateway.example.com:3000",
         "segments": ["segment1", "segment2"],
-        "trustKey": "${MY_TRUST_KEY}"
+        "trustKey": "${MY_TRUST_KEY}",
+        "reportInterval": 5000
     }
 }
 ```
@@ -114,13 +118,13 @@ If a function is available on multiple workers, the gateway will automatically b
 
 ### Worker monitoring
 
-The availability of workers is actively monitored. If a worker cannot be reached or replies to have [an unhealthy state](../monitor/health.md), it will be removed from the gateway.
+The availability of workers is actively monitored. If a worker fails to report its status on time, it will be considered stopped and removed from the gateway. If a worker reports [an unhealthy state](../monitor/health.md), it will not be used by the gateway until it reports a healthy state again.
 
 ### Configuration properties
 
 The following configuration properties are available:
 
-* monitor - worker monitoring interval in milliseconds (optional, default `5000`).
+* monitorInterval - time in milliseconds between checks to detect and remove stopped workers (optional, default `5000`).
 * trustKey - key for creating trusted clients (optional).
 
 A full configuration example looks like this:
@@ -130,8 +134,31 @@ A full configuration example looks like this:
     "url": "http://gateway.example.com:3000",
     "gateway":
     {
+        "monitorInterval": 5000,
+        "trustKey": "${MY_TRUST_KEY}"
+    }
+}
+```
+
+To configure the monitoring of remote workers, the following properties are available:
+
+* unavailableThreshold - time in milliseconds after the last report from a worker, after which the worker is considered unavailable (optional, default `6000`).
+* stoppedThreshold - time in milliseconds after the last report from a worker, after which the worker is considered stopped (optional, default `18000`).
+
+These properties are configured separately from the gateway, in the `remoteWorker` service. A full configuration example looks like this:
+
+```json
+{
+    "url": "http://gateway.example.com:3000",
+    "gateway":
+    {
         "monitor": 5000,
         "trustKey": "${MY_TRUST_KEY}"
+    },
+    "remoteWorker":
+    {
+        "unavailableThreshold": 6000,
+        "stoppedThreshold": 18000
     }
 }
 ```
