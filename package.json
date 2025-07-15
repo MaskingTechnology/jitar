@@ -7,12 +7,10 @@
   "type": "module",
   "workspaces": [
     "packages/*",
-    "tools/*",
-    "examples/**/*"
+    "tools/*"
   ],
   "scripts": {
     "build": "turbo run build --filter=jitar --filter=create-jitar --filter=@jitar/plugin*",
-    "build:examples": "turbo run build --filter=*-example",
     "build:all": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",

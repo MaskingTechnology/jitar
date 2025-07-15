@@ -1,4 +1,0 @@
-
-// Show the data from the database
-
-GET http://localhost:3000/rpc/getData HTTP/1.1

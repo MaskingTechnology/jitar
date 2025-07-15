@@ -1,9 +1,0 @@
-{
-    "name": "jitar-health-checks-example",
-    "type": "module",
-    "private": true,
-    "scripts": {
-        "build": "rm -rf dist .jitar && tsc && jitar build",
-        "standalone": "jitar start --service=services/standalone.json"
-    }
-}
