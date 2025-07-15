@@ -7,7 +7,7 @@
     "scripts": {
         "build": "npm run clean && npm run copy && npm run minify",
         "clean": "rm -rf dist",
-        "copy": "cpx -u 'src/**/*.{svg,png, txt}' dist",
+        "copy": "cpx -u 'src/**/*.{svg,png,txt}' dist",
         "minify": "npm run minify-html && npm run minify-css",
         "minify-html": "minify src/index.html > dist/index.html",
         "minify-css": "minify src/css/*.css src/css/**/*.css src/fonts/**/*.css > dist/site.css"
