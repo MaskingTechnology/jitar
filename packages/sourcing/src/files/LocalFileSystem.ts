@@ -23,7 +23,7 @@ export default class LocalFileSystem implements FileSystem
     {
         try
         {
-            await fsp.statfs(location);
+            await fsp.stat(location);
             
             return true;
         }
