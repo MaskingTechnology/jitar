@@ -152,7 +152,7 @@ These properties are configured separately from the gateway, in the `remoteWorke
     "url": "http://gateway.example.com:3000",
     "gateway":
     {
-        "monitor": 5000,
+        "monitorInterval": 5000,
         "trustKey": "${MY_TRUST_KEY}"
     },
     "remoteWorker":
