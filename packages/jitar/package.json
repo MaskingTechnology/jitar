@@ -31,7 +31,6 @@
     "dependencies": {
         "dotenv": "^17.0.1",
         "express": "^5.1.0",
-        "fs-extra": "^11.3.0",
         "glob": "11.0.3",
         "mime-types": "^3.0.1"
     },

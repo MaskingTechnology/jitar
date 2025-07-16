@@ -16,7 +16,6 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "fs-extra": "^11.3.0",
     "glob": "11.0.3",
     "mime-types": "^3.0.1"
   }
