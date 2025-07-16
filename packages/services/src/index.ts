@@ -10,6 +10,7 @@ export { default as DummyRunner } from './dummy/DummyRunner';
 export { default as Gateway } from './gateway/Gateway';
 export { default as LocalGateway } from './gateway/LocalGateway';
 export { default as RemoteGateway } from './gateway/RemoteGateway';
+export { default as WorkerManager } from './gateway/WorkerManager';
 
 export { default as LocalProxy } from './proxy/LocalProxy';
 

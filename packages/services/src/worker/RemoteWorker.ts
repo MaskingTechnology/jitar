@@ -42,38 +42,26 @@ export default class RemoteWorker implements Worker
 
     get state() { return this.#stateManager.state; }
 
-    set state(state: State) { this.#stateManager.report(state);}
-
     get url() { return this.#url; }
 
     get trustKey() { return this.#trustKey; }
 
     async start(): Promise<void>
     {
-        if (this.#stateManager.isNotStopped())
+        return this.#stateManager.start(async () =>
         {
-            return;
-        }
+            await this.#remote.connect();
 
-        this.#stateManager.setStarting();
-
-        await this.#remote.connect();
-
-        await this.updateState();
+            await this.updateState();
+        });
     }
 
     async stop(): Promise<void>
     {
-        if (this.#stateManager.isNotStarted())
+        return this.#stateManager.stop(async () =>
         {
-            return;
-        }
-
-        this.#stateManager.setStopping();
-
-        await this.#remote.disconnect();
-
-        this.#stateManager.setStopped();
+            await this.#remote.disconnect();
+        });
     }
 
     getProcedureNames(): string[]
@@ -96,9 +84,19 @@ export default class RemoteWorker implements Worker
         return this.#remote.getHealth();
     }
 
+    isAvailable(): boolean
+    {
+        return this.#stateManager.isAvailable();
+    }
+
     async updateState(): Promise<State>
     {
         return this.#stateManager.update();
+    }
+
+    async reportState(state: State): Promise<void>
+    {
+        this.#stateManager.report(state);
     }
 
     run(request: Request): Promise<Response>

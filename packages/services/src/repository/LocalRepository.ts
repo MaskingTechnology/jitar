@@ -49,30 +49,20 @@ export default class LocalRepository implements Repository
 
     async start(): Promise<void>
     {
-        if (this.#stateManager.isNotStopped())
+        return this.#stateManager.start(async () =>
         {
-            return;
-        }
+            await this.#healthManager.start();
 
-        this.#stateManager.setStarting();
-
-        await this.#healthManager.start();
-
-        await this.updateState();
+            await this.updateState();
+        });
     }
 
     async stop(): Promise<void>
     {
-        if (this.#stateManager.isNotStarted())
+        return this.#stateManager.stop(async () =>
         {
-            return;
-        }
-
-        this.#stateManager.setStopping();
-
-        await this.#healthManager.stop();
-
-        this.#stateManager.setStopped();
+            await this.#healthManager.stop();
+        });
     }
 
     isHealthy(): Promise<boolean>

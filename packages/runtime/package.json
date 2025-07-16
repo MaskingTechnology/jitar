@@ -22,6 +22,7 @@
     "@jitar/health": "*",
     "@jitar/logging": "*",
     "@jitar/middleware": "*",
+    "@jitar/scheduling": "*",
     "@jitar/services": "*",
     "@jitar/sourcing": "*"
   }

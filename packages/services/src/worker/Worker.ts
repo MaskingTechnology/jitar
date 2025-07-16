@@ -8,7 +8,9 @@ interface Worker extends RunnerService
 
    set id(id: string);
 
-   set state(state: State);
+   isAvailable(): boolean;
+   
+   reportState(state: State): Promise<void>;
 }
 
 export default Worker;

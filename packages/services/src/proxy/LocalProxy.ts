@@ -41,36 +41,26 @@ export default class LocalProxy implements ProviderService, RunnerService
 
     async start(): Promise<void>
     {
-        if (this.#stateManager.isNotStopped())
+        return this.#stateManager.start(async () =>
         {
-            return;
-        }
+            await Promise.all([
+                this.#provider.start(),
+                this.#runner.start()
+            ]);
 
-        this.#stateManager.setStarting();
-
-        await Promise.all([
-            this.#provider.start(),
-            this.#runner.start()
-        ]);
-
-        await this.updateState();
+            await this.updateState();
+        });
     }
 
     async stop(): Promise<void>
     {
-        if (this.#stateManager.isNotStarted())
+        return this.#stateManager.stop(async () =>
         {
-            return;
-        }
-
-        this.#stateManager.setStopping();
-
-        await Promise.all([
-            this.#runner.stop(),
-            this.#provider.stop()
-        ]);
-
-        this.#stateManager.setStopped();
+            await Promise.allSettled([
+                this.#runner.stop(),
+                this.#provider.stop()
+            ]);
+        });
     }
 
     async isHealthy(): Promise<boolean>

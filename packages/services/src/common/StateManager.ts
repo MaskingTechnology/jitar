@@ -2,6 +2,8 @@
 import States from './definitions/States';
 import type { State } from './definitions/States';
 
+type Task = () => Promise<void>;
+
 export default class StateManager
 {
     #state: State = States.STOPPED;
@@ -10,14 +12,63 @@ export default class StateManager
 
     set state(state: State) { this.#state = state; }
 
-    isNotStopped(): boolean
+    async start(task: Task): Promise<void>
+    {
+        if (this.isStarted())
+        {
+            return;
+        }
+
+        try
+        {
+            this.setStarting();
+
+            await task();
+        }
+        catch (error: unknown)
+        {
+            this.setStopped();
+
+            throw error;
+        }
+    }
+
+    async stop(task: Task): Promise<void>
+    {
+        if (this.isStopped())
+        {
+            return;
+        }
+
+        try
+        {
+            this.setStopping();
+
+            await task();
+
+            this.setStopped();
+        }
+        catch (error: unknown)
+        {
+            this.setUnavailable();
+
+            throw error;
+        }
+    }
+
+    isStarted(): boolean
     {
         return this.#notHasState(States.STOPPED);
     }
 
-    isNotStarted(): boolean
+    isStopped(): boolean
     {
-        return this.#hasState(States.STOPPING, States.STOPPED);
+        return this.#hasState(States.STOPPED);
+    }
+
+    isAvailable(): boolean
+    {
+        return this.#hasState(States.AVAILABLE);
     }
 
     setStarting(): void

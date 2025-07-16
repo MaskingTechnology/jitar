@@ -36,30 +36,20 @@ export default class RemoteGateway implements Gateway
     
     async start(): Promise<void>
     {
-        if (this.#stateManager.isNotStopped())
+        return this.#stateManager.start(async () =>
         {
-            return;
-        }
+            await this.#remote.connect();
 
-        this.#stateManager.setStarting();
-
-        await this.#remote.connect();
-
-        await this.updateState();
+            await this.updateState();
+        });
     }
 
     async stop(): Promise<void>
     {
-        if (this.#stateManager.isNotStarted())
+        return this.#stateManager.stop(async () =>
         {
-            return;
-        }
-
-        this.#stateManager.setStopping();
-
-        await this.#remote.disconnect();
-
-        this.#stateManager.setStopped();
+            await this.#remote.disconnect();
+        });
     }
 
     isHealthy(): Promise<boolean>

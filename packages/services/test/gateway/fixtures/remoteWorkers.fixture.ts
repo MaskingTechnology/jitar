@@ -32,17 +32,17 @@ const untrustedWorker = new RemoteWorker({ url, procedureNames: noProcedureNames
 
 const firstProcedureNames = new Set<string>(['first']);
 const firstWorker = new RemoteWorker({ url, procedureNames: firstProcedureNames, remote });
-firstWorker.state = States.AVAILABLE;
+await firstWorker.reportState(States.AVAILABLE);
 
 const secondProcedureNames = new Set<string>(['first', 'second']);
 const secondWorker = new RemoteWorker({ url, procedureNames: secondProcedureNames, remote });
-secondWorker.state = States.AVAILABLE;
+await secondWorker.reportState(States.AVAILABLE);
 
 const healthyWorker = new HealthyWorker({ url, procedureNames: noProcedureNames, remote });
-healthyWorker.state = States.AVAILABLE;
+await healthyWorker.reportState(States.AVAILABLE);
 
 const unhealthyWorker = new UnhealthyWorker({ url, procedureNames: noProcedureNames, remote });
-unhealthyWorker.state = States.STOPPED;
+await unhealthyWorker.reportState(States.STOPPED);
 
 export const REMOTE_WORKERS =
 {

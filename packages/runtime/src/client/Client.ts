@@ -1,7 +1,8 @@
 
 import type { ExecutionManager, Request, Response } from '@jitar/execution';
-import { HealthManager } from '@jitar/health';
+import type { HealthManager } from '@jitar/health';
 import type { MiddlewareManager } from '@jitar/middleware';
+import type { ScheduleManager } from '@jitar/scheduling';
 import { LocalWorker, RemoteGateway, Remote, RequestPool } from '@jitar/services';
 
 import ProcedureRunner from '../ProcedureRunner';
@@ -14,6 +15,7 @@ type Configuration =
     healthManager: HealthManager;
     middlewareManager: MiddlewareManager;
     executionManager: ExecutionManager;
+    scheduleManager: ScheduleManager;
 };
 
 export default class Client extends Runtime
@@ -34,7 +36,8 @@ export default class Client extends Runtime
                 remote: configuration.remote
             }),
             healthManager: configuration.healthManager,
-            executionManager: configuration.executionManager
+            executionManager: configuration.executionManager,
+            scheduleManager: configuration.scheduleManager
         });
 
         this.#middlewareManager = configuration.middlewareManager;

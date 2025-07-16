@@ -1,5 +1,6 @@
 
 import { Request, Response, Runner } from '@jitar/execution';
+import RequestCancelled from './errors/RequestCancelled';
 
 const DEFAULT_POOL_SIZE = 20;
 
@@ -36,6 +37,8 @@ export default class RequestPool implements Runner
     stop(): void
     {
         this.#started = false;
+
+        this.#cancelAll();
     }
 
     run(request: Request): Promise<Response>
@@ -111,5 +114,25 @@ export default class RequestPool implements Runner
 
             this.#update();
         }
+    }
+
+    #cancelAll(): void
+    {
+        while (this.#queue.length > 0)
+        {
+            const item = this.#queue.shift();
+
+            if (item === undefined)
+            {
+                continue;
+            }
+
+            this.#cancel(item);
+        }
+    }
+
+    #cancel(item: QueueItem)
+    {
+        item.reject(new RequestCancelled());
     }
 }

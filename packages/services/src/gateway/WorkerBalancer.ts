@@ -1,7 +1,6 @@
 
 import type { Request, Response } from '@jitar/execution';
 
-import States from '../common/definitions/States';
 import type Worker from '../worker/Worker';
 
 import NoWorkerAvailable from './errors/NoWorkerAvailable';
@@ -37,10 +36,12 @@ export default class WorkerBalancer
 
     getNextWorker(): Worker | undefined
     {
-        const workers = this.#workers.filter(worker => worker.state === States.AVAILABLE);
+        const workers = this.#workers.filter(worker => worker.isAvailable());
 
         if (workers.length === 0)
         {
+            this.#currentIndex = 0;
+            
             return;
         }
 

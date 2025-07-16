@@ -1,6 +1,7 @@
 
 import { ExecutionManager, Implementation, ProcedureNotFound, Request, Response } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
+import type { ScheduleManager, ScheduledTask } from '@jitar/scheduling';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
 import StateManager from '../common/StateManager';
@@ -9,7 +10,6 @@ import Gateway from '../gateway/Gateway';
 import Worker from './Worker';
 
 import ExecutionClassResolver from './ExecutionClassResolver';
-import ReportManager from './ReportManager';
 import RequestNotTrusted from './errors/RequestNotTrusted';
 
 const JITAR_TRUST_HEADER_KEY = 'X-Jitar-Trust-Key';
@@ -22,9 +22,10 @@ type Configuration =
     trustKey?: string;
     gateway?: Gateway;
     registerAtGateway?: boolean;
+    reportInterval?: number;
     executionManager: ExecutionManager;
     healthManager: HealthManager;
-    reportInterval?: number;
+    scheduleManager: ScheduleManager;
 };
 
 export default class LocalWorker implements Worker
@@ -37,7 +38,7 @@ export default class LocalWorker implements Worker
     readonly #registerAtGateway: boolean;
     readonly #executionManager: ExecutionManager;
     readonly #healthManager: HealthManager;
-    readonly #reportManager: ReportManager;
+    readonly #reportTask: ScheduledTask;
     readonly #serializer: Serializer;
 
     readonly #stateManager = new StateManager();
@@ -51,7 +52,9 @@ export default class LocalWorker implements Worker
 
         this.#executionManager = configuration.executionManager;
         this.#healthManager = configuration.healthManager;
-        this.#reportManager = new ReportManager(this, configuration.reportInterval);
+
+        const scheduleManager = configuration.scheduleManager;
+        this.#reportTask = scheduleManager.create(() => this.#report(), configuration.reportInterval);
 
         const classResolver = new ExecutionClassResolver(this.#executionManager);
         this.#serializer = SerializerBuilder.build(classResolver);
@@ -62,8 +65,6 @@ export default class LocalWorker implements Worker
     set id(id: string) { this.#id = id; }
 
     get state(): State { return this.#stateManager.state; }
-    
-    set state(state: State) { this.#stateManager.state = state; }
 
     get url() { return this.#url; }
 
@@ -71,60 +72,50 @@ export default class LocalWorker implements Worker
 
     async start(): Promise<void>
     {
-        if (this.#stateManager.isNotStopped())
+        return this.#stateManager.start(async () =>
         {
-            return;
-        }
+            await Promise.all([
+                this.#executionManager.start(),
+                this.#healthManager.start()
+            ]);
 
-        this.#stateManager.setStarting();
-
-        await Promise.all([
-            this.#executionManager.start(),
-            this.#healthManager.start()
-        ]);
-
-        if (this.#gateway !== undefined)
-        {
-            await this.#gateway.start();
-
-            if (this.#registerAtGateway)
+            if (this.#gateway !== undefined)
             {
-                this.#id = await this.#gateway.addWorker(this);
+                await this.#gateway.start();
 
-                this.#reportManager.start();
+                if (this.#registerAtGateway)
+                {
+                    this.#id = await this.#gateway.addWorker(this);
+
+                    this.#reportTask.start();
+                }
             }
-        }
 
-        await this.updateState();
+            await this.updateState();
+        });
     }
 
     async stop(): Promise<void>
     {
-        if (this.#stateManager.isNotStarted())
+        return this.#stateManager.stop(async () =>
         {
-            return;
-        }
-
-        this.#stateManager.setStopping();
-
-        if (this.#gateway !== undefined)
-        {
-            if (this.#id !== undefined)
+            if (this.#gateway !== undefined)
             {
-                this.#reportManager.stop();
+                if (this.#id !== undefined)
+                {
+                    this.#reportTask.stop();
 
-                await this.#gateway.removeWorker(this.#id);
+                    await this.#gateway.removeWorker(this.#id);
+                }
+
+                await this.#gateway.stop();
             }
-
-            await this.#gateway.stop();
-        }
-        
-        await Promise.all([
-            this.#healthManager.stop(),
-            this.#executionManager.stop()
-        ]);
-
-        this.#stateManager.setStopped();
+            
+            await Promise.all([
+                this.#healthManager.stop(),
+                this.#executionManager.stop()
+            ]);
+        });
     }
 
     getProcedureNames(): string[]
@@ -147,6 +138,11 @@ export default class LocalWorker implements Worker
         return this.#healthManager.getHealth();
     }
 
+    isAvailable(): boolean
+    {
+        return this.#stateManager.isAvailable();
+    }
+
     async updateState(): Promise<State>
     {
         const healthy = await this.isHealthy();
@@ -154,14 +150,14 @@ export default class LocalWorker implements Worker
         return this.#stateManager.setAvailability(healthy);
     }
 
-    async reportAtGateway(): Promise<void>
+    async reportState(state: State): Promise<void>
     {
         if (this.#gateway === undefined || this.#id === undefined)
         {
             return;
         }
 
-        return this.#gateway.reportWorker(this.#id, this.state);
+        return this.#gateway.reportWorker(this.#id, state);
     }
 
     async run(request: Request): Promise<Response>
@@ -283,5 +279,12 @@ export default class LocalWorker implements Worker
         const deserializedResult = await this.#serializer.deserialize(response.result);
 
         return new Response(response.status, deserializedResult, response.headers);
+    }
+
+    async #report(): Promise<void>
+    {
+        const state = await this.updateState();
+
+        return this.reportState(state);
     }
 }

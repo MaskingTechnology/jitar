@@ -2,7 +2,9 @@
 import { Segment, ExecutionManager } from '@jitar/execution';
 import { RemoteBuilder } from '@jitar/services';
 import { HealthManager } from '@jitar/health';
+import { Logger, LogLevels } from '@jitar/logging';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
+import { ScheduleManager } from '@jitar/scheduling';
 import { RemoteSourcingManager } from '@jitar/sourcing';
 
 import Client from './Client';
@@ -29,13 +31,16 @@ export default class ClientBuilder
         const middleware = configuration.middleware;
         const segments = configuration.segments;
 
+        const logger = new Logger(LogLevels.WARN);
+
         const remote = this.#remoteBuilder.build(remoteUrl);
         const sourcingManager = new RemoteSourcingManager(remoteUrl);
         const healthManager = this.#buildHealthManager(sourcingManager);
         const middlewareManager = this.#buildMiddlewareManager(sourcingManager, middleware);
         const executionManager = this.#buildExecutionManager(sourcingManager, segments);
+        const scheduleManager = this.#buildScheduleManager(logger);
 
-        return new Client({ remoteUrl, remote, healthManager, middlewareManager, executionManager });
+        return new Client({ remoteUrl, remote, healthManager, middlewareManager, executionManager, scheduleManager });
     }
 
     #buildHealthManager(sourcingManager: RemoteSourcingManager): HealthManager
@@ -59,5 +64,10 @@ export default class ClientBuilder
         segments.forEach(segment => manager.addSegment(segment));
 
         return manager;
+    }
+
+    #buildScheduleManager(logger: Logger): ScheduleManager
+    {
+        return new ScheduleManager(logger);
     }
 }

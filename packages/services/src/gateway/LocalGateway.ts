@@ -9,7 +9,6 @@ import type Worker from '../worker/Worker';
 
 import Gateway from './Gateway';
 import WorkerManager from './WorkerManager';
-import WorkerMonitor from './WorkerMonitor';
 
 import InvalidTrustKey from './errors/InvalidTrustKey';
 
@@ -17,8 +16,8 @@ type Configuration =
 {
     url: string;
     trustKey?: string;
-    monitorInterval?: number;
     healthManager: HealthManager;
+    workerManager: WorkerManager;
 };
 
 export default class LocalGateway implements Gateway
@@ -27,7 +26,6 @@ export default class LocalGateway implements Gateway
     readonly #trustKey?: string;
     readonly #healthManager: HealthManager;
     readonly #workerManager: WorkerManager;
-    readonly #workerMonitor: WorkerMonitor;
 
     readonly #stateManager = new StateManager();
 
@@ -36,8 +34,7 @@ export default class LocalGateway implements Gateway
         this.#url = configuration.url;
         this.#trustKey = configuration.trustKey;
         this.#healthManager = configuration.healthManager;
-        this.#workerManager = new WorkerManager();
-        this.#workerMonitor = new WorkerMonitor(this.#workerManager, configuration.monitorInterval);
+        this.#workerManager = configuration.workerManager;
     }
     
     get url() { return this.#url; }
@@ -48,36 +45,26 @@ export default class LocalGateway implements Gateway
 
     async start(): Promise<void>
     {
-        if (this.#stateManager.isNotStopped())
+        return this.#stateManager.start(async () =>
         {
-            return;
-        }
+            await Promise.all([
+                this.#healthManager.start(),
+                this.#workerManager.start()
+            ]);
 
-        this.#stateManager.setStarting();
-
-        await Promise.all([
-            this.#healthManager.start(),
-            this.#workerMonitor.start()
-        ]);
-
-        await this.updateState();
+            await this.updateState();
+        });
     }
 
     async stop(): Promise<void>
     {
-        if (this.#stateManager.isNotStarted())
+        this.#stateManager.stop(async () =>
         {
-            return;
-        }
-
-        this.#stateManager.setStopping();
-
-        await Promise.all([
-            this.#workerMonitor.stop(),
-            this.#healthManager.stop()
-        ]);
-
-        this.#stateManager.setStopped();
+            await Promise.all([
+                this.#workerManager.stop(),
+                this.#healthManager.stop()
+            ]);
+        });
     }
 
     async isHealthy(): Promise<boolean>

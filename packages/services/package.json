@@ -19,6 +19,7 @@
     "@jitar/errors": "*",
     "@jitar/execution": "*",
     "@jitar/health": "*",
+    "@jitar/scheduling": "*",
     "@jitar/serialization": "*",
     "@jitar/sourcing": "*"
   }
