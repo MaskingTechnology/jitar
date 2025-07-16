@@ -11,7 +11,7 @@ export default class ScheduledTask
     readonly #task: Task;
     readonly #interval: number;
 
-    #timeout: ReturnType<typeof setInterval> | null = null;
+    #timeout: ReturnType<typeof setTimeout> | null = null;
 
     constructor(logger: Logger, task: Task, interval = DEFAULT_INTERVAL)
     {
@@ -32,7 +32,7 @@ export default class ScheduledTask
             return;
         }
 
-        clearInterval(this.#timeout);
+        clearTimeout(this.#timeout);
 
         this.#timeout = null;
     }

@@ -40,20 +40,11 @@ export default class StateManager
             return;
         }
 
-        try
-        {
-            this.setStopping();
+        this.setStopping();
 
-            await task();
+        await task();
 
-            this.setStopped();
-        }
-        catch (error: unknown)
-        {
-            this.setUnavailable();
-
-            throw error;
-        }
+        this.setStopped();
     }
 
     isStarted(): boolean

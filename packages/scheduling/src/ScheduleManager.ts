@@ -7,9 +7,9 @@ import ScheduledTask from './ScheduledTask';
 
 export default class ScheduleManager
 {
-    #scheduledTasks: ScheduledTask[] = [];
+    readonly #scheduledTasks: ScheduledTask[] = [];
 
-    #logger: Logger;
+    readonly #logger: Logger;
 
     constructor(logger: Logger)
     {

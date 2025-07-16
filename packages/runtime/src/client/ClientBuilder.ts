@@ -2,7 +2,7 @@
 import { Segment, ExecutionManager } from '@jitar/execution';
 import { RemoteBuilder } from '@jitar/services';
 import { HealthManager } from '@jitar/health';
-import { Logger, LogLevels } from '@jitar/logging';
+import { Logger, LogLevels, LogLevel } from '@jitar/logging';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
 import { ScheduleManager } from '@jitar/scheduling';
 import { RemoteSourcingManager } from '@jitar/sourcing';
@@ -14,6 +14,7 @@ type ClientConfiguration =
     remoteUrl: string;
     middleware?: Middleware[];
     segments?: Segment[];
+    logLevel?: LogLevel;
 };
 
 export default class ClientBuilder
@@ -31,7 +32,7 @@ export default class ClientBuilder
         const middleware = configuration.middleware;
         const segments = configuration.segments;
 
-        const logger = new Logger(LogLevels.WARN);
+        const logger = new Logger(configuration.logLevel ?? LogLevels.WARN);
 
         const remote = this.#remoteBuilder.build(remoteUrl);
         const sourcingManager = new RemoteSourcingManager(remoteUrl);

@@ -9,8 +9,8 @@ const DEFAULT_STOPPED_THRESHOLD = 18000;
 
 export default class ReportedStateManager extends StateManager
 {
-    #unavailableThreshold: number;
-    #stoppedThreshold: number;
+    readonly #unavailableThreshold: number;
+    readonly #stoppedThreshold: number;
 
     #lastReport: number = Date.now();
     #lastUpdate: number = Date.now();

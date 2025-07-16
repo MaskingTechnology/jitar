@@ -58,7 +58,7 @@ export default class LocalGateway implements Gateway
 
     async stop(): Promise<void>
     {
-        this.#stateManager.stop(async () =>
+        return this.#stateManager.stop(async () =>
         {
             await Promise.all([
                 this.#workerManager.stop(),
