@@ -31,11 +31,20 @@ export default class MiddlewareManager
             return;
         }
 
-        this.#state = States.STARTING;
+        try
+        {
+            this.#state = States.STARTING;
 
-        await this.#loadMiddlewares();
+            await this.#loadMiddlewares();
 
-        this.#state = States.STARTED;
+            this.#state = States.STARTED;
+        }
+        catch (error: unknown)
+        {
+            this.#state = States.STOPPED;
+
+            throw error;
+        }
     }
 
     async stop(): Promise<void>
@@ -45,11 +54,20 @@ export default class MiddlewareManager
             return;
         }
 
-        this.#state = States.STOPPING;
+        try
+        {
+            this.#state = States.STOPPING;
 
-        this.clearMiddlewares();
+            this.clearMiddlewares();
 
-        this.#state = States.STOPPED;
+            this.#state = States.STOPPED;
+        }
+        catch (error: unknown)
+        {
+            this.#state = States.STARTED;
+
+            throw error;
+        }
     }
 
     async loadMiddleware(filename: string): Promise<void>
