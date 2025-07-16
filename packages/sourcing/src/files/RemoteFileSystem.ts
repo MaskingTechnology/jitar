@@ -31,6 +31,11 @@ export default class RemoteFileSystem implements FileSystem
         return [];
     }
 
+    isAbsolute(location: string): boolean
+    {
+        return location.startsWith('/');    
+    }
+
     isDirectory(location: string): boolean
     {
         throw new RemoteFilesNotSupported();
@@ -54,6 +59,11 @@ export default class RemoteFileSystem implements FileSystem
     relative(from: string, to: string): string
     {
         throw new RemoteFilesNotSupported();
+    }
+
+    normalize(location: string): string
+    {
+        return location;
     }
 
     mimeType(location: string): Promise<string | undefined>

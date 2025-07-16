@@ -45,13 +45,14 @@ export default class LocationRewriter
     {
         const dependency = this.#parser.parseImport(statement);
         const from = this.#fileHelper.stripPath(dependency.from);
+        const normalizedFrom = this.#sourceFileManager.normalizeLocation(from);
 
-        if (this.#fileHelper.isApplicationModule(from) === false)
+        if (this.#fileHelper.isApplicationModule(normalizedFrom) === false)
         {
             return statement;
         }
 
-        const rewrittenFrom = this.#rewriteFrom(filename, from);
+        const rewrittenFrom = this.#rewriteFrom(filename, normalizedFrom);
 
         return statement.replace(from, rewrittenFrom);
     }
@@ -66,13 +67,14 @@ export default class LocationRewriter
         }
 
         const from = this.#fileHelper.stripPath(dependency.from);
+        const normalizedFrom = this.#sourceFileManager.normalizeLocation(from);
 
-        if (this.#fileHelper.isApplicationModule(from) === false)
+        if (this.#fileHelper.isApplicationModule(normalizedFrom) === false)
         {
             return statement;
         }
 
-        const rewrittenFrom = this.#rewriteFrom(filename, from);
+        const rewrittenFrom = this.#rewriteFrom(filename, normalizedFrom);
 
         return statement.replace(from, rewrittenFrom);
     }

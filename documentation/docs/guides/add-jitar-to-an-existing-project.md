@@ -17,12 +17,7 @@ In this guide we will explain what needs to be done to add Jitar to your project
 
 ## Prerequisites
 
-A Jitar project has a few requirements to function properly. Before adding Jitar make sure the the following conditions are (or can be) met:
-
-* Node version 20.0 or higher
-* TypeScript 4.7 or higher
-* Use of ESM (CommonJS is not supported)
-* Vite, if a frontend needs to be hooked in
+A Jitar project has a few requirements to function properly. Before adding Jitar make sure that you have read the `develop` section and understand the essentials.
 
 ## Roadmap
 
