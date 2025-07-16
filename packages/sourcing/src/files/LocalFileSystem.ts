@@ -1,5 +1,6 @@
 
-import fs from 'fs-extra';
+import fsp from 'node:fs/promises';
+import fs from 'node:fs';
 import { glob } from 'glob';
 import mime from 'mime-types';
 import path from 'path';
@@ -10,17 +11,26 @@ export default class LocalFileSystem implements FileSystem
 {
     copy(source: string, destination: string): Promise<void>
     {
-        return fs.copy(source, destination, { overwrite: true });
+        return fsp.cp(source, destination, { recursive: true, force: true });
     }
 
     delete(location: string): Promise<void>
     {
-        return fs.remove(location);
+        return fsp.rm(location,  { recursive: true, force: true });
     }
 
-    exists(location: string): Promise<boolean>
+    async exists(location: string): Promise<boolean>
     {
-        return fs.exists(location);
+        try
+        {
+            await fsp.stat(location);
+            
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
     }
 
     isAbsolute(location: string): boolean
@@ -64,7 +74,7 @@ export default class LocalFileSystem implements FileSystem
 
     read(location: string): Promise<Buffer>
     {
-        return fs.readFile(location);
+        return fsp.readFile(location);
     }
     
     resolve(location: string): string
@@ -100,6 +110,6 @@ export default class LocalFileSystem implements FileSystem
 
         fs.mkdirSync(directory, { recursive: true });
 
-        return fs.writeFile(location, content);
+        return fsp.writeFile(location, content);
     }
 }
