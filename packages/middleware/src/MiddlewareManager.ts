@@ -131,6 +131,6 @@ export default class MiddlewareManager
 
         const nextHandler = this.#getNextHandler(request, index + 1);
 
-        return async () => { return next.handle(request, nextHandler); };
+        return async () => { return await next.handle(request, nextHandler); };
     }
 }
