@@ -1,5 +1,5 @@
 
-# Jitar Build
+# Jitar Scheduling
 
 This package provides task scheduling for the [Jitar](https://jitar.dev) runtime.
 
