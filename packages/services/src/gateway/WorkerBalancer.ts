@@ -36,17 +36,21 @@ export default class WorkerBalancer
 
     getNextWorker(): Worker | undefined
     {
-        if (this.#workers.length === 0)
+        const workers = this.#workers.filter(worker => worker.isAvailable());
+
+        if (workers.length === 0)
         {
+            this.#currentIndex = 0;
+            
             return;
         }
 
-        if (this.#currentIndex >= this.#workers.length)
+        if (this.#currentIndex >= workers.length)
         {
             this.#currentIndex = 0;
         }
 
-        return this.#workers[this.#currentIndex++];
+        return workers[this.#currentIndex++];
     }
 
     async run(request: Request): Promise<Response>

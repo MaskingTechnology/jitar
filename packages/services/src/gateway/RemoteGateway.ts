@@ -2,7 +2,9 @@
 import { NotImplemented } from '@jitar/errors';
 import { Request, Response } from '@jitar/execution';
 
-import type Remote from '../Remote';
+import type Remote from '../common/Remote';
+import StateManager from '../common/StateManager';
+import type { State } from '../common/definitions/States';
 import type Worker from '../worker/Worker';
 
 import Gateway from './Gateway';
@@ -18,6 +20,8 @@ export default class RemoteGateway implements Gateway
     readonly #url: string;
     readonly #remote: Remote;
 
+    readonly #stateManager = new StateManager();
+
     constructor(configuration: Configuration)
     {
         this.#url = configuration.url;
@@ -26,16 +30,26 @@ export default class RemoteGateway implements Gateway
 
     get url() { return this.#url; }
 
+    get state() { return this.#stateManager.state; }
+
     get trustKey() { return undefined; }
     
-    start(): Promise<void>
+    async start(): Promise<void>
     {
-        return this.#remote.connect();
+        return this.#stateManager.start(async () =>
+        {
+            await this.#remote.connect();
+
+            await this.updateState();
+        });
     }
 
-    stop(): Promise<void>
+    async stop(): Promise<void>
     {
-        return this.#remote.disconnect();
+        return this.#stateManager.stop(async () =>
+        {
+            await this.#remote.disconnect();
+        });
     }
 
     isHealthy(): Promise<boolean>
@@ -46,6 +60,13 @@ export default class RemoteGateway implements Gateway
     getHealth(): Promise<Map<string, boolean>>
     {
         return this.#remote.getHealth();
+    }
+
+    async updateState(): Promise<State>
+    {
+        const healthy = await this.isHealthy();
+
+        return this.#stateManager.setAvailability(healthy);
     }
 
     getProcedureNames(): string[]
@@ -64,9 +85,14 @@ export default class RemoteGateway implements Gateway
         return this.#remote.addWorker(worker.url, worker.getProcedureNames(), worker.trustKey);
     }
 
-    removeWorker(worker: Worker): Promise<void>
+    reportWorker(id: string, state: State): Promise<void>
     {
-        return this.#remote.removeWorker(worker.id as string);
+        return this.#remote.reportWorker(id, state);
+    }
+
+    removeWorker(id: string): Promise<void>
+    {
+        return this.#remote.removeWorker(id);
     }
 
     run(request: Request): Promise<Response>

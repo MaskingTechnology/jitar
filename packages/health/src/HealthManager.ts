@@ -1,6 +1,8 @@
 
 import type { ModuleImporter } from '@jitar/sourcing';
 
+import States from './definitions/States';
+import type { State } from './definitions/States';
 import InvalidHealthCheck from './errors/InvalidHealthCheck';
 import type HealthCheck from './interfaces/HealthCheck';
 
@@ -12,10 +14,11 @@ type HealthCheckResult =
 
 export default class HealthManager
 {
+    #state: State = States.STOPPED;
+    readonly #healthChecks = new Map<string, HealthCheck>();
+
     readonly #moduleImporter: ModuleImporter;
     readonly #healthCheckFiles: string[];
-
-    readonly #healthChecks = new Map<string, HealthCheck>();
 
     constructor(moduleImporter: ModuleImporter, healthCheckFiles: string[] = [])
     {
@@ -23,14 +26,52 @@ export default class HealthManager
         this.#healthCheckFiles = healthCheckFiles;
     }
 
+    get state() { return this.#state; }
+
     async start(): Promise<void>
     {
-        return this.#loadHealthChecks();
+        if (this.#state !== States.STOPPED)
+        {
+            return;
+        }
+
+        try
+        {
+            this.#state = States.STARTING;
+
+            await this.#loadHealthChecks();
+
+            this.#state = States.STARTED;
+        }
+        catch (error: unknown)
+        {
+            this.#state = States.STOPPED;
+
+            throw error;
+        }
     }
 
     async stop(): Promise<void>
     {
-        return this.clearHealthChecks();
+        if (this.#state !== States.STARTED)
+        {
+            return;
+        }
+
+        try
+        {
+            this.#state = States.STOPPING;
+
+            this.clearHealthChecks();
+
+            this.#state = States.STOPPED;
+        }
+        catch (error: unknown)
+        {
+            this.#state = States.STARTED;
+
+            throw error;
+        }
     }
 
     async loadHealthCheck(filename: string): Promise<void>
