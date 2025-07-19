@@ -1,3 +1,19 @@
+# v0.10.0
+[2025-07-19]
+
+### Features
+
+* \[[667](https://github.com/MaskingTechnology/jitar/pull/667)] feat: service state (#561, #565) by Peter van Vliet
+
+### Fixes
+
+* \[[675](https://github.com/MaskingTechnology/jitar/pull/675)] fix: middleware execution (#674) by Peter van Vliet
+
+### Chores
+
+* \[[669](https://github.com/MaskingTechnology/jitar/pull/669)] chore(deps): fs-extra removal (#664) by Bas Meeuwissen
+
+
 # v0.9.4
 [2025-07-12]
 
