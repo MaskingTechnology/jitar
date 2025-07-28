@@ -5,7 +5,7 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "build": "rimraf dist && tsc && jitar build",
+        "build": "rimraf dist .jitar && tsc && jitar build",
         "standalone": "jitar start --service=services/standalone.json",
         "gateway": "jitar start --service=services/gateway.json",
         "worker-data": "jitar start --service=services/data.json",
