@@ -1,0 +1,20 @@
+{
+    "name": "jitar-load-balancing-example",
+    "version": "0.0.0",
+    "type": "module",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "build": "rimraf dist .jitar && tsc && jitar build",
+        "standalone": "jitar start --service=services/standalone.json",
+        "gateway": "jitar start --service=services/gateway.json",
+        "worker1": "jitar start --service=services/worker1.json",
+        "worker2": "jitar start --service=services/worker2.json"
+    },
+    "devDependencies": {
+        "rimraf": "^6.0.1"
+    },
+    "dependencies": {
+        "jitar": "^0.10.0"
+    }
+}
