@@ -46,7 +46,7 @@ npm install
 npm run build
 ```
 
-To start Jitar we need four terminal sessions to start the repository, gateway, and workers separately. The starting order is of importance.
+To start Jitar we need three terminal sessions to start the repository, gateway, and workers separately. The starting order is of importance.
 
 **Gateway** (terminal 1)
 

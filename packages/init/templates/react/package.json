@@ -16,7 +16,7 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
-    "@jitar/plugin-vite": "^0.9.2",
+    "@jitar/plugin-vite": "^0.10.0",
     "@types/node": "22.15.27",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.5",
