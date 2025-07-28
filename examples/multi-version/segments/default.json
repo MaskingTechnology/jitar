@@ -1,0 +1,13 @@
+{
+    "./getEmployee": {
+        "getEmployee": {
+            "access": "public",
+            "version": "1.0.0"
+        },
+        "getEmployeeV2": {
+            "as": "getEmployee",
+            "access": "protected",
+            "version": "2.0.0"
+        }
+    }
+}

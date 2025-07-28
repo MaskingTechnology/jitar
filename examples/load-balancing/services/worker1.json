@@ -1,0 +1,8 @@
+{
+    "url": "http://127.0.0.1:3002",
+    "worker":
+    {
+        "gateway": "http://127.0.0.1:3000",
+        "segments": [ "calculator" ]
+    }
+}

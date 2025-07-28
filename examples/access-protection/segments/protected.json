@@ -1,0 +1,10 @@
+{
+    "./game": {
+        "checkSecret": {
+            "access": "protected"
+        },
+        "getSecret": {
+            "access": "private"
+        }
+    }
+}

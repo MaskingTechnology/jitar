@@ -1,5 +1,5 @@
 
-import express, { type Request, type Response } from 'express';
+import express, { Request, Response } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 

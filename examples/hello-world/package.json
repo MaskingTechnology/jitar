@@ -5,13 +5,13 @@
     "license": "MIT",
     "private": true,
     "scripts": {
-        "build": "rimraf dist .jitar && tsc && jitar build",
+        "build": "rm -rf dist .jitar && tsc && jitar build",
         "standalone": "jitar start --service=services/standalone.json"
     },
     "devDependencies": {
         "rimraf": "^6.0.1"
     },
     "dependencies": {
-        "jitar": "^0.10.0"
+        "jitar": "^0.9.4"
     }
 }
