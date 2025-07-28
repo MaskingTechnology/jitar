@@ -4,6 +4,8 @@ import type { File } from '@jitar/sourcing';
 
 import RunnerService from '../RunnerService';
 import ProviderService from '../ProviderService';
+import StateManager from '../common/StateManager';
+import { State } from '../common/definitions/States';
 
 type Configuration =
 {
@@ -18,6 +20,8 @@ export default class LocalProxy implements ProviderService, RunnerService
     readonly #provider: ProviderService;
     readonly #runner: RunnerService;
 
+    readonly #stateManager = new StateManager();
+
     constructor(configuration: Configuration)
     {
         this.#url = configuration.url;
@@ -27,11 +31,37 @@ export default class LocalProxy implements ProviderService, RunnerService
 
     get url() { return this.#url; }
 
+    get state() { return this.#stateManager.state; }
+
     get trustKey() { return this.#runner.trustKey; }
 
     get provider() { return this.#provider; }
 
     get runner() { return this.#runner; }
+
+    async start(): Promise<void>
+    {
+        return this.#stateManager.start(async () =>
+        {
+            await Promise.all([
+                this.#provider.start(),
+                this.#runner.start()
+            ]);
+
+            await this.updateState();
+        });
+    }
+
+    async stop(): Promise<void>
+    {
+        return this.#stateManager.stop(async () =>
+        {
+            await Promise.allSettled([
+                this.#runner.stop(),
+                this.#provider.stop()
+            ]);
+        });
+    }
 
     async isHealthy(): Promise<boolean>
     {
@@ -53,20 +83,11 @@ export default class LocalProxy implements ProviderService, RunnerService
         return new Map([...providerHealth, ...runnerHealth]);
     }
 
-    async start(): Promise<void>
+    async updateState(): Promise<State>
     {
-        await Promise.all([
-            this.#provider.start(),
-            this.#runner.start()
-        ]);
-    }
+        const healthy = await this.isHealthy();
 
-    async stop(): Promise<void>
-    {
-        await Promise.all([
-            this.#runner.stop(),
-            this.#provider.stop()
-        ]);
+        return this.#stateManager.setAvailability(healthy);
     }
 
     provide(filename: string): Promise<File>

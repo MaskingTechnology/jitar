@@ -4,7 +4,8 @@ import { ExecutionManager } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
 import { Logger, LogLevel } from '@jitar/logging';
 import { MiddlewareManager } from '@jitar/middleware';
-import { DummyProvider, DummyRunner, LocalGateway, LocalRepository, LocalWorker, LocalProxy, RemoteBuilder, RemoteGateway, RemoteRepository } from '@jitar/services';
+import { ScheduleManager } from '@jitar/scheduling';
+import { DummyProvider, DummyRunner, LocalGateway, LocalRepository, LocalWorker, LocalProxy, RemoteBuilder, RemoteWorkerBuilder, RemoteGateway, RemoteRepository, WorkerManager } from '@jitar/services';
 import { SourcingManager } from '@jitar/sourcing';
 
 import UnknownServiceConfigured from './errors/UnknownServiceConfigured';
@@ -29,59 +30,62 @@ export default class RuntimeBuilder
         const middleware = configuration.middleware;
         const healthChecks = configuration.healthChecks;
 
-        const proxy = await this.#buildService(configuration);
-        const sourcingManager = this.#sourcingManager;
-        const remoteBuilder = this.#remoteBuilder;
-        const resourceManager = this.#buildResourceManager(setUp, tearDown);
-        const middlewareManager = this.#buildMiddlewareManager(middleware);
-        const healthManager = this.#buildHealthManager(healthChecks);
-
         const logger = new Logger(logLevel);
 
-        return new Server({ proxy, sourcingManager, remoteBuilder, resourceManager, middlewareManager, healthManager, logger });
+        const healthManager = this.#buildHealthManager(healthChecks);
+        const scheduleManager = this.#buildScheduleManager(logger);
+        const proxy = await this.#buildService(configuration, healthManager, scheduleManager);
+
+        const sourcingManager = this.#sourcingManager;
+        const resourceManager = this.#buildResourceManager(setUp, tearDown);
+        const middlewareManager = this.#buildMiddlewareManager(middleware);
+        const remoteWorkerBuilder = this.#buildRemoteWorkerBuilder(configuration);
+
+        return new Server({ proxy, sourcingManager, resourceManager, middlewareManager, remoteWorkerBuilder, logger });
     }
 
-    #buildService(configuration: ServerConfiguration): Promise<LocalProxy>
+    #buildService(configuration: ServerConfiguration, healthManager: HealthManager, scheduleManager: ScheduleManager): Promise<LocalProxy>
     {
-        if (configuration.gateway !== undefined) return this.#buildGatewayProxy(configuration.url, configuration.gateway);
-        if (configuration.worker !== undefined) return this.#buildWorkerProxy(configuration.url, configuration.worker);
-        if (configuration.repository !== undefined) return this.#buildRepositoryProxy(configuration.url, configuration.repository);
+        if (configuration.gateway !== undefined) return this.#buildGatewayProxy(configuration.url, configuration.gateway, healthManager, scheduleManager);
+        if (configuration.worker !== undefined) return this.#buildWorkerProxy(configuration.url, configuration.worker, healthManager, scheduleManager);
+        if (configuration.repository !== undefined) return this.#buildRepositoryProxy(configuration.url, configuration.repository, healthManager);
         if (configuration.proxy !== undefined) return this.#buildProxy(configuration.url, configuration.proxy);
-        if (configuration.standalone !== undefined) return this.#buildStandalone(configuration.url, configuration.standalone);
+        if (configuration.standalone !== undefined) return this.#buildStandalone(configuration.url, configuration.standalone, healthManager, scheduleManager);
 
         throw new UnknownServiceConfigured();
     }
 
-    async #buildGatewayProxy(url: string, configuration: GatewayConfiguration): Promise<LocalProxy>
+    async #buildGatewayProxy(url: string, configuration: GatewayConfiguration, healthManager: HealthManager, scheduleManager: ScheduleManager): Promise<LocalProxy>
     {
         const provider = new DummyProvider();
-        const runner = this.#buildLocalGateway(url, configuration);
+        const runner = this.#buildLocalGateway(url, configuration, healthManager, scheduleManager);
 
         return new LocalProxy({ url, provider, runner });
     }
 
-    async #buildWorkerProxy(url: string, configuration: WorkerConfiguration): Promise<LocalProxy>
+    async #buildWorkerProxy(url: string, configuration: WorkerConfiguration, healthManager: HealthManager, scheduleManager: ScheduleManager): Promise<LocalProxy>
     {
         const provider = new DummyProvider();
-        const runner = this.#buildLocalWorker(url, configuration);
+        const runner = this.#buildLocalWorker(url, configuration, healthManager, scheduleManager);
 
         return new LocalProxy({ url, provider, runner });
     }
 
-    async #buildRepositoryProxy(url: string, configuration: RepositoryConfiguration): Promise<LocalProxy>
+    async #buildRepositoryProxy(url: string, configuration: RepositoryConfiguration, healthManager: HealthManager): Promise<LocalProxy>
     {
-        const provider = await this.#buildLocalRepository(url, configuration);
+        const provider = await this.#buildLocalRepository(url, configuration, healthManager);
         const runner = new DummyRunner();
 
         return new LocalProxy({ url, provider, runner });
     }
 
-    #buildLocalGateway(url: string, configuration: GatewayConfiguration): LocalGateway
+    #buildLocalGateway(url: string, configuration: GatewayConfiguration, healthManager: HealthManager, scheduleManager: ScheduleManager): LocalGateway
     {
         const trustKey = configuration.trustKey;
-        const monitorInterval = configuration.monitor;
+        const monitorInterval = configuration.monitorInterval;
+        const workerManager = new WorkerManager(scheduleManager, monitorInterval);
 
-        return new LocalGateway({ url, trustKey, monitorInterval });
+        return new LocalGateway({ url, trustKey, healthManager, workerManager });
     }
 
     #buildRemoteGateway(url: string): RemoteGateway
@@ -91,24 +95,25 @@ export default class RuntimeBuilder
         return new RemoteGateway({ url, remote });
     }
 
-    #buildLocalWorker(url: string, configuration: WorkerConfiguration): LocalWorker
+    #buildLocalWorker(url: string, configuration: WorkerConfiguration, healthManager: HealthManager, scheduleManager: ScheduleManager): LocalWorker
     {
         const trustKey = configuration.trustKey;
         const gateway = configuration.gateway ? this.#buildRemoteGateway(configuration.gateway) : undefined;
+        const reportInterval = configuration.reportInterval;
         const registerAtGateway = gateway !== undefined; // if we have a gateway, the worker needs to register itself at it.
         const executionManager = this.#buildExecutionManager(configuration.segments);
 
-        return new LocalWorker({ url, trustKey, gateway, registerAtGateway, executionManager });
+        return new LocalWorker({ url, trustKey, reportInterval, gateway, registerAtGateway, executionManager, healthManager, scheduleManager });
     }
 
-    async #buildLocalRepository(url: string, configuration: RepositoryConfiguration): Promise<LocalRepository>
+    async #buildLocalRepository(url: string, configuration: RepositoryConfiguration, healthManager: HealthManager): Promise<LocalRepository>
     {
         const sourcingManager = this.#sourcingManager;
         const assets = await this.#buildAssetSet(configuration.assets);
         const indexFilename = configuration.indexFilename;
         const serveIndexOnNotFound = configuration.serveIndexOnNotFound;
 
-        return new LocalRepository({ url, sourcingManager, assets, indexFilename, serveIndexOnNotFound });
+        return new LocalRepository({ url, sourcingManager, assets, indexFilename, serveIndexOnNotFound, healthManager });
     }
 
     #buildRemoteRepository(url: string): RemoteRepository
@@ -126,10 +131,10 @@ export default class RuntimeBuilder
         return new LocalProxy({ url, provider, runner });
     }
 
-    async #buildStandalone(url: string, configuration: StandaloneConfiguration): Promise<LocalProxy>
+    async #buildStandalone(url: string, configuration: StandaloneConfiguration, healthManager: HealthManager, scheduleManager: ScheduleManager): Promise<LocalProxy>
     {
-        const provider = await this.#buildLocalRepository(url, configuration);
-        const runner = this.#buildLocalWorker(url, configuration);
+        const provider = await this.#buildLocalRepository(url, configuration, healthManager);
+        const runner = this.#buildLocalWorker(url, configuration, healthManager, scheduleManager);
 
         return new LocalProxy({ url, provider, runner });
     }
@@ -161,6 +166,19 @@ export default class RuntimeBuilder
         const filenames = segmentNames.map(name => `./${name}.segment.js`);
 
         return new ExecutionManager(this.#sourcingManager, filenames);
+    }
+
+    #buildScheduleManager(logger: Logger): ScheduleManager
+    {
+        return new ScheduleManager(logger);
+    }
+
+    #buildRemoteWorkerBuilder(configuration: ServerConfiguration): RemoteWorkerBuilder
+    {
+        const unavailableThreshold = configuration.remoteWorker?.unavailableThreshold;
+        const stoppedThreshold = configuration.remoteWorker?.stoppedThreshold;
+        
+        return new RemoteWorkerBuilder(this.#remoteBuilder, unavailableThreshold, stoppedThreshold);
     }
 
     async #buildAssetSet(patterns?: string[]): Promise<Set<string>>

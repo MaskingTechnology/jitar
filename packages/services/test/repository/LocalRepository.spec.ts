@@ -33,4 +33,6 @@ describe('repository/LocalRepository', () =>
             await expect(promise).resolves.toEqual(FILES.HTML);
         });
     });
+
+    // TODO: Add tests for states
 });

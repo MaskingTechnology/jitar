@@ -1,7 +1,7 @@
 
 import { ErrorConverter, Request, Response as ResultResponse } from '@jitar/execution';
 import { AddWorkerRequest } from '@jitar/runtime';
-import type { Remote } from '@jitar/services';
+import type { Remote, State } from '@jitar/services';
 import { File } from '@jitar/sourcing';
 import { Validator } from '@jitar/validation';
 
@@ -102,6 +102,20 @@ export default class HttpRemote implements Remote
         }
 
         return result.id;
+    }
+
+    async reportWorker(id: string, state: State): Promise<void>
+    {
+        const remoteUrl = `${this.#url}/workers/${id}/report`;
+        const body = { state };
+        const options =
+        {
+            method: 'POST',
+            headers: { 'Content-Type': HeaderValues.APPLICATION_JSON },
+            body: JSON.stringify(body)
+        };
+
+        await this.#callRemote(remoteUrl, options);
     }
 
     async removeWorker(id: string): Promise<void>

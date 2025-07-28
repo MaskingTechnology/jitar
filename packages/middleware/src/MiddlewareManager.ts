@@ -2,16 +2,19 @@
 import { Request, Response, StatusCodes } from '@jitar/execution';
 import type { ModuleImporter } from '@jitar/sourcing';
 
+import States from './definitions/States';
+import type { State } from './definitions/States';
 import InvalidMiddleware from './errors/InvalidMiddleware';
 import type Middleware from './interfaces/Middleware';
 import type NextHandler from './types/NextHandler';
 
 export default class MiddlewareManager
 {
+    #state: State = States.STOPPED;
+    #middlewares: Middleware[] = [];
+
     readonly #moduleImporter: ModuleImporter;
     readonly #middlewareFiles: string[];
-
-    #middlewares: Middleware[] = [];
 
     constructor(moduleImporter: ModuleImporter, middlewareFiles: string[] = [])
     {
@@ -19,14 +22,52 @@ export default class MiddlewareManager
         this.#middlewareFiles = middlewareFiles;
     }
 
+    get state() { return this.#state; }
+
     async start(): Promise<void>
     {
-        return this.#loadMiddlewares();
+        if (this.#state !== States.STOPPED)
+        {
+            return;
+        }
+
+        try
+        {
+            this.#state = States.STARTING;
+
+            await this.#loadMiddlewares();
+
+            this.#state = States.STARTED;
+        }
+        catch (error: unknown)
+        {
+            this.#state = States.STOPPED;
+
+            throw error;
+        }
     }
 
     async stop(): Promise<void>
     {
-        return this.clearMiddlewares();
+        if (this.#state !== States.STARTED)
+        {
+            return;
+        }
+
+        try
+        {
+            this.#state = States.STOPPING;
+
+            this.clearMiddlewares();
+
+            this.#state = States.STOPPED;
+        }
+        catch (error: unknown)
+        {
+            this.#state = States.STARTED;
+
+            throw error;
+        }
     }
 
     async loadMiddleware(filename: string): Promise<void>
@@ -90,6 +131,6 @@ export default class MiddlewareManager
 
         const nextHandler = this.#getNextHandler(request, index + 1);
 
-        return async () => { return next.handle(request, nextHandler); };
+        return async () => { return await next.handle(request, nextHandler); };
     }
 }

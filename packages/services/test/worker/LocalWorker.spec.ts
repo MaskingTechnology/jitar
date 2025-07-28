@@ -65,5 +65,7 @@ describe('worker/LocalWorker', () =>
         // TODO: Add tests for remote execution
 
         // TODO: Add tests for (de)serialization
+
+        // TODO: Add tests for states
     });
 });

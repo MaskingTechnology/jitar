@@ -1,9 +1,12 @@
 
 import { ProcedureNotFound, Request, Response, Runner } from '@jitar/execution';
+import type { ScheduleManager, ScheduledTask } from '@jitar/scheduling';
 
+import States from '../common/definitions/States';
+import type { State } from '../common/definitions/States';
 import Worker from '../worker/Worker';
-import WorkerBalancer from './WorkerBalancer';
 
+import WorkerBalancer from './WorkerBalancer';
 import IdGenerator from './utils/IdGenerator';
 import UnknownWorker from './errors/UnknownWorker';
 
@@ -13,6 +16,12 @@ export default class WorkerManager implements Runner
     readonly #balancers = new Map<string, WorkerBalancer>();
 
     readonly #idGenerator = new IdGenerator();
+    readonly #monitorTask: ScheduledTask;
+
+    constructor(scheduleManager: ScheduleManager, monitorInterval?: number)
+    {
+        this.#monitorTask = scheduleManager.create(() => this.#monitor(), monitorInterval);
+    }
 
     get workers()
     {
@@ -20,6 +29,16 @@ export default class WorkerManager implements Runner
     }
 
     get balancers() { return this.#balancers; }
+
+    start(): void
+    {
+        this.#monitorTask.start();
+    }
+
+    stop(): void
+    {
+        this.#monitorTask.stop();
+    }
 
     getProcedureNames(): string[]
     {
@@ -64,9 +83,18 @@ export default class WorkerManager implements Runner
         return worker;
     }
 
-    removeWorker(worker: Worker): void
+    reportWorker(id: string, state: State): void
     {
-        this.#workers.delete(worker.id as string);
+        const worker = this.getWorker(id);
+
+        worker.reportState(state);
+    }
+
+    removeWorker(id: string): Worker
+    {
+        const worker = this.getWorker(id);
+
+        this.#workers.delete(id);
 
         for (const name of worker.getProcedureNames())
         {
@@ -79,6 +107,8 @@ export default class WorkerManager implements Runner
 
             balancer.removeWorker(worker);
         }
+
+        return worker;
     }
 
     #getBalancer(fqn: string): WorkerBalancer | undefined
@@ -110,5 +140,22 @@ export default class WorkerManager implements Runner
         }
 
         return balancer.run(request);
+    }
+
+    async #monitor(): Promise<void>
+    {
+        const promises = this.workers.map(worker => this.#checkWorker(worker));
+
+        await Promise.allSettled(promises);
+    }
+
+    async #checkWorker(worker: Worker): Promise<void>
+    {
+        const state = await worker.updateState();
+        
+        if (state === States.STOPPED)
+        {
+            this.removeWorker(worker.id as string);
+        }
     }
 }

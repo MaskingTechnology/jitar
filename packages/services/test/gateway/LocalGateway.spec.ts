@@ -44,4 +44,6 @@ describe('gateway/LocalGateway', () =>
             await expect(promise).rejects.toEqual(new InvalidTrustKey());
         });
     });
+
+    // TODO: Add tests for states
 });

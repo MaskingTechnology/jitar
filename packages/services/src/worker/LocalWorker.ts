@@ -1,7 +1,11 @@
 
 import { ExecutionManager, Implementation, ProcedureNotFound, Request, Response } from '@jitar/execution';
+import { HealthManager } from '@jitar/health';
+import type { ScheduleManager, ScheduledTask } from '@jitar/scheduling';
 import { Serializer, SerializerBuilder } from '@jitar/serialization';
 
+import StateManager from '../common/StateManager';
+import type { State } from '../common/definitions/States';
 import Gateway from '../gateway/Gateway';
 import Worker from './Worker';
 
@@ -18,18 +22,26 @@ type Configuration =
     trustKey?: string;
     gateway?: Gateway;
     registerAtGateway?: boolean;
+    reportInterval?: number;
     executionManager: ExecutionManager;
+    healthManager: HealthManager;
+    scheduleManager: ScheduleManager;
 };
 
 export default class LocalWorker implements Worker
 {
     #id: string | undefined;
+
     readonly #url: string;
     readonly #trustKey?: string;
     readonly #gateway?: Gateway;
     readonly #registerAtGateway: boolean;
     readonly #executionManager: ExecutionManager;
+    readonly #healthManager: HealthManager;
+    readonly #reportTask: ScheduledTask;
     readonly #serializer: Serializer;
+
+    readonly #stateManager = new StateManager();
 
     constructor(configuration: Configuration)
     {
@@ -39,6 +51,10 @@ export default class LocalWorker implements Worker
         this.#registerAtGateway = configuration.registerAtGateway === true;
 
         this.#executionManager = configuration.executionManager;
+        this.#healthManager = configuration.healthManager;
+
+        const scheduleManager = configuration.scheduleManager;
+        this.#reportTask = scheduleManager.create(() => this.#report(), configuration.reportInterval);
 
         const classResolver = new ExecutionClassResolver(this.#executionManager);
         this.#serializer = SerializerBuilder.build(classResolver);
@@ -48,38 +64,58 @@ export default class LocalWorker implements Worker
 
     set id(id: string) { this.#id = id; }
 
+    get state(): State { return this.#stateManager.state; }
+
     get url() { return this.#url; }
 
     get trustKey() { return this.#trustKey; }
 
     async start(): Promise<void>
     {
-        await this.#executionManager.start();
-
-        if (this.#gateway !== undefined)
+        return this.#stateManager.start(async () =>
         {
-            await this.#gateway.start();
+            await Promise.all([
+                this.#executionManager.start(),
+                this.#healthManager.start()
+            ]);
 
-            if (this.#registerAtGateway)
+            if (this.#gateway !== undefined)
             {
-                this.#id = await this.#gateway.addWorker(this);
+                await this.#gateway.start();
+
+                if (this.#registerAtGateway)
+                {
+                    this.#id = await this.#gateway.addWorker(this);
+
+                    this.#reportTask.start();
+                }
             }
-        }
+
+            await this.updateState();
+        });
     }
 
     async stop(): Promise<void>
     {
-        if (this.#gateway !== undefined)
+        return this.#stateManager.stop(async () =>
         {
-            if (this.#id !== undefined)
+            if (this.#gateway !== undefined)
             {
-                await this.#gateway.removeWorker(this);
-            }
+                if (this.#id !== undefined)
+                {
+                    this.#reportTask.stop();
 
-            await this.#gateway.stop();
-        }
-        
-        await this.#executionManager.stop();
+                    await this.#gateway.removeWorker(this.#id);
+                }
+
+                await this.#gateway.stop();
+            }
+            
+            await Promise.all([
+                this.#healthManager.stop(),
+                this.#executionManager.stop()
+            ]);
+        });
     }
 
     getProcedureNames(): string[]
@@ -92,14 +128,36 @@ export default class LocalWorker implements Worker
         return this.#executionManager.hasProcedure(name);
     }
 
-    async isHealthy(): Promise<boolean>
+    isHealthy(): Promise<boolean>
     {
-        return true;
+        return this.#healthManager.isHealthy();
     }
 
-    async getHealth(): Promise<Map<string, boolean>>
+    getHealth(): Promise<Map<string, boolean>>
     {
-        return new Map();
+        return this.#healthManager.getHealth();
+    }
+
+    isAvailable(): boolean
+    {
+        return this.#stateManager.isAvailable();
+    }
+
+    async updateState(): Promise<State>
+    {
+        const healthy = await this.isHealthy();
+
+        return this.#stateManager.setAvailability(healthy);
+    }
+
+    async reportState(state: State): Promise<void>
+    {
+        if (this.#gateway === undefined || this.#id === undefined)
+        {
+            return;
+        }
+
+        return this.#gateway.reportWorker(this.#id, state);
     }
 
     async run(request: Request): Promise<Response>
@@ -221,5 +279,12 @@ export default class LocalWorker implements Worker
         const deserializedResult = await this.#serializer.deserialize(response.result);
 
         return new Response(response.status, deserializedResult, response.headers);
+    }
+
+    async #report(): Promise<void>
+    {
+        const state = await this.updateState();
+
+        return this.reportState(state);
     }
 }
