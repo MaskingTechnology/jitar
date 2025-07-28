@@ -22,7 +22,7 @@
         "lint": "eslint",
         "validate": "tsc -p tsconfig.json --noEmit",
         "build": "npm run clean && npm run bundle && npm run copy && npm run finalize",
-        "clean": "rm -rf dist",
+        "clean": "rimraf dist",
         "bundle": "rollup -c",
         "copy": "cp -R ../init/templates dist/templates",
         "finalize": "chmod +x dist/cli.js",

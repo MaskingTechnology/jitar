@@ -28,7 +28,7 @@
   "scripts": {
     "lint": "eslint",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist build",
+    "clean": "rimraf dist",
     "prepublishOnly": "npm run clean && npm run build"
   },
   "repository": {
