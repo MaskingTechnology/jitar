@@ -7,12 +7,10 @@
   "type": "module",
   "workspaces": [
     "packages/*",
-    "tools/*",
-    "examples/**/*"
+    "tools/*"
   ],
   "scripts": {
     "build": "turbo run build --filter=jitar --filter=create-jitar --filter=@jitar/plugin*",
-    "build:examples": "turbo run build --filter=*-example",
     "build:all": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
@@ -36,6 +34,7 @@
     "eslint": "^9.30.1",
     "eslint-plugin-jitar": "0.0.1",
     "eslint-plugin-sonarjs": "^3.0.4",
+    "rimraf": "^6.0.1",
     "rollup": "^4.44.1",
     "rollup-plugin-dts": "^6.2.1",
     "tslib": "2.8.1",

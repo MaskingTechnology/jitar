@@ -45,27 +45,21 @@ npm install
 npm run build
 ```
 
-To start Jitar we need four terminal sessions to start the repository, gateway, and workers separately. The starting order is of importance.
+To start Jitar we need three terminal sessions to start the gateway, and workers separately. The starting order is of importance.
 
-**Repository** (terminal 1)
-
-```bash
-npm run repo
-```
-
-**Gateway** (terminal 2)
+**Gateway** (terminal 1)
 
 ```bash
 npm run gateway
 ```
 
-**Data segment** (terminal 3)
+**Data segment** (terminal 2)
 
 ```bash
 npm run worker-data
 ```
 
-**Process segment** (terminal 4)
+**Process segment** (terminal 3)
 
 ```bash
 npm run worker-process

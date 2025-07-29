@@ -1,12 +1,21 @@
 {
     "name": "jitar-data-transportation-example",
+    "version": "0.0.0",
     "type": "module",
+    "license": "MIT",
     "private": true,
     "scripts": {
-        "build": "rm -rf dist .jitar && tsc && jitar build",
+        "build": "rimraf dist .jitar && tsc && jitar build",
         "standalone": "jitar start --service=services/standalone.json",
         "gateway": "jitar start --service=services/gateway.json",
         "worker-account": "jitar start --service=services/account.json",
         "worker-helpdesk": "jitar start --service=services/helpdesk.json"
+    },
+    "devDependencies": {
+        "rimraf": "^6.0.1",
+        "typescript": "^5.8.3"
+    },
+    "dependencies": {
+        "jitar": "^0.10.0"
     }
 }

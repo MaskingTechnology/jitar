@@ -13,6 +13,6 @@
     "test-coverage": "vitest run --coverage",
     "lint": "eslint",
     "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist"
+    "clean": "rimraf dist"
   }
 }
