@@ -16,6 +16,6 @@
         "typescript": "^5.8.3"
     },
     "dependencies": {
-        "jitar": "^0.9.4"
+        "jitar": "^0.10.0"
     }
 }
