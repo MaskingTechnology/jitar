@@ -37,7 +37,7 @@ Developers are at the heart of every application. Jitar is designed to make thei
 
 Build a monolith, deploy as microservices. Jitar provides powerful features to scale endlessly.
 
-* **Segmentation** - Breaks down applications into deployable packages.
+* **Segmentation** - Breaks down applications into deployable bundles.
 * **Orchestration** - Coordinates running segmented procedures.
 * **Load balancing** - Balances the execution of procedures automatically.
 * **Access protection** - Protects the access to private procedures.
@@ -64,6 +64,8 @@ Getting started with Jitar is as easy as pie. It only takes a few simple steps.
 1. **Configure what runs on the server** - Add the exported functions to a server segment configuration file.
 1. **Run your application** - Jitar will take care of the rest.
 
+See our [Quick Start](https://docs.jitar.dev/introduction/quick-start.html) for more information.
+
 # Documentation
 
 Full documentation is available at [docs.jitar.dev](https://docs.jitar.dev).
@@ -72,6 +74,7 @@ Please join our [Discord community](https://discord.gg/Bqwy8azp5R) for questions
 
 # Publications
 
+* [The Anatomy of a Distributed JavaScript Runtime (series)](https://medium.com/javascript-in-plain-english/the-anatomy-of-a-distributed-javascript-runtime-part-i-4d550f1f5bbe)
 * [How I Speed Up Full-stack Development by Not Building APIs](https://medium.com/better-programming/how-i-speed-up-full-stack-development-by-not-building-apis-7f768335bec6)
 * [How I Split a Monolith Into Microservices Without Refactoring](https://medium.com/better-programming/how-i-split-a-monolith-into-microservices-without-refactoring-5d76924c34c2)
 
