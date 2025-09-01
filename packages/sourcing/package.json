@@ -18,5 +18,8 @@
   "dependencies": {
     "glob": "11.0.3",
     "mime-types": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/mime-types": "^3.0.1"
   }
 }
