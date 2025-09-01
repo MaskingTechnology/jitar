@@ -29,7 +29,7 @@
         "prepublishOnly": "npm run clean && npm run build"
     },
     "dependencies": {
-        "dotenv": "^17.0.1",
+        "dotenv": "^17.2.1",
         "express": "^5.1.0",
         "glob": "11.0.3",
         "mime-types": "^3.0.1"

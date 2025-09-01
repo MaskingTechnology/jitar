@@ -1,6 +1,5 @@
 
-import fs from 'node:fs';
-import fsp from 'node:fs/promises';
+import fs, { promises as fsp } from 'node:fs';
 import path from 'node:path';
 import { glob } from 'glob';
 import mime from 'mime-types';

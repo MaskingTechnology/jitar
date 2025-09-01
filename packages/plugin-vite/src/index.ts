@@ -1,5 +1,5 @@
 
-import fs from 'fs';
+import fs from 'node:fs';
 import path from 'node:path';
 
 import { normalizePath, PluginOption, ResolvedConfig } from 'vite';
