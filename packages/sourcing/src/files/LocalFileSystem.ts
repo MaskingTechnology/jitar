@@ -1,9 +1,9 @@
 
-import fsp from 'node:fs/promises';
 import fs from 'node:fs';
+import fsp from 'node:fs/promises';
+import path from 'node:path';
 import { glob } from 'glob';
 import mime from 'mime-types';
-import path from 'path';
 
 import FileSystem from './interfaces/FileSystem';
 
