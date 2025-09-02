@@ -1,7 +1,7 @@
 
-import path from 'path';
-import fs from 'fs/promises';
-import { fileURLToPath } from 'url';
+import path from 'node:path';
+import { promises as fsp } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
 import InvalidName from './errors/InvalidName';
 import UnknownTemplate from './errors/UnknownTemplate';
@@ -70,7 +70,7 @@ export default class InitManager
         {
             const location = path.join(this.#templateRootPath, templateName);
 
-            const stat = await fs.stat(location);
+            const stat = await fsp.stat(location);
 
             return stat.isDirectory();
         }
@@ -85,7 +85,7 @@ export default class InitManager
         const templateLocation = path.join(this.#templateRootPath, templateName);
         const projectLocation = path.join(this.#projectRootPath, projectName);
 
-        return fs.cp(templateLocation, projectLocation, { recursive: true, force: true });
+        return fsp.cp(templateLocation, projectLocation, { recursive: true, force: true });
     }
 
     async #renameFiles(projectName: string): Promise<void>
@@ -100,7 +100,7 @@ export default class InitManager
             const sourceFileLocation = path.join(projectLocation, source);
             const targetFileLocation = path.join(projectLocation, target);
 
-            promises.push(fs.rename(sourceFileLocation, targetFileLocation));
+            promises.push(fsp.rename(sourceFileLocation, targetFileLocation));
         }
 
         await Promise.all(promises);

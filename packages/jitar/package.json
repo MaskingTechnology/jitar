@@ -29,7 +29,7 @@
         "prepublishOnly": "npm run clean && npm run build"
     },
     "dependencies": {
-        "dotenv": "^17.0.1",
+        "dotenv": "^17.2.1",
         "express": "^5.1.0",
         "glob": "11.0.3",
         "mime-types": "^3.0.1"
@@ -42,7 +42,13 @@
         "@jitar/http": "*",
         "@jitar/logging": "*",
         "@jitar/middleware": "*",
-        "@jitar/runtime": "*"
+        "@jitar/runtime": "*",
+        "@rollup/plugin-node-resolve": "^16.0.1",
+        "@rollup/plugin-replace": "^6.0.2",
+        "@rollup/plugin-terser": "^0.4.4",
+        "@rollup/plugin-typescript": "^12.1.4",
+        "rollup": "^4.46.2",
+        "rollup-plugin-dts": "^6.2.3"
     },
     "engines": {
         "node": ">=20.0"
