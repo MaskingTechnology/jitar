@@ -1,7 +1,7 @@
 
 import express, { Request, Response } from 'express';
 import path from 'node:path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 const filePath = fileURLToPath(import.meta.url);
 const fileLocation = path.dirname(filePath);

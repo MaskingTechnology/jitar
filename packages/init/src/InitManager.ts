@@ -1,7 +1,7 @@
 
 import path from 'node:path';
 import { promises as fsp } from 'node:fs';
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 import InvalidName from './errors/InvalidName';
 import UnknownTemplate from './errors/UnknownTemplate';
