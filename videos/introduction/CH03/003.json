@@ -3,13 +3,13 @@
     "scene": "003",
     "voice":
     {
-        "text": "split it into smaller, independent bundles by configuration...",
+        "text": "[Jitar](/dʒiːtɑr/) handles the communication automatically, so everything works seamlessly.",
         "speed": 0.9,
         "delay": 0
     },
     "frames":
     {
         "source": "introduction/CH03/frames/003.pdf",
-        "duplications": "1:0,62:0"
+        "duplications": "1:10,45:0"
     }
 }

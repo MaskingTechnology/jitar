@@ -3,13 +3,13 @@
     "scene": "002",
     "voice":
     {
-        "text": "It provides the tools to overcome these limitations by taking your full-stack monolithic application...",
+        "text": "It provides the [tools](/tu:lz/) to overcome these limitations by taking your full-stack monolithic application. By configuration, it splits the application into smaller, independent bundles, and deploying them across web browsers and servers.",
         "speed": 0.9,
         "delay": 0
     },
     "frames":
     {
         "source": "introduction/CH03/frames/002.pdf",
-        "duplications": "22:7,26:12,39:10"
+        "duplications": "22:7,26:12,39:10,87:10,102:0"
     }
 }
