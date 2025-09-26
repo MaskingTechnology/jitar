@@ -1,0 +1,15 @@
+{
+    "chapter": "CH02",
+    "scene": "007",
+    "voice":
+    {
+        "text": "when the application becomes too big to deploy effectively...",
+        "speed": 0.9,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "introduction/CH02/frames/007.pdf",
+        "duplications": "1:7,21:10"
+    }
+}

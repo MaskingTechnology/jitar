@@ -1,0 +1,15 @@
+{
+    "chapter": "CH02",
+    "scene": "013",
+    "voice":
+    {
+        "text": "it could take down the whole application.",
+        "speed": 0.9,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "introduction/CH02/frames/013.pdf",
+        "duplications": "1:0,21:4"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "chapter": "CH02",
+    "scene": "002",
+    "voice":
+    {
+        "text": "Which is loved for its simplicity.",
+        "speed": 0.9,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "introduction/CH02/frames/002.pdf",
+        "duplications": "1:10,8:10"
+    }
+}

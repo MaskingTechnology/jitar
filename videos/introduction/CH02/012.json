@@ -1,0 +1,15 @@
+{
+    "chapter": "CH02",
+    "scene": "012",
+    "voice":
+    {
+        "text": "Or, when one module fails...",
+        "speed": 0.8,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "introduction/CH02/frames/012.pdf",
+        "duplications": "1:0,19:4"
+    }
+}

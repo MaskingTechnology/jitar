@@ -1,0 +1,15 @@
+{
+    "chapter": "CH02",
+    "scene": "005",
+    "voice":
+    {
+        "text": "But there are a few drawbacks.",
+        "speed": 0.8,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "introduction/CH02/frames/005.pdf",
+        "duplications": "1:2,7:9"
+    }
+}

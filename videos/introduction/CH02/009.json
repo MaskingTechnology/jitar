@@ -1,0 +1,15 @@
+{
+    "chapter": "CH02",
+    "scene": "009",
+    "voice":
+    {
+        "text": "Or, when one module is under heavy load...",
+        "speed": 0.9,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "introduction/CH02/frames/009.pdf",
+        "duplications": "7:4,19:4"
+    }
+}

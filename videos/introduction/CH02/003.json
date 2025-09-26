@@ -1,0 +1,15 @@
+{
+    "chapter": "CH02",
+    "scene": "003",
+    "voice":
+    {
+        "text": "And with good modularity...",
+        "speed": 0.9,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "introduction/CH02/frames/003.pdf",
+        "duplications": "1:1,16:2"
+    }
+}

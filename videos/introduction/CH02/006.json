@@ -1,0 +1,15 @@
+{
+    "chapter": "CH02",
+    "scene": "006",
+    "voice":
+    {
+        "text": "For example...",
+        "speed": 0.9,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "introduction/CH02/frames/006.pdf",
+        "duplications": "1:3,5:4"
+    }
+}

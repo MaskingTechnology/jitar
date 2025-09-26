@@ -1,0 +1,15 @@
+{
+    "chapter": "CH03",
+    "scene": "002",
+    "voice":
+    {
+        "text": "It provides the tools to overcome these limitations by taking your full-stack monolithic application...",
+        "speed": 0.9,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "introduction/CH03/frames/002.pdf",
+        "duplications": "22:7,26:12,39:10"
+    }
+}

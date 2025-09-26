@@ -1,0 +1,15 @@
+{
+    "chapter": "CH03",
+    "scene": "003",
+    "voice":
+    {
+        "text": "split it into smaller, independent bundles by configuration...",
+        "speed": 0.9,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "introduction/CH03/frames/003.pdf",
+        "duplications": "1:0,62:0"
+    }
+}
