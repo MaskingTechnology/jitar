@@ -3,13 +3,13 @@
     "scene": "012",
     "voice":
     {
-        "text": "Or, when one module fails...",
+        "text": "Or, when one module fails, it could take down the whole application.",
         "speed": 0.8,
         "delay": 0
     },
     "frames":
     {
         "source": "introduction/CH02/frames/012.pdf",
-        "duplications": "1:0,19:4"
+        "duplications": "1:0,19:4,40:0"
     }
 }

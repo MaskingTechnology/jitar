@@ -3,13 +3,13 @@
     "scene": "001",
     "voice":
     {
-        "text": "It manages a full-stack monolithic application.",
+        "text": "It manages a full-stack monolithic application. Which is loved for its simplicity.",
         "speed": 0.9,
         "delay": 0
     },
     "frames":
     {
         "source": "introduction/CH02/frames/001.pdf",
-        "duplications": "1:8,5:20"
+        "duplications": "1:8,5:30,13:1"
     }
 }
