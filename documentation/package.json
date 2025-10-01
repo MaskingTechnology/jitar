@@ -16,6 +16,6 @@
       "docs:preview": "vitepress preview docs"
     },
     "devDependencies": {
-        "vitepress": "^2.0.0-alpha.4"
+        "vitepress": "2.0.0-alpha.12"
     }
 }
