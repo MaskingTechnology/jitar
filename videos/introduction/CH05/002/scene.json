@@ -1,0 +1,15 @@
+{
+    "chapter": "CH05",
+    "scene": "002",
+    "voice":
+    {
+        "text": "it comes with batteries included",
+        "speed": 0.8,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,22:0"
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "chapter": "CH05",
+    "scene": "003",
+    "voice":
+    {
+        "text": "Like, request routing, load balancing, health monitoring, access control, and more",
+        "speed": 0.8,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,5:7,9:7,13:7,17:0"
+    }
+}
