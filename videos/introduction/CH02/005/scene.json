@@ -1,6 +1,6 @@
 {
     "chapter": "CH02",
-    "scene": "009",
+    "scene": "005",
     "voice":
     {
         "text": "Or, when one module is under heavy load, the whole app must scale, wasting resources.",
@@ -9,7 +9,7 @@
     },
     "frames":
     {
-        "source": "introduction/CH02/frames/009.pdf",
+        "source": "frames.pdf",
         "duplications": "7:4,19:4,36:8,37:0"
     }
 }

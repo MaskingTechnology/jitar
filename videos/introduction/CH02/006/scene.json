@@ -1,6 +1,6 @@
 {
     "chapter": "CH02",
-    "scene": "012",
+    "scene": "006",
     "voice":
     {
         "text": "Or, when one module fails, it could take down the whole application.",
@@ -9,7 +9,7 @@
     },
     "frames":
     {
-        "source": "introduction/CH02/frames/012.pdf",
+        "source": "frames.pdf",
         "duplications": "1:0,19:4,40:0"
     }
 }

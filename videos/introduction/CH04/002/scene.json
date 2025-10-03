@@ -1,0 +1,15 @@
+{
+    "chapter": "CH04",
+    "scene": "002",
+    "voice":
+    {
+        "text": "It seamlessly integrates frontend and backend, with safe type sharing...",
+        "speed": 0.9,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,17:10,28:5"
+    }
+}
