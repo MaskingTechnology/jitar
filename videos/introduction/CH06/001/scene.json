@@ -1,0 +1,15 @@
+{
+    "chapter": "CH06",
+    "scene": "001",
+    "voice":
+    {
+        "text": "Overall, [Jitar](/dʒiːtɑr/) simplifies developing and deploying scalable full-stack applications and makes you more productive.",
+        "speed": 0.9,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,26:10,34:10,42:0"
+    }
+}
