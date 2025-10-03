@@ -1,0 +1,15 @@
+{
+    "chapter": "CH06",
+    "scene": "003",
+    "voice":
+    {
+        "text": "Check out [Jitar](/dʒiːtɑr/) dot dev for more information.",
+        "speed": 0.9,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,16:0"
+    }
+}
