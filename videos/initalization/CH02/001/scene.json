@@ -1,0 +1,15 @@
+{
+    "chapter": "CH02",
+    "scene": "001",
+    "voice":
+    {
+        "text": "First, we need to install the runtime.",
+        "speed": 0.82,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,26:0"
+    }
+}

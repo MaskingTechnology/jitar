@@ -1,0 +1,15 @@
+{
+    "chapter": "CH03",
+    "scene": "004",
+    "voice":
+    {
+        "text": "Once created, build and run the app with the provided commands.",
+        "speed": 0.85,
+        "delay": 0.5
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,2:2,4:2,6:1,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:1,15:1,16:1,17:2,18:2,20:2,21:2,35:0"
+    }
+}
