@@ -4,12 +4,12 @@
     "voice":
     {
         "text": "An open-source, distributed runtime for javascript and typescript applications.",
-        "speed": 0.9,
+        "speed": 1.0,
         "delay": 0
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:9,6:13,10:3,14:10"
+        "duplications": "1:9,6:13,10:7,14:5"
     }
 }

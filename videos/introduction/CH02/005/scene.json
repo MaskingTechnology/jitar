@@ -4,7 +4,7 @@
     "voice":
     {
         "text": "Or, when one module is under heavy load, the whole app must scale, wasting resources.",
-        "speed": 0.9,
+        "speed": 1.0,
         "delay": 0
     },
     "frames":

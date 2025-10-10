@@ -4,12 +4,12 @@
     "voice":
     {
         "text": "Overall, [Jitar](/dʒiːtɑr/) simplifies developing and deploying scalable full-stack applications and makes you more productive.",
-        "speed": 0.9,
+        "speed": 1.0,
         "delay": 0
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:10,26:5,34:5,51:0"
+        "duplications": "1:10,26:5,34:3,53:0"
     }
 }
