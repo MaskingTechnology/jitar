@@ -1,0 +1,97 @@
+0:00:00.960,0:00:02.200
+Meet Jitar.
+
+0:00:02.600,0:00:08.000
+An open-source, distributed runtime
+for JavaScript and TypeScript applications.
+
+0:00:08.200,0:00:13.000
+On the surface, it looks simple.
+But inside, it’s doing something powerful.
+
+0:00:13.100,0:00:16.400
+It manages a full-stack
+monolithic application.
+
+0:00:16.400,0:00:18.700
+Which is loved for its simplicity.
+
+0:00:19.000,0:00:23.300
+And with good modularity,
+it can even scale for big apps and teams.
+
+0:00:23.300,0:00:25.200
+But there are a few drawbacks.
+
+0:00:25.520,0:00:31.700
+For example, when the application becomes
+too big to deploy effectively, releases are slowed down.
+
+0:00:31.760,0:00:37.600
+Or, when one module is under heavy load, 
+the whole app must scale, wasting resources.
+
+0:00:37.600,0:00:42.000
+Or, when one module fails,
+it could take down the whole application.
+
+0:00:42.160,0:00:44.300
+And this is where Jitar comes in.
+
+0:00:44.700,0:00:48.100
+It provides the tools to overcome these limitations...
+
+0:00:48.100,0:00:51.600
+by taking your full-stack 
+monolithic application.
+
+0:00:51.600,0:00:56.800
+By configuration,
+it splits the application into smaller, independent bundles...
+
+0:00:56.800,0:01:00.400
+and deploying them across
+web browsers and servers.
+
+0:01:00.400,0:01:05.900
+Jitar handles the communication automatically,
+so everything works seamlessly.
+
+0:01:05.900,0:01:10.300
+This gives your application the power
+and flexibility of distributed systems...
+
+0:01:10.300,0:01:11.900
+exactly when you need it.
+
+0:01:12.320,0:01:16.900
+It seamlessly integrates frontend 
+and backend, with safe type sharing.
+
+0:01:17.120,0:01:20.300
+And it doesn’t lock you into 
+any framework or library.
+
+0:01:20.560,0:01:22.200
+But it has more to offer.
+
+0:01:22.600,0:01:24.800
+It comes with batteries included.
+
+0:01:24.960,0:01:30.400
+Like, request routing, load balancing, 
+health monitoring, access control, and more.
+
+0:01:30.400,0:01:35.680
+Overall, Jitar simplifies developing and 
+deploying scalable full-stack applications...
+
+0:01:35.680,0:01:37.500
+and makes you more productive.
+
+0:01:37.800,0:01:42.300
+It includes everything you need to scale,
+at any time, at any place.
+
+0:01:42.400,0:01:45.300
+Check out jitar.dev for more information.

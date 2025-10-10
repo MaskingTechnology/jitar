@@ -1,0 +1,14 @@
+Meet Jitar – an open-source, distributed runtime for JavaScript and TypeScript. With simple configuration, turn your full-stack monolithic apps into a distributed system with seamless frontend-backend integration, type-safe sharing, and built-in features like routing, load balancing, and monitoring. Perfect for developers and architects looking to build powerful, modular, and distributed applications without being locked into a specific framework.
+
+🔗 Check out Jitar and get started: https://jitar.dev
+🤝 Join our community on Discord: https://discord.gg/Bqwy8azp5R
+🔔 Follow us on BlueSky for the latest updates: https://bsky.app/profile/masking.tech
+⭐️ Star the project on GitHub: https://github.com/MaskingTechnology/jitar
+
+— Chapters —
+0:00 Introduction
+0:13 Problem statement
+0:42 Solution statement
+1:05 Advantages
+1:20 Features
+1:30 Conclusions
