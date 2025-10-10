@@ -46,6 +46,7 @@ jobs:
           - 'packages/middleware'
           - 'packages/plugin-vite'
           - 'packages/runtime'
+          - 'packages/scheduling'
           - 'packages/serialization'
           - 'packages/services'
           - 'packages/sourcing'

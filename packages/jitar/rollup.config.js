@@ -20,7 +20,7 @@ function bundle(input, output, supportBrowser)
 			format: 'module',
 			plugins: [terser({
 				module: true,
-				mangle: false
+				mangle: true
 			})]
 		},
 		plugins: [

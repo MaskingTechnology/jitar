@@ -18,6 +18,6 @@
   "dependencies": {
     "@jitar/sourcing": "*",
     "@jitar/validation": "*",
-    "dotenv": "^17.0.1"
+    "dotenv": "17.2.3"
   }
 }
