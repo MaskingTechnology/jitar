@@ -12,10 +12,10 @@
         "worker-process": "jitar start --service=services/process.json"
     },
     "devDependencies": {
-        "rimraf": "^6.0.1",
-        "typescript": "^5.8.3"
+        "rimraf": "6.0.1",
+        "typescript": "5.9.3"
     },
     "dependencies": {
-        "jitar": "^0.10.0"
+        "jitar": "0.10.0"
     }
 }
