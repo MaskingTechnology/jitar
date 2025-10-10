@@ -1,5 +1,7 @@
 # Jitar - Distributed runtime
 
+[![Watch the video](videos/introduction/publication/banner.png)](https://www.youtube.com/watch?v=BMgJ4wZbCWg)
+
 <img width="1102" alt="explainer" src="https://github.com/MaskingTechnology/jitar/assets/108156553/2129b4cc-a32c-497e-b69d-d5670a66d7aa">
 
 Welcome to [Jitar](https://jitar.dev), a distributed runtime for JavaScript and TypeScript that lets you build your application as a monolith and deploy it as (micro)services by configuration.
