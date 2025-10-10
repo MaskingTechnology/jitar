@@ -4,7 +4,7 @@
     "voice":
     {
         "text": "Besides NPM, you can also use Yarn or PNPM.”",
-        "speed": 0.85,
+        "speed": 1.0,
         "delay": 0
     },
     "frames":

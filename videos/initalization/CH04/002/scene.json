@@ -4,12 +4,12 @@
     "voice":
     {
         "text": "The hello message, comes from the backend.",
-        "speed": 0.8,
+        "speed": 1.0,
         "delay": 0
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:0,2:10,5:0"
+        "duplications": "1:0,4:13,8:0"
     }
 }

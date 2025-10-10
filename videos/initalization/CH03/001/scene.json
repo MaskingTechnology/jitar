@@ -4,7 +4,7 @@
     "voice":
     {
         "text": "The simplest way to create an app is by using the init command.",
-        "speed": 0.85,
+        "speed": 1.0,
         "delay": 0
     },
     "frames":

@@ -4,12 +4,12 @@
     "voice":
     {
         "text": "Let’s jump straight in, and see it in action.",
-        "speed": 0.83,
+        "speed": 1.0,
         "delay": 0
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:10,12:0"
+        "duplications": "1:10,10:1,14:0"
     }
 }

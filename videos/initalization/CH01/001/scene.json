@@ -3,13 +3,13 @@
     "scene": "001",
     "voice":
     {
-        "text": "In this video, we’ll get started with [Jitar](/dʒiːtɑr/), a runtime that makes it simple to build and scale full-stack applications.",
-        "speed": 0.9,
+        "text": "In this video, we’ll build a scalable full-stack app using [Jitar](/dʒiːtɑr/).",
+        "speed": 1.0,
         "delay": 0
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:10,2:5,3:3,4:5,5:5,6:5,7:5,8:5,9:5,10:4,11:3,12:0"
+        "duplications": "1:15,2:15,3:0"
     }
 }

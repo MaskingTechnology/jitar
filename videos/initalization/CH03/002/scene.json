@@ -4,7 +4,7 @@
     "voice":
     {
         "text": "It scaffolds a complete project from a template, like React.",
-        "speed": 0.85,
+        "speed": 1.0,
         "delay": 0
     },
     "frames":
