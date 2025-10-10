@@ -1,0 +1,15 @@
+{
+    "chapter": "CH03",
+    "scene": "003",
+    "voice":
+    {
+        "text": "[Jitar](/dʒiːtɑr/) handles the communication automatically, so everything works seamlessly.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,41:0"
+    }
+}

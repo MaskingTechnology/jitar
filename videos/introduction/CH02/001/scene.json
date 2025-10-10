@@ -1,0 +1,15 @@
+{
+    "chapter": "CH02",
+    "scene": "001",
+    "voice":
+    {
+        "text": "It manages a full-stack monolithic application. Which is loved for its simplicity.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:8,5:30,13:1"
+    }
+}

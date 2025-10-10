@@ -1,0 +1,15 @@
+{
+    "chapter": "CH01",
+    "scene": "002",
+    "voice":
+    {
+        "text": "An open-source, distributed runtime for javascript and typescript applications.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:9,6:13,10:7,14:5"
+    }
+}

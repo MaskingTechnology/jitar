@@ -1,0 +1,15 @@
+{
+    "chapter": "CH01",
+    "scene": "003",
+    "voice":
+    {
+        "text": "On the surface, it looks simple. But inside, it’s doing something powerful.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "003.pdf",
+        "duplications": "1:5,12:5,29:0"
+    }
+}

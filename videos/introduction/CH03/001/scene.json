@@ -1,0 +1,15 @@
+{
+    "chapter": "CH03",
+    "scene": "001",
+    "voice":
+    {
+        "text": "And this is where [Jitar](/dʒiːtɑr/) comes in...",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10"
+    }
+}

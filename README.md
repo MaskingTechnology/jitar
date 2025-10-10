@@ -1,6 +1,6 @@
 # Jitar - Distributed runtime
 
-<img width="1102" alt="explainer" src="https://github.com/MaskingTechnology/jitar/assets/108156553/2129b4cc-a32c-497e-b69d-d5670a66d7aa">
+[<img width="1102" alt="explainer" src="videos/introduction/publication/banner.png">](https://www.youtube.com/watch?v=BMgJ4wZbCWg)
 
 Welcome to [Jitar](https://jitar.dev), a distributed runtime for JavaScript and TypeScript that lets you build your application as a monolith and deploy it as (micro)services by configuration.
 
@@ -15,6 +15,8 @@ In contrast to other solutions, there is no trace of Jitar in the application co
 **👋 Have questions?** Join our [discord community](https://discord.gg/Bqwy8azp5R).
 
 # How it works
+
+<img width="1102" alt="explainer" src="https://github.com/MaskingTechnology/jitar/assets/108156553/2129b4cc-a32c-497e-b69d-d5670a66d7aa">
 
 Building scalable applications is hard. It requires breaking an application into independently deployable pieces, like microservices. The boundaries of these pieces are sensitive to change and aren't always clear. Developing endpoints and requests to arrange the communication between them brings a lot of overhead.
 

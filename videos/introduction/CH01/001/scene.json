@@ -1,0 +1,15 @@
+{
+    "chapter": "CH01",
+    "scene": "001",
+    "voice":
+    {
+        "text": "Meet [Jitar](/dʒiːtɑr/)",
+        "speed": 1.0,
+        "delay": 0.6
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:2,15:0"
+    }
+}

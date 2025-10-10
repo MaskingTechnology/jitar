@@ -1,0 +1,15 @@
+{
+    "chapter": "CH02",
+    "scene": "002",
+    "voice":
+    {
+        "text": "And with good modularity, it can even scale for big apps and teams.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:1,16:8,33:0"
+    }
+}

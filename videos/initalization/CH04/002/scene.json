@@ -1,0 +1,15 @@
+{
+    "chapter": "CH04",
+    "scene": "002",
+    "voice":
+    {
+        "text": "The hello message, comes from the backend.",
+        "speed": 0.8,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,2:10,5:0"
+    }
+}
