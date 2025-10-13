@@ -4,7 +4,5 @@
 ./chapter02.sh
 ./chapter03.sh
 ./chapter04.sh
-./chapter05.sh
-./chapter06.sh
 
 ../video.sh video.json
