@@ -1,4 +1,11 @@
 {
     "video": "Jitar introduction",
-    "chapters": ["CH01", "CH02", "CH03", "CH04", "CH05", "CH06"]
+    "chapters": {
+        "CH01": "CH01/chapter.json",
+        "CH02": "CH02/chapter.json",
+        "CH03": "CH03/chapter.json",
+        "CH04": "CH04/chapter.json",
+        "CH05": "CH05/chapter.json",
+        "CH06": "CH06/chapter.json"
+    }
 }

@@ -3,13 +3,13 @@
     "scene": "002",
     "voice":
     {
-        "text": "Let’s jump straight in, and see it in action.",
+        "text": "Let’s jump straight in.",
         "speed": 1.0,
-        "delay": 0
+        "delay": 0.8
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:10,10:1,14:0"
+        "duplications": "1:0,10:1,14:0"
     }
 }

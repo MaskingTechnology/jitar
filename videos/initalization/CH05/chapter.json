@@ -1,0 +1,7 @@
+{
+    "chapter": "CH05",
+    "description": "Explore code",
+    "scenes": {
+        "001": "001/scene.json"
+    }
+}
