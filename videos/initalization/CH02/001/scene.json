@@ -5,11 +5,11 @@
     {
         "text": "First, we need to install the runtime.",
         "speed": 1.0,
-        "delay": 0
+        "delay": 0.6
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:0,5:3,26:2"
+        "duplications": "1:0,5:3,25:3,26:0"
     }
 }
