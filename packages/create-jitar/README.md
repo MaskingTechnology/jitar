@@ -44,4 +44,4 @@ npm create jitar@latest -- --template=value
 The following templates are available:
 * react
 * vue
-* none (jitar-only)
+* none (backend)

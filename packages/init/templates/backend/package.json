@@ -1,5 +1,5 @@
 {
-    "name": "jitar-only-starter",
+    "name": "backend-only-starter",
     "type": "module",
     "private": true,
     "scripts": {
