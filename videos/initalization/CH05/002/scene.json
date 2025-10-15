@@ -1,0 +1,15 @@
+{
+    "chapter": "CH05",
+    "scene": "002",
+    "voice":
+    {
+        "text": "The project folder contains four important folders.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,2:0"
+    }
+}

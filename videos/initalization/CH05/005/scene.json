@@ -1,0 +1,15 @@
+{
+    "chapter": "CH05",
+    "scene": "005",
+    "voice":
+    {
+        "text": "The implementation of the say hello function is simple, but it must be asynchronous for [Jitar](/dʒiːtɑr/) to distribute it to the server.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,8:10,9:0"
+    }
+}
