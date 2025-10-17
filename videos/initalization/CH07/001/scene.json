@@ -3,13 +3,13 @@
     "scene": "001",
     "voice":
     {
-        "text": "That is all it takes to set up and run a scalable full-stack app using [Jitar](/dʒiːtɑr/). More information and details can be found in the other videos and in the documentation at [Jitar](/dʒiːtɑr/) dot dev.",
+        "text": "That is all it takes to set up and run a scalable full-stack app using [Jitar](/dʒiːtɑr/).",
         "speed": 1.0,
         "delay": 0
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:10,6:15,11:10,15:4,73:0"
+        "duplications": "1:10,6:15,11:10"
     }
 }
