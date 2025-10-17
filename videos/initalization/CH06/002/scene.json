@@ -1,6 +1,6 @@
 {
-    "chapter": "CH05",
-    "scene": "007",
+    "chapter": "CH06",
+    "scene": "002",
     "voice":
     {
         "text": "The default segmentation configuration imports the say hello module and makes its function available as a public endpoint for the web UI.",

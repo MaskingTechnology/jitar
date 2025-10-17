@@ -1,6 +1,6 @@
 {
-    "chapter": "CH05",
-    "scene": "008",
+    "chapter": "CH06",
+    "scene": "003",
     "voice":
     {
         "text": "The runtime service runs on port 3000 in standalone mode, so it works as both a worker and a web server. It loads the default segment to handle its endpoints, and the web server uses a whitelist of assets.",
