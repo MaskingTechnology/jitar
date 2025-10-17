@@ -1,0 +1,15 @@
+{
+    "chapter": "CH06",
+    "scene": "001",
+    "voice":
+    {
+        "text": "It is configured to run on the server using [Jitar](/dʒiːtɑr/)'s segmentation system and runtime services.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:13,6:7,7:1,8:10,10:3,11:1,12:0"
+    }
+}

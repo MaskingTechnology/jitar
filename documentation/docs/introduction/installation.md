@@ -23,7 +23,7 @@ npm install -g jitar
 jitar init --name=project-name --template=react
 ```
 
-You can also use our `vue` template, or `jitar-only` if you don't need a frontend framework.
+You can also use our `vue` template, or `backend` if you don't need a frontend framework.
 
 Next, run the prompted commands.
 

@@ -1,0 +1,18 @@
+{
+    "name": "backend-only-starter",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "build": "rimraf dist && tsc -p tsconfig.json && jitar build",
+        "standalone": "jitar start --service=services/standalone.json",
+        "gateway": "jitar start --service=services/gateway.json",
+        "hi": "jitar start --service=services/hi.json",
+        "hello": "jitar start --service=services/hello.json"
+    },
+    "dependencies": {
+        "jitar": "^0.10.0"
+    },
+    "devDependencies": {
+        "rimraf": "^6.0.1"
+    }
+}

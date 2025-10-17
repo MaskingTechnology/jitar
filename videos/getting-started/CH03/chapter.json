@@ -1,0 +1,10 @@
+{
+    "chapter": "CH03",
+    "description": "Create app",
+    "scenes": {
+        "001": "001/scene.json",
+        "002": "002/scene.json",
+        "003": "003/scene.json",
+        "004": "004/scene.json"
+    }
+}

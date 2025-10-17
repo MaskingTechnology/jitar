@@ -1,0 +1,15 @@
+{
+    "chapter": "CH05",
+    "scene": "004",
+    "voice":
+    {
+        "text": "The App UI component imports the say hello function from the domain directly, calls it when the app gets loaded, ...and shows the message in the browser.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:2,5:2,6:1,8:4,13:1,25:5,34:2,41:6,61:1,62:0"
+    }
+}

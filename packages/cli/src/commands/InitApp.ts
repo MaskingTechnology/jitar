@@ -11,7 +11,7 @@ export default class InitApp implements Command
     readonly options =
     [
         { key: '--name', required: true, description: 'Project name used for creating the project folder' },
-        { key: '--template', required: true, description: 'Template to use [react, vue, jitar-only]' },
+        { key: '--template', required: true, description: 'Template to use [react, vue, backend]' },
         { key: '--location', required: false, description: 'The root location of the project', defaultValue: './' }
     ];
 

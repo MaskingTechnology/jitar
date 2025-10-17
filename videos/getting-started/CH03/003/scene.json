@@ -1,0 +1,15 @@
+{
+    "chapter": "CH03",
+    "scene": "003",
+    "voice":
+    {
+        "text": "You can also start with [Vue](/vjuː/) or backend only.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,7:0"
+    }
+}

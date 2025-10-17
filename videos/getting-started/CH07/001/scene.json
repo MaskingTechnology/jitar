@@ -1,0 +1,15 @@
+{
+    "chapter": "CH07",
+    "scene": "001",
+    "voice":
+    {
+        "text": "That is all it takes to set up and run a scalable full-stack app using [Jitar](/dʒiːtɑr/).",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,6:15,11:10"
+    }
+}

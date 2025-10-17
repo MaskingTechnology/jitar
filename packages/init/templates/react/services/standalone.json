@@ -3,6 +3,6 @@
     "standalone":
     {
         "segments": ["default"],
-        "assets": ["index.html", "main.js", "App.js", "vite.svg", "assets/**/*"]
+        "assets": ["index.html", "vite.svg", "assets/**/*"]
     }
 }

@@ -1,5 +1,12 @@
 {
     "chapter": "CH02",
     "description": "Problem statement",
-    "scenes": ["001", "002", "003", "004", "005", "006"]
+    "scenes": {
+        "001": "001/scene.json",
+        "002": "002/scene.json",
+        "003": "003/scene.json",
+        "004": "004/scene.json",
+        "005": "005/scene.json",
+        "006": "006/scene.json"
+    }
 }

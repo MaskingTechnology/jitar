@@ -1,0 +1,25 @@
+In this tutorial, we’ll guide you step-by-step through setting up a scalable full-stack application using Jitar, the distributed runtime that simplifies modern app development.
+
+From installation to deployment, you’ll learn how to:
+
+* Install Jitar using NPM, Yarn, or PNPM
+* Create a new app with React, Vue, or backend-only templates
+* Explore the project structure and understand the source, domain, and UI folders
+* See a live demo of your app running in the browser
+* Configure Jitar’s segmentation system and runtime services
+
+By the end of this video, you’ll have a fully functional full-stack app powered by Jitar and a solid understanding of how the runtime distributes requests and connects frontend and backend seamlessly.
+
+🔗 Check out Jitar and get started: https://jitar.dev
+🤝 Join our community on Discord: https://discord.gg/Bqwy8azp5R
+🔔 Follow us on BlueSky for the latest updates: https://bsky.app/profile/masking.tech
+⭐️ Star the project on GitHub: https://github.com/MaskingTechnology/jitar
+
+— Chapters —
+0:00 Introduction
+0:07 Installation
+0:18 App creation
+0:38 App demo
+0:49 Code walkthrough
+1:17 Configuration walkthrough
+1:47 Closure

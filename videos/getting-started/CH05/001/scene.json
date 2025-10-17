@@ -1,0 +1,15 @@
+{
+    "chapter": "CH05",
+    "scene": "001",
+    "voice":
+    {
+        "text": "Now, let's see how this works.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:2,5:5,9:0"
+    }
+}

@@ -20,10 +20,10 @@ export default function App()
 
   return (
     <div className="App">
-      <a href="https://vitejs.dev" target="_blank" rel="noopener noreferrer">
+      <a href="https://vite.dev" target="_blank" rel="noopener noreferrer">
           <img src="/vite.svg" className="logo" alt="Vite logo" />
         </a>
-        <a href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
+        <a href="https://react.dev" target="_blank" rel="noopener noreferrer">
           <img src={reactLogo} className="logo react" alt="React logo" />
         </a>
         <a href="https://jitar.dev" target="_blank" rel="noopener noreferrer">

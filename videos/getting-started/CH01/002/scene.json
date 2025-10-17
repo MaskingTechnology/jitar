@@ -1,0 +1,15 @@
+{
+    "chapter": "CH01",
+    "scene": "002",
+    "voice":
+    {
+        "text": "Let’s jump straight in.",
+        "speed": 1.0,
+        "delay": 0.2
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,10:1,14:0"
+    }
+}

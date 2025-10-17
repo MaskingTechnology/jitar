@@ -1,0 +1,15 @@
+{
+    "chapter": "CH03",
+    "scene": "004",
+    "voice":
+    {
+        "text": "The project is created in a folder named after your app. From there, ...it can be built and run with the provided commands.",
+        "speed": 1.0,
+        "delay": 0.1
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,2:5,3:6,4:3,6:1,7:1,8:1,9:1,10:1,11:1,12:1,13:1,14:1,15:1,16:1,17:6,18:5,20:6,21:5,35:0"
+    }
+}
