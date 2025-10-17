@@ -3,13 +3,13 @@
     "scene": "001",
     "voice":
     {
-        "text": "That is it for this video. You can find more details in the other videos and in the documentation at [Jitar](/dʒiːtɑr/) dot dev.",
+        "text": "That is all it takes to set up and run a scalable full-stack app using [Jitar](/dʒiːtɑr/). More information and details can be found in the other videos and in the documentation at [Jitar](/dʒiːtɑr/) dot dev.",
         "speed": 1.0,
         "delay": 0
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:0,4:5,66:0"
+        "duplications": "1:10,6:10,11:15,73:0"
     }
 }
