@@ -21,4 +21,4 @@ Within each video project, you can run the `build.sh` script.
 ./build.sh
 ```
 
-This will build all scenes and chapters that are not build yet, or updated before (re)building te video.
+This will build all scenes and chapters that are not built yet, or updated before (re)building the video.
