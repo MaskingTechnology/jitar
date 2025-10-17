@@ -1,3 +1,18 @@
+# v0.10.1
+[2025-10-17]
+
+### Chores
+
+* \[[697](https://github.com/MaskingTechnology/jitar/pull/697)] chore: getting started video (#695) by Bas Meeuwissen & Peter van Vliet
+* \[[696](https://github.com/MaskingTechnology/jitar/pull/696)] chore(deps): october updates (#694) by Bas Meeuwissen
+* \[[693](https://github.com/MaskingTechnology/jitar/pull/693)] chore: introduction video (#690) by Peter van Vliet
+* \[[686](https://github.com/MaskingTechnology/jitar/pull/686)] chore(deps): organize dependencies (#679) by Bas Meeuwissen
+* \[[685](https://github.com/MaskingTechnology/jitar/pull/685)] chore(deps): bump actions/checkout from 4 to 5 (#685) by dependabot[bot]
+* \[[683](https://github.com/MaskingTechnology/jitar/pull/683)] chore: readme update (#682) by Peter van Vliet
+* \[[681](https://github.com/MaskingTechnology/jitar/pull/681)] chore(deps): august updates (#681) by Peter van Vliet
+* \[[678](https://github.com/MaskingTechnology/jitar/pull/679)] chore(deps): added rimraf (#670) by Bas Meeuwissen
+
+
 # v0.10.0
 [2025-07-19]
 
