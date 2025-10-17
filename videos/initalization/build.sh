@@ -1,3 +1,3 @@
 # rm -rf .video
 
-../video.sh video.json
+pdf2vid --type "video" --config "video.json" --output ".video"
