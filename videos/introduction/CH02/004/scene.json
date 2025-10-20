@@ -1,6 +1,4 @@
 {
-    "chapter": "CH02",
-    "scene": "004",
     "voice":
     {
         "text": "For example, when the application becomes too big to deploy effectively, releases are slowed down.",

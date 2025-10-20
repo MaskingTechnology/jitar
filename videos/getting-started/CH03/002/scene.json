@@ -1,6 +1,4 @@
 {
-    "chapter": "CH03",
-    "scene": "002",
     "voice":
     {
         "text": "It scaffolds a complete project from a template, like React.",

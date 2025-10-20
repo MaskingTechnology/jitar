@@ -1,6 +1,4 @@
 {
-    "chapter": "CH03",
-    "scene": "001",
     "voice":
     {
         "text": "The simplest way to create an app is by using the init command.",

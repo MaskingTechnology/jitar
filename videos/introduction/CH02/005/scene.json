@@ -1,6 +1,4 @@
 {
-    "chapter": "CH02",
-    "scene": "005",
     "voice":
     {
         "text": "Or, when one module is under heavy load, the whole app must scale, wasting resources.",

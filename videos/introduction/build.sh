@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pdf2vid --type "video" --config "video.json" --output ".video"
+pdf2vid --config "video.json" --output ".video"

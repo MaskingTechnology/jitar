@@ -1,6 +1,4 @@
 {
-    "chapter": "CH05",
-    "scene": "003",
     "voice":
     {
         "text": "Like, request routing, load balancing, health monitoring, access control, and more",

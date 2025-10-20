@@ -1,6 +1,4 @@
 {
-    "chapter": "CH05",
-    "scene": "003",
     "voice":
     {
         "text": "It all starts in the source folder, where both the domain and UI components live.",

@@ -1,6 +1,4 @@
 {
-    "chapter": "CH02",
-    "scene": "003",
     "voice":
     {
         "text": "Let’s verify the install by checking the CLI options.”",
