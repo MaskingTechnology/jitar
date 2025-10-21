@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "This component is a simple asynchronous function that counts how many times each name has been greeted, and keeps its state locally for now.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,11:5,12:5,20:10,30:10,41:0"
+    }
+}

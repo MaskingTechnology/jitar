@@ -1,6 +1,7 @@
 {
     "video": "Jitar scalability",
     "chapters": {
-        "CH01": "CH01/chapter.json"
+        "CH01": "CH01/chapter.json",
+        "CH02": "CH02/chapter.json"
     }
 }
