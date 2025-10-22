@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "In the web browser we can see the added number to the hello message coming from our new component. The number increases after refresh.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,5:3,4:1,16:40,21:3,22:1,25:3,24:1,29:0"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Before we can run the service, we need to build the app first. In this process our data segment gets built besides the default segment.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,8:10,9:3,10:3,11:5,15:10,19:3,27:5,29:0"
+    }
+}
