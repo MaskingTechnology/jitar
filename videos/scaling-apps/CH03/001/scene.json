@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Next, we’ll put this component into a separate segment to enable independent deployment.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:15,6:7,10:5,11:1,12:0"
+    }
+}
