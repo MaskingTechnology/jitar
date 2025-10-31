@@ -1,13 +1,13 @@
 {
     "voice":
     {
-        "text": "This means that our new component works, and is ready to scale out.",
+        "text": "Let's see how that works.",
         "speed": 1.0,
         "delay": 0
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:10,11:0"
+        "duplications": "1:0,13:0"
     }
 }

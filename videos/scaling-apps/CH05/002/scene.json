@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Currently, we have a web browser that is running our React app connected to a standalone service running the say hello and keep hello count functions.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,2:10,3:20,4:15,5:10,6:0"
+    }
+}

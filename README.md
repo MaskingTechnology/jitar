@@ -1,8 +1,10 @@
 # Jitar - Distributed runtime
 
+Do you always know when and how to scale your applications? Neither do we.
+
 [<img width="1102" alt="explainer" src="videos/introduction/publication/banner.png">](https://www.youtube.com/watch?v=BMgJ4wZbCWg)
 
-Welcome to [Jitar](https://jitar.dev), a distributed runtime for JavaScript and TypeScript that lets you build your application as a monolith and deploy it as (micro)services by configuration.
+Welcome to [Jitar](https://jitar.dev), a distributed runtime for JavaScript and TypeScript that lets you build your application as a monolith and scale it just-in-time by configuration.
 
 Jitar runs on the server and the web browser, closing the gap between the frontend and backend. All end-to-end communication is automated with type-safety. You can call your server functions directly, Jitar takes care of the rest.
 
