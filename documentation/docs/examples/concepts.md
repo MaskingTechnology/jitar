@@ -6,7 +6,7 @@ prev:
     link: /guides/migrate-away-from-jitar
 
 next:
-    text: Full stack example
+    text: Full-stack example
     link: /examples/full-stack
 
 ---

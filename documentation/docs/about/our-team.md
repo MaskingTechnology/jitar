@@ -14,7 +14,7 @@ const members = [
   {
     avatar: 'https://github.com/petermasking.png',
     name: 'Peter van Vliet',
-    desc: 'Experienced full stack architect. Done with building APIs for the wrong reasons.',
+    desc: 'Experienced full-stack architect. Done with building APIs for the wrong reasons.',
     title: 'Creator',
     links: [
       { icon: 'github', link: 'https://github.com/petermasking' },
