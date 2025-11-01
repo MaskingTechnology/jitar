@@ -7,11 +7,11 @@ This document describes the workflow we use for the development of Jitar.
 To work on Jitar, you need the following tools:
 
 - Node.js 20.x or higher
-- npm 10.x or higher
+- npm 11.x or higher
 - Visual Studio Code
 - Docker (optional) for running the full stack example
 
-Note: Jitar is managed as a monorepo with Lerna. You don't need specific knowledge about Lerna to work on Jitar.
+Note: Jitar is managed as a monorepo with Turbo. You don't need specific knowledge about Turbo to work on Jitar.
 
 ## Installation
 
