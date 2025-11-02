@@ -34,7 +34,7 @@ Note: Jitar is managed as a monorepo with Turbo. You don't need specific knowled
 1. Run `npm run changeset` to create a changeset for your changes.
 1. Commit and push the changes.
 1. Create a pull request.
-1. [CodeRabbit](https://www.coderabbit.ai/) will review your pull request automatically. It is very nitpicky, so don't get discouraged by the number of comments. 
+1. [CodeRabbit](https://www.coderabbit.ai/) will review your pull request automatically. It is very nitpicky, so don't get discouraged by the number of comments.
 
 ## Publishing
 
@@ -42,6 +42,6 @@ To do consistent releases, we use the following steps:
 
 1. Create a new issue and branch.
 1. Update the version number for the mono repo in the `package.json` file.
-1. Run 'npm run publish-packages' to build and publish all packages.
+1. Run `npm run publish-packages` to build and publish all packages.
 1. Create a pull request.
 1. Once the pull request is merged, tag the release.
