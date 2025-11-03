@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Now we can configure the services, starting with the data worker. Its configuration is very similar to the standalone setup, but includes only the data segment and no assets.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:20,3:3,4:1,6:3,11:10,12:5,16:3,17:1,19:5,20:1,23:3,24:1,26:10,27:0"
+    }
+}

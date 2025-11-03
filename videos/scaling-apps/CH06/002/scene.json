@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Let's first create the configuration files for each of the services.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,2:1,3:3,4:2,5:1,6:3,7:2,8:1,9:3,10:2,11:1,12:3,13:2,14:1,15:3,16:2"
+    }
+}

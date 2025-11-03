@@ -1,7 +1,7 @@
 {
     "voice":
     {
-        "text": "To make this work, we need the following additional services: a gateway to route requests to the server hosting the function, a repository to serve the React app like a web server, and a proxy that acts as a single access point to both the repository and the gateway, preventing cross-origin requests.",
+        "text": "To make this work, we need three additional services: a gateway to route requests to the service with the function, a repository to serve the React app like a web server, and a proxy that acts as a single access point to both the repository and the gateway, preventing cross-origin requests.",
         "speed": 1.0,
         "delay": 0
     },
