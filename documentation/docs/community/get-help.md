@@ -2,7 +2,7 @@
 layout: doc
 
 prev:
-    text: Full stack examples
+    text: Full-stack examples
     link: /examples/full-stack
 
 next:

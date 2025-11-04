@@ -11,9 +11,9 @@ next:
 
 ---
 
-# Full stack example
+# Full-stack example
 
-To demonstrate the capabilities of Jitar, we have created a full stack example project called [Comify](https://github.com/MaskingTechnology/comify){target="_blank"}.
+To demonstrate the capabilities of Jitar, we have created a full-stack example project called [Comify](https://github.com/MaskingTechnology/comify){target="_blank"}.
 
 ## Introduction
 
