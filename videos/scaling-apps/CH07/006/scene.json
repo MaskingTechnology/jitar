@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Finally, we can start the data worker…",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,2:5,3:3,17:0"
+    }
+}

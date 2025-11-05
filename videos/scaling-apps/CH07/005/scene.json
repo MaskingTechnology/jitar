@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Next, we combine them in the proxy.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,2:5,3:3,14:0"
+    }
+}

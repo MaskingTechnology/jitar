@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "And the default worker to complete the setup.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,2:5,3:3,17:0"
+    }
+}

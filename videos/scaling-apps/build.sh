@@ -1,3 +1,3 @@
 #!/bin/bash
 
-pdf2vid --config "video.json" --output ".video"
+pdf2vid --config "video.json" --output ".video" --chapter "CH07"
