@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "The gateway registered both workers and routed the function requests…",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,4:3,5:1,7:0"
+    }
+}
