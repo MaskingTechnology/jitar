@@ -1,13 +1,13 @@
 {
     "voice":
     {
-        "text": "Now we can configure the services, starting with the data worker. Its configuration is very similar to the standalone setup, but includes only the data segment and no assets.",
+        "text": "Now we can start configuring the services, beginning with the data worker. Its setup is similar to the standalone version, but it only includes the data segment, connects to the gateway service, and doesn’t serve any assets.",
         "speed": 1.0,
         "delay": 0
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:20,3:3,4:1,6:3,11:10,12:5,16:3,17:1,19:5,20:1,23:3,24:1,26:10,27:0"
+        "duplications": "1:20,3:3,4:1,6:3,11:10,12:5,16:3,17:1,19:5,20:1,23:3,24:1,26:5,27:1,30:3,31:1,34:10,35:0"
     }
 }
