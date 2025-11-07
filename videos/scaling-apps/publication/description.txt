@@ -1,0 +1,30 @@
+In this tutorial, we’ll guide you step-by-step through scaling a full-stack React application using Jitar. 
+
+From adding components to running a fully distributed setup, you’ll learn how to:
+
+* Add a new component
+* Create a separate segment for independent deployment
+* Build and test your app in the browser
+* Understand Jitar’s runtime services: gateway, repository, proxy, and workers
+* Configure and run a distributed architecture
+* Inspect service logs to ensure everything works as expected
+
+By the end of this video, you’ll have a fully functional full-stack app powered by Jitar, with a clear understanding of how Jitar’s runtime services work and how full-stack app distribution is managed through configuration.
+
+The application that will be scaled is created using Jitar's init command shown in the "Create a Scalable Full-Stack App With Jitar" video    • Getting Started | Create a Scalable Full-S...  
+
+🔗 Check out Jitar and get started: https://jitar.dev
+🤝 Join our community on Discord:   / discord  
+🔔 Follow us on BlueSky for the latest updates: https://bsky.app/profile/masking.tech
+⭐️ Star the project on GitHub: https://github.com/MaskingTechnology/...
+
+— Chapters —
+0:00 Introduction
+0:08 Add component
+0:34 Create segment
+0:56 Test component
+1:23 Introduce services
+2:00 Configure services
+2:51 Run distributed
+3:37 Walk through logs
+3:56 Closure
