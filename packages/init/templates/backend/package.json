@@ -10,9 +10,9 @@
         "hello": "jitar start --service=services/hello.json"
     },
     "dependencies": {
-        "jitar": "^0.10.0"
+        "jitar": "^0.10.1"
     },
     "devDependencies": {
-        "rimraf": "^6.0.1"
+        "rimraf": "^6.1.0"
     }
 }

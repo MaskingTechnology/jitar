@@ -11,16 +11,16 @@
     "standalone": "jitar start --service=services/standalone.json"
   },
   "dependencies": {
-    "jitar": "^0.10.0",
+    "jitar": "^0.10.1",
     "vue": "^3.5.22"
   },
   "devDependencies": {
-    "@types/node": "^24.6.1",
-    "@jitar/plugin-vite": "^0.10.0",
+    "@types/node": "^24.9.2",
+    "@jitar/plugin-vite": "^0.10.1",
     "@vitejs/plugin-vue": "^6.0.1",
-    "rimraf": "^6.0.1",
+    "rimraf": "^6.1.0",
     "typescript": "5.9.3",
-    "vite": "^7.1.7",
-    "vue-tsc": "^3.1.1"
+    "vite": "^7.1.12",
+    "vue-tsc": "^3.1.2"
   }
 }

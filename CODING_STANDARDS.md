@@ -3,7 +3,7 @@
 
 This document describes our coding standards. These are based on the [TypeScript coding guidelines](https://github.com/microsoft/TypeScript/wiki/Coding-guidelines).
 
-We use the latest [ECMAScript](https://www.ecma-international.org/publications-and-standards/standards/ecma-262/) features of JavaScript as much as possible. Typescript is primarly used for type checking.
+We use the latest [ECMAScript](https://www.ecma-international.org/publications-and-standards/standards/ecma-262/) features of JavaScript as much as possible. Typescript is primarily used for type checking.
 
 ## Names
 
