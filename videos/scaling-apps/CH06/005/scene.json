@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Next, we’ll configure the gateway. Aside from specifying the service type, we don’t need any other options for now.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,4:5,5:10,6:5,9:3,10:1,12:10,13:0"
+    }
+}

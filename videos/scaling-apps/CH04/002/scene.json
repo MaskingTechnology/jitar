@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "At the start of the service, end points are created for both the keep hello count and say hello functions.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,2:5,17:10,19:3,20:1,23:1,24:0"
+    }
+}

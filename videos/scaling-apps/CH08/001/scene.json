@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "From the logs, we can see that the default worker ran the say hello function, and the data worker ran the keep hello count function.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,8:25,13:3,14:1,16:0"
+    }
+}

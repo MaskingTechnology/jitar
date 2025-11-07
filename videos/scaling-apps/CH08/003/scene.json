@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "while the repository served the web client…",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,3:3,4:1,6:0"
+    }
+}

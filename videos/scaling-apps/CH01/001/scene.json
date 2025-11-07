@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "In this video, we’ll scale out a simple full-stack app using [Jitar](/dʒiːtɑr/)'s runtime services.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:15,15:8,18:5,19:0"
+    }
+}

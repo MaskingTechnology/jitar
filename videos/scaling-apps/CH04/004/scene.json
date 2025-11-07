@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "This means that our new component is ready to scale out.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,11:0"
+    }
+}

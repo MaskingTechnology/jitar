@@ -1,6 +1,4 @@
 {
-    "chapter": "CH05",
-    "scene": "004",
     "voice":
     {
         "text": "The App UI component imports the say hello function from the domain directly, calls it when the app gets loaded, ...and shows the message in the browser.",

@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "We'll start with a React app created with [Jitar](/dʒiːtɑr/)'s init command.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,12:3,13:1,14:3,18:3,19:1,20:0"
+    }
+}

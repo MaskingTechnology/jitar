@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "For the repository, we need to carry over the whitelisted assets from the standalone configuration.",
+        "speed": 1.0,
+        "delay": 0.5
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,5:5,6:5,11:3,12:1,15:3,16:1,19:3,20:1,24:20,25:0"
+    }
+}

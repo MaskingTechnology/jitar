@@ -1,5 +1,4 @@
 {
-    "chapter": "CH06",
     "description": "Explain configuration",
     "scenes": {
         "001": "001/scene.json",

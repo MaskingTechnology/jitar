@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Now, we can return to the web browser to check if it works. After refreshing, the number is reset to 1.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,8:15,13:3,14:1,17:10,20:0"
+    }
+}

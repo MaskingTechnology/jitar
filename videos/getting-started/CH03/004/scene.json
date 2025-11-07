@@ -1,6 +1,4 @@
 {
-    "chapter": "CH03",
-    "scene": "004",
     "voice":
     {
         "text": "The project is created in a folder named after your app. From there, ...it can be built and run with the provided commands.",

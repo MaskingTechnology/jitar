@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "All these services are provided by [Jitar](/dʒiːtɑr/) and can be configured independently.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,8:5,12:3,16:3,17:1,18:3,20:0"
+    }
+}

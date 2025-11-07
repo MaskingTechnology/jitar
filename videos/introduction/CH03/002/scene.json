@@ -1,6 +1,4 @@
 {
-    "chapter": "CH03",
-    "scene": "002",
     "voice":
     {
         "text": "It provides the [tools](/tu:lz/) to overcome these limitations by taking your full-stack monolithic application. By configuration, it splits the application into smaller, independent bundles, and deploying them across web browsers and servers.",

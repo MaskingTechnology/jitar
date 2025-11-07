@@ -1,6 +1,4 @@
 {
-    "chapter": "CH02",
-    "scene": "006",
     "voice":
     {
         "text": "Or, when one module fails, it could take down the whole application.",

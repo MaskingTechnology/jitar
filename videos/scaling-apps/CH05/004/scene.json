@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "To support this setup, we’ll introduce three additional services: a gateway to route requests to the service with the function, a repository to serve the React app like a web server, and a proxy that acts as a single access point to both the repository and the gateway, preventing cross-origin requests.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:39,14:25,22:25,29:0"
+    }
+}

@@ -1,6 +1,4 @@
 {
-    "chapter": "CH01",
-    "scene": "002",
     "voice":
     {
         "text": "An open-source, distributed runtime for javascript and typescript applications.",

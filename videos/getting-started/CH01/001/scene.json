@@ -1,6 +1,4 @@
 {
-    "chapter": "CH01",
-    "scene": "001",
     "voice":
     {
         "text": "In this video, we’ll set up a scalable full-stack app using [Jitar](/dʒiːtɑr/).",

@@ -1,6 +1,4 @@
 {
-    "chapter": "CH02",
-    "scene": "002",
     "voice":
     {
         "text": "Besides NPM, you can also use Yarn or PNPM.",
