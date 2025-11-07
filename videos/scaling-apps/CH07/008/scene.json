@@ -1,7 +1,7 @@
 {
     "voice":
     {
-        "text": "Now, we can return to the web browser to check if it works. After refreshing, the number should reset to 1.",
+        "text": "Now, we can return to the web browser to check if it works. After refreshing, the number is reset to 1.",
         "speed": 1.0,
         "delay": 0
     },

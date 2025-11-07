@@ -1,7 +1,7 @@
 {
     "voice":
     {
-        "text": "Before we can start one of the new services, we need to stop the standalone service first.",
+        "text": "Before we can start one of the new services, we need to stop the standalone service since the proxy is configured to use the same port.",
         "speed": 1.0,
         "delay": 0
     },

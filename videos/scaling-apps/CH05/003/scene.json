@@ -1,13 +1,13 @@
 {
     "voice":
     {
-        "text": "Now, we want to split off the keep hello count function to run in its own service.",
+        "text": "Now, we’re going to split off the keep hello count function so it runs in its own service.",
         "speed": 1.0,
         "delay": 0
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:20,8:0"
+        "duplications": "1:23,8:0"
     }
 }

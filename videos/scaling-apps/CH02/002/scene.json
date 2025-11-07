@@ -1,13 +1,13 @@
 {
     "voice":
     {
-        "text": "First, we need a second component in our domain that we'll use for scaling out.",
+        "text": "First, we need a second component in our domain, which we'll use for scaling out.",
         "speed": 1.0,
         "delay": 0
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:5,5:5,7:5,8:5,25:5,26:0"
+        "duplications": "1:5,3:3,4:1,5:5,7:5,8:5,25:5,26:0"
     }
 }

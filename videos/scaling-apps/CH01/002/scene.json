@@ -1,13 +1,13 @@
 {
-     "voice":
+    "voice":
     {
-        "text": "You will learn how to split off a component into a segment, how the runtime services work, and how to scale it with load balancing.",
+        "text": "Let’s jump straight in.",
         "speed": 1.0,
         "delay": 0.2
     },
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:5,4:7,5:20,6:20,7:20,11:3,16:0"
+        "duplications": "1:0,8:3,9:1,13:0"
     }
 }
