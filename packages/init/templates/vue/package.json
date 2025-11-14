@@ -11,7 +11,7 @@
     "standalone": "jitar start --service=services/standalone.json"
   },
   "dependencies": {
-    "jitar": "^0.10.1",
+    "jitar": "^0.10.2",
     "vue": "^3.5.22"
   },
   "devDependencies": {
