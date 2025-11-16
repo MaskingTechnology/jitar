@@ -1,60 +1,93 @@
+# v0.10.2
+[2025-11-14]
+
+### Chores
+
+* \[[709](https://github.com/MaskingTechnology/jitar/pull/709)] chore: release v0.10.2 (#709) by Bas Meeuwissen
+* \[[707](https://github.com/MaskingTechnology/jitar/pull/707)] chore: scaling apps video (#707) by Peter van Vliet
+* \[[706](https://github.com/MaskingTechnology/jitar/pull/706)] chore(deps): november updates (#706) by Bas Meeuwissen
+
 # v0.10.1
 [2025-10-17]
 
 ### Chores
 
-* \[[697](https://github.com/MaskingTechnology/jitar/pull/697)] chore: getting started video (#695) by Bas Meeuwissen & Peter van Vliet
-* \[[696](https://github.com/MaskingTechnology/jitar/pull/696)] chore(deps): october updates (#694) by Bas Meeuwissen
-* \[[693](https://github.com/MaskingTechnology/jitar/pull/693)] chore: introduction video (#690) by Peter van Vliet
-* \[[686](https://github.com/MaskingTechnology/jitar/pull/686)] chore(deps): organize dependencies (#679) by Bas Meeuwissen
+* \[[699](https://github.com/MaskingTechnology/jitar/pull/699)] chore: release v0.10.1 (#699) by Bas Meeuwissen
+* \[[697](https://github.com/MaskingTechnology/jitar/pull/697)] chore: getting started video (#697) by Bas Meeuwissen
+* \[[696](https://github.com/MaskingTechnology/jitar/pull/696)] chore(deps): october updates (#696) by Bas Meeuwissen
+* \[[693](https://github.com/MaskingTechnology/jitar/pull/693)] chore: introduction video (#693) by Peter van Vliet
+* \[[686](https://github.com/MaskingTechnology/jitar/pull/686)] chore(deps): organize dependencies (#686) by Bas Meeuwissen
 * \[[685](https://github.com/MaskingTechnology/jitar/pull/685)] chore(deps): bump actions/checkout from 4 to 5 (#685) by dependabot[bot]
-* \[[683](https://github.com/MaskingTechnology/jitar/pull/683)] chore: readme update (#682) by Peter van Vliet
-* \[[681](https://github.com/MaskingTechnology/jitar/pull/681)] chore(deps): august updates (#681) by Peter van Vliet
-* \[[678](https://github.com/MaskingTechnology/jitar/pull/679)] chore(deps): added rimraf (#670) by Bas Meeuwissen
-
+* \[[683](https://github.com/MaskingTechnology/jitar/pull/683)] chore: readme update (#683) by Peter van Vliet
+* \[[681](https://github.com/MaskingTechnology/jitar/pull/681)] chore(deps): august updates (#681) by dependabot[bot]
+* \[[678](https://github.com/MaskingTechnology/jitar/pull/678)] chore(deps): added rimraf (#678) by Bas Meeuwissen
 
 # v0.10.0
-[2025-07-19]
+[2025-10-17]
 
 ### Features
 
-* \[[667](https://github.com/MaskingTechnology/jitar/pull/667)] feat: service state (#561, #565) by Peter van Vliet
+* \[[667](https://github.com/MaskingTechnology/jitar/pull/667)] feat: service state (#667) by Peter van Vliet
 
 ### Fixes
 
-* \[[675](https://github.com/MaskingTechnology/jitar/pull/675)] fix: middleware execution (#674) by Peter van Vliet
+* \[[675](https://github.com/MaskingTechnology/jitar/pull/675)] fix: middleware execution (#675) by Peter van Vliet
 
 ### Chores
 
-* \[[669](https://github.com/MaskingTechnology/jitar/pull/669)] chore(deps): fs-extra removal (#664) by Bas Meeuwissen
-
+* \[[677](https://github.com/MaskingTechnology/jitar/pull/677)] chore: release v0.10.0 (#677) by Bas Meeuwissen
+* \[[672](https://github.com/MaskingTechnology/jitar/pull/672)] chore(deps): website (#672) by Bas Meeuwissen
+* \[[669](https://github.com/MaskingTechnology/jitar/pull/669)] chore(deps): fs-extra removal (#669) by Bas Meeuwissen
+* \[[666](https://github.com/MaskingTechnology/jitar/pull/666)] chore: release v0.9.4 (#666) by Bas Meeuwissen
 
 # v0.9.4
-[2025-07-12]
+[2025-07-13]
 
 ### Features
 
-* \[[655](https://github.com/MaskingTechnology/jitar/pull/655)] feat: implement init command (#560) by Peter van Vliet
-* \[[663](https://github.com/MaskingTechnology/jitar/pull/663)] feat: windows support (#643) by Bas Meeuwissen
+* \[[663](https://github.com/MaskingTechnology/jitar/pull/663)] feat: windows support (#663) by Bas Meeuwissen
+* \[[655](https://github.com/MaskingTechnology/jitar/pull/655)] feat: implement init command (#655) by Peter van Vliet
 
 ### Fixes
 
-* \[[661](https://github.com/MaskingTechnology/jitar/pull/661)] fix: plugin loading order (#660) by Peter van Vliet
-
-# v0.9.3
-[2025-06-02]
+* \[[661](https://github.com/MaskingTechnology/jitar/pull/661)] fix: plugin loading order (#661) by Peter van Vliet
 
 ### Chores
 
-* \[[647](https://github.com/MaskingTechnology/jitar/pull/647)] chore(deps): june updates (#646) by Peter van Vliet
-* \[[644](https://github.com/MaskingTechnology/jitar/pull/644)] chore: clean up templates (#643) by Bas Meeuwissen
+* \[[658](https://github.com/MaskingTechnology/jitar/pull/658)] chore(deps): july updates (#658) by Bas Meeuwissen
+* \[[652](https://github.com/MaskingTechnology/jitar/pull/652)] chore: dependenciy updates (#652) by dependabot[bot]
+* \[[654](https://github.com/MaskingTechnology/jitar/pull/654)] chore: code owners (#654) by Bas Meeuwissen
+* \[[651](https://github.com/MaskingTechnology/jitar/pull/651)] chore: vite plugin readme update (#651) by Bas Meeuwissen
+
+# v0.9.3
+[2025-07-13]
+
+### Chores
+
+* \[[644](https://github.com/MaskingTechnology/jitar/pull/644)] chore: template cleanup (#644) by Bas Meeuwissen
+
+### Other
+
+* \[[649](https://github.com/MaskingTechnology/jitar/pull/649)] #648: released v0.9.3 (#649) by Peter van Vliet
+* \[[647](https://github.com/MaskingTechnology/jitar/pull/647)] #646: updated dependencies (#647) by Peter van Vliet
 
 # v0.9.2
-[2025-05-23]
+[2025-07-13]
 
-### Features
+### Chores
 
-* \[[638](https://github.com/MaskingTechnology/jitar/pull/638)] feat: improved resource loading (#608) by Peter van Vliet
+* \[[642](https://github.com/MaskingTechnology/jitar/pull/642)] chore: release v0.9.2 (#642) by Bas Meeuwissen
+* \[[640](https://github.com/MaskingTechnology/jitar/pull/640)] chore: creator update (#640) by Bas Meeuwissen
+* \[[637](https://github.com/MaskingTechnology/jitar/pull/637)] chore(deps): may updates (#637) by Peter van Vliet
+* \[[630](https://github.com/MaskingTechnology/jitar/pull/630)] chore(deps): bump vite from 6.2.0 to 6.2.6 in /documentation (#630) by dependabot[bot]
+* \[[631](https://github.com/MaskingTechnology/jitar/pull/631)] chore(deps): bump vite from 6.2.1 to 6.2.6 (#631) by dependabot[bot]
+* \[[623](https://github.com/MaskingTechnology/jitar/pull/623)] chore(deps): example cleanup (#623) by Bas Meeuwissen
+* \[[621](https://github.com/MaskingTechnology/jitar/pull/621)] chore: turborepo (#621) by Bas Meeuwissen
+
+### Other
+
+* \[[633](https://github.com/MaskingTechnology/jitar/pull/633)] #632: april updates (#633) by Bas Meeuwissen
+* \[[620](https://github.com/MaskingTechnology/jitar/pull/620)] deps: february updates (#620) by dependabot[bot]
 
 # v0.9.1
 [2025-02-14]
@@ -72,6 +105,7 @@
 
 ### Chores
 
+* \[[619](https://github.com/MaskingTechnology/jitar/pull/619)] chore: release v0.9.1 (#619) by Bas Meeuwissen
 * \[[611](https://github.com/MaskingTechnology/jitar/pull/611)] npm: bump vitest and @vitest/coverage-v8 (#611) by dependabot[bot]
 * \[[610](https://github.com/MaskingTechnology/jitar/pull/610)] chore(deps): february updates (#610) by Bas Meeuwissen
 
