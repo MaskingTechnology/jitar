@@ -16,9 +16,9 @@
     "test": "turbo run test",
     "review": "turbo run test lint",
     "publish-packages": "turbo run build lint test && npm run publish-jitar && npm run publish-plugin && npm run publish-create-jitar",
-    "publish-jitar": "npm publish jitar",
-    "publish-plugin": "npm publish @jitar/plugin-vite",
-    "publish-create-jitar": "npm publish create-jitar",
+    "publish-jitar": "npm publish -workspace packages/jitar",
+    "publish-plugin": "npm publish -workspace packages/plugin-vite",
+    "publish-create-jitar": "npm publish -workspace packages/create-jitar",
     "changelog": "auto-changelog --template changelog.hbs -p -u --commit-limit false --hide-empty-releases true",
     "changelog-debug": "auto-changelog --template changelog.hbs -p --template json --output changelog-data.json"
   },
