@@ -1,3 +1,11 @@
+# v0.10.3
+[2025-11-20]
+
+### Chores
+
+* \[[717](https://github.com/MaskingTechnology/jitar/pull/717)] chore(deps): bump glob from 11.0.3 to 11.1.0 in /website (#717) by dependabot[bot]
+* \[[711](https://github.com/MaskingTechnology/jitar/pull/711)] chore: replace changelog tool (#711) by Bas Meeuwissen
+
 # v0.10.2
 [2025-11-14]
 
