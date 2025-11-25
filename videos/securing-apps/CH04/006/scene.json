@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "To activate the middleware, we register them. On the client side, we add the middleware reference to the [Jitar](/dʒiːtɑr/) plugin in the [Vite](/vit/) configuration. The server middleware is registered the same way in the proxy configuration.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:25,5:5,6:15,7:3,11:15,12:3,13:15,14:5,15:3,16:0"
+    }
+}

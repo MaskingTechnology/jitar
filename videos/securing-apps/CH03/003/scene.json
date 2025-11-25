@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Next, we apply the same trust key to the worker services so they can securely connect to the gateway.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,4:5,5:5,6:3,7:10,8:5,9:3,10:0"
+    }
+}

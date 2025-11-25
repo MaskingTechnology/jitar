@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "We start by setting up a trust zone, beginning with adding a trust key to the gateway service.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,5:3,6:1,7:3,11:3,12:1,14:1,19:10,20:0"
+    }
+}

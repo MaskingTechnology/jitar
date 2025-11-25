@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "That is how to secure a full-stack application running on [Jitar](/dʒiːtɑr/).",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,8:3,12:3,16:3,17:1,21:10"
+    }
+}

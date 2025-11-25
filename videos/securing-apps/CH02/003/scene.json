@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Access to application files is controlled by the repository service through a mandatory allow-list, as explained in the app creation video.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:25,2:30,7:30,8:0"
+    }
+}

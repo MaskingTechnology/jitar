@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "With everything configured, we can try it out. We launch the gateway first to establish the trust zone, followed by the default worker, which contains the say hello procedure, and the data worker, which contains the keep hello count procedure.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,6:15,7:3,8:5,9:5,21:10,22:5,23:5,37:10,38:5,39:5,53:0"
+    }
+}
