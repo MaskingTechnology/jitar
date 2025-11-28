@@ -8,6 +8,6 @@
     "frames":
     {
         "source": "frames.pdf",
-        "duplications": "1:10,2:20,10:20,11:0"
+        "duplications": "1:10,2:20,10:0"
     }
 }

@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "The handle function receives the request object and the next handler. The request headers can be used to include authentication data. We’ll keep the example simple, but links to real implementations are in the video description.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,2:3,3:1,8:30,12:3,13:1,17:30,18:0"
+    }
+}
