@@ -11,12 +11,12 @@ From adding components to running a fully distributed setup, you’ll learn how 
 
 By the end of this video, you’ll have a fully functional full-stack app powered by Jitar, with a clear understanding of how Jitar’s runtime services work and how full-stack app distribution is managed through configuration.
 
-The application that will be scaled is created using Jitar's init command shown in the "Create a Scalable Full-Stack App With Jitar" video    • Getting Started | Create a Scalable Full-S...  
+The application that will be scaled is created using Jitar's init command shown in the "Create a Scalable Full-Stack App With Jitar" video.
 
 🔗 Check out Jitar and get started: https://jitar.dev
-🤝 Join our community on Discord:   / discord  
+🤝 Join our community on Discord: https://discord.gg/Bqwy8azp5R
 🔔 Follow us on BlueSky for the latest updates: https://bsky.app/profile/masking.tech
-⭐️ Star the project on GitHub: https://github.com/MaskingTechnology/...
+⭐️ Star the project on GitHub: https://github.com/MaskingTechnology/jitar
 
 — Chapters —
 0:00 Introduction
