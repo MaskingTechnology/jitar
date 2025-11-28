@@ -48,7 +48,7 @@ export default class Builder
         const firstModuleSegment = moduleSegments[0];
         const segmentModule = firstModuleSegment.getModule(module.filename);
 
-        const remoteBuild = segmentModule!.hasImplementations()
+        const remoteBuild = segmentModule?.hasImplementations()
             ? this.#buildRemoteModule(module, moduleSegments)
             : Promise.resolve();
 

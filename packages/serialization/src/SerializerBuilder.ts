@@ -15,6 +15,7 @@ import SetSerializer from './serializers/SetSerializer';
 import TypedArraySerializer from './serializers/TypedArraySerializer';
 import UrlSerializer from './serializers/UrlSerializer';
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 export default class SerializerBuilder
 {
     public static build(classResolver?: ClassResolver): Serializer

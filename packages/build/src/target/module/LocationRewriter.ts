@@ -110,7 +110,7 @@ export default abstract class LocationRewriter
 
     #rewriteToSegment(targetModuleFilename: string, dependency: ESImport | ESExport, keys: string[]): string
     {
-        const from = this.#rewriteApplicationFrom(targetModuleFilename, this.#segment!.name);
+        const from = this.#rewriteApplicationFrom(targetModuleFilename, this.#segment?.name);
 
         return this.includeInBundle(dependency, from, keys);
     }
