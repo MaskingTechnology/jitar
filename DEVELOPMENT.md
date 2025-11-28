@@ -42,6 +42,9 @@ To do consistent releases, we use the following steps:
 
 1. Create a new issue and branch.
 1. Update the version number for the mono repo in the `package.json` file.
+1. Update the version numbers for the packages `jitar`, `create-jitar` and `@jitar/plugin-vite`.
+1. Update the changelog by running `npm run changelog`.
+1. Commit and push the changes.
 1. Run `npm run publish-packages` to build and publish all packages.
 1. Create a pull request.
 1. Once the pull request is merged, tag the release.

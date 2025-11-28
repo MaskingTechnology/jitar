@@ -1,6 +1,6 @@
 {
     "name": "jitar",
-    "version": "0.10.2",
+    "version": "0.10.3",
     "description": "Distributed runtime for JavaScript and TypeScript to chop monolithic applications into micros.",
     "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
     "license": "MIT",
@@ -31,7 +31,7 @@
     "dependencies": {
         "dotenv": "17.2.3",
         "express": "5.1.0",
-        "glob": "11.0.3",
+        "glob": "12.0.0",
         "mime-types": "3.0.1"
     },
     "devDependencies": {
