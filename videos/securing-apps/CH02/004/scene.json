@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Procedure execution is managed by configuring access levels and establishing trust zones between gateway and worker services.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:20,2:30,8:10,14:0"
+    }
+}

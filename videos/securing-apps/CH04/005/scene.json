@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Now we’ll implement the server middleware. It receives the request, reads the authorization header, and for demonstration replaces the name parameter with its value.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,3:5,4:5,5:20,14:10,18:3,19:1,23:3,24:0"
+    }
+}

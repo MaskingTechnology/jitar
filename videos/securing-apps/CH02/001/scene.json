@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "We’ll continue with the React app from the scaling video. It has two procedures and runs across five distributed services.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,12:10,13:1,14:3,18:3,19:1,20:3,22:1,23:1,24:3,26:0"
+    }
+}

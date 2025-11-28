@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Next, we’ll set up authentication.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,8:0"
+    }
+}

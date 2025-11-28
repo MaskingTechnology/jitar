@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "For testing, we’ll use the browser to run the procedures through [Jitar](/dʒiːtɑr/)'s RPC API. The public say hello procedure responds as expected, since the default worker is allowed to call the protected keep hello count procedure on the data worker. The protected keep hello count procedure can’t be called directly from the browser because the client isn’t part of the trust zone.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,8:10,12:3,13:1,14:3,17:5,18:15,19:1,20:80,23:3,24:1,26:1,30:5,31:5,32:30,35:0"
+    }
+}

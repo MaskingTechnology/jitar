@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "After adding the header, we call the next handler to execute the procedure, and finally export an instance of the middleware so [Jitar](/dʒiːtɑr/) can register it.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,2:20,3:1,6:20,10:3,11:1,15:20,16:0"
+    }
+}

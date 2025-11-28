@@ -1,0 +1,10 @@
+{
+    "video": "Jitar security",
+    "chapters": {
+        "CH01": "CH01/chapter.json",
+        "CH02": "CH02/chapter.json",
+        "CH03": "CH03/chapter.json",
+        "CH04": "CH04/chapter.json",
+        "CH05": "CH05/chapter.json"
+    }
+}

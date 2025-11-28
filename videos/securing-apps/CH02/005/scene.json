@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "Authentication can be handled through middleware, ensuring only authorized requests reach the services.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:10,2:20,10:0"
+    }
+}

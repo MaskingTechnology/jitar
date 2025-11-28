@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "[Jitar](/dʒiːtɑr/) supports authentication through client and server middleware, which we’ll implement in a dedicated folder.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:5,5:5,10:3,11:1,12:3,14:3,15:1,16:3,19:3,20:1,21:3,23:3,24:3,25:5,26:0"
+    }
+}

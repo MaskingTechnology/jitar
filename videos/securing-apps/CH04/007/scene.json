@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "To test this, we start the repository and proxy services.",
+        "speed": 1.0,
+        "delay": 0.6
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,6:5,7:5,8:3,19:5,20:5,21:3,32:5"
+    }
+}

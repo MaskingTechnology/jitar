@@ -1,0 +1,13 @@
+{
+    "voice":
+    {
+        "text": "We’ll start with the client middleware.",
+        "speed": 1.0,
+        "delay": 0
+    },
+    "frames":
+    {
+        "source": "frames.pdf",
+        "duplications": "1:0,3:3,4:1,5:1,6:3,11:3,12:0"
+    }
+}

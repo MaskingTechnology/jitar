@@ -1,0 +1,27 @@
+In this tutorial, we’ll guide you step-by-step through securing a full-stack React application running on Jitar.
+
+From the available options to a fully secured setup, you’ll learn how to:
+
+* Set up trust zones between workers and gateways
+* Protect procedures from external requests
+* Implement client and server middleware
+* Leverage middleware for authentication
+
+By the end of this video, you’ll have a secured full-stack app running on Jitar and a clear understanding of Jitar’s security capabilities.
+
+The application secured in this video was originally created in Scale a Full-Stack App With Jitar. Real-world examples of OAuth-based authentication middleware can be found here:
+
+* Client: https://github.com/MaskingTechnology/comify/blob/main/src/integrations/runtime/requesterMiddleware.ts
+* Server: https://github.com/MaskingTechnology/comify/blob/main/src/integrations/runtime/authenticationMiddleware.ts
+
+🔗 Check out Jitar and get started: https://jitar.dev
+🤝 Join our community on Discord: https://discord.gg/Bqwy8azp5R
+🔔 Follow us on BlueSky for the latest updates: https://bsky.app/profile/masking.tech
+⭐️ Star the project on GitHub: https://github.com/MaskingTechnology/jitar
+
+— Chapters —
+0:00 Introduction
+0:08 Security options
+0:44 Trust zones
+1:44 Authentication
+3:07 Closure
