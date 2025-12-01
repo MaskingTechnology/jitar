@@ -31,8 +31,8 @@
     "dependencies": {
         "dotenv": "17.2.3",
         "express": "5.1.0",
-        "glob": "12.0.0",
-        "mime-types": "3.0.1"
+        "glob": "13.0.0",
+        "mime-types": "3.0.2"
     },
     "devDependencies": {
         "@jitar/cli": "*",
@@ -43,12 +43,12 @@
         "@jitar/logging": "*",
         "@jitar/middleware": "*",
         "@jitar/runtime": "*",
-        "@rollup/plugin-node-resolve": "16.0.1",
-        "@rollup/plugin-replace": "6.0.2",
+        "@rollup/plugin-node-resolve": "16.0.3",
+        "@rollup/plugin-replace": "6.0.3",
         "@rollup/plugin-terser": "0.4.4",
-        "@rollup/plugin-typescript": "12.1.4",
-        "rollup": "4.52.3",
-        "rollup-plugin-dts": "6.2.3"
+        "@rollup/plugin-typescript": "12.3.0",
+        "rollup": "4.53.3",
+        "rollup-plugin-dts": "6.3.0"
     },
     "engines": {
         "node": ">=20.0"
