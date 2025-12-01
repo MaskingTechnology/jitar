@@ -24,18 +24,18 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.1",
-    "@typescript-eslint/eslint-plugin": "8.46.4",
-    "@vitest/coverage-v8": "4.0.9",
+    "@typescript-eslint/eslint-plugin": "8.48.0",
+    "@vitest/coverage-v8": "4.0.14",
     "auto-changelog": "^2.5.0",
     "eslint": "9.39.1",
     "eslint-plugin-jitar": "0.0.1",
     "eslint-plugin-sonarjs": "3.0.5",
-    "rimraf": "6.1.0",
+    "rimraf": "6.1.2",
     "tslib": "2.8.1",
     "turbo": "2.6.1",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.46.4",
-    "vitest": "4.0.9"
+    "typescript-eslint": "8.48.0",
+    "vitest": "4.0.14"
   },
   "optionalDependencies": {
     "@nrwl/nx-linux-x64-gnu": "^15.9.3"
