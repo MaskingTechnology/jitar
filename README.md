@@ -1,12 +1,5 @@
-<div align="center">
-  <img width="400" alt="Logo" src="videos/introduction/publication/banner.png" />
 
-  <h1>Jitar - Distributed Runtime</h1>
-
-  <p>
-    <strong>For Building Scalable Full-Stack JavaScript and TypeScript Applications.</strong>
-  </p>
-</div>
+# Jitar | Distributed Runtime for Scalable Full-Stack JavaScript and TypeScript Applications
 
 [Jitar](https://jitar.dev) boosts and simplifies developing full-stack applications by letting you build your application as a (modular) monolith and scale it just-in-time by configuration.
 
@@ -45,6 +38,10 @@ Or read our [step-by-step tutorial](https://docs.jitar.dev/introduction/quick-st
 Full documentation is available at [docs.jitar.dev](https://docs.jitar.dev).
 
 Please join our [Discord community](https://discord.gg/Bqwy8azp5R) for questions and discussions.
+
+## Examples
+
+To try and experience the concepts of Jitar, example applications are available in the [example folder](https://github.com/MaskingTechnology/jitar/tree/main/examples).
 
 ## Plugins
 
