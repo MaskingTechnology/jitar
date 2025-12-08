@@ -41,7 +41,7 @@ Please join our [Discord community](https://discord.gg/Bqwy8azp5R) for questions
 
 ## Examples
 
-To try and experience the concepts of Jitar, example applications are available in the [example folder](https://github.com/MaskingTechnology/jitar/tree/main/examples).
+To try and experience with the concepts of Jitar, example applications are available in the [example folder](https://github.com/MaskingTechnology/jitar/tree/main/examples).
 
 ## Plugins
 
