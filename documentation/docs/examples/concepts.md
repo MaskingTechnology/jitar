@@ -68,12 +68,6 @@ Middleware is useful for manipulating requests and responses. In this example we
 
 [View in repository](https://github.com/MaskingTechnology/jitar/tree/main/examples/middleware){target="_blank"}
 
-## Cors
-
-When the frontend of the application is not hosted by Jitar you want to enable cors on the web server. Jitar provides a cors middleware and in this example we demonstrate how to enable cors.
-
-[View in repository](https://github.com/MaskingTechnology/jitar/tree/main/examples/cors){target="_blank"}
-
 ## Construction
 
 When starting and stopping a Jitar service, it might be useful to do additional tasks. In this example the use of start up and tear down scripts is demonstrated.
