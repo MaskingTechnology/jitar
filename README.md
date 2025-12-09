@@ -11,7 +11,7 @@ Under the hood, Jitar takes the application, splits it into smaller independent 
 
 **👋 Have questions?** Join our [discord community](https://discord.gg/Bqwy8azp5R).
 
-**IMPORTANT NOTE:** We’re still working hard toward version 1.0. We encourage you to try it out, but please avoid using it in production for now. Details can be found in the [roadmap](ROADMAP.md).
+**IMPORTANT NOTE:** We’re still working hard toward version 1.0. Details can be found in the [roadmap](ROADMAP.md). We encourage you to try it out and provide us with feedback.
 
 ## Installation
 
