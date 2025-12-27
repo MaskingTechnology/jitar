@@ -1,6 +1,6 @@
 
+import { existsSync, promises as fsp } from 'node:fs';
 import path from 'node:path';
-import { promises as fsp } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import InvalidName from './errors/InvalidName';
@@ -13,7 +13,10 @@ const NAME_REGEX = /^[a-zA-Z.\-_]+$/;
 
 const RENAME_FILES =
 {
-    '_gitignore': '.gitignore'
+    '_gitignore': '.gitignore',
+    '_package.json': 'package.json',
+    '_tsconfig.json': 'tsconfig.json',
+    '_vite.config.ts': 'vite.config.ts'
 };
 
 export default class InitManager
@@ -47,7 +50,7 @@ export default class InitManager
     #createTemplateRootPath(): string
     {
         const runtimePath = path.dirname(fileURLToPath(import.meta.url));
-        
+
         return path.join(runtimePath, TEMPLATES_LOCATION);
     }
 
@@ -100,7 +103,10 @@ export default class InitManager
             const sourceFileLocation = path.join(projectLocation, source);
             const targetFileLocation = path.join(projectLocation, target);
 
-            promises.push(fsp.rename(sourceFileLocation, targetFileLocation));
+            if (existsSync(sourceFileLocation))
+            {
+                promises.push(fsp.rename(sourceFileLocation, targetFileLocation));
+            }
         }
 
         await Promise.all(promises);
