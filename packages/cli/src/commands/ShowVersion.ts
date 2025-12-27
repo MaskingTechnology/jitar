@@ -1,8 +1,8 @@
 
-import Command from '../Command';
 import ArgumentProcessor from '../ArgumentProcessor';
+import Command from '../Command';
 
-const versionNumber = 'v0.10.3';
+const versionNumber = 'v0.10.4';
 
 export default class ShowVersion implements Command
 {

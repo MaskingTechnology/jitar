@@ -1,88 +1,91 @@
-# Jitar - Distributed runtime
 
-Do you always know when and how to scale your applications? Neither do we.
+# Jitar | Distributed Runtime for Scalable Full-Stack JavaScript and TypeScript Applications
 
-[<img width="1102" alt="explainer" src="videos/introduction/publication/banner.png">](https://www.youtube.com/watch?v=BMgJ4wZbCWg)
+[Jitar](https://jitar.dev) boosts and simplifies developing full-stack applications by letting you build your application as a (modular) monolith and scale it just-in-time by configuration.
 
-Welcome to [Jitar](https://jitar.dev), a distributed runtime for JavaScript and TypeScript that lets you build your application as a monolith and scale it just-in-time by configuration.
+Under the hood, Jitar takes the application, splits it into smaller independent bundles as configured, and runs them across web browsers and servers.
 
-Jitar runs on the server and the web browser, closing the gap between the frontend and backend. All end-to-end communication is automated with type-safety. You can call your server functions directly, Jitar takes care of the rest.
-
-In contrast to other solutions, there is no trace of Jitar in the application code, ensuring platform and framework agnosticism for easy integration and safety.
-
-**🏁 Try Jitar:** see our [Quick Start](https://docs.jitar.dev/introduction/quick-start.html)
+**🎥 Watch the** [introduction video](https://www.youtube.com/watch?v=BMgJ4wZbCWg) (recommended).
 
 **⭐ Give us a star** to show your support.
 
 **👋 Have questions?** Join our [discord community](https://discord.gg/Bqwy8azp5R).
 
-# How it works
+**IMPORTANT NOTE:** We’re still working hard toward version 1.0. Details can be found in the [roadmap](ROADMAP.md). We encourage you to try it out and provide us with feedback.
 
-<img width="1102" alt="explainer" src="https://github.com/MaskingTechnology/jitar/assets/108156553/2129b4cc-a32c-497e-b69d-d5670a66d7aa">
+## Installation
 
-Building scalable applications is hard. It requires breaking an application into independently deployable pieces, like microservices. The boundaries of these pieces are sensitive to change and aren't always clear. Developing endpoints and requests to arrange the communication between them brings a lot of overhead.
+Jitar requires Node version 20.0 or higher to be installed.
 
-Jitar is designed to solve these problems. It makes the boundaries configurable so you can change them painlessly at any time and eliminates the overhead by automating the end-to-end communication.
+```bash
+npm install -g jitar
+```
 
-For breaking applications into distributable pieces, Jitar uses a segmentation system. A segment defines what functions need to be deployed together. Jitar connects these segments by creating RPC endpoints and requests under the hood.
+A global installation is recommended to make Jitar available as CLI tool.
 
-# Key benefits
+## Quick Start
 
-Developers are at the heart of every application. Jitar is designed to make their lives easier and more productive.
+Watch our Getting Started video series:
 
-* **API automation** - Automates all client-server communication.
-* **E2E type-safety** - Reduces programming and refactoring errors.
-* **Configuration only** - Keeping the code clean, simple and focussed.
-* **E2E Intellisense** - Speeds up developing full-stack apps.
-* **Platform agnostic** - Runs in modern web browsers, servers and on the server.
-* **Framework agnostic** - Works with every frontend and backend framework.
+1. [Create a Full-Stack App with Jitar](https://www.youtube.com/watch?v=PLfcR7nb9ac)
+1. [Scale a Full-Stack App with Jitar](https://www.youtube.com/watch?v=iM7XYSDIfFI)
+1. [Secure a Full-Stack App Running on Jitar](https://www.youtube.com/watch?v=m6vxhw0S7LA)
 
-# Key features
+Or read our [step-by-step tutorial](https://docs.jitar.dev/introduction/quick-start.html).
 
-Build a monolith, deploy as microservices. Jitar provides powerful features to scale endlessly.
-
-* **Segmentation** - Breaks applications into deployable bundles.
-* **Orchestration** - Coordinates running segmented procedures.
-* **Load balancing** - Balances the execution of procedures automatically.
-* **Access protection** - Protects the access to private procedures.
-* **Transportation** - (De)serializes data automatically.
-* **Multi-version** - Supports multiple versions of the same procedure.
-* **Integration** - Integrates in any existing landscape.
-* **And more** - Validation, health checks, middleware, hooks, etc.
-
-# When to use
-
-Jitar is a great tool for building applications that are expected to grow and change over time. It can be used for building small to large API driven (web) applications, like:
-
-* Full-stack applications
-* Microservices
-
-For existing applications, Jitar can be of great assistance for load balancing (parts) of the application, or adding multi-version support.
-
-# Getting started
-
-Getting started with Jitar is as easy as pie. It only takes a few simple steps.
-
-1. **Create new project** - Start fast with our creator and pick one of our templates for Vue, React or Jitar only.
-1. **Add your functions** - Write functions and export them like you are used to.
-1. **Configure what runs on the server** - Add the exported functions to a server segment configuration file.
-1. **Run your application** - Jitar will take care of the rest.
-
-For a step-by-step tutorial, see the [Quick Start](https://docs.jitar.dev/introduction/quick-start.html).
-
-# Documentation
+## Documentation
 
 Full documentation is available at [docs.jitar.dev](https://docs.jitar.dev).
 
 Please join our [Discord community](https://discord.gg/Bqwy8azp5R) for questions and discussions.
 
-# Publications
+## Examples
 
-* [The Anatomy of a Distributed JavaScript Runtime — Series](https://medium.com/javascript-in-plain-english/the-anatomy-of-a-distributed-javascript-runtime-part-i-4d550f1f5bbe)
+To try and experience with the concepts of Jitar, example applications are available in the [example folder](https://github.com/MaskingTechnology/jitar/tree/main/examples).
+
+## Plugins
+
+Jitar is extensible through two types of plugins:
+
+1. **Middleware** — additional request logic (auth, logging, etc.).
+1. **Health checks** — additional monitoring information (database, etc.).
+
+For common concerns like authentication, CORS, etc. plugins are available in the [plugins repository](https://github.com/MaskingTechnology/jitar-plugins).
+
+## Key benefits
+
+Boosts and simplifies full-stack development:
+
+* **API automation** - Automates all client-server communication.
+* **E2E type-safety** - Reduces programming and refactoring errors.
+* **Framework agnostic** - Works with modern frontend and backend frameworks.
+* **Platform agnostic** - Runs in modern web browsers, servers and on the server.
+
+## Key features
+
+Provides everything needed to scale:
+
+* **Routing** - Requests are automatically routed to the appropriate instance.
+* **Balancing** - Requests are automatically balanced when multiple instances are available.
+* **Monitoring** - Instance health is automatically monitored using pluggable health checks.
+* **Security** - Access to files and procedures by configuration.
+
+## More information
+
+Detailed information on the motivation and technical mechanics can be found in the "The Anatomy of a Distributed JavaScript Runtime" articles series:
+
+* [Part I - Motivation and goals](https://javascript.plainenglish.io/the-anatomy-of-a-distributed-javascript-runtime-part-i-4d550f1f5bbe)
+* [Part II - Splitting applications](https://javascript.plainenglish.io/the-anatomy-of-a-distributed-javascript-runtime-part-ii-321762404778)
+* [Part III - Running applications](https://javascript.plainenglish.io/the-anatomy-of-a-distributed-javascript-runtime-part-iii-3400d66c15cc)
+* [Part IV - Distributing applications](https://javascript.plainenglish.io/the-anatomy-of-a-distributed-javascript-runtime-part-iv-distributing-applications-7e9e9b7df54f)
+* [Part V - Consolidation and conclusions](https://javascript.plainenglish.io/the-anatomy-of-a-distributed-javascript-runtime-part-v-consolidation-and-conclusions-e84b04148f54)
+
+More information on the use-cases can be found in the following articles:
+
 * [How I Speed Up Full-stack Development by Not Building APIs](https://medium.com/better-programming/how-i-speed-up-full-stack-development-by-not-building-apis-7f768335bec6)
 * [How I Split a Monolith Into Microservices Without Refactoring](https://medium.com/better-programming/how-i-split-a-monolith-into-microservices-without-refactoring-5d76924c34c2)
 
-# Contributing
+## Contributing
 
 We welcome contributions to Jitar. Please read our [contributing guidelines](CONTRIBUTING.md) for more information.
 
@@ -90,7 +93,3 @@ A special thanks to everyone who has contributed to Jitar so far!
 
 - [Yusuf-YENICERI](https://github.com/Yusuf-YENICERI)
 - [Tawakal](https://github.com/tawakal)
-
-# Roadmap
-
-We are working hard towards a stable 1.0 release. Details can be found in our [roadmap](ROADMAP.md) document.

@@ -22,9 +22,9 @@
     "@jitar/services": "*",
     "@jitar/sourcing": "*",
     "@jitar/validation": "*",
-    "express": "5.1.0"
+    "express": "5.2.1"
   },
   "devDependencies": {
-    "@types/express": "5.0.5"
+    "@types/express": "5.0.6"
   }
 }
