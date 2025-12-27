@@ -1,5 +1,5 @@
 
-import { promises as fsp } from 'node:fs';
+import { existsSync, promises as fsp } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -103,7 +103,10 @@ export default class InitManager
             const sourceFileLocation = path.join(projectLocation, source);
             const targetFileLocation = path.join(projectLocation, target);
 
-            promises.push(fsp.rename(sourceFileLocation, targetFileLocation));
+            if (existsSync(sourceFileLocation))
+            {
+                promises.push(fsp.rename(sourceFileLocation, targetFileLocation));
+            }
         }
 
         await Promise.all(promises);
