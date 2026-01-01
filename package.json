@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.2",
-    "@typescript-eslint/eslint-plugin": "8.50.1",
+    "@typescript-eslint/eslint-plugin": "8.51.0",
     "@vitest/coverage-v8": "4.0.16",
     "auto-changelog": "^2.5.0",
     "eslint": "9.39.2",
@@ -34,7 +34,7 @@
     "tslib": "2.8.1",
     "turbo": "2.7.2",
     "typescript": "5.9.3",
-    "typescript-eslint": "8.50.1",
+    "typescript-eslint": "8.51.0",
     "vitest": "4.0.16"
   },
   "optionalDependencies": {
