@@ -7,7 +7,7 @@ export default class RemoteModuleLocator implements ModuleLocator
     // This is a placeholder class because remote module loading
     // is currently not allowed due to security reasons.
 
-    // eslint-disable-next-line @typescript-eslint/no-useless-constructor, @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     constructor(location: string)
     {
         // This constructor is intentionally empty.

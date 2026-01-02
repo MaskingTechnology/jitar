@@ -12,10 +12,10 @@
         "worker-helpdesk": "jitar start --service=services/helpdesk.json"
     },
     "devDependencies": {
-        "rimraf": "6.1.0",
+        "rimraf": "6.1.2",
         "typescript": "5.9.3"
     },
     "dependencies": {
-        "jitar": "0.10.3"
+        "jitar": "0.10.4"
     }
 }
