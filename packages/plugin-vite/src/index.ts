@@ -143,7 +143,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                     return null;
                 }
 
-                const cacheId = resolution.id.replace(`/${sourceDir}/`, `/${targetDir}/`);
+                const cacheId = resolution.id.replace(sourcePath!, targetPath!);
 
                 // First check if the module is a scoped module (segmented file)
 

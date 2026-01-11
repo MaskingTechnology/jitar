@@ -1,6 +1,6 @@
 {
   "name": "@jitar/analysis",
-  "version": "0.7.1",
+  "version": "0.10.5",
   "description": "Application analysis library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
