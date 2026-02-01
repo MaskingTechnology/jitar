@@ -15,6 +15,6 @@
     "devDependencies": {
         "cpx2": "8.0.0",
         "rimraf": "6.1.2",
-        "minify": "14.1.0"
+        "minify": "15.0.1"
     }
 }
