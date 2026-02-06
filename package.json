@@ -1,6 +1,6 @@
 {
   "name": "jitar-monorepo",
-  "version": "0.10.5",
+  "version": "0.10.6",
   "private": true,
   "description": "Monorepo configuration for Jitar.",
   "license": "MIT",
@@ -33,7 +33,7 @@
     "eslint-plugin-sonarjs": "3.0.6",
     "rimraf": "6.1.2",
     "tslib": "2.8.1",
-    "turbo": "2.8.1",
+    "turbo": "2.8.3",
     "typescript": "5.9.3",
     "typescript-eslint": "8.54.0",
     "vitest": "4.0.18"
