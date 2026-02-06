@@ -51,6 +51,8 @@ export default class ScheduledTask
             this.#scheduleNextExecution();
 
         }, this.#interval);
+
+        this.#timeout.unref();
     }
 
     async #executeTask(): Promise<void>
