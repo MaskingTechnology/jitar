@@ -1,6 +1,6 @@
 {
   "name": "@jitar/sourcing",
-  "version": "0.10.5",
+  "version": "0.10.6",
   "description": "Sourcing library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "glob": "13.0.0",
+    "glob": "13.0.1",
     "mime-types": "3.0.2"
   },
   "devDependencies": {

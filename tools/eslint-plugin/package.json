@@ -1,6 +1,6 @@
 {
     "name": "eslint-plugin-jitar",
-    "version": "0.0.1",
+    "version": "0.10.6",
     "private": true,
     "type": "commonjs",
     "scripts": {}

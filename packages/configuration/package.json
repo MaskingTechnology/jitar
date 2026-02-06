@@ -1,6 +1,6 @@
 {
   "name": "@jitar/configuration",
-  "version": "0.10.5",
+  "version": "0.10.6",
   "description": "Configuration library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
@@ -18,6 +18,6 @@
   "dependencies": {
     "@jitar/sourcing": "*",
     "@jitar/validation": "*",
-    "dotenv": "17.2.3"
+    "dotenv": "17.2.4"
   }
 }
