@@ -12,13 +12,12 @@ import WorkerManager from './WorkerManager';
 
 import InvalidTrustKey from './errors/InvalidTrustKey';
 
-type Configuration =
-    {
-        url: string;
-        trustKey?: string;
-        healthManager: HealthManager;
-        workerManager: WorkerManager;
-    };
+type Configuration = {
+    url: string;
+    trustKey?: string;
+    healthManager: HealthManager;
+    workerManager: WorkerManager;
+};
 
 export default class LocalGateway implements Gateway
 {
@@ -47,9 +46,9 @@ export default class LocalGateway implements Gateway
     {
         return this.#stateManager.start(async () =>
         {
-            this.#workerManager.start();
-
             await this.#healthManager.start();
+
+            this.#workerManager.start();
 
             await this.updateState();
         });
@@ -59,9 +58,9 @@ export default class LocalGateway implements Gateway
     {
         return this.#stateManager.stop(async () =>
         {
-            await this.#healthManager.stop();
-
             this.#workerManager.stop();
+
+            await this.#healthManager.stop();
         });
     }
 

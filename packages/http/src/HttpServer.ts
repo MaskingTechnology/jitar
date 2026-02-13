@@ -161,11 +161,11 @@ export default class HttpServer
         const args = this.#extractBodyArguments(request);
 
         const validation = this.#validator.validate(args,
-            {
-                url: { type: 'url', required: true },
-                procedureNames: { type: 'list', required: true, items: { type: 'string' } },
-                trustKey: { type: 'string', required: false }
-            });
+        {
+            url: { type: 'url', required: true },
+            procedureNames: { type: 'list', required: true, items: { type: 'string' } },
+            trustKey: { type: 'string', required: false }
+        });
 
         if (validation.valid === false)
         {
@@ -195,10 +195,10 @@ export default class HttpServer
         const args = { id: request.params.id, state: request.body.state };
 
         const validation = this.#validator.validate(args,
-            {
-                id: { type: 'string', required: true },
-                state: { type: 'string', required: true }
-            });
+        {
+            id: { type: 'string', required: true },
+            state: { type: 'string', required: true }
+        });
 
         if (validation.valid === false)
         {
@@ -227,9 +227,9 @@ export default class HttpServer
         const args = { id: request.params.id };
 
         const validation = this.#validator.validate(args,
-            {
-                id: { type: 'string', required: true },
-            });
+        {
+            id: { type: 'string', required: true },
+        });
 
         if (validation.valid === false)
         {
