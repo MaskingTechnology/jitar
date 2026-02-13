@@ -1,5 +1,5 @@
 
-# Jitar Execution
+# Jitar Http
 
 This package provides the HTTP communication for the [Jitar](https://jitar.dev) runtime.
 

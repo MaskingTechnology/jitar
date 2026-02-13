@@ -1,24 +1,16 @@
 name: "CodeQL"
 
 on:
-  push:
-    branches: [ "main" ]
-    paths:
-      - 'packages/**'
-      - '!packages/**/node_modules/**'
-      - '!packages/**/dist/**'
-      - '!packages/jitar'
-      - '!packages/create-jitar'
   pull_request:
     branches: [ "main" ]
     paths:
-      - 'packages/**'
-      - '!packages/**/node_modules/**'
-      - '!packages/**/dist/**'
-      - '!packages/jitar'
-      - '!packages/create-jitar'
+    - 'packages/**'
+    - '!packages/**/node_modules/**'
+    - '!packages/**/dist/**'
+    - '!packages/jitar'
+    - '!packages/create-jitar'
   schedule:
-    - cron: '39 10 * * 1'
+  - cron: '39 10 * * 1'
 
 jobs:
   analyze:
@@ -34,23 +26,23 @@ jobs:
       matrix:
         language: [ 'javascript' ]
         package:
-          - 'packages/analysis'
-          - 'packages/build'
-          - 'packages/cli'
-          - 'packages/configuration'
-          - 'packages/errors'
-          - 'packages/execution'
-          - 'packages/health'
-          - 'packages/http'
-          - 'packages/logging'
-          - 'packages/middleware'
-          - 'packages/plugin-vite'
-          - 'packages/runtime'
-          - 'packages/scheduling'
-          - 'packages/serialization'
-          - 'packages/services'
-          - 'packages/sourcing'
-          - 'packages/validation'
+        - 'packages/analysis'
+        - 'packages/build'
+        - 'packages/cli'
+        - 'packages/configuration'
+        - 'packages/errors'
+        - 'packages/execution'
+        - 'packages/health'
+        - 'packages/http'
+        - 'packages/logging'
+        - 'packages/middleware'
+        - 'packages/plugin-vite'
+        - 'packages/runtime'
+        - 'packages/scheduling'
+        - 'packages/serialization'
+        - 'packages/services'
+        - 'packages/sourcing'
+        - 'packages/validation'
 
     steps:
     - name: Checkout repository
