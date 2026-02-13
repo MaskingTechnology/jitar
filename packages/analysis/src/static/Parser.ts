@@ -147,7 +147,6 @@ export default class Parser
         return new ESScope(members);
     }
 
-    // eslint-disable-next-line sonarjs/cognitive-complexity
     #parseNext(tokenList: TokenList, isAsync = false): ESMember | ESValue | undefined
     {
         const token = tokenList.current;
