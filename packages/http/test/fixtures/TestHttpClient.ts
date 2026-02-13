@@ -8,6 +8,6 @@ export class TestHttpClient implements HttpClient
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async execute(url: string, options: object): Promise<Response>
     {
-        return Promise.resolve(HTTP_RESPONSES[url] ?? NOT_FOUND);
+        return HTTP_RESPONSES[url] ?? NOT_FOUND;
     }
 }

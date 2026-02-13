@@ -1,5 +1,5 @@
 
-# Jitar Configuration
+# Jitar Sourcing
 
 This package provides application sourcing (file and modules) for the [Jitar](https://jitar.dev) runtime.
 

@@ -1,5 +1,5 @@
 
-# Jitar Health
+# Jitar Services
 
 This package provides the services of the [Jitar](https://jitar.dev) runtime.
 

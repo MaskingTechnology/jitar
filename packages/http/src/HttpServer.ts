@@ -1,6 +1,6 @@
 
 import express, { Express, NextFunction, Request, Response } from 'express';
-import { Server as Http } from 'http';
+import { Server as Http } from 'node:http';
 
 import { RunModes } from '@jitar/execution';
 import { ContentTypes, Server, ServerResponse } from '@jitar/runtime';
@@ -65,7 +65,7 @@ export default class HttpServer
         this.#app.post('/workers', (request, response) => { this.#addWorker(request, response); });
         this.#app.post('/workers/:id/report', (request, response) => { this.#reportWorker(request, response); });
         this.#app.delete('/workers/:id', (request, response) => { this.#removeWorker(request, response); });
-        
+
         this.#app.use((request, response) => { this.#provide(request, response); });
     }
 
@@ -161,11 +161,11 @@ export default class HttpServer
         const args = this.#extractBodyArguments(request);
 
         const validation = this.#validator.validate(args,
-        {
-            url: { type: 'url', required: true },
-            procedureNames: { type: 'list', required: true, items: { type: 'string' } },
-            trustKey: { type: 'string', required: false }
-        });
+            {
+                url: { type: 'url', required: true },
+                procedureNames: { type: 'list', required: true, items: { type: 'string' } },
+                trustKey: { type: 'string', required: false }
+            });
 
         if (validation.valid === false)
         {
@@ -195,10 +195,10 @@ export default class HttpServer
         const args = { id: request.params.id, state: request.body.state };
 
         const validation = this.#validator.validate(args,
-        {
-            id: { type: 'string', required: true },
-            state: { type: 'string', required: true }
-        });
+            {
+                id: { type: 'string', required: true },
+                state: { type: 'string', required: true }
+            });
 
         if (validation.valid === false)
         {
@@ -227,9 +227,9 @@ export default class HttpServer
         const args = { id: request.params.id };
 
         const validation = this.#validator.validate(args,
-        {
-            id: { type: 'string', required: true },
-        });
+            {
+                id: { type: 'string', required: true },
+            });
 
         if (validation.valid === false)
         {

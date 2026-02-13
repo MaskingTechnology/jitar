@@ -1,6 +1,6 @@
 
-import { Response } from '@jitar/execution';
 import type { Request } from '@jitar/execution';
+import { Response } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
 
 import StateManager from '../common/StateManager';
@@ -13,12 +13,12 @@ import WorkerManager from './WorkerManager';
 import InvalidTrustKey from './errors/InvalidTrustKey';
 
 type Configuration =
-{
-    url: string;
-    trustKey?: string;
-    healthManager: HealthManager;
-    workerManager: WorkerManager;
-};
+    {
+        url: string;
+        trustKey?: string;
+        healthManager: HealthManager;
+        workerManager: WorkerManager;
+    };
 
 export default class LocalGateway implements Gateway
 {
@@ -36,7 +36,7 @@ export default class LocalGateway implements Gateway
         this.#healthManager = configuration.healthManager;
         this.#workerManager = configuration.workerManager;
     }
-    
+
     get url() { return this.#url; }
 
     get state() { return this.#stateManager.state; }
@@ -47,10 +47,9 @@ export default class LocalGateway implements Gateway
     {
         return this.#stateManager.start(async () =>
         {
-            await Promise.all([
-                this.#healthManager.start(),
-                this.#workerManager.start()
-            ]);
+            this.#workerManager.start();
+
+            await this.#healthManager.start();
 
             await this.updateState();
         });
@@ -60,10 +59,9 @@ export default class LocalGateway implements Gateway
     {
         return this.#stateManager.stop(async () =>
         {
-            await Promise.all([
-                this.#workerManager.stop(),
-                this.#healthManager.stop()
-            ]);
+            await this.#healthManager.stop();
+
+            this.#workerManager.stop();
         });
     }
 

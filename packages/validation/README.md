@@ -1,5 +1,5 @@
 
-# Jitar Middleware
+# Jitar Validation
 
 This package provides data validation for the [Jitar](https://jitar.dev) runtime.
 
