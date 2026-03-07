@@ -16,7 +16,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "glob": "13.0.1",
+    "glob": "13.0.6",
     "mime-types": "3.0.2"
   },
   "devDependencies": {

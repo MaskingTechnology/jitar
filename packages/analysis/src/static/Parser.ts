@@ -550,7 +550,7 @@ export default class Parser
             isPrivate = token.value.startsWith(PRIVATE_INDICATOR);
             name = isPrivate ? token.value.substring(1) : token.value;
 
-            token = tokenList.step(); // Read away the function name
+            tokenList.step(); // Read away the function name
         }
 
         const parameters = this.#parseParameters(tokenList, Group.CLOSE);

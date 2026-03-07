@@ -17,7 +17,7 @@ module.exports = {
   
             return {
                 Program: function (node) {
-                    const sourceCode = context.getSourceCode();
+                    const sourceCode = context.sourceCode;
                     const firstToken = sourceCode.getFirstToken(node);
                     
                     if (firstToken === null)
