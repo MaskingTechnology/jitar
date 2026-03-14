@@ -42,5 +42,6 @@
   },
   "optionalDependencies": {
     "@nrwl/nx-linux-x64-gnu": "^15.9.3"
-  }
+  },
+  "packageManager": "npm@11.6.2"
 }
