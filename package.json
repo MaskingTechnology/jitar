@@ -1,6 +1,6 @@
 {
   "name": "jitar-monorepo",
-  "version": "0.10.6",
+  "version": "0.10.7",
   "private": true,
   "description": "Monorepo configuration for Jitar.",
   "license": "MIT",
