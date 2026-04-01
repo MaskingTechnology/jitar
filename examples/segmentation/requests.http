@@ -1,7 +1,7 @@
 
 // Get the data (from the data segment)
 
-GET http://localhost:3000/rpc/reporting/getData?aaa=x HTTP/1.1
+GET http://localhost:3000/rpc/reporting/getData HTTP/1.1
 
 ###
 

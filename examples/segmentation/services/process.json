@@ -1,9 +1,5 @@
 {
     "url": "http://127.0.0.1:3002",
-    "middleware":
-    [
-        "./telemetry/telemetryMiddleware"
-    ],
     "worker":
     {
         "gateway": "http://127.0.0.1:3000",
