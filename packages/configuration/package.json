@@ -1,6 +1,6 @@
 {
   "name": "@jitar/configuration",
-  "version": "0.10.7",
+  "version": "0.10.8",
   "description": "Configuration library for the Jitar runtime.",
   "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
   "license": "MIT",
