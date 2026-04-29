@@ -2,28 +2,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { ConfigurationManager, BuildHelper } from 'jitar';
 import { normalizePath, PluginOption, ResolvedConfig } from 'vite';
 
 const JITAR_SOURCE_ID = 'jitar';
 const JITAR_CLIENT_ID = 'jitar/client';
 const JITAR_BUNDLE_ID = 'jitar-bundle';
-
-function formatDir(dir: string)
-{
-    dir = normalizePath(dir);
-
-    if (dir.startsWith('/'))
-    {
-        dir = dir.substring(1);
-    }
-
-    if (dir.endsWith('/'))
-    {
-        dir = dir.substring(0, dir.length - 1);
-    }
-
-    return dir;
-}
 
 function assureExtension(filename: string)
 {
@@ -35,33 +19,76 @@ function assureExtension(filename: string)
     return `${filename}.js`;
 }
 
+function createJitarBundle(middlewares: string[], targetPath: string)
+{
+    const middlewareFiles = middlewares.map(name => assureExtension(`${targetPath}/${name}`));
+
+    const jitarImport = `import { ClientBuilder, HttpRemoteBuilder } from "${JITAR_CLIENT_ID}";`;
+    const middlewareImports = middlewareFiles.map((filename, index) => `import { default as $M${index} } from "${filename}";`).join('');
+    const imports = [jitarImport, middlewareImports].join('\n');
+
+    const remoteUrl = 'const remoteUrl = document.location.origin;';
+    const segmentsArray = `const segments = [];`;
+    const middlewareItems = middlewares.map((_, index) => `$M${index}`).join(', ');
+    const middlewareArray = `const middleware = [${middlewareItems}];`;
+    const declarations = [remoteUrl, segmentsArray, middlewareArray].join('\n');
+
+    const remoteBuilder = 'const remoteBuilder = new HttpRemoteBuilder();';
+    const clientBuilder = 'const clientBuilder = new ClientBuilder(remoteBuilder);';
+    const build = 'const client = clientBuilder.build({remoteUrl, segments, middleware});';
+    const start = 'client.start();';
+    const client = [remoteBuilder, clientBuilder, build, start].join('\n');
+
+    const exports = `export * from "${JITAR_CLIENT_ID}";`;
+
+    return [imports, declarations, client, exports].join('\n');
+}
+
+
 type PluginConfig = {
-    sourceDir: string;
-    targetDir: string;
-    jitarDir: string;
+    projectRoot: string;
+    sourceRoot: string;
     jitarUrl: string;
     segments?: string[];
     middleware?: string[];
+};
+
+type PluginPaths = {
+    vite: {
+        input?: string;
+        output?: string;
+        assetOutput?: string;
+    };
+    project: {
+        root?: string;
+        source?: string;
+    };
+    jitar: {
+        input?: string;
+        output?: string;
+    };
 };
 
 export type { PluginConfig as JitarConfig };
 
 export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 {
-    const sourceDir = formatDir(pluginConfig.sourceDir);
-    const targetDir = formatDir(pluginConfig.targetDir);
-    const jitarDir = formatDir(pluginConfig.jitarDir);
+    console.log('!!! EXPERIMENTAL !!!');
+    console.log('-------------------------------------------------------------------------------------------------');
+
     const jitarUrl = pluginConfig.jitarUrl;
     const segments = pluginConfig.segments ?? [];
     const middlewares = pluginConfig.middleware ?? [];
 
-    const scopes = [ ...segments, 'remote'];
+    const paths: PluginPaths =
+    {
+        vite: { input: undefined, output: undefined, assetOutput: undefined },
+        project: { root: undefined, source: undefined },
+        jitar: { input: undefined, output: undefined }
+    };
 
-    let rootPath: string | undefined;
-    let sourcePath: string | undefined;
-    let targetPath: string | undefined;
-    let outputPath: string | undefined;
-    let jitarPath: string | undefined;
+    let buildHelper: BuildHelper;
+
     let jitarBundleFilename: string | undefined;
     let jitarBundleImported = false;
 
@@ -77,13 +104,24 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             };
         },
 
-        configResolved(resolvedConfig: ResolvedConfig)
+        async configResolved(resolvedConfig: ResolvedConfig)
         {
-            rootPath = normalizePath(path.join(resolvedConfig.root));
-            sourcePath = normalizePath(path.join(rootPath, sourceDir));
-            targetPath = normalizePath(path.join(rootPath, targetDir));
-            outputPath = normalizePath(path.join(targetPath, resolvedConfig.build.assetsDir));
-            jitarPath = normalizePath(path.join(sourcePath, jitarDir));
+            paths.vite.input = normalizePath(path.join(resolvedConfig.root));
+            paths.vite.output = normalizePath(path.join(paths.vite.input, resolvedConfig.build.outDir));
+            paths.vite.assetOutput = normalizePath(path.join(paths.vite.input, resolvedConfig.build.assetsDir));
+
+            paths.project.root = normalizePath(path.join(paths.vite.input, pluginConfig.projectRoot));
+            paths.project.source = normalizePath(path.join(paths.vite.input, pluginConfig.sourceRoot));
+
+            const configurationManager = new ConfigurationManager(paths.project.root);
+            // await configurationManager.configureEnvironment(pluginConfig.environmentFile);
+
+            const configuration = await configurationManager.getRuntimeConfiguration();
+            paths.jitar.input = normalizePath(path.join(paths.project.root, configuration.source));
+            paths.jitar.output = normalizePath(path.join(paths.project.root, configuration.target));
+
+            buildHelper = new BuildHelper(configuration);
+            await buildHelper.readApplication();
         },
 
         options(options)
@@ -135,76 +173,45 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
                     return JITAR_BUNDLE_ID;
                 }
-
-                const resolution = await this.resolve(source, importer, options);
-
-                if (resolution === null || jitarPath === undefined || resolution.id.includes(jitarPath) === false)
-                {
-                    return null;
-                }
-
-                const cacheId = resolution.id.replace(sourcePath!, targetPath!);
-
-                // First check if the module is a scoped module (segmented file)
-
-                for (const scope of scopes)
-                {
-                    const scopeId = cacheId.replace('.ts', `.${scope}.js`);
-
-                    if (fs.existsSync(scopeId))
-                    {
-                        return scopeId;
-                    }
-                }
-
-                // Next, check if the module is a common module (unscoped file)
-
-                const scopeId = cacheId.replace('.ts', '.js');
-
-                if (fs.existsSync(scopeId))
-                {
-                    return scopeId;
-                }
-
-                // It's doesn't seem to be a cached file, so we can return the original resolution id
-
-                return resolution.id;
             }
         },
 
         load(id)
         {
-            // Create the jitar client bundle content
-
-            if (id !== JITAR_BUNDLE_ID)
+            if (id === JITAR_BUNDLE_ID)
             {
-                return null;
+                return createJitarBundle(middlewares, paths.vite.output!);
             }
 
-            const segmentFiles = segments.map(name => `${targetPath}/${name}.segment.js`);
-            const middlewareFiles = middlewares.map(name => assureExtension(`${targetPath}/${name}`));
+            if (id.startsWith(paths.project.source!))
+            {
+                if (id.startsWith(paths.vite.input!))
+                {
+                    return null;
+                }
 
-            const jitarImport = `import { ClientBuilder, HttpRemoteBuilder } from "${JITAR_CLIENT_ID}";`;
-            const segmentImports = segmentFiles.map((filename, index) => `import { default as $S${index} } from "${filename}";`).join('');
-            const middlewareImports = middlewareFiles.map((filename, index) => `import { default as $M${index} } from "${filename}";`).join('');
-            const imports = [jitarImport, segmentImports, middlewareImports].join('\n');
+                const relativeId = id
+                    .replace(paths.project.source!, '')
+                    .replace('.ts', '.js');
+                
+                if (relativeId.endsWith('.js'))
+                {
+                    try
+                    {
+                        return buildHelper.generateModuleCode(relativeId, segments);
+                    }
+                    catch (error)
+                    {
+                        const message = error instanceof Error ? error.message : String(error);
 
-            const remoteUrl = 'const remoteUrl = document.location.origin;';
-            const segmentsItems = segments.map((_, index) => `$S${index}`).join(', ');
-            const segmentsArray = `const segments = [${segmentsItems}];`;
-            const middlewareItems = middlewares.map((_, index) => `$M${index}`).join(', ');
-            const middlewareArray = `const middleware = [${middlewareItems}];`;
-            const declarations = [remoteUrl, segmentsArray, middlewareArray].join('\n');
+                        console.error('ERROR:', message);
+                        
+                        return null;
+                    }
+                }
+            }
 
-            const remoteBuilder = 'const remoteBuilder = new HttpRemoteBuilder();';
-            const clientBuilder = 'const clientBuilder = new ClientBuilder(remoteBuilder);';
-            const build = 'const client = clientBuilder.build({remoteUrl, segments, middleware});';
-            const start = 'client.start();';
-            const client = [remoteBuilder, clientBuilder, build, start].join('\n');
-
-            const exports = `export * from "${JITAR_CLIENT_ID}";`;
-
-            return [imports, declarations, client, exports].join('\n');
+            return null;
         },
 
         generateBundle(options, bundle)
@@ -228,7 +235,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
         {
             // Add the jitar client bundle to the HTML if it wasn't imported
             // by any of the application files.
-
+            
             if (jitarBundleImported === true)
             {
                 return html;
@@ -238,14 +245,14 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             {
                 // Dev mode: insert the pre generated jitar bundle
 
-                if (outputPath === undefined)
+                if (paths.vite.assetOutput === undefined)
                 {
                     console.warn('Output path not found!');
 
                     return html;
                 }
 
-                const filenames = fs.readdirSync(outputPath);
+                const filenames = fs.readdirSync(paths.vite.assetOutput);
 
                 const jitarFilename = filenames.find(fileName => fileName.startsWith(JITAR_BUNDLE_ID) && fileName.endsWith('.js'));
 
@@ -256,7 +263,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                     return html;
                 }
 
-                const jitarBundle = fs.readFileSync(path.join(outputPath, jitarFilename), 'utf-8');
+                const jitarBundle = fs.readFileSync(path.join(paths.vite.assetOutput, jitarFilename), 'utf-8');
 
                 return html.replace('<script', `<script type="module">${jitarBundle}</script>\n    <script`);
             }
