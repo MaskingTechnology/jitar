@@ -5,11 +5,14 @@ import { Files, LocalFileManager } from '@jitar/sourcing';
 
 import { ApplicationReader } from './source';
 import { ApplicationBuilder } from './target';
+import { FileHelper } from './utils';
+
 import ProjectFileManager from './ProjectFileManager';
 
 export default class BuildManager
 {
     readonly #logger: Logger;
+    readonly #fileHelper: FileHelper;
 
     readonly #fileManager: ProjectFileManager;
 
@@ -19,11 +22,17 @@ export default class BuildManager
     constructor(configuration: RuntimeConfiguration, logLevel?: LogLevel)
     {
         this.#logger = new Logger(logLevel);
+        this.#fileHelper = new FileHelper();
 
-        const sourceFileManager = new LocalFileManager(configuration.source);
-        const targetFileManager = new LocalFileManager(configuration.target);
-        const resourceFileManager = new LocalFileManager(configuration.resources);
-        const segmentFileManager = new LocalFileManager(configuration.segments);
+        const source = this.#fileHelper.makePathAbsolute(configuration.source, configuration.meta.root);
+        const target = this.#fileHelper.makePathAbsolute(configuration.target, configuration.meta.root);
+        const resources = this.#fileHelper.makePathAbsolute(configuration.resources, configuration.meta.root);
+        const segments = this.#fileHelper.makePathAbsolute(configuration.segments, configuration.meta.root);
+
+        const sourceFileManager = new LocalFileManager(source);
+        const targetFileManager = new LocalFileManager(target);
+        const resourceFileManager = new LocalFileManager(resources);
+        const segmentFileManager = new LocalFileManager(segments);
 
         this.#fileManager = new ProjectFileManager(sourceFileManager, targetFileManager, resourceFileManager, segmentFileManager);
 

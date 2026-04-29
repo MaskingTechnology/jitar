@@ -82,7 +82,7 @@ export default class LocationRewriter
     #rewriteFrom(filename: string, from: string): string
     {
         const callingModulePath = this.#fileHelper.extractPath(filename);
-        const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
+        const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath, '');
 
         return this.#sourceFileManager.isDirectory(translated)
             ? `${from}/${Files.INDEX}`

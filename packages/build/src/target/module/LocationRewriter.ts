@@ -141,7 +141,7 @@ export default abstract class LocationRewriter
         const from = this.#fileHelper.stripPath(dependency.from as string);
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         
-        return this.#fileHelper.makePathAbsolute(from, callingModulePath);
+        return this.#fileHelper.makePathAbsolute(from, callingModulePath, '');
     }
 
     #getModuleImportKeys(targetModuleFilename: string, dependency: ESImport | ESExport): ModuleImportKeys
