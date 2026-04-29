@@ -73,9 +73,6 @@ export type { PluginConfig as JitarConfig };
 
 export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 {
-    console.log('!!! EXPERIMENTAL !!!');
-    console.log('-------------------------------------------------------------------------------------------------');
-
     const jitarUrl = pluginConfig.jitarUrl;
     const segments = pluginConfig.segments ?? [];
     const middlewares = pluginConfig.middleware ?? [];
@@ -104,7 +101,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             };
         },
 
-        async configResolved(resolvedConfig: ResolvedConfig)
+        configResolved(resolvedConfig: ResolvedConfig)
         {
             paths.vite.input = normalizePath(path.join(resolvedConfig.root));
             paths.vite.output = normalizePath(path.join(paths.vite.input, resolvedConfig.build.outDir));
@@ -112,13 +109,16 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
             paths.project.root = normalizePath(path.join(paths.vite.input, pluginConfig.projectRoot));
             paths.project.source = normalizePath(path.join(paths.vite.input, pluginConfig.sourceRoot));
+        },
 
+        async buildStart()
+        {
             const configurationManager = new ConfigurationManager(paths.project.root);
             // await configurationManager.configureEnvironment(pluginConfig.environmentFile);
 
             const configuration = await configurationManager.getRuntimeConfiguration();
-            paths.jitar.input = normalizePath(path.join(paths.project.root, configuration.source));
-            paths.jitar.output = normalizePath(path.join(paths.project.root, configuration.target));
+            paths.jitar.input = normalizePath(path.join(paths.project.root!, configuration.source));
+            paths.jitar.output = normalizePath(path.join(paths.project.root!, configuration.target));
 
             buildHelper = new BuildHelper(configuration);
             await buildHelper.readApplication();
