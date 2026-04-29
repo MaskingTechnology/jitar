@@ -79,30 +79,9 @@ export default class Builder
     {
         // The remote module contains calls to segmented procedures only
 
-        const implementations = this.#getImplementations(module, segments);
         const filename = this.#fileHelper.addSubExtension(module.filename, 'remote');
-        const code = this.#remoteBuilder.build(implementations);
+        const code = this.#remoteBuilder.build(module, segments);
 
         return this.#targetFileManager.write(filename, code);
-    }
-
-    #getImplementations(module: Module, segments: Segment[]): Implementation[]
-    {
-        const segmentModules = segments.map(segment => segment.getModule(module.filename));
-        const implementations = segmentModules.flatMap(segmentModule => segmentModule!.getImplementations());
-
-        // Implementation can be duplicated across segments
-        // We need to ensure that each implementation is unique
-
-        const unique = new Map<string, Implementation>();
-
-        for (const implementation of implementations)
-        {
-            const key = `${implementation.fqn}:${implementation.version.toString()}`;
-
-            unique.set(key, implementation);
-        }
-
-        return [...unique.values()];
     }
 }

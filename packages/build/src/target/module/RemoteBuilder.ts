@@ -4,13 +4,15 @@ import type { ESParameter } from '@jitar/analysis';
 import { AccessLevels } from '@jitar/execution';
 
 import { Keywords } from '../../definitions';
-import type { SegmentImplementation as Implementation } from '../../source';
+import type { SegmentImplementation as Implementation, Module, Segment } from '../../source';
 
 export default class RemoteBuilder
 {
-    build(implementations: Implementation[]): string
+    build(module: Module, segments: Segment[]): string
     {
         let code = '';
+
+        const implementations = this.#getImplementations(module, segments);
 
         for (const implementation of implementations)
         {
@@ -20,6 +22,26 @@ export default class RemoteBuilder
         }
 
         return code.trim();
+    }
+
+    #getImplementations(module: Module, segments: Segment[]): Implementation[]
+    {
+        const segmentModules = segments.map(segment => segment.getModule(module.filename));
+        const implementations = segmentModules.flatMap(segmentModule => segmentModule!.getImplementations());
+
+        // Implementation can be duplicated across segments
+        // We need to ensure that each implementation is unique
+
+        const unique = new Map<string, Implementation>();
+
+        for (const implementation of implementations)
+        {
+            const key = `${implementation.fqn}:${implementation.version.toString()}`;
+
+            unique.set(key, implementation);
+        }
+
+        return [...unique.values()];
     }
 
     #createPrivateCode(implementation: Implementation): string
