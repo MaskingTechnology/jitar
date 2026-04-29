@@ -1,5 +1,5 @@
 
-import { Parser } from '@jitar/analysis';
+import { ESModule, Parser } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
 import FileNotLoaded from './errors/FileNotLoaded';
@@ -32,21 +32,14 @@ export default class Reader
 
     async read(filename: string): Promise<Module>
     {
-        const relativeLocation = this.#sourceFileManager.getRelativeLocation(filename);
-        const code = await this.#loadCode(filename);
-        const rewrittenCode = this.#locationRewriter.rewrite(relativeLocation, code);
-        const module = this.#parser.parse(rewrittenCode);
-
-        return new Module(relativeLocation, rewrittenCode, module);
-    }
-
-    async #loadCode(filename: string): Promise<string>
-    {
         try
         {
-            const content = await this.#sourceFileManager.getContent(filename);
+            const relativeLocation = this.#sourceFileManager.getRelativeLocation(filename);
+            const code = await this.#loadCode(filename);
+            const rewrittenCode = this.#locationRewriter.rewrite(relativeLocation, code);
+            const module = this.#parser.parse(rewrittenCode);
 
-            return content.toString();
+            return new Module(relativeLocation, rewrittenCode, module);
         }
         catch (error: unknown)
         {
@@ -54,5 +47,12 @@ export default class Reader
 
             throw new FileNotLoaded(filename, message);
         }
+    }
+
+    async #loadCode(filename: string): Promise<string>
+    {
+        const content = await this.#sourceFileManager.getContent(filename);
+
+        return content.toString();
     }
 }
