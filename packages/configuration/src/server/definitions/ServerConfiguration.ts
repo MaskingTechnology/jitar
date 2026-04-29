@@ -22,6 +22,12 @@ type ServerConfiguration =
     standalone?: StandaloneConfiguration;
     worker?: WorkerConfiguration;
     remoteWorker?: RemoteWorkerConfiguration;
+
+    meta:
+    {
+        root: string;
+        configFile: string;
+    }
 };
 
 export default ServerConfiguration;

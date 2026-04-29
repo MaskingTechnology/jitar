@@ -32,6 +32,12 @@ export default class ConfigurationBuilder
         configuration.segments ??= DefaultValues.SEGMENTS;
         configuration.resources ??= DefaultValues.RESOURCES;
 
+        configuration.meta =
+        {
+            root: this.#reader.getRootLocation(),
+            configFile: filename
+        };
+
         return configuration;
     }
 }

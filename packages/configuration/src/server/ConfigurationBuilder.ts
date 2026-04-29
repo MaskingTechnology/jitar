@@ -27,6 +27,12 @@ export default class ConfigurationBuilder
             throw new ServerConfigurationInvalid(validation);
         }
 
+        configuration.meta =
+        {
+            root: this.#reader.getRootLocation(),
+            configFile: filename
+        };
+
         return configuration;
     }
 }
