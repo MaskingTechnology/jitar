@@ -20,11 +20,11 @@ describe('model/ESClass', () =>
             expect(declarations[1]).toBeInstanceOf(ESField);
             expect(declarations[1].identifier).toBe('age');
 
-            expect(declarations[1]).toBeInstanceOf(ESField);
-            expect(declarations[1].identifier).toBe('length');
+            expect(declarations[2]).toBeInstanceOf(ESField);
+            expect(declarations[2].identifier).toBe('length');
 
-            expect(declarations[1]).toBeInstanceOf(ESField);
-            expect(declarations[1].identifier).toBe('secret');
+            expect(declarations[3]).toBeInstanceOf(ESField);
+            expect(declarations[3].identifier).toBe('secret');
         });
     });
 
@@ -73,10 +73,10 @@ describe('model/ESClass', () =>
             expect(functions.length).toBe(2);
 
             expect(functions[0]).toBeInstanceOf(ESMethod);
-            expect(functions[0].identifier).toBe('createJohn');
+            expect(functions[0].identifier).toBe('secretStuff');
 
             expect(functions[1]).toBeInstanceOf(ESMethod);
-            expect(functions[1].identifier).toBe('sum');
+            expect(functions[1].identifier).toBe('toString');
         });
     });
 

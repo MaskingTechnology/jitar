@@ -27,22 +27,22 @@ describe('model/ESModule', () =>
             expect(exports.length).toBe(1);
 
             expect(exports[0]).toBeInstanceOf(ESExport);
-            expect(exports[0].members.length).toBe(2);
+            expect(exports[0].members.length).toBe(4);
         });
     });
 
     describe('.variables', () =>
     {
-        it('should filter field members', () =>
+        it('should filter variable members', () =>
         {
             const declarations = esModule.variables;
             expect(declarations.length).toBe(2);
 
             expect(declarations[0]).toBeInstanceOf(ESVariable);
-            expect(declarations[0].identifier).toBe('name');
+            expect(declarations[0].identifier).toBe('peter');
 
             expect(declarations[1]).toBeInstanceOf(ESVariable);
-            expect(declarations[1].identifier).toBe('age');
+            expect(declarations[1].identifier).toBe('bas');
         });
     });
 

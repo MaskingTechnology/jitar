@@ -50,6 +50,19 @@ export default class Parser
         return new ESModule(statements);
     }
 
+    parseStatement(code: string): ESStatement
+    {
+        const tokenList = this.#lexer.tokenize(code);
+        const statement = this.#parseNext(tokenList);
+
+        if (statement === undefined)
+        {
+            throw new UnexpectedParseResult('a statement');
+        }
+
+        return statement;
+    }
+
     parseImport(code: string): ESImport
     {
         const tokenList = this.#lexer.tokenize(code);
@@ -269,7 +282,7 @@ export default class Parser
 
         if (token.isType(TokenType.LITERAL))
         {
-            const from = this.#parseForm(token.value);
+            const from = this.#parseFrom(token.value);
 
             return new ESImport(members, from);
         }
@@ -277,7 +290,7 @@ export default class Parser
         {
             token = tokenList.step(); // Read away the open group
 
-            const from = this.#parseForm(token.value);
+            const from = this.#parseFrom(token.value);
 
             tokenList.step(2); // Read away the from value and scope close
 
@@ -289,7 +302,7 @@ export default class Parser
             // Keep the * indicator, otherwise use the default identifier
             const identifier = token.hasValue(Operator.MULTIPLY) ? Operator.MULTIPLY : DEFAULT_IDENTIFIER;
 
-            let alias: string | undefined = undefined;
+            let alias = token.value;
 
             token = tokenList.step(); // Read away the identifier
 
@@ -325,7 +338,7 @@ export default class Parser
 
         token = tokenList.step(); // Read away the FROM keyword
 
-        const from = this.#parseForm(token.value);
+        const from = this.#parseFrom(token.value);
 
         tokenList.step(); // Read away the source
 
@@ -368,7 +381,7 @@ export default class Parser
         }
 
         const identifier = this.#isIdentifier(token) ? token.value : ANONYMOUS_IDENTIFIER;
-        const alias = undefined;
+        const alias = isDefault ? DEFAULT_IDENTIFIER : undefined;
 
         let from: string | undefined = undefined;
 
@@ -377,7 +390,7 @@ export default class Parser
         if (token?.hasValue(Keyword.FROM))
         {
             token = tokenList.step(); // Read away the FROM keyword
-            from = this.#parseForm(token.value);
+            from = this.#parseFrom(token.value);
         }
 
         if (stepSize > 0)
@@ -402,7 +415,7 @@ export default class Parser
         if (token?.hasValue(Keyword.FROM))
         {
             token = tokenList.step(); // Read away the FROM keyword
-            from = this.#parseForm(token.value);
+            from = this.#parseFrom(token.value);
         }
 
         tokenList.step(); // Read away the source
@@ -410,7 +423,7 @@ export default class Parser
         return new ESExport(members, from);
     }
 
-    #parseForm(from: string): string
+    #parseFrom(from: string): string
     {
         return from.slice(1, -1);
     }
@@ -609,7 +622,6 @@ export default class Parser
         if (token.hasValue(Group.OPEN))
         {
             parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
-            token = tokenList.current;
         }
         else
         {
@@ -618,6 +630,8 @@ export default class Parser
 
             parameters = [parameter];
         }
+
+        token = tokenList.current;
 
         if (token.hasValue(Operator.ARROW) === false)
         {
