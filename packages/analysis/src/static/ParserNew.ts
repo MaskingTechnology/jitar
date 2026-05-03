@@ -567,6 +567,11 @@ export default class Parser
 
         if (token.hasValue(Operator.ASSIGN) === false)
         {
+            if (token.hasValue(Divider.TERMINATOR))
+            {
+                tokenList.step(); // Read away the terminator
+            }
+            
             return undefined;
         }
 
@@ -742,11 +747,11 @@ export default class Parser
             }
             else if (token.hasValue(Keyword.GET))
             {
-                return this.#parseGetter(tokenList, visibility, location);
+                return this.#parseGetter(tokenList, location);
             }
             else if (token.hasValue(Keyword.SET))
             {
-                return this.#parseSetter(tokenList, visibility, location);
+                return this.#parseSetter(tokenList, location);
             }
             else if (token.hasValue(Prefix.GENERATOR))
             {
@@ -773,6 +778,8 @@ export default class Parser
         
         const parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
 
+        token = tokenList.current;
+
         if (token.hasValue(Scope.OPEN) === false)
         {
             throw new ExpectedToken(Scope.OPEN, token.start);
@@ -783,13 +790,31 @@ export default class Parser
         return new ESConstructor(parameters, body);
     }
 
-    #parseGetter(tokenList: TokenList, visibility: ClassVisibility, location: ClassLocation): ESGetter
+    #parseGetter(tokenList: TokenList, location: ClassLocation): ESGetter
     {
+        let visibility: ClassVisibility = 'public';
+
         let token = tokenList.step(); // Read away the get keyword
         
+        if (token.hasValue(Prefix.PRIVATE))
+        {
+            visibility = 'private';
+
+            token = tokenList.step(); // Read away the private indicator
+        }
+
         const identifier = token.value;
 
         token = tokenList.step(); // Read away the identifier
+
+        const parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
+
+        if (parameters.length !== 0)
+        {
+            throw new UnexpectedParseResult('an empty parameter list');
+        }
+
+        token = tokenList.current;
 
         if (token.hasValue(Scope.OPEN) === false)
         {
@@ -801,9 +826,18 @@ export default class Parser
         return new ESGetter(identifier, visibility, location, body);
     }
 
-    #parseSetter(tokenList: TokenList, visibility: ClassVisibility, location: ClassLocation): ESSetter
+    #parseSetter(tokenList: TokenList, location: ClassLocation): ESSetter
     {
-        let token = tokenList.step(); // Read away the set keyword
+        let visibility: ClassVisibility = 'public';
+
+        let token = tokenList.step(); // Read away the get keyword
+        
+        if (token.hasValue(Prefix.PRIVATE))
+        {
+            visibility = 'private';
+
+            token = tokenList.step(); // Read away the private indicator
+        }
 
         const identifier = token.value;
 
@@ -863,14 +897,7 @@ export default class Parser
 
         token = tokenList.step(); // Read away the name
 
-        let initializer: ESStatement | undefined = undefined;
-
-        if (token.hasValue(Operator.ASSIGN))
-        {
-            tokenList.step(); // Read away the assignment operator
-
-            initializer = this.#parseInitializer(tokenList);
-        }
+        const initializer = this.#parseInitializer(tokenList);
 
         return new ESField(identifier, visibility, location, initializer);
     }
@@ -916,9 +943,17 @@ export default class Parser
                 token = tokenList.step();
             }
 
-            if (token === undefined || this.#atEndOfStatement(token))
+            if (token === undefined)
             {
-                // End of the list
+                break;
+            }
+
+            if (this.#atEndOfStatement(token))
+            {
+                if (token.hasValue(Divider.TERMINATOR))
+                {
+                    tokenList.step(); // Read away the terminator
+                }
 
                 break;
             }

@@ -23,42 +23,42 @@ describe('parser/Parser', () =>
         {
             const expression = parser.parseStatement(VALUES.ARRAY);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toBe('[ 1 , "foo" , false , new Person ( "Peter" , 42 ) , { a : 1 , b : 2 } ]');
+            expect(expression.toString()).toEqual('[ 1 , "foo" , false , new Person ( "Peter" , 42 ) , { a : 1 , b : 2 } ]');
         });
 
         it('should parse an object', () =>
         {
             const expression = parser.parseStatement(VALUES.OBJECT);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toBe('{ key1 : "value1" , "key2" : new Person ( ) .toString ( ) }');
+            expect(expression.toString()).toEqual('{ key1 : "value1" , "key2" : new Person ( ) .toString ( ) }');
         });
 
         it('should parse an expression', () =>
         {
             const expression = parser.parseStatement(VALUES.EXPRESSION);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toBe('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
+            expect(expression.toString()).toEqual('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
         });
 
         it('should parse a grouped expression', () =>
         {
             const expression = parser.parseStatement(VALUES.EXPRESSION_GROUP);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toBe('( a + b ) * c');
+            expect(expression.toString()).toEqual('( a + b ) * c');
         });
 
         it('should parse an if...else expression', () =>
         {
             const expression = parser.parseStatement(VALUES.IF_ELSE);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toBe('if ( true ) { return "value1" ; } else { return "value2" ; }');
+            expect(expression.toString()).toEqual('if ( true ) { return "value1" ; } else { return "value2" ; }');
         });
 
         it('should parse an try...catch...finally expression', () =>
         {
             const expression = parser.parseStatement(VALUES.TRY_CATCH_FINALLY);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toBe('try { sum ( 1 , 2 ) ; } catch ( error ) { console.error ( error ) ; } finally { console.log ( "finally" ) ; }');
+            expect(expression.toString()).toEqual('try { sum ( 1 , 2 ) ; } catch ( error ) { console.error ( error ) ; } finally { console.log ( "finally" ) ; }');
         });
     });
 
@@ -68,17 +68,17 @@ describe('parser/Parser', () =>
         {
             const imported = parser.parseImport(IMPORTS.LOAD);
             expect(imported.members.length).toBe(0);
-            expect(imported.from).toBe('module');
+            expect(imported.from).toEqual('module');
         });
 
         it('should parse importing a single member', () =>
         {
             const imported = parser.parseImport(IMPORTS.IMPORT);
             expect(imported.members.length).toBe(1);
-            expect(imported.from).toBe('module');
+            expect(imported.from).toEqual('module');
 
             const member = imported.members[0];
-            expect(member.identifier).toBe('member');
+            expect(member.identifier).toEqual('member');
             expect(member.alias).toBeUndefined();
         });
 
@@ -86,47 +86,47 @@ describe('parser/Parser', () =>
         {
             const imported = parser.parseImport(IMPORTS.IMPORT_AS);
             expect(imported.members.length).toBe(1);
-            expect(imported.from).toBe('module');
+            expect(imported.from).toEqual('module');
 
             const member = imported.members[0];
-            expect(member.identifier).toBe('member');
-            expect(member.alias).toBe('alias');
+            expect(member.identifier).toEqual('member');
+            expect(member.alias).toEqual('alias');
         });
 
         it('should parse importing all members', () =>
         {
             const imported = parser.parseImport(IMPORTS.IMPORT_ALL);
             expect(imported.members.length).toBe(1);
-            expect(imported.from).toBe('module');
+            expect(imported.from).toEqual('module');
 
             const member = imported.members[0];
-            expect(member.identifier).toBe('*');
-            expect(member.alias).toBe('name');
+            expect(member.identifier).toEqual('*');
+            expect(member.alias).toEqual('name');
         });
 
         it('should parse importing the default member', () =>
         {
             const imported = parser.parseImport(IMPORTS.IMPORT_DEFAULT);
             expect(imported.members.length).toBe(1);
-            expect(imported.from).toBe('module');
+            expect(imported.from).toEqual('module');
 
             const member = imported.members[0];
-            expect(member.identifier).toBe('default');
-            expect(member.alias).toBe('name');
+            expect(member.identifier).toEqual('default');
+            expect(member.alias).toEqual('name');
         });
 
         it('should parse importing the default with another member', () =>
         {
             const imported = parser.parseImport(IMPORTS.IMPORT_DEFAULT_MEMBER);
             expect(imported.members.length).toBe(2);
-            expect(imported.from).toBe('module');
+            expect(imported.from).toEqual('module');
 
             const first = imported.members[0];
-            expect(first.identifier).toBe('default');
-            expect(first.alias).toBe('name');
+            expect(first.identifier).toEqual('default');
+            expect(first.alias).toEqual('name');
 
             const second = imported.members[1];
-            expect(second.identifier).toBe('member');
+            expect(second.identifier).toEqual('member');
             expect(second.alias).toBeUndefined();
         });
 
@@ -134,37 +134,37 @@ describe('parser/Parser', () =>
         {
             const imported = parser.parseImport(IMPORTS.IMPORT_DEFAULT_MEMBER_AS);
             expect(imported.members.length).toBe(2);
-            expect(imported.from).toBe('module');
+            expect(imported.from).toEqual('module');
 
             const first = imported.members[0];
-            expect(first.identifier).toBe('default');
-            expect(first.alias).toBe('name');
+            expect(first.identifier).toEqual('default');
+            expect(first.alias).toEqual('name');
 
             const second = imported.members[1];
-            expect(second.identifier).toBe('member');
-            expect(second.alias).toBe('alias');
+            expect(second.identifier).toEqual('member');
+            expect(second.alias).toEqual('alias');
         });
 
         it('should parse importing the default with other members and aliases', () =>
         {
             const imported = parser.parseImport(IMPORTS.IMPORT_MULTIPLE_MEMBERS_AS);
             expect(imported.members.length).toBe(2);
-            expect(imported.from).toBe('module');
+            expect(imported.from).toEqual('module');
 
             const first = imported.members[0];
-            expect(first.identifier).toBe('name');
+            expect(first.identifier).toEqual('name');
             expect(first.alias).toBeUndefined();
 
             const second = imported.members[1];
-            expect(second.identifier).toBe('member');
-            expect(second.alias).toBe('alias');
+            expect(second.identifier).toEqual('member');
+            expect(second.alias).toEqual('alias');
         });
 
         it('should parse importing modules dynamically', () =>
         {
             const imported = parser.parseImport(IMPORTS.IMPORT_DYNAMIC);
             expect(imported.members.length).toBe(0);
-            expect(imported.from).toBe('module');
+            expect(imported.from).toEqual('module');
         });
     });
 
@@ -177,7 +177,7 @@ describe('parser/Parser', () =>
             expect(exported.from).toBeUndefined();
 
             const member = exported.members[0];
-            expect(member.identifier).toBe('member');
+            expect(member.identifier).toEqual('member');
             expect(member.alias).toBeUndefined();
         });
 
@@ -188,8 +188,8 @@ describe('parser/Parser', () =>
             expect(exported.from).toBeUndefined();
 
             const member = exported.members[0];
-            expect(member.identifier).toBe('member');
-            expect(member.alias).toBe('alias');
+            expect(member.identifier).toEqual('member');
+            expect(member.alias).toEqual('alias');
         });
 
         it('should parse exporting a default', () =>
@@ -199,8 +199,8 @@ describe('parser/Parser', () =>
             expect(exported.from).toBeUndefined();
 
             const member = exported.members[0];
-            expect(member.identifier).toBe('name');
-            expect(member.alias).toBe('default');
+            expect(member.identifier).toEqual('name');
+            expect(member.alias).toEqual('default');
         });
 
         it('should parse exporting multiple members', () =>
@@ -210,11 +210,11 @@ describe('parser/Parser', () =>
             expect(exported.from).toBeUndefined();
 
             const first = exported.members[0];
-            expect(first.identifier).toBe('name');
+            expect(first.identifier).toEqual('name');
             expect(first.alias).toBeUndefined();
 
             const second = exported.members[1];
-            expect(second.identifier).toBe('member');
+            expect(second.identifier).toEqual('member');
             expect(second.alias).toBeUndefined();
         });
 
@@ -225,12 +225,12 @@ describe('parser/Parser', () =>
             expect(exported.from).toBeUndefined();
 
             const first = exported.members[0];
-            expect(first.identifier).toBe('name');
+            expect(first.identifier).toEqual('name');
             expect(first.alias).toBeUndefined();
 
             const second = exported.members[1];
-            expect(second.identifier).toBe('member');
-            expect(second.alias).toBe('alias');
+            expect(second.identifier).toEqual('member');
+            expect(second.alias).toEqual('alias');
         });
 
         it('should parse exporting a class declaration', () =>
@@ -240,7 +240,7 @@ describe('parser/Parser', () =>
             expect(exported.from).toBeUndefined();
 
             const member = exported.members[0];
-            expect(member.identifier).toBe('name');
+            expect(member.identifier).toEqual('name');
             expect(member.alias).toBeUndefined();
         });
 
@@ -251,7 +251,7 @@ describe('parser/Parser', () =>
             expect(exported.from).toBeUndefined();
 
             const member = exported.members[0];
-            expect(member.identifier).toBe('name');
+            expect(member.identifier).toEqual('name');
             expect(member.alias).toBeUndefined();
         });
 
@@ -262,7 +262,7 @@ describe('parser/Parser', () =>
             expect(exported.from).toBeUndefined();
 
             const member = exported.members[0];
-            expect(member.identifier).toBe('name');
+            expect(member.identifier).toEqual('name');
             expect(member.alias).toBeUndefined();
         });
 
@@ -270,10 +270,10 @@ describe('parser/Parser', () =>
         {
             const exported = parser.parseExport(EXPORTS.REEXPORT_ALL);
             expect(exported.members.length).toBe(1);
-            expect(exported.from).toBe('module');
+            expect(exported.from).toEqual('module');
 
             const member = exported.members[0];
-            expect(member.identifier).toBe('');
+            expect(member.identifier).toEqual('');
             expect(member.alias).toBeUndefined();
         });
 
@@ -281,10 +281,10 @@ describe('parser/Parser', () =>
         {
             const exported = parser.parseExport(EXPORTS.REEXPORT_MEMBER);
             expect(exported.members.length).toBe(1);
-            expect(exported.from).toBe('module');
+            expect(exported.from).toEqual('module');
 
             const member = exported.members[0];
-            expect(member.identifier).toBe('member');
+            expect(member.identifier).toEqual('member');
             expect(member.alias).toBeUndefined();
         });
     });
@@ -294,20 +294,18 @@ describe('parser/Parser', () =>
         it('should parse an empty declaration', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.EMPTY);
-
-            expect(variable.identifier).toBe('name');
+            expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toBe('let');
+            expect(variable.type).toEqual('let');
             expect(variable.initializer).toBeUndefined();
         });
 
         it('should parse a const variable', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.CONST);
-
-            expect(variable.identifier).toBe('name');
+            expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toBe('const');
+            expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual("'const'");
         });
@@ -315,10 +313,9 @@ describe('parser/Parser', () =>
         it('should parse a let declaration with value', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.LET);
-
-            expect(variable.identifier).toBe('name');
+            expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toBe('let');
+            expect(variable.type).toEqual('let');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual("'let'");
         });
@@ -326,10 +323,9 @@ describe('parser/Parser', () =>
         it('should parse a var declaration with value', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.VAR);
-
-            expect(variable.identifier).toBe('name');
+            expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toBe('var');
+            expect(variable.type).toEqual('var');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual("'var'");
         });
@@ -337,10 +333,9 @@ describe('parser/Parser', () =>
         it('should parse a declaration with multiple declarations', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.MULTIPLE);
-
-            expect(variable.identifier).toBe('name1');
+            expect(variable.identifier).toEqual('name1');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toBe('let');
+            expect(variable.type).toEqual('let');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual('( 1 + 2 ) * 3');
         });
@@ -348,10 +343,9 @@ describe('parser/Parser', () =>
         it('should parse a declaration with an expression', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.EXPRESSION);
-
-            expect(variable.identifier).toBe('number');
+            expect(variable.identifier).toEqual('number');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toBe('const');
+            expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
         });
@@ -359,10 +353,9 @@ describe('parser/Parser', () =>
         it('should parse a declaration with an array value', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.ARRAY);
-
-            expect(variable.identifier).toBe('array');
+            expect(variable.identifier).toEqual('array');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toBe('const');
+            expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual("[ 'value1' , 'value2' ]");
         });
@@ -370,10 +363,9 @@ describe('parser/Parser', () =>
         it('should parse a declaration with an array value', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.OBJECT);
-
-            expect(variable.identifier).toBe('object');
+            expect(variable.identifier).toEqual('object');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toBe('const');
+            expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual("{ key1 : 'value1' , key2 : 'value2' }");
         });
@@ -381,10 +373,9 @@ describe('parser/Parser', () =>
         it('should parse a declaration with a regex value', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.REGEX);
-
-            expect(variable.identifier).toBe('regex');
+            expect(variable.identifier).toEqual('regex');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toBe('const');
+            expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual("/regex/g");
         });
@@ -392,10 +383,9 @@ describe('parser/Parser', () =>
         it('should parse a declaration that is destructuring an array', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.DESTRUCTURING_ARRAY);
-
-            expect(variable.identifier).toBe('[ value1, value2 = true ]');
+            expect(variable.identifier).toEqual('[ value1, value2 = true ]');
             expect(variable.binding).toBeInstanceOf(ESArrayBinding);
-            expect(variable.type).toBe('const');
+            expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual('array');
 
@@ -413,16 +403,15 @@ describe('parser/Parser', () =>
             expect(secondElement.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(secondElement.binding.toString()).toEqual('value2');
             expect(secondElement.initializer).toBeInstanceOf(ESExpression);
-            expect(secondElement.initializer?.toString()).toBe('true');
+            expect(secondElement.initializer?.toString()).toEqual('true');
         });
 
         it('should parse a declaration that is destructuring an object', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.DESTRUCTURING_OBJECT);
-
-            expect(variable.identifier).toBe('{ key1, key2 = false }');
+            expect(variable.identifier).toEqual('{ key1, key2 = false }');
             expect(variable.binding).toBeInstanceOf(ESObjectBinding);
-            expect(variable.type).toBe('const');
+            expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual('object');
 
@@ -439,16 +428,15 @@ describe('parser/Parser', () =>
             expect(secondElement.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(secondElement.binding.toString()).toEqual('key2');
             expect(secondElement.initializer).toBeInstanceOf(ESExpression);
-            expect(secondElement.initializer?.toString()).toBe('false');
+            expect(secondElement.initializer?.toString()).toEqual('false');
         });
 
         it('should parse a declaration with a non reserved keyword as name', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.KEYWORD_AS_NAME);
-
-            expect(variable.identifier).toBe('as');
+            expect(variable.identifier).toEqual('as');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toBe('const');
+            expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual("'value'");
         });
@@ -456,10 +444,9 @@ describe('parser/Parser', () =>
         it('should parse a declaration that refers to a non reserved keyword as value', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.KEYWORD_AS_VALUE);
-
-            expect(variable.identifier).toBe('alias');
+            expect(variable.identifier).toEqual('alias');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toBe('const');
+            expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
             expect(variable.initializer?.toString()).toEqual('as');
         });
@@ -470,221 +457,201 @@ describe('parser/Parser', () =>
         it('should parse a simple function declaration', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.DECLARATION);
-
-            expect(funktion.identifier).toBe('name');
+            expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBe(false);
             expect(funktion.parameters.length).toBe(0);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
         });
 
         it('should parse an async function declaration', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.ASYNC_DECLARATION);
-
-            expect(funktion.identifier).toBe('name');
+            expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBe(true);
             expect(funktion.parameters.length).toBe(0);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
         });
 
         it('should parse an expression function declaration', () =>
         {
             const variable = parser.parseVariable(FUNCTIONS.EXPRESSION);
-
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESFunction);
 
             const funktion = variable.initializer as ESFunction;
-            
             expect(funktion.identifier).toBeUndefined();
             expect(funktion.isAsync).toBe(false);
             expect(funktion.parameters.length).toBe(0);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
         });
 
         it('should parse an async expression function declaration', () =>
         {
             const variable = parser.parseVariable(FUNCTIONS.ASYNC_EXPRESSION);
-
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESFunction);
             
             const funktion = variable.initializer as ESFunction;
-
             expect(funktion.identifier).toBeUndefined();
             expect(funktion.isAsync).toBe(true);
             expect(funktion.parameters.length).toBe(0);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
         });
 
         it('should parse an arrow function declaration', () =>
         {
             const variable = parser.parseVariable(FUNCTIONS.ARROW);
-
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESArrowFunction);
             
             const funktion = variable.initializer as ESArrowFunction;
-
             expect(funktion.identifier).toBeUndefined();
             expect(funktion.isAsync).toBe(false);
             expect(funktion.parameters.length).toBe(0);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
         });
 
         it('should parse an arrow function expression declaration', () =>
         {
             const variable = parser.parseVariable(FUNCTIONS.ARROW_EXPRESSION);
-
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESArrowFunction);
             
             const funktion = variable.initializer as ESArrowFunction;
-
             expect(funktion.identifier).toBeUndefined();
             expect(funktion.isAsync).toBe(false);
             expect(funktion.parameters.length).toBe(0);
-            expect(funktion.body.toString()).toBe("'value'");
+            expect(funktion.body.toString()).toEqual("'value'");
         });
 
         it('should parse an arrow function argument declaration', () =>
         {
             const variable = parser.parseVariable(FUNCTIONS.ARROW_ARGUMENT);
-
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESArrowFunction);
             
             const funktion = variable.initializer as ESArrowFunction;
-
             expect(funktion.identifier).toBeUndefined();
             expect(funktion.isAsync).toBe(false);
             expect(funktion.parameters.length).toBe(1);
-            expect(funktion.body.toString()).toBe('arg');
+            expect(funktion.body.toString()).toEqual('arg');
         });
 
         it('should parse an async arrow function declaration', () =>
         {
             const variable = parser.parseVariable(FUNCTIONS.ASYNC_ARROW);
-
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESArrowFunction);
             
             const funktion = variable.initializer as ESArrowFunction;
-
             expect(funktion.identifier).toBeUndefined();
             expect(funktion.isAsync).toBe(true);
             expect(funktion.parameters.length).toBe(0);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
         });
 
         it('should parse a generator function declaration', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.GENERATOR);
-
             expect(funktion).toBeInstanceOf(ESGeneratorFunction);
-            expect(funktion.identifier).toBe('name');
+            expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBe(false);
             expect(funktion.parameters.length).toBe(0);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
         });
 
         it('should parse an async generator function declaration', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.ASYNC_GENERATOR);
-
             expect(funktion).toBeInstanceOf(ESGeneratorFunction);
-            expect(funktion.identifier).toBe('name');
+            expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBe(true);
             expect(funktion.parameters.length).toBe(0);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
         });
 
         it('should parse an expression generator function declaration', () =>
         {
             const variable = parser.parseVariable(FUNCTIONS.EXPRESSION_GENERATOR);
-
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESGeneratorFunction);
             
             const funktion = variable.initializer as ESGeneratorFunction;
-
             expect(funktion.identifier).toBeUndefined();
             expect(funktion.isAsync).toBe(false);
             expect(funktion.parameters.length).toBe(0);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
         });
 
         it('should parse an async expression generator function declaration', () =>
         {
             const variable = parser.parseVariable(FUNCTIONS.ASYNC_EXPRESSION_GENERATOR);
-
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESGeneratorFunction);
             
             const funktion = variable.initializer as ESGeneratorFunction;
-
             expect(funktion.identifier).toBeUndefined();
             expect(funktion.isAsync).toBe(true);
             expect(funktion.parameters.length).toBe(0);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
         });
 
         it('should parse a function with parameters', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.PARAMETERS);
-            expect(funktion.identifier).toBe('name');
+            expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBe(false);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
 
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(2);
 
             const first = parameters[0];
             expect(first.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(first.binding.toString()).toBe('param1');
+            expect(first.binding.toString()).toEqual('param1');
             expect(first.initializer).toBeUndefined();
 
             const second = parameters[1];
             expect(second.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(second.binding.toString()).toBe('param2');
+            expect(second.binding.toString()).toEqual('param2');
             expect(second.initializer).toBeUndefined();
         });
 
         it('should parse a function with default parameters', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.DEFAULT_PARAMETERS);
-            expect(funktion.identifier).toBe('name');
+            expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBe(false);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
 
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(2);
 
             const first = parameters[0];
             expect(first.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(first.binding.toString()).toBe('param1');
+            expect(first.binding.toString()).toEqual('param1');
             expect(first.initializer).toBeInstanceOf(ESExpression);
             expect(first.initializer?.toString()).toEqual("'value1'");
 
             const second = parameters[1];
             expect(second.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(second.binding.toString()).toBe('param2');
+            expect(second.binding.toString()).toEqual('param2');
             expect(second.initializer).toBeInstanceOf(ESExpression);
             expect(second.initializer?.toString()).toEqual('true');
         });
@@ -692,9 +659,9 @@ describe('parser/Parser', () =>
         it('should parse a function with a rest parameter', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.REST_PARAMETERS);
-            expect(funktion.identifier).toBe('name');
+            expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBe(false);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
 
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(1);
@@ -708,9 +675,9 @@ describe('parser/Parser', () =>
         it('should parse a function with destructuring parameters', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.DESTRUCTURING_PARAMETERS);
-            expect(funktion.identifier).toBe('name');
+            expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBe(false);
-            expect(funktion.body.toString()).toBe('{ }');
+            expect(funktion.body.toString()).toEqual('{ }');
 
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(2);
@@ -752,91 +719,107 @@ describe('parser/Parser', () =>
             expect(fourthMember.initializer).toBeUndefined();
         });
 
-        // it('should parse a function with destructuring default parameters', () =>
-        // {
-        //     const funktion = parser.parseFunction(FUNCTIONS.DESTRUCTURING_DEFAULT_PARAMETERS);
-        //     expect(funktion.identifier).toBe('name');
-        //     expect(funktion.isAsync).toBe(false);
-        //     expect(funktion.body.toString()).toBe('{ }');
+        it('should parse a function with destructuring default parameters', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.DESTRUCTURING_DEFAULT_PARAMETERS);
+            expect(funktion.identifier).toEqual('name');
+            expect(funktion.isAsync).toBe(false);
+            expect(funktion.body.toString()).toEqual('{ }');
 
-        //     const parameters = funktion.parameters;
-        //     expect(parameters.length).toBe(2);
+            const parameters = funktion.parameters;
+            expect(parameters.length).toBe(2);
 
-        //     const firstParameter = parameters[0] as ESDestructuredObject;
-        //     expect(firstParameter).toBeInstanceOf(ESDestructuredObject);
-        //     expect(firstParameter.members.length).toBe(2);
-            
-        //     const firstMember = firstParameter.members[0] as ESField;
-        //     expect(firstMember).toBeInstanceOf(ESField);
-        //     expect(firstMember.identifier).toBe('param1');
-        //     expect(firstMember.value).toBeInstanceOf(ESExpression);
+            const firstParameter = parameters[0];
+            expect(firstParameter.binding).toBeInstanceOf(ESObjectBinding);
+            expect(firstParameter.initializer).toBeUndefined();
 
-        //     const secondMember = firstParameter.members[1] as ESField;
-        //     expect(secondMember).toBeInstanceOf(ESField);
-        //     expect(secondMember.identifier).toBe('param2');
-        //     expect(secondMember.value).toBeInstanceOf(ESExpression);
+            const firstBinding = firstParameter.binding as ESObjectBinding;
+            expect(firstBinding.elements).toHaveLength(2);
+            expect(firstBinding.toString()).toEqual("{ param1 = 'value1', param2 = true }");
 
-        //     const secondParameter = parameters[1] as ESDestructuredArray;
-        //     expect(secondParameter).toBeInstanceOf(ESDestructuredArray);
-        //     expect(secondParameter.members.length).toBe(2);
-            
-        //     const thirdMember = secondParameter.members[0] as ESField;
-        //     expect(thirdMember).toBeInstanceOf(ESField);
-        //     expect(thirdMember.identifier).toBe('param3');
-        //     expect(thirdMember.value).toBeInstanceOf(ESExpression);
+            const firstMember = firstBinding.elements[0];
+            expect(firstMember.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(firstMember.binding.toString()).toEqual('param1');
+            expect(firstMember.initializer).toBeInstanceOf(ESExpression);
 
-        //     const fourthMember = secondParameter.members[1] as ESField;
-        //     expect(fourthMember).toBeInstanceOf(ESField);
-        //     expect(fourthMember.identifier).toBe('param4');
-        //     expect(fourthMember.value).toBeInstanceOf(ESExpression);
-        // });
+            const secondMember = firstBinding.elements[1];
+            expect(secondMember.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(secondMember.binding.toString()).toEqual('param2');
+            expect(secondMember.initializer).toBeInstanceOf(ESExpression);
 
-        // it('should parse a function with destructuring rest parameters', () =>
-        // {
-        //     const funktion = parser.parseFunction(FUNCTIONS.DESTRUCTURING_REST_PARAMETERS);
-        //     expect(funktion.identifier).toBe('name');
-        //     expect(funktion.isAsync).toBe(false);
-        //     expect(funktion.body.toString()).toBe('{ }');
+            const secondParameter = parameters[1];
+            expect(secondParameter.binding).toBeInstanceOf(ESArrayBinding);
+            expect(secondParameter.initializer).toBeUndefined();
 
-        //     const parameters = funktion.parameters;
-        //     expect(parameters.length).toBe(2);
+            const secondBinding = secondParameter.binding as ESObjectBinding;
+            expect(secondBinding.elements).toHaveLength(2);
+            expect(secondBinding.toString()).toEqual("[ param3 = 'value3', param4 = true ]");
 
-        //     const firstParameter = parameters[0] as ESDestructuredObject;
-        //     expect(firstParameter).toBeInstanceOf(ESDestructuredObject);
-        //     expect(firstParameter.members.length).toBe(2);
-            
-        //     const firstMember = firstParameter.members[0] as ESField;
-        //     expect(firstMember).toBeInstanceOf(ESField);
-        //     expect(firstMember.identifier).toBe('param1');
-        //     expect(firstMember.value).toBeUndefined();
+            const thirdMember = secondBinding.elements[0];
+            expect(thirdMember.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(thirdMember.binding.toString()).toEqual('param3');
+            expect(thirdMember.initializer).toBeInstanceOf(ESExpression);
 
-        //     const secondMember = firstParameter.members[1] as ESField;
-        //     expect(secondMember).toBeInstanceOf(ESField);
-        //     expect(secondMember.identifier).toBe('param2');
-        //     expect(secondMember.value).toBeUndefined();
+            const fourthMember = secondBinding.elements[1];
+            expect(fourthMember.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(fourthMember.binding.toString()).toEqual('param4');
+            expect(fourthMember.initializer).toBeInstanceOf(ESExpression);
+        });
 
-        //     const secondParameter = parameters[1] as ESDestructuredArray;
-        //     expect(secondParameter).toBeInstanceOf(ESDestructuredArray);
-        //     expect(secondParameter.members.length).toBe(2);
-            
-        //     const thirdMember = secondParameter.members[0] as ESField;
-        //     expect(thirdMember).toBeInstanceOf(ESField);
-        //     expect(thirdMember.identifier).toBe('param3');
-        //     expect(thirdMember.value).toBeUndefined();
+        it('should parse a function with destructuring rest parameters', () =>
+        {
+            const funktion = parser.parseFunction(FUNCTIONS.DESTRUCTURING_REST_PARAMETERS);
+            expect(funktion.identifier).toEqual('name');
+            expect(funktion.isAsync).toBe(false);
+            expect(funktion.body.toString()).toEqual('{ }');
 
-        //     const fourthMember = secondParameter.members[1] as ESField;
-        //     expect(fourthMember).toBeInstanceOf(ESField);
-        //     expect(fourthMember.identifier).toBe('...param4');
-        //     expect(fourthMember.value).toBeUndefined();
-        // });
+            const parameters = funktion.parameters;
+            expect(parameters.length).toBe(2);
+
+            const firstParameter = parameters[0];
+            expect(firstParameter.binding).toBeInstanceOf(ESObjectBinding);
+            expect(firstParameter.initializer).toBeUndefined();
+
+            const firstBinding = firstParameter.binding as ESObjectBinding;
+            expect(firstBinding.elements).toHaveLength(2);
+            expect(firstBinding.toString()).toEqual('{ param1, param2 }');
+
+            const firstMember = firstBinding.elements[0];
+            expect(firstMember.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(firstMember.binding.toString()).toEqual('param1');
+            expect(firstMember.initializer).toBeUndefined();
+
+            const secondMember = firstBinding.elements[1];
+            expect(secondMember.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(secondMember.binding.toString()).toEqual('param2');
+            expect(secondMember.initializer).toBeUndefined();
+
+            const secondParameter = parameters[1];
+            expect(secondParameter.binding).toBeInstanceOf(ESArrayBinding);
+            expect(secondParameter.initializer).toBeUndefined();
+
+            const secondBinding = secondParameter.binding as ESObjectBinding;
+            expect(secondBinding.elements).toHaveLength(2);
+            expect(secondBinding.toString()).toEqual('[ param3, ...param4 ]');
+
+            const thirdMember = secondBinding.elements[0];
+            expect(thirdMember.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(thirdMember.binding.toString()).toEqual('param3');
+            expect(thirdMember.initializer).toBeUndefined();
+
+            const fourthMember = secondBinding.elements[1];
+            expect(fourthMember.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(fourthMember.binding.toString()).toEqual('...param4');
+            expect(fourthMember.initializer).toBeUndefined();
+        });
 
         it('should parse a simple function body', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.SIMPLE_BODY);
 
-            expect(funktion.identifier).toBe('name');
+            expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBe(false);
-            expect(funktion.body.toString()).toBe("{ return 'value' ; }");
+            expect(funktion.body.toString()).toEqual("{ return 'value' ; }");
 
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(0);
@@ -846,9 +829,9 @@ describe('parser/Parser', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.BLOCK_BODY);
 
-            expect(funktion.identifier).toBe('name');
+            expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBe(false);
-            expect(funktion.body.toString()).toBe("{ if ( true ) { return 'value' ; } }");
+            expect(funktion.body.toString()).toEqual("{ if ( true ) { return 'value' ; } }");
 
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(0);
@@ -858,9 +841,9 @@ describe('parser/Parser', () =>
         {
             const funktion = parser.parseFunction(FUNCTIONS.KEYWORD_AS_NAME);
 
-            expect(funktion.identifier).toBe('as');
+            expect(funktion.identifier).toEqual('as');
             expect(funktion.isAsync).toBe(false);
-            expect(funktion.body.toString()).toBe("{ }");
+            expect(funktion.body.toString()).toEqual("{ }");
 
             const parameters = funktion.parameters;
             expect(parameters.length).toBe(0);
@@ -869,162 +852,163 @@ describe('parser/Parser', () =>
 
     describe('.parseClass(code)', () =>
     {
-        it('should be ok', () => 
+        it('should parse a simple class declaration', () =>
         {
+            const clazz = parser.parseClass(CLASSES.DECLARATION);
+            expect(clazz.identifier).toEqual('Name');
+            expect(clazz.parent).toBeUndefined();
 
+            const members = clazz.members;
+            expect(members.length).toBe(0);
         });
 
-    //     it('should parse a simple class declaration', () =>
-    //     {
-    //         const clazz = parser.parseClass(CLASSES.DECLARATION);
-    //         expect(clazz.identifier).toBe('Name');
-    //         expect(clazz.parentName).toBeUndefined();
-
-    //         const members = clazz.members;
-    //         expect(members.length).toBe(0);
-    //     });
-
-    //     it('should parse a simple class declaration with parent class', () =>
-    //     {
-    //         const clazz = parser.parseClass(CLASSES.EXTENDS);
-    //         expect(clazz.identifier).toBe('Name');
-    //         expect(clazz.parentName).toBe('Parent');
+        it('should parse a simple class declaration with parent class', () =>
+        {
+            const clazz = parser.parseClass(CLASSES.EXTENDS);
+            expect(clazz.identifier).toEqual('Name');
+            expect(clazz.parent).toEqual('Parent');
             
-    //         const members = clazz.members;
-    //         expect(members.length).toBe(0);
-    //     });
+            const members = clazz.members;
+            expect(members.length).toBe(0);
+        });
 
-    //     it('should parse an expression class declaration', () =>
-    //     {
-    //         const clazz = parser.parseClass(CLASSES.EXPRESSION);
-    //         expect(clazz.identifier).toBe('name');
-    //         expect(clazz.parentName).toBeUndefined();
+        it('should parse an expression class declaration', () =>
+        {
+            const variable = parser.parseVariable(CLASSES.EXPRESSION);
+            expect(variable.identifier).toEqual('name');
+            expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(variable.type).toEqual('const');
+            expect(variable.initializer).toBeInstanceOf(ESClass);
 
-    //         const members = clazz.members;
-    //         expect(members.length).toBe(0);
-    //     });
+            const clazz = variable.initializer as ESClass;
+            expect(clazz.identifier).toBeUndefined();
+            expect(clazz.parent).toBeUndefined();
 
-    //     it('should parse class members', () =>
-    //     {
-    //         const clazz = parser.parseClass(CLASSES.MEMBERS);
-    //         expect(clazz.identifier).toBe('Name');
-    //         expect(clazz.parentName).toBeUndefined();
+            const members = clazz.members;
+            expect(members.length).toBe(0);
+        });
 
-    //         const members = clazz.members;
-    //         expect(members.length).toBe(21);
+        it('should parse class members', () =>
+        {
+            const clazz = parser.parseClass(CLASSES.MEMBERS);
+            expect(clazz.identifier).toEqual('Name');
+            expect(clazz.parent).toBeUndefined();
 
-    //         const variables = clazz.declarations;
-    //         expect(declarations.length).toBe(4);
+            const members = clazz.members;
+            expect(members.length).toBe(21);
 
-    //         expect(declarations[0].identifier).toBe('field1');
-    //         expect(declarations[0].isPrivate).toBe(true);
-    //         expect(declarations[0].isStatic).toBe(false);
-    //         expect(declarations[0].value?.definition).toBe("'value1'");
+            // const variables = clazz.declarations;
+            // expect(declarations.length).toBe(4);
 
-    //         expect(declarations[1].identifier).toBe('field2');
-    //         expect(declarations[1].isPrivate).toBe(false);
-    //         expect(declarations[1].isStatic).toBe(false);
-    //         expect(declarations[1].value).toBeUndefined();
+            // expect(declarations[0].identifier).toEqual('field1');
+            // expect(declarations[0].isPrivate).toBe(true);
+            // expect(declarations[0].isStatic).toBe(false);
+            // expect(declarations[0].value?.definition).toEqual("'value1'");
 
-    //         expect(declarations[2].identifier).toBe('field3');
-    //         expect(declarations[2].isPrivate).toBe(true);
-    //         expect(declarations[2].isStatic).toBe(true);
-    //         expect(declarations[2].value?.definition).toBe('"value3"');
+            // expect(declarations[1].identifier).toEqual('field2');
+            // expect(declarations[1].isPrivate).toBe(false);
+            // expect(declarations[1].isStatic).toBe(false);
+            // expect(declarations[1].value).toBeUndefined();
 
-    //         expect(declarations[3].identifier).toBe('field4');
-    //         expect(declarations[3].isPrivate).toBe(false);
-    //         expect(declarations[3].isStatic).toBe(true);
-    //         expect(declarations[3].value).toBeUndefined();
+            // expect(declarations[2].identifier).toEqual('field3');
+            // expect(declarations[2].isPrivate).toBe(true);
+            // expect(declarations[2].isStatic).toBe(true);
+            // expect(declarations[2].value?.definition).toEqual('"value3"');
 
-    //         const getters = clazz.getters;
-    //         expect(getters.length).toBe(4);
+            // expect(declarations[3].identifier).toEqual('field4');
+            // expect(declarations[3].isPrivate).toBe(false);
+            // expect(declarations[3].isStatic).toBe(true);
+            // expect(declarations[3].value).toBeUndefined();
 
-    //         expect(getters[0].identifier).toBe('getter1');
-    //         expect(getters[0].isPrivate).toBe(true);
-    //         expect(getters[0].isStatic).toBe(false);
+            // const getters = clazz.getters;
+            // expect(getters.length).toBe(4);
 
-    //         expect(getters[1].identifier).toBe('getter2');
-    //         expect(getters[1].isPrivate).toBe(false);
-    //         expect(getters[1].isStatic).toBe(false);
+            // expect(getters[0].identifier).toEqual('getter1');
+            // expect(getters[0].isPrivate).toBe(true);
+            // expect(getters[0].isStatic).toBe(false);
 
-    //         expect(getters[2].identifier).toBe('getter3');
-    //         expect(getters[2].isPrivate).toBe(true);
-    //         expect(getters[2].isStatic).toBe(true);
+            // expect(getters[1].identifier).toEqual('getter2');
+            // expect(getters[1].isPrivate).toBe(false);
+            // expect(getters[1].isStatic).toBe(false);
 
-    //         expect(getters[3].identifier).toBe('getter4');
-    //         expect(getters[3].isPrivate).toBe(false);
-    //         expect(getters[3].isStatic).toBe(true);
+            // expect(getters[2].identifier).toEqual('getter3');
+            // expect(getters[2].isPrivate).toBe(true);
+            // expect(getters[2].isStatic).toBe(true);
 
-    //         const setters = clazz.setters;
-    //         expect(setters.length).toBe(4);
+            // expect(getters[3].identifier).toEqual('getter4');
+            // expect(getters[3].isPrivate).toBe(false);
+            // expect(getters[3].isStatic).toBe(true);
 
-    //         expect(setters[0].identifier).toBe('setter1');
-    //         expect(setters[0].isPrivate).toBe(true);
-    //         expect(setters[0].isStatic).toBe(false);
+            // const setters = clazz.setters;
+            // expect(setters.length).toBe(4);
 
-    //         expect(setters[1].identifier).toBe('setter2');
-    //         expect(setters[1].isPrivate).toBe(false);
-    //         expect(setters[1].isStatic).toBe(false);
+            // expect(setters[0].identifier).toEqual('setter1');
+            // expect(setters[0].isPrivate).toBe(true);
+            // expect(setters[0].isStatic).toBe(false);
 
-    //         expect(setters[2].identifier).toBe('setter3');
-    //         expect(setters[2].isPrivate).toBe(true);
-    //         expect(setters[2].isStatic).toBe(true);
+            // expect(setters[1].identifier).toEqual('setter2');
+            // expect(setters[1].isPrivate).toBe(false);
+            // expect(setters[1].isStatic).toBe(false);
 
-    //         expect(setters[3].identifier).toBe('setter4');
-    //         expect(setters[3].isPrivate).toBe(false);
-    //         expect(setters[3].isStatic).toBe(true);
+            // expect(setters[2].identifier).toEqual('setter3');
+            // expect(setters[2].isPrivate).toBe(true);
+            // expect(setters[2].isStatic).toBe(true);
 
-    //         const functions = clazz.functions;
-    //         expect(functions.length).toBe(6);
+            // expect(setters[3].identifier).toEqual('setter4');
+            // expect(setters[3].isPrivate).toBe(false);
+            // expect(setters[3].isStatic).toBe(true);
 
-    //         expect(functions[0].identifier).toBe('constructor');
-    //         expect(functions[0].isPrivate).toBe(false);
-    //         expect(functions[0].isStatic).toBe(false);
-    //         expect(functions[0].isAsync).toBe(false);
+            // const functions = clazz.functions;
+            // expect(functions.length).toBe(6);
 
-    //         expect(functions[1].identifier).toBe('method1');
-    //         expect(functions[1].isPrivate).toBe(false);
-    //         expect(functions[1].isStatic).toBe(false);
-    //         expect(functions[1].isAsync).toBe(false);
+            // expect(functions[0].identifier).toEqual('constructor');
+            // expect(functions[0].isPrivate).toBe(false);
+            // expect(functions[0].isStatic).toBe(false);
+            // expect(functions[0].isAsync).toBe(false);
 
-    //         expect(functions[2].identifier).toBe('method2');
-    //         expect(functions[2].isPrivate).toBe(false);
-    //         expect(functions[2].isStatic).toBe(false);
-    //         expect(functions[2].isAsync).toBe(true);
+            // expect(functions[1].identifier).toEqual('method1');
+            // expect(functions[1].isPrivate).toBe(false);
+            // expect(functions[1].isStatic).toBe(false);
+            // expect(functions[1].isAsync).toBe(false);
 
-    //         expect(functions[3].identifier).toBe('method3');
-    //         expect(functions[3].isPrivate).toBe(false);
-    //         expect(functions[3].isStatic).toBe(true);
-    //         expect(functions[3].isAsync).toBe(false);
+            // expect(functions[2].identifier).toEqual('method2');
+            // expect(functions[2].isPrivate).toBe(false);
+            // expect(functions[2].isStatic).toBe(false);
+            // expect(functions[2].isAsync).toBe(true);
 
-    //         expect(functions[4].identifier).toBe('method4');
-    //         expect(functions[4].isPrivate).toBe(false);
-    //         expect(functions[4].isStatic).toBe(true);
-    //         expect(functions[4].isAsync).toBe(true);
+            // expect(functions[3].identifier).toEqual('method3');
+            // expect(functions[3].isPrivate).toBe(false);
+            // expect(functions[3].isStatic).toBe(true);
+            // expect(functions[3].isAsync).toBe(false);
 
-    //         expect(functions[5].identifier).toBe('method5');
-    //         expect(functions[5].isPrivate).toBe(true);
-    //         expect(functions[5].isStatic).toBe(false);
-    //         expect(functions[5].isAsync).toBe(false);
+            // expect(functions[4].identifier).toEqual('method4');
+            // expect(functions[4].isPrivate).toBe(false);
+            // expect(functions[4].isStatic).toBe(true);
+            // expect(functions[4].isAsync).toBe(true);
 
-    //         const generators = clazz.generators;
-    //         expect(generators.length).toBe(3);
+            // expect(functions[5].identifier).toEqual('method5');
+            // expect(functions[5].isPrivate).toBe(true);
+            // expect(functions[5].isStatic).toBe(false);
+            // expect(functions[5].isAsync).toBe(false);
 
-    //         expect(generators[0].identifier).toBe('generator1');
-    //         expect(generators[0].isPrivate).toBe(false);
-    //         expect(generators[0].isStatic).toBe(false);
-    //         expect(generators[0].isAsync).toBe(false);
+            // const generators = clazz.generators;
+            // expect(generators.length).toBe(3);
 
-    //         expect(generators[1].identifier).toBe('generator2');
-    //         expect(generators[1].isPrivate).toBe(false);
-    //         expect(generators[1].isStatic).toBe(false);
-    //         expect(generators[1].isAsync).toBe(true);
+            // expect(generators[0].identifier).toEqual('generator1');
+            // expect(generators[0].isPrivate).toBe(false);
+            // expect(generators[0].isStatic).toBe(false);
+            // expect(generators[0].isAsync).toBe(false);
 
-    //         expect(generators[2].identifier).toBe('generator3');
-    //         expect(generators[2].isPrivate).toBe(false);
-    //         expect(generators[2].isStatic).toBe(true);
-    //         expect(generators[2].isAsync).toBe(true);
-    //     });
+            // expect(generators[1].identifier).toEqual('generator2');
+            // expect(generators[1].isPrivate).toBe(false);
+            // expect(generators[1].isStatic).toBe(false);
+            // expect(generators[1].isAsync).toBe(true);
+
+            // expect(generators[2].identifier).toEqual('generator3');
+            // expect(generators[2].isPrivate).toBe(false);
+            // expect(generators[2].isStatic).toBe(true);
+            // expect(generators[2].isAsync).toBe(true);
+        });
     });
 
     describe('.parse(code)', () =>
