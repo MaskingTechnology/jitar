@@ -83,241 +83,203 @@ describe('model/ESClass', () =>
         });
     });
 
-    // describe('.readable', () =>
-    // {
-    //     it('should return all readable members', () =>
-    //     {
-    //         const readable = esClass.readable;
-    //         expect(readable.length).toBe(3);
+    describe('.readable', () =>
+    {
+        it('should return all readable members', () =>
+        {
+            const readable = esClass.readable;
+            expect(readable).toHaveLength(3);
 
-    //         expect(readable[0].name).toEqual('name');
-    //         expect(readable[0]).toBeInstanceOf(ESGetter);
+            expect(readable[0].identifier).toEqual('length');
+            expect(readable[0]).toBeInstanceOf(ESField);
 
-    //         expect(readable[1].name).toEqual('age');
-    //         expect(readable[1]).toBeInstanceOf(ESGetter);
+            expect(readable[1].identifier).toEqual('name');
+            expect(readable[1]).toBeInstanceOf(ESGetter);
 
-    //         expect(readable[2].name).toEqual('length');
-    //         expect(readable[2]).toBeInstanceOf(ESDeclaration);
-    //     });
-    // });
+            expect(readable[2].identifier).toEqual('age');
+            expect(readable[2]).toBeInstanceOf(ESGetter);
+        });
+    });
 
-    // describe('.writable', () =>
-    // {
-    //     it('should return all writable members', () =>
-    //     {
-    //         const writable = esClass.writable;
-    //         expect(writable.length).toBe(2);
+    describe('.writable', () =>
+    {
+        it('should return all writable members', () =>
+        {
+            const writable = esClass.writable;
+            expect(writable).toHaveLength(2);
 
-    //         expect(writable[0].name).toEqual('age');
-    //         expect(writable[0]).toBeInstanceOf(ESSetter);
+            expect(writable[0].identifier).toEqual('length');
+            expect(writable[0]).toBeInstanceOf(ESField);
 
-    //         expect(writable[1].name).toEqual('length');
-    //         expect(writable[1]).toBeInstanceOf(ESDeclaration);
-    //     });
-    // });
+            expect(writable[1].identifier).toEqual('age');
+            expect(writable[1]).toBeInstanceOf(ESSetter);
+        });
+    });
 
-    // describe('.callable', () =>
-    // {
-    //     it('should return all callable members', () =>
-    //     {
-    //         const callable = esClass.callable;
-    //         expect(callable.length).toBe(2);
+    describe('.getMember(identifier)', () =>
+    {
+        it('should get a member by its identifier', () =>
+        {
+            const member = esClass.getMember('toString');
+            expect(member).toBeInstanceOf(ESMethod);
+            expect(member?.identifier).toEqual('toString');
+        });
+    });
 
-    //         expect(callable[0].name).toEqual('constructor');
-    //         expect(callable[0]).toBeInstanceOf(ESFunction);
+    describe('.getField(identifier)', () =>
+    {
+        it('should get a field by its identifier', () =>
+        {
+            const member = esClass.getField('name');
+            expect(member).toBeInstanceOf(ESField);
+            expect(member?.identifier).toEqual('name');
+        });
+    });
 
-    //         expect(callable[1].name).toEqual('toString');
-    //         expect(callable[1]).toBeInstanceOf(ESFunction);
-    //     });
-    // });
+    describe('.getGetter(identifier)', () =>
+    {
+        it('should get a getter by its identifier', () =>
+        {
+            const member = esClass.getGetter('name');
+            expect(member).toBeInstanceOf(ESGetter);
+            expect(member?.identifier).toEqual('name');
+        });
+    });
 
-    // describe('.getMember(name)', () =>
-    // {
-    //     it('should get a member by its identifier', () =>
-    //     {
-    //         const member = esClass.getMember('sum');
-    //         expect(member).toBeInstanceOf(ESMethod);
-    //         expect(member?.name).toEqual('sum');
-    //     });
-    // });
+    describe('.getSetter(identifier)', () =>
+    {
+        it('should get a setter by its identifier', () =>
+        {
+            const member = esClass.getSetter('age');
+            expect(member).toBeInstanceOf(ESSetter);
+            expect(member?.identifier).toEqual('age');
+        });
+    });
 
-    // describe('.getMethod(name)', () =>
-    // {
-    //     it('should get a function by its name', () =>
-    //     {
-    //         const member = esClass.getMethod('secretStuff');
-    //         expect(member).toBeInstanceOf(ESGeneratorMethod);
-    //         expect(member?.name).toEqual('secretStuff');
-    //     });
-    // });
+    describe('.getMethod(identifier)', () =>
+    {
+        it('should get a method by its identifier', () =>
+        {
+            const member = esClass.getMethod('secretStuff');
+            expect(member).toBeInstanceOf(ESMethod);
+            expect(member?.identifier).toEqual('secretStuff');
+        });
+    });
 
-    // describe('.getGetter(name)', () =>
-    // {
-    //     it('should get a getter by its name', () =>
-    //     {
-    //         const member = esClass.getGetter('name');
-    //         expect(member).toBeInstanceOf(ESGetter);
-    //         expect(member?.name).toEqual('name');
-    //     });
-    // });
+    describe('.hasMember(identifier)', () =>
+    {
+        it('should have an existing member', () =>
+        {
+            const result = esClass.hasMember('age');
+            expect(result).toBeTruthy();
+        });
 
-    // describe('.getSetter(name)', () =>
-    // {
-    //     it('should get a setter by its name', () =>
-    //     {
-    //         const member = esClass.getSetter('age');
-    //         expect(member).toBeInstanceOf(ESSetter);
-    //         expect(member?.name).toEqual('age');
-    //     });
-    // });
+        it('should not have a non-existing member', () =>
+        {
+            const result = esClass.hasMember('nonExisting');
+            expect(result).toBeFalsy();
+        });
+    });
 
-    // describe('.getGenerator(name)', () =>
-    // {
-    //     it('should get a generator by its name', () =>
-    //     {
-    //         const member = esClass.getGenerator('createJohn');
-    //         expect(member).toBeInstanceOf(ESGeneratorMethod);
-    //         expect(member?.name).toEqual('createJohn');
-    //     });
-    // });
+    describe('.hasField(identifier)', () =>
+    {
+        it('should have an existing field', () =>
+        {
+            const result = esClass.hasField('name');
+            expect(result).toBeTruthy();
+        });
 
-    // describe('.hasMember(name)', () =>
-    // {
-    //     it('should have an existing member', () =>
-    //     {
-    //         const result = esClass.hasMember('age');
-    //         expect(result).toBe(true);
-    //     });
+        it('should not have a non-existing field', () =>
+        {
+            const result = esClass.hasField('createJohn');
+            expect(result).toBeFalsy();
+        });
+    });
 
-    //     it('should not have a non-existing member', () =>
-    //     {
-    //         const result = esClass.hasMember('nonExisting');
-    //         expect(result).toBe(false);
-    //     });
-    // });
+    describe('.hasGetter(identifier)', () =>
+    {
+        it('should have an existing getter', () =>
+        {
+            const result = esClass.hasGetter('name');
+            expect(result).toBeTruthy();
+        });
 
-    // describe('.hasMethod(name)', () =>
-    // {
-    //     it('should have an existing function', () =>
-    //     {
-    //         const result = esClass.hasMethod('secretStuff');
-    //         expect(result).toBe(true);
-    //     });
+        it('should not have a non-existing getter', () =>
+        {
+            const result = esClass.hasGetter('createJohn');
+            expect(result).toBeFalsy();
+        });
+    });
 
-    //     it('should not have a non-existing function', () =>
-    //     {
-    //         const result = esClass.hasMethod('name');
-    //         expect(result).toBe(false);
-    //     });
-    // });
+    describe('.hasSetter(identifier)', () =>
+    {
+        it('should have an existing setter', () =>
+        {
+            const result = esClass.hasSetter('age');
+            expect(result).toBeTruthy();
+        });
 
-    // describe('.hasGetter(name)', () =>
-    // {
-    //     it('should have an existing getter', () =>
-    //     {
-    //         const result = esClass.hasGetter('name');
-    //         expect(result).toBe(true);
-    //     });
+        it('should not have a non-existing setter', () =>
+        {
+            const result = esClass.hasSetter('name');
+            expect(result).toBeFalsy();
+        });
+    });
 
-    //     it('should not have a non-existing getter', () =>
-    //     {
-    //         const result = esClass.hasGetter('createJohn');
-    //         expect(result).toBe(false);
-    //     });
-    // });
+    describe('.hasMethod(identifier)', () =>
+    {
+        it('should have an existing function', () =>
+        {
+            const result = esClass.hasMethod('secretStuff');
+            expect(result).toBeTruthy();
+        });
 
-    // describe('.hasSetter(name)', () =>
-    // {
-    //     it('should have an existing setter', () =>
-    //     {
-    //         const result = esClass.hasSetter('age');
-    //         expect(result).toBe(true);
-    //     });
+        it('should not have a non-existing function', () =>
+        {
+            const result = esClass.hasMethod('name');
+            expect(result).toBeFalsy();
+        });
+    });
 
-    //     it('should not have a non-existing setter', () =>
-    //     {
-    //         const result = esClass.hasSetter('name');
-    //         expect(result).toBe(false);
-    //     });
-    // });
+    describe('.canRead(identifier)', () =>
+    {
+        it('should read a public field', () =>
+        {
+            const canRead = esClass.canRead('length');
+            expect(canRead).toBeTruthy();
+        });
 
-    // describe('.hasGenerator(name)', () =>
-    // {
-    //     it('should have an existing generator', () =>
-    //     {
-    //         const result = esClass.hasGenerator('createJohn');
-    //         expect(result).toBe(true);
-    //     });
+        it('should read a private field with getter', () =>
+        {
+            const canRead = esClass.canRead('name');
+            expect(canRead).toBeTruthy();
+        });
 
-    //     it('should not have a non-existing generator', () =>
-    //     {
-    //         const result = esClass.hasGenerator('sum');
-    //         expect(result).toBe(false);
-    //     });
-    // });
+        it('should not read a private field without a getter', () =>
+        {
+            const canRead = esClass.canRead('secret');
+            expect(canRead).toBeFalsy();
+        });
+    });
 
-    // describe('.canRead(name)', () =>
-    // {
-    //     it('should read a public field', () =>
-    //     {
-    //         const canRead = esClass.canRead('length');
+    describe('.canWrite(identifier)', () =>
+    {
+        it('should write a public field', () =>
+        {
+            const canWrite = esClass.canWrite('length');
+            expect(canWrite).toBeTruthy();
+        });
 
-    //         expect(canRead).toBe(true);
-    //     });
+        it('should write a private field with setter', () =>
+        {
+            const canWrite = esClass.canWrite('age');
+            expect(canWrite).toBeTruthy();
+        });
 
-    //     it('should read a private field with getter', () =>
-    //     {
-    //         const canRead = esClass.canRead('name');
-
-    //         expect(canRead).toBe(true);
-    //     });
-
-    //     it('should not read a private field without a getter', () =>
-    //     {
-    //         const canRead = esClass.canRead('secret');
-
-    //         expect(canRead).toBe(false);
-    //     });
-    // });
-
-    // describe('.canWrite(name)', () =>
-    // {
-    //     it('should write a public field', () =>
-    //     {
-    //         const canWrite = esClass.canWrite('length');
-
-    //         expect(canWrite).toBe(true);
-    //     });
-
-    //     it('should write a private field with setter', () =>
-    //     {
-    //         const canWrite = esClass.canWrite('age');
-
-    //         expect(canWrite).toBe(true);
-    //     });
-
-    //     it('should not wite a private field without a setter', () =>
-    //     {
-    //         const canWrite = esClass.canWrite('secret');
-
-    //         expect(canWrite).toBe(false);
-    //     });
-    // });
-
-    // describe('.canCall(name)', () =>
-    // {
-    //     it('should call a public function', () =>
-    //     {
-    //         const canCall = esClass.canCall('toString');
-
-    //         expect(canCall).toBe(true);
-    //     });
-
-    //     it('should not call a private function', () =>
-    //     {
-    //         const canCall = esClass.canCall('secretStuff');
-
-    //         expect(canCall).toBe(false);
-    //     });
-    // });
+        it('should not wite a private field without a setter', () =>
+        {
+            const canWrite = esClass.canWrite('secret');
+            expect(canWrite).toBeFalsy();
+        });
+    });
 });

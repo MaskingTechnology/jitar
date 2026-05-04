@@ -1,21 +1,21 @@
 
+import ESDeclaration from './ESDeclaration';
+
 export type Visibility = 'public' | 'private';
 export type Location = 'instance' | 'static';
 
-export default abstract class ESClassMember
+export default abstract class ESClassMember extends ESDeclaration
 {
-    readonly #identifier: string;
     readonly #visibility: Visibility;
     readonly #location: Location;
 
     constructor(identifier: string, visibility: Visibility, location: Location)
     {
-        this.#identifier = identifier;
+        super(identifier);
+        
         this.#visibility = visibility;
         this.#location = location;
     }
-
-    get identifier() { return this.#identifier; }
 
     get visibility() { return this.#visibility; }
 

@@ -27,11 +27,79 @@ export default class ESModule
 
     get declarations() { return this.#statements.filter(statement => statement instanceof ESDeclaration); }
 
-    get classes() { return this.#statements.filter(statement => statement instanceof ESClass); }
-    
+    get variables() { return this.#statements.filter(statement => statement instanceof ESVariable); }
+
     get functions() { return this.#statements.filter(statement => statement instanceof ESFunction); }
 
-    get variables() { return this.#statements.filter(statement => statement instanceof ESVariable); }
+    get classes() { return this.#statements.filter(statement => statement instanceof ESClass); }
+
+    get exported(): ESDeclaration[]
+    {
+        const declarations: ESDeclaration[] = [];
+
+        for (const entry of this.exports)
+        {
+            for (const member of entry.members)
+            {
+                const declaration = this.getDeclaration(member.identifier);
+
+                if (declaration === undefined)
+                {
+                    continue;
+                }
+
+                declarations.push(declaration);
+            }
+        }
+
+        return declarations;
+    }
+
+    get exportedVariables() { return this.exported.filter(declaration => declaration instanceof ESVariable); }
+
+    get exportedFunctions() { return this.exported.filter(declaration => declaration instanceof ESFunction); }
+
+    get exportedClasses() { return this.exported.filter(declaration => declaration instanceof ESClass); }
+    
+    hasDeclaration(identifier: string): boolean
+    {
+        return this.declarations.some(entry => entry.is(identifier));
+    }
+
+    getDeclaration(identifier: string): ESDeclaration | undefined
+    {
+        return this.declarations.find(entry => entry.is(identifier));
+    }
+
+    hasVariable(identifier: string): boolean
+    {
+        return this.variables.some(entry => entry.is(identifier));
+    }
+
+    getVariable(identifier: string): ESVariable | undefined
+    {
+        return this.variables.find(entry => entry.is(identifier));
+    }
+
+    hasFunction(identifier: string): boolean
+    {
+        return this.functions.some(entry => entry.is(identifier));
+    }
+
+    getFunction(identifier: string): ESFunction | undefined
+    {
+        return this.functions.find(entry => entry.is(identifier));
+    }
+
+    hasClass(identifier: string): boolean
+    {
+        return this.classes.some(entry => entry.is(identifier));
+    }
+
+    getClass(identifier: string): ESClass | undefined
+    {
+        return this.classes.find(entry => entry.is(identifier));
+    }
 
     toString(): string
     {

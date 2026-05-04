@@ -79,234 +79,149 @@ describe('model/ESModule', () =>
         });
     });
 
-    // describe('.getMember(name)', () =>
-    // {
-    //     it('should get a member by its name', () =>
-    //     {
-    //         const member = esModule.getMember('sum');
-    //         expect(member).toBeInstanceOf(ESFunction);
-    //         expect(member?.name).toEqual('sum');
-    //     });
-    // });
+    describe('.getDeclaration(identifier)', () =>
+    {
+        it('should get a declaration by its identifier', () =>
+        {
+            const member = esModule.getDeclaration('sum');
+            expect(member).toBeInstanceOf(ESFunction);
+            expect(member?.identifier).toEqual('sum');
+        });
+    });
 
-    // describe('.getDeclaration(name)', () =>
-    // {
-    //     it('should get a field by its name', () =>
-    //     {
-    //         const member = esModule.getDeclaration('name');
-    //         expect(member).toBeInstanceOf(ESDeclaration);
-    //         expect(member?.name).toEqual('name');
-    //     });
-    // });
+    describe('.getVariable(identifier)', () =>
+    {
+        it('should get a variable by its identifier', () =>
+        {
+            const member = esModule.getVariable('bas');
+            expect(member).toBeInstanceOf(ESVariable);
+            expect(member?.identifier).toEqual('bas');
+        });
+    });
 
-    // describe('.getFunction(name)', () =>
-    // {
-    //     it('should get a function by its name', () =>
-    //     {
-    //         const member = esModule.getFunction('createJohn');
-    //         expect(member).toBeInstanceOf(ESFunction);
-    //         expect(member?.name).toEqual('createJohn');
-    //     });
-    // });
+    describe('.getFunction(identifier)', () =>
+    {
+        it('should get a function by its identifier', () =>
+        {
+            const member = esModule.getFunction('createJohn');
+            expect(member).toBeInstanceOf(ESFunction);
+            expect(member?.identifier).toEqual('createJohn');
+        });
 
-    // describe('.getGenerator(name)', () =>
-    // {
-    //     it('should get a generator by its name', () =>
-    //     {
-    //         const member = esModule.getGenerator('createJohn');
-    //         expect(member).toBeInstanceOf(ESGenerator);
-    //         expect(member?.name).toEqual('createJohn');
-    //     });
-    // });
+        it('should get a generator function by its identifier', () =>
+        {
+            const member = esModule.getFunction('generateNumbers');
+            expect(member).toBeInstanceOf(ESGeneratorFunction);
+            expect(member?.identifier).toEqual('generateNumbers');
+        });
+    });
 
-    // describe('.getClass(name)', () =>
-    // {
-    //     it('should get a class by its name', () =>
-    //     {
-    //         const member = esModule.getClass('Customer');
-    //         expect(member).toBeInstanceOf(ESClass);
-    //         expect(member?.name).toEqual('Customer');
-    //     });
-    // });
+    describe('.getClass(identifier)', () =>
+    {
+        it('should get a class by its identifier', () =>
+        {
+            const member = esModule.getClass('Customer');
+            expect(member).toBeInstanceOf(ESClass);
+            expect(member?.identifier).toEqual('Customer');
+        });
+    });
 
-    // describe('.hasMember(name)', () =>
-    // {
-    //     it('should have an existing member', () =>
-    //     {
-    //         const result = esModule.hasMember('sum');
-    //         expect(result).toBe(true);
-    //     });
+    describe('.hasDeclaration(identifier)', () =>
+    {
+        it('should have an existing member', () =>
+        {
+            const result = esModule.hasDeclaration('sum');
+            expect(result).toBeTruthy();
+        });
 
-    //     it('should not have a non-existing member', () =>
-    //     {
-    //         const result = esModule.hasMember('nonExisting');
-    //         expect(result).toBe(false);
-    //     });
-    // });
+        it('should not have a non-existing member', () =>
+        {
+            const result = esModule.hasDeclaration('nonExisting');
+            expect(result).toBeFalsy();
+        });
+    });
 
-    // describe('.hasDeclaration(name)', () =>
-    // {
-    //     it('should have an existing field', () =>
-    //     {
-    //         const result = esModule.hasDeclaration('age');
-    //         expect(result).toBe(true);
-    //     });
+    describe('.hasVariable(identifier)', () =>
+    {
+        it('should have an existing variable', () =>
+        {
+            const result = esModule.hasVariable('peter');
+            expect(result).toBeTruthy();
+        });
 
-    //     it('should not have a non-existing field', () =>
-    //     {
-    //         const result = esModule.hasDeclaration('Customer');
-    //         expect(result).toBe(false);
-    //     });
-    // });
+        it('should not have a non-existing variable', () =>
+        {
+            const result = esModule.hasVariable('Customer');
+            expect(result).toBeFalsy();
+        });
+    });
 
-    // describe('.hasFunction(name)', () =>
-    // {
-    //     it('should have an existing function', () =>
-    //     {
-    //         const result = esModule.hasFunction('createJohn');
-    //         expect(result).toBe(true);
-    //     });
+    describe('.hasFunction(identifier)', () =>
+    {
+        it('should have an existing function', () =>
+        {
+            const result = esModule.hasFunction('createJohn');
+            expect(result).toBeTruthy();
+        });
 
-    //     it('should not have a non-existing function', () =>
-    //     {
-    //         const result = esModule.hasFunction('name');
-    //         expect(result).toBe(false);
-    //     });
-    // });
-    
-    // describe('.hasGenerator(name)', () =>
-    // {
-    //     it('should have an existing generator', () =>
-    //     {
-    //         const result = esModule.hasGenerator('createJohn');
-    //         expect(result).toBe(true);
-    //     });
+        it('should not have a non-existing function', () =>
+        {
+            const result = esModule.hasFunction('bas');
+            expect(result).toBeFalsy();
+        });
+    });
 
-    //     it('should not have a non-existing generator', () =>
-    //     {
-    //         const result = esModule.hasGenerator('sum');
-    //         expect(result).toBe(false);
-    //     });
-    // });
+    describe('.hasClass(identifier)', () =>
+    {
+        it('should have an existing class', () =>
+        {
+            const result = esModule.hasClass('Customer');
+            expect(result).toBe(true);
+        });
 
-    // describe('.hasClass(name)', () =>
-    // {
-    //     it('should have an existing class', () =>
-    //     {
-    //         const result = esModule.hasClass('Customer');
-    //         expect(result).toBe(true);
-    //     });
+        it('should not have a non-existing class', () =>
+        {
+            const result = esModule.hasClass('peter');
+            expect(result).toBe(false);
+        });
+    });
 
-    //     it('should not have a non-existing class', () =>
-    //     {
-    //         const result = esModule.hasClass('name');
-    //         expect(result).toBe(false);
-    //     });
-    // });
+    describe('.exportedVariables', () =>
+    {
+        it('should filter exported variables', () =>
+        {
+            const declarations = esModule.exportedVariables;
+            expect(declarations).toHaveLength(1);
 
-    // describe('.exportedDeclarations', () =>
-    // {
-    //     it('should filter exported declarations', () =>
-    //     {
-    //         const declarations = esModule.exportedDeclarations;
-    //         expect(declarations.length).toBe(1);
+            expect(declarations[0]).toBeInstanceOf(ESVariable);
+            expect(declarations[0].identifier).toEqual('peter');
+        });
+    });
 
-    //         expect(declarations[0]).toBeInstanceOf(ESDeclaration);
-    //         expect(declarations[0].name).toEqual('peter');
-    //     });
-    // });
+    describe('.exportedFunctions', () =>
+    {
+        it('should filter exported functions', () =>
+        {
+            const functions = esModule.exportedFunctions;
+            expect(functions).toHaveLength(2);
 
-    // describe('.exportedFunctions', () =>
-    // {
-    //     it('should filter exported functions', () =>
-    //     {
-    //         const functions = esModule.exportedFunctions;
-    //         expect(functions.length).toBe(1);
+            expect(functions[0]).toBeInstanceOf(ESFunction);
+            expect(functions[0].identifier).toEqual('sum');
 
-    //         expect(functions[0]).toBeInstanceOf(ESFunction);
-    //         expect(functions[0].name).toEqual('sum');
-    //     });
-    // });
+            expect(functions[1]).toBeInstanceOf(ESGeneratorFunction);
+            expect(functions[1].identifier).toEqual('generateNumbers');
+        });
+    });
 
-    // describe('.exportedGenerators', () =>
-    // {
-    //     it('should filter exported generators', () =>
-    //     {
-    //         const generators = esModule.exportedGenerators;
-    //         expect(generators.length).toBe(1);
+    describe('.exportedClasses', () =>
+    {
+        it('should filter exported classes', () =>
+        {
+            const classes = esModule.exportedClasses;
+            expect(classes).toHaveLength(1);
 
-    //         expect(generators[0]).toBeInstanceOf(ESGenerator);
-    //         expect(generators[0].name).toEqual('generateNumbers');
-    //     });
-    // });
-
-    // describe('.exportedClasses', () =>
-    // {
-    //     it('should filter exported classes', () =>
-    //     {
-    //         const classes = esModule.exportedClasses;
-    //         expect(classes.length).toBe(1);
-
-    //         expect(classes[0]).toBeInstanceOf(ESClass);
-    //         expect(classes[0].name).toEqual('Customer');
-    //     });
-    // });
-
-    // describe('.exported', () =>
-    // {
-    //     it('should return a map with exported members only', () =>
-    //     {
-    //         const exported = esModule.exported;
-    //         expect(exported.size).toBe(4);
-
-    //         const first = exported.get('default') as ESFunction;
-    //         expect(first).toBeInstanceOf(ESFunction);
-    //         expect(first.name).toEqual('sum');
-
-    //         const second = exported.get('peter') as ESDeclaration;
-    //         expect(second).toBeInstanceOf(ESDeclaration);
-    //         expect(second.name).toEqual('peter');
-
-    //         const third = exported.get('Customer') as ESClass;
-    //         expect(third).toBeInstanceOf(ESClass);
-    //         expect(third.name).toEqual('Customer');
-
-    //         const fourth = exported.get('generateNumbers') as ESGenerator;
-    //         expect(fourth).toBeInstanceOf(ESGenerator);
-    //         expect(fourth.name).toEqual('generateNumbers');
-    //     });
-    // });
-
-    // describe('.isExported(member)', () =>
-    // {
-    //     it('should indicate that a member is exported', () =>
-    //     {
-    //         const member = esModule.getMember('sum') as ESMember;
-    //         const result = esModule.isExported(member);
-    //         expect(result).toBe(true);
-    //     });
-
-    //     it('should indicate that a member is not exported', () =>
-    //     {
-    //         const member = esModule.getMember('createJohn') as ESMember;
-    //         const result = esModule.isExported(member);
-    //         expect(result).toBe(false);
-    //     });
-    // });
-
-    // describe('.getExported(name)', () =>
-    // {
-    //     it('should get an exported member', () =>
-    //     {
-    //         const member = esModule.getExported('default') as ESFunction;
-    //         expect(member).toBeInstanceOf(ESFunction);
-    //         expect(member.name).toEqual('sum');
-    //     });
-
-    //     it('should not get a non-exported member', () =>
-    //     {
-    //         const member = esModule.getExported('createJohn');
-    //         expect(member).toBe(undefined);
-    //     });
-    // });
+            expect(classes[0]).toBeInstanceOf(ESClass);
+            expect(classes[0].identifier).toEqual('Customer');
+        });
+    });
 });
