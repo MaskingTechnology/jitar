@@ -12,7 +12,7 @@ describe('model/ESModule', () =>
         it('should filter import members', () =>
         {
             const imports = esModule.imports;
-            expect(imports.length).toBe(1);
+            expect(imports).toHaveLength(1);
 
             expect(imports[0]).toBeInstanceOf(ESImport);
             expect(imports[0].members.length).toBe(1);
@@ -24,7 +24,7 @@ describe('model/ESModule', () =>
         it('should filter export members', () =>
         {
             const exports = esModule.exports;
-            expect(exports.length).toBe(1);
+            expect(exports).toHaveLength(1);
 
             expect(exports[0]).toBeInstanceOf(ESExport);
             expect(exports[0].members.length).toBe(4);
@@ -36,13 +36,13 @@ describe('model/ESModule', () =>
         it('should filter variable members', () =>
         {
             const declarations = esModule.variables;
-            expect(declarations.length).toBe(2);
+            expect(declarations).toHaveLength(2);
 
             expect(declarations[0]).toBeInstanceOf(ESVariable);
-            expect(declarations[0].identifier).toBe('peter');
+            expect(declarations[0].identifier).toEqual('peter');
 
             expect(declarations[1]).toBeInstanceOf(ESVariable);
-            expect(declarations[1].identifier).toBe('bas');
+            expect(declarations[1].identifier).toEqual('bas');
         });
     });
 
@@ -51,25 +51,16 @@ describe('model/ESModule', () =>
         it('should filter function members', () =>
         {
             const functions = esModule.functions;
-            expect(functions.length).toBe(2);
+            expect(functions).toHaveLength(3);
 
             expect(functions[0]).toBeInstanceOf(ESFunction);
-            expect(functions[0].identifier).toBe('createJohn');
+            expect(functions[0].identifier).toEqual('createJohn');
 
             expect(functions[1]).toBeInstanceOf(ESFunction);
-            expect(functions[1].identifier).toBe('sum');
-        });
-    });
+            expect(functions[1].identifier).toEqual('sum');
 
-    describe('.generators', () =>
-    {
-        it('should filter generator members', () =>
-        {
-            const generators = esModule.generators;
-            expect(generators.length).toBe(1);
-
-            expect(generators[0]).toBeInstanceOf(ESGeneratorFunction);
-            expect(generators[0].identifier).toBe('generateNumbers');
+            expect(functions[2]).toBeInstanceOf(ESGeneratorFunction);
+            expect(functions[2].identifier).toEqual('generateNumbers');
         });
     });
 
@@ -78,13 +69,13 @@ describe('model/ESModule', () =>
         it('should filter class members', () =>
         {
             const classes = esModule.classes;
-            expect(classes.length).toBe(2);
+            expect(classes).toHaveLength(2);
 
             expect(classes[0]).toBeInstanceOf(ESClass);
-            expect(classes[0].identifier).toBe('Customer');
+            expect(classes[0].identifier).toEqual('Customer');
 
             expect(classes[1]).toBeInstanceOf(ESClass);
-            expect(classes[1].identifier).toBe('Order');
+            expect(classes[1].identifier).toEqual('Order');
         });
     });
 
@@ -94,7 +85,7 @@ describe('model/ESModule', () =>
     //     {
     //         const member = esModule.getMember('sum');
     //         expect(member).toBeInstanceOf(ESFunction);
-    //         expect(member?.name).toBe('sum');
+    //         expect(member?.name).toEqual('sum');
     //     });
     // });
 
@@ -104,7 +95,7 @@ describe('model/ESModule', () =>
     //     {
     //         const member = esModule.getDeclaration('name');
     //         expect(member).toBeInstanceOf(ESDeclaration);
-    //         expect(member?.name).toBe('name');
+    //         expect(member?.name).toEqual('name');
     //     });
     // });
 
@@ -114,7 +105,7 @@ describe('model/ESModule', () =>
     //     {
     //         const member = esModule.getFunction('createJohn');
     //         expect(member).toBeInstanceOf(ESFunction);
-    //         expect(member?.name).toBe('createJohn');
+    //         expect(member?.name).toEqual('createJohn');
     //     });
     // });
 
@@ -124,7 +115,7 @@ describe('model/ESModule', () =>
     //     {
     //         const member = esModule.getGenerator('createJohn');
     //         expect(member).toBeInstanceOf(ESGenerator);
-    //         expect(member?.name).toBe('createJohn');
+    //         expect(member?.name).toEqual('createJohn');
     //     });
     // });
 
@@ -134,7 +125,7 @@ describe('model/ESModule', () =>
     //     {
     //         const member = esModule.getClass('Customer');
     //         expect(member).toBeInstanceOf(ESClass);
-    //         expect(member?.name).toBe('Customer');
+    //         expect(member?.name).toEqual('Customer');
     //     });
     // });
 
@@ -221,7 +212,7 @@ describe('model/ESModule', () =>
     //         expect(declarations.length).toBe(1);
 
     //         expect(declarations[0]).toBeInstanceOf(ESDeclaration);
-    //         expect(declarations[0].name).toBe('peter');
+    //         expect(declarations[0].name).toEqual('peter');
     //     });
     // });
 
@@ -233,7 +224,7 @@ describe('model/ESModule', () =>
     //         expect(functions.length).toBe(1);
 
     //         expect(functions[0]).toBeInstanceOf(ESFunction);
-    //         expect(functions[0].name).toBe('sum');
+    //         expect(functions[0].name).toEqual('sum');
     //     });
     // });
 
@@ -245,7 +236,7 @@ describe('model/ESModule', () =>
     //         expect(generators.length).toBe(1);
 
     //         expect(generators[0]).toBeInstanceOf(ESGenerator);
-    //         expect(generators[0].name).toBe('generateNumbers');
+    //         expect(generators[0].name).toEqual('generateNumbers');
     //     });
     // });
 
@@ -257,7 +248,7 @@ describe('model/ESModule', () =>
     //         expect(classes.length).toBe(1);
 
     //         expect(classes[0]).toBeInstanceOf(ESClass);
-    //         expect(classes[0].name).toBe('Customer');
+    //         expect(classes[0].name).toEqual('Customer');
     //     });
     // });
 
@@ -270,19 +261,19 @@ describe('model/ESModule', () =>
 
     //         const first = exported.get('default') as ESFunction;
     //         expect(first).toBeInstanceOf(ESFunction);
-    //         expect(first.name).toBe('sum');
+    //         expect(first.name).toEqual('sum');
 
     //         const second = exported.get('peter') as ESDeclaration;
     //         expect(second).toBeInstanceOf(ESDeclaration);
-    //         expect(second.name).toBe('peter');
+    //         expect(second.name).toEqual('peter');
 
     //         const third = exported.get('Customer') as ESClass;
     //         expect(third).toBeInstanceOf(ESClass);
-    //         expect(third.name).toBe('Customer');
+    //         expect(third.name).toEqual('Customer');
 
     //         const fourth = exported.get('generateNumbers') as ESGenerator;
     //         expect(fourth).toBeInstanceOf(ESGenerator);
-    //         expect(fourth.name).toBe('generateNumbers');
+    //         expect(fourth.name).toEqual('generateNumbers');
     //     });
     // });
 
@@ -309,7 +300,7 @@ describe('model/ESModule', () =>
     //     {
     //         const member = esModule.getExported('default') as ESFunction;
     //         expect(member).toBeInstanceOf(ESFunction);
-    //         expect(member.name).toBe('sum');
+    //         expect(member.name).toEqual('sum');
     //     });
 
     //     it('should not get a non-exported member', () =>

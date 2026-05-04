@@ -12,19 +12,19 @@ describe('model/ESClass', () =>
         it('should filter field members', () =>
         {
             const declarations = esClass.fields;
-            expect(declarations.length).toBe(4);
+            expect(declarations).toHaveLength(4);
 
             expect(declarations[0]).toBeInstanceOf(ESField);
-            expect(declarations[0].identifier).toBe('name');
+            expect(declarations[0].identifier).toEqual('name');
 
             expect(declarations[1]).toBeInstanceOf(ESField);
-            expect(declarations[1].identifier).toBe('age');
+            expect(declarations[1].identifier).toEqual('age');
 
             expect(declarations[2]).toBeInstanceOf(ESField);
-            expect(declarations[2].identifier).toBe('length');
+            expect(declarations[2].identifier).toEqual('length');
 
             expect(declarations[3]).toBeInstanceOf(ESField);
-            expect(declarations[3].identifier).toBe('secret');
+            expect(declarations[3].identifier).toEqual('secret');
         });
     });
 
@@ -43,13 +43,13 @@ describe('model/ESClass', () =>
         it('should filter getter members', () =>
         {
             const getters = esClass.getters;
-            expect(getters.length).toBe(2);
+            expect(getters).toHaveLength(2);
 
             expect(getters[0]).toBeInstanceOf(ESGetter);
-            expect(getters[0].identifier).toBe('name');
+            expect(getters[0].identifier).toEqual('name');
 
             expect(getters[1]).toBeInstanceOf(ESGetter);
-            expect(getters[1].identifier).toBe('age');
+            expect(getters[1].identifier).toEqual('age');
         });
     });
 
@@ -58,37 +58,28 @@ describe('model/ESClass', () =>
         it('should filter setter members', () =>
         {
             const setters = esClass.setters;
-            expect(setters.length).toBe(1);
+            expect(setters).toHaveLength(1);
 
             expect(setters[0]).toBeInstanceOf(ESSetter);
-            expect(setters[0].identifier).toBe('age');
+            expect(setters[0].identifier).toEqual('age');
         });
     });
 
     describe('.methods', () =>
     {
-        it('should filter function members', () =>
+        it('should filter method members', () =>
         {
-            const functions = esClass.methods;
-            expect(functions.length).toBe(2);
+            const methods = esClass.methods;
+            expect(methods).toHaveLength(3);
 
-            expect(functions[0]).toBeInstanceOf(ESMethod);
-            expect(functions[0].identifier).toBe('secretStuff');
+            expect(methods[0]).toBeInstanceOf(ESMethod);
+            expect(methods[0].identifier).toEqual('secretStuff');
 
-            expect(functions[1]).toBeInstanceOf(ESMethod);
-            expect(functions[1].identifier).toBe('toString');
-        });
-    });
+            expect(methods[1]).toBeInstanceOf(ESMethod);
+            expect(methods[1].identifier).toEqual('toString');
 
-    describe('.generators', () =>
-    {
-        it('should filter generator members', () =>
-        {
-            const generators = esClass.generators;
-            expect(generators.length).toBe(1);
-
-            expect(generators[0]).toBeInstanceOf(ESGeneratorMethod);
-            expect(generators[0].identifier).toBe('createJohn');
+            expect(methods[2]).toBeInstanceOf(ESGeneratorMethod);
+            expect(methods[2].identifier).toEqual('createJohn');
         });
     });
 
@@ -99,13 +90,13 @@ describe('model/ESClass', () =>
     //         const readable = esClass.readable;
     //         expect(readable.length).toBe(3);
 
-    //         expect(readable[0].name).toBe('name');
+    //         expect(readable[0].name).toEqual('name');
     //         expect(readable[0]).toBeInstanceOf(ESGetter);
 
-    //         expect(readable[1].name).toBe('age');
+    //         expect(readable[1].name).toEqual('age');
     //         expect(readable[1]).toBeInstanceOf(ESGetter);
 
-    //         expect(readable[2].name).toBe('length');
+    //         expect(readable[2].name).toEqual('length');
     //         expect(readable[2]).toBeInstanceOf(ESDeclaration);
     //     });
     // });
@@ -117,10 +108,10 @@ describe('model/ESClass', () =>
     //         const writable = esClass.writable;
     //         expect(writable.length).toBe(2);
 
-    //         expect(writable[0].name).toBe('age');
+    //         expect(writable[0].name).toEqual('age');
     //         expect(writable[0]).toBeInstanceOf(ESSetter);
 
-    //         expect(writable[1].name).toBe('length');
+    //         expect(writable[1].name).toEqual('length');
     //         expect(writable[1]).toBeInstanceOf(ESDeclaration);
     //     });
     // });
@@ -132,10 +123,10 @@ describe('model/ESClass', () =>
     //         const callable = esClass.callable;
     //         expect(callable.length).toBe(2);
 
-    //         expect(callable[0].name).toBe('constructor');
+    //         expect(callable[0].name).toEqual('constructor');
     //         expect(callable[0]).toBeInstanceOf(ESFunction);
 
-    //         expect(callable[1].name).toBe('toString');
+    //         expect(callable[1].name).toEqual('toString');
     //         expect(callable[1]).toBeInstanceOf(ESFunction);
     //     });
     // });
@@ -146,7 +137,7 @@ describe('model/ESClass', () =>
     //     {
     //         const member = esClass.getMember('sum');
     //         expect(member).toBeInstanceOf(ESMethod);
-    //         expect(member?.name).toBe('sum');
+    //         expect(member?.name).toEqual('sum');
     //     });
     // });
 
@@ -156,7 +147,7 @@ describe('model/ESClass', () =>
     //     {
     //         const member = esClass.getMethod('secretStuff');
     //         expect(member).toBeInstanceOf(ESGeneratorMethod);
-    //         expect(member?.name).toBe('secretStuff');
+    //         expect(member?.name).toEqual('secretStuff');
     //     });
     // });
 
@@ -166,7 +157,7 @@ describe('model/ESClass', () =>
     //     {
     //         const member = esClass.getGetter('name');
     //         expect(member).toBeInstanceOf(ESGetter);
-    //         expect(member?.name).toBe('name');
+    //         expect(member?.name).toEqual('name');
     //     });
     // });
 
@@ -176,7 +167,7 @@ describe('model/ESClass', () =>
     //     {
     //         const member = esClass.getSetter('age');
     //         expect(member).toBeInstanceOf(ESSetter);
-    //         expect(member?.name).toBe('age');
+    //         expect(member?.name).toEqual('age');
     //     });
     // });
 
@@ -186,7 +177,7 @@ describe('model/ESClass', () =>
     //     {
     //         const member = esClass.getGenerator('createJohn');
     //         expect(member).toBeInstanceOf(ESGeneratorMethod);
-    //         expect(member?.name).toBe('createJohn');
+    //         expect(member?.name).toEqual('createJohn');
     //     });
     // });
 
