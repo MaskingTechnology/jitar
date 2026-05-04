@@ -1,37 +1,28 @@
 
-import { ESClass, ESDeclaration, ESFunction, ESScope } from '../models';
+import { ESClass, ESClassMember } from '../model';
 
 export default class ClassMerger
 {
     merge(model: ESClass, parent: ESClass): ESClass
     {
-        const declarations = this.#mergeDeclarations(model.declarations, parent.declarations);
-        const functions = this.#mergeFunctions(model.functions, parent.functions);
-        const getters = this.#mergeFunctions(model.getters, parent.getters);
-        const setters = this.#mergeFunctions(model.setters, parent.setters);
+        const constructors = model.construct !== undefined ? [model.construct] : [];
+        const fields = this.#mergeMembers(model.fields, parent.fields);
+        const methods = this.#mergeMembers(model.methods, parent.methods);
+        const getters = this.#mergeMembers(model.getters, parent.getters);
+        const setters = this.#mergeMembers(model.setters, parent.setters);
         
-        const members = [...declarations.values(), ...functions.values(), ...getters.values(), ...setters.values()];
+        const members = [...fields, ...constructors, ...methods, ...getters, ...setters];
 
-        return new ESClass(model.name, parent.name, new ESScope(members));
+        return new ESClass(model.identifier, parent.identifier, members);
     }
 
-    #mergeDeclarations(model: ESDeclaration[], parent: ESDeclaration[]): ESDeclaration[]
+    #mergeMembers<T extends ESClassMember>(model: T[], parent: T[]): T[]
     {
-        const declarations = new Map<string, ESDeclaration>();
+        const members = new Map<string, T>();
 
-        parent.forEach(declaration => declarations.set(declaration.name, declaration));
-        model.forEach(declaration => declarations.set(declaration.name, declaration));
+        parent.forEach(member => members.set(member.identifier!, member));
+        model.forEach(member => members.set(member.identifier!, member));
 
-        return [...declarations.values()];
-    }
-
-    #mergeFunctions(model: ESFunction[], parent: ESFunction[]): ESFunction[]
-    {
-        const functions = new Map<string, ESFunction>();
-
-        parent.forEach(funktion => functions.set(funktion.name, funktion));
-        model.forEach(funktion => functions.set(funktion.name, funktion));
-
-        return [...functions.values()];
+        return [...members.values()];
     }
 }

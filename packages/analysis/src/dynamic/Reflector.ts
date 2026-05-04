@@ -1,5 +1,5 @@
 
-import { ESClass, ESDeclaration, ESExpression, ESFunction, ESGetter, ESMember, ESModule, ESScope, ESSetter, ESValue } from '../models';
+import { ESClass, ESClassMember, ESVariable, ESExpression, ESFunction, ESField, ESMethod, ESGetter, ESModule, ESSetter, ESConstructor } from '../model';
 import { Parser } from '../static';
 
 import ClassMerger from './ClassMerger';
@@ -35,18 +35,18 @@ export default class Reflector
             {
                 const expression = new ESExpression(code);
 
-                members.push(new ESDeclaration(key, expression));
+                members.push(new ESVariable('var', key, expression));
             }
         }
 
-        return new ESModule(new ESScope(members));
+        return new ESModule(members);
     }
 
     fromClass(clazz: Function, inherit = false): ESClass
     {
         const model = this.isClass(clazz)
-            ? this.#reflectStatic(clazz)
-            : this.#reflectDynamic(clazz);
+            ? this.#reflectClassStatic(clazz)
+            : this.#reflectClassDynamic(clazz);
 
         if (inherit === false)
         {
@@ -116,42 +116,41 @@ export default class Reflector
             || clazz.toString().startsWith('async function');
     }
 
-    #reflectStatic(clazz: Function): ESClass
+    #reflectClassStatic(clazz: Function): ESClass
     {
         const code = clazz.toString();
 
         return this.#parser.parseClass(code);
     }
 
-    #reflectDynamic(clazz: Function): ESClass
+    #reflectClassDynamic(clazz: Function): ESClass
     {
-        const object = this.createInstance(clazz);
-        const members = this.#getMembers(clazz, object);
-        const scope = new ESScope(members);
+        const instance = this.createInstance(clazz);
+        const members = this.#getClassMembers(clazz, instance);
 
-        return new ESClass(clazz.name, undefined, scope);
+        return new ESClass(clazz.name, undefined, members);
     }
 
-    #getMembers(clazz: Function, object: object): ESMember[]
+    #getClassMembers(clazz: Function, instance: object): ESClassMember[]
     {
-        const declarations = this.#getDeclarations(object);
-        const functions = this.#getFunctions(clazz);
+        const fields = this.#getClassFields(instance);
+        const methods = this.#getClassMethods(clazz);
 
-        return [...declarations, ...functions];
+        return [...fields, ...methods];
     }
 
-    #getDeclarations(object: object): ESDeclaration[]
+    #getClassFields(instance: object): ESField[]
     {
-        const fieldNames = Object.getOwnPropertyNames(object);
-        const values = object as Record<string, unknown>;
+        const fieldNames = Object.getOwnPropertyNames(instance);
+        const values = instance as Record<string, unknown>;
 
-        const models: ESDeclaration[] = [];
+        const models = [];
 
         for (const fieldName of fieldNames)
         {
             const content = values[fieldName];
-            const value = content !== undefined ? new ESValue(String(content)) : undefined;
-            const model = new ESDeclaration(fieldName, value);
+            const initializer = content !== undefined ? new ESExpression(String(content)) : undefined;
+            const model = new ESField(fieldName, 'public', 'instance', initializer);
 
             models.push(model);
         }
@@ -159,35 +158,39 @@ export default class Reflector
         return models;
     }
 
-    #getFunctions(clazz: Function): ESFunction[]
+    #getClassMethods(clazz: Function): (ESConstructor | ESGetter | ESSetter | ESMethod )[]
     {
         const functionDescriptions = Object.getOwnPropertyDescriptors(clazz.prototype);
 
-        const models: ESFunction[] = [];
+        const models = [];
 
         for (const functionName in functionDescriptions)
         {
             const description = functionDescriptions[functionName];
-            const funktion = description.value;
+            const method = description.value;
 
-            if (funktion instanceof Function === false)
+            if (method instanceof Function === false)
             {
                 continue;
             }
 
-            const model = this.fromFunction(funktion);
+            const model = this.fromFunction(method);
 
-            if (description.get !== undefined)
+            if (model.identifier === 'constructor')
             {
-                models.push(new ESGetter(model.name, model.parameters, model.body, model.isStatic, model.isAsync, model.isPrivate));
+                models.push(new ESConstructor(model.parameters, model.body));
+            }
+            else if (description.get !== undefined)
+            {
+                models.push(new ESGetter(model.identifier!, 'public', 'instance', model.body));
             }
             else if (description.set !== undefined)
             {
-                models.push(new ESSetter(model.name, model.parameters, model.body, model.isStatic, model.isAsync, model.isPrivate));
+                models.push(new ESSetter(model.identifier!, 'public', 'instance', model.parameters[0], model.body));
             }
             else
             {
-                models.push(model);
+                models.push(new ESMethod(model.identifier!, 'public', 'instance', model.parameters, model.body, model.isAsync));
             }
         }
 

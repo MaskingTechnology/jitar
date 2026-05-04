@@ -1,15 +1,19 @@
 
+import type { ClassVisibility, ClassLocation, VariableType } from '../model';
 import {
-    ESModule, ESMember, ESExport, ESClass, ESFunction, ESField, ESGetter, ESSetter, ESImport,
-    ESGenerator, ESExpression, ESArray, ESObject, ESAlias, ESScope, ESValue, ESParameter,
-    ESDestructuredArray, ESDestructuredObject, ESDeclaration, ESIdentifier
-} from '../models';
+    ESBinding, ESIdentifierBinding, ESArrayBinding, ESObjectBinding, ESBindingElement,
+    ESBlock, ESExpression, ESVariable,
+    ESFunction, ESArrowFunction, ESGeneratorFunction, ESParameter,
+    ESClass, ESClassMember, ESField, ESMethod, ESGeneratorMethod, ESConstructor, ESGetter, ESSetter,
+    ESModule, ESModuleMember, ESExport, ESImport, ESStatement
+} from '../model';
 
 import { Divider, isDivider } from './definitions/Divider';
 import { Group } from './definitions/Group';
 import { Keyword, isDeclaration, isKeyword, isNotReserved } from './definitions/Keyword';
 import { List } from './definitions/List';
 import { Operator } from './definitions/Operator';
+import { Indicator } from './definitions/Indicator';
 import { Scope } from './definitions/Scope';
 import { TokenType } from './definitions/TokenType';
 
@@ -26,7 +30,6 @@ import Lexer from './Lexer';
 
 const ANONYMOUS_IDENTIFIER = '';
 const DEFAULT_IDENTIFIER = 'default';
-const PRIVATE_INDICATOR = '#';
 const DEFINITION_SEPARATOR = ' ';
 
 export default class Parser
@@ -41,113 +44,109 @@ export default class Parser
     parse(code: string): ESModule
     {
         const tokenList = this.#lexer.tokenize(code);
-        const scope = this.#parseScope(tokenList);
+        const statements = this.#parseAll(tokenList);
 
-        return new ESModule(scope);
+        return new ESModule(statements);
     }
 
-    parseFirst(code: string): ESMember | ESValue | undefined
+    parseStatement(code: string): ESStatement
     {
         const tokenList = this.#lexer.tokenize(code);
+        const statement = this.#parseNext(tokenList);
 
-        return this.#parseNext(tokenList);
-    }
-
-    parseValue(code: string): ESValue
-    {
-        const model = this.parseFirst(code);
-
-        if ((model instanceof ESValue) === false)
+        if (statement === undefined)
         {
-            throw new UnexpectedParseResult('a value definition');
+            throw new UnexpectedParseResult('a statement');
         }
 
-        return model;
+        return statement;
     }
 
     parseImport(code: string): ESImport
     {
-        const model = this.parseFirst(code);
+        const tokenList = this.#lexer.tokenize(code);
+        const declaration = this.#parseKeyword(tokenList);
 
-        if ((model instanceof ESImport) === false)
+        if ((declaration instanceof ESImport) === false)
         {
             throw new UnexpectedParseResult('an import definition');
         }
 
-        return model;
+        return declaration;
     }
 
     parseExport(code: string): ESExport
     {
-        const model = this.parseFirst(code);
+        const tokenList = this.#lexer.tokenize(code);
+        const declaration = this.#parseKeyword(tokenList);
 
-        if ((model instanceof ESExport) === false)
+        if ((declaration instanceof ESExport) === false)
         {
             throw new UnexpectedParseResult('an export definition');
         }
 
-        return model;
+        return declaration;
     }
 
-    parseDeclaration(code: string): ESDeclaration
+    parseVariable(code: string): ESVariable
     {
-        const model = this.parseFirst(code);
+        const tokenList = this.#lexer.tokenize(code);
+        const declaration = this.#parseKeyword(tokenList);
 
-        if ((model instanceof ESDeclaration) === false)
+        if ((declaration instanceof ESVariable) === false)
         {
-            throw new UnexpectedParseResult('a declaration definition');
+            throw new UnexpectedParseResult('a variable definition');
         }
 
-        return model;
+        return declaration;
     }
 
     parseFunction(code: string): ESFunction
     {
         const tokenList = this.#lexer.tokenize(code);
-        const model = this.#parseMember(tokenList);
+        const declaration = this.#parseKeyword(tokenList);
 
-        if ((model instanceof ESFunction) === false)
+        if ((declaration instanceof ESFunction) === false)
         {
             throw new UnexpectedParseResult('a function definition');
         }
 
-        return model;
+        return declaration;
     }
 
     parseClass(code: string): ESClass
     {
         const tokenList = this.#lexer.tokenize(code);
-        const model = this.#parseMember(tokenList);
+        const declaration = this.#parseKeyword(tokenList);
 
-        if ((model instanceof ESClass) === false)
+        if ((declaration instanceof ESClass) === false)
         {
             throw new UnexpectedParseResult('a class definition');
         }
 
-        return model;
+        return declaration;
     }
 
-    #parseScope(tokenList: TokenList): ESScope
+    #parseAll(tokenList: TokenList): ESStatement[]
     {
-        const members: ESMember[] = [];
+        const statements: ESStatement[] = [];
 
         while (tokenList.notAtEnd())
         {
-            const member = this.#parseNext(tokenList);
+            const statement = this.#parseNext(tokenList);
 
-            if (member instanceof ESMember)
+            if (statement === undefined)
             {
-                // Only ES members are of interest
-                // because they can be exported
-
-                members.push(member);
+                continue;
             }
+
+            statements.push(statement);
         }
 
-        return new ESScope(members);
+        return statements;
     }
 
-    #parseNext(tokenList: TokenList, isAsync = false): ESMember | ESValue | undefined
+    #parseNext(tokenList: TokenList, isAsync = false): ESStatement | undefined
     {
         const token = tokenList.current;
 
@@ -190,7 +189,7 @@ export default class Parser
                 return this.#parseExpression(tokenList);
             }
 
-            return this.#parseMember(tokenList, isAsync);
+            return this.#parseKeyword(tokenList, isAsync);
         }
         else if (token.isType(TokenType.REGEX))
         {
@@ -198,7 +197,7 @@ export default class Parser
         }
         else if (token.hasValue(Group.OPEN))
         {
-            const next = this.#peekAfterBlock(tokenList, Group.OPEN, Group.CLOSE);
+            const next = this.#peekAfterCollection(tokenList, Group.OPEN, Group.CLOSE);
 
             if (next?.hasValue(Operator.ARROW))
             {
@@ -209,11 +208,13 @@ export default class Parser
         }
         else if (token.hasValue(Scope.OPEN))
         {
-            return this.#parseObject(tokenList);
+            // Object value
+            return this.#parseExpression(tokenList);
         }
         else if (token.hasValue(List.OPEN))
         {
-            return this.#parseArray(tokenList);
+            // Array value
+            return this.#parseExpression(tokenList);
         }
         else if (token.hasValue(Operator.NOT) || token.hasValue(Operator.SUBTRACT))
         {
@@ -235,7 +236,7 @@ export default class Parser
         throw new UnexpectedToken(token.value, token.start);
     }
 
-    #parseMember(tokenList: TokenList, isAsync = false): ESMember
+    #parseKeyword(tokenList: TokenList, isAsync = false): ESStatement | undefined
     {
         const token = tokenList.current;
 
@@ -256,12 +257,16 @@ export default class Parser
                 return this.#parseFunction(tokenList, isAsync);
 
             case Keyword.VAR:
+                return this.#parseVariable(tokenList, 'var');
+
             case Keyword.LET:
+                return this.#parseVariable(tokenList, 'let');
+
             case Keyword.CONST:
-                return this.#parseDeclaration(tokenList, false, true);
+                return this.#parseVariable(tokenList, 'const');
 
             case Keyword.ASYNC:
-                return this.#parseMember(tokenList, true);
+                return this.#parseNext(tokenList, true);
 
             default:
                 throw new UnexpectedKeyword(token.value, token.start);
@@ -270,19 +275,21 @@ export default class Parser
 
     #parseImport(tokenList: TokenList): ESImport
     {
-        const members: ESAlias[] = [];
+        const members: ESModuleMember[] = [];
 
         let token = tokenList.current;
 
         if (token.isType(TokenType.LITERAL))
         {
-            return new ESImport(members, token.value);
+            const from = this.#parseFrom(token.value);
+
+            return new ESImport(members, from);
         }
         else if (token.hasValue(Group.OPEN))
         {
             token = tokenList.step(); // Read away the open group
 
-            const from = token.value;
+            const from = this.#parseFrom(token.value);
 
             tokenList.step(2); // Read away the from value and scope close
 
@@ -292,21 +299,21 @@ export default class Parser
         if (token.hasValue(Scope.OPEN) === false)
         {
             // Keep the * indicator, otherwise use the default identifier
-            const name = token.hasValue(Operator.MULTIPLY) ? Operator.MULTIPLY : DEFAULT_IDENTIFIER;
+            const identifier = token.hasValue(Operator.MULTIPLY) ? Operator.MULTIPLY : DEFAULT_IDENTIFIER;
 
-            let as = token.value;
+            let alias = token.value;
 
-            token = tokenList.step(); // Read away the name
+            token = tokenList.step(); // Read away the identifier
 
             if (token.hasValue(Keyword.AS))
             {
                 token = tokenList.step(); // Read away the AS keyword
-                as = token.value;
+                alias = token.value;
 
-                token = tokenList.step(); // Read away the alias name
+                token = tokenList.step(); // Read away the alias identifier
             }
 
-            members.push(new ESAlias(name, as));
+            members.push(new ESModuleMember(identifier, alias));
         }
 
         if (token.hasValue(Divider.SEPARATOR))
@@ -316,9 +323,9 @@ export default class Parser
 
         if (token.hasValue(Scope.OPEN))
         {
-            const aliases = this.#parseAliasList(tokenList);
+            const parsedMembers = this.#parseModuleMembers(tokenList);
 
-            members.push(...aliases);
+            members.push(...parsedMembers);
 
             token = tokenList.current;
         }
@@ -329,7 +336,8 @@ export default class Parser
         }
 
         token = tokenList.step(); // Read away the FROM keyword
-        const from = token.value;
+
+        const from = this.#parseFrom(token.value);
 
         tokenList.step(); // Read away the source
 
@@ -371,8 +379,9 @@ export default class Parser
             stepSize++;
         }
 
-        const name = this.#isIdentifier(token) ? token.value : ANONYMOUS_IDENTIFIER;
-        const as = isDefault ? DEFAULT_IDENTIFIER : name;
+        const identifier = this.#isIdentifier(token) ? token.value : ANONYMOUS_IDENTIFIER;
+        const alias = isDefault ? DEFAULT_IDENTIFIER : undefined;
+
         let from: string | undefined = undefined;
 
         token = tokenList.step(); // Read away the name
@@ -380,8 +389,7 @@ export default class Parser
         if (token?.hasValue(Keyword.FROM))
         {
             token = tokenList.step(); // Read away the FROM keyword
-
-            from = token.value;
+            from = this.#parseFrom(token.value);
         }
 
         if (stepSize > 0)
@@ -391,14 +399,14 @@ export default class Parser
             tokenList.stepBack(stepSize); // Step back to the original position
         }
 
-        const alias = new ESAlias(name, as);
+        const member = new ESModuleMember(identifier, alias);
 
-        return new ESExport([alias], from);
+        return new ESExport([member], from);
     }
 
     #parseMultiExport(tokenList: TokenList): ESExport
     {
-        const members = this.#parseAliasList(tokenList);
+        const members = this.#parseModuleMembers(tokenList);
 
         let from: string | undefined = undefined;
         let token = tokenList.current;
@@ -406,7 +414,7 @@ export default class Parser
         if (token?.hasValue(Keyword.FROM))
         {
             token = tokenList.step(); // Read away the FROM keyword
-            from = token.value;
+            from = this.#parseFrom(token.value);
         }
 
         tokenList.step(); // Read away the source
@@ -414,9 +422,14 @@ export default class Parser
         return new ESExport(members, from);
     }
 
-    #parseAliasList(tokenList: TokenList): ESAlias[]
+    #parseFrom(from: string): string
     {
-        const aliases = [];
+        return from.slice(1, -1);
+    }
+
+    #parseModuleMembers(tokenList: TokenList): ESModuleMember[]
+    {
+        const members = [];
 
         let token = tokenList.step(); // Read away the scope open
 
@@ -436,183 +449,73 @@ export default class Parser
                 continue;
             }
 
-            const alias = this.#parseAlias(tokenList);
+            const member = this.#parseModuleMember(tokenList);
 
-            aliases.push(alias);
+            members.push(member);
 
             token = tokenList.step();
         }
 
-        return aliases;
+        return members;
     }
 
-    #parseAlias(tokenList: TokenList): ESAlias
+    #parseModuleMember(tokenList: TokenList): ESModuleMember
     {
         let token = tokenList.current;
 
-        const name = token.value;
-        let as = name;
+        const identifier = token.value;
+        let alias: string | undefined = undefined;
 
         if (tokenList.next.hasValue(Keyword.AS))
         {
             token = tokenList.step(2); // Read away the AS keyword
-            as = token.value;
+            alias = token.value;
         }
 
-        return new ESAlias(name, as);
+        return new ESModuleMember(identifier, alias);
     }
 
-    #parseDeclaration(tokenList: TokenList, isStatic: boolean, parseMultiple = false): ESMember
+    #parseVariable(tokenList: TokenList, type: VariableType): ESVariable
     {
-        let token = tokenList.current;
-        let identifier: ESIdentifier;
-        let isPrivate = false;
+        const binding = this.#parseBinding(tokenList);
+        const initializer = this.#parseInitializer(tokenList);
 
+        return new ESVariable(type, binding, initializer);
+    }
+
+    #parseBinding(tokenList: TokenList): ESBinding
+    {
+        const token = tokenList.current;
+        
         if (token.hasValue(List.OPEN))
         {
-            identifier = this.#parseDestructuredArray(tokenList);
-            token = tokenList.current;
+            return this.#parseArrayBinding(tokenList);
         }
         else if (token.hasValue(Scope.OPEN))
         {
-            identifier = this.#parseDestructuredObject(tokenList);
-            token = tokenList.current;
+            return this.#parseObjectBinding(tokenList);
         }
-        else
-        {
-            isPrivate = token.value.startsWith(PRIVATE_INDICATOR);
-            identifier = isPrivate ? token.value.substring(1) : token.value;
-            token = tokenList.step(); // Read away the identifier
-        }
-
-        let value = undefined;
-
-        if (token.hasValue(Operator.ASSIGN))
-        {
-            tokenList.step(); // Read away the assignment operator
-
-            value = this.#parseNext(tokenList, false);
-            token = tokenList.current;
-        }
-
-        if (token !== undefined)
-        {
-            if (token.hasValue(Divider.TERMINATOR))
-            {
-                tokenList.step(); // Read away the terminator
-            }
-            else if (parseMultiple === true && token.hasValue(Divider.SEPARATOR))
-            {
-                // Parse away the next declaration without saving it.
-                // Note that this is a known limitation as described in the readme.
-
-                tokenList.step(); // Read away the separator
-
-                this.#parseDeclaration(tokenList, isStatic, true);
-            }
-        }
-
-        // Now we have the value we need to check if we need to recreate it
-        // with the correct name, static and private properties.
-
-        if (value instanceof ESGenerator)
-        {
-            return new ESGenerator(identifier.toString(), value.parameters, value.body, isStatic, value.isAsync, isPrivate);
-        }
-        else if (value instanceof ESFunction)
-        {
-            return new ESFunction(identifier.toString(), value.parameters, value.body, isStatic, value.isAsync, isPrivate);
-        }
-        else if (value instanceof ESClass)
-        {
-            return new ESClass(identifier.toString(), value.parentName, value.scope);
-        }
-
-        return new ESDeclaration(identifier, value as ESValue, isStatic, isPrivate);
+        
+        return this.#parseIdentifierBinding(tokenList);
     }
 
-    #parseFunction(tokenList: TokenList, isAsync: boolean, isStatic = false, isGetter = false, isSetter = false): ESFunction
+    #parseArrayBinding(tokenList: TokenList): ESArrayBinding
     {
-        let token = tokenList.current;
-        let name = ANONYMOUS_IDENTIFIER;
-        let isGenerator = false;
-        let isPrivate = false;
+        const elements = this.#parseBindingElements(tokenList, List.CLOSE);
 
-        if (token.hasValue(Operator.MULTIPLY))
-        {
-            isGenerator = true;
-
-            token = tokenList.step(); // Read away the generator operator
-        }
-
-        if (this.#isIdentifier(token))
-        {
-            isPrivate = token.value.startsWith(PRIVATE_INDICATOR);
-            name = isPrivate ? token.value.substring(1) : token.value;
-
-            tokenList.step(); // Read away the function name
-        }
-
-        const parameters = this.#parseParameters(tokenList, Group.CLOSE);
-
-        token = tokenList.current;
-
-        if (token.hasValue(Scope.OPEN) === false)
-        {
-            throw new ExpectedToken(Scope.OPEN, token.start);
-        }
-
-        const body = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
-
-        if (isGenerator)
-        {
-            return new ESGenerator(name, parameters, body, isStatic, isAsync, isPrivate);
-        }
-        else if (isGetter)
-        {
-            return new ESGetter(name, parameters, body, isStatic, isAsync, isPrivate);
-        }
-        else if (isSetter)
-        {
-            return new ESSetter(name, parameters, body, isStatic, isAsync, isPrivate);
-        }
-
-        return new ESFunction(name, parameters, body, isStatic, isAsync, isPrivate);
+        return new ESArrayBinding(elements);
     }
 
-    #parseArrowFunction(tokenList: TokenList, isAsync: boolean): ESFunction
+    #parseObjectBinding(tokenList: TokenList): ESObjectBinding
     {
-        let token = tokenList.current;
-        let parameters: ESParameter[];
+        const elements = this.#parseBindingElements(tokenList, Scope.CLOSE);
 
-        if (token.hasValue(Group.OPEN))
-        {
-            parameters = this.#parseParameters(tokenList, Group.CLOSE);
-            token = tokenList.current;
-        }
-        else
-        {
-            parameters = [new ESField(token.value, undefined)];
-            token = tokenList.step();
-        }
-
-        if (token.hasValue(Operator.ARROW) === false)
-        {
-            throw new ExpectedToken(Operator.ARROW, token.start);
-        }
-
-        token = tokenList.step(); // Read away the arrow
-
-        const body = token.hasValue(Scope.OPEN)
-            ? this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE)
-            : this.#parseExpression(tokenList).definition;
-
-        return new ESFunction(ANONYMOUS_IDENTIFIER, parameters, body, false, isAsync, false);
+        return new ESObjectBinding(elements);
     }
 
-    #parseParameters(tokenList: TokenList, closeId: string): ESParameter[]
+    #parseBindingElements(tokenList: TokenList, closeId: string): ESBindingElement[]
     {
-        const parameters = [];
+        const elements = [];
 
         tokenList.step(); // Read away the group open
 
@@ -622,7 +525,7 @@ export default class Parser
 
             if (token.hasValue(closeId))
             {
-                // End of the parameter list
+                // End of the element list
 
                 tokenList.step(); // Read away the group close
 
@@ -630,50 +533,151 @@ export default class Parser
             }
             else if (token.hasValue(Divider.SEPARATOR))
             {
-                // End of parameter
+                // End of element
 
                 tokenList.step(); // Read away the separator
 
                 continue;
             }
 
-            let parameter;
+            const binding = this.#parseBinding(tokenList);
+            const initializer = this.#parseInitializer(tokenList);
 
-            if (token.hasValue(Scope.OPEN))
-            {
-                parameter = this.#parseDestructuredObject(tokenList);
-            }
-            else if (token.hasValue(List.OPEN))
-            {
-                parameter = this.#parseDestructuredArray(tokenList);
-            }
-            else
-            {
-                parameter = this.#parseField(tokenList);
-            }
-
-            parameters.push(parameter);
+            const element = new ESBindingElement(binding, initializer);
+            elements.push(element);
         }
 
-        return parameters;
+        return elements;
+    }
+
+    #parseIdentifierBinding(tokenList: TokenList): ESIdentifierBinding
+    {
+        const token = tokenList.current;
+        const identifier = token.value;
+
+        tokenList.step(); // Read away the identifier
+
+        return new ESIdentifierBinding(identifier);
+    }
+
+    #parseInitializer(tokenList: TokenList): ESStatement | undefined
+    {
+        const token = tokenList.current;
+
+        if (token.hasValue(Operator.ASSIGN) === false)
+        {
+            if (token.hasValue(Divider.TERMINATOR))
+            {
+                tokenList.step(); // Read away the terminator
+            }
+
+            return undefined;
+        }
+
+        tokenList.step(); // Read away the assignment operator
+
+        return this.#parseNext(tokenList, false);
+    }
+
+    #parseFunction(tokenList: TokenList, isAsync: boolean): ESFunction
+    {
+        let token = tokenList.current;
+        let identifier: string | undefined = undefined;
+        let isGenerator = false;
+
+        if (token.hasValue(Indicator.GENERATOR))
+        {
+            isGenerator = true;
+
+            token = tokenList.step(); // Read away the generator operator
+        }
+
+        if (this.#isIdentifier(token))
+        {
+            identifier = token.value;
+
+            tokenList.step(); // Read away the function identifier
+        }
+
+        const parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
+
+        token = tokenList.current;
+
+        if (token.hasValue(Scope.OPEN) === false)
+        {
+            throw new ExpectedToken(Scope.OPEN, token.start);
+        }
+
+        const body = this.#parseBlock(tokenList);
+
+        if (isGenerator)
+        {
+            return new ESGeneratorFunction(identifier, parameters, body, isAsync);
+        }
+        
+        return new ESFunction(identifier, parameters, body, isAsync);
+    }
+
+    #parseArrowFunction(tokenList: TokenList, isAsync: boolean): ESArrowFunction
+    {
+        let token = tokenList.current;
+        let parameters: ESParameter[];
+
+        if (token.hasValue(Group.OPEN))
+        {
+            parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
+        }
+        else
+        {
+            const binding = this.#parseIdentifierBinding(tokenList);
+            const parameter = new ESBindingElement(binding, undefined);
+
+            parameters = [parameter];
+        }
+
+        token = tokenList.current;
+
+        if (token.hasValue(Operator.ARROW) === false)
+        {
+            throw new ExpectedToken(Operator.ARROW, token.start);
+        }
+
+        token = tokenList.step(); // Read away the arrow
+
+        let body: ESBlock;
+
+        if (token.hasValue(Scope.OPEN))
+        {
+            body = this.#parseBlock(tokenList);
+        }
+        else
+        {
+            const expression = this.#parseExpression(tokenList);
+
+            body = new ESBlock(expression.code);
+        }
+
+        return new ESArrowFunction(parameters, body, isAsync);
     }
 
     #parseClass(tokenList: TokenList): ESClass
     {
         let token = tokenList.current;
-        let name = ANONYMOUS_IDENTIFIER;
+
+        let identifier: string | undefined = undefined;
         let parent: string | undefined = undefined;
 
         if (this.#isIdentifier(token))
         {
-            name = token.value;
+            identifier = token.value;
 
-            token = tokenList.step(); // Read away the class name
+            token = tokenList.step(); // Read away the class identifier
         }
 
         if (token.hasValue(Keyword.EXTENDS))
         {
             token = tokenList.step(); // Read away the extends keyword
+
             parent = token.value;
 
             token = tokenList.step(); // Read away the extends name
@@ -684,12 +688,12 @@ export default class Parser
             throw new ExpectedToken(Scope.OPEN, token.start);
         }
 
-        const scope = this.#parseClassScope(tokenList);
+        const members = this.#parseClassMembers(tokenList);
 
-        return new ESClass(name, parent, scope);
+        return new ESClass(identifier, parent, members);
     }
 
-    #parseClassScope(tokenList: TokenList): ESScope
+    #parseClassMembers(tokenList: TokenList): ESClassMember[]
     {
         let token = tokenList.step(); // Read away the scope open
 
@@ -711,40 +715,48 @@ export default class Parser
             token = tokenList.current;
         }
 
-        return new ESScope(members);
+        return members;
     }
 
-    #parseClassMember(tokenList: TokenList): ESMember
+    #parseClassMember(tokenList: TokenList): ESClassMember
     {
         let token = tokenList.current;
 
+        let visibility: ClassVisibility = 'public';
+        let location: ClassLocation = 'instance';
         let isAsync = false;
-        let isStatic = false;
-        let isGetter = false;
-        let isSetter = false;
 
         while (tokenList.notAtEnd())
         {
-            if (token.hasValue(Keyword.STATIC))
+            if (token.hasValue(Indicator.PRIVATE))
             {
-                isStatic = true;
+                visibility = 'private';
+            }
+            else if (token.hasValue(Keyword.STATIC))
+            {
+                location = 'static';
             }
             else if (token.hasValue(Keyword.ASYNC))
             {
                 isAsync = true;
             }
+            else if (token.hasValue(Keyword.CONSTRUCTOR))
+            {
+                return this.#parseConstructor(tokenList);
+            }
             else if (token.hasValue(Keyword.GET))
             {
-                isGetter = true;
+                return this.#parseGetter(tokenList, location);
             }
             else if (token.hasValue(Keyword.SET))
             {
-                isSetter = true;
+                return this.#parseSetter(tokenList, location);
             }
-            else if (token.hasValue(Operator.MULTIPLY))
+            else if (token.hasValue(Indicator.GENERATOR))
             {
-                // Generator function
-                return this.#parseFunction(tokenList, isAsync, isStatic, false, false);
+                tokenList.step(); // Read away the generator indicator
+
+                return this.#parseMethod(tokenList, visibility, location, isAsync, true);
             }
             else
             {
@@ -757,56 +769,145 @@ export default class Parser
         const nextToken = tokenList.next;
 
         return nextToken.hasValue(Group.OPEN)
-            ? this.#parseFunction(tokenList, isAsync, isStatic, isGetter, isSetter)
-            : this.#parseDeclaration(tokenList, isStatic);
+            ? this.#parseMethod(tokenList, visibility, location, isAsync, false)
+            : this.#parseField(tokenList, visibility, location);
     }
 
-    #parseArray(tokenList: TokenList): ESArray
+    #parseConstructor(tokenList: TokenList): ESConstructor
     {
-        const items = this.#parseBlock(tokenList, List.OPEN, List.CLOSE);
+        tokenList.step(); // Read away the constructor keyword
+        
+        const parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
 
-        return new ESArray(items);
-    }
+        const token = tokenList.current;
 
-    #parseDestructuredArray(tokenList: TokenList): ESDestructuredArray
-    {
-        const fields = this.#parseParameters(tokenList, List.CLOSE);
-
-        return new ESDestructuredArray(fields);
-    }
-
-    #parseObject(tokenList: TokenList): ESObject
-    {
-        const fields = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
-
-        return new ESObject(fields);
-    }
-
-    #parseDestructuredObject(tokenList: TokenList): ESDestructuredObject
-    {
-        const fields = this.#parseParameters(tokenList, Scope.CLOSE);
-
-        return new ESDestructuredObject(fields);
-    }
-
-    #parseField(tokenList: TokenList): ESField
-    {
-        let token = tokenList.current;
-
-        const name = token.value;
-
-        token = tokenList.step(); // Read away the name
-
-        let value = undefined;
-
-        if (token.hasValue(Operator.ASSIGN))
+        if (token.hasValue(Scope.OPEN) === false)
         {
-            tokenList.step(); // Read away the assignment operator
-
-            value = this.#parseNext(tokenList, false) as ESValue;
+            throw new ExpectedToken(Scope.OPEN, token.start);
         }
 
-        return new ESField(name, value);
+        const body = this.#parseBlock(tokenList);
+
+        return new ESConstructor(parameters, body);
+    }
+
+    #parseGetter(tokenList: TokenList, location: ClassLocation): ESGetter
+    {
+        let visibility: ClassVisibility = 'public';
+
+        let token = tokenList.step(); // Read away the get keyword
+        
+        if (token.hasValue(Indicator.PRIVATE))
+        {
+            visibility = 'private';
+
+            token = tokenList.step(); // Read away the private indicator
+        }
+
+        const identifier = token.value;
+
+        tokenList.step(); // Read away the identifier
+
+        const parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
+
+        if (parameters.length !== 0)
+        {
+            throw new UnexpectedParseResult('an empty parameter list');
+        }
+
+        token = tokenList.current;
+
+        if (token.hasValue(Scope.OPEN) === false)
+        {
+            throw new ExpectedToken(Scope.OPEN, token.start);
+        }
+
+        const body = this.#parseBlock(tokenList);
+
+        return new ESGetter(identifier, visibility, location, body);
+    }
+
+    #parseSetter(tokenList: TokenList, location: ClassLocation): ESSetter
+    {
+        let visibility: ClassVisibility = 'public';
+
+        let token = tokenList.step(); // Read away the get keyword
+        
+        if (token.hasValue(Indicator.PRIVATE))
+        {
+            visibility = 'private';
+
+            token = tokenList.step(); // Read away the private indicator
+        }
+
+        const identifier = token.value;
+
+        tokenList.step(); // Read away the identifier
+        
+        const parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
+
+        token = tokenList.current;
+
+        if (parameters.length !== 1)
+        {
+            throw new UnexpectedParseResult('exactly one setter parameter');
+        }
+
+        if (token.hasValue(Scope.OPEN) === false)
+        {
+            throw new ExpectedToken(Scope.OPEN, token.start);
+        }
+
+        const body = this.#parseBlock(tokenList);
+
+        return new ESSetter(identifier, visibility, location, parameters[0], body);
+    }
+
+    #parseMethod(tokenList: TokenList, visibility: ClassVisibility, location: ClassLocation, isAsync: boolean, isGenerator: boolean): ESMethod
+    {
+        let token = tokenList.current;
+        
+        const identifier = token.value;
+
+        tokenList.step(); // Read away the identifier
+
+        const parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
+
+        token = tokenList.current;
+
+        if (token.hasValue(Scope.OPEN) === false)
+        {
+            throw new ExpectedToken(Scope.OPEN, token.start);
+        }
+
+        const body = this.#parseBlock(tokenList);
+
+        if (isGenerator)
+        {
+            return new ESGeneratorMethod(identifier, visibility, location, parameters, body, isAsync);
+        }
+
+        return new ESMethod(identifier, visibility, location, parameters, body, isAsync);
+    }
+
+    #parseField(tokenList: TokenList, visibility: ClassVisibility, location: ClassLocation): ESField
+    {
+        const token = tokenList.current;
+
+        const identifier = token.value;
+
+        tokenList.step(); // Read away the name
+
+        const initializer = this.#parseInitializer(tokenList);
+
+        return new ESField(identifier, visibility, location, initializer);
+    }
+
+    #parseBlock(tokenList: TokenList): ESBlock
+    {
+        const code = this.#parseCollectionToCode(tokenList, Scope.OPEN, Scope.CLOSE);
+
+        return new ESBlock(code);
     }
 
     #parseExpression(tokenList: TokenList): ESExpression
@@ -818,21 +919,21 @@ export default class Parser
         {
             if (token.hasValue(List.OPEN))
             {
-                const array = this.#parseBlock(tokenList, List.OPEN, List.CLOSE);
+                const array = this.#parseCollectionToCode(tokenList, List.OPEN, List.CLOSE);
 
                 code += array + DEFINITION_SEPARATOR;
                 token = tokenList.current;
             }
             else if (token.hasValue(Group.OPEN))
             {
-                const group = this.#parseBlock(tokenList, Group.OPEN, Group.CLOSE);
+                const group = this.#parseCollectionToCode(tokenList, Group.OPEN, Group.CLOSE);
 
                 code += group + DEFINITION_SEPARATOR;
                 token = tokenList.current;
             }
             else if (token.hasValue(Scope.OPEN))
             {
-                const scope = this.#parseBlock(tokenList, Scope.OPEN, Scope.CLOSE);
+                const scope = this.#parseCollectionToCode(tokenList, Scope.OPEN, Scope.CLOSE);
 
                 code += scope + DEFINITION_SEPARATOR;
                 token = tokenList.current;
@@ -843,9 +944,17 @@ export default class Parser
                 token = tokenList.step();
             }
 
-            if (token === undefined || this.#atEndOfStatement(token))
+            if (token === undefined)
             {
-                // End of the list
+                break;
+            }
+
+            if (this.#atEndOfStatement(token))
+            {
+                if (token.hasValue(Divider.TERMINATOR))
+                {
+                    tokenList.step(); // Read away the terminator
+                }
 
                 break;
             }
@@ -854,17 +963,16 @@ export default class Parser
         return new ESExpression(code.trim());
     }
 
-    #parseBlock(tokenList: TokenList, openId: string, closeId: string): string
+    #parseCollectionToCode(tokenList: TokenList, openId: string, closeId: string): string
     {
         let token = tokenList.step(); // Read away the open
-
         let code = openId + DEFINITION_SEPARATOR;
 
         while (tokenList.notAtEnd())
         {
             if (token.hasValue(openId))
             {
-                code += this.#parseBlock(tokenList, openId, closeId) + DEFINITION_SEPARATOR;
+                code += this.#parseCollectionToCode(tokenList, openId, closeId) + DEFINITION_SEPARATOR;
                 token = tokenList.current;
 
                 continue;
@@ -885,11 +993,11 @@ export default class Parser
         return code;
     }
 
-    #peekAfterBlock(tokenList: TokenList, openId: string, closeId: string): Token | undefined
+    #peekAfterCollection(tokenList: TokenList, openId: string, closeId: string): Token | undefined
     {
         const start = tokenList.position;
 
-        this.#parseBlock(tokenList, openId, closeId);
+        this.#parseCollectionToCode(tokenList, openId, closeId);
 
         const token = tokenList.current;
         const end = tokenList.position;

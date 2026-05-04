@@ -17,6 +17,7 @@ const Keyword =
     STATIC: 'static',
     ASYNC: 'async',
     RETURN: 'return',
+    CONSTRUCTOR: 'constructor',
     // Other keywords are not needed in the parse
     // process and must be treated as identifiers.
 };

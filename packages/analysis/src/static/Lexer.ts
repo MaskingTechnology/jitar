@@ -11,6 +11,7 @@ import { isKeyword } from './definitions/Keyword';
 import { List, isList } from './definitions/List';
 import { isLiteral } from './definitions/Literal';
 import { isOperator, Operator } from './definitions/Operator';
+import { isIndicator } from './definitions/Indicator';
 import { Punctuation } from './definitions/Punctuation';
 import { isScope } from './definitions/Scope';
 import { TokenType } from './definitions/TokenType';
@@ -101,6 +102,13 @@ export default class Lexer
             const end = charList.position;
 
             return new Token(TokenType.OPERATOR, value, start, end);
+        }
+        else if (isIndicator(char))
+        {
+            const value = this.#readOperation(charList);
+            const end = charList.position;
+
+            return new Token(TokenType.INDICATOR, value, start, end);
         }
         else if (isDivider(char))
         {
