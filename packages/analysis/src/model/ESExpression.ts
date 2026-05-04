@@ -14,8 +14,10 @@ export default class ESExpression extends ESStatement
 
     get code() { return this.#code; }
 
-    toString(): string
+    toString(terminate = true): string
     {
-        return this.#code;
+        const terminator = terminate === false || this.#code.endsWith('}') ? '' : ';';
+
+        return `${this.#code}${terminator}`;
     }
 }

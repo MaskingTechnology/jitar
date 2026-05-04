@@ -36,7 +36,7 @@ export default class ESModule
     toString(): string
     {
         return this.#statements
-            .map(statement => statement.toString())
+            .map(statement => statement.toString(true))
             .join(' ');
     }
 }

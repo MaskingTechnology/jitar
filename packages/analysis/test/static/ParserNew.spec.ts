@@ -2,16 +2,15 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-    ESBinding, ESIdentifierBinding, ESArrayBinding, ESObjectBinding, ESBindingElement,
-    ESBlock, ESExpression, ESVariable,
-    ESFunction, ESArrowFunction, ESGeneratorFunction, ESParameter,
-    ESClass, ESClassMember, ESField, ESMethod, ESGeneratorMethod, ESConstructor, ESGetter, ESSetter,
-    ESModule, ESModuleMember, ESExport, ESImport, ESStatement
+    ESIdentifierBinding, ESArrayBinding, ESObjectBinding, ESBindingElement,
+    ESExpression,
+    ESFunction, ESArrowFunction, ESGeneratorFunction,
+    ESClass, ESGeneratorMethod, ESConstructor
 } from '../../src/model';
 
 import { ParserNew as Parser } from '../../src/static';
 
-import { VALUES, IMPORTS, EXPORTS, DECLARATIONS, FUNCTIONS, CLASSES, MODULES } from './fixtures';
+import { VALUES, IMPORTS, EXPORTS, DECLARATIONS, FUNCTIONS, CLASSES, MODULES, MODULES_STRINGS } from './fixtures';
 
 const parser = new Parser();
 
@@ -23,42 +22,42 @@ describe('parser/Parser', () =>
         {
             const expression = parser.parseStatement(VALUES.ARRAY);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toEqual('[ 1 , "foo" , false , new Person ( "Peter" , 42 ) , { a : 1 , b : 2 } ]');
+            expect(expression.toString(false)).toEqual('[ 1 , "foo" , false , new Person ( "Peter" , 42 ) , { a : 1 , b : 2 } ]');
         });
 
         it('should parse an object', () =>
         {
             const expression = parser.parseStatement(VALUES.OBJECT);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toEqual('{ key1 : "value1" , "key2" : new Person ( ) .toString ( ) }');
+            expect(expression.toString(false)).toEqual('{ key1 : "value1" , "key2" : new Person ( ) .toString ( ) }');
         });
 
         it('should parse an expression', () =>
         {
             const expression = parser.parseStatement(VALUES.EXPRESSION);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toEqual('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
+            expect(expression.toString(false)).toEqual('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
         });
 
         it('should parse a grouped expression', () =>
         {
             const expression = parser.parseStatement(VALUES.EXPRESSION_GROUP);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toEqual('( a + b ) * c');
+            expect(expression.toString(false)).toEqual('( a + b ) * c');
         });
 
         it('should parse an if...else expression', () =>
         {
             const expression = parser.parseStatement(VALUES.IF_ELSE);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toEqual('if ( true ) { return "value1" ; } else { return "value2" ; }');
+            expect(expression.toString(false)).toEqual('if ( true ) { return "value1" ; } else { return "value2" ; }');
         });
 
         it('should parse an try...catch...finally expression', () =>
         {
             const expression = parser.parseStatement(VALUES.TRY_CATCH_FINALLY);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString()).toEqual('try { sum ( 1 , 2 ) ; } catch ( error ) { console.error ( error ) ; } finally { console.log ( "finally" ) ; }');
+            expect(expression.toString(false)).toEqual('try { sum ( 1 , 2 ) ; } catch ( error ) { console.error ( error ) ; } finally { console.log ( "finally" ) ; }');
         });
     });
 
@@ -307,7 +306,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual("'const'");
+            expect(variable.initializer?.toString(false)).toEqual("'const'");
         });
 
         it('should parse a let declaration with value', () =>
@@ -317,7 +316,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('let');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual("'let'");
+            expect(variable.initializer?.toString(false)).toEqual("'let'");
         });
 
         it('should parse a var declaration with value', () =>
@@ -327,7 +326,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('var');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual("'var'");
+            expect(variable.initializer?.toString(false)).toEqual("'var'");
         });
 
         it('should parse a declaration with multiple declarations', () =>
@@ -337,7 +336,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('let');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual('( 1 + 2 ) * 3');
+            expect(variable.initializer?.toString(false)).toEqual('( 1 + 2 ) * 3');
         });
 
         it('should parse a declaration with an expression', () =>
@@ -347,7 +346,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
+            expect(variable.initializer?.toString(false)).toEqual('new Number ( Math.ceil ( Math.random ( ) ) + 10 ) .toString ( )');
         });
 
         it('should parse a declaration with an array value', () =>
@@ -357,7 +356,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual("[ 'value1' , 'value2' ]");
+            expect(variable.initializer?.toString(false)).toEqual("[ 'value1' , 'value2' ]");
         });
 
         it('should parse a declaration with an array value', () =>
@@ -367,7 +366,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual("{ key1 : 'value1' , key2 : 'value2' }");
+            expect(variable.initializer?.toString(false)).toEqual("{ key1 : 'value1' , key2 : 'value2' }");
         });
 
         it('should parse a declaration with a regex value', () =>
@@ -377,7 +376,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual("/regex/g");
+            expect(variable.initializer?.toString(false)).toEqual("/regex/g");
         });
 
         it('should parse a declaration that is destructuring an array', () =>
@@ -387,7 +386,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESArrayBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual('array');
+            expect(variable.initializer?.toString(false)).toEqual('array');
 
             const binding = variable.binding as ESArrayBinding;
             expect(binding.elements).toHaveLength(2);
@@ -403,7 +402,7 @@ describe('parser/Parser', () =>
             expect(secondElement.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(secondElement.binding.toString()).toEqual('value2');
             expect(secondElement.initializer).toBeInstanceOf(ESExpression);
-            expect(secondElement.initializer?.toString()).toEqual('true');
+            expect(secondElement.initializer?.toString(false)).toEqual('true');
         });
 
         it('should parse a declaration that is destructuring an object', () =>
@@ -413,7 +412,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESObjectBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual('object');
+            expect(variable.initializer?.toString(false)).toEqual('object');
 
             const binding = variable.binding as ESObjectBinding;
             expect(binding.elements).toHaveLength(2);
@@ -428,7 +427,7 @@ describe('parser/Parser', () =>
             expect(secondElement.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(secondElement.binding.toString()).toEqual('key2');
             expect(secondElement.initializer).toBeInstanceOf(ESExpression);
-            expect(secondElement.initializer?.toString()).toEqual('false');
+            expect(secondElement.initializer?.toString(false)).toEqual('false');
         });
 
         it('should parse a declaration with a non reserved keyword as name', () =>
@@ -438,7 +437,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual("'value'");
+            expect(variable.initializer?.toString(false)).toEqual("'value'");
         });
 
         it('should parse a declaration that refers to a non reserved keyword as value', () =>
@@ -448,7 +447,7 @@ describe('parser/Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString()).toEqual('as');
+            expect(variable.initializer?.toString(false)).toEqual('as');
         });
     });
 
@@ -647,13 +646,13 @@ describe('parser/Parser', () =>
             expect(first.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(first.binding.toString()).toEqual('param1');
             expect(first.initializer).toBeInstanceOf(ESExpression);
-            expect(first.initializer?.toString()).toEqual("'value1'");
+            expect(first.initializer?.toString(false)).toEqual("'value1'");
 
             const second = parameters[1];
             expect(second.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(second.binding.toString()).toEqual('param2');
             expect(second.initializer).toBeInstanceOf(ESExpression);
-            expect(second.initializer?.toString()).toEqual('true');
+            expect(second.initializer?.toString(false)).toEqual('true');
         });
 
         it('should parse a function with a rest parameter', () =>
@@ -903,7 +902,7 @@ describe('parser/Parser', () =>
             expect(fields[0].identifier).toEqual('field1');
             expect(fields[0].visibility).toEqual('private');
             expect(fields[0].location).toEqual('instance');
-            expect(fields[0].initializer?.toString()).toEqual("'value1'");
+            expect(fields[0].initializer?.toString(false)).toEqual("'value1'");
 
             expect(fields[1].identifier).toEqual('field2');
             expect(fields[1].visibility).toEqual('public');
@@ -913,7 +912,7 @@ describe('parser/Parser', () =>
             expect(fields[2].identifier).toEqual('field3');
             expect(fields[2].visibility).toEqual('private');
             expect(fields[2].location).toEqual('static');
-            expect(fields[2].initializer?.toString()).toEqual('"value3"');
+            expect(fields[2].initializer?.toString(false)).toEqual('"value3"');
 
             expect(fields[3].identifier).toEqual('field4');
             expect(fields[3].visibility).toEqual('public');
@@ -1076,6 +1075,15 @@ describe('parser/Parser', () =>
             expect(module.variables).toHaveLength(2);
             expect(module.functions).toHaveLength(1);
             expect(module.classes).toHaveLength(1);
+        });
+
+        it('should parse a module and regenerate its code', () =>
+        {
+            const module = parser.parse(MODULES.TERMINATED);
+            
+            expect(module.toString()).toEqual(MODULES_STRINGS.TERMINATED);
+
+            // NOTE: Unterminated code is read only as it can not be outputted to working code
         });
     });
 });
