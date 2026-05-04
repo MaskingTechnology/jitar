@@ -17,6 +17,8 @@ export default class ESModule
         this.#statements = statements;
     }
 
+    get statements() { return this.#statements; }
+
     get exports() { return this.#statements.filter(statement => statement instanceof ESExport); }
 
     get imports() { return this.#statements.filter(statement => statement instanceof ESImport); }
