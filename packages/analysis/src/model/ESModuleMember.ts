@@ -10,9 +10,9 @@ export default class ESModuleMember
         this.#alias = alias;
     }
 
-    get identifier() { return this.#identifier }
+    get identifier() { return this.#identifier; }
 
-    get alias() { return this.#alias }
+    get alias() { return this.#alias; }
 
     is(identifier: string): boolean
     {

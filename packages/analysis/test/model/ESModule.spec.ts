@@ -1,7 +1,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { ESImport, ESExport, ESClass, ESDeclaration, ESFunction, ESGeneratorFunction, ESVariable } from '../../src/model';
+import { ESImport, ESExport, ESClass, ESFunction, ESGeneratorFunction, ESVariable } from '../../src/model';
 
 import { esModule } from './fixtures';
 

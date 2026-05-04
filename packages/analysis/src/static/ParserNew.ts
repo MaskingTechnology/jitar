@@ -563,7 +563,7 @@ export default class Parser
 
     #parseInitializer(tokenList: TokenList): ESStatement | undefined
     {
-        let token = tokenList.current;
+        const token = tokenList.current;
 
         if (token.hasValue(Operator.ASSIGN) === false)
         {
@@ -649,7 +649,7 @@ export default class Parser
 
         if (token.hasValue(Scope.OPEN))
         {
-            body = this.#parseBlock(tokenList)
+            body = this.#parseBlock(tokenList);
         }
         else
         {
@@ -776,11 +776,11 @@ export default class Parser
 
     #parseConstructor(tokenList: TokenList): ESConstructor
     {
-        let token = tokenList.step(); // Read away the constructor keyword
+        tokenList.step(); // Read away the constructor keyword
         
         const parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
 
-        token = tokenList.current;
+        const token = tokenList.current;
 
         if (token.hasValue(Scope.OPEN) === false)
         {
@@ -807,7 +807,7 @@ export default class Parser
 
         const identifier = token.value;
 
-        token = tokenList.step(); // Read away the identifier
+        tokenList.step(); // Read away the identifier
 
         const parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
 
@@ -870,7 +870,7 @@ export default class Parser
         
         const identifier = token.value;
 
-        token = tokenList.step(); // Read away the identifier
+        tokenList.step(); // Read away the identifier
 
         const parameters = this.#parseBindingElements(tokenList, Group.CLOSE);
 
@@ -893,11 +893,11 @@ export default class Parser
 
     #parseField(tokenList: TokenList, visibility: ClassVisibility, location: ClassLocation): ESField
     {
-        let token = tokenList.current;
+        const token = tokenList.current;
 
         const identifier = token.value;
 
-        token = tokenList.step(); // Read away the name
+        tokenList.step(); // Read away the name
 
         const initializer = this.#parseInitializer(tokenList);
 

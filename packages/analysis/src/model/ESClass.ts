@@ -27,7 +27,7 @@ export default class ESClass extends ESDeclaration
 
     get members() { return this.#members; }
 
-    get construct() { return this.#members.find(member => member instanceof ESConstructor) }
+    get construct() { return this.#members.find(member => member instanceof ESConstructor); }
 
     get fields() { return this.#members.filter(member => member instanceof ESField); }
 

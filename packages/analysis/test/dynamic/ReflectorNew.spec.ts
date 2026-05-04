@@ -1,7 +1,6 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { ESParameter } from '../../src/model';
 import { ReflectorNew as Reflector } from '../../src/dynamic';
 
 import { CLASSES, FUNCTIONS, OBJECTS, MODULES } from './fixtures';
