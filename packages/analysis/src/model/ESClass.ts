@@ -4,7 +4,6 @@ import ESConstructor from './ESConstructor';
 import ESGetter from './ESGetter';
 import ESSetter from './ESSetter';
 import ESMethod from './ESMethod';
-import ESGeneratorMethod from './ESGeneratorMethod';
 import ESField from './ESField';
 import ESDeclaration from './ESDeclaration';
 
@@ -32,8 +31,6 @@ export default class ESClass extends ESDeclaration
     get setters() { return this.#members.filter(member => member instanceof ESSetter); }
 
     get methods() { return this.#members.filter(member => member instanceof ESMethod); }
-
-    get generators() { return this.#members.filter(member => member instanceof ESGeneratorMethod); }
 
     get fields() { return this.#members.filter(member => member instanceof ESField); }
 

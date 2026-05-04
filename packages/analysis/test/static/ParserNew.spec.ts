@@ -897,117 +897,152 @@ describe('parser/Parser', () =>
             const members = clazz.members;
             expect(members.length).toBe(21);
 
-            // const variables = clazz.declarations;
-            // expect(declarations.length).toBe(4);
+            const fields = clazz.fields;
+            expect(fields.length).toBe(4);
 
-            // expect(declarations[0].identifier).toEqual('field1');
-            // expect(declarations[0].isPrivate).toBe(true);
-            // expect(declarations[0].isStatic).toBe(false);
-            // expect(declarations[0].value?.definition).toEqual("'value1'");
+            expect(fields[0].identifier).toEqual('field1');
+            expect(fields[0].visibility).toEqual('private');
+            expect(fields[0].location).toEqual('instance');
+            expect(fields[0].initializer?.toString()).toEqual("'value1'");
 
-            // expect(declarations[1].identifier).toEqual('field2');
-            // expect(declarations[1].isPrivate).toBe(false);
-            // expect(declarations[1].isStatic).toBe(false);
-            // expect(declarations[1].value).toBeUndefined();
+            expect(fields[1].identifier).toEqual('field2');
+            expect(fields[1].visibility).toEqual('public');
+            expect(fields[1].location).toEqual('instance');
+            expect(fields[1].initializer).toBeUndefined();
 
-            // expect(declarations[2].identifier).toEqual('field3');
-            // expect(declarations[2].isPrivate).toBe(true);
-            // expect(declarations[2].isStatic).toBe(true);
-            // expect(declarations[2].value?.definition).toEqual('"value3"');
+            expect(fields[2].identifier).toEqual('field3');
+            expect(fields[2].visibility).toEqual('private');
+            expect(fields[2].location).toEqual('static');
+            expect(fields[2].initializer?.toString()).toEqual('"value3"');
 
-            // expect(declarations[3].identifier).toEqual('field4');
-            // expect(declarations[3].isPrivate).toBe(false);
-            // expect(declarations[3].isStatic).toBe(true);
-            // expect(declarations[3].value).toBeUndefined();
+            expect(fields[3].identifier).toEqual('field4');
+            expect(fields[3].visibility).toEqual('public');
+            expect(fields[3].location).toEqual('static');
+            expect(fields[3].initializer).toBeUndefined();
 
-            // const getters = clazz.getters;
-            // expect(getters.length).toBe(4);
+            const getters = clazz.getters;
+            expect(getters.length).toBe(4);
 
-            // expect(getters[0].identifier).toEqual('getter1');
-            // expect(getters[0].isPrivate).toBe(true);
-            // expect(getters[0].isStatic).toBe(false);
+            expect(getters[0].identifier).toEqual('getter1');
+            expect(getters[0].visibility).toEqual('private');
+            expect(getters[0].location).toEqual('instance');
+            expect(getters[0].body.code).toEqual('{ return this.#field1 ; }');
 
-            // expect(getters[1].identifier).toEqual('getter2');
-            // expect(getters[1].isPrivate).toBe(false);
-            // expect(getters[1].isStatic).toBe(false);
+            expect(getters[1].identifier).toEqual('getter2');
+            expect(getters[1].visibility).toEqual('public');
+            expect(getters[1].location).toEqual('instance');
+            expect(getters[1].body.code).toEqual('{ return this.field2 ; }');
 
-            // expect(getters[2].identifier).toEqual('getter3');
-            // expect(getters[2].isPrivate).toBe(true);
-            // expect(getters[2].isStatic).toBe(true);
+            expect(getters[2].identifier).toEqual('getter3');
+            expect(getters[2].visibility).toEqual('private');
+            expect(getters[2].location).toEqual('static');
+            expect(getters[2].body.code).toEqual('{ return this.#field3 ; }');
 
-            // expect(getters[3].identifier).toEqual('getter4');
-            // expect(getters[3].isPrivate).toBe(false);
-            // expect(getters[3].isStatic).toBe(true);
+            expect(getters[3].identifier).toEqual('getter4');
+            expect(getters[3].visibility).toEqual('public');
+            expect(getters[3].location).toEqual('static');
+            expect(getters[3].body.code).toEqual('{ return this.field4 ; }');
 
-            // const setters = clazz.setters;
-            // expect(setters.length).toBe(4);
+            const setters = clazz.setters;
+            expect(setters.length).toBe(4);
 
-            // expect(setters[0].identifier).toEqual('setter1');
-            // expect(setters[0].isPrivate).toBe(true);
-            // expect(setters[0].isStatic).toBe(false);
+            expect(setters[0].identifier).toEqual('setter1');
+            expect(setters[0].visibility).toEqual('private');
+            expect(setters[0].location).toEqual('instance');
+            expect(setters[0].parameter.binding.toString()).toEqual('value');
+            expect(setters[0].body.code).toEqual('{ this.#field1 = value ; }');
 
-            // expect(setters[1].identifier).toEqual('setter2');
-            // expect(setters[1].isPrivate).toBe(false);
-            // expect(setters[1].isStatic).toBe(false);
+            expect(setters[1].identifier).toEqual('setter2');
+            expect(setters[1].visibility).toEqual('public');
+            expect(setters[1].location).toEqual('instance');
+            expect(setters[1].parameter.binding.toString()).toEqual('value');
+            expect(setters[1].body.code).toEqual('{ this.field2 = value ; }');
 
-            // expect(setters[2].identifier).toEqual('setter3');
-            // expect(setters[2].isPrivate).toBe(true);
-            // expect(setters[2].isStatic).toBe(true);
+            expect(setters[2].identifier).toEqual('setter3');
+            expect(setters[2].visibility).toEqual('private');
+            expect(setters[2].location).toEqual('static');
+            expect(setters[2].parameter.binding.toString()).toEqual('value');
+            expect(setters[2].body.code).toEqual('{ this.#field3 = value ; }');
 
-            // expect(setters[3].identifier).toEqual('setter4');
-            // expect(setters[3].isPrivate).toBe(false);
-            // expect(setters[3].isStatic).toBe(true);
+            expect(setters[3].identifier).toEqual('setter4');
+            expect(setters[3].visibility).toEqual('public');
+            expect(setters[3].location).toEqual('static');
+            expect(setters[3].parameter.binding.toString()).toEqual('value');
+            expect(setters[3].body.code).toEqual('{ this.field4 = value ; }');
 
-            // const functions = clazz.functions;
-            // expect(functions.length).toBe(6);
+            const construct = clazz.construct as ESConstructor;
+            expect(construct).toBeDefined();
+            expect(construct.identifier).toEqual('constructor');
+            expect(construct.visibility).toEqual('public');
+            expect(construct.location).toEqual('instance');
+            expect(construct.parameters).toHaveLength(2);
+            expect(construct.parameters[0].toString()).toEqual('field1');
+            expect(construct.parameters[1].toString()).toEqual('...field2');
+            expect(construct.body.toString()).toEqual('{ this.#field1 = field1 ; this.field2 = field2 ; }');
 
-            // expect(functions[0].identifier).toEqual('constructor');
-            // expect(functions[0].isPrivate).toBe(false);
-            // expect(functions[0].isStatic).toBe(false);
-            // expect(functions[0].isAsync).toBe(false);
+            const methods = clazz.methods;
+            expect(methods.length).toBe(8);
 
-            // expect(functions[1].identifier).toEqual('method1');
-            // expect(functions[1].isPrivate).toBe(false);
-            // expect(functions[1].isStatic).toBe(false);
-            // expect(functions[1].isAsync).toBe(false);
+            expect(methods[0].identifier).toEqual('method1');
+            expect(methods[0].visibility).toEqual('public');
+            expect(methods[0].location).toEqual('instance');
+            expect(methods[0].isAsync).toBe(false);
+            expect(methods[0].parameters).toHaveLength(0);
+            expect(methods[0].body.toString()).toEqual('{ return this.#field1 ; }');
 
-            // expect(functions[2].identifier).toEqual('method2');
-            // expect(functions[2].isPrivate).toBe(false);
-            // expect(functions[2].isStatic).toBe(false);
-            // expect(functions[2].isAsync).toBe(true);
+            expect(methods[1].identifier).toEqual('method2');
+            expect(methods[1].visibility).toEqual('public');
+            expect(methods[1].location).toEqual('instance');
+            expect(methods[1].isAsync).toBe(true);
+            expect(methods[1].parameters).toHaveLength(0);
+            expect(methods[1].body.toString()).toEqual('{ return this.field2 ; }');
 
-            // expect(functions[3].identifier).toEqual('method3');
-            // expect(functions[3].isPrivate).toBe(false);
-            // expect(functions[3].isStatic).toBe(true);
-            // expect(functions[3].isAsync).toBe(false);
+            expect(methods[2].identifier).toEqual('method3');
+            expect(methods[2].visibility).toEqual('public');
+            expect(methods[2].location).toEqual('static');
+            expect(methods[2].isAsync).toBe(false);
+            expect(methods[2].parameters).toHaveLength(0);
+            expect(methods[2].body.toString()).toEqual('{ return this.#field3 ; }');
 
-            // expect(functions[4].identifier).toEqual('method4');
-            // expect(functions[4].isPrivate).toBe(false);
-            // expect(functions[4].isStatic).toBe(true);
-            // expect(functions[4].isAsync).toBe(true);
+            expect(methods[3].identifier).toEqual('method4');
+            expect(methods[3].visibility).toEqual('public');
+            expect(methods[3].location).toEqual('static');
+            expect(methods[3].isAsync).toBe(true);
+            expect(methods[3].parameters).toHaveLength(0);
+            expect(methods[3].body.toString()).toEqual('{ return this.field4 ; }');
 
-            // expect(functions[5].identifier).toEqual('method5');
-            // expect(functions[5].isPrivate).toBe(true);
-            // expect(functions[5].isStatic).toBe(false);
-            // expect(functions[5].isAsync).toBe(false);
+            expect(methods[4].identifier).toEqual('method5');
+            expect(methods[4].visibility).toEqual('private');
+            expect(methods[4].location).toEqual('instance');
+            expect(methods[4].isAsync).toBe(false);
+            expect(methods[4].parameters).toHaveLength(2);
+            expect(methods[4].parameters[0].toString()).toEqual('a');
+            expect(methods[4].parameters[1].toString()).toEqual('b');
+            expect(methods[4].body.toString()).toEqual('{ return a + b ; }');
 
-            // const generators = clazz.generators;
-            // expect(generators.length).toBe(3);
+            expect(methods[5]).toBeInstanceOf(ESGeneratorMethod);
+            expect(methods[5].identifier).toEqual('generator1');
+            expect(methods[5].visibility).toEqual('public');
+            expect(methods[5].location).toEqual('instance');
+            expect(methods[5].isAsync).toBe(false);
+            expect(methods[5].parameters).toHaveLength(0);
+            expect(methods[5].body.toString()).toEqual('{ yield 1 ; }');
 
-            // expect(generators[0].identifier).toEqual('generator1');
-            // expect(generators[0].isPrivate).toBe(false);
-            // expect(generators[0].isStatic).toBe(false);
-            // expect(generators[0].isAsync).toBe(false);
+            expect(methods[6]).toBeInstanceOf(ESGeneratorMethod);
+            expect(methods[6].identifier).toEqual('generator2');
+            expect(methods[6].visibility).toEqual('public');
+            expect(methods[6].location).toEqual('instance');
+            expect(methods[6].isAsync).toBe(true);
+            expect(methods[6].parameters).toHaveLength(0);
+            expect(methods[6].body.toString()).toEqual('{ yield 1 ; }');
 
-            // expect(generators[1].identifier).toEqual('generator2');
-            // expect(generators[1].isPrivate).toBe(false);
-            // expect(generators[1].isStatic).toBe(false);
-            // expect(generators[1].isAsync).toBe(true);
-
-            // expect(generators[2].identifier).toEqual('generator3');
-            // expect(generators[2].isPrivate).toBe(false);
-            // expect(generators[2].isStatic).toBe(true);
-            // expect(generators[2].isAsync).toBe(true);
+            expect(methods[7]).toBeInstanceOf(ESGeneratorMethod);
+            expect(methods[7].identifier).toEqual('generator3');
+            expect(methods[7].visibility).toEqual('public');
+            expect(methods[7].location).toEqual('static');
+            expect(methods[7].isAsync).toBe(true);
+            expect(methods[7].parameters).toHaveLength(0);
+            expect(methods[7].body.toString()).toEqual('{ yield 1 ; }');
         });
     });
 

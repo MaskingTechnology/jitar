@@ -14,7 +14,7 @@ import { Group } from './definitions/Group';
 import { Keyword, isDeclaration, isKeyword, isNotReserved } from './definitions/Keyword';
 import { List } from './definitions/List';
 import { Operator } from './definitions/Operator';
-import { Prefix } from './definitions/Prefix';
+import { Indicator } from './definitions/Indicator';
 import { Scope } from './definitions/Scope';
 import { TokenType } from './definitions/TokenType';
 
@@ -571,7 +571,7 @@ export default class Parser
             {
                 tokenList.step(); // Read away the terminator
             }
-            
+
             return undefined;
         }
 
@@ -586,7 +586,7 @@ export default class Parser
         let identifier: string | undefined = undefined;
         let isGenerator = false;
 
-        if (token.hasValue(Prefix.GENERATOR))
+        if (token.hasValue(Indicator.GENERATOR))
         {
             isGenerator = true;
 
@@ -729,7 +729,7 @@ export default class Parser
 
         while (tokenList.notAtEnd())
         {
-            if (token.hasValue(Prefix.PRIVATE))
+            if (token.hasValue(Indicator.PRIVATE))
             {
                 visibility = 'private';
             }
@@ -753,8 +753,10 @@ export default class Parser
             {
                 return this.#parseSetter(tokenList, location);
             }
-            else if (token.hasValue(Prefix.GENERATOR))
+            else if (token.hasValue(Indicator.GENERATOR))
             {
+                tokenList.step(); // Read away the generator indicator
+
                 return this.#parseMethod(tokenList, visibility, location, isAsync, true);
             }
             else
@@ -796,7 +798,7 @@ export default class Parser
 
         let token = tokenList.step(); // Read away the get keyword
         
-        if (token.hasValue(Prefix.PRIVATE))
+        if (token.hasValue(Indicator.PRIVATE))
         {
             visibility = 'private';
 
@@ -832,7 +834,7 @@ export default class Parser
 
         let token = tokenList.step(); // Read away the get keyword
         
-        if (token.hasValue(Prefix.PRIVATE))
+        if (token.hasValue(Indicator.PRIVATE))
         {
             visibility = 'private';
 

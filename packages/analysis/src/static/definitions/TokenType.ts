@@ -9,7 +9,7 @@ const TokenType =
     LIST: 'list',
     LITERAL: 'literal',
     OPERATOR: 'operator',
-    PREFIX: 'prefix',
+    INDICATOR: 'indicator',
     REGEX: 'regex',
     SCOPE: 'scope',
     WHITESPACE: 'whitespace'

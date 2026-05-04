@@ -5,7 +5,6 @@ import ESExpression from './ESExpression';
 import ESDeclaration from './ESDeclaration';
 import ESClass from './ESClass';
 import ESFunction from './ESFunction';
-import ESGeneratorFunction from './ESGeneratorFunction';
 import ESVariable from './ESVariable';
 import type ESStatement from './ESStatement';
 
@@ -29,8 +28,6 @@ export default class ESModule
     get classes() { return this.#statements.filter(statement => statement instanceof ESClass); }
     
     get functions() { return this.#statements.filter(statement => statement instanceof ESFunction); }
-
-    get generators() { return this.#statements.filter(statement => statement instanceof ESGeneratorFunction); }
 
     get variables() { return this.#statements.filter(statement => statement instanceof ESVariable); }
 
