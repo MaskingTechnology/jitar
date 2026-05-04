@@ -1,5 +1,5 @@
 
-import { ESDestructuredArray, ESDestructuredObject, ESDestructuredValue, ESField } from '@jitar/analysis';
+import { ESArrayBinding, ESObjectBinding, ESIdentifierBinding } from '@jitar/analysis';
 import type { ESParameter } from '@jitar/analysis';
 import { AccessLevels } from '@jitar/execution';
 
@@ -79,17 +79,17 @@ export default class RemoteBuilder
 
         for (const parameter of parameters)
         {
-            if (parameter instanceof ESField)
+            if (parameter.binding instanceof ESIdentifierBinding)
             {
-                result.push(parameter.name);
+                result.push(parameter.binding.identifier);
             }
-            else if (parameter instanceof ESDestructuredArray)
+            else if (parameter.binding instanceof ESArrayBinding)
             {
-                result.push(parameter.toString());
+                result.push(parameter.binding.toString());
             }
-            else if (parameter instanceof ESDestructuredObject)
+            else if (parameter.binding instanceof ESObjectBinding)
             {
-                result.push(parameter.toString());
+                result.push(parameter.binding.toString());
             }
         }
         
@@ -109,26 +109,32 @@ export default class RemoteBuilder
 
         for (const parameter of parameters)
         {
-            if (parameter instanceof ESDestructuredValue)
+            if (parameter.binding instanceof ESIdentifierBinding)
             {
-                const argumentz = this.#extractArguments(parameter.members);
+                const argument = this.#createNamedArgument(parameter.binding);
+
+                result.push(argument);
+            }
+            else if (parameter.binding instanceof ESArrayBinding)
+            {
+                const argumentz = this.#extractArguments(parameter.binding.elements);
 
                 result.push(...argumentz);
             }
-            else if (parameter instanceof ESField)
+            else if (parameter.binding instanceof ESObjectBinding)
             {
-                const argument = this.#createNamedArgument(parameter);
+                const argumentz = this.#extractArguments(parameter.binding.elements);
 
-                result.push(argument);
+                result.push(...argumentz);
             }
         }
         
         return result;
     }
 
-    #createNamedArgument(parameter: ESField): string
+    #createNamedArgument(binding: ESIdentifierBinding): string
     {
-        const key = parameter.name;
+        const key = binding.identifier;
         const value = key.startsWith('...') ? key.substring(3) : key;
 
         return `'${key}': ${value}`;
@@ -136,7 +142,7 @@ export default class RemoteBuilder
 
     #createDeclaration(implementation: Implementation): string
     {
-        const name = implementation.model.name;
+        const name = implementation.model.identifier;
         const parameters = this.#createParameters(implementation.model.parameters);
 
         const prefix = implementation.importKey === Keywords.DEFAULT ? `${Keywords.DEFAULT} ` : '';

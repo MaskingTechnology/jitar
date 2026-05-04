@@ -44,7 +44,7 @@ export default class LocationRewriter
     #replaceImport(filename: string, statement: string): string
     {
         const dependency = this.#parser.parseImport(statement);
-        const from = this.#fileHelper.stripPath(dependency.from);
+        const from = dependency.from;
         const normalizedFrom = this.#sourceFileManager.normalizeLocation(from);
 
         if (this.#fileHelper.isApplicationModule(normalizedFrom) === false)
@@ -66,7 +66,7 @@ export default class LocationRewriter
             return statement;
         }
 
-        const from = this.#fileHelper.stripPath(dependency.from);
+        const from = dependency.from;
         const normalizedFrom = this.#sourceFileManager.normalizeLocation(from);
 
         if (this.#fileHelper.isApplicationModule(normalizedFrom) === false)

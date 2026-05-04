@@ -1,7 +1,7 @@
 
 import type { FileManager } from '@jitar/sourcing';
 
-import type { Application, SegmentImplementation as Implementation, Module, Segment, Segmentation, ResourcesList } from '../../source';
+import type { Application, Module, Segment, Segmentation, ResourcesList } from '../../source';
 import { FileHelper } from '../../utils';
 
 import LocalBuilder from './LocalBuilder';

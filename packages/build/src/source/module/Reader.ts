@@ -1,5 +1,5 @@
 
-import { ESModule, Parser } from '@jitar/analysis';
+import { Parser } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
 import FileNotLoaded from './errors/FileNotLoaded';

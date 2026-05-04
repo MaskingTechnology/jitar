@@ -34,23 +34,23 @@ export default class ExportRewriter extends LocationRewriter
         // Although the resource module is not included in the bundle, the re-exported module is.
         // Depending on the situation, this is desired, but is most likely a configuration error.
 
-        const keys = dependency.members.map(member => member.name);
+        const keys = dependency.members.map(member => member.identifier);
 
         return this.includeInBundle(dependency, from, keys);
     }
 
     #rewriteStaticExportMembers(dependency: ESExport, keys: string[]): string
     {
-        const members = dependency.members.filter(member => keys.includes(member.name));
+        const members = dependency.members.filter(member => keys.includes(member.identifier));
 
-        if (members.length === 1 && members[0].name === '')
+        if (members.length === 1 && members[0].identifier === '')
         {
             const member = members[0];
 
-            return member.name !== member.as ? `${Values.ASTERISK} as ${member.as}` : Values.ASTERISK;
+            return member.alias !== undefined ? `${Values.ASTERISK} as ${member.alias}` : Values.ASTERISK;
         }
 
-        const memberExports = members.map(member => member.name !== member.as ? `${member.name} as ${member.as}` : member.name);
+        const memberExports = members.map(member => member.alias !== undefined ? `${member.identifier} as ${member.alias}` : member.identifier);
 
         return `{ ${memberExports.join(', ')} }`;
     }

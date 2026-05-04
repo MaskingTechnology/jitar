@@ -67,7 +67,7 @@ export default abstract class LocationRewriter
     #rewriteForRuntime(dependency: ESImport | ESExport): string
     {
         const from = this.#rewriteRuntimeFrom(dependency);
-        const keys = dependency.members.map(member => member.name);
+        const keys = dependency.members.map(member => member.identifier);
 
         return this.includeInBundle(dependency, from, keys);
     }
@@ -131,14 +131,14 @@ export default abstract class LocationRewriter
 
     #isApplicationModule(dependency: ESImport | ESExport): boolean
     {
-        const from = this.#fileHelper.stripPath(dependency.from as string);
+        const from = dependency.from!;
 
         return this.#fileHelper.isApplicationModule(from);
     }
 
     #getTargetModuleFilename(dependency: ESImport | ESExport): string
     {
-        const from = this.#fileHelper.stripPath(dependency.from as string);
+        const from = dependency.from!;
         const callingModulePath = this.#fileHelper.extractPath(this.#module.filename);
         
         return this.#fileHelper.makePathAbsolute(from, callingModulePath, '');
@@ -182,15 +182,15 @@ export default abstract class LocationRewriter
     #filterMemberKeys(dependency: ESImport | ESExport, keys: string[]): string[]
     {
         return dependency.members
-            .filter(member => keys.includes(member.name))
-            .map(member => member.name);
+            .filter(member => keys.includes(member.identifier))
+            .map(member => member.identifier);
     }
 
     #extractUnsegmentedImportKeys(dependency: ESImport | ESExport, segmentedKeys: string[]): string[]
     {
         return dependency.members
-            .filter(member => segmentedKeys.includes(member.name) === false)
-            .map(member => member.name);
+            .filter(member => segmentedKeys.includes(member.identifier) === false)
+            .map(member => member.identifier);
     }
 
     #rewriteApplicationFrom(filename: string, scope?: string): string
@@ -205,7 +205,7 @@ export default abstract class LocationRewriter
 
     #rewriteRuntimeFrom(dependency: ESImport | ESExport): string
     {
-        return this.#fileHelper.stripPath(dependency.from as string);
+        return dependency.from!;
     }
 
     abstract includeInBundle(dependency: ESImport | ESExport, from: string, keys: string[]): string;

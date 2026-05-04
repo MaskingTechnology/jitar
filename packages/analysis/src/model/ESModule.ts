@@ -61,6 +61,16 @@ export default class ESModule
 
     get exportedClasses() { return this.exported.filter(declaration => declaration instanceof ESClass); }
     
+    getExport(name: string): ESExport | undefined
+    {
+        return this.exports.find(entry => entry.hasMember(name));
+    }
+
+    getImport(name: string): ESImport | undefined
+    {
+        return this.imports.find(entry => entry.hasMember(name));
+    }
+
     hasDeclaration(identifier: string): boolean
     {
         return this.declarations.some(entry => entry.is(identifier));

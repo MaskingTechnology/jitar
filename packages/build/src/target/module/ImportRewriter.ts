@@ -43,14 +43,14 @@ export default class ImportRewriter extends LocationRewriter
 
     #rewriteStaticImportMembers(dependency: ESImport, keys: string[]): string
     {
-        const members = dependency.members.filter(member => keys.includes(member.name));
+        const members = dependency.members.filter(member => keys.includes(member.identifier));
 
-        const defaultMember = members.find(member => member.name === Keywords.DEFAULT);
+        const defaultMember = members.find(member => member.identifier === Keywords.DEFAULT);
         const hasDefaultMember = defaultMember !== undefined;
-        const defaultMemberImport = hasDefaultMember ? defaultMember.as : '';
+        const defaultMemberImport = hasDefaultMember ? defaultMember.alias : '';
 
-        const namedMembers = members.filter(member => member.name !== Keywords.DEFAULT);
-        const namedMemberImports = namedMembers.map(member => member.name !== member.as ? `${member.name} as ${member.as}` : member.name);
+        const namedMembers = members.filter(member => member.identifier !== Keywords.DEFAULT);
+        const namedMemberImports = namedMembers.map(member => member.alias !== undefined ? `${member.identifier} as ${member.alias}` : member.identifier);
         const hasNamedMembers = namedMemberImports.length > 0;
         const groupedNamedMemberImports = hasNamedMembers ? `{ ${namedMemberImports.join(', ')} }` : '';
 
@@ -63,11 +63,13 @@ export default class ImportRewriter extends LocationRewriter
     {
         if (this.#doesImportAll(dependency))
         {
-            return dependency.members[0].as;
+            const member = dependency.members[0];
+
+            return member.alias ?? member.identifier;
         }
 
         const members = dependency.members;
-        const memberImports = members.map(member => member.name !== member.as ? `${member.name} : ${member.as}` : member.name);
+        const memberImports = members.map(member => member.alias !== undefined ? `${member.identifier} : ${member.alias}` : member.identifier);
 
         return `{ ${memberImports.join(', ')} }`;
     }
@@ -75,6 +77,6 @@ export default class ImportRewriter extends LocationRewriter
     #doesImportAll(dependency: ESImport): boolean
     {
         return dependency.members.length === 1
-            && dependency.members[0].name === Values.ASTERISK;
+            && dependency.members[0].identifier === Values.ASTERISK;
     }
 }

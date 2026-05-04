@@ -1,6 +1,6 @@
 
-import type { ESField, ESFunction, ESParameter } from '@jitar/analysis';
-import { ESDestructuredArray, ESDestructuredObject } from '@jitar/analysis';
+import { ESFunction, ESIdentifierBinding, ESParameter } from '@jitar/analysis';
+import { ESArrayBinding, ESObjectBinding } from '@jitar/analysis';
 import { VersionParser } from '@jitar/execution';
 import { Logger } from '@jitar/logging';
 import type { FileManager } from '@jitar/sourcing';
@@ -164,11 +164,11 @@ export default class Builder
 
     #extractParameter(parameter: ESParameter): string
     {
-        if (parameter instanceof ESDestructuredArray)
+        if (parameter.binding instanceof ESArrayBinding)
         {
             return this.#createArrayParameter(parameter);
         }
-        else if (parameter instanceof ESDestructuredObject)
+        else if (parameter.binding instanceof ESObjectBinding)
         {
             return this.#createObjectParameter(parameter);
         }
@@ -176,21 +176,25 @@ export default class Builder
         return this.#createNamedParameter(parameter);
     }
 
-    #createNamedParameter(parameter: ESField): string
+    #createNamedParameter(parameter: ESParameter): string
     {
-        return `new NamedParameter("${parameter.name}", ${parameter.value !== undefined})`;
+        const binding = parameter.binding as ESIdentifierBinding;
+
+        return `new NamedParameter("${binding}", ${parameter.initializer !== undefined})`;
     }
 
-    #createArrayParameter(parameter: ESDestructuredArray): string
+    #createArrayParameter(parameter: ESParameter): string
     {
-        const members = this.#extractParameters(parameter.members);
+        const binding = parameter.binding as ESArrayBinding;
+        const members = this.#extractParameters(binding.elements);
 
         return `new ArrayParameter([${members.join(', ')}])`;
     }
 
-    #createObjectParameter(parameter: ESDestructuredObject): string
+    #createObjectParameter(parameter: ESParameter): string
     {
-        const members = this.#extractParameters(parameter.members);
+        const binding = parameter.binding as ESArrayBinding;
+        const members = this.#extractParameters(binding.elements);
 
         return `new ObjectParameter([${members.join(', ')}])`;
     }
