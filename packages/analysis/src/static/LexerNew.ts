@@ -7,7 +7,7 @@ import { Comment, isComment } from './definitions/Comment';
 import { isDivider } from './definitions/Divider';
 import { isEmpty } from './definitions/Empty';
 import { Group, isGroup } from './definitions/Group';
-import { isKeyword } from './definitions/Keyword';
+import { isKeyword } from './definitions/KeywordNew';
 import { List, isList } from './definitions/List';
 import { isLiteral } from './definitions/Literal';
 import { isOperator, Operator } from './definitions/Operator';

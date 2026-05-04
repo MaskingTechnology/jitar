@@ -11,7 +11,7 @@ import {
 
 import { Divider, isDivider } from './definitions/Divider';
 import { Group } from './definitions/Group';
-import { Keyword, isDeclaration, isKeyword, isNotReserved } from './definitions/Keyword';
+import { Keyword, isDeclaration, isKeyword, isNotReserved } from './definitions/KeywordNew';
 import { List } from './definitions/List';
 import { Operator } from './definitions/Operator';
 import { Indicator } from './definitions/Indicator';
