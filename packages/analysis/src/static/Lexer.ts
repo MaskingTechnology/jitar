@@ -3,9 +3,10 @@ import CharList from './models/CharList';
 import Token from './models/Token';
 import TokenList from './models/TokenList';
 
+import { isBoolean } from './definitions/Boolean';
 import { Comment, isComment } from './definitions/Comment';
 import { isDivider } from './definitions/Divider';
-import { isEmpty } from './definitions/Empty';
+import { isEmpty, isNothing } from './definitions/Empty';
 import { Group, isGroup } from './definitions/Group';
 import { isKeyword } from './definitions/Keyword';
 import { List, isList } from './definitions/List';
@@ -148,10 +149,22 @@ export default class Lexer
         }
 
         const value = this.#readIdentifier(charList);
-        const type = isKeyword(value) ? TokenType.KEYWORD : TokenType.IDENTIFIER;
         const end = charList.position;
 
-        return new Token(type, value, start, end);
+        if (isKeyword(value))
+        {
+            return new Token(TokenType.KEYWORD, value, start, end);
+        }
+        else if (isBoolean(value))
+        {
+            return new Token(TokenType.BOOLEAN, value, start, end);
+        }
+        else if (isNothing(value))
+        {
+            return new Token(TokenType.NOTHING, value, start, end);
+        }
+        
+        return new Token(TokenType.IDENTIFIER, value, start, end);
     }
 
     #readComment(charList: CharList): string

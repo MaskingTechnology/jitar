@@ -150,11 +150,7 @@ export default class Parser
     {
         const token = tokenList.current;
 
-        if (token.isType(TokenType.LITERAL))
-        {
-            return this.#parseExpression(tokenList);
-        }
-        if (token.isType(TokenType.NUMBER))
+        if (this.#isValue(token))
         {
             return this.#parseExpression(tokenList);
         }
@@ -243,6 +239,14 @@ export default class Parser
         }
 
         throw new UnexpectedToken(token.value, token.start);
+    }
+
+    #isValue(token: Token): boolean
+    {
+        return token.isType(TokenType.LITERAL)
+            || token.isType(TokenType.NUMBER)
+            || token.isType(TokenType.BOOLEAN)
+            || token.isType(TokenType.NOTHING);
     }
 
     #parseKeyword(tokenList: TokenList, isAsync = false): ESStatement | undefined
@@ -388,7 +392,7 @@ export default class Parser
             stepSize++;
         }
 
-        const identifier = this.#isIdentifier(token) ? token.value : ANONYMOUS_IDENTIFIER;
+        const identifier = token.hasValue(Operator.MULTIPLY) ? '' : token.value;
         const alias = isDefault ? DEFAULT_IDENTIFIER : undefined;
 
         let from: string | undefined = undefined;

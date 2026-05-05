@@ -11,6 +11,33 @@ describe('Lexer', () =>
 {
     describe('Tokenize', () =>
     {
+        it('should distinguish value types', () =>
+        {
+            const tokens = lexer.tokenize(CODE.VALUES);
+            expect(tokens.size).toEqual(7);
+
+            expect(tokens.get(0).type).toEqual(TokenType.NUMBER);
+            expect(tokens.get(0).value).toEqual('42');
+
+            expect(tokens.get(1).type).toEqual(TokenType.IDENTIFIER);
+            expect(tokens.get(1).value).toEqual('hello');
+
+            expect(tokens.get(2).type).toEqual(TokenType.LITERAL);
+            expect(tokens.get(2).value).toEqual('"world"');
+
+            expect(tokens.get(3).type).toEqual(TokenType.BOOLEAN);
+            expect(tokens.get(3).value).toEqual('true');
+
+            expect(tokens.get(4).type).toEqual(TokenType.BOOLEAN);
+            expect(tokens.get(4).value).toEqual('false');
+
+            expect(tokens.get(5).type).toEqual(TokenType.NOTHING);
+            expect(tokens.get(5).value).toEqual('undefined');
+
+            expect(tokens.get(6).type).toEqual(TokenType.NOTHING);
+            expect(tokens.get(6).value).toEqual('null');
+        });
+
         it('should separate operators', () =>
         {
             const tokens = lexer.tokenize(CODE.OPERATORS);
