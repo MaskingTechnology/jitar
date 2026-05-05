@@ -28,7 +28,6 @@ import TokenList from './models/TokenList';
 
 import Lexer from './Lexer';
 
-const ANONYMOUS_IDENTIFIER = '';
 const DEFAULT_IDENTIFIER = 'default';
 const DEFINITION_SEPARATOR = ' ';
 
@@ -246,7 +245,8 @@ export default class Parser
         return token.isType(TokenType.LITERAL)
             || token.isType(TokenType.NUMBER)
             || token.isType(TokenType.BOOLEAN)
-            || token.isType(TokenType.NOTHING);
+            || token.isType(TokenType.NOTHING)
+            || token.hasValue(Keyword.NEW);
     }
 
     #parseKeyword(tokenList: TokenList, isAsync = false): ESStatement | undefined
@@ -380,6 +380,21 @@ export default class Parser
         let token = tokenList.current;
         let stepSize = 0;
 
+        if (isDefault && this.#isValue(token))
+        {
+            // Default export not bound to a declaration need to move to their own declaration
+
+            const identifier = `\$_EXPORT_${token.start}_${token.end}`;
+
+            tokenList.insert(
+                new Token(TokenType.KEYWORD, Keyword.CONST, 0, 0),
+                new Token(TokenType.IDENTIFIER, identifier, 0, 0),
+                new Token(TokenType.OPERATOR, Operator.ASSIGN, 0, 0)
+            );
+
+            token = tokenList.current;
+        }
+
         if (token.hasValue(Keyword.ASYNC))
         {
             token = tokenList.step(); // Read away the async keyword
@@ -392,7 +407,7 @@ export default class Parser
             stepSize++;
         }
 
-        const identifier = token.hasValue(Operator.MULTIPLY) ? '' : token.value;
+        const identifier = this.#isIdentifier(token) ? token.value : '';
         const alias = isDefault ? DEFAULT_IDENTIFIER : undefined;
 
         let from: string | undefined = undefined;

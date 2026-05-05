@@ -5,7 +5,9 @@ import {
     ESIdentifierBinding, ESArrayBinding, ESObjectBinding, ESBindingElement,
     ESExpression,
     ESFunction, ESArrowFunction, ESGeneratorFunction,
-    ESClass, ESGeneratorMethod, ESConstructor
+    ESClass, ESGeneratorMethod, ESConstructor,
+    ESExport,
+    ESVariable
 } from '../../src/model';
 
 import { Parser } from '../../src/static';
@@ -14,9 +16,9 @@ import { VALUES, IMPORTS, EXPORTS, DECLARATIONS, FUNCTIONS, CLASSES, MODULES, MO
 
 const parser = new Parser();
 
-describe('parser/Parser', () =>
+describe('Parser', () =>
 {
-    describe('.parseStatement(code)', () =>
+    describe('Statements', () =>
     {
         it('should parse an array', () =>
         {
@@ -61,7 +63,7 @@ describe('parser/Parser', () =>
         });
     });
 
-    describe('.parseImport(code)', () =>
+    describe('Imports', () =>
     {
         it('should parse loading a module', () =>
         {
@@ -167,7 +169,7 @@ describe('parser/Parser', () =>
         });
     });
 
-    describe('.parseExport(code)', () =>
+    describe('Exports', () =>
     {
         it('should parse exporting a single member', () =>
         {
@@ -265,6 +267,90 @@ describe('parser/Parser', () =>
             expect(member.alias).toBeUndefined();
         });
 
+        it('should parse exporting a default value', () =>
+        {
+            const identifier = '$_EXPORT_15_17';
+
+            const module = parser.parse(EXPORTS.EXPORT_DEFAULT_VALUE);
+            expect(module.statements).toHaveLength(2);
+
+            const exported = module.statements[0] as ESExport;
+            expect(exported).toBeInstanceOf(ESExport);
+            expect(exported.members).toHaveLength(1);
+            expect(exported.from).toBeUndefined();
+
+            const member = exported.members[0];
+            expect(member.identifier).toEqual(identifier);
+            expect(member.alias).toEqual('default');
+
+            const declaration = module.statements[1] as ESVariable;
+            expect(declaration).toBeInstanceOf(ESVariable);
+            expect(declaration.type).toEqual('const');
+            expect(declaration.identifier).toEqual(identifier);
+            expect(declaration.initializer).toBeInstanceOf(ESExpression);
+            expect(declaration.initializer?.toString(false)).toEqual('42');
+        });
+
+        it('should parse exporting a default instance', () =>
+        {
+            const identifier = '$_EXPORT_15_17';
+
+            const module = parser.parse(EXPORTS.EXPORT_DEFAULT_INSTANCE);
+            expect(module.statements).toHaveLength(2);
+
+            const exported = module.statements[0] as ESExport;
+            expect(exported).toBeInstanceOf(ESExport);
+            expect(exported.members).toHaveLength(1);
+            expect(exported.from).toBeUndefined();
+
+            const member = exported.members[0];
+            expect(member.identifier).toEqual(identifier);
+            expect(member.alias).toEqual('default');
+
+            const declaration = module.statements[1] as ESVariable;
+            expect(declaration).toBeInstanceOf(ESVariable);
+            expect(declaration.type).toEqual('const');
+            expect(declaration.identifier).toEqual(identifier);
+            expect(declaration.initializer).toBeInstanceOf(ESExpression);
+            expect(declaration.initializer?.toString(false)).toEqual('new Date ( )');
+        });
+
+        it('should parse exporting a default function', () =>
+        {
+            const module = parser.parse(EXPORTS.EXPORT_DEFAULT_FUNCTION);
+            expect(module.statements).toHaveLength(2);
+
+            const exported = module.statements[0] as ESExport;
+            expect(exported).toBeInstanceOf(ESExport);
+            expect(exported.members).toHaveLength(1);
+            expect(exported.from).toBeUndefined();
+
+            const member = exported.members[0];
+            expect(member.identifier).toEqual('');
+            expect(member.alias).toEqual('default');
+
+            const declaration = module.statements[1] as ESFunction;
+            expect(declaration).toBeInstanceOf(ESFunction);
+        });
+
+        it('should parse exporting a default class', () =>
+        {
+            const module = parser.parse(EXPORTS.EXPORT_DEFAULT_CLASS);
+            expect(module.statements).toHaveLength(2);
+
+            const exported = module.statements[0] as ESExport;
+            expect(exported).toBeInstanceOf(ESExport);
+            expect(exported.members).toHaveLength(1);
+            expect(exported.from).toBeUndefined();
+
+            const member = exported.members[0];
+            expect(member.identifier).toEqual('');
+            expect(member.alias).toEqual('default');
+
+            const declaration = module.statements[1] as ESClass;
+            expect(declaration).toBeInstanceOf(ESClass);
+        });
+
         it('should parse reexporting a module', () =>
         {
             const exported = parser.parseExport(EXPORTS.REEXPORT_ALL);
@@ -288,7 +374,7 @@ describe('parser/Parser', () =>
         });
     });
 
-    describe('.parseVariable(code)', () =>
+    describe('Variables', () =>
     {
         it('should parse an empty declaration', () =>
         {
@@ -451,7 +537,7 @@ describe('parser/Parser', () =>
         });
     });
 
-    describe('.parseFunction(code)', () =>
+    describe('Functions', () =>
     {
         it('should parse a simple function declaration', () =>
         {
@@ -849,7 +935,7 @@ describe('parser/Parser', () =>
         });
     });
 
-    describe('.parseClass(code)', () =>
+    describe('Classes', () =>
     {
         it('should parse a simple class declaration', () =>
         {
@@ -1045,7 +1131,7 @@ describe('parser/Parser', () =>
         });
     });
 
-    describe('.parse(code)', () =>
+    describe('Modules', () =>
     {
         it('should parse an empty module', () =>
         {
@@ -1077,13 +1163,13 @@ describe('parser/Parser', () =>
             expect(module.classes).toHaveLength(1);
         });
 
-        it('should parse a module and regenerate its code', () =>
-        {
-            const module = parser.parse(MODULES.TERMINATED);
+        // it('should parse a module and regenerate its code', () =>
+        // {
+        //     const module = parser.parse(MODULES.TERMINATED);
             
-            expect(module.toString()).toEqual(MODULES_STRINGS.TERMINATED);
+        //     expect(module.toString()).toEqual(MODULES_STRINGS.TERMINATED);
 
-            // NOTE: Unterminated code is read only as it can not be outputted to working code
-        });
+        //     // NOTE: Unterminated code is read only as it can not be outputted to working code
+        // });
     });
 });

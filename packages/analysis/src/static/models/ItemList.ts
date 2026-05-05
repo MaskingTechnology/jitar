@@ -52,4 +52,9 @@ export default class ItemList<T>
     {
         return this.#position + 1 < this.#items.length;
     }
+
+    insert(...item: T[]): void
+    {
+        this.#items.splice(this.#position, 0, ...item);
+    }
 }
