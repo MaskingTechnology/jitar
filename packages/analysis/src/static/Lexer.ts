@@ -10,6 +10,7 @@ import { Group, isGroup } from './definitions/Group';
 import { isKeyword } from './definitions/Keyword';
 import { List, isList } from './definitions/List';
 import { isLiteral } from './definitions/Literal';
+import { isNumber } from './definitions/Number';
 import { isOperator, Operator } from './definitions/Operator';
 import { isIndicator } from './definitions/Indicator';
 import { Punctuation } from './definitions/Punctuation';
@@ -88,6 +89,13 @@ export default class Lexer
             const end = charList.position;
 
             return new Token(TokenType.REGEX, value, start, end);
+        }
+        else if (this.#startNumber(charList, lastToken))
+        {
+            const value = this.#readNumber(charList);
+            const end = charList.position;
+
+            return new Token(TokenType.NUMBER, value, start, end);
         }
         else if (isLiteral(char))
         {
@@ -237,6 +245,54 @@ export default class Lexer
             }
 
             value += current;
+
+            charList.step();
+        }
+
+        return value;
+    }
+
+    #startNumber(charList: CharList, lastToken: Token | undefined): boolean
+    {
+        const current = charList.current;
+        const next = charList.next;
+
+        if (isNumber(current))
+        {
+            return true;
+        }
+
+        if (current !== Operator.SUBTRACT)
+        {
+            return false;
+        }
+
+        if (lastToken?.isType(TokenType.NUMBER))
+        {
+            return false;
+        }
+
+        return isNumber(next);
+    }
+
+    #readNumber(charList: CharList): string
+    {
+        let value = charList.current;
+
+        charList.step();
+
+        while (charList.notAtEnd())
+        {
+            const char = charList.current;
+
+            if (isNumber(char) === false)
+            {
+                charList.stepBack();
+
+                break;
+            }
+
+            value += char;
 
             charList.step();
         }

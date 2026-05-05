@@ -2,6 +2,7 @@
 export const CODE =
 {
     OPERATORS: `=====!=+=*!=`,
+    NUMBERS: '-12-10 1234567890',
     LITERALS: '`foo\\`ter`"bar\\"becue"\'baz\'',
     KEYWORDS_IDENTIFIERS: 'class Foo function bar',
     WHITESPACE: `const identifier\n=\t"value" ;`,

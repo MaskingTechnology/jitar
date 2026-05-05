@@ -154,6 +154,10 @@ export default class Parser
         {
             return this.#parseExpression(tokenList);
         }
+        if (token.isType(TokenType.NUMBER))
+        {
+            return this.#parseExpression(tokenList);
+        }
         else if (token.isType(TokenType.IDENTIFIER))
         {
             const next = tokenList.next;

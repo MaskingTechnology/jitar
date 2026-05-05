@@ -8,6 +8,7 @@ const TokenType =
     KEYWORD: 'keyword',
     LIST: 'list',
     LITERAL: 'literal',
+    NUMBER: 'number',
     OPERATOR: 'operator',
     INDICATOR: 'indicator',
     REGEX: 'regex',
