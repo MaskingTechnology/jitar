@@ -10,7 +10,7 @@ import {
 
 import { Divider, isDivider } from './definitions/Divider';
 import { Group } from './definitions/Group';
-import { Keyword, isDeclaration, isKeyword, isNotReserved } from './definitions/Keyword';
+import { Keyword, isDeclaration, isRootKeyword, isContextualKeyword, isNotRootKeyword } from './definitions/Keyword';
 import { List } from './definitions/List';
 import { Operator } from './definitions/Operator';
 import { Indicator } from './definitions/Indicator';
@@ -167,7 +167,7 @@ export default class Parser
         }
         else if (token.isType(TokenType.KEYWORD))
         {
-            if (isNotReserved(token.value))
+            if (isContextualKeyword(token.value))
             {
                 const next = tokenList.next;
                 const nextIsFunction = next !== undefined && (next.hasValue(Keyword.FUNCTION) || next.hasValue(Group.OPEN));
@@ -185,6 +185,11 @@ export default class Parser
             }
 
             if (token.hasValue(Keyword.RETURN))
+            {
+                return this.#parseExpression(tokenList);
+            }
+
+            if (isNotRootKeyword(token.value))
             {
                 return this.#parseExpression(tokenList);
             }
@@ -1011,12 +1016,12 @@ export default class Parser
     {
         return [Divider.TERMINATOR, Divider.SEPARATOR].includes(token.value)
             || [List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value)
-            || isKeyword(token.value);
+            || isRootKeyword(token.value);
     }
 
     #isIdentifier(token: Token): boolean
     {
         return token.isType(TokenType.IDENTIFIER)
-            || (token.isType(TokenType.KEYWORD) && isNotReserved(token.value));
+            || (token.isType(TokenType.KEYWORD) && isContextualKeyword(token.value));
     }
 }
