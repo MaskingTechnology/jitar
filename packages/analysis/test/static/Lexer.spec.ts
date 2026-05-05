@@ -38,7 +38,7 @@ describe('Lexer', () =>
         it('should separate numbers from operations', () =>
         {
             const tokens = lexer.tokenize(CODE.NUMBERS);
-            expect(tokens.size).toEqual(4);
+            expect(tokens.size).toEqual(6);
 
             expect(tokens.get(0).type).toEqual(TokenType.NUMBER);
             expect(tokens.get(0).value).toEqual('-12');
@@ -50,7 +50,13 @@ describe('Lexer', () =>
             expect(tokens.get(2).value).toEqual('10');
 
             expect(tokens.get(3).type).toEqual(TokenType.NUMBER);
-            expect(tokens.get(3).value).toEqual('1234567890');
+            expect(tokens.get(3).value).toEqual('12_345_678.90');
+
+            expect(tokens.get(4).type).toEqual(TokenType.NUMBER);
+            expect(tokens.get(4).value).toEqual('0x124_a4Bc');
+
+            expect(tokens.get(5).type).toEqual(TokenType.NUMBER);
+            expect(tokens.get(5).value).toEqual('0b11_0110');
         });
 
         it('should separate keywords from literals', () =>

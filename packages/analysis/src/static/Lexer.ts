@@ -10,7 +10,7 @@ import { Group, isGroup } from './definitions/Group';
 import { isKeyword } from './definitions/Keyword';
 import { List, isList } from './definitions/List';
 import { isLiteral } from './definitions/Literal';
-import { isNumber } from './definitions/Number';
+import { isNumber, isHexadecimal, isBinary } from './definitions/Number';
 import { isOperator, Operator } from './definitions/Operator';
 import { isIndicator } from './definitions/Indicator';
 import { Punctuation } from './definitions/Punctuation';
@@ -90,7 +90,7 @@ export default class Lexer
 
             return new Token(TokenType.REGEX, value, start, end);
         }
-        else if (this.#startNumber(charList, lastToken))
+        else if (this.#startsNumber(charList, lastToken))
         {
             const value = this.#readNumber(charList);
             const end = charList.position;
@@ -252,7 +252,7 @@ export default class Lexer
         return value;
     }
 
-    #startNumber(charList: CharList, lastToken: Token | undefined): boolean
+    #startsNumber(charList: CharList, lastToken: Token | undefined): boolean
     {
         const current = charList.current;
         const next = charList.next;
@@ -275,17 +275,52 @@ export default class Lexer
         return isNumber(next);
     }
 
+    #endsNumber(char: string, hexadecimal: boolean, binary: boolean): boolean
+    {
+        if (hexadecimal)
+        {
+            return isHexadecimal(char) === false
+                && char !== Punctuation.UNDERSCORE;
+        }
+
+        if (binary)
+        {
+            return isBinary(char) === false
+                && char !== Punctuation.UNDERSCORE;
+        }
+
+        return isNumber(char) === false
+            && char !== Punctuation.DOT
+            && char !== Punctuation.UNDERSCORE
+            && char !== 'e';
+    }
+
     #readNumber(charList: CharList): string
     {
         let value = charList.current;
 
+        if (value === Operator.SUBTRACT)
+        {
+            value += charList.step();
+        }
+
         charList.step();
+
+        const hexadecimal = charList.current === 'x';
+        const binary = charList.current === 'b';
+
+        if (hexadecimal || binary)
+        {
+            value += charList.current;
+
+            charList.step();
+        }
 
         while (charList.notAtEnd())
         {
             const char = charList.current;
 
-            if (isNumber(char) === false)
+            if (this.#endsNumber(char, hexadecimal, binary))
             {
                 charList.stepBack();
 
