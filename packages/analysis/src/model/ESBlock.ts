@@ -3,19 +3,22 @@ import ESStatement from './ESStatement';
 
 export default class ESBlock extends ESStatement
 {
-    readonly #code: string;
+    code: string;
 
     constructor(code: string)
     {
         super();
 
-        this.#code = code;
+        this.code = code;
     }
 
-    get code() { return this.#code; }
+    clone(): ESBlock
+    {
+        return new ESBlock(this.code);
+    }
 
     toString(): string
     {
-        return this.#code;
+        return this.code;
     }
 }

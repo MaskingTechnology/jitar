@@ -6,24 +6,26 @@ import ESClassMember from './ESClassMember';
 
 export default class ESMethod extends ESClassMember
 {
-    readonly #parameters: ESParameter[];
-    readonly #body: ESBlock;
-    readonly #isAsync: boolean;
+    parameters: ESParameter[];
+    body: ESBlock;
+    isAsync: boolean;
 
     constructor(identifier: string, visibility: Visibility, location: Location, parameters: ESParameter[], body: ESBlock, isAsync = false)
     {
         super(identifier, visibility, location);
 
-        this.#parameters = parameters;
-        this.#body = body;
-        this.#isAsync = isAsync;
+        this.parameters = parameters;
+        this.body = body;
+        this.isAsync = isAsync;
     }
 
-    get parameters() { return this.#parameters; }
+    clone(): ESMethod
+    {
+        const parameters = this.parameters.map(parameter => parameter.clone());
+        const body = this.body.clone();
 
-    get body() { return this.#body; }
-
-    get isAsync() { return this.#isAsync; }
+        return new ESMethod(this.identifier!, this.visibility, this.location, parameters, body, this.isAsync);
+    }
 
     toString(): string
     {

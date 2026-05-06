@@ -3,21 +3,24 @@ import ESStatement from './ESStatement';
 
 export default class ESExpression extends ESStatement
 {
-    readonly #code: string;
+    code: string;
 
     constructor(code: string)
     {
         super();
 
-        this.#code = code;
+        this.code = code;
     }
 
-    get code() { return this.#code; }
+    clone(): ESExpression
+    {
+        return new ESExpression(this.code);
+    }
 
     toString(terminate = true): string
     {
-        const terminator = terminate === false || this.#code.endsWith('}') ? '' : ';';
+        const terminator = terminate === false || this.code.endsWith('}') ? '' : ';';
 
-        return `${this.#code}${terminator}`;
+        return `${this.code}${terminator}`;
     }
 }

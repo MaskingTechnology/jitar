@@ -5,25 +5,29 @@ import ESClassMember from './ESClassMember';
 
 export default class ESConstructor extends ESClassMember
 {
-    readonly #parameters: ESParameter[];
-    readonly #body: ESBlock;
+    parameters: ESParameter[];
+    body: ESBlock;
     
     constructor(parameters: ESParameter[], body: ESBlock)
     {
         super('constructor', 'public', 'instance');
 
-        this.#parameters = parameters;
-        this.#body = body;
+        this.parameters = parameters;
+        this.body = body;
     }
 
-    get parameters() { return this.#parameters; }
+    clone(): ESConstructor
+    {
+        const parameters = this.parameters.map(parameter => parameter.clone());
+        const body = this.body.clone();
 
-    get body() { return this.#body; }
+        return new ESConstructor(parameters, body);
+    }
 
     toString(): string
     {
-        const parameters = this.#parameters.map((parameter) => parameter.toString());
-        const body = this.#body.toString();
+        const parameters = this.parameters.map((parameter) => parameter.toString());
+        const body = this.body.toString();
 
         return `${this.identifier}(${parameters.join(',')}) ${body}`;
     }

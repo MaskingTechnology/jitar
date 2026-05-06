@@ -3,25 +3,26 @@ import ESBinding from './ESBinding';
 
 export default class ESIdentifierBinding extends ESBinding
 {
-    readonly #identifier: string;
-    readonly #isRest: boolean;
+    identifier: string;
+    isRest: boolean;
 
     constructor(identifier: string, isRest = false)
     {
         super();
 
-        this.#identifier = identifier;
-        this.#isRest = isRest;
+        this.identifier = identifier;
+        this.isRest = isRest;
     }
 
-    get identifier() { return this.#identifier; }
-
-    get isRest() { return this.#isRest; }
+    clone(): ESIdentifierBinding
+    {
+        return new ESIdentifierBinding(this.identifier, this.isRest);
+    }
 
     toString(): string
     {
-        const prefix = this.#isRest ? '...' : '';
+        const prefix = this.isRest ? '...' : '';
 
-        return `${prefix}${this.#identifier}`;
+        return `${prefix}${this.identifier}`;
     }
 }

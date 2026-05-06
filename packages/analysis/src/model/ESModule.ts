@@ -10,28 +10,26 @@ import type ESStatement from './ESStatement';
 
 export default class ESModule
 {
-    readonly #statements: ESStatement[];
+    statements: ESStatement[];
 
     constructor(statements: ESStatement[])
     {
-        this.#statements = statements;
+        this.statements = statements;
     }
 
-    get statements() { return this.#statements; }
+    get exports() { return this.statements.filter(statement => statement instanceof ESExport); }
 
-    get exports() { return this.#statements.filter(statement => statement instanceof ESExport); }
+    get imports() { return this.statements.filter(statement => statement instanceof ESImport); }
 
-    get imports() { return this.#statements.filter(statement => statement instanceof ESImport); }
+    get expressions() { return this.statements.filter(statement => statement instanceof ESExpression); }
 
-    get expressions() { return this.#statements.filter(statement => statement instanceof ESExpression); }
+    get declarations() { return this.statements.filter(statement => statement instanceof ESDeclaration); }
 
-    get declarations() { return this.#statements.filter(statement => statement instanceof ESDeclaration); }
+    get variables() { return this.statements.filter(statement => statement instanceof ESVariable); }
 
-    get variables() { return this.#statements.filter(statement => statement instanceof ESVariable); }
+    get functions() { return this.statements.filter(statement => statement instanceof ESFunction); }
 
-    get functions() { return this.#statements.filter(statement => statement instanceof ESFunction); }
-
-    get classes() { return this.#statements.filter(statement => statement instanceof ESClass); }
+    get classes() { return this.statements.filter(statement => statement instanceof ESClass); }
 
     get exported(): ESDeclaration[]
     {
@@ -111,9 +109,16 @@ export default class ESModule
         return this.classes.find(entry => entry.is(identifier));
     }
 
+    clone(): ESModule
+    {
+        const statements = this.statements.map(statement => statement.clone());
+
+        return new ESModule(statements);
+    }
+
     toString(): string
     {
-        return this.#statements
+        return this.statements
             .map(statement => statement.toString(true))
             .join('\n');
     }

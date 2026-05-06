@@ -10,6 +10,14 @@ export default class ESArrowFunction extends ESFunction
         super(undefined, parameters, body, isAsync);
     }
 
+    clone(): ESFunction
+    {
+        const parameters = this.parameters.map(parameter => parameter.clone());
+        const body = this.body.clone();
+
+        return new ESArrowFunction(parameters, body, this.isAsync);
+    }
+
     toString(): string
     {
         const prefix = this.isAsync ? 'async ' : '';

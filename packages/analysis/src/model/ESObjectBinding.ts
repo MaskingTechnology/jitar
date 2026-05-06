@@ -4,20 +4,25 @@ import ESBinding from './ESBinding';
 
 export default class ESObjectBinding extends ESBinding
 {
-    readonly #elements: ESBindingElement[];
+    elements: ESBindingElement[];
 
     constructor(elements: ESBindingElement[])
     {
         super();
 
-        this.#elements = elements;
+        this.elements = elements;
     }
 
-    get elements() { return this.#elements; }
+    clone(): ESObjectBinding
+    {
+        const elements = this.elements.map(element => element.clone());
+
+        return new ESObjectBinding(elements);
+    }
 
     toString(): string
     {
-        const elements = this.#elements.map(element => element.toString());
+        const elements = this.elements.map(element => element.toString());
 
         return `{${elements.join(',')}}`;
     }

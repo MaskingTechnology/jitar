@@ -5,24 +5,26 @@ import ESDeclaration from './ESDeclaration';
 
 export default class ESFunction extends ESDeclaration
 {
-    readonly #parameters: ESParameter[];
-    readonly #body: ESBlock;
-    readonly #isAsync: boolean;
+    parameters: ESParameter[];
+    body: ESBlock;
+    isAsync: boolean;
 
     constructor(identifier: string | undefined, parameters: ESParameter[], body: ESBlock, isAsync = false)
     {
         super(identifier);
 
-        this.#parameters = parameters;
-        this.#body = body;
-        this.#isAsync = isAsync;
+        this.parameters = parameters;
+        this.body = body;
+        this.isAsync = isAsync;
     }
 
-    get parameters() { return this.#parameters; }
+    clone(): ESFunction
+    {
+        const parameters = this.parameters.map(parameter => parameter.clone());
+        const body = this.body.clone();
 
-    get body() { return this.#body; }
-
-    get isAsync() { return this.#isAsync; }
+        return new ESFunction(this.identifier, parameters, body, this.isAsync);
+    }
 
     toString(): string
     {

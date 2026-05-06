@@ -21,5 +21,7 @@ export default abstract class ESClassMember extends ESDeclaration
 
     get location() { return this.#location; }
 
+    abstract clone(): ESClassMember;
+
     abstract toString(): string;
 }

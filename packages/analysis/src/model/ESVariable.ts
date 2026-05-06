@@ -8,30 +8,32 @@ export type Initializer = ESStatement | undefined;
 
 export default class ESVariable extends ESDeclaration
 {
-    readonly #type: Type;
-    readonly #binding: ESBinding;
-    readonly #initializer: Initializer;
+    type: Type;
+    binding: ESBinding;
+    initializer: Initializer;
 
     constructor(type: Type, binding: ESBinding, initializer: Initializer)
     {
         super(binding.toString());
         
-        this.#type = type;
-        this.#binding = binding;
-        this.#initializer = initializer;
+        this.type = type;
+        this.binding = binding;
+        this.initializer = initializer;
     }
 
-    get type() { return this.#type; }
+    clone(): ESVariable
+    {
+        const binding = this.binding.clone();
+        const initializer = this.initializer?.clone();
 
-    get binding() { return this.#binding; }
-
-    get initializer() { return this.#initializer; }
+        return new ESVariable(this.type, binding, initializer);
+    }
 
     toString(): string
     {
-        const initializer = this.#initializer !== undefined ? `=${this.#initializer.toString(true)}` : '';
+        const initializer = this.initializer !== undefined ? `=${this.initializer.toString(true)}` : '';
         const terminator = initializer.endsWith(';') ? '' : ';';
 
-        return `${this.#type} ${this.identifier}${initializer}${terminator}`;
+        return `${this.type} ${this.identifier}${initializer}${terminator}`;
     }
 }

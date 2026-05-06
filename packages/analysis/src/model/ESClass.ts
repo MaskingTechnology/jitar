@@ -12,30 +12,26 @@ export type ESWritableClassMember = ESField | ESSetter;
 
 export default class ESClass extends ESDeclaration
 {
-    readonly #parent: string | undefined;
-    readonly #members: ESClassMember[];
+    parent: string | undefined;
+    members: ESClassMember[];
 
     constructor(identifier: string | undefined, parent: string | undefined, members: ESClassMember[])
     {
         super(identifier);
 
-        this.#parent = parent;
-        this.#members = members;
+        this.parent = parent;
+        this.members = members;
     }
 
-    get parent() { return this.#parent; }
+    get construct() { return this.members.find(member => member instanceof ESConstructor); }
 
-    get members() { return this.#members; }
+    get fields() { return this.members.filter(member => member instanceof ESField); }
 
-    get construct() { return this.#members.find(member => member instanceof ESConstructor); }
+    get getters() { return this.members.filter(member => member instanceof ESGetter); }
 
-    get fields() { return this.#members.filter(member => member instanceof ESField); }
+    get setters() { return this.members.filter(member => member instanceof ESSetter); }
 
-    get getters() { return this.#members.filter(member => member instanceof ESGetter); }
-
-    get setters() { return this.#members.filter(member => member instanceof ESSetter); }
-
-    get methods() { return this.#members.filter(member => member instanceof ESMethod); }
+    get methods() { return this.members.filter(member => member instanceof ESMethod); }
 
     get publicFields() { return this.fields.filter(member => member.visibility === 'public' ); }
 
@@ -115,11 +111,18 @@ export default class ESClass extends ESDeclaration
         return this.writable.some(member => member.is(identifier));
     }
 
+    clone(): ESClass
+    {
+        const members = this.members.map(member => member.clone());
+
+        return new ESClass(this.identifier, this.parent, members);
+    }
+
     toString(): string
     {
         const identifier = this.identifier ?? '';
-        const infix = this.#parent !== undefined ? ` extends ${this.#parent}` : '';
-        const members = this.#members.map(member => member.toString());
+        const infix = this.parent !== undefined ? ` extends ${this.parent}` : '';
+        const members = this.members.map(member => member.toString());
 
         return `class ${identifier}${infix}{${members.join('')}}`;
     }

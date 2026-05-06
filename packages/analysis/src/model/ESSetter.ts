@@ -6,27 +6,31 @@ import ESClassMember from './ESClassMember';
 
 export default class ESSetter extends ESClassMember
 {
-    readonly #parameter: ESParameter;
-    readonly #body: ESBlock;
+    parameter: ESParameter;
+    body: ESBlock;
     
     constructor(identifier: string, visibility: Visibility, location: Location, parameter: ESParameter, body: ESBlock)
     {
         super(identifier, visibility, location);
 
-        this.#parameter = parameter;
-        this.#body = body;
+        this.parameter = parameter;
+        this.body = body;
     }
 
-    get parameter() { return this.#parameter; }
+    clone(): ESSetter
+    {
+        const parameter = this.parameter.clone();
+        const body = this.body.clone();
 
-    get body() { return this.#body; }
+        return new ESSetter(this.identifier!, this.visibility, this.location, parameter, body);
+    }
 
     toString(): string
     {
         const location = this.location === 'static' ? 'static ' : '';
         const visibility = this.visibility === 'private' ? '#' : '';
-        const parameter = this.#parameter.toString();
-        const body = this.#body.toString();
+        const parameter = this.parameter.toString();
+        const body = this.body.toString();
 
         return `${location}set ${visibility}${this.identifier}(${parameter})${body}`;
     }

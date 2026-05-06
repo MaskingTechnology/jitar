@@ -384,7 +384,7 @@ export default class Parser
         {
             // Default exports of values need to move to their own declaration
 
-            const identifier = `\$_EXPORT_${token.start}_${token.end}`;
+            const identifier = `$_EXPORT_${token.start}_${token.end}`;
 
             tokenList.insert(
                 new Token(TokenType.KEYWORD, Keyword.CONST, 0, 0),
