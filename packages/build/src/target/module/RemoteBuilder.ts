@@ -81,7 +81,7 @@ export default class RemoteBuilder
         {
             if (parameter.binding instanceof ESIdentifierBinding)
             {
-                result.push(parameter.binding.identifier);
+                result.push(parameter.binding.identifier.toString());
             }
             else if (parameter.binding instanceof ESArrayBinding)
             {
@@ -135,9 +135,8 @@ export default class RemoteBuilder
     #createNamedArgument(binding: ESIdentifierBinding): string
     {
         const key = binding.identifier;
-        const value = key.startsWith('...') ? key.substring(3) : key;
 
-        return `'${key}': ${value}`;
+        return `'${key}': ${key}`;
     }
 
     #createDeclaration(implementation: Implementation): string
