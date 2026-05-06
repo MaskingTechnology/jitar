@@ -10,6 +10,7 @@ const Keyword =
 
     // Declarations
     ASYNC: 'async',
+    AWAIT: 'await',
     USING: 'using',
     CONST: 'const',
     LET: 'let',
@@ -64,6 +65,7 @@ const DeclarationKeywords = // Things to import / export
 [
     Keyword.VAR, Keyword.LET, Keyword.CONST,
     Keyword.FUNCTION, Keyword.CLASS,
+    Keyword.USING
 ];
 
 const ContextualKeywords = // Are also valid identifiers

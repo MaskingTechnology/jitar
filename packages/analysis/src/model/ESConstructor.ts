@@ -25,6 +25,6 @@ export default class ESConstructor extends ESClassMember
         const parameters = this.#parameters.map((parameter) => parameter.toString());
         const body = this.#body.toString();
 
-        return `${this.identifier}(${parameters.join(', ')}) ${body}`;
+        return `${this.identifier}(${parameters.join(',')}) ${body}`;
     }
 }

@@ -121,6 +121,6 @@ export default class ESClass extends ESDeclaration
         const infix = this.#parent !== undefined ? ` extends ${this.#parent}` : '';
         const members = this.#members.map(member => member.toString());
 
-        return `class ${identifier}${infix}{ ${members.join(' ')} }`;
+        return `class ${identifier}${infix}{${members.join('')}}`;
     }
 }

@@ -33,6 +33,6 @@ export default class ESMethod extends ESClassMember
         const parameters = this.parameters.map((parameter) => parameter.toString());
         const body = this.body.toString();
 
-        return `${location}${prefix}${visibility}${this.identifier}(${parameters.join(', ')}) ${body}`;
+        return `${location}${prefix}${visibility}${this.identifier}(${parameters.join(',')})${body}`;
     }
 }

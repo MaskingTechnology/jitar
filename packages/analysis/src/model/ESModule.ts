@@ -115,6 +115,6 @@ export default class ESModule
     {
         return this.#statements
             .map(statement => statement.toString(true))
-            .join(' ');
+            .join('\n');
     }
 }

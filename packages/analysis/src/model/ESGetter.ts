@@ -22,6 +22,6 @@ export default class ESGetter extends ESClassMember
         const visibility = this.visibility === 'private' ? '#' : '';
         const body = this.#body.toString();
 
-        return `${location}get ${visibility}${this.identifier}() ${body}`;
+        return `${location}get ${visibility}${this.identifier}()${body}`;
     }
 }

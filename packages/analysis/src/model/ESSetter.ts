@@ -28,6 +28,6 @@ export default class ESSetter extends ESClassMember
         const parameter = this.#parameter.toString();
         const body = this.#body.toString();
 
-        return `${location}set ${visibility}${this.identifier}(${parameter}) ${body}`;
+        return `${location}set ${visibility}${this.identifier}(${parameter})${body}`;
     }
 }

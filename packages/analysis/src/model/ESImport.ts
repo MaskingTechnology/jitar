@@ -38,6 +38,6 @@ export default class ESImport extends ESStatement
         
         const members = this.#members.map(member => member.toString());
 
-        return `import { ${members.join(', ')} } from '${this.#from}';`;
+        return `import {${members.join(',')}} from '${this.#from}';`;
     }
 }

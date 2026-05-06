@@ -20,7 +20,7 @@ export default class ESBindingElement
     toString(): string
     {
         const binding = this.#binding.toString();
-        const initializer = this.#initializer !== undefined ? ` = ${this.#initializer.toString(false)}` : '';
+        const initializer = this.#initializer !== undefined ? `=${this.#initializer.toString(false)}` : '';
 
         return `${binding}${initializer}`;
     }

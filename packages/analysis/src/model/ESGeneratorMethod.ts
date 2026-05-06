@@ -10,6 +10,6 @@ export default class ESGeneratorMethod extends ESMethod
         const parameters = this.parameters.map((parameter) => parameter.toString());
         const body = this.body.toString();
 
-        return `${prefix}*${identifier}(${parameters.join(', ')}) ${body}`;
+        return `${prefix}*${identifier}(${parameters.join(',')})${body}`;
     }
 }

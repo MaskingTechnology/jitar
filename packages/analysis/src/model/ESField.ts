@@ -20,7 +20,7 @@ export default class ESField extends ESClassMember
     {
         const location = this.location === 'static' ? 'static ' : '';
         const visibility = this.visibility === 'private' ? '#' : '';
-        const initializer = this.#initializer !== undefined ? ` = ${this.#initializer.toString(true)}` : ';';
+        const initializer = this.#initializer !== undefined ? `=${this.#initializer.toString(true)}` : ';';
 
         return `${location}${visibility}${this.identifier}${initializer}`;
     }

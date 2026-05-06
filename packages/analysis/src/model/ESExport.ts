@@ -34,6 +34,6 @@ export default class ESExport extends ESStatement
         const members = this.#members.map(member => member.toString());
         const postfix = this.#from ? ` from '${this.#from}'` : '';
 
-        return `export { ${members.join(', ')} }${postfix};`;
+        return `export {${members.join(',')}}${postfix};`;
     }
 }

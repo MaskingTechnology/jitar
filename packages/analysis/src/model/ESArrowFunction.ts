@@ -16,6 +16,6 @@ export default class ESArrowFunction extends ESFunction
         const parameters = this.parameters.map((parameter) => parameter.toString());
         const body = this.body.toString();
 
-        return `${prefix}(${parameters.join(', ')}) => ${body}`;
+        return `${prefix}(${parameters.join(', ')})=>${body}`;
     }
 }

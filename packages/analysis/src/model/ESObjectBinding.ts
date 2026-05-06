@@ -19,6 +19,6 @@ export default class ESObjectBinding extends ESBinding
     {
         const elements = this.#elements.map(element => element.toString());
 
-        return `{ ${elements.join(', ')} }`;
+        return `{${elements.join(',')}}`;
     }
 }

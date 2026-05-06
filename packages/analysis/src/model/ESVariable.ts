@@ -29,7 +29,7 @@ export default class ESVariable extends ESDeclaration
 
     toString(): string
     {
-        const initializer = this.#initializer !== undefined ? ` = ${this.#initializer.toString(true)}` : '';
+        const initializer = this.#initializer !== undefined ? `=${this.#initializer.toString(true)}` : '';
         const terminator = initializer.endsWith(';') ? '' : ';';
 
         return `${this.#type} ${this.identifier}${initializer}${terminator}`;

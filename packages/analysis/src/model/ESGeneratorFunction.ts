@@ -10,6 +10,6 @@ export default class ESGeneratorFunction extends ESFunction
         const parameters = this.parameters.map((parameter) => parameter.toString());
         const body = this.body.toString();
 
-        return `${prefix}function* ${identifier}(${parameters.join(', ')}) ${body}`;
+        return `${prefix}function* ${identifier}(${parameters.join(',')})${body}`;
     }
 }

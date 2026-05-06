@@ -4,18 +4,24 @@ import ESBinding from './ESBinding';
 export default class ESIdentifierBinding extends ESBinding
 {
     readonly #identifier: string;
+    readonly #isRest: boolean;
 
-    constructor(identifier: string)
+    constructor(identifier: string, isRest = false)
     {
         super();
 
         this.#identifier = identifier;
+        this.#isRest = isRest;
     }
 
     get identifier() { return this.#identifier; }
 
+    get isRest() { return this.#isRest; }
+
     toString(): string
     {
-        return this.#identifier;
+        const prefix = this.#isRest ? '...' : '';
+
+        return `${prefix}${this.#identifier}`;
     }
 }

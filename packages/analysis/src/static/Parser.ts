@@ -27,9 +27,9 @@ import Token from './models/Token';
 import TokenList from './models/TokenList';
 
 import Lexer from './Lexer';
+import Coder from './Coder';
 
 const DEFAULT_IDENTIFIER = 'default';
-const DEFINITION_SEPARATOR = ' ';
 
 export default class Parser
 {
@@ -380,9 +380,9 @@ export default class Parser
         let token = tokenList.current;
         let stepSize = 0;
 
-        if (isDefault && this.#isValue(token))
+        if (isDefault && this.#doesExportValue(tokenList))
         {
-            // Default export not bound to a declaration need to move to their own declaration
+            // Default exports of values need to move to their own declaration
 
             const identifier = `\$_EXPORT_${token.start}_${token.end}`;
 
@@ -430,6 +430,20 @@ export default class Parser
         const member = new ESModuleMember(identifier, alias);
 
         return new ESExport([member], from);
+    }
+
+    #doesExportValue(tokenList: TokenList): boolean
+    {
+        const current = tokenList.current;
+
+        if (this.#isValue(current))
+        {
+            return true;
+        }
+
+        const next = tokenList.next;
+        
+        return this.#isIdentifier(current) && next?.hasValue(Group.OPEN); // function call
     }
 
     #parseMultiExport(tokenList: TokenList): ESExport
@@ -580,12 +594,20 @@ export default class Parser
 
     #parseIdentifierBinding(tokenList: TokenList): ESIdentifierBinding
     {
-        const token = tokenList.current;
+        let token = tokenList.current;
+        let isRest = false;
+
+        if (token.hasValue(Operator.SPREAD))
+        {
+            isRest = true;
+            token = tokenList.step();
+        }
+
         const identifier = token.value;
 
         tokenList.step(); // Read away the identifier
 
-        return new ESIdentifierBinding(identifier);
+        return new ESIdentifierBinding(identifier, isRest);
     }
 
     #parseInitializer(tokenList: TokenList): ESStatement | undefined
@@ -933,15 +955,18 @@ export default class Parser
 
     #parseBlock(tokenList: TokenList): ESBlock
     {
-        const code = this.#parseCollectionToCode(tokenList, Scope.OPEN, Scope.CLOSE);
+        const coder = this.#parseCollectionToCode(tokenList, Scope.OPEN, Scope.CLOSE);
+        
+        const code = coder.generate();
 
         return new ESBlock(code);
     }
 
     #parseExpression(tokenList: TokenList): ESExpression
     {
+        const coder = new Coder();
+
         let token = tokenList.current;
-        let code = '';
 
         while (tokenList.notAtEnd())
         {
@@ -949,26 +974,30 @@ export default class Parser
             {
                 const array = this.#parseCollectionToCode(tokenList, List.OPEN, List.CLOSE);
 
-                code += array + DEFINITION_SEPARATOR;
+                coder.merge(array);
+
                 token = tokenList.current;
             }
             else if (token.hasValue(Group.OPEN))
             {
                 const group = this.#parseCollectionToCode(tokenList, Group.OPEN, Group.CLOSE);
 
-                code += group + DEFINITION_SEPARATOR;
+                coder.merge(group);
+
                 token = tokenList.current;
             }
             else if (token.hasValue(Scope.OPEN))
             {
                 const scope = this.#parseCollectionToCode(tokenList, Scope.OPEN, Scope.CLOSE);
 
-                code += scope + DEFINITION_SEPARATOR;
+                coder.merge(scope);
+
                 token = tokenList.current;
             }
             else
             {
-                code += token.toString() + DEFINITION_SEPARATOR;
+                coder.append(token);
+
                 token = tokenList.step();
             }
 
@@ -988,19 +1017,27 @@ export default class Parser
             }
         }
 
-        return new ESExpression(code.trim());
+        const code = coder.generate();
+
+        return new ESExpression(code);
     }
 
-    #parseCollectionToCode(tokenList: TokenList, openId: string, closeId: string): string
+    #parseCollectionToCode(tokenList: TokenList, openId: string, closeId: string): Coder
     {
-        let token = tokenList.step(); // Read away the open
-        let code = openId + DEFINITION_SEPARATOR;
+        let token = tokenList.current;
+
+        const coder = new Coder([token]);
+
+        token = tokenList.step(); // Read away the open
 
         while (tokenList.notAtEnd())
         {
             if (token.hasValue(openId))
             {
-                code += this.#parseCollectionToCode(tokenList, openId, closeId) + DEFINITION_SEPARATOR;
+                const collection = this.#parseCollectionToCode(tokenList, openId, closeId);
+
+                coder.merge(collection);
+                
                 token = tokenList.current;
 
                 continue;
@@ -1009,16 +1046,17 @@ export default class Parser
             {
                 tokenList.step(); // Read away the close
 
-                code += closeId;
+                coder.append(token);
 
-                return code;
+                return coder;
             }
 
-            code += token.toString() + DEFINITION_SEPARATOR;
+            coder.append(token);
+            
             token = tokenList.step();
         }
 
-        return code;
+        return coder;
     }
 
     #peekAfterCollection(tokenList: TokenList, openId: string, closeId: string): Token | undefined
