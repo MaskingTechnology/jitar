@@ -1,5 +1,5 @@
 
-import { ESClass, ESClassMember, ESVariable, ESExpression, ESFunction, ESField, ESMethod, ESGetter, ESModule, ESSetter, ESConstructor } from '../model';
+import { ESClass, ESClassMember, ESVariable, ESExpression, ESFunction, ESField, ESMethod, ESGetter, ESModule, ESSetter, ESConstructor, ESIdentifierBinding } from '../model';
 import { Parser } from '../static';
 
 import ClassMerger from './ClassMerger';
@@ -33,9 +33,10 @@ export default class Reflector
             }
             else
             {
+                const binding = new ESIdentifierBinding(key, false);
                 const expression = new ESExpression(code);
 
-                members.push(new ESVariable('var', key, expression));
+                members.push(new ESVariable('var', binding, expression));
             }
         }
 

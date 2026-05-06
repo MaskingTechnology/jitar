@@ -169,7 +169,7 @@ describe('Reflector', () =>
         {
             const functionFunction = reflector.fromFunction(FUNCTIONS.OPTIONAL_ARGS);
             expect(functionFunction.identifier).toEqual('optionalFunction');
-            expect(functionFunction.body.toString()).toEqual('{ return a + b + c ; }');
+            expect(functionFunction.body.toString()).toEqual('{return a+b+c;}');
 
             const parameters = functionFunction.parameters;
             expect(parameters).toHaveLength(3);
@@ -178,7 +178,7 @@ describe('Reflector', () =>
             expect(parameters[0].initializer).toBeUndefined();
 
             expect(parameters[1].binding.toString()).toEqual('b');
-            expect(parameters[1].initializer?.toString(false)).toEqual('new Child ( 1 , "Jane" , "Doe" , 42 )');
+            expect(parameters[1].initializer?.toString(false)).toEqual('new Child(1,"Jane","Doe",42)');
 
             expect(parameters[2].binding.toString()).toEqual('c');
             expect(parameters[2].initializer?.toString(false)).toEqual('0');
