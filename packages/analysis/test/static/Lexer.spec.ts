@@ -179,7 +179,7 @@ describe('Lexer', () =>
         it('should tokenize a regex statement', () =>
         {
             const tokens = lexer.tokenize(CODE.REGEX_STATEMENT);
-            expect(tokens.size).toEqual(8);
+            expect(tokens.size).toEqual(9);
 
             expect(tokens.get(0).type).toEqual(TokenType.KEYWORD);
             expect(tokens.get(0).value).toEqual(Keyword.CONST);
@@ -193,17 +193,20 @@ describe('Lexer', () =>
             expect(tokens.get(3).type).toEqual(TokenType.REGEX);
             expect(tokens.get(3).value).toEqual(`/[\\"]['"]/g`);
 
-            expect(tokens.get(4).type).toEqual(TokenType.IDENTIFIER);
-            expect(tokens.get(4).value).toEqual('.test');
+            expect(tokens.get(4).type).toEqual(TokenType.OPERATOR);
+            expect(tokens.get(4).value).toEqual(Operator.CHAINING);
 
-            expect(tokens.get(5).type).toEqual(TokenType.GROUP);
-            expect(tokens.get(5).value).toEqual(Group.OPEN);
+            expect(tokens.get(5).type).toEqual(TokenType.IDENTIFIER);
+            expect(tokens.get(5).value).toEqual('test');
 
-            expect(tokens.get(6).type).toEqual(TokenType.LITERAL);
-            expect(tokens.get(6).value).toEqual("'foo'");
+            expect(tokens.get(6).type).toEqual(TokenType.GROUP);
+            expect(tokens.get(6).value).toEqual(Group.OPEN);
 
-            expect(tokens.get(7).type).toEqual(TokenType.GROUP);
-            expect(tokens.get(7).value).toEqual(Group.CLOSE);
+            expect(tokens.get(7).type).toEqual(TokenType.LITERAL);
+            expect(tokens.get(7).value).toEqual("'foo'");
+
+            expect(tokens.get(8).type).toEqual(TokenType.GROUP);
+            expect(tokens.get(8).value).toEqual(Group.CLOSE);
         });
 
         it('should tokenize a regex array', () =>
