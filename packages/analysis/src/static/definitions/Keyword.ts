@@ -29,6 +29,7 @@ const Keyword =
     EXTENDS: 'extends',
     STATIC: 'static',
     NEW: 'new',
+    THIS: 'this',
 
     // Iterations
     DO: 'do',

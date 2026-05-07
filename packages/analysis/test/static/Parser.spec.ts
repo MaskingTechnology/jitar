@@ -1173,6 +1173,7 @@ describe('Parser', () =>
             expect(module.variables).toHaveLength(5);
             expect(module.functions).toHaveLength(2);
             expect(module.classes).toHaveLength(1);
+            expect(module.toString()).toEqual(MODULES_STRINGS.TERMINATED);
         });
 
         it('should parse a module with unterminated statements', () =>
@@ -1185,14 +1186,6 @@ describe('Parser', () =>
             expect(module.variables).toHaveLength(2);
             expect(module.functions).toHaveLength(1);
             expect(module.classes).toHaveLength(1);
-        });
-
-        it('should parse a module and regenerate its code', () =>
-        {
-            const module = parser.parse(MODULES.TERMINATED);
-            
-            expect(module.toString()).toEqual(MODULES_STRINGS.TERMINATED);
-
             // NOTE: Unterminated code is read only as it can not be outputted to working code
         });
     });

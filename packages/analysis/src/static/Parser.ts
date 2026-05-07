@@ -177,7 +177,7 @@ export default class Parser
 
                     return this.#parseNext(tokenList, true);
                 }
-                else if (next === undefined || this.#atEndOfStatement(next))
+                else if (next === undefined || this.#atEndOfExpression(next))
                 {
                     return this.#parseExpression(tokenList);
                 }
@@ -1006,7 +1006,7 @@ export default class Parser
                 break;
             }
 
-            if (this.#atEndOfStatement(token))
+            if (this.#atEndOfExpression(token))
             {
                 if (token.hasValue(Divider.TERMINATOR))
                 {
@@ -1054,6 +1054,11 @@ export default class Parser
             coder.append(token);
             
             token = tokenList.step();
+
+            if (this.#mustInsertTerminator(tokenList))
+            {
+                coder.append(new Token(TokenType.DIVIDER, Divider.TERMINATOR, 0, 0));
+            }
         }
 
         return coder;
@@ -1073,11 +1078,17 @@ export default class Parser
         return token;
     }
 
-    #atEndOfStatement(token: Token): boolean
+    #atEndOfExpression(token: Token): boolean
     {
         return [Divider.TERMINATOR, Divider.SEPARATOR].includes(token.value)
             || [List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value)
             || isRootKeyword(token.value);
+    }
+
+    #mustInsertTerminator(tokenList: TokenList): boolean
+    {
+        // Unsupported for now
+        return false;
     }
 
     #isIdentifier(token: Token): boolean
