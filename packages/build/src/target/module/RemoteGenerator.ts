@@ -1,6 +1,5 @@
 
-import { ESModule, ESArrayBinding, ESObjectBinding, ESIdentifierBinding, ESBlock, ESModuleMember } from '@jitar/analysis';
-import { ESExport, ESFunction, ESParameter, ESStatement } from '@jitar/analysis';
+import { ESModule, ESArrayBinding, ESObjectBinding, ESIdentifierBinding, ESBlock, ESModuleMember, ESExport, ESFunction, ESParameter, ESStatement } from '@jitar/analysis';
 import { AccessLevels } from '@jitar/execution';
 
 import { Keywords } from '../../definitions';

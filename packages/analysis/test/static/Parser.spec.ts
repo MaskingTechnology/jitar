@@ -501,13 +501,13 @@ describe('Parser', () =>
             const binding = variable.binding as ESArrayBinding;
             expect(binding.elements).toHaveLength(2);
             
-            const firstElement = binding.elements[0] as ESBindingElement;
+            const firstElement = binding.elements[0];
             expect(firstElement).toBeInstanceOf(ESBindingElement);
             expect(firstElement.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(firstElement.binding.toString()).toEqual('value1');
             expect(firstElement.initializer).toBeUndefined();
 
-            const secondElement = binding.elements[1] as ESBindingElement;
+            const secondElement = binding.elements[1];
             expect(secondElement).toBeInstanceOf(ESBindingElement);
             expect(secondElement.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(secondElement.binding.toString()).toEqual('value2');
@@ -527,12 +527,12 @@ describe('Parser', () =>
             const binding = variable.binding as ESObjectBinding;
             expect(binding.elements).toHaveLength(2);
 
-            const firstElement = binding.elements[0] as ESBindingElement;
+            const firstElement = binding.elements[0];
             expect(firstElement.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(firstElement.binding.toString()).toEqual('key1');
             expect(firstElement.initializer).toBeUndefined();
 
-            const secondElement = binding.elements[1] as ESBindingElement;
+            const secondElement = binding.elements[1];
             expect(secondElement).toBeInstanceOf(ESBindingElement);
             expect(secondElement.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(secondElement.binding.toString()).toEqual('key2');

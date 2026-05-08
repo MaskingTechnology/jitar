@@ -22,7 +22,7 @@ export default class ConfigurationManager
         const reader = new ConfigurationReader(fileManager);
         const validator = new Validator();
 
-        this.#environmentConfigurator = new EnvironmentConfigurator();
+        this.#environmentConfigurator = new EnvironmentConfigurator(fileManager);
         this.#runtimeConfigurationBuilder = new RuntimeConfigurationBuilder(reader, validator);
         this.#serverConfigurationBuilder = new ServerConfigurationBuilder(reader, validator);
     }

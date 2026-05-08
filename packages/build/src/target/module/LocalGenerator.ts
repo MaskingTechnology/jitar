@@ -159,7 +159,7 @@ export default class LocalGenerator
     #getRemoteImportKeys(targetModuleFilename: string, segmentKeys: string[]): string[]
     {
         const segments = this.#segmentation.getSegments(targetModuleFilename).filter(segment => segment !== this.#segment);
-        const importKeys = segments.map(segment => this.#getSegmentImportKeys(targetModuleFilename, segment)).flat();
+        const importKeys = segments.flatMap(segment => this.#getSegmentImportKeys(targetModuleFilename, segment));
         const uniqueKeys = [...new Set(importKeys)];
 
         return uniqueKeys.filter(key => segmentKeys.includes(key) === false);

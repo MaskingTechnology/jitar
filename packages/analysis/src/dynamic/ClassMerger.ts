@@ -20,8 +20,8 @@ export default class ClassMerger
     {
         const members = new Map<string, T>();
 
-        parent.forEach(member => members.set(member.identifier!, member));
-        model.forEach(member => members.set(member.identifier!, member));
+        parent.forEach(member => members.set(member.identifier, member));
+        model.forEach(member => members.set(member.identifier, member));
 
         return [...members.values()];
     }

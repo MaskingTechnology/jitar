@@ -5,6 +5,6 @@ export default class ESParameter extends ESBindingElement
 {
     clone(): ESParameter
     {
-        return super.clone() as ESParameter;
+        return super.clone();
     }
 }

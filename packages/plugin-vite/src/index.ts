@@ -44,10 +44,11 @@ function createJitarBundle(middlewares: string[], targetPath: string)
     return [imports, declarations, client, exports].join('\n');
 }
 
-
 type PluginConfig = {
     projectRoot: string;
     sourceRoot: string;
+    configurationFile?: string;
+    environmentFile?: string;
     jitarUrl: string;
     segments?: string[];
     middleware?: string[];
@@ -114,9 +115,13 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
         async buildStart()
         {
             const configurationManager = new ConfigurationManager(paths.project.root);
-            // await configurationManager.configureEnvironment(pluginConfig.environmentFile);
 
-            const configuration = await configurationManager.getRuntimeConfiguration();
+            if (pluginConfig.environmentFile !== undefined)
+            {
+                await configurationManager.configureEnvironment(pluginConfig.environmentFile);
+            }
+
+            const configuration = await configurationManager.getRuntimeConfiguration(pluginConfig.configurationFile);
             paths.jitar.input = normalizePath(path.join(paths.project.root!, configuration.source));
             paths.jitar.output = normalizePath(path.join(paths.project.root!, configuration.target));
 

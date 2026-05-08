@@ -5,7 +5,7 @@ import { isDeclaration, Keyword } from './definitions/Keyword';
 
 export default class Coder
 {
-    #tokens: Token[];
+    readonly #tokens: Token[];
 
     constructor(tokens: Token[] = [])
     {

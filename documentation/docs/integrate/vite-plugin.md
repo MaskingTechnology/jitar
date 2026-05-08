@@ -45,6 +45,8 @@ const JITAR_MIDDLEWARES = ['./requesterMiddleware'];
 const jitarConfig: JitarConfig = {
   projectRoot: '../../',
   sourceRoot: '../',
+  configurationFile: './jitar.json',
+  environmentFile: './dev.env',
   jitarUrl: JITAR_URL,
   segments: JITAR_SEGMENTS,
   middleware: JITAR_MIDDLEWARES
@@ -64,8 +66,10 @@ export default defineConfig({
 
 The plugin configuration has 5 parameters:
 
-1. projectRoot - The directory of the project root containing the Jitar configuration file.
-1. sourceRoot - The directory of the app source files. In most cases this is the `src` folder.
+1. projectRoot - The root directory of the the project relative to the Vite configuration.
+1. sourceRoot - The source directory relative to the Vite configuration.
+1. configurationFile - The Jitar configuration file relative to the project root. Jitar uses `./jitar.json` by default.
+1. environmentFile - The environment file relative to the project root. Is only loaded when configured.
 1. jitarUrl - The URL of the Jitar instance. Jitar uses by default `http://localhost:3000`, but can be configured differently.
 1. segments - The segments to use for the client app. This is an array of strings. The default is an empty array.
 1. middlewares - The middlewares to use for calling remote procedures. This is an array of strings. The default is an empty array.
