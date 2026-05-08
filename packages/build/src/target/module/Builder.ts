@@ -1,18 +1,15 @@
 
 import type { FileManager } from '@jitar/sourcing';
 
-import type { Application, SegmentImplementation as Implementation, Module, Segment, Segmentation, ResourcesList } from '../../source';
+import type { Application, Module, Segment, Segmentation, ResourcesList } from '../../source';
 import { FileHelper } from '../../utils';
 
-import LocalBuilder from './LocalBuilder';
-import RemoteBuilder from './RemoteBuilder';
+import LocalGenerator from './LocalGenerator';
+import RemoteGenerator from './RemoteGenerator';
 
 export default class Builder
 {
     readonly #targetFileManager: FileManager;
-
-    readonly #localBuilder = new LocalBuilder();
-    readonly #remoteBuilder = new RemoteBuilder();
     readonly #fileHelper = new FileHelper();
 
     constructor(targetFileManager: FileManager)
@@ -62,7 +59,9 @@ export default class Builder
     async #buildCommonModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
         const filename = module.filename;
-        const code = this.#localBuilder.build(module, resources, segmentation);
+
+        const generator = new LocalGenerator(module, resources, segmentation);
+        const code = generator.generate();
 
         return this.#targetFileManager.write(filename, code);
     }
@@ -70,7 +69,9 @@ export default class Builder
     async #buildSegmentModule(module: Module, resources: ResourcesList, segment: Segment, segmentation: Segmentation): Promise<void>
     {
         const filename = this.#fileHelper.addSubExtension(module.filename, segment.name);
-        const code = this.#localBuilder.build(module, resources, segmentation, segment);
+
+        const generator = new LocalGenerator(module, resources, segmentation, segment);
+        const code = generator.generate();
 
         return this.#targetFileManager.write(filename, code);
     }
@@ -79,30 +80,11 @@ export default class Builder
     {
         // The remote module contains calls to segmented procedures only
 
-        const implementations = this.#getImplementations(module, segments);
         const filename = this.#fileHelper.addSubExtension(module.filename, 'remote');
-        const code = this.#remoteBuilder.build(implementations);
+        
+        const generator = new RemoteGenerator(module, segments);
+        const code = generator.generate();
 
         return this.#targetFileManager.write(filename, code);
-    }
-
-    #getImplementations(module: Module, segments: Segment[]): Implementation[]
-    {
-        const segmentModules = segments.map(segment => segment.getModule(module.filename));
-        const implementations = segmentModules.flatMap(segmentModule => segmentModule!.getImplementations());
-
-        // Implementation can be duplicated across segments
-        // We need to ensure that each implementation is unique
-
-        const unique = new Map<string, Implementation>();
-
-        for (const implementation of implementations)
-        {
-            const key = `${implementation.fqn}:${implementation.version.toString()}`;
-
-            unique.set(key, implementation);
-        }
-
-        return [...unique.values()];
     }
 }

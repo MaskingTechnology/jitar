@@ -3,14 +3,17 @@ import CharList from './models/CharList';
 import Token from './models/Token';
 import TokenList from './models/TokenList';
 
+import { isBoolean } from './definitions/Boolean';
 import { Comment, isComment } from './definitions/Comment';
 import { isDivider } from './definitions/Divider';
-import { isEmpty } from './definitions/Empty';
+import { isEmpty, isNothing } from './definitions/Empty';
 import { Group, isGroup } from './definitions/Group';
 import { isKeyword } from './definitions/Keyword';
 import { List, isList } from './definitions/List';
 import { isLiteral } from './definitions/Literal';
+import { isNumber, isHexadecimal, isBinary } from './definitions/Number';
 import { isOperator, Operator } from './definitions/Operator';
+import { isIndicator } from './definitions/Indicator';
 import { Punctuation } from './definitions/Punctuation';
 import { isScope } from './definitions/Scope';
 import { TokenType } from './definitions/TokenType';
@@ -88,6 +91,13 @@ export default class Lexer
 
             return new Token(TokenType.REGEX, value, start, end);
         }
+        else if (this.#startsNumber(charList, lastToken))
+        {
+            const value = this.#readNumber(charList);
+            const end = charList.position;
+
+            return new Token(TokenType.NUMBER, value, start, end);
+        }
         else if (isLiteral(char))
         {
             const value = this.#readLiteral(charList);
@@ -101,6 +111,13 @@ export default class Lexer
             const end = charList.position;
 
             return new Token(TokenType.OPERATOR, value, start, end);
+        }
+        else if (isIndicator(char))
+        {
+            const value = this.#readOperation(charList);
+            const end = charList.position;
+
+            return new Token(TokenType.INDICATOR, value, start, end);
         }
         else if (isDivider(char))
         {
@@ -132,10 +149,22 @@ export default class Lexer
         }
 
         const value = this.#readIdentifier(charList);
-        const type = isKeyword(value) ? TokenType.KEYWORD : TokenType.IDENTIFIER;
         const end = charList.position;
 
-        return new Token(type, value, start, end);
+        if (isKeyword(value))
+        {
+            return new Token(TokenType.KEYWORD, value, start, end);
+        }
+        else if (isBoolean(value))
+        {
+            return new Token(TokenType.BOOLEAN, value, start, end);
+        }
+        else if (isNothing(value))
+        {
+            return new Token(TokenType.NOTHING, value, start, end);
+        }
+        
+        return new Token(TokenType.IDENTIFIER, value, start, end);
     }
 
     #readComment(charList: CharList): string
@@ -229,6 +258,89 @@ export default class Lexer
             }
 
             value += current;
+
+            charList.step();
+        }
+
+        return value;
+    }
+
+    #startsNumber(charList: CharList, lastToken: Token | undefined): boolean
+    {
+        const current = charList.current;
+        const next = charList.next;
+
+        if (isNumber(current))
+        {
+            return true;
+        }
+
+        if (current !== Operator.SUBTRACT)
+        {
+            return false;
+        }
+
+        if (lastToken?.isType(TokenType.NUMBER))
+        {
+            return false;
+        }
+
+        return isNumber(next);
+    }
+
+    #endsNumber(char: string, hexadecimal: boolean, binary: boolean): boolean
+    {
+        if (hexadecimal)
+        {
+            return isHexadecimal(char) === false
+                && char !== Punctuation.UNDERSCORE;
+        }
+
+        if (binary)
+        {
+            return isBinary(char) === false
+                && char !== Punctuation.UNDERSCORE;
+        }
+
+        return isNumber(char) === false
+            && char !== Punctuation.DOT
+            && char !== Punctuation.UNDERSCORE
+            && char !== 'e';
+    }
+
+    #readNumber(charList: CharList): string
+    {
+        let value = charList.current;
+
+        if (value === Operator.SUBTRACT)
+        {
+            value += charList.step();
+        }
+
+        charList.step();
+
+        const hexadecimal = charList.current === 'x';
+        const binary = charList.current === 'b';
+
+        if (hexadecimal || binary)
+        {
+            value += charList.current;
+
+            charList.step();
+        }
+
+        while (charList.notAtEnd())
+        {
+            const char = charList.current;
+
+            if (this.#endsNumber(char, hexadecimal, binary))
+            {
+                charList.stepBack();
+
+                break;
+            }
+
+            value += char;
 
             charList.step();
         }

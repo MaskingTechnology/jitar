@@ -60,13 +60,7 @@ const { a, b: c, ...others } = myObject;
 ```
 
 ```ts
-// Nested destructuring is not supported (will be supported)
-const [ a, [ b = 42, c, d ] ] = myArray;
-const { a: { c, d = true }, b = 42 } = myObject;
-```
-
-```ts
-// Dynamic property destructuring is not supported (won't be supported)
+// Dynamic property destructuring is not supported (will be supported)
 const [ [a]: b ] = myArray;
 const { [a]: b } = myObject;
 ```

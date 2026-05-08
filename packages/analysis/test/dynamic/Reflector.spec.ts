@@ -1,7 +1,6 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { ESExpression, ESField } from '../../src/models';
 import { Reflector } from '../../src/dynamic';
 
 import { CLASSES, FUNCTIONS, OBJECTS, MODULES } from './fixtures';
@@ -16,20 +15,20 @@ describe('Reflector', () =>
         {
             const reflectionModule = reflector.fromModule(MODULES.MIXED, false);
             
-            const members = reflectionModule.members;
-            expect(members.length).toBe(3);
+            const statements = reflectionModule.statements;
+            expect(statements).toHaveLength(3);
 
-            const declarations = reflectionModule.declarations;
-            expect(declarations.length).toBe(1);
-            expect(declarations[0].name).toBe('johnDoe');
+            const variables = reflectionModule.variables;
+            expect(variables).toHaveLength(1);
+            expect(variables[0].identifier).toEqual('johnDoe');
             
             const functions = reflectionModule.functions;
-            expect(functions.length).toBe(1);
-            expect(functions[0].name).toBe('requiredFunction');
+            expect(functions).toHaveLength(1);
+            expect(functions[0].identifier).toEqual('requiredFunction');
 
             const classes = reflectionModule.classes;
-            expect(classes.length).toBe(1);
-            expect(classes[0].name).toBe('Child');
+            expect(classes).toHaveLength(1);
+            expect(classes[0].identifier).toEqual('Child');
         });
     });
 
@@ -38,105 +37,98 @@ describe('Reflector', () =>
         it('should get class reflection model without parent members from a class', () =>
         {
             const reflectionClass = reflector.fromClass(CLASSES.Child, false);
-            expect(reflectionClass.name).toBe('Child');
+            expect(reflectionClass.identifier).toEqual('Child');
+            expect(reflectionClass.members).toHaveLength(9);
+            expect(reflectionClass.construct).toBeDefined();
 
-            const members = reflectionClass.members;
-            expect(members.length).toBe(9);
-
-            const declarations = reflectionClass.declarations;
-            expect(declarations.length).toBe(4);
-            expect(declarations[0].name).toBe('firstName');
-            expect(declarations[1].name).toBe('lastName');
-            expect(declarations[2].name).toBe('age');
-            expect(declarations[3].name).toBe('state');
+            const fields = reflectionClass.fields;
+            expect(fields).toHaveLength(4);
+            expect(fields[0].identifier).toEqual('firstName');
+            expect(fields[1].identifier).toEqual('lastName');
+            expect(fields[2].identifier).toEqual('age');
+            expect(fields[3].identifier).toEqual('state');
 
             const getters = reflectionClass.getters;
-            expect(getters.length).toBe(2);
-            expect(getters[0].name).toBe('fullName');
-            expect(getters[1].name).toBe('age');
+            expect(getters).toHaveLength(2);
+            expect(getters[0].identifier).toEqual('fullName');
+            expect(getters[1].identifier).toEqual('age');
 
             const setters = reflectionClass.setters;
-            expect(setters.length).toBe(1);
-            expect(setters[0].name).toBe('state');
+            expect(setters).toHaveLength(1);
+            expect(setters[0].identifier).toEqual('state');
 
-            const functions = reflectionClass.functions;
-            expect(functions.length).toBe(2);
-            expect(functions[0].name).toBe('constructor');
-            expect(functions[1].name).toBe('toString');
+            const methods = reflectionClass.methods;
+            expect(methods).toHaveLength(1);
+            expect(methods[0].identifier).toEqual('toString');
         });
 
         it('should get class reflection model with parent members from a class', () =>
         {
             const reflectionClass = reflector.fromClass(CLASSES.Child, true);
-            expect(reflectionClass.name).toBe('Child');
+            expect(reflectionClass.identifier).toEqual('Child');
+            expect(reflectionClass.members).toHaveLength(11);
+            expect(reflectionClass.construct).toBeDefined();
 
-            const members = reflectionClass.members;
-            expect(members.length).toBe(11);
-
-            const declarations = reflectionClass.declarations;
-            expect(declarations.length).toBe(5);
-            expect(declarations[0].name).toBe('id');
-            expect(declarations[1].name).toBe('firstName');
-            expect(declarations[2].name).toBe('lastName');
-            expect(declarations[3].name).toBe('age');
-            expect(declarations[4].name).toBe('state');
+            const fields = reflectionClass.fields;
+            expect(fields).toHaveLength(5);
+            expect(fields[0].identifier).toEqual('id');
+            expect(fields[1].identifier).toEqual('firstName');
+            expect(fields[2].identifier).toEqual('lastName');
+            expect(fields[3].identifier).toEqual('age');
+            expect(fields[4].identifier).toEqual('state');
 
             const getters = reflectionClass.getters;
-            expect(getters.length).toBe(2);
-            expect(getters[0].name).toBe('fullName');
-            expect(getters[1].name).toBe('age');
+            expect(getters).toHaveLength(2);
+            expect(getters[0].identifier).toEqual('fullName');
+            expect(getters[1].identifier).toEqual('age');
 
             const setters = reflectionClass.setters;
-            expect(setters.length).toBe(1);
-            expect(setters[0].name).toBe('state');
+            expect(setters).toHaveLength(1);
+            expect(setters[0].identifier).toEqual('state');
 
-            const functions = reflectionClass.functions;
-            expect(functions.length).toBe(3);
-            expect(functions[0].name).toBe('constructor');
-            expect(functions[1].name).toBe('speak');
-            expect(functions[2].name).toBe('toString');
+            const methods = reflectionClass.methods;
+            expect(methods).toHaveLength(2);
+            expect(methods[0].identifier).toEqual('speak');
+            expect(methods[1].identifier).toEqual('toString');
         });
 
         it('should get class reflection model from a function based class', () =>
         {
             const reflectionClass = reflector.fromClass(Error, true);
-            expect(reflectionClass.name).toBe('Error');
+            expect(reflectionClass.identifier).toEqual('Error');
+            expect(reflectionClass.members).toHaveLength(3);
+            expect(reflectionClass.construct).toBeUndefined();
 
-            const members = reflectionClass.members;
-            expect(members.length).toBe(3);
+            const fields = reflectionClass.fields;
+            expect(fields).toHaveLength(1);
+            expect(fields[0].identifier).toEqual('stack');
 
-            const declarations = reflectionClass.declarations;
-            expect(declarations.length).toBe(1);
-            expect(declarations[0].name).toBe('stack');
-
-            const functions = reflectionClass.functions;
-            expect(functions.length).toBe(2);
-            expect(functions[0].name).toBe('Error');
-            expect(functions[1].name).toBe('toString');
+            const methods = reflectionClass.methods;
+            expect(methods).toHaveLength(2);
+            expect(methods[0].identifier).toEqual('Error');
+            expect(methods[1].identifier).toEqual('toString');
         });
 
         it('should get class reflection model from a class with function based parent class', () =>
         {
             const reflectionClass = reflector.fromClass(CLASSES.CustomError, true);
-            expect(reflectionClass.name).toBe('CustomError');
+            expect(reflectionClass.identifier).toEqual('CustomError');
+            expect(reflectionClass.members).toHaveLength(6);
+            expect(reflectionClass.construct).toBeDefined();
 
-            const members = reflectionClass.members;
-            expect(members.length).toBe(6);
-
-            const declarations = reflectionClass.declarations;
-            expect(declarations.length).toBe(2);
-            expect(declarations[0].name).toBe('stack');
-            expect(declarations[1].name).toBe('additional');
+            const fields = reflectionClass.fields;
+            expect(fields).toHaveLength(2);
+            expect(fields[0].identifier).toEqual('stack');
+            expect(fields[1].identifier).toEqual('additional');
 
             const getters = reflectionClass.getters;
-            expect(getters.length).toBe(1);
-            expect(getters[0].name).toBe('additional');
+            expect(getters).toHaveLength(1);
+            expect(getters[0].identifier).toEqual('additional');
 
-            const functions = reflectionClass.functions;
-            expect(functions.length).toBe(3);
-            expect(functions[0].name).toBe('Error');
-            expect(functions[1].name).toBe('toString');
-            expect(functions[2].name).toBe('constructor');
+            const methods = reflectionClass.methods;
+            expect(methods).toHaveLength(2);
+            expect(methods[0].identifier).toEqual('Error');
+            expect(methods[1].identifier).toEqual('toString');
         });
     });
 
@@ -145,37 +137,29 @@ describe('Reflector', () =>
         it('should get class reflection model without parent members from an object', () =>
         {
             const reflectionClass = reflector.fromObject(OBJECTS.CLASS, false);
-            expect(reflectionClass.name).toBe('Child');
-
-            const members = reflectionClass.members;
-            expect(members.length).toBe(9);
+            expect(reflectionClass.identifier).toEqual('Child');
+            expect(reflectionClass.members).toHaveLength(9);
         });
 
         it('should get class reflection model with parent members from an object', () =>
         {
             const reflectionClass = reflector.fromObject(OBJECTS.CLASS, true);
-            expect(reflectionClass.name).toBe('Child');
-
-            const members = reflectionClass.members;
-            expect(members.length).toBe(11);
+            expect(reflectionClass.identifier).toEqual('Child');
+            expect(reflectionClass.members).toHaveLength(11);
         });
 
         it('should get class reflection model from a function based class object', () =>
         {
             const reflectionClass = reflector.fromObject(OBJECTS.ERROR, true);
-            expect(reflectionClass.name).toBe('Error');
-
-            const members = reflectionClass.members;
-            expect(members.length).toBe(3);
+            expect(reflectionClass.identifier).toEqual('Error');
+            expect(reflectionClass.members).toHaveLength(3);
         });
 
         it('should get class reflection model from a a class object with function based parent class', () =>
         {
             const reflectionClass = reflector.fromObject(OBJECTS.CUSTOM_ERROR, true);
-            expect(reflectionClass.name).toBe('CustomError');
-
-            const members = reflectionClass.members;
-            expect(members.length).toBe(6);
+            expect(reflectionClass.identifier).toEqual('CustomError');
+            expect(reflectionClass.members).toHaveLength(6);
         });
     });
 
@@ -184,25 +168,20 @@ describe('Reflector', () =>
         it('should get function reflection model', () =>
         {
             const functionFunction = reflector.fromFunction(FUNCTIONS.OPTIONAL_ARGS);
-            expect(functionFunction.name).toBe('optionalFunction');
-            expect(functionFunction.body).toBe('{ return a + b + c ; }');
+            expect(functionFunction.identifier).toEqual('optionalFunction');
+            expect(functionFunction.body.toString()).toEqual('{return a+b+c;}');
 
             const parameters = functionFunction.parameters;
-            expect(parameters.length).toBe(3);
+            expect(parameters).toHaveLength(3);
 
-            const first = parameters[0] as ESField;
-            expect(first.name).toBe('a');
-            expect(first.value).toBe(undefined);
+            expect(parameters[0].binding.toString()).toEqual('a');
+            expect(parameters[0].initializer).toBeUndefined();
 
-            const second = parameters[1] as ESField;
-            expect(second.name).toBe('b');
-            expect(second.value).toBeInstanceOf(ESExpression);
-            expect(second.value?.definition).toBe('new Child ( 1 , "Jane" , "Doe" , 42 )');
+            expect(parameters[1].binding.toString()).toEqual('b');
+            expect(parameters[1].initializer?.toString(false)).toEqual('new Child(1,"Jane","Doe",42)');
 
-            const third = parameters[2] as ESField;
-            expect(third.name).toBe('c');
-            expect(third.value).toBeInstanceOf(ESExpression);
-            expect(third.value?.definition).toBe('0');
+            expect(parameters[2].binding.toString()).toEqual('c');
+            expect(parameters[2].initializer?.toString(false)).toEqual('0');
         });
     });
 
@@ -213,9 +192,9 @@ describe('Reflector', () =>
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const peter = reflector.createInstance(CLASSES.Child, [1, 'Peter', 'van Vliet', 24]) as any;
             expect(peter).toBeInstanceOf(CLASSES.Child);
-            expect(peter.id).toBe(1);
-            expect(peter.fullName).toBe('Peter van Vliet');
-            expect(peter.age).toBe(24);
+            expect(peter.id).toEqual(1);
+            expect(peter.fullName).toEqual('Peter van Vliet');
+            expect(peter.age).toEqual(24);
         });
     });
 
@@ -224,13 +203,13 @@ describe('Reflector', () =>
         it('should detect a class object', () =>
         {
             const result = reflector.isClassObject(OBJECTS.CLASS);
-            expect(result).toBe(true);
+            expect(result).toBeTruthy();
         });
 
         it('should detect a non class object', () =>
         {
             const result = reflector.isClassObject(OBJECTS.PLAIN);
-            expect(result).toBe(false);
+            expect(result).toBeFalsy();
         });
     });
 
@@ -239,8 +218,7 @@ describe('Reflector', () =>
         it('should get the class of an object', () =>
         {
             const result = reflector.getClass(OBJECTS.CLASS);
-
-            expect(result.name).toBe('Child');
+            expect(result.name).toEqual('Child');
         });
     });
 
@@ -249,8 +227,7 @@ describe('Reflector', () =>
         it('should get the parent of a class', () =>
         {
             const result = reflector.getParentClass(CLASSES.Child);
-
-            expect(result.name).toBe('Parent');
+            expect(result.name).toEqual('Parent');
         });
     });
 });

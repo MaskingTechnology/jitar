@@ -12,5 +12,5 @@ export * from './definitions/Scope';
 export * from './definitions/TokenType';
 export * from './definitions/Whitespace';
 
-export { default as Lexer } from './Lexer';
+export { default as Lexer} from './Lexer';
 export { default as Parser } from './Parser';

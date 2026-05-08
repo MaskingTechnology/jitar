@@ -14,6 +14,11 @@ export default class ConfigurationReader
         this.#fileManager = fileManager;
     }
 
+    getRootLocation(): string
+    {
+        return this.#fileManager.getAbsoluteLocation('.');
+    }
+
     async read(filename: string): Promise<Record<string, unknown>>
     {
         const fileExists = await this.#fileManager.exists(filename);

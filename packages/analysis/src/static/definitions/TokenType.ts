@@ -1,6 +1,7 @@
 
 const TokenType =
 {
+    BOOLEAN: 'boolean',
     COMMENT: 'comment',
     DIVIDER: 'divider',
     GROUP: 'group',
@@ -8,7 +9,10 @@ const TokenType =
     KEYWORD: 'keyword',
     LIST: 'list',
     LITERAL: 'literal',
+    NOTHING: 'nothing',
+    NUMBER: 'number',
     OPERATOR: 'operator',
+    INDICATOR: 'indicator',
     REGEX: 'regex',
     SCOPE: 'scope',
     WHITESPACE: 'whitespace'

@@ -18,31 +18,31 @@ export const CLASSES =
         this.field2 = field2;
     }
     
-    get #getter1() { return field1; }
+    get #getter1() { return this.#field1; }
 
-    get getter2() { return field2; }
+    get getter2() { return this.field2; }
 
-    static get #getter3() { return field3; }
+    static get #getter3() { return this.#field3; }
 
-    static get getter4() { return field4; }
+    static get getter4() { return this.field4; }
 
     set #setter1(value) { this.#field1 = value; }
 
-    set setter2(value) { this.#field2 = value; }
+    set setter2(value) { this.field2 = value; }
 
     static set #setter3(value) { this.#field3 = value; }
 
-    static set setter4(value) { this.#field4 = value; }
+    static set setter4(value) { this.field4 = value; }
 
     method1() { return this.#field1; }
 
-    async method2() { return this.#field1; }
+    async method2() { return this.field2; }
 
-    static method3() { return this.#field1; }
+    static method3() { return this.#field3; }
 
-    static async method4() { return this.#field1; }
+    static async method4() { return this.field4; }
 
-    #method5() { return this.#field1; }
+    #method5(a, b) { return a + b; }
 
     *generator1() { yield 1; }
 

@@ -15,7 +15,8 @@ const Punctuation =
     RIGHT_BRACE: '}',
     SINGLE_QUOTE: '\'',
     DOUBLE_QUOTE: '"',
-    BACKTICK: '`'
+    BACKTICK: '`',
+    UNDERSCORE: '_'
 };
 
 const Punctuations = Object.values(Punctuation);

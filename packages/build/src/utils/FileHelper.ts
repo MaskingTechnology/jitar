@@ -51,23 +51,20 @@ export default class FileHelper
         return `${prefix}/${suffix}`;
     }
 
-    makePathAbsolute(relativeFilename: string, relativeToPath: string): string
+    makePathAbsolute(relativeFilename: string, relativeToPath: string, prefix = '/'): string
     {
         const fullPath = relativeToPath !== ''
             ? `${relativeToPath}/${relativeFilename}`
             : relativeFilename;
 
-        return this.translatePath(fullPath);
+        const translated = this.translatePath(fullPath);
+
+        return `${prefix}${translated}`;
     }
 
     extractPath(filename: string)
     {
         return filename.split('/').slice(0, -1).join('/');
-    }
-
-    stripPath(path: string): string
-    {
-        return path.substring(1, path.length - 1);
     }
 
     extractFilename(filename: string)

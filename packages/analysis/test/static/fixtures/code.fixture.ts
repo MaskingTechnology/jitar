@@ -1,7 +1,9 @@
 
 export const CODE =
 {
+    VALUES: '42 hello "world" true false undefined null',
     OPERATORS: `=====!=+=*!=`,
+    NUMBERS: '-12-10 12_345_678.90 0x124_a4Bc 0b11_0110',
     LITERALS: '`foo\\`ter`"bar\\"becue"\'baz\'',
     KEYWORDS_IDENTIFIERS: 'class Foo function bar',
     WHITESPACE: `const identifier\n=\t"value" ;`,

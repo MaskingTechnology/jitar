@@ -10,6 +10,11 @@ export const EXPORTS =
     EXPORT_FIELD_DECLARATION: "export const name = 'value'",
     EXPORT_FUNCTION_DECLARATION: "export function name() {}",
     EXPORT_ASYNC_FUNCTION_DECLARATION: "export async function name() {}",
+    EXPORT_DEFAULT_VALUE: "export default 42",
+    EXPORT_DEFAULT_INSTANCE: "export default new Date()",
+    EXPORT_DEFAULT_CALL: "export default name()",
+    EXPORT_DEFAULT_FUNCTION: "export default function() {}",
+    EXPORT_DEFAULT_CLASS: "export default class {}",
     REEXPORT_ALL: "export * from 'module'",
-    REEXPORT_MEMBER: "export { member } from 'module'",
+    REEXPORT_MEMBER: "export { member } from 'module'"
 };

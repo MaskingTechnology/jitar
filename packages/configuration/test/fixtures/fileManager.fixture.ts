@@ -10,6 +10,11 @@ export default class TestFileManager
         this.#files = files;
     }
 
+    getAbsoluteLocation(filename: string): string
+    {
+        return filename;
+    }
+
     exists(filename: string): Promise<boolean>
     {
         for (const key in this.#files)

@@ -7,6 +7,12 @@ type RuntimeConfiguration =
     target: string;
     segments: string;
     resources: string;
+    
+    meta:
+    {
+        root: string;
+        configFile: string;
+    }
 };
 
 export default RuntimeConfiguration;

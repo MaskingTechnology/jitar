@@ -1,5 +1,5 @@
 
-import { ESMember } from '@jitar/analysis';
+import { ESDeclaration } from '@jitar/analysis';
 
 import { FileHelper } from '../../utils';
 import type { Module, ModuleRepository } from '../module';
@@ -12,7 +12,7 @@ import ImportInfo from './types/ImportInfo';
 
 type TraceEntry = { filename: string, importKey: string };
 type Trace = TraceEntry[];
-type LocatedMember = { trace: Trace, model: ESMember};
+type LocatedMember = { trace: Trace, model: ESDeclaration};
 
 export default class MemberLocator
 {
@@ -33,7 +33,7 @@ export default class MemberLocator
         return { trace, model };
     }
 
-    #locate(filename: string, importKey: string, trace: Trace): ESMember
+    #locate(filename: string, importKey: string, trace: Trace): ESDeclaration
     {
         trace.push({ filename, importKey });
 
@@ -65,7 +65,7 @@ export default class MemberLocator
             || exportItem?.from !== undefined;
     }
 
-    #relocate(module: Module, importKey: string, trace: Trace): ESMember
+    #relocate(module: Module, importKey: string, trace: Trace): ESDeclaration
     {
         const relocateInfo = this.#getImportInfo(module, importKey)
                           ?? this.#getExportInfo(module, importKey);
@@ -74,13 +74,13 @@ export default class MemberLocator
         const relocateKey = relocateInfo?.name as string;
 
         const callingModulePath = this.#fileHelper.extractPath(module.filename);
-        const relativeFrom = this.#fileHelper.stripPath(relocatePath);
-        const absoluteFrom = this.#fileHelper.makePathAbsolute(relativeFrom, callingModulePath);
+        const relativeFrom = relocatePath;
+        const absoluteFrom = this.#fileHelper.makePathAbsolute(relativeFrom, callingModulePath, '');
 
         return this.#locate(absoluteFrom, relocateKey, trace);
     }
 
-    #extract(module: Module, importKey: string): ESMember
+    #extract(module: Module, importKey: string): ESDeclaration
     {
         const exportInfo = this.#getExportInfo(module, importKey);
 
@@ -89,7 +89,7 @@ export default class MemberLocator
             throw new MissingModuleExport(module.filename, importKey);
         }
 
-        const member = module.model.getMember(exportInfo.name);
+        const member = module.model.getDeclaration(exportInfo.name);
 
         if (member === undefined)
         {
@@ -102,26 +102,26 @@ export default class MemberLocator
     #getExportInfo(module: Module, importKey: string): ExportInfo | undefined
     {
         const exportItem = module.model.getExport(importKey);
-        const exportAlias = exportItem?.getMember(importKey);
+        const exportMember = exportItem?.getMember(importKey);
 
-        if (exportAlias === undefined)
+        if (exportMember === undefined)
         {
             return undefined;
         }
 
-        return { from: exportItem?.from, name: exportAlias.name };
+        return { from: exportItem?.from, name: exportMember.identifier };
     }
 
     #getImportInfo(module: Module, importKey: string): ImportInfo | undefined
     {
         const importItem = module.model.getImport(importKey);
-        const importAlias = importItem?.getMember(importKey);
+        const importMember = importItem?.getMember(importKey);
 
-        if (importItem === undefined || importAlias === undefined)
+        if (importItem === undefined || importMember === undefined)
         {
             return undefined;
         }
 
-        return { from: importItem.from, name: importAlias.name };
+        return { from: importItem.from, name: importMember.identifier };
     }
 }

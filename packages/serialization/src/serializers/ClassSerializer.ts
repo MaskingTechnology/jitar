@@ -1,5 +1,5 @@
 
-import { ESClass, ESField, Reflector } from '@jitar/analysis';
+import { ESClass, ESParameter, ESIdentifierBinding, Reflector } from '@jitar/analysis';
 
 import ValueSerializer from '../ValueSerializer';
 import ClassNotFound from '../errors/ClassNotFound';
@@ -64,10 +64,10 @@ export default class ClassSerializer extends ValueSerializer
 
     #extractConstructorParameters(model: ESClass): string[]
     {
-        const constructor = model.getFunction('constructor');
-        const parameters = (constructor?.parameters ?? []) as ESField[];
+        const constructor = model.construct;
+        const parameters = (constructor?.parameters ?? []) as ESParameter[];
 
-        return parameters.map(parameter => parameter.name);
+        return parameters.map(parameter => (parameter.binding as ESIdentifierBinding).identifier);
     }
 
     async #serializeConstructor(model: ESClass, includeNames: string[], object: object): Promise<SerializableObject>
@@ -96,7 +96,7 @@ export default class ClassSerializer extends ValueSerializer
 
         for (const property of model.writable)
         {
-            const name = property.name;
+            const name = property.identifier!;
 
             if (excludeNames.includes(name) || model.canRead(name) === false)
             {
@@ -141,8 +141,8 @@ export default class ClassSerializer extends ValueSerializer
     async #deserializeConstructor(clazz: Function, args: SerializableObject): Promise<unknown[]>
     {
         const model = reflector.fromClass(clazz, true);
-        const constructor = model.getFunction('constructor');
-        const parameters = (constructor?.parameters ?? []) as ESField[];
+        const constructor = model.construct;
+        const parameters = (constructor?.parameters ?? []) as ESParameter[];
 
         const values = parameters.map((_, index) =>
         {

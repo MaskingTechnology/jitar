@@ -6,7 +6,7 @@ import { FILENAMES } from './filenames.fixture';
 
 export const FILES: Record<string, File> = 
 {
-    DEFAULT: new File(FILENAMES.DEFAULT, 'text/json', JSON.stringify(CONFIGURATIONS.DEFAULT)),
-    VALID: new File(FILENAMES.VALID, 'text/json', JSON.stringify(CONFIGURATIONS.RUNTIME)),
-    INVALID: new File(FILENAMES.INVALID, 'text/json', JSON.stringify(CONFIGURATIONS.INVALID))
+    DEFAULT: new File(FILENAMES.DEFAULT, 'text/json', JSON.stringify(CONFIGURATIONS.INPUT.DEFAULT)),
+    VALID: new File(FILENAMES.VALID, 'text/json', JSON.stringify(CONFIGURATIONS.INPUT.RUNTIME)),
+    INVALID: new File(FILENAMES.INVALID, 'text/json', JSON.stringify(CONFIGURATIONS.INPUT.INVALID))
 } as const;

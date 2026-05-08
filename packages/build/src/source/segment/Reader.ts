@@ -1,5 +1,5 @@
 
-import { ESFunction, ESClass, ESMember } from '@jitar/analysis';
+import { ESFunction, ESClass, ESDeclaration } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
 import { Defaults, Files, Keywords } from '../../definitions';
@@ -169,12 +169,12 @@ export default class SegmentReader
         }
     }
 
-    #constructProperties(module: Module, model: ESMember, importKey: string, idGenerator: IdGenerator): MemberProperties
+    #constructProperties(module: Module, model: ESDeclaration, importKey: string, idGenerator: IdGenerator): MemberProperties
     {
         const configuration = module.imports[importKey];
 
         const id = idGenerator.next();
-        const name = configuration.as ?? model.name;
+        const name = configuration.as ?? model.identifier!;
         const access = configuration.access ?? Defaults.ACCESS_LEVEL;
         const version = configuration.version ?? Defaults.VERSION_NUMBER;
         const fqn = this.#constructFqn(module, name, importKey);
@@ -212,7 +212,7 @@ export default class SegmentReader
         return importKey === Keywords.DEFAULT;
     }
 
-    #createMember(segment: Segment, module: Module, model: ESMember, properties: MemberProperties): void
+    #createMember(segment: Segment, module: Module, model: ESDeclaration, properties: MemberProperties): void
     {
         if (model instanceof ESClass)
         {

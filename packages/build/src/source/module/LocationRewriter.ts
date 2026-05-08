@@ -1,8 +1,8 @@
 
-import { Parser } from '@jitar/analysis';
+import type { ESModule, ESImport, ESExport } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
-import { Files, Patterns } from '../../definitions';
+import { Files } from '../../definitions';
 import { FileHelper } from '../../utils';
 
 // The location rewriter ensures the '.js' for all application imports and re-exports
@@ -12,7 +12,6 @@ export default class LocationRewriter
 {
     readonly #sourceFileManager: FileManager;
 
-    readonly #parser = new Parser();
     readonly #fileHelper = new FileHelper();
 
     constructor(sourceFileManager: FileManager)
@@ -20,69 +19,45 @@ export default class LocationRewriter
         this.#sourceFileManager = sourceFileManager;
     }
 
-    rewrite(filename: string, code: string): string
+    rewrite(module: ESModule, filename: string): void
     {
-        const replacedImports = this.#rewriteImports(filename, code);
-        
-        return this.#rewriteExports(filename, replacedImports);
+        module.imports.forEach(item => this.#rewriteImport(item, filename));
+        module.exports.forEach(item => this.#rewriteExport(item, filename));
     }
 
-    #rewriteImports(filename: string, code: string): string
+    #rewriteImport(item: ESImport, filename: string): void
     {
-        const replacer = (statement: string) => this.#replaceImport(filename, statement);
-
-        return code.replaceAll(Patterns.IMPORT, replacer);
-    }
-
-    #rewriteExports(filename: string, code: string): string
-    {
-        const replacer = (statement: string) => this.#replaceExport(filename, statement);
-
-        return code.replaceAll(Patterns.EXPORT, replacer);
-    }
-
-    #replaceImport(filename: string, statement: string): string
-    {
-        const dependency = this.#parser.parseImport(statement);
-        const from = this.#fileHelper.stripPath(dependency.from);
-        const normalizedFrom = this.#sourceFileManager.normalizeLocation(from);
+        const normalizedFrom = this.#sourceFileManager.normalizeLocation(item.from);
 
         if (this.#fileHelper.isApplicationModule(normalizedFrom) === false)
         {
-            return statement;
+            return;
         }
 
-        const rewrittenFrom = this.#rewriteFrom(filename, normalizedFrom);
-
-        return statement.replace(from, rewrittenFrom);
+        item.from = this.#rewriteFrom(filename, normalizedFrom);
     }
 
-    #replaceExport(filename: string, statement: string): string
+    #rewriteExport(item: ESExport, filename: string): void
     {
-        const dependency = this.#parser.parseExport(statement);
-
-        if (dependency.from === undefined)
+        if (item.from === undefined)
         {
-            return statement;
+            return;
         }
 
-        const from = this.#fileHelper.stripPath(dependency.from);
-        const normalizedFrom = this.#sourceFileManager.normalizeLocation(from);
+        const normalizedFrom = this.#sourceFileManager.normalizeLocation(item.from);
 
         if (this.#fileHelper.isApplicationModule(normalizedFrom) === false)
         {
-            return statement;
+            return;
         }
 
-        const rewrittenFrom = this.#rewriteFrom(filename, normalizedFrom);
-
-        return statement.replace(from, rewrittenFrom);
+        item.from = this.#rewriteFrom(filename, normalizedFrom);
     }
 
     #rewriteFrom(filename: string, from: string): string
     {
         const callingModulePath = this.#fileHelper.extractPath(filename);
-        const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath);
+        const translated = this.#fileHelper.makePathAbsolute(from, callingModulePath, '');
 
         return this.#sourceFileManager.isDirectory(translated)
             ? `${from}/${Files.INDEX}`

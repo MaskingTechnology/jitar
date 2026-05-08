@@ -6,6 +6,8 @@ const Empty =
     STRING: ''
 };
 
+const NOTHING = ['null', 'undefined'];
+
 const Empties = Object.values(Empty) as unknown[];
 
 function isEmpty(value: unknown): boolean
@@ -13,4 +15,9 @@ function isEmpty(value: unknown): boolean
     return Empties.includes(value);
 }
 
-export { Empty, isEmpty };
+function isNothing(value: string)
+{
+    return NOTHING.includes(value);
+}
+
+export { Empty, isEmpty, isNothing };

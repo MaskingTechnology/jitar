@@ -1,49 +1,103 @@
 
 const Keyword =
 {
+    // Modules
+    IMPORT: 'import',
     EXPORT: 'export',
+    AS: 'as',
+    FROM: 'from',
     DEFAULT: 'default',
-    CLASS: 'class',
-    FUNCTION: 'function',
+
+    // Declarations
+    ASYNC: 'async',
+    AWAIT: 'await',
+    USING: 'using',
     CONST: 'const',
     LET: 'let',
     VAR: 'var',
-    AS: 'as',
-    FROM: 'from',
-    IMPORT: 'import',
+
+    // Functions
+    FUNCTION: 'function',
+    RETURN: 'return',
+    YIELD: 'yield',
+
+    // Classes
+    CLASS: 'class',
+    CONSTRUCTOR: 'constructor',
     GET: 'get',
     SET: 'set',
     EXTENDS: 'extends',
     STATIC: 'static',
-    ASYNC: 'async',
-    RETURN: 'return',
-    // Other keywords are not needed in the parse
-    // process and must be treated as identifiers.
+    NEW: 'new',
+    THIS: 'this',
+
+    // Iterations
+    DO: 'do',
+    WHILE: 'while',
+    FOR: 'for',
+    OF: 'of',
+    IN: 'in',
+    BREAK: 'break',
+    CONTINUE: 'continue',
+    
+    // Control flow
+    IF: 'if',
+    ELSE: 'else',
+    SWITCH: 'switch',
+    CASE: 'case',
+    
+    // Exceptions
+    THROW: 'throw',
+    TRY: 'try',
+    CATCH: 'catch',
+    FINALLY: 'finally'
 };
 
 const Keywords = Object.values(Keyword);
+
+const RootKeywords = // That we parse at module level
+[
+    Keyword.IMPORT, Keyword.EXPORT,
+    Keyword.VAR, Keyword.LET, Keyword.CONST, Keyword.FUNCTION, Keyword.CLASS,
+    Keyword.ASYNC
+];
+
+const DeclarationKeywords = // Things to import / export
+[
+    Keyword.VAR, Keyword.LET, Keyword.CONST,
+    Keyword.FUNCTION, Keyword.CLASS,
+    Keyword.USING
+];
+
+const ContextualKeywords = // Are also valid identifiers
+[
+    Keyword.AS, Keyword.ASYNC, Keyword.GET, Keyword.SET,
+    Keyword.OF, Keyword.YIELD, Keyword.FROM, Keyword.STATIC
+];
 
 function isKeyword(value: string): boolean
 {
     return Keywords.includes(value);
 }
 
+function isRootKeyword(value: string): boolean
+{
+    return RootKeywords.includes(value);
+}
+
+function isNotRootKeyword(value: string): boolean
+{
+    return isRootKeyword(value) === false;
+}
+
 function isDeclaration(value: string): boolean
 {
-    return value === Keyword.CLASS
-        || value === Keyword.FUNCTION
-        || value === Keyword.CONST
-        || value === Keyword.LET
-        || value === Keyword.VAR;
+    return DeclarationKeywords.includes(value);
 }
 
-function isNotReserved(value: string): boolean
+function isContextualKeyword(value: string): boolean
 {
-    return value === Keyword.AS
-        || value === Keyword.ASYNC
-        || value === Keyword.FROM
-        || value === Keyword.GET
-        || value === Keyword.SET;
+    return ContextualKeywords.includes(value);
 }
 
-export { Keyword, isKeyword, isDeclaration, isNotReserved };
+export { Keyword, isKeyword, isRootKeyword, isNotRootKeyword, isDeclaration, isContextualKeyword };
