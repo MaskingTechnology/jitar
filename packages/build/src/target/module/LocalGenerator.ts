@@ -145,9 +145,12 @@ export default class LocalGenerator
 
         const module = segment.getModule(targetModuleFilename);
 
-        return module !== undefined
-            ? Object.keys(module.imports)
-            : [];
+        if (module === undefined)
+        {
+            return [];
+        }
+        
+        return Object.keys(module.imports);
     }
 
     #getRemoteImportKeys(targetModuleFilename: string, segmentKeys: string[]): string[]

@@ -70,7 +70,7 @@ export default class Builder
     {
         const filename = this.#fileHelper.addSubExtension(module.filename, segment.name);
 
-        const generator = new LocalGenerator(module, resources, segmentation);
+        const generator = new LocalGenerator(module, resources, segmentation, segment);
         const code = generator.generate();
 
         return this.#targetFileManager.write(filename, code);
