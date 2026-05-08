@@ -70,12 +70,17 @@ export default class Builder
 
         for (const module of segment.getSegmentedModules())
         {
+            const filename = this.#fileHelper.addSubExtension(module.filename, segment.name);
+
             if (module.members.length === 0)
             {
+                const importRule = `import "./${filename}";`;
+
+                imports.push(importRule);
+                
                 continue;
             }
             
-            const filename = this.#fileHelper.addSubExtension(module.filename, segment.name);
             const members = this.#createModuleImportMembers(module);
 
             const importRule = `import ${members} from "./${filename}";`;

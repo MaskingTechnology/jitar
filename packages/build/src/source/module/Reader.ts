@@ -36,10 +36,11 @@ export default class Reader
         {
             const relativeLocation = this.#sourceFileManager.getRelativeLocation(filename);
             const code = await this.#loadCode(filename);
-            const rewrittenCode = this.#locationRewriter.rewrite(relativeLocation, code);
-            const module = this.#parser.parse(rewrittenCode);
+            const module = this.#parser.parse(code);
 
-            return new Module(relativeLocation, rewrittenCode, module);
+            this.#locationRewriter.rewrite(module, relativeLocation);
+            
+            return new Module(relativeLocation, module);
         }
         catch (error: unknown)
         {

@@ -1,32 +1,44 @@
 
-import { ESArrayBinding, ESObjectBinding, ESIdentifierBinding } from '@jitar/analysis';
-import type { ESParameter } from '@jitar/analysis';
+import { ESModule, ESArrayBinding, ESObjectBinding, ESIdentifierBinding, ESBlock, ESModuleMember } from '@jitar/analysis';
+import { ESExport, ESFunction, ESParameter, ESStatement } from '@jitar/analysis';
 import { AccessLevels } from '@jitar/execution';
 
 import { Keywords } from '../../definitions';
 import type { SegmentImplementation as Implementation, Module, Segment } from '../../source';
 
-export default class RemoteBuilder
+export default class RemoteGenerator
 {
-    build(module: Module, segments: Segment[]): string
-    {
-        let code = '';
+    readonly #module: Module;
+    readonly #segments: Segment[];
 
-        const implementations = this.#getImplementations(module, segments);
+    constructor(module: Module, segments: Segment[])
+    {
+        this.#module = module;
+        this.#segments = segments;
+    }
+
+    generate(): string
+    {
+        const statements: ESStatement[] = [];
+        const implementations = this.#getImplementations();
 
         for (const implementation of implementations)
         {
-            code += implementation.access === AccessLevels.PRIVATE
-                ? this.#createPrivateCode(implementation)
-                : this.#createPublicCode(implementation);
+            const declarations = implementation.access === AccessLevels.PRIVATE
+                ? this.#createPrivate(implementation)
+                : this.#createPublic(implementation);
+            
+            statements.push(...declarations);
         }
 
-        return code.trim();
+        const model = new ESModule(statements);
+
+        return model.toString();
     }
 
-    #getImplementations(module: Module, segments: Segment[]): Implementation[]
+    #getImplementations(): Implementation[]
     {
-        const segmentModules = segments.map(segment => segment.getModule(module.filename));
+        const segmentModules = this.#segments.map(segment => segment.getModule(this.#module.filename));
         const implementations = segmentModules.flatMap(segmentModule => segmentModule!.getImplementations());
 
         // Implementation can be duplicated across segments
@@ -44,21 +56,22 @@ export default class RemoteBuilder
         return [...unique.values()];
     }
 
-    #createPrivateCode(implementation: Implementation): string
+    #createPrivate(implementation: Implementation): ESStatement[]
     {
         // Private procedures are not accessible from the outside.
         // Therefore we need to throw an error when they are called.
 
         const fqn = implementation.fqn;
         const version = implementation.version;
+        const code = `throw new ProcedureNotAccessible('${fqn}','${version}');`;
 
-        const declaration = this.#createDeclaration(implementation);
-        const body = `throw new ProcedureNotAccessible('${fqn}', '${version}');`;
-
-        return this.#createFunction(declaration, body);
+        return [
+            this.#createExport(implementation),
+            this.#createFunction(implementation, code)
+        ];
     }
 
-    #createPublicCode(implementation: Implementation): string
+    #createPublic(implementation: Implementation): ESStatement[]
     {
         // Public procedures are accessible from the outside.
         // Therefore we need to create a remote implementation.
@@ -66,41 +79,39 @@ export default class RemoteBuilder
         const fqn = implementation.fqn;
         const version = implementation.version;
         const args = this.#createArguments(implementation.model.parameters);
+        const code = `return __run('${fqn}','${version}',{${args}},this);`;
 
-        const declaration = this.#createDeclaration(implementation);
-        const body = `return __run('${fqn}', '${version}', { ${args} }, this);`;
-
-        return this.#createFunction(declaration, body);
+        return [
+            this.#createExport(implementation),
+            this.#createFunction(implementation, code)
+        ];
     }
 
-    #createParameters(parameters: ESParameter[]): string
+    #createExport(implementation: Implementation): ESExport
     {
-        const result: string[] = [];
+        const identifier = implementation.model.identifier!;
+        const alias = implementation.importKey === Keywords.DEFAULT ? Keywords.DEFAULT : undefined;
 
-        for (const parameter of parameters)
-        {
-            if (parameter.binding instanceof ESIdentifierBinding)
-            {
-                result.push(parameter.binding.identifier.toString());
-            }
-            else if (parameter.binding instanceof ESArrayBinding)
-            {
-                result.push(parameter.binding.toString());
-            }
-            else if (parameter.binding instanceof ESObjectBinding)
-            {
-                result.push(parameter.binding.toString());
-            }
-        }
-        
-        return result.join(', ');
+        const member = new ESModuleMember(identifier, alias);
+
+        return new ESExport([member], undefined);
+    }
+
+    #createFunction(implementation: Implementation, code: string): ESFunction
+    {
+        const identifier = implementation.model.identifier;
+        const parameters = implementation.model.parameters;
+        const body = new ESBlock(`{${code}}`);
+        const isAsync = implementation.model.isAsync;
+
+        return new ESFunction(identifier, parameters, body, isAsync);
     }
 
     #createArguments(parameters: ESParameter[]): string
     {
         const result = this.#extractArguments(parameters);
         
-        return result.join(', ');
+        return result.join(',');
     }
 
     #extractArguments(parameters: ESParameter[]): string[]
@@ -135,22 +146,8 @@ export default class RemoteBuilder
     #createNamedArgument(binding: ESIdentifierBinding): string
     {
         const key = binding.identifier;
+        const value = binding.toString(); 
 
-        return `'${key}': ${key}`;
-    }
-
-    #createDeclaration(implementation: Implementation): string
-    {
-        const name = implementation.model.identifier;
-        const parameters = this.#createParameters(implementation.model.parameters);
-
-        const prefix = implementation.importKey === Keywords.DEFAULT ? `${Keywords.DEFAULT} ` : '';
-
-        return `\nexport ${prefix}async function ${name}(${parameters})`;
-    }
-
-    #createFunction(declaration: string, body: string): string
-    {
-        return `${declaration} {\n\t${body}\n}\n`;
+        return `'${key}':${value}`;
     }
 }

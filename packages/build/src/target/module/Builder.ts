@@ -4,15 +4,12 @@ import type { FileManager } from '@jitar/sourcing';
 import type { Application, Module, Segment, Segmentation, ResourcesList } from '../../source';
 import { FileHelper } from '../../utils';
 
-import LocalBuilder from './LocalBuilder';
-import RemoteBuilder from './RemoteBuilder';
+import LocalGenerator from './LocalGenerator';
+import RemoteGenerator from './RemoteGenerator';
 
 export default class Builder
 {
     readonly #targetFileManager: FileManager;
-
-    readonly #localBuilder = new LocalBuilder();
-    readonly #remoteBuilder = new RemoteBuilder();
     readonly #fileHelper = new FileHelper();
 
     constructor(targetFileManager: FileManager)
@@ -62,7 +59,9 @@ export default class Builder
     async #buildCommonModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
         const filename = module.filename;
-        const code = this.#localBuilder.build(module, resources, segmentation);
+
+        const generator = new LocalGenerator(module, resources, segmentation);
+        const code = generator.generate();
 
         return this.#targetFileManager.write(filename, code);
     }
@@ -70,7 +69,9 @@ export default class Builder
     async #buildSegmentModule(module: Module, resources: ResourcesList, segment: Segment, segmentation: Segmentation): Promise<void>
     {
         const filename = this.#fileHelper.addSubExtension(module.filename, segment.name);
-        const code = this.#localBuilder.build(module, resources, segmentation, segment);
+
+        const generator = new LocalGenerator(module, resources, segmentation);
+        const code = generator.generate();
 
         return this.#targetFileManager.write(filename, code);
     }
@@ -80,7 +81,9 @@ export default class Builder
         // The remote module contains calls to segmented procedures only
 
         const filename = this.#fileHelper.addSubExtension(module.filename, 'remote');
-        const code = this.#remoteBuilder.build(module, segments);
+        
+        const generator = new RemoteGenerator(module, segments);
+        const code = generator.generate();
 
         return this.#targetFileManager.write(filename, code);
     }

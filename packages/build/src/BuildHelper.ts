@@ -3,7 +3,7 @@ import type { RuntimeConfiguration } from '@jitar/configuration';
 import { Files, LocalFileManager } from '@jitar/sourcing';
 
 import { Application, ApplicationReader } from './source';
-import { LocalModuleBuilder, RemoteModuleBuilder } from './target';
+import { LocalModuleGenerator, RemoteModuleGenerator } from './target';
 import { FileHelper } from './utils';
 
 import ProjectFileManager from './ProjectFileManager';
@@ -11,12 +11,8 @@ import ProjectFileManager from './ProjectFileManager';
 export default class BuildHelper
 {
     readonly #fileHelper: FileHelper = new FileHelper();
-
     readonly #fileManager: ProjectFileManager;
-
     readonly #applicationReader: ApplicationReader;
-    readonly #localModuleBuilder = new LocalModuleBuilder();
-    readonly #remoteModuleBuilder = new RemoteModuleBuilder();
 
     #application?: Application;
 
@@ -73,16 +69,22 @@ export default class BuildHelper
 
         if (segments.length === 0)
         {
-            return this.#localModuleBuilder.build(module, resources, segmentation);
+            const generator = new LocalModuleGenerator(module, resources, segmentation);
+
+            return generator.generate();
         }
 
         const segment = segments.find(segment => segmentNames.includes(segment.name));
 
         if (segment === undefined)
         {
-            return this.#remoteModuleBuilder.build(module, segments);
+            const generator = new RemoteModuleGenerator(module, segments);
+            
+            return generator.generate();
         }
 
-        return this.#localModuleBuilder.build(module, resources, segmentation, segment);
+        const generator = new LocalModuleGenerator(module, resources, segmentation);
+            
+        return generator.generate();
     }
 }
