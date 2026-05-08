@@ -72,13 +72,17 @@ Functions can return any value that can be [(de)serialized](./data-sharing.md#au
 
 ### Arrow functions
 
-Arrow functions are supported, but come with an important limitation. Jitar uses the function's `this` to pass context information (headers) for creating remote calls. Array functions do not have a `this` and can't provide any context.
+Arrow functions are NOT supported by the segmentation system, but can be safely used inside a segment.
 
 ```ts
-export const sayHello = (name: string) => { /* … */ };
+// src/domain/sayHello.ts
+export const sayHello = async (name: string): Promise<string> =>
+{
+    return `Hello, ${name}!`;
+};
 ```
 
-This example works with the default Jitar setup, but will break when using [middleware](./middleware) that sets additional headers like authorization. To avoid this we recommend using normal functions in any situation.
+Trying to segment this function results into an error a build level.
 
 ### Importing and calling
 

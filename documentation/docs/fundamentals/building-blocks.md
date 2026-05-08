@@ -41,7 +41,7 @@ To ensure your application can be broken into segments and keeps working after d
 1. Must be exported (named or as default)
 1. Must be stateless / pure (don't depend on global values)
 
-As long as you follow these rules, all will be fine. One thing to keep in mind is that arrow functions are supported, but can only be safely used in a non-distributed context. Meaning that the function does not call another function that might be in another segment. Besides that, we don't like to mix styles and recommend writing normal functions in any case.
+As long as you follow these rules, all will be fine. One thing to keep in mind is that arrow functions NOT are supported for segmentation. Besides that, we don't like to mix styles and recommend writing normal functions in any case.
 
 More in depth information on writing functions and the rules can be found in the [DEVELOP section](../develop/writing-functions).
 

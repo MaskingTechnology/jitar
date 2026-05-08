@@ -43,9 +43,8 @@ const JITAR_SEGMENTS = ['frontend'];
 const JITAR_MIDDLEWARES = ['./requesterMiddleware'];
 
 const jitarConfig: JitarConfig = {
-  sourceDir: 'src',
-  targetDir: 'dist',
-  jitarDir: 'domain',
+  projectRoot: '../../',
+  sourceRoot: '../',
   jitarUrl: JITAR_URL,
   segments: JITAR_SEGMENTS,
   middleware: JITAR_MIDDLEWARES
@@ -63,11 +62,10 @@ export default defineConfig({
 });
 ``` 
 
-The plugin configuration has 6 parameters:
+The plugin configuration has 5 parameters:
 
-1. sourceDir - The directory of the app source files. In most cases this is the `src` folder.
-1. targetDir - The directory of the output folder of the Vite build. This is the folder that Jitar uses as input for creating its cache.
-1. jitarDir - The directory of the source files used by Jitar. This path is relative to the source root. We like to use `domain` (which points to `src/domain`), but feel free to use something else.
+1. projectRoot - The directory of the project root containing the Jitar configuration file.
+1. sourceRoot - The directory of the app source files. In most cases this is the `src` folder.
 1. jitarUrl - The URL of the Jitar instance. Jitar uses by default `http://localhost:3000`, but can be configured differently.
 1. segments - The segments to use for the client app. This is an array of strings. The default is an empty array.
 1. middlewares - The middlewares to use for calling remote procedures. This is an array of strings. The default is an empty array.
