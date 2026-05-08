@@ -6,6 +6,9 @@ import { Application, ApplicationReader } from './source';
 import { LocalModuleGenerator, RemoteModuleGenerator } from './target';
 import { FileHelper } from './utils';
 
+import ApplicationNotRead from './errors/ApplicationNotRead';
+import ApplicationModuleNotFound from './errors/ApplicationModuleNotFound';
+
 import ProjectFileManager from './ProjectFileManager';
 
 export default class BuildHelper
@@ -50,7 +53,7 @@ export default class BuildHelper
     {
         if (this.#application === undefined)
         {
-            throw new Error('Application not read');
+            throw new ApplicationNotRead();
         }
 
         const repository = this.#application.repository;
@@ -59,7 +62,7 @@ export default class BuildHelper
 
         if (module === undefined)
         {
-            throw new Error(`Module not found: ${filename}`);
+            throw new ApplicationModuleNotFound(filename);
         }
 
         const resources = this.#application.resources;

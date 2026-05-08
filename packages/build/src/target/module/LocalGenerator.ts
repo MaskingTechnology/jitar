@@ -4,6 +4,8 @@ import type { ESImport, ESExport, ESModuleMember, ESModule } from '@jitar/analys
 import type { Module, Segmentation, Segment, ResourcesList } from '../../source';
 import { FileHelper } from '../../utils';
 
+import RewriteItemNotFound from './errors/RewriteItemNotFound';
+
 type ModuleImportKeys = { segmentKeys: string[], remoteKeys: string[], commonKeys: string[] };
 
 export default class LocalGenerator
@@ -48,7 +50,7 @@ export default class LocalGenerator
 
             if (index === -1)
             {
-                throw new Error('Statement not found!');
+                throw new RewriteItemNotFound(item.toString());
             }
 
             model.statements.splice(index, 1, ...rewritten);
