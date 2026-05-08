@@ -24,7 +24,7 @@ export default class ESMethod extends ESClassMember
         const parameters = this.parameters.map(parameter => parameter.clone());
         const body = this.body.clone();
 
-        return new ESMethod(this.identifier!, this.visibility, this.location, parameters, body, this.isAsync);
+        return new ESMethod(this.identifier, this.visibility, this.location, parameters, body, this.isAsync);
     }
 
     toString(): string

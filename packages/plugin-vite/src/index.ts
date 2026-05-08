@@ -151,7 +151,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
         resolveId:
         {
             order: 'pre',
-            async handler(source: string, importer: string | undefined, options: object)
+            async handler(source: string, importer: string | undefined)
             {
                 if (source === JITAR_BUNDLE_ID)
                 {

@@ -276,7 +276,7 @@ describe('model/ESClass', () =>
             expect(canWrite).toBeTruthy();
         });
 
-        it('should not wite a private field without a setter', () =>
+        it('should not write a private field without a setter', () =>
         {
             const canWrite = esClass.canWrite('secret');
             expect(canWrite).toBeFalsy();

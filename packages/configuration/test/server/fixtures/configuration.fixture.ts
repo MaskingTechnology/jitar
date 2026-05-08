@@ -16,7 +16,7 @@ const standaloneConfiguration: StandaloneConfiguration = { segments, indexFilena
 const workerConfiguration: WorkerConfiguration = { gateway, segments, trustKey } as const;
 const remoteWorkerConfiguration: RemoteWorkerConfiguration = { unavailableThreshold: 6000, stoppedThreshold: 18000 } as const;
 
-export const SERVER_CONFIGURATION: ServerConfiguration = 
+const validInput: Record<string, unknown> = 
 { 
     url: 'https://server', 
     setUp: ['setup'],
@@ -30,4 +30,38 @@ export const SERVER_CONFIGURATION: ServerConfiguration =
     standalone: standaloneConfiguration,
     worker: workerConfiguration,
     remoteWorker: remoteWorkerConfiguration
+} as const;
+
+const validResult: ServerConfiguration = 
+{ 
+    url: 'https://server', 
+    setUp: ['setup'],
+    tearDown: ['tearDown'],
+    middleware: ['middleware'],
+    healthChecks: ['healthChecks'],
+    
+    gateway: gatewayConfiguration,
+    proxy: proxyConfiguration,
+    repository: repositoryConfiguration,
+    standalone: standaloneConfiguration,
+    worker: workerConfiguration,
+    remoteWorker: remoteWorkerConfiguration,
+
+    meta:
+    {
+        configFile: 'valid-configuration.json',
+        root: '.'
+    }
+} as const;
+
+export const CONFIGURATIONS =
+{
+    INPUT:
+    {
+        VALID: validInput,
+    },
+    RESULT:
+    {
+        VALID: validResult
+    }
 } as const;

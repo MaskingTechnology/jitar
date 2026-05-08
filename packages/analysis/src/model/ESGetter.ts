@@ -18,7 +18,7 @@ export default class ESGetter extends ESClassMember
     {
         const body = this.body.clone();
 
-        return new ESGetter(this.identifier!, this.visibility, this.location, body);
+        return new ESGetter(this.identifier, this.visibility, this.location, body);
     }
     
     toString(): string

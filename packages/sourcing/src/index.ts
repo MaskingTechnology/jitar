@@ -1,5 +1,5 @@
 
-export type { FileReader  } from './files';
+export type { FileReader, FileSystem } from './files';
 export { Files, File, FileManager, LocalFileManager, RemoteFileManager, InvalidLocation, FileNotFound } from './files';
 
 export type  { Module, ModuleImporter } from './modules';

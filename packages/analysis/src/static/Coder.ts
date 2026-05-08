@@ -19,7 +19,7 @@ export default class Coder
         this.#tokens.push(...tokens);
     }
 
-    merge(coder: Coder)
+    merge(coder: Coder): void
     {
         this.append(...coder.tokens);
     }
@@ -27,7 +27,7 @@ export default class Coder
     generate(): string
     {
         let code = '';
-        let previous: Token | undefined = new Token(TokenType.NOTHING, '', 0, 0);
+        let previous: Token = new Token(TokenType.NOTHING, '', 0, 0);
 
         for (const current of this.#tokens)
         {

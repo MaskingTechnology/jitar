@@ -881,7 +881,7 @@ export default class Parser
     {
         let visibility: ClassVisibility = 'public';
 
-        let token = tokenList.step(); // Read away the get keyword
+        let token = tokenList.step(); // Read away the set keyword
         
         if (token.hasValue(Indicator.PRIVATE))
         {
@@ -1054,11 +1054,6 @@ export default class Parser
             coder.append(token);
             
             token = tokenList.step();
-
-            if (this.#mustInsertTerminator(tokenList))
-            {
-                coder.append(new Token(TokenType.DIVIDER, Divider.TERMINATOR, 0, 0));
-            }
         }
 
         return coder;
@@ -1083,12 +1078,6 @@ export default class Parser
         return [Divider.TERMINATOR, Divider.SEPARATOR].includes(token.value)
             || [List.CLOSE, Group.CLOSE, Scope.CLOSE].includes(token.value)
             || isRootKeyword(token.value);
-    }
-
-    #mustInsertTerminator(tokenList: TokenList): boolean
-    {
-        // Unsupported for now
-        return false;
     }
 
     #isIdentifier(token: Token): boolean

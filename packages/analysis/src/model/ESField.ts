@@ -18,7 +18,7 @@ export default class ESField extends ESClassMember
     {
         const initializer = this.initializer?.clone();
 
-        return new ESField(this.identifier!, this.visibility, this.location, initializer);
+        return new ESField(this.identifier, this.visibility, this.location, initializer);
     }
 
     toString(): string

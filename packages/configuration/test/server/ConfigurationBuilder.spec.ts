@@ -1,7 +1,7 @@
 
 import { describe, expect, it } from 'vitest';
 
-import { configurationBuilder, FILENAMES, SERVER_CONFIGURATION, ServerConfigurationInvalid, VALIDATION_RESULT } from './fixtures';
+import { configurationBuilder, FILENAMES, CONFIGURATIONS, ServerConfigurationInvalid, VALIDATION_RESULT } from './fixtures';
 
 describe('server/ConfigurationBuilder', () =>
 {
@@ -9,7 +9,7 @@ describe('server/ConfigurationBuilder', () =>
     {
         const promise = configurationBuilder.build(FILENAMES.VALID_CONFIGURATION);
 
-        await expect(promise).resolves.toEqual(SERVER_CONFIGURATION);
+        await expect(promise).resolves.toEqual(CONFIGURATIONS.RESULT.VALID);
     });
 
     it('should reject an invalid server configuration', async () =>

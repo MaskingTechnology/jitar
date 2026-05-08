@@ -186,7 +186,7 @@ export default class Generator
 
     #createObjectParameter(parameter: ESParameter): string
     {
-        const binding = parameter.binding as ESArrayBinding;
+        const binding = parameter.binding as ESObjectBinding;
         const members = this.#extractParameters(binding.elements);
 
         return `new ObjectParameter([${members.join(', ')}])`;

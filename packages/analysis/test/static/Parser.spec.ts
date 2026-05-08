@@ -256,7 +256,7 @@ describe('Parser', () =>
             expect(member.alias).toBeUndefined();
         });
 
-        it('should parse exporting a async function declaration', () =>
+        it('should parse exporting a field declaration', () =>
         {
             const exported = parser.parseExport(EXPORTS.EXPORT_FIELD_DECLARATION);
             expect(exported.members).toHaveLength(1);
@@ -469,7 +469,7 @@ describe('Parser', () =>
             expect(variable.initializer?.toString(false)).toEqual("['value1','value2']");
         });
 
-        it('should parse a declaration with an array value', () =>
+        it('should parse a declaration with an object value', () =>
         {
             const variable = parser.parseVariable(DECLARATIONS.OBJECT);
             expect(variable.identifier).toEqual('object');
@@ -813,7 +813,7 @@ describe('Parser', () =>
             expect(secondParameter.binding).toBeInstanceOf(ESArrayBinding);
             expect(secondParameter.initializer).toBeUndefined();
 
-            const secondBinding = secondParameter.binding as ESObjectBinding;
+            const secondBinding = secondParameter.binding as ESArrayBinding;
             expect(secondBinding.elements).toHaveLength(2);
             expect(secondBinding.toString()).toEqual('[param3,param4]');
 
@@ -860,7 +860,7 @@ describe('Parser', () =>
             expect(secondParameter.binding).toBeInstanceOf(ESArrayBinding);
             expect(secondParameter.initializer).toBeUndefined();
 
-            const secondBinding = secondParameter.binding as ESObjectBinding;
+            const secondBinding = secondParameter.binding as ESArrayBinding;
             expect(secondBinding.elements).toHaveLength(2);
             expect(secondBinding.toString()).toEqual("[param3='value3',param4=true]");
 
@@ -907,7 +907,7 @@ describe('Parser', () =>
             expect(secondParameter.binding).toBeInstanceOf(ESArrayBinding);
             expect(secondParameter.initializer).toBeUndefined();
 
-            const secondBinding = secondParameter.binding as ESObjectBinding;
+            const secondBinding = secondParameter.binding as ESArrayBinding;
             expect(secondBinding.elements).toHaveLength(2);
             expect(secondBinding.toString()).toEqual('[param3,...param4]');
 

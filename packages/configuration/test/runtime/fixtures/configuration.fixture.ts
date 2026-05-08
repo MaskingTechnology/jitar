@@ -1,30 +1,78 @@
 
 import { RuntimeConfiguration } from '../../../src/runtime';
 
-const defaultConfiguration: RuntimeConfiguration =
+const defaultInput: Record<string, string> =
+{
+    source: './src',
+    target: './dist',
+    segments: './segments',
+    resources: './resources'
+} as const;
+
+const defaultResult: RuntimeConfiguration =
 {
     source: './src',
     target: './dist',
     segments: './segments',
     resources: './resources',
+    meta:
+    {
+        configFile: './jitar.json',
+        root: '.'
+    }
 } as const;
 
-const runtimeConfiguration: RuntimeConfiguration =
+const runtimeInput: Record<string, string> =
+{
+    source: './source',
+    target: './target',
+    segments: './segment',
+    resources: './resource'
+} as const;
+
+const runtimeResult: RuntimeConfiguration =
 {
     source: './source',
     target: './target',
     segments: './segment',
     resources: './resource',
+    meta:
+    {
+        configFile: 'valid-runtime-configuration.json',
+        root: '.'
+    }
 } as const;
 
-const invalidConfiguration: any =
+const missingResult: RuntimeConfiguration =
 {
-    invalid: true
+    source: './src',
+    target: './dist',
+    segments: './segments',
+    resources: './resources',
+    meta:
+    {
+        configFile: 'missing-runtime-configuration.json',
+        root: '.'
+    }
 } as const;
 
-export const CONFIGURATIONS: Record<string, RuntimeConfiguration> =
+const invalidInput: Record<string, string> =
 {
-    DEFAULT: defaultConfiguration,
-    RUNTIME: runtimeConfiguration,
-    INVALID: invalidConfiguration,
+    invalid: 'true'
+} as const;
+
+export const CONFIGURATIONS =
+{
+    INPUT:
+    {
+        DEFAULT: defaultInput,
+        RUNTIME: runtimeInput,
+        INVALID: invalidInput
+    },
+    RESULT:
+    {
+        DEFAULT: defaultResult,
+        RUNTIME: runtimeResult,
+        MISSING: missingResult
+    }
 } as const;

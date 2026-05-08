@@ -90,9 +90,10 @@ export default class LocalGenerator
     #rewriteToResource<T extends (ESImport | ESExport)>(item: T, targetModuleFilename: string): T[]
     {
         // Rewrite to dynamic import?
-        item.from = this.#rewriteApplicationFrom(targetModuleFilename);
+        const clone = item.clone() as T;
+        clone.from = this.#rewriteApplicationFrom(targetModuleFilename);
 
-        return [];
+        return [clone];
     }
 
     #rewriteToApplication<T extends (ESImport | ESExport)>(item: T, targetModuleFilename: string): T[]
@@ -179,7 +180,6 @@ export default class LocalGenerator
     #rewriteToSegment<T extends (ESImport | ESExport)>(targetModuleFilename: string, item: ESImport | ESExport, keys: string[]): T
     {
         const clone = item.clone() as T;
-
         clone.from = this.#rewriteApplicationFrom(targetModuleFilename, this.#segment?.name);
         clone.members = this.#filterMembers(item.members, keys);
 
@@ -189,7 +189,6 @@ export default class LocalGenerator
     #rewriteToRemote<T extends (ESImport | ESExport)>(targetModuleFilename: string, item: ESImport | ESExport, keys: string[]): T
     {
         const clone = item.clone() as T;
-
         clone.from = this.#rewriteApplicationFrom(targetModuleFilename, 'remote');
         clone.members = this.#filterMembers(item.members, keys);
 
@@ -199,7 +198,6 @@ export default class LocalGenerator
     #rewriteToCommon<T extends (ESImport | ESExport)>(targetModuleFilename: string, item: ESImport | ESExport, keys: string[]): T
     {
         const clone = item.clone() as T;
-
         clone.from = this.#rewriteApplicationFrom(targetModuleFilename);
         clone.members = this.#filterMembers(item.members, keys);
 

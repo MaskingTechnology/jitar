@@ -5,6 +5,7 @@ export { default as InvalidLocation } from './errors/InvalidLocation';
 export { default as FileNotFound } from './errors/FileNotFound';
 
 export type { default as FileReader } from './interfaces/FileReader';
+export type { default as FileSystem } from './interfaces/FileSystem';
 
 export { default as File } from './models/File';
 

@@ -22,7 +22,7 @@ export default class ESSetter extends ESClassMember
         const parameter = this.parameter.clone();
         const body = this.body.clone();
 
-        return new ESSetter(this.identifier!, this.visibility, this.location, parameter, body);
+        return new ESSetter(this.identifier, this.visibility, this.location, parameter, body);
     }
 
     toString(): string

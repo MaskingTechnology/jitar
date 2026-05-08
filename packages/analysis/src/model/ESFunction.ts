@@ -29,10 +29,10 @@ export default class ESFunction extends ESDeclaration
     toString(): string
     {
         const prefix = this.isAsync ? 'async ' : '';
-        const identifier = this.identifier ?? '';
+        const identifier = this.identifier ? ` ${this.identifier}` : '';
         const parameters = this.parameters.map((parameter) => parameter.toString());
         const body = this.body.toString();
 
-        return `${prefix}function ${identifier}(${parameters.join(',')})${body}`;
+        return `${prefix}function${identifier}(${parameters.join(',')})${body}`;
     }
 }

@@ -40,7 +40,6 @@ const Operator =
     MULTIPLY: '*',
     NULLISH: '??',
     CHAINING: '.',
-    STUPID: '..',
     OPTIONAL_CHAINING: '?.',
     SPREAD: '...',
     NOT: '!',
@@ -49,7 +48,8 @@ const Operator =
     RIGHT_SHIFT: '>>',
     SUBTRACT: '-',
     TERNARY: '?',
-    XOR: '^'
+
+    $BRIDGE_CHAINING_SPREAD: '..'
 };
 
 const Operators = Object.values(Operator);
