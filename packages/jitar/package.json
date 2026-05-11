@@ -30,7 +30,7 @@
         "prepublishOnly": "npm run clean && npm run build"
     },
     "dependencies": {
-        "dotenv": "17.3.1",
+        "dotenv": "17.4.2",
         "express": "5.2.1",
         "glob": "13.0.6",
         "mime-types": "3.0.2"
@@ -48,8 +48,8 @@
         "@rollup/plugin-replace": "6.0.3",
         "@rollup/plugin-terser": "1.0.0",
         "@rollup/plugin-typescript": "12.3.0",
-        "rollup": "4.59.0",
-        "rollup-plugin-dts": "6.3.0"
+        "rollup": "4.60.3",
+        "rollup-plugin-dts": "6.4.1"
     },
     "engines": {
         "node": ">=20.0"
