@@ -8,7 +8,6 @@ on:
     - '!packages/**/node_modules/**'
     - '!packages/**/dist/**'
     - '!packages/jitar'
-    - '!packages/create-jitar'
   schedule:
   - cron: '39 10 * * 1'
 
