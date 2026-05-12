@@ -126,7 +126,8 @@ export default class SegmentReader
         // For index resolution we need to read the source files and check
         // if the given filename is a directory.
 
-        const normalizedFilename = this.#sourceFileManager.normalizeLocation(filename);
+        const trimmedFilename = filename.trim();
+        const normalizedFilename = this.#sourceFileManager.normalizeLocation(trimmedFilename);
 
         const fullFilename = this.#sourceFileManager.isDirectory(normalizedFilename)
             ? `${normalizedFilename}/${Files.INDEX}`
