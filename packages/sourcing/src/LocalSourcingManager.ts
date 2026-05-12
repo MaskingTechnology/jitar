@@ -13,4 +13,11 @@ export default class LocalSourcingManager extends SourcingManager
 
         super(fileManager, importManager);
     }
+
+    fork(location: string): LocalSourcingManager
+    {
+        const absoluteLocation = this.fileManager.getAbsoluteLocation(location);
+
+        return new LocalSourcingManager(absoluteLocation);
+    }
 }

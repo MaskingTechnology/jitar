@@ -1,22 +1,20 @@
 
 import type { ValidationScheme } from '@jitar/validation';
 
-type StandaloneConfiguration =
-{
-    segments: string[];
-    indexFilename?: string;
-    serveIndexOnNotFound?: boolean;
-    assets?: string[];
-};
+import type RepositoryConfiguration from './RepositoryConfiguration';
+import { validationScheme as repositoryScheme } from './RepositoryConfiguration';
+import type WorkerConfiguration from './WorkerConfiguration';
+import { validationScheme as workerScheme } from './WorkerConfiguration';
+
+type StandaloneConfiguration = RepositoryConfiguration
+                             & Pick<WorkerConfiguration, 'segments'>;
 
 export default StandaloneConfiguration;
 
 const validationScheme: ValidationScheme =
 {
-    segments: { type: 'list', required: true, items: { type: 'string' } },
-    indexFilename: { type: 'string', required: false },
-    serveIndexOnNotFound: { type: 'boolean', required: false },
-    assets: { type: 'list', required: false, items: { type: 'string' } }
+    ...repositoryScheme,
+    segments: workerScheme.segments
 } as const;
 
 export { validationScheme };

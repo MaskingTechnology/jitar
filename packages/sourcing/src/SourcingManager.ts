@@ -3,7 +3,7 @@
 import { File, FileManager, FileReader } from './files';
 import { Module, ImportManager, ModuleImporter } from './modules';
 
-export default class SourcingManager implements FileReader, ModuleImporter
+export default abstract class SourcingManager implements FileReader, ModuleImporter
 {
     readonly #fileManager: FileManager;
     readonly #importManager: ImportManager;
@@ -13,6 +13,10 @@ export default class SourcingManager implements FileReader, ModuleImporter
         this.#fileManager = fileManager;
         this.#importManager = importManager;
     }
+
+    get fileManager() { return this.#fileManager; }
+
+    get importManager() { return this.#importManager; }
 
     async filter(...patterns: string[]): Promise<string[]>
     {
@@ -35,4 +39,6 @@ export default class SourcingManager implements FileReader, ModuleImporter
     {
         return this.#importManager.import(filename);
     }
+
+    abstract fork(location: string): SourcingManager;
 }

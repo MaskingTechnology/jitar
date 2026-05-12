@@ -108,8 +108,11 @@ export default class RuntimeBuilder
 
     async #buildLocalRepository(url: string, configuration: RepositoryConfiguration, healthManager: HealthManager): Promise<LocalRepository>
     {
-        const sourcingManager = this.#sourcingManager;
-        const assets = await this.#buildAssetSet(configuration.assets);
+        const sourcingManager = configuration.assetRoot !== undefined
+            ? this.#sourcingManager.fork(configuration.assetRoot)
+            : this.#sourcingManager;
+
+        const assets = await this.#buildAssetSet(sourcingManager, configuration.assets);
         const indexFilename = configuration.indexFilename;
         const serveIndexOnNotFound = configuration.serveIndexOnNotFound;
 
@@ -181,11 +184,11 @@ export default class RuntimeBuilder
         return new RemoteWorkerBuilder(this.#remoteBuilder, unavailableThreshold, stoppedThreshold);
     }
 
-    async #buildAssetSet(patterns?: string[]): Promise<Set<string>>
+    async #buildAssetSet(sourcingManager: SourcingManager, patterns?: string[]): Promise<Set<string>>
     {
         if (patterns === undefined) return new Set();
 
-        const filenames = await this.#sourcingManager.filter(...patterns);
+        const filenames = await sourcingManager.filter(...patterns);
 
         return new Set(filenames);
     }
