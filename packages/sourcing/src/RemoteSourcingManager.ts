@@ -13,4 +13,11 @@ export default class RemoteSourcingManager extends SourcingManager
 
         super(fileManager, importManager);
     }
+
+    fork(location: string): RemoteSourcingManager
+    {
+        const absoluteLocation = this.fileManager.getAbsoluteLocation(location);
+
+        return new RemoteSourcingManager(absoluteLocation);
+    }
 }

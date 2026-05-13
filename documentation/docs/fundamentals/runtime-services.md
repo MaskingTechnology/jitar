@@ -181,6 +181,7 @@ The following configuration properties are available:
 
 * index - file to serve when accessed by a web browser (optional, default `index.html`).
 * serveIndexOnNotFound - when true, the index file will be served if the requested file is not found (default `false`).
+* assetRoot - the root folder of the assets relative to the target folder (optional, default the target folder).
 * assets - list of whitelisted assets (optional, default `undefined`).
 
 A full configuration example looks like this.
@@ -192,6 +193,7 @@ A full configuration example looks like this.
     {
         "index": "index.html",
         "serveIndexOnNotFound": false,
+        "assetRoot": "./app",
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"]
     }
 }
@@ -248,6 +250,7 @@ The standalone service has the same configuration properties as the repository s
 
 * index - file to serve when accessed by a web browser (optional, default `index.html`).
 * serveIndexOnNotFound - when true, the index file will be served if the requested file is not found (default `false`).
+* assetRoot - the root folder of the assets relative to the target folder (optional, default the target folder)
 * assets - list of whitelisted assets (optional, default `undefined`).
 * segments - list of segment names to load (required).
 * trustKey - key for creating trusted clients (optional).
@@ -261,6 +264,7 @@ A full configuration example looks like this:
     {
         "index": "index.html",
         "serveIndexOnNotFound": false,
+        "assetRoot": "./app",
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
         "segments": ["segment1", "segment2"],
         "trustKey": "${MY_TRUST_KEY}"
