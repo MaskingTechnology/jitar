@@ -64,7 +64,7 @@ export default class Module
         {
             const identifier = key.trim();
 
-            this.#imports[identifier] = imports[identifier];
+            this.#imports[identifier] = imports[key];
         }
     }
 }
