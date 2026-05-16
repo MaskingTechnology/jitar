@@ -6,6 +6,10 @@ on:
     paths:
     - 'packages/**'
 
+permissons:
+  contents: read
+  id-token: none
+
 jobs:
   build:
 

@@ -11,6 +11,10 @@ on:
   schedule:
   - cron: '39 10 * * 1'
 
+permissons:
+  contents: read
+  id-token: none
+
 jobs:
   analyze:
     name: Analyze
