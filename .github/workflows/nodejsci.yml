@@ -6,7 +6,7 @@ on:
     paths:
     - 'packages/**'
 
-permissons:
+permissions:
   contents: read
   id-token: none
 
