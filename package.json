@@ -10,15 +10,14 @@
     "tools/*"
   ],
   "scripts": {
-    "build": "turbo run build --filter=jitar --filter=create-jitar --filter=@jitar/plugin*",
+    "build": "turbo run build --filter=jitar --filter=@jitar/plugin*",
     "build:all": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
     "review": "turbo run test lint",
-    "publish-packages": "turbo run build lint test && npm run publish-jitar && npm run publish-plugin && npm run publish-create-jitar",
+    "publish-packages": "turbo run build lint test && npm run publish-jitar && npm run publish-plugin",
     "publish-jitar": "npm publish -workspace packages/jitar",
     "publish-plugin": "npm publish -workspace packages/plugin-vite",
-    "publish-create-jitar": "npm publish -workspace packages/create-jitar",
     "changelog": "auto-changelog --template changelog.hbs -p -u --commit-limit false --hide-empty-releases true",
     "changelog-debug": "auto-changelog --template changelog.hbs -p --template json --output changelog-data.json",
     "version": "npm version $VERSION --no-git-tag-version --workspaces --include-workspace-root=true"
