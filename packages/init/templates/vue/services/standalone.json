@@ -3,6 +3,7 @@
     "standalone":
     {
         "segments": ["default"],
+        "assetRoot": "./app",
         "assets": ["index.html", "vite.svg", "assets/**/*"]
     }
 }

@@ -2,10 +2,10 @@
 import { useEffect, useState } from 'react';
 
 import './App.css';
-import reactLogo from './assets/react.svg';
-import jitarLogo from './assets/jitar.svg';
+import reactLogo from '../assets/react.svg';
+import jitarLogo from '../assets/jitar.svg';
 
-import { sayHello } from '../domain/sayHello';
+import { sayHello } from '../../domain/sayHello';
 
 export default function App()
 {

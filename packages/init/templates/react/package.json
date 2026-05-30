@@ -1,0 +1,28 @@
+{
+  "name": "jitar-react-starter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run build-domain && npm run build-app",
+    "build-domain": "rimraf build dist && tsc -p src/tsconfig.json && jitar build",
+    "build-app": "vite build --config src/app/vite.config.ts",
+    "standalone": "jitar start --service=services/standalone.json"
+  },
+  "dependencies": {
+    "jitar": "^0.11.0",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@jitar/plugin-vite": "^0.11.0",
+    "@types/node": "^24.12.4",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "rimraf": "^6.1.3",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.14"
+  }
+}
