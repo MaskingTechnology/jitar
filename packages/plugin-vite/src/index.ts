@@ -21,7 +21,7 @@ function assureExtension(filename: string)
 
 function createJitarBundle(middlewares: string[], targetPath: string)
 {
-    const middlewareFiles = middlewares.map(name => assureExtension(`${targetPath}/${name}`));
+    const middlewareFiles = middlewares.map(name => assureExtension(path.join(targetPath, name)));
 
     const jitarImport = `import { ClientBuilder, HttpRemoteBuilder } from "${JITAR_CLIENT_ID}";`;
     const middlewareImports = middlewareFiles.map((filename, index) => `import { default as $M${index} } from "${filename}";`).join('');
@@ -106,7 +106,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
         {
             paths.vite.input = normalizePath(path.join(resolvedConfig.root));
             paths.vite.output = normalizePath(path.join(paths.vite.input, resolvedConfig.build.outDir));
-            paths.vite.assetOutput = normalizePath(path.join(paths.vite.input, resolvedConfig.build.assetsDir));
+            paths.vite.assetOutput = normalizePath(path.join(paths.vite.output, resolvedConfig.build.assetsDir));
 
             paths.project.root = normalizePath(path.join(paths.vite.input, pluginConfig.projectRoot));
             paths.project.source = normalizePath(path.join(paths.vite.input, pluginConfig.sourceRoot));
