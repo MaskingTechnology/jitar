@@ -1,7 +1,7 @@
 
 import Token from './models/Token';
 import { TokenType } from './definitions/TokenType';
-import { isDeclaration, Keyword } from './definitions/Keyword';
+import { Keyword } from './definitions/Keyword';
 
 export default class Coder
 {
@@ -31,9 +31,10 @@ export default class Coder
 
         for (const current of this.#tokens)
         {
-            const glue = this.#needsSpacing(previous, current) ? ' ' : '';
+            const prefix = this.#needsSpacingBefore(current, previous) ? ' ' : '';
+            const postfix = this.#needsSpacingAfter(current) ? ' ' : '';
 
-            code += `${glue}${current.value}`;
+            code += `${prefix}${current.value}${postfix}`;
 
             previous = current;
         }
@@ -41,13 +42,13 @@ export default class Coder
         return code;
     }
 
-    #needsSpacing(previous: Token, current: Token): boolean
+    #needsSpacingBefore(current: Token, previous: Token): boolean
     {
-        if (previous.isType(TokenType.KEYWORD) && this.#isSpacedKeyword(previous))
+        if (current.isType(TokenType.KEYWORD) && this.#isInfixKeyword(current))
         {
             return true;
         }
-        if (previous.isType(TokenType.OPERATOR) && current.isType(TokenType.OPERATOR))
+        else if (previous.isType(TokenType.OPERATOR) && current.isType(TokenType.OPERATOR))
         {
             return true;
         }
@@ -55,14 +56,33 @@ export default class Coder
         return false;
     }
 
-    #isSpacedKeyword(token: Token): boolean
+    #needsSpacingAfter(current: Token): boolean
     {
-        return isDeclaration(token.value)
+        return current.isType(TokenType.KEYWORD) && this.#isPrefixKeyword(current);
+    }
+
+    #isPrefixKeyword(token: Token): boolean
+    {
+        return this.#isInfixKeyword(token)
+            || token.hasValue(Keyword.VAR)
+            || token.hasValue(Keyword.LET)
+            || token.hasValue(Keyword.CONST)
+            || token.hasValue(Keyword.FUNCTION)
+            || token.hasValue(Keyword.CLASS)
+            || token.hasValue(Keyword.USING)
             || token.hasValue(Keyword.RETURN)
             || token.hasValue(Keyword.ASYNC)
             || token.hasValue(Keyword.AWAIT)
             || token.hasValue(Keyword.YIELD)
             || token.hasValue(Keyword.NEW)
             || token.hasValue(Keyword.THROW);
+    }
+
+    #isInfixKeyword(token: Token): boolean
+    {
+        return token.hasValue(Keyword.OF)
+            || token.hasValue(Keyword.IN)
+            || token.hasValue(Keyword.AS)
+            || token.hasValue(Keyword.FROM);
     }
 }

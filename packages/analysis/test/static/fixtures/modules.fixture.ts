@@ -82,7 +82,7 @@ export {Person};
 class Person{#name;#age;constructor(name,age) {this.#name=name;this.#age=age;}}
 const peter=new Person(name,42);
 async function async(){}
-const a=async;
+const a=async ;
 const b=async ()=>{};
 const as=12;
 export {as as hi};
