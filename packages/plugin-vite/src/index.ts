@@ -180,9 +180,13 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
         transform(code, id)
         {
-            // Import the Jitar bundle in the first application component
+            // Import the Jitar bundle from the first application component
+
+            const isFirstAppComponent = jitarImported === false
+                                     && id.startsWith(paths.project.source!)
+                                     && (id.endsWith('.ts') || id.endsWith('.tsx'));
             
-            if (id.startsWith(paths.project.source!) && id.endsWith('.tsx') && jitarImported === false)
+            if (isFirstAppComponent)
             {
                 jitarImported = true;
 
