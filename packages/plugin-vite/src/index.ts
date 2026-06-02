@@ -1,5 +1,4 @@
 
-import fs from 'node:fs';
 import path from 'node:path';
 
 import { ConfigurationManager, BuildHelper } from 'jitar';
@@ -8,6 +7,7 @@ import { normalizePath, PluginOption, ResolvedConfig } from 'vite';
 const JITAR_SOURCE_ID = 'jitar';
 const JITAR_CLIENT_ID = 'jitar/client';
 const JITAR_BUNDLE_ID = 'jitar-bundle';
+const JITAR_BUNDLE_RESOLVE_ID = `\0${JITAR_BUNDLE_ID}`;
 
 function assureExtension(filename: string)
 {
@@ -86,9 +86,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
     };
 
     let buildHelper: BuildHelper;
-
-    let jitarBundleFilename: string | undefined;
-    let jitarBundleImported = false;
+    let jitarImported = false;
 
     return {
 
@@ -129,61 +127,22 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             await buildHelper.readApplication();
         },
 
-        options(options)
+        resolveId(source)
         {
-            // Add the jitar client bundle to the input
-
-            if (options.input === undefined)
+            if (source === JITAR_BUNDLE_ID)
             {
-                options.input = JITAR_BUNDLE_ID;
-            }
-            else if (typeof options.input === 'string')
-            {
-                options.input = [options.input, JITAR_BUNDLE_ID];
-            }
-            else if (Array.isArray(options.input))
-            {
-                options.input.push(JITAR_BUNDLE_ID);
-            }
-            else if (typeof options.input === 'object')
-            {
-                options.input.additionalEntry = JITAR_BUNDLE_ID;
+                return JITAR_BUNDLE_RESOLVE_ID;
             }
 
-            return options;
-        },
-
-        resolveId:
-        {
-            order: 'pre',
-            async handler(source: string, importer: string | undefined)
+            if (source === JITAR_SOURCE_ID)
             {
-                if (source === JITAR_BUNDLE_ID)
-                {
-                    return source;
-                }
-
-                if (source === JITAR_SOURCE_ID)
-                {
-                    // Redirect all jitar imports to the jitar client bundle
-                    // so we can bundle the client code with the application
-
-                    if (importer?.endsWith('.segment.js') === false)
-                    {
-                        // Flag that the jitar bundle was imported by the application
-                        // so we can avoid adding it to the HTML
-
-                        jitarBundleImported = true;
-                    }
-
-                    return JITAR_BUNDLE_ID;
-                }
+                return JITAR_BUNDLE_RESOLVE_ID;
             }
         },
 
         load(id)
         {
-            if (id === JITAR_BUNDLE_ID)
+            if (id === JITAR_BUNDLE_RESOLVE_ID)
             {
                 return createJitarBundle(middlewares, paths.vite.output!);
             }
@@ -219,63 +178,18 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             return null;
         },
 
-        generateBundle(options, bundle)
+        transform(code, id)
         {
-            // Find the jitar client bundle so we can add it later to the HTML
-
-            const bundles = Object.entries(bundle);
-
-            for (const [fileName, chunk] of bundles)
-            {
-                if (chunk.type === 'chunk' && chunk.name === JITAR_BUNDLE_ID)
-                {
-                    jitarBundleFilename = fileName;
-
-                    break;
-                }
-            }
-        },
-
-        transformIndexHtml(html)
-        {
-            // Add the jitar client bundle to the HTML if it wasn't imported
-            // by any of the application files.
+            // Import the Jitar bundle in the first application component
             
-            if (jitarBundleImported === true)
+            if (id.startsWith(paths.project.source!) && id.endsWith('.tsx') && jitarImported === false)
             {
-                return html;
+                jitarImported = true;
+
+                return `import '${JITAR_BUNDLE_ID}';\n${code}`;
             }
 
-            if (jitarBundleFilename === undefined)
-            {
-                // Dev mode: insert the pre generated jitar bundle
-
-                if (paths.vite.assetOutput === undefined)
-                {
-                    console.warn('Output path not found!');
-
-                    return html;
-                }
-
-                const filenames = fs.readdirSync(paths.vite.assetOutput);
-
-                const jitarFilename = filenames.find(fileName => fileName.startsWith(JITAR_BUNDLE_ID) && fileName.endsWith('.js'));
-
-                if (jitarFilename === undefined)
-                {
-                    console.warn('Jitar bundle not found! Did you build the application first?');
-
-                    return html;
-                }
-
-                const jitarBundle = fs.readFileSync(path.join(paths.vite.assetOutput, jitarFilename), 'utf-8');
-
-                return html.replace('<script', `<script type="module">${jitarBundle}</script>\n    <script`);
-            }
-
-            // Production mode: load the jitar bundle from the assets folder
-
-            return html.replace('<script', `<script type="module" crossorigin src="/${jitarBundleFilename}"></script>\n    <script`);
+            return code;
         }
 
     } as PluginOption;
