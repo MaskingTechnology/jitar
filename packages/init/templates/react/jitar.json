@@ -1,5 +1,5 @@
 {
-    "source": "./dist",
+    "source": "./build",
     "target": "./dist",
     "segments": "./segments"
 }

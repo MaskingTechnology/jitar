@@ -1,5 +1,5 @@
 
-import { existsSync, promises as fsp } from 'node:fs';
+import { promises as fsp } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -10,14 +10,6 @@ const TEMPLATES_LOCATION = 'templates';
 const DEFAULT_PROJECT_ROOT_PATH = './';
 
 const NAME_REGEX = /^[a-zA-Z.\-_]+$/;
-
-const RENAME_FILES =
-{
-    '_gitignore': '.gitignore',
-    '_package.json': 'package.json',
-    '_tsconfig.json': 'tsconfig.json',
-    '_vite.config.ts': 'vite.config.ts'
-};
 
 export default class InitManager
 {
@@ -43,8 +35,6 @@ export default class InitManager
         }
 
         await this.#copyTemplate(projectName, templateName);
-
-        this.#renameFiles(projectName);
     }
 
     #createTemplateRootPath(): string
@@ -89,26 +79,5 @@ export default class InitManager
         const projectLocation = path.join(this.#projectRootPath, projectName);
 
         return fsp.cp(templateLocation, projectLocation, { recursive: true, force: true });
-    }
-
-    async #renameFiles(projectName: string): Promise<void>
-    {
-        const projectLocation = path.join(this.#projectRootPath, projectName);
-
-        const files = Object.entries(RENAME_FILES);
-        const promises = [];
-
-        for (const [source, target] of files)
-        {
-            const sourceFileLocation = path.join(projectLocation, source);
-            const targetFileLocation = path.join(projectLocation, target);
-
-            if (existsSync(sourceFileLocation))
-            {
-                promises.push(fsp.rename(sourceFileLocation, targetFileLocation));
-            }
-        }
-
-        await Promise.all(promises);
     }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import { ref } from 'vue';
-import { sayHello } from '../domain/sayHello';
+import { sayHello } from '../../domain/sayHello';
 
 const message = ref('');
 
@@ -19,10 +19,10 @@ runComponent();
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
     <a href="https://vuejs.org/" target="_blank" rel="noopener noreferrer">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
+      <img src="../assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
     <a href="https://jitar.dev" target="_blank" rel="noopener noreferrer">
-      <img src="./assets/jitar.svg" class="logo jitar" alt="Jitar logo" />
+      <img src="../assets/jitar.svg" class="logo jitar" alt="Jitar logo" />
     </a>
   </div>
   <h1>{{ message }}</h1>
