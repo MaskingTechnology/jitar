@@ -1,6 +1,6 @@
 {
     "source": "./dist",
-    "target": "./.jitar",
+    "target": "./build",
     "segments": "./segments",
     "resources": "./resources"
 }
