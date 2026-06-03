@@ -15,7 +15,8 @@ const TokenType =
     INDICATOR: 'indicator',
     REGEX: 'regex',
     SCOPE: 'scope',
-    WHITESPACE: 'whitespace'
+    WHITESPACE: 'whitespace',
+    NONE: 'none'
 };
 
 export { TokenType };

@@ -52,7 +52,7 @@ describe('Parser', () =>
         {
             const expression = parser.parseStatement(VALUES.IF_ELSE);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString(false)).toEqual('if(true){return "value1";}else{return "value2";}');
+            expect(expression.toString(false)).toEqual('if(true){return"value1";}else{return"value2";}');
         });
 
         it('should parse an try...catch...finally expression', () =>
@@ -557,7 +557,7 @@ describe('Parser', () =>
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
             expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString(false)).toEqual(' as ');
+            expect(variable.initializer?.toString(false)).toEqual('as');
         });
     });
 
@@ -928,7 +928,7 @@ describe('Parser', () =>
 
             expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBeFalsy();
-            expect(funktion.body.toString()).toEqual("{return 'value';}");
+            expect(funktion.body.toString()).toEqual("{return'value';}");
 
             const parameters = funktion.parameters;
             expect(parameters).toHaveLength(0);
@@ -940,7 +940,7 @@ describe('Parser', () =>
 
             expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBeFalsy();
-            expect(funktion.body.toString()).toEqual("{if(true){return 'value';}}");
+            expect(funktion.body.toString()).toEqual("{if(true){return'value';}}");
 
             const parameters = funktion.parameters;
             expect(parameters).toHaveLength(0);

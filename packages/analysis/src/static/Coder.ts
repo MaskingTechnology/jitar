@@ -1,7 +1,8 @@
 
 import Token from './models/Token';
 import { TokenType } from './definitions/TokenType';
-import { Keyword } from './definitions/Keyword';
+
+const NO_TOKEN = new Token(TokenType.NONE, '', -1, 0);
 
 export default class Coder
 {
@@ -27,28 +28,29 @@ export default class Coder
     generate(): string
     {
         let code = '';
-        let previous: Token = new Token(TokenType.NOTHING, '', 0, 0);
-
-        for (const current of this.#tokens)
+        
+        for (let index = 0; index < this.#tokens.length; index++)
         {
-            const prefix = this.#needsSpacingBefore(current, previous) ? ' ' : '';
-            const postfix = this.#needsSpacingAfter(current) ? ' ' : '';
+            const previous = this.#tokens[index - 1] ?? NO_TOKEN;
+            const current = this.#tokens[index];
+            const next = this.#tokens[index + 1] ?? NO_TOKEN;
+            
+            const prefix = this.#needsSpacingBefore(previous, current) ? ' ' : '';
+            const postfix = this.#needsSpacingAfter(current, next) ? ' ' : '';
 
             code += `${prefix}${current.value}${postfix}`;
-
-            previous = current;
         }
 
         return code;
     }
 
-    #needsSpacingBefore(current: Token, previous: Token): boolean
+    #needsSpacingBefore(previous: Token, current: Token): boolean
     {
-        if (current.isType(TokenType.KEYWORD) && this.#isInfixKeyword(current))
+        if (current.isType(TokenType.KEYWORD) && this.#isTextType(previous))
         {
             return true;
         }
-        else if (previous.isType(TokenType.OPERATOR) && current.isType(TokenType.OPERATOR))
+        else if (current.isType(TokenType.OPERATOR) && previous.isType(TokenType.OPERATOR))
         {
             return true;
         }
@@ -56,33 +58,16 @@ export default class Coder
         return false;
     }
 
-    #needsSpacingAfter(current: Token): boolean
+    #needsSpacingAfter(current: Token, next: Token): boolean
     {
-        return current.isType(TokenType.KEYWORD) && this.#isPrefixKeyword(current);
+        return current.isType(TokenType.KEYWORD) && (next.isType(TokenType.KEYWORD) || this.#isTextType(next));
     }
 
-    #isPrefixKeyword(token: Token): boolean
+    #isTextType(token: Token)
     {
-        return this.#isInfixKeyword(token)
-            || token.hasValue(Keyword.VAR)
-            || token.hasValue(Keyword.LET)
-            || token.hasValue(Keyword.CONST)
-            || token.hasValue(Keyword.FUNCTION)
-            || token.hasValue(Keyword.CLASS)
-            || token.hasValue(Keyword.USING)
-            || token.hasValue(Keyword.RETURN)
-            || token.hasValue(Keyword.ASYNC)
-            || token.hasValue(Keyword.AWAIT)
-            || token.hasValue(Keyword.YIELD)
-            || token.hasValue(Keyword.NEW)
-            || token.hasValue(Keyword.THROW);
-    }
-
-    #isInfixKeyword(token: Token): boolean
-    {
-        return token.hasValue(Keyword.OF)
-            || token.hasValue(Keyword.IN)
-            || token.hasValue(Keyword.AS)
-            || token.hasValue(Keyword.FROM);
+        return token.isType(TokenType.IDENTIFIER)
+            || token.isType(TokenType.BOOLEAN)
+            || token.isType(TokenType.NOTHING)
+            || token.isType(TokenType.NUMBER);
     }
 }
