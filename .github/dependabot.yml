@@ -3,21 +3,23 @@
 version: 2
 updates:
 
-  # Maintain dependencies for GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "monthly"
+# Maintain dependencies for GitHub Actions
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: "monthly"
 
-  # Maintain dependencies for jitar
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "monthly"
-    commit-message:
-      # Prefix all commit messages with "npm"
-      prefix: "npm"
-    open-pull-requests-limit: 1
-    pull-request-branch-name:
-      # Separate sections of the branch name with a hyphen
-      separator: "-"
+# Maintain dependencies for jitar
+- package-ecosystem: "npm"
+  directory: "/"
+  schedule:
+    interval: "monthly"
+  commit-message:
+    # Prefix all commit messages with "npm"
+    prefix: "npm"
+  open-pull-requests-limit: 1
+  pull-request-branch-name:
+    # Separate sections of the branch name with a hyphen
+    separator: "-"
+  cooldown:
+    default-days: 4

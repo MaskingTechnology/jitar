@@ -3,34 +3,37 @@ name: "Publish packages"
 on:
   workflow_dispatch:
 
+
 permissions:
   id-token: write
   contents: read
-  
+
 jobs:
   publish:
     runs-on: ubuntu-latest
+    environment:
+      name: release
     steps:
-      - name: ⚙️ Checkout Repository
-        uses: actions/checkout@v6
-      
-      - name: 🛠️ Set up Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: '24.x'
-          registry-url: 'https://registry.npmjs.org/'
+    - name: ⚙️ Checkout Repository
+      uses: actions/checkout@v6
 
-      - name: 📦 Install Dependencies
-        run: npm ci
+    - name: 🛠️ Set up Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: '24.x'
+        registry-url: 'https://registry.npmjs.org/'
 
-      - name: 🔨 Build all packages
-        run: npm run build
+    - name: 📦 Install Dependencies
+      run: npm ci
 
-      - name: 🚀 Publish Jitar
-        run: npm run publish-jitar
+    - name: 🔨 Build all packages
+      run: npm run build
 
-      - name: 🚀 Publish plugin for Vite
-        run: npm run publish-plugin
+    - name: 🚀 Publish Jitar
+      run: npm run publish-jitar
 
-      - name: ✅ Publish Complete
-        run: echo "Packages published"
+    - name: 🚀 Publish plugin for Vite
+      run: npm run publish-plugin
+
+    - name: ✅ Publish Complete
+      run: echo "Packages published"
