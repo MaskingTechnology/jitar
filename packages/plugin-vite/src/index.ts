@@ -91,6 +91,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
     return {
 
         name: 'jitar-plugin-vite',
+        enforce: 'pre',
 
         config()
         {
@@ -112,6 +113,8 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
         async buildStart()
         {
+            jitarImported = false;
+
             const configurationManager = new ConfigurationManager(paths.project.root);
 
             if (pluginConfig.environmentFile !== undefined)
@@ -138,12 +141,16 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             {
                 return JITAR_BUNDLE_RESOLVE_ID;
             }
+
+            return null;
         },
 
         load(id)
         {
             if (id === JITAR_BUNDLE_RESOLVE_ID)
             {
+                jitarImported = true;
+
                 return createJitarBundle(middlewares, paths.vite.output!);
             }
 
@@ -184,12 +191,10 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
             const isFirstAppComponent = jitarImported === false
                                      && id.startsWith(paths.project.source!)
-                                     && (id.endsWith('.ts') || id.endsWith('.tsx'));
+                                     && (id.endsWith('.js') || id.endsWith('.ts') || id.endsWith('.jsx') || id.endsWith('.tsx'));
             
             if (isFirstAppComponent)
             {
-                jitarImported = true;
-
                 return `import '${JITAR_BUNDLE_ID}';\n${code}`;
             }
 
