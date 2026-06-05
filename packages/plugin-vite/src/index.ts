@@ -130,14 +130,14 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             await buildHelper.readApplication();
         },
 
-        resolveId(source)
+        resolveId(id)
         {
-            if (source === JITAR_BUNDLE_ID)
+            if (id === JITAR_BUNDLE_ID)
             {
                 return JITAR_BUNDLE_RESOLVE_ID;
             }
 
-            if (source === JITAR_SOURCE_ID)
+            if (id === JITAR_SOURCE_ID)
             {
                 return JITAR_BUNDLE_RESOLVE_ID;
             }
