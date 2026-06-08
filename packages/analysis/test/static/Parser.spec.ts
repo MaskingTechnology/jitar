@@ -12,7 +12,7 @@ import {
 
 import { Parser } from '../../src/static';
 
-import { VALUES, IMPORTS, EXPORTS, DECLARATIONS, FUNCTIONS, CLASSES, MODULES, MODULES_STRINGS } from './fixtures';
+import { VALUES, IMPORTS, EXPORTS, VARIABLES, FUNCTIONS, CLASSES, MODULES, MODULES_STRINGS } from './fixtures';
 
 const parser = new Parser();
 
@@ -52,7 +52,7 @@ describe('Parser', () =>
         {
             const expression = parser.parseStatement(VALUES.IF_ELSE);
             expect(expression).toBeInstanceOf(ESExpression);
-            expect(expression.toString(false)).toEqual('if(true){return "value1";}else{return "value2";}');
+            expect(expression.toString(false)).toEqual('if(true){return"value1";}else{return"value2";}');
         });
 
         it('should parse an try...catch...finally expression', () =>
@@ -402,7 +402,7 @@ describe('Parser', () =>
     {
         it('should parse an empty declaration', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.EMPTY);
+            const variable = parser.parseVariable(VARIABLES.EMPTY);
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('let');
@@ -411,7 +411,7 @@ describe('Parser', () =>
 
         it('should parse a const variable', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.CONST);
+            const variable = parser.parseVariable(VARIABLES.CONST);
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
@@ -421,7 +421,7 @@ describe('Parser', () =>
 
         it('should parse a let declaration with value', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.LET);
+            const variable = parser.parseVariable(VARIABLES.LET);
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('let');
@@ -431,7 +431,7 @@ describe('Parser', () =>
 
         it('should parse a var declaration with value', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.VAR);
+            const variable = parser.parseVariable(VARIABLES.VAR);
             expect(variable.identifier).toEqual('name');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('var');
@@ -441,7 +441,7 @@ describe('Parser', () =>
 
         it('should parse a declaration with multiple declarations', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.MULTIPLE);
+            const variable = parser.parseVariable(VARIABLES.MULTIPLE);
             expect(variable.identifier).toEqual('name1');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('let');
@@ -451,7 +451,7 @@ describe('Parser', () =>
 
         it('should parse a declaration with an expression', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.EXPRESSION);
+            const variable = parser.parseVariable(VARIABLES.EXPRESSION);
             expect(variable.identifier).toEqual('number');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
@@ -461,7 +461,7 @@ describe('Parser', () =>
 
         it('should parse a declaration with an array value', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.ARRAY);
+            const variable = parser.parseVariable(VARIABLES.ARRAY);
             expect(variable.identifier).toEqual('array');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
@@ -471,7 +471,7 @@ describe('Parser', () =>
 
         it('should parse a declaration with an object value', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.OBJECT);
+            const variable = parser.parseVariable(VARIABLES.OBJECT);
             expect(variable.identifier).toEqual('object');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
@@ -481,7 +481,7 @@ describe('Parser', () =>
 
         it('should parse a declaration with a regex value', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.REGEX);
+            const variable = parser.parseVariable(VARIABLES.REGEX);
             expect(variable.identifier).toEqual('regex');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
@@ -491,7 +491,7 @@ describe('Parser', () =>
 
         it('should parse a declaration that is destructuring an array', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.DESTRUCTURING_ARRAY);
+            const variable = parser.parseVariable(VARIABLES.DESTRUCTURING_ARRAY);
             expect(variable.identifier).toEqual('[value1,value2=true]');
             expect(variable.binding).toBeInstanceOf(ESArrayBinding);
             expect(variable.type).toEqual('const');
@@ -517,7 +517,7 @@ describe('Parser', () =>
 
         it('should parse a declaration that is destructuring an object', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.DESTRUCTURING_OBJECT);
+            const variable = parser.parseVariable(VARIABLES.DESTRUCTURING_OBJECT);
             expect(variable.identifier).toEqual('{key1,key2=false}');
             expect(variable.binding).toBeInstanceOf(ESObjectBinding);
             expect(variable.type).toEqual('const');
@@ -542,7 +542,7 @@ describe('Parser', () =>
 
         it('should parse a declaration with a non reserved keyword as name', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.KEYWORD_AS_NAME);
+            const variable = parser.parseVariable(VARIABLES.KEYWORD_AS_NAME);
             expect(variable.identifier).toEqual('as');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
@@ -552,7 +552,7 @@ describe('Parser', () =>
 
         it('should parse a declaration that refers to a non reserved keyword as value', () =>
         {
-            const variable = parser.parseVariable(DECLARATIONS.KEYWORD_AS_VALUE);
+            const variable = parser.parseVariable(VARIABLES.KEYWORD_AS_VALUE);
             expect(variable.identifier).toEqual('alias');
             expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
             expect(variable.type).toEqual('const');
@@ -928,7 +928,7 @@ describe('Parser', () =>
 
             expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBeFalsy();
-            expect(funktion.body.toString()).toEqual("{return 'value';}");
+            expect(funktion.body.toString()).toEqual("{return'value';}");
 
             const parameters = funktion.parameters;
             expect(parameters).toHaveLength(0);
@@ -940,7 +940,7 @@ describe('Parser', () =>
 
             expect(funktion.identifier).toEqual('name');
             expect(funktion.isAsync).toBeFalsy();
-            expect(funktion.body.toString()).toEqual("{if(true){return 'value';}}");
+            expect(funktion.body.toString()).toEqual("{if(true){return'value';}}");
 
             const parameters = funktion.parameters;
             expect(parameters).toHaveLength(0);

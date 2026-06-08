@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --config src/app/vite.config.ts",
     "build": "npm run build-domain && npm run build-app",
     "build-domain": "rimraf build dist && tsc -p src/tsconfig.json && jitar build",
     "build-app": "vite build --config src/app/vite.config.ts",

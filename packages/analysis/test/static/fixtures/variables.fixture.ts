@@ -1,5 +1,5 @@
 
-export const DECLARATIONS =
+export const VARIABLES =
 {
     EMPTY: "let name;",
     CONST: "const name = 'const';",
