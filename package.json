@@ -38,10 +38,14 @@
     "vitest": "^4.1.0"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.9.0"
   },
   "optionalDependencies": {
     "@nrwl/nx-linux-x64-gnu": "^15.9.3"
   },
-  "packageManager": "npm@11.6.2"
+  "packageManager": "npm@11.16.0",
+  "allowScripts": {
+    "esbuild@0.27.7": true,
+    "fsevents@2.3.3": true
+  }
 }
