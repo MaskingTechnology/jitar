@@ -38,7 +38,7 @@
     "vitest": "^4.1.0"
   },
   "engines": {
-    "node": "^20.19.0 || ^22.9.0 || >=24"
+    "node": ">=22"
   },
   "optionalDependencies": {
     "@nrwl/nx-linux-x64-gnu": "^15.9.3"
