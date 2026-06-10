@@ -8,8 +8,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+build
 dist
-.jitar
 dist-ssr
 *.local
 
