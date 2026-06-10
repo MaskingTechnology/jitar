@@ -1,5 +1,5 @@
 
-export default class ModuleNotLoaded extends Error
+export default class ModuleNotFound extends Error
 {
     constructor(filename: string)
     {
