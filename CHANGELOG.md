@@ -1,10 +1,54 @@
-# v0.10.3
-[2025-11-20]
+# v0.11.0
+[2026-06-17]
 
 ### Chores
 
+* \[[789](https://github.com/MaskingTechnology/jitar/pull/789)] chore: update ci/cd configuration (#789) by Bas Meeuwissen
+* \[[788](https://github.com/MaskingTechnology/jitar/pull/788)] chore(plugins): Vite 8 compatibility (#788) by Peter van Vliet
+* \[[785](https://github.com/MaskingTechnology/jitar/pull/785)] chore: updated starter templates (#785) by Bas Meeuwissen
+* \[[781](https://github.com/MaskingTechnology/jitar/pull/781)] chore: creator app removal (#781) by Bas Meeuwissen
+
+# v0.11.0
+[2026-05-22]
+
+### Features
+
+* \[[777](https://github.com/MaskingTechnology/jitar/pull/777)] feat: custom asset root (#777) by Peter van Vliet
+* \[[770](https://github.com/MaskingTechnology/jitar/pull/770)] feat: improved build strategy (#770) by Peter van Vliet
+
+### Chores
+
+* \[[779](https://github.com/MaskingTechnology/jitar/pull/779)] chore: release v0.11.0 (#779) by Bas Meeuwissen
+* \[[775](https://github.com/MaskingTechnology/jitar/pull/775)] chore(deps): May updates (#775) by Bas Meeuwissen
+* \[[764](https://github.com/MaskingTechnology/jitar/pull/764)] chore(deps): april updates (#764) by Bas Meeuwissen
+* \[[757](https://github.com/MaskingTechnology/jitar/pull/757)] chore(deps): march updates (#757) by Bas Meeuwissen
+* \[[751](https://github.com/MaskingTechnology/jitar/pull/751)] chore: simplified ci (#751) by Bas Meeuwissen
+
+# v0.10.6
+[2026-05-22]
+
+### Features
+
+* \[[743](https://github.com/MaskingTechnology/jitar/pull/743)] feat(plugins): relative paths resolution (#743) by Peter van Vliet
+
+### Chores
+
+* \[[749](https://github.com/MaskingTechnology/jitar/pull/749)] chore: release 0.10.6 (#749) by Peter van Vliet
+* \[[741](https://github.com/MaskingTechnology/jitar/pull/741)] chore(deps): january updates (#741) by Bas Meeuwissen
+* \[[738](https://github.com/MaskingTechnology/jitar/pull/738)] chore(website): copyright year update (#738) by Bas Meeuwissen
+* \[[736](https://github.com/MaskingTechnology/jitar/pull/736)] chore: publication flow (#736) by Bas Meeuwissen
+* \[[733](https://github.com/MaskingTechnology/jitar/pull/733)] chore: updated readme (#733) by Peter van Vliet
+* \[[732](https://github.com/MaskingTechnology/jitar/pull/732)] chore: remove cors middleware (#732) by Peter van Vliet
+* \[[726](https://github.com/MaskingTechnology/jitar/pull/726)] chore(deps): december updates (#726) by Bas Meeuwissen
+* \[[722](https://github.com/MaskingTechnology/jitar/pull/722)] chore: updated eslint config (#722) by Bas Meeuwissen
+* \[[720](https://github.com/MaskingTechnology/jitar/pull/720)] chore: securing apps video (#720) by Peter van Vliet
+* \[[719](https://github.com/MaskingTechnology/jitar/pull/719)] chore: release v0.10.3 (#719) by Bas Meeuwissen
 * \[[717](https://github.com/MaskingTechnology/jitar/pull/717)] chore(deps): bump glob from 11.0.3 to 11.1.0 in /website (#717) by dependabot[bot]
 * \[[711](https://github.com/MaskingTechnology/jitar/pull/711)] chore: replace changelog tool (#711) by Bas Meeuwissen
+
+### Other
+
+* \[[729](https://github.com/MaskingTechnology/jitar/pull/729)] chore(deps-dev): bump mdast-util-to-hast from 13.2.0 to 13.2.1 in /documentation (#729) by dependabot[bot]
 
 # v0.10.2
 [2025-11-14]
