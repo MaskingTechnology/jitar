@@ -13,11 +13,13 @@ next:
 
 # Configuration
 
-The jitar build process is configured using a `jitar.json` file. This file is optional and defines the location of the `source`, `target`, `segments`, and `resources` folders. These values are used to split the application in separate deployable bundles and create the necessary configuration files for the jitar runtime.
+The jitar build process and runtime environment is configured using a JSON file. This file is optional and can be added to a project at any time.
 
 ## Jitar configuration file
 
-The `jitar.json` file is a JSON file that contains the following properties:
+By default, Jitar looks for a `jitar.json` file in the project's root directory, but you can use a different filename and specify it when running the CLI.
+
+A basic configuration contains the following properties:
 
 ```json
 {
@@ -37,7 +39,7 @@ The configuration also supports environment variables. They can be used by wrapp
 ```
 :::
 
-There are four properties in the configuration file:
+There are four main properties in the configuration file:
 * `source` - the location of the source files (default `./src`).
 * `target` - the location of the target files (default `./dist`).
 * `segments` - the location of the segment configuration files (default `./segments`).
@@ -50,3 +52,18 @@ For a TypeScript project, the `source` folder should be the target folder after 
 ::: warning IMPORTANT
 The build process deletes the files in the `target` folder during the build process. Make sure that it doesn't point to the `src` folder.
 :::
+
+## Specific build options
+
+Additionally, the configuration supports specific build options.
+
+```json
+{
+    "source": "./src",
+    "build": {
+        "ignore": ["app/**/*"]
+    }
+}
+```
+
+* `build.ignore` - list of glob patterns, relative to the source folder, specifying files that should be ignored during the build (default `[]`).
