@@ -19,6 +19,13 @@ describe('runtime/ConfigurationBuilder', () =>
         await expect(promise).resolves.toEqual(CONFIGURATIONS.RESULT.RUNTIME);
     });
 
+    it('should build a valid runtime configuration with build configuration', async () =>
+    {
+        const promise = configurationBuilder.build(FILENAMES.BUILD);
+
+        await expect(promise).resolves.toEqual(CONFIGURATIONS.RESULT.BUILD);
+    });
+
     it('should build a default runtime when the configuration file does not exist', async () =>
     {
         const promise = configurationBuilder.build(FILENAMES.MISSING);

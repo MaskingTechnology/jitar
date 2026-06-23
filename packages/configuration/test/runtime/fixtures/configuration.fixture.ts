@@ -1,7 +1,7 @@
 
 import { RuntimeConfiguration } from '../../../src/runtime';
 
-const defaultInput: Record<string, string> =
+const defaultInput: Record<string, unknown> =
 {
     source: './src',
     target: './dist',
@@ -15,6 +15,10 @@ const defaultResult: RuntimeConfiguration =
     target: './dist',
     segments: './segments',
     resources: './resources',
+    build:
+    {
+        ignore: []
+    },
     meta:
     {
         configFile: './jitar.json',
@@ -22,7 +26,7 @@ const defaultResult: RuntimeConfiguration =
     }
 } as const;
 
-const runtimeInput: Record<string, string> =
+const runtimeInput: Record<string, unknown> =
 {
     source: './source',
     target: './target',
@@ -36,9 +40,38 @@ const runtimeResult: RuntimeConfiguration =
     target: './target',
     segments: './segment',
     resources: './resource',
+    build:
+    {
+        ignore: []
+    },
     meta:
     {
         configFile: 'valid-runtime-configuration.json',
+        root: '.'
+    }
+} as const;
+
+const buildInput: Record<string, unknown> =
+{
+    build:
+    {
+        ignore: ['app/**/*']
+    }
+} as const;
+
+const buildResult: RuntimeConfiguration =
+{
+    source: './src',
+    target: './dist',
+    segments: './segments',
+    resources: './resources',
+    build:
+    {
+        ignore: ['app/**/*']
+    },
+    meta:
+    {
+        configFile: 'build-runtime-configuration.json',
         root: '.'
     }
 } as const;
@@ -49,6 +82,10 @@ const missingResult: RuntimeConfiguration =
     target: './dist',
     segments: './segments',
     resources: './resources',
+    build:
+    {
+        ignore: []
+    },
     meta:
     {
         configFile: 'missing-runtime-configuration.json',
@@ -56,9 +93,9 @@ const missingResult: RuntimeConfiguration =
     }
 } as const;
 
-const invalidInput: Record<string, string> =
+const invalidInput: Record<string, unknown> =
 {
-    invalid: 'true'
+    invalid: true
 } as const;
 
 export const CONFIGURATIONS =
@@ -67,12 +104,14 @@ export const CONFIGURATIONS =
     {
         DEFAULT: defaultInput,
         RUNTIME: runtimeInput,
+        BUILD: buildInput,
         INVALID: invalidInput
     },
     RESULT:
     {
         DEFAULT: defaultResult,
         RUNTIME: runtimeResult,
+        BUILD: buildResult,
         MISSING: missingResult
     }
 } as const;

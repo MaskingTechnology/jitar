@@ -31,6 +31,8 @@ export default class ConfigurationBuilder
         configuration.target ??= DefaultValues.TARGET;
         configuration.segments ??= DefaultValues.SEGMENTS;
         configuration.resources ??= DefaultValues.RESOURCES;
+        configuration.build ??= DefaultValues.BUILD;
+        configuration.build.ignore ??= DefaultValues.BUILD_IGNORE;
 
         configuration.meta =
         {

@@ -29,12 +29,13 @@ export default class BuildManager
         const resources = this.#fileHelper.makePathAbsolute(configuration.resources, configuration.meta.root);
         const segments = this.#fileHelper.makePathAbsolute(configuration.segments, configuration.meta.root);
 
-        const sourceFileManager = new LocalFileManager(source);
-        const targetFileManager = new LocalFileManager(target);
-        const resourceFileManager = new LocalFileManager(resources);
-        const segmentFileManager = new LocalFileManager(segments);
-
-        this.#fileManager = new ProjectFileManager(sourceFileManager, targetFileManager, resourceFileManager, segmentFileManager);
+        this.#fileManager = new ProjectFileManager(
+            new LocalFileManager(source),
+            new LocalFileManager(target),
+            new LocalFileManager(resources),
+            new LocalFileManager(segments),
+            configuration.build.ignore
+        );
 
         this.#applicationReader = new ApplicationReader(this.#fileManager);
         this.#applicationBuilder = new ApplicationBuilder(this.#fileManager, this.#logger);
@@ -46,7 +47,7 @@ export default class BuildManager
         const resourceFileManager = this.#fileManager.resource;
         const segmentFileManager = this.#fileManager.segment;
 
-        const moduleFiles = await sourceFileManager.filter(Files.MODULE_PATTERN);
+        const moduleFiles = await sourceFileManager.filterWithIgnores(Files.MODULE_PATTERN, this.#fileManager.sourceIgnores);
         const resourceFiles = await resourceFileManager.filter(Files.RESOURCE_PATTERN);
         const segmentFiles = await segmentFileManager.filter(Files.SEGMENT_PATTERN);
 

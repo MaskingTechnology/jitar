@@ -7,13 +7,15 @@ export default class ProjectFileManager
     readonly #target: FileManager;
     readonly #resource: FileManager;
     readonly #segment: FileManager;
+    readonly #sourceIgnores: string[];
 
-    constructor(source: FileManager, target: FileManager, resource: FileManager, segment: FileManager)
+    constructor(source: FileManager, target: FileManager, resource: FileManager, segment: FileManager, sourceIgnores: string[])
     {
         this.#source = source;
         this.#target = target;
         this.#resource = resource;
         this.#segment = segment;
+        this.#sourceIgnores = sourceIgnores;
     }
 
     get source() { return this.#source; }
@@ -23,4 +25,6 @@ export default class ProjectFileManager
     get resource() { return this.#resource; }
 
     get segment() { return this.#segment; }
+
+    get sourceIgnores() { return this.#sourceIgnores; }
 }

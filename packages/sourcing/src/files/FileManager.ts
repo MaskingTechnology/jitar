@@ -130,6 +130,17 @@ export default class FileManager implements FileReader
         return filenames.map(filename => this.#fileSystem.normalize(filename));
     }
 
+    async filterWithIgnores(pattern: string, ignorePatterns: string[]): Promise<string[]>
+    {
+        const allFilenames = await this.filter(pattern);
+
+        const ignoreFilters = ignorePatterns.map(pattern => this.filter(pattern));
+        const ignoredFilenames = await Promise.all(ignoreFilters);
+        const ignoredSet = new Set(ignoredFilenames.flat());
+
+        return allFilenames.filter(filename => ignoredSet.has(filename) === false);
+    }
+
     #validateLocation(location: string, filename: string): void
     {
         if (location.startsWith(this.#rootLocation) === false)
