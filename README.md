@@ -15,7 +15,7 @@ Under the hood, Jitar takes the application, splits it into smaller independent 
 
 ## Installation
 
-Jitar requires Node version 20.0 or higher to be installed.
+Jitar requires Node version 22.9 or higher to be installed.
 
 ```bash
 npm install -g jitar
