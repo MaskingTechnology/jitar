@@ -25,7 +25,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^25.6.2",
-    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^8.60.1",
     "@vitest/coverage-v8": "^4.1.0",
     "auto-changelog": "^2.5.0",
     "eslint": "^10.0.3",
@@ -34,7 +34,7 @@
     "tslib": "^2.8.1",
     "turbo": "^2.8.17",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.57.0",
+    "typescript-eslint": "^8.60.1",
     "vitest": "^4.1.0"
   },
   "engines": {
@@ -45,7 +45,6 @@
   },
   "packageManager": "npm@11.16.0",
   "allowScripts": {
-    "esbuild@0.27.7": true,
     "fsevents@2.3.3": true
   }
 }
