@@ -30,6 +30,7 @@ import Lexer from './Lexer';
 import Coder from './Coder';
 
 const DEFAULT_IDENTIFIER = 'default';
+const EXPORTED_PREFIX = '$_EXPORT';
 
 export default class Parser
 {
@@ -384,7 +385,7 @@ export default class Parser
         {
             // Default exports of values need to move to their own declaration
 
-            const identifier = `$_EXPORT_${token.start}_${token.end}`;
+            const identifier = `${EXPORTED_PREFIX}_${token.start}_${token.end}`;
 
             tokenList.insert(
                 new Token(TokenType.KEYWORD, Keyword.CONST, 0, 0),
@@ -405,6 +406,25 @@ export default class Parser
         {
             token = tokenList.step(); // Read away the declaration keyword
             stepSize++;
+        }
+
+        if (token.hasValue(Indicator.GENERATOR))
+        {
+            token = tokenList.step(); // Read away the generator indicator
+            stepSize++;
+        }
+
+        if (token.hasValue(Keyword.EXTENDS)
+         || token.hasValue(Group.OPEN)
+         || token.hasValue(Scope.OPEN))
+        {
+            // Anonymous functions and class need an identifier
+
+            const identifier = `${EXPORTED_PREFIX}_${token.start}_${token.end}`;
+
+            tokenList.insert(new Token(TokenType.IDENTIFIER, identifier, 0, 0));
+
+            token = tokenList.current;
         }
 
         const identifier = this.#isIdentifier(token) ? token.value : '';
