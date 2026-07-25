@@ -50,7 +50,11 @@ const Keyword =
     THROW: 'throw',
     TRY: 'try',
     CATCH: 'catch',
-    FINALLY: 'finally'
+    FINALLY: 'finally',
+
+    // TYPE CHECKING
+    TYPEOF: 'typeof',
+    INSTANCEOF: 'instanceof'
 };
 
 const Keywords = Object.values(Keyword);
