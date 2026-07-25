@@ -406,12 +406,12 @@ export default class Parser
         {
             token = tokenList.step(); // Read away the declaration keyword
             stepSize++;
-        }
 
-        if (token.hasValue(Indicator.GENERATOR))
-        {
-            token = tokenList.step(); // Read away the generator indicator
-            stepSize++;
+            if (token.hasValue(Indicator.GENERATOR))
+            {
+                token = tokenList.step(); // Read away the generator indicator
+                stepSize++;
+            }
         }
 
         if (token.hasValue(Keyword.EXTENDS)

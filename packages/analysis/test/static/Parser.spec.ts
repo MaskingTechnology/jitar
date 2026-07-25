@@ -350,7 +350,7 @@ describe('Parser', () =>
             expect(exported.from).toBeUndefined();
 
             const member = exported.members[0];
-            expect(member.identifier).toEqual('');
+            expect(member.identifier).toEqual('$_EXPORT_23_23');
             expect(member.alias).toEqual('default');
 
             const declaration = module.statements[1] as ESFunction;
@@ -368,7 +368,7 @@ describe('Parser', () =>
             expect(exported.from).toBeUndefined();
 
             const member = exported.members[0];
-            expect(member.identifier).toEqual('');
+            expect(member.identifier).toEqual('$_EXPORT_21_21');
             expect(member.alias).toEqual('default');
 
             const declaration = module.statements[1] as ESClass;
