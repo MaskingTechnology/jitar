@@ -441,12 +441,27 @@ describe('Parser', () =>
 
         it('should parse a declaration with multiple declarations', () =>
         {
-            const variable = parser.parseVariable(VARIABLES.MULTIPLE);
-            expect(variable.identifier).toEqual('name1');
-            expect(variable.binding).toBeInstanceOf(ESIdentifierBinding);
-            expect(variable.type).toEqual('let');
-            expect(variable.initializer).toBeInstanceOf(ESExpression);
-            expect(variable.initializer?.toString(false)).toEqual('(1+2)*3');
+            const module = parser.parse(VARIABLES.MULTIPLE);
+            expect(module.variables).toHaveLength(3);
+
+            const [name1, name2, name3] = module.variables;
+
+            expect(name1.identifier).toEqual('name1');
+            expect(name1.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(name1.type).toEqual('let');
+            expect(name1.initializer).toBeInstanceOf(ESExpression);
+            expect(name1.initializer?.toString(false)).toEqual('(1+2)*3');
+
+            expect(name2.identifier).toEqual('name2');
+            expect(name2.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(name2.type).toEqual('let');
+            expect(name2.initializer).toBeUndefined();
+
+            expect(name3.identifier).toEqual('name3');
+            expect(name3.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(name3.type).toEqual('let');
+            expect(name3.initializer).toBeInstanceOf(ESExpression);
+            expect(name3.initializer?.toString(false)).toEqual("'foo'");
         });
 
         it('should parse a declaration with an expression', () =>
