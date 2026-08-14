@@ -43,7 +43,7 @@ export default class ExecutionManager implements Runner
     {
         try
         {
-            return this.#loadSegments();
+            await this.#loadSegments();
         }
         catch (error: unknown)
         {

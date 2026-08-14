@@ -41,7 +41,9 @@ export default class Builder
                 // For unsegmented modules we only need to build the common module.
                 // This will overwrite the original module file.
 
-                return this.#buildCommonModule(module, resources, segmentation);
+                await this.#buildCommonModule(module, resources, segmentation);
+
+                return;
             }
             
             const segmentBuilds = moduleSegments.map(segment => this.#buildSegmentModule(module, resources, segment, segmentation));

@@ -112,8 +112,11 @@ export default class Logger
 
         if (object instanceof Error)
         {
-            const causeValue = object.cause ? this.#interpretValue(object.cause, level + 1) : undefined;
-            const cause = causeValue ? `\n->${causeValue}` : '';
+            const causeValue = object.cause !== undefined
+                ? this.#interpretValue(object.cause, level + 1)
+                : undefined;
+
+            const cause = causeValue !== undefined ? `\n->${causeValue}` : '';
 
             return `${object.message}${cause}`;
         }

@@ -57,7 +57,7 @@ export default class BuildManager
 
             const applicationModel = await this.#applicationReader.read(moduleFiles, resourceFiles, segmentFiles);
 
-            return this.#applicationBuilder.build(applicationModel);
+            await this.#applicationBuilder.build(applicationModel);
         }
         catch (error: unknown)
         {
