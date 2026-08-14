@@ -542,6 +542,12 @@ export default class Parser
         const binding = this.#parseBinding(tokenList);
         const initializer = this.#parseInitializer(tokenList);
 
+        if (tokenList.notAtEnd() && tokenList.current.hasValue(Divider.SEPARATOR))
+        {
+            tokenList.step(); // Read away the comma
+            tokenList.insert(new Token(TokenType.KEYWORD, type, 0, 0));
+        }
+
         return new ESVariable(type, binding, initializer);
     }
 
