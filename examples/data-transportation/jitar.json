@@ -1,4 +1,4 @@
 {
-    "source": "./dist",
-    "target": "./build"
+    "source": "./build",
+    "target": "./dist"
 }
