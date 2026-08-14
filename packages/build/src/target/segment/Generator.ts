@@ -5,7 +5,6 @@ import { VersionParser } from '@jitar/execution';
 import type { Segment } from '../../source';
 import { FileHelper } from '../../utils';
 
-
 const JITAR_MODULE = 'jitar';
 const JITAR_IMPORTS = ['Segment', 'Class', 'Procedure', 'Implementation', 'Version', 'NamedParameter', 'ArrayParameter', 'ObjectParameter'];
 
