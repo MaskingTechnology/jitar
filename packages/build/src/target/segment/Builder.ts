@@ -4,6 +4,8 @@ import type { FileManager } from '@jitar/sourcing';
 
 import type { Application, Segment } from '../../source';
 
+import BuildingSegmentFailed from './errors/BuildingSegmentFailed';
+
 import Generator from './Generator';
 
 export default class Builder
@@ -29,13 +31,20 @@ export default class Builder
 
     async #buildSegment(segment: Segment): Promise<void>
     {
-        const filename = `${segment.name}.segment.js`;
+        try
+        {
+            const filename = `${segment.name}.segment.js`;
 
-        const generator = new Generator(segment);
-        const code = generator.generate();
+            const generator = new Generator(segment);
+            const code = generator.generate();
 
-        await this.#targetFileManager.write(filename, code);
+            await this.#targetFileManager.write(filename, code);
 
-        this.#logger.info(`Built ${segment.name} segment (${segment.modules.length} modules, ${segment.procedures.length} procedures, ${segment.classes.length} classes)`);
+            this.#logger.info(`Built ${segment.name} segment (${segment.modules.length} modules, ${segment.procedures.length} procedures, ${segment.classes.length} classes)`);
+        }
+        catch (error: unknown)
+        {
+            throw new BuildingSegmentFailed(segment.name, error);
+        }
     }
 }

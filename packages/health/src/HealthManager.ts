@@ -3,7 +3,11 @@ import type { ModuleImporter } from '@jitar/sourcing';
 
 import States from './definitions/States';
 import type { State } from './definitions/States';
+
 import InvalidHealthCheck from './errors/InvalidHealthCheck';
+import StartingHealthManagerFailed from './errors/StartingHealthManagerFailed';
+import StoppingHealthManagerFailed from './errors/StoppingHealthManagerFailed';
+
 import type HealthCheck from './interfaces/HealthCheck';
 
 type HealthCheckResult =
@@ -47,7 +51,7 @@ export default class HealthManager
         {
             this.#state = States.STOPPED;
 
-            throw error;
+            throw new StartingHealthManagerFailed(error);
         }
     }
 
@@ -70,7 +74,7 @@ export default class HealthManager
         {
             this.#state = States.STARTED;
 
-            throw error;
+            throw new StoppingHealthManagerFailed(error);
         }
     }
 

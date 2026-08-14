@@ -1,20 +1,8 @@
 
 export default class ModuleNotLoaded extends Error
 {
-    readonly #url: string;
-    readonly #reason?: string;
-
-    constructor(url: string, reason?: string)
+    constructor(url: string, cause: unknown)
     {
-        const postfix = reason !== undefined ? ` | ${reason}` : '';
-
-        super(`Module '${url}' could not be loaded${postfix}`);
-
-        this.#url = url;
-        this.#reason = reason;
+        super(`Module could not be loaded from '${url}'`, { cause });
     }
-
-    get url() { return this.#url; }
-
-    get reason() { return this.#reason; }
 }

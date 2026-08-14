@@ -4,8 +4,8 @@ import type { FileManager } from '@jitar/sourcing';
 import { Files } from '../../definitions';
 import { FileHelper } from '../../utils';
 
+import ReadingResourcesFailed from './errors/ReadingResourcesFailed';
 import ResourcesList from './models/ResourcesList';
-import FileNotLoaded from './errors/FileNotLoaded';
 import type ResourceFile from './types/File';
 
 export default class ResourceReader
@@ -42,9 +42,7 @@ export default class ResourceReader
         }
         catch (error: unknown)
         {
-            const message = error instanceof Error ? error.message : String(error);
-
-            throw new FileNotLoaded(filename, message);
+            throw new ReadingResourcesFailed(filename, error);
         }
     }
 

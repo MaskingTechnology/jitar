@@ -13,6 +13,9 @@ import Runtime from '../Runtime';
 import ContentTypes from './definitions/ContentTypes';
 import StatusCodes from './definitions/StatusCodes';
 
+import StartingServerFailed from './errors/StartingServerFailed';
+import StoppingServerFailed from './errors/StoppingServerFailed';
+
 import AddWorkerRequest from './types/AddWorkerRequest';
 import ProvideRequest from './types/ProvideRequest';
 import RemoveWorkerRequest from './types/RemoveWorkerRequest';
@@ -63,21 +66,35 @@ export default class Server extends Runtime
 
     async start(): Promise<void>
     {
-        await this.#setUp();
-
-        this.#logger.info(`Server started at ${this.#proxy.url}`);
-
-        if (this.#proxy.runner instanceof LocalWorker)
+        try
         {
-            this.#logger.info('RPC procedures:', this.#proxy.runner.getProcedureNames());
+            await this.#setUp();
+
+            this.#logger.info(`Server started at ${this.#proxy.url}`);
+
+            if (this.#proxy.runner instanceof LocalWorker)
+            {
+                this.#logger.info('RPC procedures:', this.#proxy.runner.getProcedureNames());
+            }
+        }
+        catch (error: unknown)
+        {
+            throw new StartingServerFailed(error);
         }
     }
 
     async stop(): Promise<void>
     {
-        await this.#tearDown();
+        try
+        {
+            await this.#tearDown();
 
-        this.#logger.info('Server stopped');
+            this.#logger.info('Server stopped');
+        }
+        catch (error: unknown)
+        {
+            throw new StoppingServerFailed(error);
+        }
     }
 
     async getHealth(): Promise<ServerResponse>
@@ -94,7 +111,7 @@ export default class Server extends Runtime
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error('Failed to get health:', message);
+            this.#logger.error(`Failed to get health (${message})`);
 
             return this.#respondError(error);
         }
@@ -114,7 +131,7 @@ export default class Server extends Runtime
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error('Failed to get health status:', message);
+            this.#logger.error(`Failed to get health status (${message})`);
 
             return this.#respondError(error);
         }
@@ -126,7 +143,7 @@ export default class Server extends Runtime
         {
             const file = await this.#proxy.provide(provideRequest.filename);
 
-            this.#logger.info('Provided file:', provideRequest.filename);
+            this.#logger.info(`Provided file:' ${provideRequest.filename}`);
 
             return this.#respondFile(file);
         }
@@ -134,7 +151,7 @@ export default class Server extends Runtime
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.warn('Failed to provide file:', message);
+            this.#logger.warn(`Failed to provide file: ${provideRequest.filename} (${message})`);
 
             return this.#respondError(error);
         }
@@ -149,7 +166,7 @@ export default class Server extends Runtime
             // Middleware is only executed on external requests.
             const response = await this.#middlewareManager.handle(request);
 
-            this.#logger.info('Ran request:', request.fqn);
+            this.#logger.info(`Ran request: ${request.fqn}`);
 
             return this.#respondResponse(response);
         }
@@ -157,7 +174,7 @@ export default class Server extends Runtime
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error('Failed run request:', message);
+            this.#logger.error(`Failed run request: ${runRequest.fqn} (${message})`);
 
             return this.#respondError(error);
         }
@@ -179,7 +196,7 @@ export default class Server extends Runtime
 
             const id = await gateway.addWorker(worker);
 
-            this.#logger.info('Added worker:', worker.url);
+            this.#logger.info(`Added worker: ${worker.url}`);
 
             return this.#respondSuccess({ id });
         }
@@ -187,7 +204,7 @@ export default class Server extends Runtime
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error('Failed to add worker:', message);
+            this.#logger.error(`Failed to add worker: ${addRequest.url} (${message})`);
 
             return this.#respondError(error);
         }
@@ -203,7 +220,7 @@ export default class Server extends Runtime
 
             await gateway.reportWorker(reportRequest.id, state);
 
-            this.#logger.debug('Reported worker:', reportRequest.id);
+            this.#logger.debug(`Reported worker: ${reportRequest.id}`);
 
             return this.#respondSuccess();
         }
@@ -211,7 +228,7 @@ export default class Server extends Runtime
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error('Failed to report worker:', message);
+            this.#logger.error(`Failed to report worker: ${reportRequest.id} (${message})`);
 
             return this.#respondError(error);
         }
@@ -225,7 +242,7 @@ export default class Server extends Runtime
 
             await gateway.removeWorker(removeRequest.id);
 
-            this.#logger.info('Removed worker:', removeRequest.id);
+            this.#logger.info(`Removed worker: ${removeRequest.id}`);
 
             return this.#respondSuccess();
         }
@@ -233,7 +250,7 @@ export default class Server extends Runtime
         {
             const message = error instanceof Error ? error.message : String(error);
 
-            this.#logger.error('Failed to remove worker:', message);
+            this.#logger.error(`Failed to remove worker: ${removeRequest.id} (${message})`);
 
             return this.#respondError(error);
         }
