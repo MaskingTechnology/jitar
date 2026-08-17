@@ -45,21 +45,18 @@ export default class Builder
 
                 return;
             }
-            
-            const segmentBuilds = moduleSegments.map(segment => this.#buildSegmentModule(module, resources, segment, segmentation));
 
-            const firstModuleSegment = moduleSegments[0];
-            const segmentModule = firstModuleSegment.getModule(module.filename);
+            const implementationSegments = moduleSegments.filter(segment => segment.getModule(module.filename)?.hasImplementations());
 
-            const remoteBuild = segmentModule?.hasImplementations()
+            const commonBuild = this.#buildCommonModule(module, resources, segmentation);
+
+            const segmentBuilds = implementationSegments.map(segment => this.#buildSegmentModule(module, resources, segment, segmentation));
+
+            const remoteBuild = implementationSegments.length > 0
                 ? this.#buildRemoteModule(module, moduleSegments)
                 : Promise.resolve();
 
-            await Promise.all([...segmentBuilds, remoteBuild]);
-
-            // The segment files will replace the original module file, so we can delete it.
-
-            this.#targetFileManager.delete(module.filename);
+            await Promise.all([commonBuild, ...segmentBuilds, remoteBuild]);
         }
         catch (error: unknown)
         {

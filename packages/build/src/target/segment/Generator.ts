@@ -2,7 +2,7 @@
 import { ESModule, ESFunction, ESIdentifierBinding, ESParameter, ESArrayBinding, ESObjectBinding, ESImport, ESModuleMember, ESVariable, ESExport, ESExpression } from '@jitar/analysis';
 import { VersionParser } from '@jitar/execution';
 
-import type { Segment } from '../../source';
+import type { Segment, SegmentMember } from '../../source';
 import { FileHelper } from '../../utils';
 
 const JITAR_MODULE = 'jitar';
@@ -48,36 +48,58 @@ export default class Generator
 
     #createModuleImports(): ESImport[]
     {
-        const imports = [];
-
-        // We only want to include modules that are defined in the segment configuration.
-        // The other modules contain classes and procedures that are re-exported by at least one segmented module.
-        // Adding them would cause a duplicate declaration error.
-
         const segmentName = this.#segment.name;
         const modules = this.#segment.getSegmentedModules();
 
+        const imports: ESImport[] = [];
+
         for (const module of modules)
         {
-            const filename = this.#fileHelper.addSubExtension(module.filename, segmentName);
-            const from = `./${filename}`;
-
+            const segmentedFilename = this.#fileHelper.addSubExtension(module.filename, segmentName);
+            const segmentedFrom = `./${segmentedFilename}`;
+            
             if (module.members.length === 0)
             {
-                const model = new ESImport([], from);
+                const model = new ESImport([], segmentedFrom);
 
                 imports.push(model);
                 
                 continue;
             }
-            
-            const members = module.members.map(member => new ESModuleMember(member.importKey, member.id));
-            const model = new ESImport(members, from);
 
-            imports.push(model);
+            const classes = module.classes;
+            const implementations = module.implementations;
+
+            if (classes.length > 0)
+            {
+                const commonFrom = `./${module.filename}`;
+                
+                const model = this.#createModuleImport(classes, commonFrom);
+
+                imports.push(model);
+            }
+            
+            if (implementations.length > 0)
+            {
+                const model = this.#createModuleImport(implementations, segmentedFrom);
+
+                imports.push(model);
+            }
         }
 
         return imports;
+    }
+
+    #createModuleImport(segmentMembers: SegmentMember[], from: string): ESImport
+    {
+        if (segmentMembers.length === 0)
+        {
+            return new ESImport([], from);
+        }
+        
+        const importMembers = segmentMembers.map(member => new ESModuleMember(member.importKey, member.id));
+
+        return new ESImport(importMembers, from);
     }
 
     #createExport(): ESExport

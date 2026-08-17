@@ -105,7 +105,7 @@ export default class LocalGenerator
             return [this.#rewriteToCommon(targetModuleFilename, item, [])];
         }
 
-        const { segmentKeys, remoteKeys, commonKeys } = this.#getModuleImportKeys(targetModuleFilename, item);
+        const { segmentKeys, remoteKeys, commonKeys } = this.#getModuleImplementationImportKeys(targetModuleFilename, item);
 
         const rewrites: T[] = [];
 
@@ -127,10 +127,10 @@ export default class LocalGenerator
         return rewrites;
     }
 
-    #getModuleImportKeys(targetModuleFilename: string, item: ESImport | ESExport): ModuleImportKeys
+    #getModuleImplementationImportKeys(targetModuleFilename: string, item: ESImport | ESExport): ModuleImportKeys
     {
-        const moduleSegmentKeys = this.#getSegmentImportKeys(targetModuleFilename, this.#segment);
-        const moduleRemoteKeys = this.#getRemoteImportKeys(targetModuleFilename, moduleSegmentKeys);
+        const moduleSegmentKeys = this.#getSegmentImplementationImportKeys(targetModuleFilename, this.#segment);
+        const moduleRemoteKeys = this.#getRemoteImplementationImportKeys(targetModuleFilename, moduleSegmentKeys);
 
         const segmentKeys = this.#filterMemberKeys(item, moduleSegmentKeys);
         const remoteKeys = this.#filterMemberKeys(item, moduleRemoteKeys);
@@ -139,7 +139,7 @@ export default class LocalGenerator
         return { segmentKeys, remoteKeys, commonKeys };
     }
 
-    #getSegmentImportKeys(targetModuleFilename: string, segment?: Segment): string[]
+    #getSegmentImplementationImportKeys(targetModuleFilename: string, segment?: Segment): string[]
     {
         if (segment === undefined)
         {
@@ -153,13 +153,15 @@ export default class LocalGenerator
             return [];
         }
         
-        return Object.keys(module.imports);
+        const keys = Object.keys(module.imports);
+
+        return keys.filter(key => module.importsImplementation(key));
     }
 
-    #getRemoteImportKeys(targetModuleFilename: string, segmentKeys: string[]): string[]
+    #getRemoteImplementationImportKeys(targetModuleFilename: string, segmentKeys: string[]): string[]
     {
         const segments = this.#segmentation.getSegments(targetModuleFilename).filter(segment => segment !== this.#segment);
-        const importKeys = segments.flatMap(segment => this.#getSegmentImportKeys(targetModuleFilename, segment));
+        const importKeys = segments.flatMap(segment => this.#getSegmentImplementationImportKeys(targetModuleFilename, segment));
         const uniqueKeys = [...new Set(importKeys)];
 
         return uniqueKeys.filter(key => segmentKeys.includes(key) === false);
