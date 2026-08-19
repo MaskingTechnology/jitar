@@ -135,7 +135,8 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                 {
                     const code = buildHelper
                         .generateSegmentCode(segmentName)
-                        .replaceAll("from './", `from '${paths.project.source!}/`);
+                        .replaceAll("from './", `from '${paths.project.source!}/`)
+                        .replaceAll(`.${segmentName}.js`, '.js');
 
                     return code;
                 }

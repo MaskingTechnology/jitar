@@ -3,30 +3,30 @@ export type FieldValidation = PrimitiveValidation | GroupValidation | ListValida
 
 type BaseValidation =
 {
-    required: boolean;
+    readonly required?: boolean;
 }
 
 export type PrimitiveValidation = BaseValidation &
 {
-    type: 'string' | 'integer' | 'real' | 'boolean' | 'url';
+    readonly type: 'string' | 'integer' | 'real' | 'boolean' | 'url';
 };
 
 export type GroupValidation = BaseValidation &
 {
-    type: 'group';
-    fields: Record<string, FieldValidation>;
+    readonly type: 'group';
+    readonly fields: Record<string, FieldValidation>;
 }
 
 export type ListValidation = BaseValidation &
 {
-    type: 'list';
-    items: PrimitiveValidation;
+    readonly type: 'list';
+    readonly items: PrimitiveValidation;
 };
 
 export type EnumValidation = BaseValidation &
 {
-    type: 'enum';
-    options: unknown[];
+    readonly type: 'enum';
+    readonly options: unknown[];
 };
 
 type ValidationScheme = Record<string, FieldValidation>;

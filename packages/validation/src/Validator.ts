@@ -173,7 +173,9 @@ export default class Validator
     {
         if (scheme.options.includes(value) === false)
         {
-            errors.push(`Field '${key}' is not one of: ${scheme.options.join(', ')}`);
+            const options = scheme.options.map(option => String(option));
+
+            errors.push(`Field '${key}' is not one of: ${options.join(', ')}`);
         }
     }
 
