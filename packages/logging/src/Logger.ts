@@ -116,7 +116,7 @@ export default class Logger
                 ? this.#interpretValue(object.cause, level + 1)
                 : undefined;
 
-            const cause = causeValue !== undefined ? `\n->${causeValue}` : '';
+            const cause = causeValue !== undefined ? `\n=>${causeValue}` : '';
 
             return `${object.message}${cause}`;
         }
