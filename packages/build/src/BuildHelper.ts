@@ -3,11 +3,12 @@ import type { RuntimeConfiguration } from '@jitar/configuration';
 import { Files, LocalFileManager } from '@jitar/sourcing';
 
 import { Application, ApplicationReader } from './source';
-import { LocalModuleGenerator, RemoteModuleGenerator } from './target';
+import { LocalModuleGenerator, RemoteModuleGenerator, SegmentGenerator } from './target';
 import { FileHelper } from './utils';
 
 import ApplicationNotRead from './errors/ApplicationNotRead';
 import ApplicationModuleNotFound from './errors/ApplicationModuleNotFound';
+import ApplicationSegmentNotFound from './errors/ApplicationSegmentNotFound';
 
 import ProjectFileManager from './ProjectFileManager';
 
@@ -89,6 +90,25 @@ export default class BuildHelper
 
         const generator = new LocalModuleGenerator(module, resources, segmentation);
             
+        return generator.generate();
+    }
+
+    generateSegmentCode(segmentName: string): string
+    {
+        if (this.#application === undefined)
+        {
+            throw new ApplicationNotRead();
+        }
+
+        const segment = this.#application.segmentation.getSegment(segmentName);
+
+        if (segment === undefined)
+        {
+            throw new ApplicationSegmentNotFound(segmentName);
+        }
+
+        const generator = new SegmentGenerator(segment);
+
         return generator.generate();
     }
 }
