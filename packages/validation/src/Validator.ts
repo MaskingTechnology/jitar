@@ -1,6 +1,6 @@
 
 import ValidationResult from './types/ValidationResult';
-import ValidationScheme, { FieldValidation, GroupValidation, ListValidation, PrimitiveValidation } from './types/ValidationScheme';
+import ValidationScheme, { EnumValidation, FieldValidation, GroupValidation, ListValidation, PrimitiveValidation } from './types/ValidationScheme';
 
 type Data = Record<string, unknown>;
 
@@ -92,6 +92,8 @@ export default class Validator
                 return this.#validateGroup(key, value, scheme, errors);
             case 'list':
                 return this.#validateList(key, value, scheme, errors);
+            case 'enum':
+                return this.#validateEnum(key, value, scheme, errors);
         }
     }
 
@@ -164,6 +166,14 @@ export default class Validator
             const itemValue = data[itemIndex];
 
             this.#validateValue(itemKey, itemValue, scheme.items, errors);
+        }
+    }
+
+    #validateEnum(key: string, value: unknown, scheme: EnumValidation, errors: string[]): void
+    {
+        if (scheme.options.includes(value) === false)
+        {
+            errors.push(`Field '${key}' is not one of: ${scheme.options.join(', ')}`);
         }
     }
 
