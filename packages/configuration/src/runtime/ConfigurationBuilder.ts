@@ -24,7 +24,7 @@ export default class ConfigurationBuilder
 
         if (validation.valid === false)
         {
-            throw new RuntimeConfigurationInvalid(validation);
+            throw new RuntimeConfigurationInvalid(filename, validation);
         }
 
         configuration.source ??= DefaultValues.SOURCE;
