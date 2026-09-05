@@ -7,3 +7,10 @@ For more information about Jitar:
 
 * [Visit our website](https://jitar.dev)
 * [Read the documentation](https://docs.jitar.dev).
+
+## CONTENT
+
+Two tools are provided:
+
+* **BuildHelper** - Generates and returns module and segment code on request.
+* **BuildManager** - Rewrites the whole application to the target folder.
