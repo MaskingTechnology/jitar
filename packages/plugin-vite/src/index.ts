@@ -146,7 +146,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
                     console.error('ERROR:', message);
                     
-                    return null;
+                    throw error;
                 }
             }
 
@@ -173,7 +173,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
 
                         console.error('ERROR:', message);
                         
-                        return null;
+                        throw error;
                     }
                 }
             }

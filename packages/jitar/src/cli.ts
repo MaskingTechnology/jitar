@@ -17,5 +17,5 @@ catch (error: unknown)
 {
     logger.fatal(error);
 
-    process.exit(1);
+    process.exitCode = 1;
 }
