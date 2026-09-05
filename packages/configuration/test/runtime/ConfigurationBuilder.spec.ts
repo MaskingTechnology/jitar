@@ -37,6 +37,6 @@ describe('runtime/ConfigurationBuilder', () =>
     {
         const promise = configurationBuilder.build(FILENAMES.INVALID);
 
-        await expect(promise).rejects.toEqual(new RuntimeConfigurationInvalid(VALIDATION_RESULT));
+        await expect(promise).rejects.toEqual(new RuntimeConfigurationInvalid(FILENAMES.INVALID, VALIDATION_RESULT));
     });
 });

@@ -10,7 +10,7 @@ const JITAR_BUNDLE_ID = 'jitar-bundle';
 const JITAR_BUNDLE_RESOLVE_ID = `\0${JITAR_BUNDLE_ID}`;
 
 const APP_SEGMENT_ID = 'segment:';
-const APP_SEGMENT_RESOLVE_ID = `\0${APP_SEGMENT_ID}`
+const APP_SEGMENT_RESOLVE_ID = `\0${APP_SEGMENT_ID}`;
 
 type PluginConfig = {
     projectRoot: string;
