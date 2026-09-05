@@ -1,8 +1,17 @@
-# v0.11.0
-[2026-06-17]
+# v0.11.3
+[2026-09-05]
+
+### Features
+
+* \[[817](https://github.com/MaskingTechnology/jitar/pull/817)] feat: improved error handling (#817) by Peter van Vliet
+* \[[812](https://github.com/MaskingTechnology/jitar/pull/812)] feat(analysis): multiple variable declarators (#812) by zahraamselim
+* \[[801](https://github.com/MaskingTechnology/jitar/pull/801)] feat: anonymous default exports (#801) by Peter van Vliet
+* \[[793](https://github.com/MaskingTechnology/jitar/pull/793)] feat(build): exclude files (#793) by Peter van Vliet
 
 ### Chores
 
+* \[[797](https://github.com/MaskingTechnology/jitar/pull/797)] chore(deps): july updates (#797) by Bas Meeuwissen
+* \[[791](https://github.com/MaskingTechnology/jitar/pull/791)] chore: release v0.11.1 (#791) by Bas Meeuwissen
 * \[[789](https://github.com/MaskingTechnology/jitar/pull/789)] chore: update ci/cd configuration (#789) by Bas Meeuwissen
 * \[[788](https://github.com/MaskingTechnology/jitar/pull/788)] chore(plugins): Vite 8 compatibility (#788) by Peter van Vliet
 * \[[785](https://github.com/MaskingTechnology/jitar/pull/785)] chore: updated starter templates (#785) by Bas Meeuwissen
