@@ -29,11 +29,11 @@ export const INPUT =
 
 export const OUTPUT =
 {
-    DEBUG_CATEGORY: /\[DEBUG\]\[.*\] debug/,
-    INFO_CATEGORY: /\[INFO\]\[.*\] info/,
-    WARN_CATEGORY: /\[WARN\]\[.*\] warn/,
-    ERROR_CATEGORY: /\[ERROR\]\[.*\] error/,
-    FATAL_CATEGORY: /\[FATAL\]\[.*\] fatal/,
+    DEBUG_CATEGORY: /\[.*\]\[DEBUG\] debug/,
+    INFO_CATEGORY: /\[.*\]\[INFO\] info/,
+    WARN_CATEGORY: /\[.*\]\[WARN\] warn/,
+    ERROR_CATEGORY: /\[.*\]\[ERROR\] error/,
+    FATAL_CATEGORY: /\[.*\]\[FATAL\] fatal/,
 
     STRING: /\[.*\]\[.*\] value/,
     NUMBER: /\[.*\]\[.*\] 1/,
@@ -45,6 +45,6 @@ export const OUTPUT =
     NULL: /\[.*\]\[.*\] null/,
     NESTED_OBJECT: /\[.*\]\[.*\] {"key":{"key":{"key":"value"}}}/,
     NESTED_ARRAY: /\[.*\]\[.*\] \[\n {2}value,\n {2}\[\n {4}value,\n {4}\[\n {6}value\n {4}\]\n {2}\]\n\]/,
-    ERROR_WITH_STACKTRACE: /\[.*\]\[.*\] Stacktrace/,
+    ERROR_WITH_STACKTRACE: /\[.*\]\[.*\] error with stacktrace/,
     ERROR_WITHOUT_STACKTRACE: /\[.*\]\[.*\] error without stacktrace/
 };

@@ -73,7 +73,7 @@ export default class Logger
         const moment = new Date().toISOString();
         const message = messages.map(value => this.#interpretValue(value)).join(' ');
 
-        return `[${logLevel}][${moment}] ${message}`;
+        return `[${moment}][${logLevel}] ${message}`;
     }
 
     #interpretValue(value: unknown, level = 0): string
@@ -112,7 +112,13 @@ export default class Logger
 
         if (object instanceof Error)
         {
-            return object.stack ?? object.message;
+            const causeValue = object.cause !== undefined
+                ? this.#interpretValue(object.cause, level + 1)
+                : undefined;
+
+            const cause = causeValue !== undefined ? `\n=>${causeValue}` : '';
+
+            return `${object.message}${cause}`;
         }
 
         return JSON.stringify(object);

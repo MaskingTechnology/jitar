@@ -16,6 +16,6 @@ describe('server/ConfigurationBuilder', () =>
     {
         const promise = configurationBuilder.build(FILENAMES.INVALID_CONFIGURATION);
 
-        await expect(promise).rejects.toEqual(new ServerConfigurationInvalid(VALIDATION_RESULT));
+        await expect(promise).rejects.toEqual(new ServerConfigurationInvalid(FILENAMES.INVALID_CONFIGURATION, VALIDATION_RESULT));
     });
 });

@@ -2,10 +2,10 @@
 import { Parser } from '@jitar/analysis';
 import type { FileManager } from '@jitar/sourcing';
 
-import FileNotLoaded from './errors/FileNotLoaded';
-
+import ReadingModuleFailed from './errors/ReadingModuleFailed';
 import Module from './models/Module';
 import Repository from './models/Repository';
+
 import LocationRewriter from './LocationRewriter';
 
 export default class Reader
@@ -44,9 +44,7 @@ export default class Reader
         }
         catch (error: unknown)
         {
-            const message = error instanceof Error ? error.message : String(error);
-
-            throw new FileNotLoaded(filename, message);
+            throw new ReadingModuleFailed(filename, error);
         }
     }
 

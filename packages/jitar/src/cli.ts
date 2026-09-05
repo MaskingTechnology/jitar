@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 
+import process from 'node:process';
+
 import { Cli } from '@jitar/cli';
 import { Logger } from '@jitar/logging';
+
+const logger = new Logger();
 
 try
 {
@@ -11,8 +15,7 @@ try
 }
 catch (error: unknown)
 {
-    const logger = new Logger();
-    const message = error instanceof Error ? error.message : String(error);
+    logger.fatal(error);
 
-    logger.fatal(message);
+    process.exitCode = 1;
 }

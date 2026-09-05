@@ -8,21 +8,20 @@ For more information about Jitar:
 * [Visit our website](https://jitar.dev)
 * [Read the documentation](https://docs.jitar.dev).
 
-## Known limitations
+## TOOLS
 
-1. Declaration of multiple values is not supported
+Two tools are provided:
 
-```ts
-// Supported
-const a = 1;
-export { a }
+* **Reflector** - Extensive reflection (modules, classes, functions, objects and instances)
+* **Parser** - Code parsing (modules, statements, imports, exports, variables, functions and classes)
 
-// Unsupported (will be supported)
-const b = 2, c = 3;
-export { b, c }
-```
+Both tools return a shared based on the ECMAScript specification, but tailored to the Jitar runtime.
 
-2. Generator as object properties are not supported
+## KNOWN LIMITATIONS
+
+The limitations below belong to the parser.
+
+1. Generator as object properties are not supported
 
 ```ts
 // Supported
@@ -45,7 +44,7 @@ class Bar
 }
 ```
 
-3. Destructuring not fully supported
+2. Destructuring not fully supported
 
 ```ts
 // Supported

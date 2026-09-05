@@ -4,6 +4,8 @@ import type { FileManager } from '@jitar/sourcing';
 import type { Application, Module, Segment, Segmentation, ResourcesList } from '../../source';
 import { FileHelper } from '../../utils';
 
+import BuildingModuleFailed from './errors/BuildingModuleFailed';
+
 import LocalGenerator from './LocalGenerator';
 import RemoteGenerator from './RemoteGenerator';
 
@@ -30,30 +32,36 @@ export default class Builder
 
     async #buildModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>
     {
-        const moduleSegments = segmentation.getSegments(module.filename);
-
-        if (moduleSegments.length === 0)
+        try
         {
-            // For unsegmented modules we only need to build the common module.
-            // This will overwrite the original module file.
+            const moduleSegments = segmentation.getSegments(module.filename);
 
-            return this.#buildCommonModule(module, resources, segmentation);
+            if (moduleSegments.length === 0)
+            {
+                // For unsegmented modules we only need to build the common module.
+                // This will overwrite the original module file.
+
+                await this.#buildCommonModule(module, resources, segmentation);
+
+                return;
+            }
+
+            const implementationSegments = moduleSegments.filter(segment => segment.getModule(module.filename)?.hasImplementations());
+
+            const commonBuild = this.#buildCommonModule(module, resources, segmentation);
+
+            const segmentBuilds = implementationSegments.map(segment => this.#buildSegmentModule(module, resources, segment, segmentation));
+
+            const remoteBuild = implementationSegments.length > 0
+                ? this.#buildRemoteModule(module, moduleSegments)
+                : Promise.resolve();
+
+            await Promise.all([commonBuild, ...segmentBuilds, remoteBuild]);
         }
-        
-        const segmentBuilds = moduleSegments.map(segment => this.#buildSegmentModule(module, resources, segment, segmentation));
-
-        const firstModuleSegment = moduleSegments[0];
-        const segmentModule = firstModuleSegment.getModule(module.filename);
-
-        const remoteBuild = segmentModule?.hasImplementations()
-            ? this.#buildRemoteModule(module, moduleSegments)
-            : Promise.resolve();
-
-        await Promise.all([...segmentBuilds, remoteBuild]);
-
-        // The segment files will replace the original module file, so we can delete it.
-
-        this.#targetFileManager.delete(module.filename);
+        catch (error: unknown)
+        {
+            throw new BuildingModuleFailed(module.filename, error);
+        }
     }
 
     async #buildCommonModule(module: Module, resources: ResourcesList, segmentation: Segmentation): Promise<void>

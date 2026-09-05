@@ -9,40 +9,8 @@ const JITAR_CLIENT_ID = 'jitar/client';
 const JITAR_BUNDLE_ID = 'jitar-bundle';
 const JITAR_BUNDLE_RESOLVE_ID = `\0${JITAR_BUNDLE_ID}`;
 
-function assureExtension(filename: string)
-{
-    if (filename.endsWith('.js'))
-    {
-        return filename;
-    }
-
-    return `${filename}.js`;
-}
-
-function createJitarBundle(middlewares: string[], targetPath: string)
-{
-    const middlewareFiles = middlewares.map(name => assureExtension(path.join(targetPath, name)));
-
-    const jitarImport = `import { ClientBuilder, HttpRemoteBuilder } from "${JITAR_CLIENT_ID}";`;
-    const middlewareImports = middlewareFiles.map((filename, index) => `import { default as $M${index} } from "${filename}";`).join('');
-    const imports = [jitarImport, middlewareImports].join('\n');
-
-    const remoteUrl = 'const remoteUrl = document.location.origin;';
-    const segmentsArray = `const segments = [];`;
-    const middlewareItems = middlewares.map((_, index) => `$M${index}`).join(', ');
-    const middlewareArray = `const middleware = [${middlewareItems}];`;
-    const declarations = [remoteUrl, segmentsArray, middlewareArray].join('\n');
-
-    const remoteBuilder = 'const remoteBuilder = new HttpRemoteBuilder();';
-    const clientBuilder = 'const clientBuilder = new ClientBuilder(remoteBuilder);';
-    const build = 'const client = clientBuilder.build({remoteUrl, segments, middleware});';
-    const start = 'client.start();';
-    const client = [remoteBuilder, clientBuilder, build, start].join('\n');
-
-    const exports = `export * from "${JITAR_CLIENT_ID}";`;
-
-    return [imports, declarations, client, exports].join('\n');
-}
+const APP_SEGMENT_ID = 'segment:';
+const APP_SEGMENT_RESOLVE_ID = `\0${APP_SEGMENT_ID}`;
 
 type PluginConfig = {
     projectRoot: string;
@@ -142,6 +110,11 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                 return JITAR_BUNDLE_RESOLVE_ID;
             }
 
+            if (id.startsWith(APP_SEGMENT_ID))
+            {
+                return `\0${id}`;
+            }
+
             return null;
         },
 
@@ -151,7 +124,19 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             {
                 jitarImported = true;
 
-                return createJitarBundle(middlewares, paths.vite.output!);
+                return createJitarBundle(segments, middlewares, paths.vite.output!);
+            }
+
+            if (id.startsWith(APP_SEGMENT_RESOLVE_ID))
+            {
+                const segmentName = id.substring(APP_SEGMENT_RESOLVE_ID.length);
+
+                const code = buildHelper
+                    .generateSegmentCode(segmentName)
+                    .replaceAll("from './", `from '${paths.project.source!}/`)
+                    .replaceAll(`.${segmentName}.js`, '.js');
+
+                return code;
             }
 
             if (id.startsWith(paths.project.source!))
@@ -167,18 +152,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                 
                 if (relativeId.endsWith('.js'))
                 {
-                    try
-                    {
-                        return buildHelper.generateModuleCode(relativeId, segments);
-                    }
-                    catch (error)
-                    {
-                        const message = error instanceof Error ? error.message : String(error);
-
-                        console.error('ERROR:', message);
-                        
-                        return null;
-                    }
+                    return buildHelper.generateModuleCode(relativeId, segments);
                 }
             }
 
@@ -202,4 +176,41 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
         }
 
     } as PluginOption;
+}
+
+function assureExtension(filename: string)
+{
+    if (filename.endsWith('.js'))
+    {
+        return filename;
+    }
+
+    return `${filename}.js`;
+}
+
+function createJitarBundle(segments: string[], middlewares: string[], targetPath: string)
+{
+    const middlewareFiles = middlewares.map(name => assureExtension(path.join(targetPath, name)));
+
+    const jitarImport = `import { ClientBuilder, HttpRemoteBuilder } from "${JITAR_CLIENT_ID}";`;
+    const segmentImports = segments.map((name, index) => `import { default as $S${index} } from "segment:${name}";`).join('');
+    const middlewareImports = middlewareFiles.map((filename, index) => `import { default as $M${index} } from "${filename}";`).join('');
+    const imports = [jitarImport, segmentImports, middlewareImports].join('\n');
+
+    const remoteUrl = 'const remoteUrl = document.location.origin;';
+    const segmentItems = segments.map((_, index) => `$S${index}`).join(', ');
+    const segmentArray = `const segments = [${segmentItems}];`;
+    const middlewareItems = middlewares.map((_, index) => `$M${index}`).join(', ');
+    const middlewareArray = `const middleware = [${middlewareItems}];`;
+    const declarations = [remoteUrl, segmentArray, middlewareArray].join('\n');
+
+    const remoteBuilder = 'const remoteBuilder = new HttpRemoteBuilder();';
+    const clientBuilder = 'const clientBuilder = new ClientBuilder(remoteBuilder);';
+    const build = 'const client = clientBuilder.build({remoteUrl, segments, middleware});';
+    const start = 'client.start();';
+    const client = [remoteBuilder, clientBuilder, build, start].join('\n');
+
+    const exports = `export * from "${JITAR_CLIENT_ID}";`;
+
+    return [imports, declarations, client, exports].join('\n');
 }

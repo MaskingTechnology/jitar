@@ -5,6 +5,9 @@ import type { MiddlewareManager } from '@jitar/middleware';
 import type { ScheduleManager } from '@jitar/scheduling';
 import { LocalWorker, RemoteGateway, Remote, RequestPool } from '@jitar/services';
 
+import StartingClientFailed from './errors/StartingClientFailed';
+import StoppingClientFailed from './errors/StoppingClientFailed';
+
 import ProcedureRunner from '../ProcedureRunner';
 import Runtime from '../Runtime';
 
@@ -47,16 +50,30 @@ export default class Client extends Runtime
 
     async start(): Promise<void>
     {
-        await this.#setUp();
+        try
+        {
+            await this.#setUp();
 
-        this.#requestPool.start();
+            this.#requestPool.start();
+        }
+        catch (error: unknown)
+        {
+            throw new StartingClientFailed(error);
+        }
     }
 
     async stop(): Promise<void>
     {
-        this.#requestPool.stop();
+        try
+        {
+            this.#requestPool.stop();
 
-        await this.#tearDown();
+            await this.#tearDown();
+        }
+        catch (error: unknown)
+        {
+            throw new StoppingClientFailed(error);
+        }
     }
 
     getTrustKey(): string | undefined

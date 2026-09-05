@@ -7,6 +7,8 @@ import RunModes from './definitions/RunModes';
 import ImplementationNotFound from './errors/ImplementationNotFound';
 import InvalidSegment from './errors/InvalidSegment';
 import ProcedureNotFound from './errors/ProcedureNotFound';
+import StartingExecutionManagerFailed from './errors/StartingExecutionManagerFailed';
+import StoppingExecutionManagerFailed from './errors/StoppingExecutionManagerFailed';
 
 import type Runner from './interfaces/Runner';
 
@@ -39,12 +41,26 @@ export default class ExecutionManager implements Runner
 
     async start(): Promise<void>
     {
-        return this.#loadSegments();
+        try
+        {
+            await this.#loadSegments();
+        }
+        catch (error: unknown)
+        {
+            throw new StartingExecutionManagerFailed(error);
+        }
     }
 
     async stop(): Promise<void>
     {
-        return this.#clearSegments();
+        try
+        {
+            return this.#clearSegments();
+        }
+        catch (error: unknown)
+        {
+            throw new StoppingExecutionManagerFailed(error);
+        }
     }
 
     async loadSegment(filename: string): Promise<void>

@@ -51,6 +51,14 @@ export const VALIDATION_SCHEMES: Record<string, ValidationScheme> =
         }
     },
 
+    ENUM: {
+        enum: {
+            type: 'enum',
+            required: true,
+            options: ['one', 'two', 'three']
+        }
+    },
+
     COMPLEX: {
         complex: {
             type: 'group',

@@ -10,6 +10,7 @@ import FunctionNotAsync from './errors/FunctionNotAsync';
 import InvalidFilename from './errors/InvalidFilename';
 import FileNotLoaded from './errors/FileNotLoaded';
 import InvalidModuleExport from './errors/InvalidModuleExport';
+import ReadingSegmentFailed from './errors/ReadingSegmentFailed';
 
 import Segmentation from './models/Segmentation';
 import Segment from './models/Segment';
@@ -57,15 +58,22 @@ export default class SegmentReader
 
     async #read(filename: string): Promise<Segment>
     {
-        const definition = await this.#loadSegmentDefinition(filename);
-        const name = this.#extractSegmentName(filename);
+        try
+        {
+            const definition = await this.#loadSegmentDefinition(filename);
+            const name = this.#extractSegmentName(filename);
 
-        const segment = new Segment(name);
+            const segment = new Segment(name);
 
-        this.#registerModules(segment, definition);
-        this.#registerMembers(segment);
+            this.#registerModules(segment, definition);
+            this.#registerMembers(segment);
 
-        return segment;
+            return segment;
+        }
+        catch (error: unknown)
+        {
+            throw new ReadingSegmentFailed(filename, error);
+        }
     }
 
     #extractSegmentName(filename: string): string

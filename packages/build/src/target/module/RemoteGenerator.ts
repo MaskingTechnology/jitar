@@ -38,7 +38,7 @@ export default class RemoteGenerator
     #getImplementations(): Implementation[]
     {
         const segmentModules = this.#segments.map(segment => segment.getModule(this.#module.filename));
-        const implementations = segmentModules.flatMap(segmentModule => segmentModule!.getImplementations());
+        const implementations = segmentModules.flatMap(segmentModule => segmentModule!.implementations);
 
         // Implementation can be duplicated across segments
         // We need to ensure that each implementation is unique

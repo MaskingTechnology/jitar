@@ -7,6 +7,8 @@ import { ApplicationReader } from './source';
 import { ApplicationBuilder } from './target';
 import { FileHelper } from './utils';
 
+import BuildFailed from './errors/BuildFailed';
+
 import ProjectFileManager from './ProjectFileManager';
 
 export default class BuildManager
@@ -43,16 +45,23 @@ export default class BuildManager
 
     async build(): Promise<void>
     {
-        const sourceFileManager = this.#fileManager.source;
-        const resourceFileManager = this.#fileManager.resource;
-        const segmentFileManager = this.#fileManager.segment;
+        try
+        {
+            const sourceFileManager = this.#fileManager.source;
+            const resourceFileManager = this.#fileManager.resource;
+            const segmentFileManager = this.#fileManager.segment;
 
-        const moduleFiles = await sourceFileManager.filterWithIgnores(Files.MODULE_PATTERN, this.#fileManager.sourceIgnores);
-        const resourceFiles = await resourceFileManager.filter(Files.RESOURCE_PATTERN);
-        const segmentFiles = await segmentFileManager.filter(Files.SEGMENT_PATTERN);
+            const moduleFiles = await sourceFileManager.filterWithIgnores(Files.MODULE_PATTERN, this.#fileManager.sourceIgnores);
+            const resourceFiles = await resourceFileManager.filter(Files.RESOURCE_PATTERN);
+            const segmentFiles = await segmentFileManager.filter(Files.SEGMENT_PATTERN);
 
-        const applicationModel = await this.#applicationReader.read(moduleFiles, resourceFiles, segmentFiles);
+            const applicationModel = await this.#applicationReader.read(moduleFiles, resourceFiles, segmentFiles);
 
-        return this.#applicationBuilder.build(applicationModel);
+            await this.#applicationBuilder.build(applicationModel);
+        }
+        catch (error: unknown)
+        {
+            throw new BuildFailed(error);
+        }
     }
 }

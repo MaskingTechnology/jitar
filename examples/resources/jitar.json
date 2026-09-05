@@ -1,6 +1,6 @@
 {
-    "source": "./dist",
-    "target": "./build",
+    "source": "./build",
+    "target": "./dist",
     "segments": "./segments",
     "resources": "./resources"
 }

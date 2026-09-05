@@ -24,7 +24,7 @@ export default class ConfigurationBuilder
 
         if (validation.valid === false)
         {
-            throw new ServerConfigurationInvalid(validation);
+            throw new ServerConfigurationInvalid(filename, validation);
         }
 
         configuration.meta =

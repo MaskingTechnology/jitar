@@ -29,6 +29,10 @@ export default class Module
 
     get members() { return this.#members; }
 
+    get classes() { return this.#members.filter(member => member instanceof Class); }
+
+    get implementations() { return this.#members.filter(member => member instanceof Implementation); }
+
     get segmented() { return this.#segmented; }
     
     hasClasses(): boolean
@@ -36,19 +40,14 @@ export default class Module
         return this.#members.some(member => member instanceof Class);
     }
 
-    getClasses(): Class[]
-    {
-        return this.#members.filter(member => member instanceof Class);
-    }
-
     hasImplementations(): boolean
     {
         return this.#members.some(member => member instanceof Implementation);
     }
 
-    getImplementations(): Implementation[]
+    importsImplementation(importKey: string): boolean
     {
-        return this.#members.filter(member => member instanceof Implementation);
+        return this.implementations.find(implementation => implementation.importKey === importKey) !== undefined;
     }
 
     addMember(members: Member): void

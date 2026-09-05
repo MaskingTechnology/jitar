@@ -25,9 +25,7 @@ export default class ImportManager implements ModuleImporter
         }
         catch (error: unknown)
         {
-            const message = error instanceof Error ? error.message : String(error);
-
-            throw new ModuleNotLoaded(location, message);
+            throw new ModuleNotLoaded(location, error);
         }
     }
 }

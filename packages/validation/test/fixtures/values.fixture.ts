@@ -18,6 +18,8 @@ export const VALUES =
         INVALID_LIST: `Field 'list' is not a list`,
         INVALID_LIST_ITEM: `Field 'list.1' is not a string`,
         MISSING_LIST: `Field 'list' is required`,
+        INVALID_ENUM_ITEM: `Field 'enum' is not one of: one, two, three`,
+        MISSING_ENUM: `Field 'enum' is required`,
         EXTRA_FIELD: `Unknown field 'extra'`,
     },
 };

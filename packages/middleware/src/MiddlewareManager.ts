@@ -4,7 +4,11 @@ import type { ModuleImporter } from '@jitar/sourcing';
 
 import States from './definitions/States';
 import type { State } from './definitions/States';
+
 import InvalidMiddleware from './errors/InvalidMiddleware';
+import StartingMiddlewareManagerFailed from './errors/StartingMiddlewareManagerFailed';
+import StoppingMiddlewareManagerFailed from './errors/StoppingMiddlewareManagerFailed';
+
 import type Middleware from './interfaces/Middleware';
 import type NextHandler from './types/NextHandler';
 
@@ -43,7 +47,7 @@ export default class MiddlewareManager
         {
             this.#state = States.STOPPED;
 
-            throw error;
+            throw new StartingMiddlewareManagerFailed(error);
         }
     }
 
@@ -66,7 +70,7 @@ export default class MiddlewareManager
         {
             this.#state = States.STARTED;
 
-            throw error;
+            throw new StoppingMiddlewareManagerFailed(error);
         }
     }
 

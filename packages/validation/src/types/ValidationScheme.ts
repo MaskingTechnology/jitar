@@ -1,24 +1,32 @@
 
-export type FieldValidation = PrimitiveValidation | GroupValidation | ListValidation;
+export type FieldValidation = PrimitiveValidation | GroupValidation | ListValidation | EnumValidation;
 
-export type PrimitiveValidation =
+type BaseValidation =
 {
-    type: 'string' | 'integer' | 'real' | 'boolean' | 'url';
-    required?: boolean;
-};
-
-export type GroupValidation = 
-{
-    type: 'group';
-    required?: boolean;
-    fields: Record<string, FieldValidation>;
+    readonly required?: boolean;
 }
 
-export type ListValidation =
+export type PrimitiveValidation = BaseValidation &
 {
-    type: 'list';
-    required?: boolean;
-    items: PrimitiveValidation;
+    readonly type: 'string' | 'integer' | 'real' | 'boolean' | 'url';
+};
+
+export type GroupValidation = BaseValidation &
+{
+    readonly type: 'group';
+    readonly fields: Record<string, FieldValidation>;
+}
+
+export type ListValidation = BaseValidation &
+{
+    readonly type: 'list';
+    readonly items: PrimitiveValidation;
+};
+
+export type EnumValidation = BaseValidation &
+{
+    readonly type: 'enum';
+    readonly options: unknown[];
 };
 
 type ValidationScheme = Record<string, FieldValidation>;
