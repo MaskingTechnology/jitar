@@ -91,5 +91,6 @@ We welcome contributions to Jitar. Please read our [contributing guidelines](CON
 
 A special thanks to everyone who has contributed to Jitar so far!
 
+- [zahraamselim](https://github.com/zahraamselim)
 - [Yusuf-YENICERI](https://github.com/Yusuf-YENICERI)
 - [Tawakal](https://github.com/tawakal)
