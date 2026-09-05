@@ -131,23 +131,12 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
             {
                 const segmentName = id.substring(APP_SEGMENT_RESOLVE_ID.length);
 
-                try
-                {
-                    const code = buildHelper
-                        .generateSegmentCode(segmentName)
-                        .replaceAll("from './", `from '${paths.project.source!}/`)
-                        .replaceAll(`.${segmentName}.js`, '.js');
+                const code = buildHelper
+                    .generateSegmentCode(segmentName)
+                    .replaceAll("from './", `from '${paths.project.source!}/`)
+                    .replaceAll(`.${segmentName}.js`, '.js');
 
-                    return code;
-                }
-                catch (error)
-                {
-                    const message = error instanceof Error ? error.message : String(error);
-
-                    console.error('ERROR:', message);
-                    
-                    throw error;
-                }
+                return code;
             }
 
             if (id.startsWith(paths.project.source!))
@@ -163,18 +152,7 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                 
                 if (relativeId.endsWith('.js'))
                 {
-                    try
-                    {
-                        return buildHelper.generateModuleCode(relativeId, segments);
-                    }
-                    catch (error)
-                    {
-                        const message = error instanceof Error ? error.message : String(error);
-
-                        console.error('ERROR:', message);
-                        
-                        throw error;
-                    }
+                    return buildHelper.generateModuleCode(relativeId, segments);
                 }
             }
 
