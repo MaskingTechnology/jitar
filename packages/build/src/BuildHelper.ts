@@ -51,14 +51,20 @@ export default class BuildHelper
         this.#application = await this.#applicationReader.read(moduleFiles, resourceFiles, segmentFiles);
     }
 
+    includesModule(filename: string): boolean
+    {
+        const application = this.#getApplication();
+        const repository = application.repository;
+
+        const module = repository.get(filename);
+
+        return module !== undefined;
+    }
+
     generateModuleCode(filename: string, segmentNames: string[] = []): string
     {
-        if (this.#application === undefined)
-        {
-            throw new ApplicationNotRead();
-        }
-
-        const repository = this.#application.repository;
+        const application = this.#getApplication();
+        const repository = application.repository;
 
         const module = repository.get(filename);
 
@@ -67,8 +73,8 @@ export default class BuildHelper
             throw new ApplicationModuleNotFound(filename);
         }
 
-        const resources = this.#application.resources;
-        const segmentation = this.#application.segmentation;
+        const resources = application.resources;
+        const segmentation = application.segmentation;
 
         const segments = segmentation.getSegments(filename);
 
@@ -95,12 +101,9 @@ export default class BuildHelper
 
     generateSegmentCode(segmentName: string): string
     {
-        if (this.#application === undefined)
-        {
-            throw new ApplicationNotRead();
-        }
+        const application = this.#getApplication();
 
-        const segment = this.#application.segmentation.getSegment(segmentName);
+        const segment = application.segmentation.getSegment(segmentName);
 
         if (segment === undefined)
         {
@@ -110,5 +113,15 @@ export default class BuildHelper
         const generator = new SegmentGenerator(segment);
 
         return generator.generate();
+    }
+
+    #getApplication(): Application
+    {
+        if (this.#application === undefined)
+        {
+            throw new ApplicationNotRead();
+        }
+
+        return this.#application;
     }
 }

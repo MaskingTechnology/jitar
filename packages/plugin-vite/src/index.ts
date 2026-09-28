@@ -150,10 +150,17 @@ export default function viteJitar(pluginConfig: PluginConfig): PluginOption
                     .replace(paths.project.source!, '')
                     .replace('.ts', '.js');
                 
-                if (relativeId.endsWith('.js'))
+                if (relativeId.endsWith('.js') === false)
                 {
-                    return buildHelper.generateModuleCode(relativeId, segments);
+                    return null;
                 }
+
+                if (buildHelper.includesModule(relativeId) === false)
+                {
+                    return null;
+                }
+                
+                return buildHelper.generateModuleCode(relativeId, segments);
             }
 
             return null;
