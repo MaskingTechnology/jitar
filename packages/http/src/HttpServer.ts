@@ -47,7 +47,7 @@ export default class HttpServer
     #setupExpress(bodyLimit: number): void
     {
         this.#app.use(express.json({ limit: bodyLimit }));
-        this.#app.use(express.urlencoded({ extended: true }));
+        this.#app.use(express.urlencoded({ extended: false }));
         this.#app.use(this.#addDefaultHeaders.bind(this));
 
         this.#app.disable(HeaderKeys.POWERED_BY);
