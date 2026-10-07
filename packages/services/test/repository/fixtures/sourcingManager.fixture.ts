@@ -1,6 +1,6 @@
 
 import { NotImplemented } from '@jitar/errors';
-import { File, FileNotFound, LocalSourcingManager } from '@jitar/sourcing';
+import { File, FileNotFound, LocalFileManager, LocalSourcingManager } from '@jitar/sourcing';
 
 import { FILENAMES } from './filenames.fixture';
 import { FILES } from './files.fixtures';
@@ -25,6 +25,7 @@ class DummySourcingManager extends LocalSourcingManager
         {
             case FILENAMES.HTML: return FILES.HTML;
             case FILENAMES.PNG: return FILES.PNG;
+            case FILENAMES.DIR_INDEX: return FILES.HTML;
             default: throw new FileNotFound(filename);
         }
     }

@@ -14,11 +14,11 @@ type Configuration =
     healthManager: HealthManager;
     sourcingManager: SourcingManager;
     indexFilename?: string;
-    serveIndexOnNotFound?: boolean;
+    spaFallback?: boolean;
 };
 
 const DEFAULT_INDEX_FILENAME = 'index.html';
-const DEFAULT_SERVE_INDEX_ON_NOT_FOUND = false;
+const DEFAULT_SPA_FALLBACK = false;
 
 export default class LocalRepository implements Repository
 {
@@ -28,7 +28,7 @@ export default class LocalRepository implements Repository
     readonly #assets: Set<string>;
 
     readonly #indexFilename: string;
-    readonly #serveIndexOnNotFound: boolean;
+    readonly #spaFallback: boolean;
 
     readonly #stateManager = new StateManager();
 
@@ -40,7 +40,7 @@ export default class LocalRepository implements Repository
         this.#assets = configuration.assets;
 
         this.#indexFilename = configuration.indexFilename ?? DEFAULT_INDEX_FILENAME;
-        this.#serveIndexOnNotFound = configuration.serveIndexOnNotFound ?? DEFAULT_SERVE_INDEX_ON_NOT_FOUND;
+        this.#spaFallback = configuration.spaFallback ?? DEFAULT_SPA_FALLBACK;
     }
 
     get url() { return this.#url; }
@@ -84,32 +84,27 @@ export default class LocalRepository implements Repository
 
     async provide(filename: string): Promise<File>
     {
-        if (this.#mustProvideIndex(filename))
+        if (this.#assets.has(filename))
         {
-            return this.provide(this.#indexFilename);
+            return this.#sourcingManager.read(filename);
         }
 
-        if (this.#assets.has(filename) === false)
+        // SPA config always returns the fallback
+        if (this.#spaFallback)
         {
-            throw new FileNotFound(filename);
+            return this.#sourcingManager.read(this.#indexFilename);
         }
 
-        return this.#sourcingManager.read(filename);
-    }
+        // Static config checks for directory index
+        const indexFilename = filename.endsWith('/')
+            ? `${filename}${this.#indexFilename}`
+            : `${filename}/${this.#indexFilename}`;
 
-    #mustProvideIndex(filename: string): boolean
-    {
-        if (filename === '')
+        if (this.#assets.has(indexFilename))
         {
-            return true;
+            return this.#sourcingManager.read(indexFilename);
         }
 
-        if (filename === this.#indexFilename)
-        {
-            return false;
-        }
-
-        return this.#serveIndexOnNotFound
-            && this.#assets.has(filename) === false;
+        throw new FileNotFound(filename);
     }
 }
