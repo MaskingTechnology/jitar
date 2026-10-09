@@ -114,9 +114,9 @@ export default class RuntimeBuilder
 
         const assets = await this.#buildAssetSet(sourcingManager, configuration.assets);
         const indexFilename = configuration.indexFilename;
-        const spaFallback = configuration.spaFallback;
+        const fallback = configuration.fallback;
 
-        return new LocalRepository({ url, sourcingManager, assets, indexFilename, spaFallback, healthManager });
+        return new LocalRepository({ url, sourcingManager, assets, indexFilename, fallback, healthManager });
     }
 
     #buildRemoteRepository(url: string): RemoteRepository

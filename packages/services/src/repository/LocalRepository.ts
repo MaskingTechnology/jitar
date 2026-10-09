@@ -14,11 +14,10 @@ type Configuration =
     healthManager: HealthManager;
     sourcingManager: SourcingManager;
     indexFilename?: string;
-    spaFallback?: boolean;
+    fallback?: string;
 };
 
 const DEFAULT_INDEX_FILENAME = 'index.html';
-const DEFAULT_SPA_FALLBACK = false;
 
 export default class LocalRepository implements Repository
 {
@@ -28,7 +27,7 @@ export default class LocalRepository implements Repository
     readonly #assets: Set<string>;
 
     readonly #indexFilename: string;
-    readonly #spaFallback: boolean;
+    readonly #fallback?: string;
 
     readonly #stateManager = new StateManager();
 
@@ -40,7 +39,7 @@ export default class LocalRepository implements Repository
         this.#assets = configuration.assets;
 
         this.#indexFilename = configuration.indexFilename ?? DEFAULT_INDEX_FILENAME;
-        this.#spaFallback = configuration.spaFallback ?? DEFAULT_SPA_FALLBACK;
+        this.#fallback = configuration.fallback;
     }
 
     get url() { return this.#url; }
@@ -89,13 +88,6 @@ export default class LocalRepository implements Repository
             return this.#sourcingManager.read(filename);
         }
 
-        // SPA config always returns the fallback
-        if (this.#spaFallback)
-        {
-            return this.#sourcingManager.read(this.#indexFilename);
-        }
-
-        // Static config checks for directory index
         const indexFilename = filename.endsWith('/')
             ? `${filename}${this.#indexFilename}`
             : `${filename}/${this.#indexFilename}`;
@@ -103,6 +95,12 @@ export default class LocalRepository implements Repository
         if (this.#assets.has(indexFilename))
         {
             return this.#sourcingManager.read(indexFilename);
+        }
+
+
+        if (this.#fallback !== undefined && this.#assets.has(this.#fallback))
+        {
+            return this.#sourcingManager.read(this.#fallback);
         }
 
         throw new FileNotFound(filename);

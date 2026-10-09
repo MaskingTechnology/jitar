@@ -7,10 +7,10 @@ import { sourcingManager } from './sourcingManager.fixture';
 const url = 'http://localhost:80';
 const assets = new Set(['index.html', 'logo.png', 'dir/index.html']);
 const indexFilename = 'index.html';
-const spaFallback = true;
+const fallback = 'index.html';
 
 const fileRepository = new LocalRepository({ url, assets, healthManager, sourcingManager });
-const webRepository = new LocalRepository({ url, assets, healthManager, sourcingManager, indexFilename, spaFallback });
+const webRepository = new LocalRepository({ url, assets, healthManager, sourcingManager, indexFilename, fallback });
 
 export const LOCAL_REPOSITORIES =
 {
