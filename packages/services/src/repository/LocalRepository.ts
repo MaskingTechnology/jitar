@@ -88,15 +88,12 @@ export default class LocalRepository implements Repository
             return this.#sourcingManager.read(filename);
         }
 
-        const indexFilename = filename.endsWith('/')
-            ? `${filename}${this.#indexFilename}`
-            : `${filename}/${this.#indexFilename}`;
+        const indexFilename = this.#resolveIndexFileName(filename);
 
         if (this.#assets.has(indexFilename))
         {
             return this.#sourcingManager.read(indexFilename);
         }
-
 
         if (this.#fallback !== undefined && this.#assets.has(this.#fallback))
         {
@@ -104,5 +101,20 @@ export default class LocalRepository implements Repository
         }
 
         throw new FileNotFound(filename);
+    }
+
+    #resolveIndexFileName(filename: string)
+    {
+        if (filename === '' || filename === '/')
+        {
+            return this.#indexFilename;
+        }
+
+        if (filename.endsWith('/'))
+        {
+            return `${filename}${this.#indexFilename}`;
+        }
+
+        return `${filename}/${this.#indexFilename}`;
     }
 }
