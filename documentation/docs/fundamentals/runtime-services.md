@@ -179,7 +179,7 @@ To protect the access to the application files, assets need to be whitelisted. T
 
 The following configuration properties are available:
 
-* index - file to serve when accessed by a web browser (optional, default `index.html`).
+* directoryIndex - file to serve when accessed by a web browser (optional, default `index.html`).
 * fallback - when defined, the `fallback` will be served if the requested file is not found (optional, default `undefined`).
 * assetRoot - the root folder of the assets relative to the target folder (optional, default the target folder).
 * assets - list of whitelisted assets (optional, default `undefined`).
@@ -191,7 +191,7 @@ A full configuration example looks like this.
     "url": "http://repository.example.com:3000",
     "repository":
     {
-        "index": "index.html",
+        "directoryIndex": "index.html",
         "fallback": "fallback.html",
         "assetRoot": "./app",
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"]
@@ -248,7 +248,7 @@ Combines the repository and worker core services into a single instance.
 
 The standalone service has the same configuration properties as the repository service:
 
-* index - file to serve when accessed by a web browser (optional, default `index.html`).
+* directoryIndex - file to serve when accessed by a web browser (optional, default `index.html`).
 * fallback - when defined, the `fallback` will be served if the requested file is not found (optional, default `undefined`).
 * assetRoot - the root folder of the assets relative to the target folder (optional, default the target folder)
 * assets - list of whitelisted assets (optional, default `undefined`).
@@ -262,7 +262,7 @@ A full configuration example looks like this:
     "url": "http://standalone.example.com:3000",
     "standalone":
     {
-        "index": "index.html",
+        "directoryIndex": "index.html",
         "fallback": "index.html",
         "assetRoot": "./app",
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"],
