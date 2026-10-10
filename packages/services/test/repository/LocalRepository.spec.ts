@@ -26,6 +26,13 @@ describe('repository/LocalRepository', () =>
             await expect(promise).rejects.toEqual(new FileNotFound(FILENAMES.TXT));
         });
 
+        it('should provide a directory index file', async () =>
+        {
+            const promise = fileRepository.provide(FILENAMES.DIR);
+
+            await expect(promise).resolves.toEqual(FILES.HTML);
+        });
+
         it('should provide index file when file not found', async () =>
         {
             const promise = webRepository.provide(FILENAMES.TXT);

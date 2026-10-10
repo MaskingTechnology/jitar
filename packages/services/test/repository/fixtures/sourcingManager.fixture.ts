@@ -25,6 +25,7 @@ class DummySourcingManager extends LocalSourcingManager
         {
             case FILENAMES.HTML: return FILES.HTML;
             case FILENAMES.PNG: return FILES.PNG;
+            case FILENAMES.DIR_INDEX: return FILES.HTML;
             default: throw new FileNotFound(filename);
         }
     }

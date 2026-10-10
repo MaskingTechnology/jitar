@@ -3,8 +3,8 @@ import type { ValidationScheme } from '@jitar/validation';
 
 type RepositoryConfiguration =
 {
-    indexFilename?: string;
-    serveIndexOnNotFound?: boolean;
+    directoryIndex?: string;
+    fallback?: string;
     assetRoot?: string;
     assets?: string[];
 };
@@ -13,8 +13,8 @@ export default RepositoryConfiguration;
 
 const validationScheme: ValidationScheme =
 {
-    indexFilename: { type: 'string', required: false },
-    serveIndexOnNotFound: { type: 'boolean', required: false },
+    directoryIndex: { type: 'string', required: false },
+    fallback: { type: 'string', required: false },
     assetRoot: { type: 'string', required: false },
     assets: { type: 'list', required: false, items: { type: 'string' } }
 } as const;

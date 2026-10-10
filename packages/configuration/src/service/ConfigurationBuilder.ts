@@ -3,8 +3,8 @@ import type { Validator } from '@jitar/validation';
 
 import type { ConfigurationReader } from '../utils';
 
-import ServerConfiguration, { validationScheme } from './definitions/ServerConfiguration';
-import ServerConfigurationInvalid from './errors/ServerConfigurationInvalid';
+import ServiceConfiguration, { validationScheme } from './definitions/ServiceConfiguration';
+import ServiceConfigurationInvalid from './errors/ServiceConfigurationInvalid';
 
 export default class ConfigurationBuilder
 {
@@ -17,14 +17,14 @@ export default class ConfigurationBuilder
         this.#validator = validator;
     }
 
-    async build(filename: string): Promise<ServerConfiguration>
+    async build(filename: string): Promise<ServiceConfiguration>
     {
-        const configuration = await this.#reader.read(filename) as ServerConfiguration;
+        const configuration = await this.#reader.read(filename) as ServiceConfiguration;
         const validation = this.#validator.validate(configuration, validationScheme);
 
         if (validation.valid === false)
         {
-            throw new ServerConfigurationInvalid(filename, validation);
+            throw new ServiceConfigurationInvalid(filename, validation);
         }
 
         configuration.meta =

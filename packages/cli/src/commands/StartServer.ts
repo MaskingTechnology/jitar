@@ -1,5 +1,5 @@
 
-import { ConfigurationManager, RuntimeConfiguration, ServerConfiguration } from '@jitar/configuration';
+import { ConfigurationManager, RuntimeConfiguration, ServiceConfiguration } from '@jitar/configuration';
 import { HttpRemoteBuilder, HttpServer } from '@jitar/http';
 import { LogLevel, LogLevelParser } from '@jitar/logging';
 import { ServerBuilder } from '@jitar/runtime';
@@ -50,22 +50,22 @@ export default class StartServer implements Command
         await configurationManager.configureEnvironment(environmentFile);
 
         const runtimeConfiguration = await configurationManager.getRuntimeConfiguration(runtimeConfigFile);
-        const serverConfiguration = await configurationManager.getServerConfiguration(serviceConfigFile);
+        const serviceConfiguration = await configurationManager.getServiceConfiguration(serviceConfigFile);
 
-        const httpServer = await this.#buildServer(runtimeConfiguration, serverConfiguration, bodyLimit, logLevel);
+        const httpServer = await this.#buildServer(runtimeConfiguration, serviceConfiguration, bodyLimit, logLevel);
 
         return this.#runServer(httpServer);
     }
 
-    async #buildServer(runtimeConfiguration: RuntimeConfiguration, serverConfiguration: ServerConfiguration, bodyLimit?: number, logLevel?: LogLevel): Promise<HttpServer>
+    async #buildServer(runtimeConfiguration: RuntimeConfiguration, serviceConfiguration: ServiceConfiguration, bodyLimit?: number, logLevel?: LogLevel): Promise<HttpServer>
     {
-        const [, , port] = serverConfiguration.url.split(':');
+        const [, , port] = serviceConfiguration.url.split(':');
 
         const sourcingManager = new LocalSourcingManager(runtimeConfiguration.target);
         const remoteBuilder = new HttpRemoteBuilder();
         const serverBuilder = new ServerBuilder(sourcingManager, remoteBuilder);
 
-        const server = await serverBuilder.build(serverConfiguration, logLevel);
+        const server = await serverBuilder.build(serviceConfiguration, logLevel);
 
         return new HttpServer(server, port, bodyLimit);
     }

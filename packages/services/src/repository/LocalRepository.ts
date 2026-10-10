@@ -13,12 +13,11 @@ type Configuration =
     assets: Set<string>;
     healthManager: HealthManager;
     sourcingManager: SourcingManager;
-    indexFilename?: string;
-    serveIndexOnNotFound?: boolean;
+    directoryIndex?: string;
+    fallback?: string;
 };
 
-const DEFAULT_INDEX_FILENAME = 'index.html';
-const DEFAULT_SERVE_INDEX_ON_NOT_FOUND = false;
+const DEFAULT_DIRECTORY_INDEX = 'index.html';
 
 export default class LocalRepository implements Repository
 {
@@ -27,8 +26,8 @@ export default class LocalRepository implements Repository
     readonly #sourcingManager: SourcingManager;
     readonly #assets: Set<string>;
 
-    readonly #indexFilename: string;
-    readonly #serveIndexOnNotFound: boolean;
+    readonly #directoryIndex: string;
+    readonly #fallback?: string;
 
     readonly #stateManager = new StateManager();
 
@@ -39,8 +38,8 @@ export default class LocalRepository implements Repository
         this.#sourcingManager = configuration.sourcingManager;
         this.#assets = configuration.assets;
 
-        this.#indexFilename = configuration.indexFilename ?? DEFAULT_INDEX_FILENAME;
-        this.#serveIndexOnNotFound = configuration.serveIndexOnNotFound ?? DEFAULT_SERVE_INDEX_ON_NOT_FOUND;
+        this.#directoryIndex = configuration.directoryIndex ?? DEFAULT_DIRECTORY_INDEX;
+        this.#fallback = configuration.fallback;
     }
 
     get url() { return this.#url; }
@@ -84,32 +83,38 @@ export default class LocalRepository implements Repository
 
     async provide(filename: string): Promise<File>
     {
-        if (this.#mustProvideIndex(filename))
+        if (this.#assets.has(filename))
         {
-            return this.provide(this.#indexFilename);
+            return this.#sourcingManager.read(filename);
         }
 
-        if (this.#assets.has(filename) === false)
+        const index = this.#resolveDirectoryIndex(filename);
+
+        if (this.#assets.has(index))
         {
-            throw new FileNotFound(filename);
+            return this.#sourcingManager.read(index);
         }
 
-        return this.#sourcingManager.read(filename);
+        if (this.#fallback !== undefined && this.#assets.has(this.#fallback))
+        {
+            return this.#sourcingManager.read(this.#fallback);
+        }
+
+        throw new FileNotFound(filename);
     }
 
-    #mustProvideIndex(filename: string): boolean
+    #resolveDirectoryIndex(directory: string)
     {
-        if (filename === '')
+        if (directory === '' || directory === '/')
         {
-            return true;
+            return this.#directoryIndex;
         }
 
-        if (filename === this.#indexFilename)
+        if (directory.endsWith('/'))
         {
-            return false;
+            return `${directory}${this.#directoryIndex}`;
         }
 
-        return this.#serveIndexOnNotFound
-            && this.#assets.has(filename) === false;
+        return `${directory}/${this.#directoryIndex}`;
     }
 }

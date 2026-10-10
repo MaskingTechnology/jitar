@@ -20,7 +20,7 @@ Assets like images, documents, etc. can be placed in any location inside the sou
     "url": "http://repository.example.com:3000",
     "repository":
     {
-        "index": "index.html",
+        "directoryIndex": "index.html",
         "assets": ["*.html", "*.js", "*.css", "assets/**/*"]
     }
 }
