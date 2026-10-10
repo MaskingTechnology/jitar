@@ -143,7 +143,11 @@ export default class Server extends Runtime
         {
             const file = await this.#proxy.provide(provideRequest.filename);
 
-            this.#logger.info(`Provided file: ${provideRequest.filename}`);
+            const fileInfo = file.location !== provideRequest.filename
+                ? `${provideRequest.filename} => ${file.location}`
+                : provideRequest.filename;
+
+            this.#logger.info(`Provided file: ${fileInfo}`);
 
             return this.#respondFile(file);
         }
