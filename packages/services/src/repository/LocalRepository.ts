@@ -13,11 +13,11 @@ type Configuration =
     assets: Set<string>;
     healthManager: HealthManager;
     sourcingManager: SourcingManager;
-    indexFilename?: string;
+    directoryIndex?: string;
     fallback?: string;
 };
 
-const DEFAULT_INDEX_FILENAME = 'index.html';
+const DEFAULT_DIRECTORY_INDEX = 'index.html';
 
 export default class LocalRepository implements Repository
 {
@@ -26,7 +26,7 @@ export default class LocalRepository implements Repository
     readonly #sourcingManager: SourcingManager;
     readonly #assets: Set<string>;
 
-    readonly #indexFilename: string;
+    readonly #directoryIndex: string;
     readonly #fallback?: string;
 
     readonly #stateManager = new StateManager();
@@ -38,7 +38,7 @@ export default class LocalRepository implements Repository
         this.#sourcingManager = configuration.sourcingManager;
         this.#assets = configuration.assets;
 
-        this.#indexFilename = configuration.indexFilename ?? DEFAULT_INDEX_FILENAME;
+        this.#directoryIndex = configuration.directoryIndex ?? DEFAULT_DIRECTORY_INDEX;
         this.#fallback = configuration.fallback;
     }
 
@@ -88,11 +88,11 @@ export default class LocalRepository implements Repository
             return this.#sourcingManager.read(filename);
         }
 
-        const indexFilename = this.#resolveIndexFileName(filename);
+        const index = this.#resolveDirectoryIndex(filename);
 
-        if (this.#assets.has(indexFilename))
+        if (this.#assets.has(index))
         {
-            return this.#sourcingManager.read(indexFilename);
+            return this.#sourcingManager.read(index);
         }
 
         if (this.#fallback !== undefined && this.#assets.has(this.#fallback))
@@ -103,18 +103,18 @@ export default class LocalRepository implements Repository
         throw new FileNotFound(filename);
     }
 
-    #resolveIndexFileName(filename: string)
+    #resolveDirectoryIndex(directory: string)
     {
-        if (filename === '' || filename === '/')
+        if (directory === '' || directory === '/')
         {
-            return this.#indexFilename;
+            return this.#directoryIndex;
         }
 
-        if (filename.endsWith('/'))
+        if (directory.endsWith('/'))
         {
-            return `${filename}${this.#indexFilename}`;
+            return `${directory}${this.#directoryIndex}`;
         }
 
-        return `${filename}/${this.#indexFilename}`;
+        return `${directory}/${this.#directoryIndex}`;
     }
 }

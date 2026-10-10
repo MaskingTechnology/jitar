@@ -4,15 +4,15 @@ import type { GatewayConfiguration, ProxyConfiguration, RemoteWorkerConfiguratio
 const fallback = 'index.html';
 const assets = ['index.html', 'favicon.ico'];
 const segments = ['segment'];
-const indexFilename = 'index.html';
+const directoryIndex = 'index.html';
 const trustKey = 'trust-key';
 const gateway = 'https://gateway';
 const repository = 'https://repository';
 
 const gatewayConfiguration: GatewayConfiguration = { monitorInterval: 5000, trustKey } as const;
 const proxyConfiguration: ProxyConfiguration = { gateway, repository } as const;
-const repositoryConfiguration: RepositoryConfiguration = { indexFilename, fallback, assets } as const;
-const standaloneConfiguration: StandaloneConfiguration = { segments, indexFilename, fallback, assets } as const;
+const repositoryConfiguration: RepositoryConfiguration = { directoryIndex, fallback, assets } as const;
+const standaloneConfiguration: StandaloneConfiguration = { segments, directoryIndex, fallback, assets } as const;
 const workerConfiguration: WorkerConfiguration = { gateway, segments, trustKey } as const;
 const remoteWorkerConfiguration: RemoteWorkerConfiguration = { unavailableThreshold: 6000, stoppedThreshold: 18000 } as const;
 
