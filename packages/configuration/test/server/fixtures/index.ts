@@ -1,7 +1,7 @@
 
 import { Validator } from '@jitar/validation';
 
-import { ServerConfigurationBuilder, ServerConfigurationInvalid } from '../../../src/server';
+import { ServiceConfigurationBuilder, ServiceConfigurationInvalid } from '../../../src/service';
 import { ConfigurationReader } from '../../../src/utils';
 
 import { FileManager } from '../../fixtures';
@@ -15,6 +15,6 @@ const fileManager = new FileManager(FILES);
 const configurationReader = new ConfigurationReader(fileManager);
 const validator = new Validator();
 
-const configurationBuilder = new ServerConfigurationBuilder(configurationReader, validator);
+const configurationBuilder = new ServiceConfigurationBuilder(configurationReader, validator);
 
-export { configurationBuilder, CONFIGURATIONS, ServerConfigurationInvalid, VALIDATION_RESULT, FILENAMES };
+export { configurationBuilder, CONFIGURATIONS, ServiceConfigurationInvalid, VALIDATION_RESULT, FILENAMES };

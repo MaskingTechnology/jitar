@@ -1,5 +1,5 @@
 
-import { GatewayConfiguration, ProxyConfiguration, RepositoryConfiguration, ServerConfiguration, StandaloneConfiguration, WorkerConfiguration } from '@jitar/configuration';
+import { GatewayConfiguration, ProxyConfiguration, RepositoryConfiguration, ServiceConfiguration, StandaloneConfiguration, WorkerConfiguration } from '@jitar/configuration';
 import { ExecutionManager } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
 import { Logger, LogLevel } from '@jitar/logging';
@@ -23,7 +23,7 @@ export default class RuntimeBuilder
         this.#remoteBuilder = remoteBuilder;
     }
 
-    async build(configuration: ServerConfiguration, logLevel?: LogLevel): Promise<Server>
+    async build(configuration: ServiceConfiguration, logLevel?: LogLevel): Promise<Server>
     {
         const setUp = configuration.setUp;
         const tearDown = configuration.tearDown;
@@ -44,7 +44,7 @@ export default class RuntimeBuilder
         return new Server({ proxy, sourcingManager, resourceManager, middlewareManager, remoteWorkerBuilder, logger });
     }
 
-    #buildService(configuration: ServerConfiguration, healthManager: HealthManager, scheduleManager: ScheduleManager): Promise<LocalProxy>
+    #buildService(configuration: ServiceConfiguration, healthManager: HealthManager, scheduleManager: ScheduleManager): Promise<LocalProxy>
     {
         if (configuration.gateway !== undefined) return this.#buildGatewayProxy(configuration.url, configuration.gateway, healthManager, scheduleManager);
         if (configuration.worker !== undefined) return this.#buildWorkerProxy(configuration.url, configuration.worker, healthManager, scheduleManager);
@@ -176,7 +176,7 @@ export default class RuntimeBuilder
         return new ScheduleManager(logger);
     }
 
-    #buildRemoteWorkerBuilder(configuration: ServerConfiguration): RemoteWorkerBuilder
+    #buildRemoteWorkerBuilder(configuration: ServiceConfiguration): RemoteWorkerBuilder
     {
         const unavailableThreshold = configuration.remoteWorker?.unavailableThreshold;
         const stoppedThreshold = configuration.remoteWorker?.stoppedThreshold;

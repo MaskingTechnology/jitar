@@ -4,7 +4,7 @@ import { LocalFileManager } from '@jitar/sourcing';
 
 import { EnvironmentConfigurator } from './environment';
 import { RuntimeConfiguration, RuntimeConfigurationBuilder } from './runtime';
-import { ServerConfiguration, ServerConfigurationBuilder } from './server';
+import { ServiceConfiguration, ServiceConfigurationBuilder } from './service';
 import { ConfigurationReader } from './utils';
 
 const DEFAULT_ROOT_PATH = './';
@@ -14,7 +14,7 @@ export default class ConfigurationManager
 {
     readonly #environmentConfigurator: EnvironmentConfigurator;
     readonly #runtimeConfigurationBuilder: RuntimeConfigurationBuilder;
-    readonly #serverConfigurationBuilder : ServerConfigurationBuilder;
+    readonly #serviceConfigurationBuilder: ServiceConfigurationBuilder;
 
     constructor(rootPath: string = DEFAULT_ROOT_PATH)
     {
@@ -24,7 +24,7 @@ export default class ConfigurationManager
 
         this.#environmentConfigurator = new EnvironmentConfigurator(fileManager);
         this.#runtimeConfigurationBuilder = new RuntimeConfigurationBuilder(reader, validator);
-        this.#serverConfigurationBuilder = new ServerConfigurationBuilder(reader, validator);
+        this.#serviceConfigurationBuilder = new ServiceConfigurationBuilder(reader, validator);
     }
 
     configureEnvironment(filename: string = DEFAULT_ENVIRONMENT_FILE): Promise<void>
@@ -37,8 +37,8 @@ export default class ConfigurationManager
         return this.#runtimeConfigurationBuilder.build(filename);
     }
 
-    getServerConfiguration(filename: string): Promise<ServerConfiguration>
+    getServiceConfiguration(filename: string): Promise<ServiceConfiguration>
     {
-        return this.#serverConfigurationBuilder.build(filename);
+        return this.#serviceConfigurationBuilder.build(filename);
     }
 }

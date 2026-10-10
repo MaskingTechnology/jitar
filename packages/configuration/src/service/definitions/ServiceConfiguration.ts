@@ -8,7 +8,7 @@ import StandaloneConfiguration, { validationScheme as standaloneValidationScheme
 import WorkerConfiguration, { validationScheme as workerValidationScheme } from './WorkerConfiguration';
 import RemoteWorkerConfiguration, { validationScheme as remoteWorkerValidationScheme } from './RemoteWorkerConfiguration';
 
-type ServerConfiguration =
+type ServiceConfiguration =
 {
     url: string;
     setUp?: string[];
@@ -30,7 +30,7 @@ type ServerConfiguration =
     }
 };
 
-export default ServerConfiguration;
+export default ServiceConfiguration;
 
 const validationScheme: ValidationScheme =
 {

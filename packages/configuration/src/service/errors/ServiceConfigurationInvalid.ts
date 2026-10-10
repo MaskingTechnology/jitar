@@ -3,7 +3,7 @@ import type { ValidationResult } from '@jitar/validation';
 
 const BREAK = '\n => ';
 
-export default class ServerConfigurationInvalid extends Error
+export default class ServiceConfigurationInvalid extends Error
 {
     public constructor(filename: string, validation: ValidationResult)
     {
