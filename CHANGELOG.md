@@ -1,5 +1,20 @@
+# v0.12.0
+[2026-10-10]
+
+### Features
+
+* \[[836](https://github.com/MaskingTechnology/jitar/pull/836)] feat(services): configurable directory index (#836) by Bas Meeuwissen
+* \[[822](https://github.com/MaskingTechnology/jitar/pull/822)] feat(plugins): ignoring files in Vite plugin (#822) by Peter van Vliet
+
+### Chores
+
+* \[[826](https://github.com/MaskingTechnology/jitar/pull/826)] chore(deps): october updates (#826) by Bas Meeuwissen
+* \[[828](https://github.com/MaskingTechnology/jitar/pull/828)] npm: bump brace-expansion from 5.0.9 to 5.0.12 (#828) by dependabot[bot]
+* \[[824](https://github.com/MaskingTechnology/jitar/pull/824)] chore(http): no extended url encoding (#824) by Peter van Vliet
+* \[[820](https://github.com/MaskingTechnology/jitar/pull/820)] chore: updated readme (#820) by Bas Meeuwissen
+
 # v0.11.3
-[2026-09-05]
+[2026-10-10]
 
 ### Features
 
@@ -10,7 +25,14 @@
 
 ### Chores
 
+* \[[819](https://github.com/MaskingTechnology/jitar/pull/819)] chore: release 0.11.3 (#819) by Bas Meeuwissen
 * \[[797](https://github.com/MaskingTechnology/jitar/pull/797)] chore(deps): july updates (#797) by Bas Meeuwissen
+
+# v0.11.1
+[2026-10-10]
+
+### Chores
+
 * \[[791](https://github.com/MaskingTechnology/jitar/pull/791)] chore: release v0.11.1 (#791) by Bas Meeuwissen
 * \[[789](https://github.com/MaskingTechnology/jitar/pull/789)] chore: update ci/cd configuration (#789) by Bas Meeuwissen
 * \[[788](https://github.com/MaskingTechnology/jitar/pull/788)] chore(plugins): Vite 8 compatibility (#788) by Peter van Vliet
