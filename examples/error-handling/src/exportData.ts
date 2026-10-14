@@ -4,21 +4,21 @@ import getData from './getData';
 
 export default async function exportData(): Promise<string>
 {
-    // try
-    // {
+    try
+    {
         const data = await getData();
 
         // export data to data warehouse
 
         return 'Success';
-    // }
-    // catch (error: unknown)
-    // {
-    //     if (error instanceof DatabaseError)
-    //     {
-    //         console.log(`Database error occurred`);
-    //     }
+    }
+    catch (error: unknown)
+    {
+        if (error instanceof DatabaseError)
+        {
+            console.log(`Database error occurred`);
+        }
 
-    //     return 'Failed, see log for details';
-    // }
+        return 'Failed, see log for details';
+    }
 }
