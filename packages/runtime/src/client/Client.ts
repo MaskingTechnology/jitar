@@ -3,6 +3,7 @@ import type { ExecutionManager, Request, Response } from '@jitar/execution';
 import type { HealthManager } from '@jitar/health';
 import type { MiddlewareManager } from '@jitar/middleware';
 import type { ScheduleManager } from '@jitar/scheduling';
+import type { Serializer } from '@jitar/serialization';
 import { LocalWorker, RemoteGateway, Remote, RequestPool } from '@jitar/services';
 
 import StartingClientFailed from './errors/StartingClientFailed';
@@ -18,6 +19,7 @@ type Configuration =
     healthManager: HealthManager;
     middlewareManager: MiddlewareManager;
     executionManager: ExecutionManager;
+    serializer: Serializer;
     scheduleManager: ScheduleManager;
 };
 
@@ -40,6 +42,7 @@ export default class Client extends Runtime
             }),
             healthManager: configuration.healthManager,
             executionManager: configuration.executionManager,
+            serializer: configuration.serializer,
             scheduleManager: configuration.scheduleManager
         });
 

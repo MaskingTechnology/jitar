@@ -10,6 +10,8 @@ export default class ImplementationNotFound extends NotFound
     {
         super(`No implementation found for procedure '${fqn}' with version '${version}'`);
 
+        this.name = 'ImplementationNotFound';
+        
         this.#fqn = fqn;
         this.#version = version;
     }

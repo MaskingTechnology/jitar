@@ -23,6 +23,7 @@
     "@jitar/logging": "*",
     "@jitar/middleware": "*",
     "@jitar/scheduling": "*",
+    "@jitar/serialization": "*",
     "@jitar/services": "*",
     "@jitar/sourcing": "*"
   }

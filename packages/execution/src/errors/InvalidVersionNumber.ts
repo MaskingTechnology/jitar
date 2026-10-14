@@ -9,6 +9,8 @@ export default class InvalidVersionNumber extends BadRequest
     {
         super(`Invalid version number '${number}'`);
 
+        this.name = 'InvalidVersionNumber';
+        
         this.#number = number;
     }
 

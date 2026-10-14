@@ -3,9 +3,13 @@ export { AccessLevels, AccessLevel } from './definitions/AccessLevel';
 export { default as RunModes, RunMode } from './definitions/RunModes';
 export { default as StatusCodes } from './definitions/StatusCodes';
 
+export { default as ImplementationNotFound } from './errors/ImplementationNotFound';
+export { default as InvalidParameterValue } from './errors/InvalidParameterValue';
 export { default as InvalidVersionNumber } from './errors/InvalidVersionNumber';
-export { default as ProcedureNotFound } from './errors/ProcedureNotFound';
+export { default as MissingParameterValue } from './errors/MissingParameterValue';
 export { default as ProcedureNotAccessible } from './errors/ProcedureNotAccessible';
+export { default as ProcedureNotFound } from './errors/ProcedureNotFound';
+export { default as UnknownParameter } from './errors/UnknownParameter';
 
 export { default as Runner } from './interfaces/Runner';
 

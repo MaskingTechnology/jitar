@@ -8,6 +8,8 @@ export default class ProcedureNotFound extends NotFound
     constructor(fqn: string)
     {
         super(`Procedure '${fqn}' not found`);
+        
+        this.name = 'ProcedureNotFound';
 
         this.#fqn = fqn;
     }

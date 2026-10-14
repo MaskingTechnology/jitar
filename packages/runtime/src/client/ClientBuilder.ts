@@ -5,7 +5,11 @@ import { HealthManager } from '@jitar/health';
 import { Logger, LogLevels, LogLevel } from '@jitar/logging';
 import { Middleware, MiddlewareManager } from '@jitar/middleware';
 import { ScheduleManager } from '@jitar/scheduling';
+import { Serializer, SerializerBuilder } from '@jitar/serialization';
 import { RemoteSourcingManager } from '@jitar/sourcing';
+
+import ExecutionClassResolver from '../ExecutionClassResolver';
+import jitarSegment from '../jitarSegment';
 
 import Client from './Client';
 
@@ -39,9 +43,10 @@ export default class ClientBuilder
         const healthManager = this.#buildHealthManager(sourcingManager);
         const middlewareManager = this.#buildMiddlewareManager(sourcingManager, middleware);
         const executionManager = this.#buildExecutionManager(sourcingManager, segments);
+        const serializer = this.#buildSerializer(executionManager);
         const scheduleManager = this.#buildScheduleManager(logger);
 
-        return new Client({ remoteUrl, remote, healthManager, middlewareManager, executionManager, scheduleManager });
+        return new Client({ remoteUrl, remote, healthManager, middlewareManager, executionManager, serializer, scheduleManager });
     }
 
     #buildHealthManager(sourcingManager: RemoteSourcingManager): HealthManager
@@ -64,7 +69,16 @@ export default class ClientBuilder
 
         segments.forEach(segment => manager.addSegment(segment));
 
+        manager.addSegment(jitarSegment);
+
         return manager;
+    }
+
+    #buildSerializer(executionManager: ExecutionManager): Serializer
+    {
+        const classResolver = new ExecutionClassResolver(executionManager);
+
+        return SerializerBuilder.build(classResolver);
     }
 
     #buildScheduleManager(logger: Logger): ScheduleManager
