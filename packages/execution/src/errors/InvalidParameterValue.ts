@@ -9,6 +9,8 @@ export default class InvalidParameterValue extends BadRequest
     {
         super(`Invalid value for parameter '${parameterName}'`);
 
+        this.name = 'InvalidParameterValue';
+        
         this.#parameterName = parameterName;
     }
 

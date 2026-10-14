@@ -5,8 +5,12 @@ import { HealthManager } from '@jitar/health';
 import { Logger, LogLevel } from '@jitar/logging';
 import { MiddlewareManager } from '@jitar/middleware';
 import { ScheduleManager } from '@jitar/scheduling';
+import { Serializer, SerializerBuilder } from '@jitar/serialization';
 import { DummyProvider, DummyRunner, LocalGateway, LocalRepository, LocalWorker, LocalProxy, RemoteBuilder, RemoteWorkerBuilder, RemoteGateway, RemoteRepository, WorkerManager } from '@jitar/services';
 import { SourcingManager } from '@jitar/sourcing';
+
+import ExecutionClassResolver from '../ExecutionClassResolver';
+import jitarSegment from '../jitarSegment';
 
 import UnknownServiceConfigured from './errors/UnknownServiceConfigured';
 import ResourceManager from './ResourceManager';
@@ -102,8 +106,9 @@ export default class RuntimeBuilder
         const reportInterval = configuration.reportInterval;
         const registerAtGateway = gateway !== undefined; // if we have a gateway, the worker needs to register itself at it.
         const executionManager = this.#buildExecutionManager(configuration.segments);
+        const serializer = this.#buildSerializer(executionManager);
 
-        return new LocalWorker({ url, trustKey, reportInterval, gateway, registerAtGateway, executionManager, healthManager, scheduleManager });
+        return new LocalWorker({ url, trustKey, reportInterval, gateway, registerAtGateway, executionManager, serializer, healthManager, scheduleManager });
     }
 
     async #buildLocalRepository(url: string, configuration: RepositoryConfiguration, healthManager: HealthManager): Promise<LocalRepository>
@@ -168,7 +173,18 @@ export default class RuntimeBuilder
     {
         const filenames = segmentNames.map(name => `./${name}.segment.js`);
 
-        return new ExecutionManager(this.#sourcingManager, filenames);
+        const manager = new ExecutionManager(this.#sourcingManager, filenames);
+        
+        manager.addSegment(jitarSegment);
+
+        return manager;
+    }
+
+    #buildSerializer(executionManager: ExecutionManager): Serializer
+    {
+        const classResolver = new ExecutionClassResolver(executionManager);
+
+        return SerializerBuilder.build(classResolver);
     }
 
     #buildScheduleManager(logger: Logger): ScheduleManager

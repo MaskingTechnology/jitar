@@ -2,14 +2,13 @@
 import { ExecutionManager, Implementation, ProcedureNotFound, Request, Response } from '@jitar/execution';
 import { HealthManager } from '@jitar/health';
 import type { ScheduleManager, ScheduledTask } from '@jitar/scheduling';
-import { Serializer, SerializerBuilder } from '@jitar/serialization';
+import type { Serializer } from '@jitar/serialization';
 
 import StateManager from '../common/StateManager';
 import type { State } from '../common/definitions/States';
 import Gateway from '../gateway/Gateway';
 import Worker from './Worker';
 
-import ExecutionClassResolver from './ExecutionClassResolver';
 import RequestNotTrusted from './errors/RequestNotTrusted';
 
 const JITAR_TRUST_HEADER_KEY = 'X-Jitar-Trust-Key';
@@ -24,6 +23,7 @@ type Configuration =
     registerAtGateway?: boolean;
     reportInterval?: number;
     executionManager: ExecutionManager;
+    serializer: Serializer;
     healthManager: HealthManager;
     scheduleManager: ScheduleManager;
 };
@@ -37,9 +37,9 @@ export default class LocalWorker implements Worker
     readonly #gateway?: Gateway;
     readonly #registerAtGateway: boolean;
     readonly #executionManager: ExecutionManager;
+    readonly #serializer: Serializer;
     readonly #healthManager: HealthManager;
     readonly #reportTask: ScheduledTask;
-    readonly #serializer: Serializer;
 
     readonly #stateManager = new StateManager();
 
@@ -51,13 +51,11 @@ export default class LocalWorker implements Worker
         this.#registerAtGateway = configuration.registerAtGateway === true;
 
         this.#executionManager = configuration.executionManager;
+        this.#serializer = configuration.serializer;
         this.#healthManager = configuration.healthManager;
 
         const scheduleManager = configuration.scheduleManager;
         this.#reportTask = scheduleManager.create(() => this.#report(), configuration.reportInterval);
-
-        const classResolver = new ExecutionClassResolver(this.#executionManager);
-        this.#serializer = SerializerBuilder.build(classResolver);
     }
 
     get id(): string | undefined { return this.#id; }

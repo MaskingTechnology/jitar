@@ -9,6 +9,8 @@ export default class UnknownParameter extends BadRequest
     {
         super(`Unknown parameter ${parameterName}`);
 
+        this.name = 'UnknownParameter';
+        
         this.#parameterName = parameterName;
     }
 

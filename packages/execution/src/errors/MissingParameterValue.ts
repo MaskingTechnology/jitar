@@ -9,6 +9,8 @@ export default class MissingParameterValue extends BadRequest
     {
         super(`Missing value for parameter '${parameterName}'`);
 
+        this.name = 'MissingParameterValue';
+        
         this.#parameterName = parameterName;
     }
 
