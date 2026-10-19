@@ -43,7 +43,9 @@ export default class RemoteFileSystem implements FileSystem
 
     join(...paths: string[]): string
     {
-        throw new RemoteFilesNotSupported();
+        const nonEmptyPaths = paths.filter(path => path.trim() !== '');
+
+        return nonEmptyPaths.join('/');
     }
 
     read(location: string): Promise<Buffer>

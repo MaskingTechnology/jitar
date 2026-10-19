@@ -15,9 +15,10 @@ export default class FileManager implements FileReader
     readonly #rootLocation: string;
     readonly #fileSystem: FileSystem;
 
-    constructor(location: string, fileSystem: FileSystem)
+    constructor(fileSystem: FileSystem, location: string, root = '')
     {
-        const rootLocation = fileSystem.resolve(location);
+        const joinedLocation = fileSystem.join(root, location);
+        const rootLocation = fileSystem.resolve(joinedLocation);
         
         this.#location = fileSystem.normalize(location);
         this.#rootLocation = fileSystem.normalize(rootLocation);

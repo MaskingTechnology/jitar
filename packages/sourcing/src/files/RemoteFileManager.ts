@@ -4,8 +4,8 @@ import RemoteFileSystem from './RemoteFileSystem';
 
 export default class RemoteFileManager extends FileManager
 {
-    constructor(location: string)
+    constructor(location: string, root?: string)
     {
-        super(location, new RemoteFileSystem());
+        super(new RemoteFileSystem(), location, root);
     }
 }
