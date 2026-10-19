@@ -13,7 +13,7 @@
     "test-coverage": "vitest run --coverage",
     "lint": "eslint",
     "build": "tsc -p tsconfig.json",
-    "clean": "rimraf dist"
+    "clean": "shx rm -rf dist"
   },
   "dependencies": {
     "@jitar/errors": "*",
