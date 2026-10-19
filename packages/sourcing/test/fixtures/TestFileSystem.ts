@@ -30,6 +30,11 @@ export default class TestFileSystem extends LocalFileSystem
         ]
     }
 
+    join(...paths: string[]): string
+    {
+        return path.join(...paths);
+    }
+
     async mimeType(location: string): Promise<string | undefined>
     {
         return location.endsWith('.txt') ? 'text/plain' : undefined;

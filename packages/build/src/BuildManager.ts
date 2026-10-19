@@ -5,7 +5,6 @@ import { Files, LocalFileManager } from '@jitar/sourcing';
 
 import { ApplicationReader } from './source';
 import { ApplicationBuilder } from './target';
-import { FileHelper } from './utils';
 
 import BuildFailed from './errors/BuildFailed';
 
