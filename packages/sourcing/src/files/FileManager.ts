@@ -29,11 +29,10 @@ export default class FileManager implements FileReader
     {
         const location = this.#fileSystem.isAbsolute(filename) ? filename : this.#fileSystem.join(this.#rootLocation, filename);
         const absolutePath = this.#fileSystem.resolve(location);
-        const normalizedPath = this.#fileSystem.normalize(absolutePath);
 
-        this.#validateLocation(normalizedPath, filename);
+        this.#validateLocation(absolutePath, filename);
 
-        return normalizedPath;
+        return absolutePath;
     }
 
     getRelativeLocation(filename: string): string
