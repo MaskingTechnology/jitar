@@ -11,17 +11,14 @@ const DEFAULT_MIME_TYPE = 'application/octet-stream';
 
 export default class FileManager implements FileReader
 {
-    readonly #location: string;
     readonly #rootLocation: string;
     readonly #fileSystem: FileSystem;
 
     constructor(fileSystem: FileSystem, location: string, root = '')
     {
         const joinedLocation = fileSystem.join(root, location);
-        const rootLocation = fileSystem.resolve(joinedLocation);
         
-        this.#location = fileSystem.normalize(location);
-        this.#rootLocation = fileSystem.normalize(rootLocation);
+        this.#rootLocation = fileSystem.resolve(joinedLocation);
         this.#fileSystem = fileSystem;
     }
 
@@ -30,7 +27,7 @@ export default class FileManager implements FileReader
     // and prevents access to files outside of the base location.
     getAbsoluteLocation(filename: string): string
     {
-        const location = this.#fileSystem.isAbsolute(filename) ? filename : this.#fileSystem.join(this.#location, filename);
+        const location = this.#fileSystem.isAbsolute(filename) ? filename : this.#fileSystem.join(this.#rootLocation, filename);
         const absolutePath = this.#fileSystem.resolve(location);
         const normalizedPath = this.#fileSystem.normalize(absolutePath);
 
@@ -41,7 +38,7 @@ export default class FileManager implements FileReader
 
     getRelativeLocation(filename: string): string
     {
-        const location = this.#fileSystem.relative(this.#location, filename);
+        const location = this.#fileSystem.relative(this.#rootLocation, filename);
 
         return this.#fileSystem.normalize(location);
     }
@@ -122,11 +119,9 @@ export default class FileManager implements FileReader
 
     async filter(pattern: string): Promise<string[]>
     {
-        const location = this.getAbsoluteLocation('./');
-        
         const normalizedPattern = this.#fileSystem.normalize(pattern);
 
-        const filenames = await this.#fileSystem.filter(location, normalizedPattern);
+        const filenames = await this.#fileSystem.filter(this.#rootLocation, normalizedPattern);
 
         return filenames.map(filename => this.#fileSystem.normalize(filename));
     }
