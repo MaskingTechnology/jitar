@@ -63,7 +63,7 @@ export default class LocalFileSystem implements FileSystem
 
     filter(location: string, pattern: string): Promise<string[]>
     {
-        return glob(`${location}/${pattern}`);
+        return glob(`${location}/${pattern}`, { absolute: true });
     }
 
     join(...paths: string[]): string
