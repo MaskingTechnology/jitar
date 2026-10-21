@@ -197,7 +197,7 @@ function assureExtension(filename: string)
 
 function createJitarBundle(segments: string[], middlewares: string[], targetPath: string)
 {
-    const middlewareFiles = middlewares.map(name => assureExtension(path.join(targetPath, name)));
+    const middlewareFiles = middlewares.map(name => normalizePath(assureExtension(path.join(targetPath, name))));
 
     const jitarImport = `import { ClientBuilder, HttpRemoteBuilder } from "${JITAR_CLIENT_ID}";`;
     const segmentImports = segments.map((name, index) => `import { default as $S${index} } from "segment:${name}";`).join('');
