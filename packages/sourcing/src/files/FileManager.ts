@@ -17,8 +17,9 @@ export default class FileManager implements FileReader
     constructor(fileSystem: FileSystem, location: string, root = '')
     {
         const joinedLocation = fileSystem.join(root, location);
+        const rootLocation = fileSystem.resolve(joinedLocation);
         
-        this.#rootLocation = fileSystem.resolve(joinedLocation);
+        this.#rootLocation = fileSystem.normalize(rootLocation);
         this.#fileSystem = fileSystem;
     }
 
