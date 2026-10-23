@@ -1,3 +1,18 @@
+# v0.12.1
+[2026-10-23]
+
+### Features
+
+* \[[840](https://github.com/MaskingTechnology/jitar/pull/840)] feat(runtime): jitar segment (#840) by Peter van Vliet
+
+### Fixes
+
+* \[[845](https://github.com/MaskingTechnology/jitar/pull/845)] fix: windows compatibility (#845) by Peter van Vliet
+
+### Chores
+
+* \[[848](https://github.com/MaskingTechnology/jitar/pull/848)] chore: release v0.12.1 (#848) by Peter van Vliet
+
 # v0.12.0
 [2026-10-10]
 
@@ -8,6 +23,7 @@
 
 ### Chores
 
+* \[[838](https://github.com/MaskingTechnology/jitar/pull/838)] chore: release v0.12.0 (#838) by Peter van Vliet
 * \[[826](https://github.com/MaskingTechnology/jitar/pull/826)] chore(deps): october updates (#826) by Bas Meeuwissen
 * \[[828](https://github.com/MaskingTechnology/jitar/pull/828)] npm: bump brace-expansion from 5.0.9 to 5.0.12 (#828) by dependabot[bot]
 * \[[824](https://github.com/MaskingTechnology/jitar/pull/824)] chore(http): no extended url encoding (#824) by Peter van Vliet
