@@ -18,7 +18,9 @@
         "dist",
         "!dist/types"
     ],
-    "bin": "./dist/cli.js",
+    "bin": {
+        "jitar": "dist/cli.js"
+    },
     "scripts": {
         "lint": "eslint",
         "validate": "tsc -p tsconfig.json --noEmit",

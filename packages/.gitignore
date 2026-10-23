@@ -1,6 +1,2 @@
 coverage
 dist
-cache
-.jitar
-node_modules
-**/*.tgz
