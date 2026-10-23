@@ -30,8 +30,8 @@
         "prepublishOnly": "npm run clean && npm run build"
     },
     "dependencies": {
-        "dotenv": "17.4.2",
-        "express": "5.2.1",
+        "dotenv": "18.0.8",
+        "express": "5.3.0",
         "glob": "13.0.6",
         "mime-types": "3.0.2"
     },
