@@ -6,7 +6,7 @@ This document describes the workflow we use for the development of Jitar.
 
 To work on Jitar, you need the following tools:
 
-- Node.js 22 or higher
+- Node.js 22.9 or higher
 - npm 11 or higher
 - Code editor (Visual Studio Code recommended)
 
