@@ -37,17 +37,38 @@ export default class TestFileSystem extends LocalFileSystem
 
     async mimeType(location: string): Promise<string | undefined>
     {
-        return location.endsWith('.txt') ? 'text/plain' : undefined;
+        if (location.endsWith('.txt')) return 'text/plain';
+        // Add more if needed
+
+        return undefined;
     }
 
     // eslint-disable-next-line no-unused-vars
     relative(from: string, to: string): string
     {
-        return path.relative(this.#root, to);
+        if (from.charAt(1) === ':' && to.charAt(1) === ':' && from.charAt(0) !== to.charAt(0))
+        {
+            // Windows paths, with a drive letter change
+            // Node returns the 'to' path in this situation
+            
+            return to;
+        }
+
+        return path.relative(from, to);
     }
 
     resolve(location: string): string
     {
-        return path.resolve(this.#root, location);
+        return this.isAbsolute(location) ? location : this.join(this.#root, location);
+        
+        // return path.resolve(this.#root, location);
+    }
+
+    isAbsolute(location: string): boolean
+    {
+        if (location.charAt(0) === '/') return true; // POSIX root
+        if (location.charAt(1) === ':') return true; // Windows root
+
+        return false;
     }
 }
