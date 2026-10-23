@@ -23,30 +23,31 @@ export default class FileManager implements FileReader
         this.#fileSystem = fileSystem;
     }
 
+    normalizeLocation(location: string): string
+    {
+        return this.#fileSystem.normalize(location);
+    }
+
     // This method must be used by every function that needs to access
     // the file system. This ensures that the path is always validated
     // and prevents access to files outside of the base location.
     getAbsoluteLocation(filename: string): string
     {
         const location = this.#fileSystem.isAbsolute(filename) ? filename : this.#fileSystem.join(this.#rootLocation, filename);
-        const absolutePath = this.#fileSystem.resolve(location);
-        const normalizedPath = this.#fileSystem.normalize(absolutePath);
+        const absoluteLocation = this.#fileSystem.resolve(location);
+        const normalizedLocation = this.normalizeLocation(absoluteLocation);
 
-        this.#validateLocation(normalizedPath, filename);
+        this.#validateLocation(normalizedLocation, filename);
 
-        return normalizedPath;
+        return normalizedLocation;
     }
 
     getRelativeLocation(filename: string): string
     {
-        const location = this.#fileSystem.relative(this.#rootLocation, filename);
+        const absoluteLocation = this.normalizeLocation(filename);
+        const relativeLocation = this.#fileSystem.relative(this.#rootLocation, absoluteLocation);
 
-        return this.#fileSystem.normalize(location);
-    }
-
-    normalizeLocation(location: string): string
-    {
-        return this.#fileSystem.normalize(location);
+        return this.normalizeLocation(relativeLocation);
     }
 
     async getType(filename: string): Promise<string>
@@ -88,10 +89,10 @@ export default class FileManager implements FileReader
 
     async read(filename: string): Promise<File>
     {
-        const absoluteFilename = this.getAbsoluteLocation(filename);
-
-        const type = await this.getType(absoluteFilename);
-        const content = await this.getContent(absoluteFilename);
+        const [type, content] = await Promise.all([
+            this.getType(filename),
+            this.getContent(filename)
+        ]);
 
         return new File(filename, type, content);
     }
@@ -120,11 +121,11 @@ export default class FileManager implements FileReader
 
     async filter(pattern: string): Promise<string[]>
     {
-        const normalizedPattern = this.#fileSystem.normalize(pattern);
+        const normalizedPattern = this.normalizeLocation(pattern);
 
         const filenames = await this.#fileSystem.filter(this.#rootLocation, normalizedPattern);
 
-        return filenames.map(filename => this.#fileSystem.normalize(filename));
+        return filenames.map(filename => this.normalizeLocation(filename));
     }
 
     async filterWithIgnores(pattern: string, ignorePatterns: string[]): Promise<string[]>
@@ -145,7 +146,7 @@ export default class FileManager implements FileReader
         // information.
 
         const relativePath = this.#fileSystem.relative(this.#rootLocation, location);
-        const normalizedPath = this.#fileSystem.normalize(relativePath);
+        const normalizedPath = this.normalizeLocation(relativePath);
 
         if (normalizedPath === '..' || normalizedPath.startsWith('../'))
         {

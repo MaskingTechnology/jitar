@@ -64,8 +64,9 @@ export default class TestFileSystem extends LocalFileSystem
 
     isAbsolute(location: string): boolean
     {
-        if (location.charAt(0) === '/') return true; // POSIX root
-        if (location.charAt(1) === ':') return true; // Windows root
+        if (location.charAt(0) === '/') return true; // POSIX root on POSIX machines
+        if (location.charAt(0) === '\\') return true; // POSIX root on Windows machines
+        if (location.charAt(1) === ':') return true; // Windows root on any machine
 
         return false;
     }
