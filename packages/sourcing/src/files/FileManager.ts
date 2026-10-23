@@ -44,7 +44,7 @@ export default class FileManager implements FileReader
 
     getRelativeLocation(filename: string): string
     {
-        const absoluteLocation = this.normalizeLocation(filename);
+        const absoluteLocation = this.getAbsoluteLocation(filename);
         const relativeLocation = this.#fileSystem.relative(this.#rootLocation, absoluteLocation);
 
         return this.normalizeLocation(relativeLocation);
