@@ -60,8 +60,6 @@ export default class TestFileSystem extends LocalFileSystem
     resolve(location: string): string
     {
         return this.isAbsolute(location) ? location : this.join(this.#root, location);
-        
-        // return path.resolve(this.#root, location);
     }
 
     isAbsolute(location: string): boolean
