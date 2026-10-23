@@ -2,7 +2,7 @@
 import ArgumentProcessor from '../ArgumentProcessor';
 import Command from '../Command';
 
-const versionNumber = 'v0.12.0';
+const versionNumber = 'v0.12.1';
 
 export default class ShowVersion implements Command
 {
