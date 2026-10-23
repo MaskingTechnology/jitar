@@ -12,6 +12,6 @@
     "test": "",
     "lint": "eslint",
     "build": "tsc -p tsconfig.json",
-    "clean": "rimraf dist"
+    "clean": "shx rm -rf dist"
   }
 }

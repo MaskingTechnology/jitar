@@ -1,8 +1,6 @@
 
-import { SourcingManager } from '../../src';
+import TestSourcingManager from './TestSourcingManager';
 
-import { fileManager } from './fileManager.fixture';
-
-const sourcingManager = new SourcingManager(fileManager);
+const sourcingManager = new TestSourcingManager();
 
 export { sourcingManager };

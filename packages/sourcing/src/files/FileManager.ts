@@ -11,17 +11,21 @@ const DEFAULT_MIME_TYPE = 'application/octet-stream';
 
 export default class FileManager implements FileReader
 {
-    readonly #location: string;
     readonly #rootLocation: string;
     readonly #fileSystem: FileSystem;
 
-    constructor(location: string, fileSystem: FileSystem)
+    constructor(fileSystem: FileSystem, location: string, root = '')
     {
-        const rootLocation = fileSystem.resolve(location);
+        const joinedLocation = fileSystem.join(root, location);
+        const rootLocation = fileSystem.resolve(joinedLocation);
         
-        this.#location = fileSystem.normalize(location);
         this.#rootLocation = fileSystem.normalize(rootLocation);
         this.#fileSystem = fileSystem;
+    }
+
+    normalizeLocation(location: string): string
+    {
+        return this.#fileSystem.normalize(location);
     }
 
     // This method must be used by every function that needs to access
@@ -29,25 +33,21 @@ export default class FileManager implements FileReader
     // and prevents access to files outside of the base location.
     getAbsoluteLocation(filename: string): string
     {
-        const location = this.#fileSystem.isAbsolute(filename) ? filename : this.#fileSystem.join(this.#location, filename);
-        const absolutePath = this.#fileSystem.resolve(location);
-        const normalizedPath = this.#fileSystem.normalize(absolutePath);
+        const location = this.#fileSystem.isAbsolute(filename) ? filename : this.#fileSystem.join(this.#rootLocation, filename);
+        const absoluteLocation = this.#fileSystem.resolve(location);
+        const normalizedLocation = this.normalizeLocation(absoluteLocation);
 
-        this.#validateLocation(normalizedPath, filename);
+        this.#validateLocation(normalizedLocation, filename);
 
-        return normalizedPath;
+        return normalizedLocation;
     }
 
     getRelativeLocation(filename: string): string
     {
-        const location = this.#fileSystem.relative(this.#location, filename);
+        const absoluteLocation = this.getAbsoluteLocation(filename);
+        const relativeLocation = this.#fileSystem.relative(this.#rootLocation, absoluteLocation);
 
-        return this.#fileSystem.normalize(location);
-    }
-
-    normalizeLocation(location: string): string
-    {
-        return this.#fileSystem.normalize(location);
+        return this.normalizeLocation(relativeLocation);
     }
 
     async getType(filename: string): Promise<string>
@@ -89,10 +89,10 @@ export default class FileManager implements FileReader
 
     async read(filename: string): Promise<File>
     {
-        const absoluteFilename = this.getAbsoluteLocation(filename);
-
-        const type = await this.getType(absoluteFilename);
-        const content = await this.getContent(absoluteFilename);
+        const [type, content] = await Promise.all([
+            this.getType(filename),
+            this.getContent(filename)
+        ]);
 
         return new File(filename, type, content);
     }
@@ -121,13 +121,11 @@ export default class FileManager implements FileReader
 
     async filter(pattern: string): Promise<string[]>
     {
-        const location = this.getAbsoluteLocation('./');
-        
-        const normalizedPattern = this.#fileSystem.normalize(pattern);
+        const normalizedPattern = this.normalizeLocation(pattern);
 
-        const filenames = await this.#fileSystem.filter(location, normalizedPattern);
+        const filenames = await this.#fileSystem.filter(this.#rootLocation, normalizedPattern);
 
-        return filenames.map(filename => this.#fileSystem.normalize(filename));
+        return filenames.map(filename => this.normalizeLocation(filename));
     }
 
     async filterWithIgnores(pattern: string, ignorePatterns: string[]): Promise<string[]>
@@ -143,11 +141,24 @@ export default class FileManager implements FileReader
 
     #validateLocation(location: string, filename: string): void
     {
-        if (location.startsWith(this.#rootLocation) === false)
+        // The filename is only needed for the error message. This
+        // ensures that the error message does not contain sensitive
+        // information.
+
+        const relativePath = this.#fileSystem.relative(this.#rootLocation, location);
+        const normalizedPath = this.normalizeLocation(relativePath);
+
+        if (normalizedPath === '..' || normalizedPath.startsWith('../'))
         {
-            // The filename is only needed for the error message. This
-            // ensures that the error message does not contain sensitive
-            // information.
+            // Escaping the root
+
+            throw new InvalidLocation(filename);
+        }
+
+        if(this.#fileSystem.isAbsolute(normalizedPath))
+        {
+            // Different root (e.g. a different drive letter in Windows)
+
             throw new InvalidLocation(filename);
         }
     }

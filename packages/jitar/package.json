@@ -23,10 +23,10 @@
         "lint": "eslint",
         "validate": "tsc -p tsconfig.json --noEmit",
         "build": "npm run clean && npm run bundle && npm run copy && npm run finalize",
-        "clean": "rimraf dist",
+        "clean": "shx rm -rf dist",
         "bundle": "rollup -c",
-        "copy": "cp -R ../init/templates dist/templates",
-        "finalize": "chmod +x dist/cli.js",
+        "copy": "shx cp -R ../init/templates dist/templates",
+        "finalize": "shx chmod +x dist/cli.js",
         "prepublishOnly": "npm run clean && npm run build"
     },
     "dependencies": {

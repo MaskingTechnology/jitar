@@ -16,7 +16,13 @@
       "dev": {
         "cache": false,
         "persistent": true
+      },
+      "@jitar/plugin-vite#build": {
+        "dependsOn": [
+          "^build",
+          "jitar#build"
+        ],
+        "outputs": ["dist/**"]
       }
     }
   }
-  
