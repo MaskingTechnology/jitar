@@ -140,11 +140,24 @@ export default class FileManager implements FileReader
 
     #validateLocation(location: string, filename: string): void
     {
-        if (location.startsWith(this.#rootLocation) === false)
+        // The filename is only needed for the error message. This
+        // ensures that the error message does not contain sensitive
+        // information.
+
+        const relativePath = this.#fileSystem.relative(this.#rootLocation, location);
+        const normalizedPath = this.#fileSystem.normalize(relativePath);
+
+        if (normalizedPath === '..' || normalizedPath.startsWith('../'))
         {
-            // The filename is only needed for the error message. This
-            // ensures that the error message does not contain sensitive
-            // information.
+            // Escaping the root
+
+            throw new InvalidLocation(filename);
+        }
+
+        if(this.#fileSystem.isAbsolute(normalizedPath))
+        {
+            // Different root (e.g. a different drive letter in Windows)
+
             throw new InvalidLocation(filename);
         }
     }
