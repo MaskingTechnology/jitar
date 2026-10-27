@@ -11,21 +11,39 @@ import HeaderKeys from './definitions/HeaderKeys';
 import HeaderValues from './definitions/HeaderValues';
 import IgnoredHeaderKeys from './definitions/IgnoredHeaderKeys';
 
+type ProxyMode = 'none' | 'edge' | 'behind-edge';
+
+type ProxyConfiguration = {
+    readonly mode: ProxyMode;
+    readonly trust?: boolean | number | string | string[];
+};
+
+export type HttpConfiguration = {
+    readonly port?: string;
+    readonly bodyLimit?: number;
+    readonly proxy: ProxyConfiguration;
+};
+
 export default class HttpServer
 {
     readonly #server: Server;
     readonly #port: string;
     readonly #app: Express;
+    readonly #proxy: ProxyConfiguration;
     #http?: Http;
 
     readonly #validator = new Validator();
 
-    constructor(server: Server, port: string = Defaults.PORT_NUMBER, bodyLimit: number = Defaults.BODY_LIMIT)
+    constructor(server: Server, configuration: HttpConfiguration)
     {
         this.#server = server;
-        this.#port = port;
+        this.#port = configuration.port ?? Defaults.PORT_NUMBER;
         this.#app = express();
+        this.#proxy = configuration.proxy;
 
+        const bodyLimit = configuration.bodyLimit ?? Defaults.BODY_LIMIT;
+
+        this.#setupProxy(configuration.proxy);
         this.#setupExpress(bodyLimit);
         this.#setupRoutes();
     }
@@ -42,6 +60,14 @@ export default class HttpServer
         await this.#stopHttp();
 
         return this.#server.stop();
+    }
+
+    #setupProxy(configuration?: ProxyConfiguration)
+    {
+        if (configuration?.mode === 'behind-edge')
+        {
+            this.#app.set('trust proxy', configuration.trust);
+        }
     }
 
     #setupExpress(bodyLimit: number): void
@@ -310,6 +336,17 @@ export default class HttpServer
             }
 
             headers[lowerKey] = stringValue;
+        }
+
+        if (this.#proxy.mode !== 'none')
+        {
+            const ips = this.#proxy.mode === 'edge'
+                ? request.ip
+                : `${request.ip}${headers[HeaderKeys.X_FORWARDED_FOR] !== undefined ? `, ${headers[HeaderKeys.X_FORWARDED_FOR]}` : ''}`;
+
+            headers[HeaderKeys.X_FORWARDED_PROTO] = request.protocol;
+            headers[HeaderKeys.X_FORWARDED_HOST] = request.host;
+            headers[HeaderKeys.X_FORWARDED_FOR] = `${ips}`;
         }
 
         return headers;

@@ -1,6 +1,6 @@
 
 import { ConfigurationManager, RuntimeConfiguration, ServiceConfiguration } from '@jitar/configuration';
-import { HttpRemoteBuilder, HttpServer } from '@jitar/http';
+import { HttpRemoteBuilder, HttpServer, type HttpConfiguration } from '@jitar/http';
 import { LogLevel, LogLevelParser } from '@jitar/logging';
 import { ServerBuilder } from '@jitar/runtime';
 import { LocalSourcingManager } from '@jitar/sourcing';
@@ -61,13 +61,22 @@ export default class StartServer implements Command
     {
         const [, , port] = serviceConfiguration.url.split(':');
 
+        const configuration: HttpConfiguration = {
+            port,
+            bodyLimit,
+            proxy: {
+                mode: 'behind-edge',
+                trust: 'linklocal'
+            }
+        };
+
         const sourcingManager = new LocalSourcingManager(runtimeConfiguration.target);
         const remoteBuilder = new HttpRemoteBuilder();
         const serverBuilder = new ServerBuilder(sourcingManager, remoteBuilder);
 
         const server = await serverBuilder.build(serviceConfiguration, logLevel);
 
-        return new HttpServer(server, port, bodyLimit);
+        return new HttpServer(server, configuration);
     }
 
     #runServer(httpServer: HttpServer): Promise<void>
