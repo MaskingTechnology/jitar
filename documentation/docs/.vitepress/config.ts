@@ -1,3 +1,4 @@
+
 import { defineConfig } from 'vitepress';
 
 // https://vitepress.dev/reference/site-config
@@ -40,6 +41,7 @@ export default defineConfig({
           { text: 'Error handling', link: '/develop/error-handling' },
           { text: 'State management', link: '/develop/state-management' },
           { text: 'Data consistency', link: '/develop/data-consistency' },
+          { text: 'Http settings', link: '/develop/http-settings' },
           { text: 'Set up and tear down', link: '/develop/setup-and-teardown' },
           { text: 'Middleware', link: '/develop/middleware' },
           { text: 'Validation', link: '/develop/validation' },

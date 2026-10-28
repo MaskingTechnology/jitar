@@ -6,8 +6,8 @@ prev:
     link: /develop/state-management
 
 next:
-    text: Set up and tear down
-    link: /develop/setup-and-teardown
+    text: Http settings
+    link: /develop/http-settings
 
 ---
 
