@@ -2,6 +2,7 @@
 import type { ValidationScheme } from '@jitar/validation';
 
 import GatewayConfiguration, { validationScheme as gatewayValidationScheme } from './GatewayConfiguration';
+import HttpConfiguration, { validationScheme as httpValidationScheme } from './HttpConfiguration';
 import ProxyConfiguration, { validationScheme as proxyValidationScheme } from './ProxyConfiguration';
 import RepositoryConfiguration, { validationScheme as repositoryValidationScheme } from './RepositoryConfiguration';
 import StandaloneConfiguration, { validationScheme as standaloneValidationScheme } from './StandaloneConfiguration';
@@ -15,6 +16,8 @@ type ServiceConfiguration =
     tearDown?: string[];
     middleware?: string[];
     healthChecks?: string[];
+
+    http: HttpConfiguration;
 
     gateway?: GatewayConfiguration;
     proxy?: ProxyConfiguration;
@@ -39,6 +42,8 @@ const validationScheme: ValidationScheme =
     tearDown: { type: 'list', required: false, items: { type: 'string' } },
     middleware: { type: 'list', required: false, items: { type: 'string' } },
     healthChecks: { type: 'list', required: false, items: { type: 'string' } },
+
+    http: { type: 'group', required: false, fields: httpValidationScheme },
 
     gateway: { type: 'group', required: false, fields: gatewayValidationScheme },
     proxy: { type: 'group', required: false, fields: proxyValidationScheme },

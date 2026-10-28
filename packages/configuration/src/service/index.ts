@@ -8,5 +8,6 @@ export { default as RemoteWorkerConfiguration } from './definitions/RemoteWorker
 export { default as WorkerConfiguration } from './definitions/WorkerConfiguration';
 export { default as GatewayConfiguration } from './definitions/GatewayConfiguration';
 export { default as RepositoryConfiguration } from './definitions/RepositoryConfiguration';
+export { default as HttpConfiguration } from './definitions/HttpConfiguration';
 
 export { default as ServiceConfigurationBuilder } from './ConfigurationBuilder';
