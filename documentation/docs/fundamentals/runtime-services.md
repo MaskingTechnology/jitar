@@ -26,6 +26,7 @@ Configurations are placed in JSON files. The basic structure looks like this.
 ```json
 {
     "url": "SERVICE_URL",
+    "http": { },
     "setUp": ["SET_UP_SCRIPT"],
     "tearDown": ["TEAR_DOWN_SCRIPT"],
     "healthChecks": ["HEALTH_CHECK_SCRIPT"],
@@ -49,9 +50,10 @@ The configuration also supports environment variables. They can be used by wrapp
 
 :::
 
-There are four properties at root level:
+The following properties are configured at root level:
 
 * url - service url containing protocol, address and port (e.g. `http://service.example.com:3000`).
+* http - [http](../deploy/http-configuration.md) specific properties.
 * setUp - optional list of [set up scripts](../develop/setup-and-teardown.md) that gets executed on startup.
 * tearDown - optional list of [tear down scripts](../develop/setup-and-teardown.md) that gets executed on shutdown.
 * healthChecks - optional list of [health check modules](../deploy/health-checks.md) for checking the service health.

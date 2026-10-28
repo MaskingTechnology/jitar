@@ -21,7 +21,7 @@ It is an open source social media platform that leverages comics for communicati
 
 ## Capabilities
 
-We have used the following capabilites:
+We have used the following capabilities:
 
 * Authentication (client and server middleware)
 * Data validation (application level)

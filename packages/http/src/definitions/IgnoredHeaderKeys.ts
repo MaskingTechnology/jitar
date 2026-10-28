@@ -1,4 +1,4 @@
 
-const IgnoredHeaderKeys: string[] = ['host', 'connection', 'content-length', 'accept-encoding', 'user-agent', 'keep-alive'] as const;
+const IgnoredHeaderKeys: string[] = ['connection', 'content-length', 'accept-encoding', 'user-agent', 'keep-alive'] as const;
 
 export default IgnoredHeaderKeys;

@@ -6,8 +6,8 @@ prev:
     link: /deploy/load-balancing
 
 next:
-    text: Runtime settings
-    link: /deploy/runtime-settings
+    text: Runtime options
+    link: /deploy/runtime-options
 
 ---
 
