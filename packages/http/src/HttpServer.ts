@@ -109,7 +109,9 @@ export default class HttpServer
             return;
         }
 
-        if (request.is('json') === false)
+        const contentType = request.headers[HeaderKeys.CONTENT_TYPE];
+
+        if (contentType === undefined || contentType.includes(HeaderValues.APPLICATION_JSON) === false)
         {
             response.status(415).json({
                 error: 'Content-Type must be application/json'
