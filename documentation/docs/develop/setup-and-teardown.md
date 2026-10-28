@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Http settings
-    link: /develop/http-settings
+    text: Data consistency
+    link: /develop/data-consistency
 
 next:
     text: Middleware

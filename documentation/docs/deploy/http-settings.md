@@ -2,12 +2,12 @@
 layout: doc
 
 prev:
-    text: Data consistency
-    link: /develop/data-consistency
+    text: Runtime settings
+    link: /deploy/runtime-settings
 
 next:
-    text: Set up and tear down
-    link: /develop/setup-and-teardown
+    text: RPC API
+    link: /integrate/rpc-api
 
 ---
 
@@ -28,7 +28,7 @@ The configuration below is only the http part of the [service configuration](../
 
 The following values can be configured:
 
-* bodyLimit - the maximum size of the request body (optional, default 200KB)
+* bodyLimit - the maximum size of the request body in bytes (optional, default 200KB)
 * proxied - does the application run behind a proxy (optional, default true)
 
 ::: warning Note

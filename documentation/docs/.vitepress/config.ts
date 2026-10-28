@@ -41,7 +41,6 @@ export default defineConfig({
           { text: 'Error handling', link: '/develop/error-handling' },
           { text: 'State management', link: '/develop/state-management' },
           { text: 'Data consistency', link: '/develop/data-consistency' },
-          { text: 'Http settings', link: '/develop/http-settings' },
           { text: 'Set up and tear down', link: '/develop/setup-and-teardown' },
           { text: 'Middleware', link: '/develop/middleware' },
           { text: 'Validation', link: '/develop/validation' },
@@ -65,7 +64,8 @@ export default defineConfig({
           { text: 'Environments', link: '/deploy/environments' },
           { text: 'Load balancing', link: '/deploy/load-balancing' },
           { text: 'Health checks', link: '/deploy/health-checks' },
-          { text: 'Runtime settings', link: '/deploy/runtime-settings' }
+          { text: 'Runtime settings', link: '/deploy/runtime-settings' },
+          { text: 'Http settings', link: '/deploy/http-settings' }
         ]
       },
       {

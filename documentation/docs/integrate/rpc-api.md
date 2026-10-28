@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Runtime settings
-    link: /deploy/runtime-settings
+    text: Http settings
+    link: /deploy/http-settings
 
 next:
     text: Vite plugin

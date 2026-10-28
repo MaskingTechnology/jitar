@@ -6,8 +6,8 @@ prev:
     link: /deploy/health-checks
 
 next:
-    text: RPC API
-    link: /integrate/rpc-api
+    text: Http settings
+    link: /deploy/http-settings
 
 ---
 

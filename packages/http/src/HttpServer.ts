@@ -31,7 +31,7 @@ export default class HttpServer
 
         this.#server = server;
         this.#app = express();
-        
+
         this.#setupExpress(bodyLimit);
         this.#setupRoutes();
     }
@@ -104,9 +104,7 @@ export default class HttpServer
     {
         if (request.method !== 'POST')
         {
-            next();
-
-            return;
+            return next();
         }
 
         if (request.is('application/json') === false || request.is('application/json') === null)
