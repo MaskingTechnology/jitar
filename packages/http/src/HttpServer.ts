@@ -52,7 +52,7 @@ export default class HttpServer
 
     #setupExpress(bodyLimit: number): void
     {
-        this.#app.use('/rpc', this.#validateContentType.bind(this));
+        this.#app.use(this.#validateContentType.bind(this));
         this.#app.use(express.json({ limit: bodyLimit }));
         this.#app.use(this.#addDefaultHeaders.bind(this));
 
@@ -108,10 +108,8 @@ export default class HttpServer
 
             return;
         }
-        
-        const contentType = request.headers[HeaderKeys.CONTENT_TYPE];
 
-        if (contentType === undefined || contentType !== HeaderValues.APPLICATION_JSON)
+        if (request.is('json') === false)
         {
             response.status(415).json({
                 error: 'Content-Type must be application/json'
