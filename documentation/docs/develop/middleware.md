@@ -13,7 +13,7 @@ next:
 
 # Middleware
 
-Middleware provides a way to hook into Jitars automated communication system. It allows you to add additional logic to incoming and outgoing requests. Common use cases are adding authentication and logging to applications.
+Middleware provides a way to hook into Jitar's automated communication system. It allows you to add additional logic to incoming and outgoing requests. Common use cases are adding authentication and logging to applications.
 
 In this section you'll learn how to create and add your own middleware.
 

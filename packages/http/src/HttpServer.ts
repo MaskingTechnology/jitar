@@ -9,6 +9,7 @@ import { Validator } from '@jitar/validation';
 import Defaults from './definitions/Defaults';
 import HeaderKeys from './definitions/HeaderKeys';
 import HeaderValues from './definitions/HeaderValues';
+import { type HttpConfiguration } from './definitions/HttpConfiguration';
 import IgnoredHeaderKeys from './definitions/IgnoredHeaderKeys';
 
 export default class HttpServer
@@ -16,14 +17,19 @@ export default class HttpServer
     readonly #server: Server;
     readonly #port: string;
     readonly #app: Express;
+    readonly #proxied: boolean;
     #http?: Http;
 
     readonly #validator = new Validator();
 
-    constructor(server: Server, port: string = Defaults.PORT_NUMBER, bodyLimit: number = Defaults.BODY_LIMIT)
+    constructor(server: Server, configuration: HttpConfiguration)
     {
+        this.#port = configuration.port ?? Defaults.PORT_NUMBER;
+        this.#proxied = configuration.proxied ?? Defaults.PROXIED;
+
+        const bodyLimit = configuration.bodyLimit ?? Defaults.BODY_LIMIT;
+
         this.#server = server;
-        this.#port = port;
         this.#app = express();
 
         this.#setupExpress(bodyLimit);
@@ -46,8 +52,8 @@ export default class HttpServer
 
     #setupExpress(bodyLimit: number): void
     {
+        this.#app.use(this.#validateContentType.bind(this));
         this.#app.use(express.json({ limit: bodyLimit }));
-        this.#app.use(express.urlencoded({ extended: false }));
         this.#app.use(this.#addDefaultHeaders.bind(this));
 
         this.#app.disable(HeaderKeys.POWERED_BY);
@@ -94,11 +100,30 @@ export default class HttpServer
         return new Promise(resolve => { this.#http!.close(() => resolve()); });
     }
 
+    #validateContentType(request: Request, response: Response, next: NextFunction): void
+    {
+        if (request.method !== 'POST')
+        {
+            return next();
+        }
+
+        if (request.is('application/json') === false || request.is('application/json') === null)
+        {
+            response.status(415).json({
+                error: 'Content-Type must be application/json'
+            });
+
+            return;
+        }
+
+        return next();
+    }
+
     #addDefaultHeaders(request: Request, response: Response, next: NextFunction): void
     {
         response.setHeader(HeaderKeys.CONTENT_TYPE_OPTIONS, HeaderValues.NO_SNIFF);
 
-        next();
+        return next();
     }
 
     async #getHealth(request: Request, response: Response): Promise<Response>
@@ -310,6 +335,13 @@ export default class HttpServer
             }
 
             headers[lowerKey] = stringValue;
+        }
+
+        if (this.#proxied === false)
+        {
+            headers[HeaderKeys.X_FORWARDED_PROTO] = request.protocol;
+            headers[HeaderKeys.X_FORWARDED_HOST] = request.host;
+            headers[HeaderKeys.X_FORWARDED_FOR] = request.ip!;
         }
 
         return headers;

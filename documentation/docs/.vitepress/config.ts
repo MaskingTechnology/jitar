@@ -1,3 +1,4 @@
+
 import { defineConfig } from 'vitepress';
 
 // https://vitepress.dev/reference/site-config
@@ -63,7 +64,8 @@ export default defineConfig({
           { text: 'Environments', link: '/deploy/environments' },
           { text: 'Load balancing', link: '/deploy/load-balancing' },
           { text: 'Health checks', link: '/deploy/health-checks' },
-          { text: 'Runtime settings', link: '/deploy/runtime-settings' }
+          { text: 'Runtime options', link: '/deploy/runtime-options' },
+          { text: 'Http configuration', link: '/deploy/http-configuration' }
         ]
       },
       {

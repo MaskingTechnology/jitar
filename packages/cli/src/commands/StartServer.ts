@@ -1,6 +1,6 @@
 
 import { ConfigurationManager, RuntimeConfiguration, ServiceConfiguration } from '@jitar/configuration';
-import { HttpRemoteBuilder, HttpServer } from '@jitar/http';
+import { HttpRemoteBuilder, HttpServer, type HttpConfiguration } from '@jitar/http';
 import { LogLevel, LogLevelParser } from '@jitar/logging';
 import { ServerBuilder } from '@jitar/runtime';
 import { LocalSourcingManager } from '@jitar/sourcing';
@@ -30,7 +30,6 @@ export default class StartServer implements Command
         { key: '--env-file', required: false, description: 'Path to the environment file' },
         { key: '--config', required: false, description: 'Path to the configuration file', defaultValue: 'jitar.json' },
         { key: '--log-level', required: false, description: 'Level of logging [info, debug, warn, error, fatal]', defaultValue: 'info' },
-        { key: '--http-body-limit', required: false, description: 'Maximum HTTP body size in bytes', defaultValue: 204_800 }
     ];
 
     async execute(args: ArgumentProcessor): Promise<void>
@@ -42,9 +41,6 @@ export default class StartServer implements Command
         const logLevelString = args.getOptionalArgument('--log-level', undefined);
         const logLevel = this.#parseLogLevel(logLevelString);
 
-        const bodyLimitString = args.getOptionalArgument('--http-body-limit', undefined);
-        const bodyLimit = this.#parseBodyLimit(bodyLimitString);
-
         const configurationManager = new ConfigurationManager();
 
         await configurationManager.configureEnvironment(environmentFile);
@@ -52,14 +48,20 @@ export default class StartServer implements Command
         const runtimeConfiguration = await configurationManager.getRuntimeConfiguration(runtimeConfigFile);
         const serviceConfiguration = await configurationManager.getServiceConfiguration(serviceConfigFile);
 
-        const httpServer = await this.#buildServer(runtimeConfiguration, serviceConfiguration, bodyLimit, logLevel);
+        const httpServer = await this.#buildServer(runtimeConfiguration, serviceConfiguration, logLevel);
 
         return this.#runServer(httpServer);
     }
 
-    async #buildServer(runtimeConfiguration: RuntimeConfiguration, serviceConfiguration: ServiceConfiguration, bodyLimit?: number, logLevel?: LogLevel): Promise<HttpServer>
+    async #buildServer(runtimeConfiguration: RuntimeConfiguration, serviceConfiguration: ServiceConfiguration, logLevel?: LogLevel): Promise<HttpServer>
     {
         const [, , port] = serviceConfiguration.url.split(':');
+
+        const configuration: HttpConfiguration = {
+            port,
+            bodyLimit: serviceConfiguration.http?.bodyLimit,
+            proxied: serviceConfiguration.http?.proxied
+        };
 
         const sourcingManager = new LocalSourcingManager(runtimeConfiguration.target);
         const remoteBuilder = new HttpRemoteBuilder();
@@ -67,7 +69,7 @@ export default class StartServer implements Command
 
         const server = await serverBuilder.build(serviceConfiguration, logLevel);
 
-        return new HttpServer(server, port, bodyLimit);
+        return new HttpServer(server, configuration);
     }
 
     #runServer(httpServer: HttpServer): Promise<void>
@@ -98,12 +100,5 @@ export default class StartServer implements Command
         const logLevelParser = new LogLevelParser();
 
         return logLevelParser.parse(logLevel);
-    }
-
-    #parseBodyLimit(bodyLimitString: string | undefined): number | undefined
-    {
-        const bodyLimit = Number.parseInt(bodyLimitString as string);
-
-        return Number.isNaN(bodyLimit) ? undefined : bodyLimit;
     }
 }
