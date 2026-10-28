@@ -17,7 +17,7 @@ type ServiceConfiguration =
     middleware?: string[];
     healthChecks?: string[];
 
-    http: HttpConfiguration;
+    http?: HttpConfiguration;
 
     gateway?: GatewayConfiguration;
     proxy?: ProxyConfiguration;

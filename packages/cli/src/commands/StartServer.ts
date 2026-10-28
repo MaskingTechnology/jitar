@@ -59,8 +59,8 @@ export default class StartServer implements Command
 
         const configuration: HttpConfiguration = {
             port,
-            bodyLimit: serviceConfiguration.http.bodyLimit,
-            proxied: serviceConfiguration.http.proxied
+            bodyLimit: serviceConfiguration.http?.bodyLimit,
+            proxied: serviceConfiguration.http?.proxied
         };
 
         const sourcingManager = new LocalSourcingManager(runtimeConfiguration.target);
