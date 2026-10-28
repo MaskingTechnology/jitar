@@ -52,8 +52,8 @@ export default class HttpServer
 
     #setupExpress(bodyLimit: number): void
     {
+        this.#app.use('/rpc', this.#validateContentType.bind(this));
         this.#app.use(express.json({ limit: bodyLimit }));
-        this.#app.use(express.urlencoded({ extended: false }));
         this.#app.use(this.#addDefaultHeaders.bind(this));
 
         this.#app.disable(HeaderKeys.POWERED_BY);
@@ -98,6 +98,29 @@ export default class HttpServer
         }
 
         return new Promise(resolve => { this.#http!.close(() => resolve()); });
+    }
+
+    #validateContentType(request: Request, response: Response, next: NextFunction): void
+    {
+        if (request.method !== 'POST')
+        {
+            next();
+
+            return;
+        }
+        
+        const contentType = request.headers[HeaderKeys.CONTENT_TYPE];
+
+        if (contentType === undefined || contentType !== HeaderValues.APPLICATION_JSON)
+        {
+            response.status(415).json({
+                error: 'Content-Type must be application/json'
+            });
+
+            return;
+        }
+
+        next();
     }
 
     #addDefaultHeaders(request: Request, response: Response, next: NextFunction): void
