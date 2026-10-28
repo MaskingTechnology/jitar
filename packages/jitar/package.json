@@ -1,6 +1,6 @@
 {
     "name": "jitar",
-    "version": "0.12.0",
+    "version": "0.12.1",
     "description": "Distributed runtime for JavaScript and TypeScript to chop monolithic applications into micros.",
     "author": "Masking Technology <info@masking.tech> (https://jitar.dev)",
     "license": "MIT",
@@ -30,8 +30,8 @@
         "prepublishOnly": "npm run clean && npm run build"
     },
     "dependencies": {
-        "dotenv": "17.4.2",
-        "express": "5.2.1",
+        "dotenv": "18.0.8",
+        "express": "5.3.0",
         "glob": "13.0.6",
         "mime-types": "3.0.2"
     },
@@ -44,15 +44,15 @@
         "@jitar/logging": "*",
         "@jitar/middleware": "*",
         "@jitar/runtime": "*",
-        "@rollup/plugin-node-resolve": "16.0.3",
-        "@rollup/plugin-replace": "6.0.3",
-        "@rollup/plugin-terser": "1.0.0",
-        "@rollup/plugin-typescript": "12.3.0",
-        "rollup": "4.62.2",
-        "rollup-plugin-dts": "6.4.1"
+        "@rollup/plugin-node-resolve": "^16.0.3",
+        "@rollup/plugin-replace": "^6.0.3",
+        "@rollup/plugin-terser": "^1.0.0",
+        "@rollup/plugin-typescript": "^12.3.0",
+        "rollup": "^4.64.10",
+        "rollup-plugin-dts": "^6.5.1"
     },
     "engines": {
-        "node": ">=20.0"
+        "node": ">=22"
     },
     "repository": {
         "type": "git",
