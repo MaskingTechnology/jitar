@@ -64,8 +64,8 @@ export default defineConfig({
           { text: 'Environments', link: '/deploy/environments' },
           { text: 'Load balancing', link: '/deploy/load-balancing' },
           { text: 'Health checks', link: '/deploy/health-checks' },
-          { text: 'Runtime settings', link: '/deploy/runtime-settings' },
-          { text: 'Http settings', link: '/deploy/http-settings' }
+          { text: 'Runtime options', link: '/deploy/runtime-options' },
+          { text: 'Http configuration', link: '/deploy/http-configuration' }
         ]
       },
       {

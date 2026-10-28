@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Http settings
-    link: /deploy/http-settings
+    text: Http configuration
+    link: /deploy/http-configuration
 
 next:
     text: Vite plugin

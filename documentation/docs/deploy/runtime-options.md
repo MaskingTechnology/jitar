@@ -6,12 +6,12 @@ prev:
     link: /deploy/health-checks
 
 next:
-    text: Http settings
-    link: /deploy/http-settings
+    text: Http configuration
+    link: /deploy/http-configuration
 
 ---
 
-# Runtime settings
+# Runtime options
 
 The server accepts a few command line arguments to configure its runtime behavior. A fully configured command line looks like this:
 

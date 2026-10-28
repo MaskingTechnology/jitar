@@ -116,14 +116,14 @@ export default class HttpServer
             return;
         }
 
-        next();
+        return next();
     }
 
     #addDefaultHeaders(request: Request, response: Response, next: NextFunction): void
     {
         response.setHeader(HeaderKeys.CONTENT_TYPE_OPTIONS, HeaderValues.NO_SNIFF);
 
-        next();
+        return next();
     }
 
     async #getHealth(request: Request, response: Response): Promise<Response>

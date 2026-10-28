@@ -2,8 +2,8 @@
 layout: doc
 
 prev:
-    text: Runtime settings
-    link: /deploy/runtime-settings
+    text: Runtime options
+    link: /deploy/runtime-options
 
 next:
     text: RPC API
@@ -11,7 +11,7 @@ next:
 
 ---
 
-# Http settings
+# Http configuration
 
 The options given here control the behavior of the underlying http server implementation.
 
