@@ -16,7 +16,7 @@ Configure the body limit using the new http config in the service configuration.
 {
   "url": "http://service.example.com:3000",
   "http": {
-    "bodyLimit": 2048000
+    "bodyLimit": 204800
   },
   "standalone":
   {
