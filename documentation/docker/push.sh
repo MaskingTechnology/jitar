@@ -1,4 +1,4 @@
-# Run me from the project root !!
+# Run me from the documentation root !!
 
 VERSION=$(jq -r '.version' package.json)
 
