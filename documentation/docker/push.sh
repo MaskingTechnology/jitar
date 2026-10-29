@@ -1,5 +1,5 @@
 # Run me from the documentation root !!
 
-VERSION=$(jq -r '.version' package.json)
+VERSION=$(node -p "require('./package.json').version")
 
 docker push "localhost:5000/docs.jitar.dev:$VERSION"

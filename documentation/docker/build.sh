@@ -1,6 +1,6 @@
 # Run me from the documentation root !!
 
-VERSION=$(jq -r '.version' package.json)
+VERSION=$(node -p "require('./package.json').version")
 
 npm ci
 npm run docs:build
