@@ -11,8 +11,8 @@ the examples should still be understandable.
 
 In order to run the examples you need to have the following installed:
 
-* [Node.js](https://nodejs.org/en/) version 20.0.0 or higher
-* [TypeScript](https://www.typescriptlang.org/) version 4.4.2 or higher
+* [Node.js](https://nodejs.org/en/) version 22 or higher
+* [TypeScript](https://www.typescriptlang.org/) version 6.0.3 or higher
 
 Most examples do not have an UI to keep them simple and focussed. For running these examples the PRC API will be used.
 A ``requests.http`` file is provided containing example requests to call the procedures. We use

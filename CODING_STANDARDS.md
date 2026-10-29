@@ -80,7 +80,7 @@ For a variety of reasons, we avoid certain constructs, and use some of our own. 
 
 Readability is the most important part of coding. Below are some of the ground rules to keep the code readable.
 
-Code may contain a lot of empty rows, as we prefer to group logical steps together and seperate them from other steps in the function.
+Code may contain a lot of empty rows, as we prefer to group logical steps together and separate them from other steps in the function.
 
 1. Always use brackets for if statements, even if there is just one line of code within.
 1. Use brackets for else statements, except when the only statement is an if.

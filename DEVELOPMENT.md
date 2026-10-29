@@ -7,7 +7,7 @@ This document describes the workflow we use for the development of Jitar.
 To work on Jitar, you need the following tools:
 
 - Node.js 22.9 or higher
-- npm 11.x or higher
+- npm 11 or higher
 - Code editor (Visual Studio Code recommended)
 
 Note: Jitar is managed as a monorepo with Turbo. You don't need specific knowledge about Turbo to work on Jitar.
@@ -32,7 +32,7 @@ Note: Jitar is managed as a monorepo with Turbo. You don't need specific knowled
 1. Run `npm run review` to run all tests and linting.
 1. Commit and push the changes.
 1. Create a pull request.
-1. [CodeRabbit](https://www.coderabbit.ai/) will review your pull request automatically. It is very nitpicky, so don't get discouraged by the number of comments.
+1. [CodeRabbit](https://www.coderabbit.ai/) will review your pull request automatically.
 
 ## Publishing
 
