@@ -1,5 +1,7 @@
 # Run me from the documentation root !!
 
+set -e
+
 VERSION=$(node -p "require('./package.json').version")
 
 npm ci

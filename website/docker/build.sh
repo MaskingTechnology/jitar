@@ -1,5 +1,7 @@
 # Run me from the website root !!
 
+set -e
+
 VERSION=$(node -p "require('./package.json').version")
 
 npm ci
