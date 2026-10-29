@@ -40,7 +40,6 @@ To do consistent releases, we use the following steps:
 
 1. Create a new issue and branch.
 1. Run `npm run version $VERSION` to update the version numbers for the packages where `$VERSION` is the new version number.
-1. Update the version number in the `ShowVersion` file.
 1. Commit and push the changes.
 1. Create a pull request.
 1. Once the pull request is merged, tag the release.
