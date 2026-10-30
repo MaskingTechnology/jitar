@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# $1 = previous HEAD commit
+# $2 = new HEAD commit
+# $3 = flag (1 for branch checkout, 0 for file checkout)
+
+if [ "$3" -eq 1 ]; then
+  if git diff --name-only "$1" "$2" | grep -q "^package-lock\.json$"; then
+    npm ci
+  fi
+fi
