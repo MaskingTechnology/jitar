@@ -17,6 +17,14 @@ Note: Jitar is managed as a monorepo with Turbo. You don't need specific knowled
 1. Clone the repository.
 1. Run `npm ci` to install all dependencies.
 
+### Git hooks
+
+The repository includes git hooks. To install them, run the following command from the project root:
+
+```bash
+git config --local core.hooksPath .githooks/
+```
+
 ## Development
 
 1. Run `npm run build` to build all packages.
