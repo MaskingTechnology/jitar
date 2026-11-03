@@ -16,7 +16,7 @@
     "clean": "shx rm -rf dist"
   },
   "dependencies": {
-    "glob": "13.0.6",
+    "glob": "14.0.2",
     "mime-types": "3.0.2"
   },
   "devDependencies": {
