@@ -22,12 +22,12 @@
 - `packages/validation`: Data validation library for the Jitar runtime, providing validation schemes and validators.
 
 ## Global Skills
-- Shared workflows live in `.agents/skills/<skill-name>`
+- Shared workflows live in `.agents/skills/<skill-name>` (planned)
 
 ## Package-Specific Context
 When working within a specific package under `packages/*`, refer to:
 1. `packages/<package>/AGENTS.md` for package-level instructions
-2. `packages/<package>/.agents/skills/` for specialized domain skills
+2. `packages/<package>/.agents/skills/` for specialized domain skills (planned)
 
 ## Coding Standards & Conventions
 
