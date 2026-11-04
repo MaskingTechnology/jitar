@@ -6,6 +6,23 @@
 
 if [ "$3" -eq 1 ]; then
   if git diff --name-only "$1" "$2" | grep -q "^package-lock\.json$"; then
-    npm ci
+    BACKUP_DIR=""
+    if [ -d "node_modules" ]; then
+      BACKUP_DIR=$(mktemp -d)
+      mv node_modules "$BACKUP_DIR/node_modules"
+    fi
+
+    echo "Installing dependencies."
+
+    if npm ci; then
+      [ -n "$BACKUP_DIR" ] && rm -rf "$BACKUP_DIR"
+    else
+      echo "npm ci failed, restoring prior node_modules." >&2
+      if [ -n "$BACKUP_DIR" ] && [ -d "$BACKUP_DIR/node_modules" ]; then
+        mv "$BACKUP_DIR/node_modules" .
+        rm -rf "$BACKUP_DIR"
+      fi
+      exit 1
+    fi
   fi
 fi
