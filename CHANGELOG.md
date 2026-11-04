@@ -1,3 +1,15 @@
+# v0.13.0
+[2026-11-04]
+
+### Features
+
+* \[[850](https://github.com/MaskingTechnology/jitar/pull/850)] feat(http): http configuration (#850) by Bas Meeuwissen
+
+### Chores
+
+* \[[852](https://github.com/MaskingTechnology/jitar/pull/852)] chore: git hooks (#852) by Bas Meeuwissen
+* \[[849](https://github.com/MaskingTechnology/jitar/pull/849)] chore: general maintenance (#849) by Bas Meeuwissen
+
 # v0.12.1
 [2026-10-23]
 
