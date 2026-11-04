@@ -25,16 +25,16 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^22",
-    "@typescript-eslint/eslint-plugin": "^8.71.2",
+    "@typescript-eslint/eslint-plugin": "^8.72.1",
     "@vitest/coverage-v8": "^5.0.5",
     "auto-changelog": "^2.7.0",
     "shx": "^0.4.0",
-    "eslint": "^10.13.0",
+    "eslint": "^10.14.0",
     "eslint-plugin-jitar": "0.12.1",
     "tslib": "^2.8.1",
     "turbo": "^2.11.10",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.2",
+    "typescript-eslint": "^8.72.1",
     "vitest": "^5.0.5"
   },
   "engines": {
