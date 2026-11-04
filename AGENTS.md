@@ -55,3 +55,16 @@ When working within a specific package under `packages/*`, refer to:
   - Never disable ESLint rules with inline comments (`// eslint-disable-next-line`) without explicit approval.
   - All package imports within the monorepo must use workspace aliases (`@jitar/...`), not relative paths across `packages/`.
 - **Requirement:** Always run `npm run lint` after modifying TypeScript files to verify clean code formatting.
+
+## Build & Development
+
+- **Task Runner:** This monorepo uses [Turbo](https://turbo.build) for task orchestration with caching and inter-task dependency ordering. See `turbo.json` for task definitions.
+- **Build Commands:**
+  - `npm run build` — builds core (`jitar`) and all plugins (`@jitar/plugin-*`).
+  - `npm run build:all` — builds every package in the monorepo.
+  - `npm run lint` — runs linting across all packages.
+  - `npm run test` — runs tests across all packages.
+  - `npm run review` — runs `test` then `lint` (CI-style check).
+- **Clean:** Build artifacts go into each package's `dist/` directory. Remove `dist/` directories to perform a clean build. These paths are ignored by linting.
+- **Dependencies:** All intra-monorepo package references use workspace aliases (`@jitar/...`). Never use relative paths across `packages/`.
+- **Critical Rule:** A full build (`npm run build:all`) must always pass before merging or publishing. Turbo handles build ordering — downstream packages depend on upstream builds automatically.
