@@ -1,8 +1,25 @@
 # Monorepo Agent Guidelines
 
 ## Repository Structure
-- `packages/analysis`: application analysis tools
-- `packages/build`: build tools
+- `packages/analysis`: Application analysis library for the Jitar runtime, providing code analysis and introspection capabilities.
+- `packages/build`: Application building library for the Jitar runtime, handling the build process and configuration.
+- `packages/cli`: 
+- `packages/configuration`:
+- `packages/errors`:
+- `packages/execution`:
+- `packages/health`:
+- `packages/http`:
+- `packages/init`:
+- `packages/jitar`:
+- `packages/logging`:
+- `packages/middleware`:
+- `packages/plugin-vite`:
+- `packages/runtime`:
+- `packages/scheduling`:
+- `packages/serialization`:
+- `packages/services`:
+- `packages/sourcing`:
+- `packages/validation`: 
 
 ## Global Skills
 - Shared workflows live in `.agents/skills/<skill-name>`
