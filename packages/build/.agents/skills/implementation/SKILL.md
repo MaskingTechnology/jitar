@@ -37,12 +37,12 @@ src/
 ├── source/                     ← Source reading / parsing layer
 │   ├── application/            ← ApplicationReader, Application model
 │   ├── module/                 ← ModuleReader, LocationRewriter, Module, Repository
-│   ├── segment/                ← SegmentReader, MemberLocator, Segment, Segmentation, models
+│   ├── segment/                ← SegmentReader, MemberLocator, Segment, Segmentation, models, types
 │   └── resource/               ← ResourceReader, ResourcesList
 ├── target/                     ← Target code generation layer
 │   ├── application/            ← ApplicationBuilder (orchestrates module + segment builders)
-│   ├── module/                 ← ModuleBuilder, LocalGenerator, RemoteGenerator
-│   └── segment/                ← SegmentBuilder, Generator
+│   ├── module/                 ← Builder, LocalModuleGenerator, RemoteModuleGenerator
+│   └── segment/                ← Builder, SegmentGenerator
 └── utils/                      ← FileHelper, IdGenerator
 ```
 
@@ -60,12 +60,13 @@ Reads and parses the application's source files into intermediate models.
 | `Repository` | Collection of modules with O(1) lookup by filename |
 | `SegmentReader` | Reads JSON segment definition files and locates class/function implementations via `MemberLocator` |
 | `MemberLocator` | Traces re-exports back through the module graph to find the actual class or function declaration |
-| `Segmentation` | Collection of segments; lookup by segment name or module filename |
-| `Segment` | Holds modules, classes, and procedures for a single segment |
-| `SegmentModule` | Module context within a segment (tracks imports, members, segmented flag) |
+| `Segmentation` | Collection of segments; lookup by segment name or module filename (`getSegment()`, `segments`, `getSegments()`) |
+| `Segment` | Holds modules, classes, and procedures for a single segment (`modules`, `classes`, `procedures`) |
+| `SegmentModule` | Module context within a segment (tracks imports, members, segmented flag; `imports`, `importsImplementation()`, `hasImplementations()`) |
+| `SegmentMember` | Base member type (class or implementation) with `id`, `importKey`, and `fqn` |
 | `SegmentClass` | A class declaration within a segment |
-| `SegmentProcedure` | A procedure name with its list of `SegmentImplementation`s |
-| `SegmentImplementation` | A function implementation with `access`, `version`, and the parsed `ESFunction` model |
+| `SegmentProcedure` | A procedure name with its list of `SegmentImplementation`s (`implementations`) |
+| `SegmentImplementation` | A function implementation with `access`, `version`, `id`, `importKey`, and the parsed `ESFunction` model (`model`) |
 | `ResourceReader` | Reads resource file definitions (JSON lists of resource module filenames) |
 | `ResourcesList` | Collection of resource module filenames; checks whether a filename is a resource module |
 
@@ -76,11 +77,11 @@ Generates rewritten JavaScript code for the target folder.
 | Component | Responsibility |
 | --- | --- |
 | `ApplicationBuilder` | Orchestrates building modules and segments in parallel |
-| `ModuleBuilder` | For each module: builds the common module, segment-specific modules, and optionally a remote module |
-| `LocalGenerator` | Generates local module code with rewritten imports/exports (handles segmentation, resources) |
-| `RemoteGenerator` | Generates remote module code that calls `__run` for cross-segment procedure invocation |
-| `SegmentBuilder` | Builds `.segment.js` files for each segment |
-| `Generator` | Generates the segment definition file with runtime imports (`Segment`, `Class`, `Procedure`, `Implementation`, `Version`, etc.) |
+| `Builder` (module) | For each module: builds the common module, segment-specific modules, and optionally a remote module |
+| `LocalModuleGenerator` | Generates local module code with rewritten imports/exports (handles segmentation, resources) |
+| `RemoteModuleGenerator` | Generates remote module code that calls `__run` for cross-segment procedure invocation |
+| `Builder` (segment) | Builds `.segment.js` files for each segment |
+| `SegmentGenerator` | Generates the segment definition file with runtime imports (`Segment`, `Class`, `Procedure`, `Implementation`, `Version`, etc.) |
 
 ### Supporting Components
 
@@ -122,8 +123,11 @@ if (helper.includesModule('path/to/module.js')) {
 Key methods:
 - `readApplication()` — Reads and parses all source, resource, and segment files into an `Application` model.
 - `includesModule(filename)` — Checks if a module exists in the application.
-- `generateModuleCode(filename, segmentNames?)` — Generates rewritten module code.
-- `generateSegmentCode(segmentName)` — Generates the `.segment.js` file content.
+- `generateModuleCode(filename, segmentNames?)` — Generates rewritten module code. Behavior depends on segmentation:
+  - **Unsegmented modules** — Returns common module code.
+  - **Segmented modules, matching segment** — Returns segment-specific module code.
+  - **Segmented modules, no matching segment** — Returns remote module code (calls `__run`).
+- `generateSegmentCode(segmentName)` — Generates the `.segment.js` file content. Throws `ApplicationSegmentNotFound` if the segment does not exist.
 
 ### BuildManager (Full Application Build)
 
@@ -137,7 +141,9 @@ await manager.build();
 The `build()` method:
 1. Reads all source modules, resource files, and segment definitions.
 2. Passes the parsed `Application` model to `ApplicationBuilder`.
-3. `ApplicationBuilder` runs `ModuleBuilder` and `SegmentBuilder` in parallel.
+3. `ApplicationBuilder` runs `Builder` (module) and `Builder` (segment) in parallel.
+
+**Note:** The `BuildManager` constructor accepts an optional `logLevel` parameter (defaults to `LogLevel.DEBUG`).
 
 ## Source Reading Patterns
 
@@ -169,6 +175,8 @@ Segments are JSON files matching `Files.SEGMENT_PATTERN`. Each segment file defi
 4. Uses `MemberLocator` to trace re-exports back to their original declarations.
 5. Creates `Class` or `Implementation` objects based on the declaration type.
 
+**Note:** The `ApplicationReader.read()` method takes three separate arrays (`moduleFiles`, `resourceFiles`, `segmentFiles`) and returns an `Application` model containing the `ModuleRepository`, `ResourcesList`, and `Segmentation`.
+
 ## Target Generation Patterns
 
 ### Building Modules
@@ -181,9 +189,9 @@ For each module in the application:
    - **Segment-specific modules** — One per segment with implementations, named `<module>.<segmentName>.js`.
    - **Remote module** — If the module has segmented procedures, a `<module>.remote.js` is generated.
 
-### LocalGenerator (Local Module Code)
+### LocalModuleGenerator (Local Module Code)
 
-The `LocalGenerator` rewrites imports and exports in the cloned `ESModule`:
+The `LocalModuleGenerator` rewrites imports and exports in the cloned `ESModule`:
 
 1. Clones the original `ESModule` model.
 2. Rewrites each import/export item:
@@ -195,9 +203,9 @@ The `LocalGenerator` rewrites imports and exports in the cloned `ESModule`:
    - **Remote imports** — Point to `<module>.remote.js`.
    - **Common imports** — Point to `<module>.js` (no sub-extension).
 
-### RemoteGenerator (Remote Module Code)
+### RemoteModuleGenerator (Remote Module Code)
 
-The `RemoteGenerator` generates code that calls the global `__run` function for cross-segment procedure invocation:
+The `RemoteModuleGenerator` generates code that calls the global `__run` function for cross-segment procedure invocation:
 
 1. Collects all unique implementations from all segments for the module.
 2. For each implementation:
@@ -207,7 +215,7 @@ The `RemoteGenerator` generates code that calls the global `__run` function for 
 
 ### SegmentGenerator (Segment Definition Files)
 
-The `Generator` produces `.segment.js` files that define the segment structure for the runtime:
+The `SegmentGenerator` produces `.segment.js` files that define the segment structure for the runtime:
 
 1. Imports runtime types: `Segment`, `Class`, `Procedure`, `Implementation`, `Version`, `NamedParameter`, `ArrayParameter`, `ObjectParameter`.
 2. Imports segmented module exports (classes and implementations).
@@ -239,11 +247,12 @@ The `FileHelper.addSubExtension()` method replaces `.js` with `.<subExtension>.j
 ## Key Implementation Notes
 
 - **Segment files are JSON**: The `SegmentReader` reads JSON definition files that describe which modules export which classes/functions. It uses `MemberLocator` to trace re-exports back to their original declarations.
-- **Functions must be async**: Implementation functions declared in segment files must be `async`. A `FunctionNotAsync` error is thrown otherwise.
+- **Functions must be async**: Implementation functions declared in segment files must be `async`. An `ESFunction.isAsync` property is checked, and a `FunctionNotAsync` error is thrown otherwise.
 - **Access levels**: Default access is `'private'`. Private procedures throw a `ProcedureNotAccessible` error when called from the remote module.
 - **Versioning**: Default version is `'0.0.0'`. Each implementation carries a semantic version parsed by `VersionParser`.
 - **Id generation**: Each member (class or implementation) receives a unique `$N` identifier used by the runtime to match remote calls to local implementations.
 - **The `__run` global**: Remote module generators emit calls to a global `__run(fqn, version, params, this)` function. This function is provided by the Jitar runtime at execution time.
+- **Segment modules track imports**: `SegmentModule` exposes an `imports` dictionary and `importsImplementation()` / `hasImplementations()` methods for determining which imports target segmented vs. remote procedures.
 
 ## Coding Conventions
 
@@ -254,7 +263,8 @@ Follow the repository-wide [CODING_STANDARDS.md](../../CODING_STANDARDS.md). Add
 - **Private fields** must use the JavaScript `#` syntax (never `private` keyword).
 - **Read-only properties** are exposed via getters with no return type annotation (per CODING_STANDARDS).
 - **Constructors** receive dependencies via parameter injection; never instantiate collaborators with `new` inside methods when they could be injected.
-- **Generators** follow the "generator" naming convention and expose a single `generate(): string` method.
+- **Generators** follow the "generator" naming convention and expose a single `generate(): string` method (`LocalModuleGenerator`, `RemoteModuleGenerator`, `SegmentGenerator`).
+- **Builders** follow the "builder" naming convention and expose a `build(): Promise<void>` method (`Builder` in module and segment layers).
 - **Readers** follow the "reader" naming convention and expose async `read(...)` / `readAll(...)` methods.
 
 ### Error Handling
@@ -284,7 +294,7 @@ Follow the repository-wide [CODING_STANDARDS.md](../../CODING_STANDARDS.md). Add
 | `FileNotLoaded` | `src/source/segment/errors/` | Segment file could not be loaded/parsed |
 | `BuildingModuleFailed` | `src/target/module/errors/` | Failed to generate module code |
 | `BuildingSegmentFailed` | `src/target/segment/errors/` | Failed to generate segment code |
-| `RewriteItemNotFound` | `src/target/module/errors/` | Rewrite item not found in module statements |
+| `RewriteItemFound` | `src/target/module/errors/` | Rewrite item not found in module statements |
 
 ### Imports
 
@@ -325,11 +335,11 @@ Application (repository + resources + segmentation)
     ├── BuildHelper → generateModuleCode() / generateSegmentCode()
     │
     └── BuildManager → ApplicationBuilder
-                          ├── ModuleBuilder
-                          │     ├── LocalGenerator (common + segment-specific)
-                          │     └── RemoteGenerator
-                          └── SegmentBuilder
-                                └── Generator (.segment.js)
+                          ├── Builder (module)
+                          │     ├── LocalModuleGenerator (common + segment-specific)
+                          │     └── RemoteModuleGenerator
+                          └── Builder (segment)
+                                └── SegmentGenerator (.segment.js)
 ```
 
 ## Testing
@@ -368,7 +378,7 @@ Use this skill when you need to:
 When implementing a new feature:
 
 - [ ] Understand which layer the feature belongs to (source, target, or supporting).
-- [ ] Follow the naming conventions: "Reader" for reading components, "Generator" for generation components.
+- [ ] Follow the naming conventions: "Reader" for reading components, "Builder" or "Generator" for generation components (`LocalModuleGenerator`, `RemoteModuleGenerator`, `SegmentGenerator`).
 - [ ] Use dependency injection via constructor parameters; never create collaborators with `new` inside methods.
 - [ ] Create error classes in the appropriate `errors/` subdirectory.
 - [ ] Follow the `#privateField` syntax for private fields (never `private` keyword).
