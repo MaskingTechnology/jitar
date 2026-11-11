@@ -594,6 +594,27 @@ describe('Parser', () =>
             expect(firstElement.initializer).toBeUndefined();
         });
 
+        it('should parse a declaration that is destructuring an object with nested alias and rest element', () =>
+        {
+            const variable = parser.parseVariable(VARIABLES.DESTRUCTURING_OBJECT_NESTED_ALIAS_WITH_REST);
+            expect(variable.identifier).toEqual('{key1:{key2:alias,...rest},...others}');
+            expect(variable.binding).toBeInstanceOf(ESObjectBinding);
+            expect(variable.type).toEqual('const');
+
+            const binding = variable.binding as ESObjectBinding;
+            expect(binding.elements).toHaveLength(2);
+
+            const firstElement = binding.elements[0];
+            expect(firstElement.binding).toBeInstanceOf(ESPropertyBinding);
+            expect(firstElement.binding.toString()).toEqual('key1:{key2:alias,...rest}');
+            expect(firstElement.initializer).toBeUndefined();
+
+            const secondElement = binding.elements[1];
+            expect(secondElement.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(secondElement.binding.toString()).toEqual('...others');
+            expect(secondElement.initializer).toBeUndefined();
+        });
+
         it('should parse a declaration with a non reserved keyword as name', () =>
         {
             const variable = parser.parseVariable(VARIABLES.KEYWORD_AS_NAME);

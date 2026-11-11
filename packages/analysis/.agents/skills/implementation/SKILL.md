@@ -217,8 +217,6 @@ Be aware of these known parser limitations before implementing:
 
 1. **Generator methods as object properties** — Dynamic property generators (e.g., `*[Symbol.iterator]()`) are not supported. Named generator methods (static, async, instance) are supported.
 
-2. **Destructuring with aliases** — Destructuring with aliases (e.g., `const { b: c } = obj`) is not yet supported.
-
 ## Development Commands
 
 | Command | Description |

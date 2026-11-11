@@ -14,6 +14,7 @@ export const VARIABLES =
     DESTRUCTURING_OBJECT: "const {key1, key2 = false} = object;",
     DESTRUCTURING_OBJECT_ALIAS: "const { key1, key2: alias } = object;",
     DESTRUCTURING_OBJECT_NESTED_ALIAS: "const { key1: { key2 } } = object;",
+    DESTRUCTURING_OBJECT_NESTED_ALIAS_WITH_REST: "const { key1: { key2, ...rest }, ...others } = object;",
     KEYWORD_AS_NAME: "const as = 'value';",
     KEYWORD_AS_VALUE: "const alias = as;"
 };

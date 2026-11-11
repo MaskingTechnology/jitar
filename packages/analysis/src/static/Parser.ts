@@ -554,7 +554,7 @@ export default class Parser
     #parseBinding(tokenList: TokenList): ESBinding
     {
         const token = tokenList.current;
-        
+
         if (token.hasValue(List.OPEN))
         {
             return this.#parseArrayBinding(tokenList);
@@ -563,7 +563,7 @@ export default class Parser
         {
             return this.#parseObjectBinding(tokenList);
         }
-        
+
         return this.#parseIdentifierBinding(tokenList);
     }
 
