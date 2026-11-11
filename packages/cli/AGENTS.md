@@ -20,7 +20,6 @@ The single exported entry point is `Cli`, which reads `process.argv`, extracts t
 
 ## Architecture
 
-```
 src/
 ├── Cli.ts                    ← Main entry point; reads process.argv, delegates to CommandRunner
 ├── Command.ts                ← Interface defining name, description, options, execute()
@@ -135,3 +134,6 @@ Follow the repository-wide [CODING_STANDARDS.md](../../CODING_STANDARDS.md). Add
 - **Server shutdown**: `StartServer` registers a `SIGINT` handler that calls `httpServer.stop()`. A guard flag (`isShuttingDown`) prevents double-stops.
 - **Banner**: `StartServer` prints an ASCII art banner before starting the server.
 
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.
