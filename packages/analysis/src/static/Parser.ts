@@ -635,33 +635,26 @@ export default class Parser
 
         const nextToken = tokenList.current;
 
-        if (nextToken?.hasValue(Divider.SCOPE))
+        if (nextToken.hasValue(Divider.SCOPE))
         {
-            return this.#parsePropertyBinding(tokenList, property, isRest);
+            return this.#parsePropertyBinding(tokenList, property);
         }
 
         return new ESIdentifierBinding(property, isRest);
     }
 
-    #parsePropertyBinding(tokenList: TokenList, property: string, isRest: boolean): ESPropertyBinding
+    #parsePropertyBinding(tokenList: TokenList, property: string): ESPropertyBinding
     {
         tokenList.step(); // Read away the colon
 
         const identifierToken = tokenList.current;
 
         // Check if the value is a nested destructuring (object or array)
-        if (identifierToken.hasValue(Scope.OPEN))
+        if (identifierToken.hasValue(Scope.OPEN) || identifierToken.hasValue(List.OPEN))
         {
             const nestedBinding = this.#parseBinding(tokenList);
 
-            return new ESPropertyBinding(property, nestedBinding.toString(), isRest);
-        }
-
-        if (identifierToken?.hasValue(List.OPEN))
-        {
-            const nestedBinding = this.#parseBinding(tokenList);
-
-            return new ESPropertyBinding(property, nestedBinding.toString(), isRest);
+            return new ESPropertyBinding(property, nestedBinding.toString());
         }
 
         if (this.#isIdentifier(identifierToken) === false)
@@ -673,7 +666,7 @@ export default class Parser
 
         tokenList.step(); // Read away the identifier
 
-        return new ESPropertyBinding(property, identifier, isRest);
+        return new ESPropertyBinding(property, identifier);
     }
 
     #parseInitializer(tokenList: TokenList): ESStatement | undefined
