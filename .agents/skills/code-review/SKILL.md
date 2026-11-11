@@ -7,7 +7,7 @@ description: Review code changes for bugs, regressions, security issues, convent
 
 ## Overview
 
-Reviews TypeScript changes across Comify's bounded contexts (`development/`, `testing/`, `deployment/`) for correctness, architectural integrity, and adherence to the conventions in the repository root [`AGENTS.md`](../../../AGENTS.md). For domain or UI code specifically, also cross-check against the `domain-implementation`, `domain-testing`, and `app-implementation` skills — this skill focuses on the cross-cutting checks that apply to every change.
+Reviews TypeScript changes across Jitar's packages (`packages/*`) for correctness, architectural integrity, and adherence to the conventions in the repository root [`AGENTS.md`](../../../AGENTS.md).
 
 ## When to Use
 
