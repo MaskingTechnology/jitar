@@ -267,9 +267,4 @@ All errors include descriptive messages with position information.
 
 ## MCP Usage
 
-### Github
-
-When using this MCP, the `repo` is `jitar` and the `owner` is `MaskingTechnology`.
-
-- don't use this MCP for reading code
-- when an issue number is provided (i.e. #813) use the `read issue` functionality.
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

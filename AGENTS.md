@@ -68,3 +68,20 @@ When working within a specific package under `packages/*`, refer to:
 - **Clean:** Build artifacts go into each package's `dist/` directory. Remove `dist/` directories to perform a clean build. These paths are ignored by linting.
 - **Dependencies:** All intra-monorepo package references use workspace aliases (`@jitar/...`). Never use relative paths across `packages/`.
 - **Critical Rule:** A full build (`npm run build:all`) must always pass before merging or publishing. Turbo handles build ordering — downstream packages depend on upstream builds automatically.
+
+## MCP Usage
+
+### Github
+
+When using this MCP, the `repo` is `jitar` and the `owner` is `MaskingTechnology`.
+
+- don't use this MCP for reading code
+- when an issue number is provided (i.e. #813) use the `read issue` functionality.
+
+## Generation rules
+
+When generating code, sometimes the size of the text is bigger than the context size. If this is the case:
+
+- Generate partial pieces, and keep updating the file until it's finished.
+- NEVER user heredoc, or any other custom terminal scripts.
+- NEVER generate temporary (python, typescript, etc) scripts to overcome the size limit.

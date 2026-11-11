@@ -183,3 +183,6 @@ The `FileHelper.addSubExtension()` method replaces `.js` with `.<subExtension>.j
 - **Id generation**: Each member (class or implementation) receives a unique `$N` identifier used by the runtime to match remote calls to local implementations.
 - **The `__run` global**: Remote module generators emit calls to a global `__run(fqn, version, params, this)` function. This function is provided by the Jitar runtime at execution time.
 
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.
