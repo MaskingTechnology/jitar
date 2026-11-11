@@ -74,6 +74,7 @@ ESStatement (abstract)
 ├── ESExport
 └── ESBinding (abstract)
     ├── ESIdentifierBinding
+    ├── ESPropertyBinding
     ├── ESArrayBinding
     └── ESObjectBinding
 ```
@@ -232,9 +233,7 @@ The parser has the following known limitations:
 
 1. **Generator methods as object properties** — Dynamic property generators (e.g., `*[Symbol.iterator]()`) are not supported. Named generator methods (static, async, instance) are supported.
 
-2. **Destructuring with aliases** — Destructuring with aliases (e.g., `const { b: c } = obj`) is not yet supported.
-
-3. **Dynamic property destructuring** — Dynamic property destructuring (e.g., `const { [key]: value } = obj`) is not yet supported.
+2. **Dynamic property destructuring** — Dynamic property destructuring (e.g., `const { [key]: value } = obj`) is not yet supported.
 
 ## Development Commands
 

@@ -12,6 +12,8 @@ export const VARIABLES =
     REGEX: "const regex = /regex/g;",
     DESTRUCTURING_ARRAY: "const [value1, value2 = true] = array;",
     DESTRUCTURING_OBJECT: "const {key1, key2 = false} = object;",
+    DESTRUCTURING_OBJECT_ALIAS: "const { key1, key2: alias } = object;",
+    DESTRUCTURING_OBJECT_NESTED_ALIAS: "const { key1: { key2 } } = object;",
     KEYWORD_AS_NAME: "const as = 'value';",
     KEYWORD_AS_VALUE: "const alias = as;"
 };

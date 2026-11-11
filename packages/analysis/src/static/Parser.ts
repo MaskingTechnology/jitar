@@ -1,7 +1,7 @@
 
 import type { ClassVisibility, ClassLocation, VariableType } from '../model';
 import {
-    ESBinding, ESIdentifierBinding, ESArrayBinding, ESObjectBinding, ESBindingElement,
+    ESBinding, ESIdentifierBinding, ESArrayBinding, ESObjectBinding, ESPropertyBinding, ESBindingElement,
     ESBlock, ESExpression, ESVariable,
     ESFunction, ESArrowFunction, ESGeneratorFunction, ESParameter,
     ESClass, ESClassMember, ESField, ESMethod, ESGeneratorMethod, ESConstructor, ESGetter, ESSetter,
@@ -618,7 +618,7 @@ export default class Parser
         return elements;
     }
 
-    #parseIdentifierBinding(tokenList: TokenList): ESIdentifierBinding
+    #parseIdentifierBinding(tokenList: TokenList): ESBinding
     {
         let token = tokenList.current;
         let isRest = false;
@@ -629,11 +629,51 @@ export default class Parser
             token = tokenList.step();
         }
 
-        const identifier = token.value;
+        const property = token.value;
 
         tokenList.step(); // Read away the identifier
 
-        return new ESIdentifierBinding(identifier, isRest);
+        const nextToken = tokenList.current;
+
+        if (nextToken?.hasValue(Divider.SCOPE))
+        {
+            return this.#parsePropertyBinding(tokenList, property, isRest);
+        }
+
+        return new ESIdentifierBinding(property, isRest);
+    }
+
+    #parsePropertyBinding(tokenList: TokenList, property: string, isRest: boolean): ESPropertyBinding
+    {
+        tokenList.step(); // Read away the colon
+
+        const identifierToken = tokenList.current;
+
+        // Check if the value is a nested destructuring (object or array)
+        if (identifierToken.hasValue(Scope.OPEN))
+        {
+            const nestedBinding = this.#parseBinding(tokenList);
+
+            return new ESPropertyBinding(property, nestedBinding.toString(), isRest);
+        }
+
+        if (identifierToken?.hasValue(List.OPEN))
+        {
+            const nestedBinding = this.#parseBinding(tokenList);
+
+            return new ESPropertyBinding(property, nestedBinding.toString(), isRest);
+        }
+
+        if (this.#isIdentifier(identifierToken) === false)
+        {
+            throw new ExpectedToken('an identifier', identifierToken.start);
+        }
+
+        const identifier = identifierToken.value;
+
+        tokenList.step(); // Read away the identifier
+
+        return new ESPropertyBinding(property, identifier, isRest);
     }
 
     #parseInitializer(tokenList: TokenList): ESStatement | undefined

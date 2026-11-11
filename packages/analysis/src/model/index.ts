@@ -25,6 +25,7 @@ export { default as ESModule } from './ESModule';
 export { default as ESModuleMember } from './ESModuleMember';
 export { default as ESObjectBinding } from './ESObjectBinding';
 export { default as ESParameter } from './ESParameter';
+export { default as ESPropertyBinding } from './ESPropertyBinding';
 export { default as ESSetter } from './ESSetter';
 export { default as ESStatement } from './ESStatement';
 export { default as ESVariable } from './ESVariable';

@@ -2,7 +2,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-    ESIdentifierBinding, ESArrayBinding, ESObjectBinding, ESBindingElement,
+    ESIdentifierBinding, ESArrayBinding, ESObjectBinding, ESPropertyBinding, ESBindingElement,
     ESExpression,
     ESFunction, ESArrowFunction, ESGeneratorFunction,
     ESClass, ESGeneratorMethod, ESConstructor,
@@ -553,6 +553,45 @@ describe('Parser', () =>
             expect(secondElement.binding.toString()).toEqual('key2');
             expect(secondElement.initializer).toBeInstanceOf(ESExpression);
             expect(secondElement.initializer?.toString(false)).toEqual('false');
+        });
+
+        it('should parse a declaration that is destructuring an object with aliases', () =>
+        {
+            const variable = parser.parseVariable(VARIABLES.DESTRUCTURING_OBJECT_ALIAS);
+            expect(variable.identifier).toEqual('{key1,key2:alias}');
+            expect(variable.binding).toBeInstanceOf(ESObjectBinding);
+            expect(variable.type).toEqual('const');
+            expect(variable.initializer).toBeInstanceOf(ESExpression);
+            expect(variable.initializer?.toString(false)).toEqual('object');
+
+            const binding = variable.binding as ESObjectBinding;
+            expect(binding.elements).toHaveLength(2);
+
+            const firstElement = binding.elements[0];
+            expect(firstElement.binding).toBeInstanceOf(ESIdentifierBinding);
+            expect(firstElement.binding.toString()).toEqual('key1');
+            expect(firstElement.initializer).toBeUndefined();
+
+            const secondElement = binding.elements[1];
+            expect(secondElement.binding).toBeInstanceOf(ESPropertyBinding);
+            expect(secondElement.binding.toString()).toEqual('key2:alias');
+            expect(secondElement.initializer).toBeUndefined();
+        });
+
+        it('should parse a declaration that is destructuring an object with nested aliases', () =>
+        {
+            const variable = parser.parseVariable(VARIABLES.DESTRUCTURING_OBJECT_NESTED_ALIAS);
+            expect(variable.identifier).toEqual('{key1:{key2}}');
+            expect(variable.binding).toBeInstanceOf(ESObjectBinding);
+            expect(variable.type).toEqual('const');
+
+            const binding = variable.binding as ESObjectBinding;
+            expect(binding.elements).toHaveLength(1);
+
+            const firstElement = binding.elements[0];
+            expect(firstElement.binding).toBeInstanceOf(ESPropertyBinding);
+            expect(firstElement.binding.toString()).toEqual('key1:{key2}');
+            expect(firstElement.initializer).toBeUndefined();
         });
 
         it('should parse a declaration with a non reserved keyword as name', () =>

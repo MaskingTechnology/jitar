@@ -1,6 +1,6 @@
 
 export {
-    ESBinding, ESIdentifierBinding, ESArrayBinding, ESObjectBinding, ESBindingElement,
+    ESBinding, ESIdentifierBinding, ESArrayBinding, ESObjectBinding, ESPropertyBinding, ESBindingElement,
     ESDeclaration, ESBlock, ESExpression, ESVariable,
     ESFunction, ESArrowFunction, ESGeneratorFunction, ESParameter,
     ESClass, ESClassMember, ESField, ESMethod, ESGeneratorMethod, ESConstructor, ESGetter, ESSetter,
