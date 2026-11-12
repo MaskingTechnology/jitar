@@ -1,5 +1,5 @@
 
-import type { GatewayConfiguration, ProxyConfiguration, RemoteWorkerConfiguration, RepositoryConfiguration, ServerConfiguration, StandaloneConfiguration, WorkerConfiguration } from '../../../src/server';
+import type { GatewayConfiguration, ProxyConfiguration, RemoteWorkerConfiguration, RepositoryConfiguration, ServiceConfiguration, StandaloneConfiguration, WorkerConfiguration } from '../../../src/service';
 
 const fallback = 'index.html';
 const assets = ['index.html', 'favicon.ico'];
@@ -32,7 +32,7 @@ const validInput: Record<string, unknown> =
     remoteWorker: remoteWorkerConfiguration
 } as const;
 
-const validResult: ServerConfiguration = 
+const validResult: ServiceConfiguration = 
 { 
     url: 'https://server', 
     setUp: ['setup'],

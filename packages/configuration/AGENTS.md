@@ -138,3 +138,7 @@ When working with this package:
 5. **Write tests**: Mirror the source structure, create fixtures for dependencies, test both success and error paths.
 6. **Run `npm run lint`** after making changes.
 7. **Run `npm run test`** to verify all tests pass.
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.
