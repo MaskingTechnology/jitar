@@ -1,16 +1,14 @@
-# Configuration Package Agent Guidelines
+# Configuration Package
 
-## Purpose
-This package provides configuration loading, parsing, and validation for the Jitar runtime. It reads JSON configuration files, replaces environment variables, validates configurations against schemas, and exposes configuration types for runtime and service layers.
+## Package Overview
 
-## Dependencies
-- `@jitar/sourcing` — `FileManager` interface and `LocalFileManager` for file operations
-- `@jitar/validation` — `Validator` class and `ValidationScheme` type for configuration validation
-- `dotenv` — `.env` file loading
+This package (`@jitar/configuration`) provides configuration loading, parsing, and validation for the Jitar runtime. It reads JSON configuration files, replaces environment variables with their values, validates configurations against schemas, and exposes configuration types for runtime and service layers.
+
+It is a **private** package within the Jitar monorepo and is not published independently.
 
 ## Architecture
 
-The package is organized into four logical modules, each with its own index file:
+The package is organized into four logical modules:
 
 ```
 src/
@@ -55,90 +53,105 @@ src/
 | `RuntimeConfiguration` | Type + validation scheme for build-time configuration |
 | `ServiceConfiguration` | Type + validation scheme for runtime service configuration (aggregates all sub-types) |
 
-## Coding Conventions
+### Key Data Flow
 
-### File Organization
+1. `ConfigurationManager` is instantiated with an optional `rootPath` (defaults to `'./'`).
+2. It composes an `EnvironmentConfigurator`, `RuntimeConfigurationBuilder`, and `ServiceConfigurationBuilder`.
+3. `configureEnvironment()` loads `.env` files (via `dotenv`).
+4. `getRuntimeConfiguration()` / `getServiceConfiguration()` delegate to their respective builders.
+5. Each builder uses a `ConfigurationReader` (which reads JSON, interpolates env vars) and a `Validator` (from `@jitar/validation`).
+6. Validation failures throw package-specific error classes (`RuntimeConfigurationInvalid`, `ServiceConfigurationInvalid`).
+
+## Dependencies
+
+- `@jitar/sourcing` — `FileManager` interface and `LocalFileManager` for file operations.
+- `@jitar/validation` — `Validator` class and `ValidationScheme` type for configuration validation.
+- `dotenv` (v18.0.9) — `.env` file loading.
+
+All intra-monorepo dependencies use workspace aliases (`@jitar/...`). Never use relative paths across `packages/`.
+
+## Development Conventions
+
+Follow the monorepo-wide conventions documented in the root [`CODING_STANDARDS.md`](../../CODING_STANDARDS.md) and the root [`AGENTS.md`](../../AGENTS.md).
+
+Package-specific conventions:
+
 - **1 file per logical component** (class, type, or error).
-- Group related types and their validation schemes in the same file (e.g., `RuntimeConfiguration.ts`).
-- Each sub-module (`runtime/`, `service/`, `utils/`, `environment/`) must have an `index.ts` that re-exports its public members.
-
-### Exports
+- **Group related types and their validation schemes** in the same file (e.g., `RuntimeConfiguration.ts` contains the type definition, `DefaultValues`, and `validationScheme`).
 - **Classes and default types**: `export default` (e.g., `export default class ConfigurationBuilder`).
 - **Named exports for shared values**: `const DefaultValues`, `validationScheme` are exported via `export { ... }`.
 - **Index files**: Re-export from sub-modules using `export { default as <Name> }` pattern.
-- **Do not export types/functions** unless shared across multiple components.
+- **Private fields**: Use JavaScript private syntax (`#fieldName`).
+- **Import ordering**: External dependencies first, then core (workspace) dependencies, then runtime dependencies, then types.
+- **Imports within the package**: Use relative paths. Imports across packages: use workspace aliases (`@jitar/...`).
+- **Every sub-module** (`runtime/`, `service/`, `utils/`, `environment/`) must have an `index.ts` that re-exports all public members.
 
-### Class Patterns
-- Private fields use `#` prefix (e.g., `#fileManager`, `#reader`, `#validator`).
-- Constructor always assigns dependencies to private fields.
-- Builder classes receive dependencies via constructor injection (`ConfigurationReader`, `Validator`).
-- Error classes extend `Error` and take descriptive arguments in the constructor.
+### Validation Schemes
 
-### Validation Patterns
-- Each configuration type exports a `validationScheme: ValidationScheme` constant.
-- Schemes use `as const` assertions.
-- Supported types: `'string'`, `'url'`, `'integer'`, `'boolean'`, `'list'` (with `items`), `'group'` (with nested `fields`).
-- Fields declare `required: boolean`.
-- Configuration builders validate input against the scheme and throw a typed error if `validation.valid === false`.
+Each configuration type exports a `validationScheme` (of type `ValidationScheme` from `@jitar/validation`). Supported scheme types include: `string`, `url`, `integer`, `boolean`, `list` (with optional `items`), and `group` (with nested `fields`). All fields are optional unless explicitly marked `required: true`.
 
-### Default Values
-- Default values are defined as a `const DefaultValues` object and exported.
-- Builders apply defaults using the nullish coalescing operator (`??=`) after reading.
-- The `meta` field (containing `root` and `configFile`) is always set by the builder, never from the file.
+### Error Classes
 
-### Error Messages
-- Error constructors receive the `filename` and `ValidationResult`.
-- Error messages join `validation.errors` with a separator (e.g., `'\\n'` or `'\\n => '`).
-- Message format: `Invalid <type> configuration '<filename>'<separator><errors>`.
+- `RuntimeConfigurationInvalid` — thrown when runtime configuration fails validation. Message format: `Invalid runtime configuration '<filename>'\n<error messages joined by '\n'>`.
+- `ServiceConfigurationInvalid` — thrown when service configuration fails validation. Message format: `Invalid server configuration '<filename>'\n => <error messages joined by '\n => '>`.
+- `InvalidConfigurationFile` — thrown when a configuration file exists but is not JSON (checked via `file.type.includes('json')`).
 
-## Testing Conventions
+## Public API and Compatibility
 
-### Test Structure
-- Tests live in `test/` mirroring the `src/` directory structure.
-- Each test file is named `<ComponentName>.spec.ts`.
-- Per-test-file fixtures live in `test/<module>/fixtures/`.
+The package exports the following at its entry point (`dist/index.js`):
 
-### Fixture Patterns
-- **File manager fixture** (`TestFileManager` in `test/fixtures/fileManager.fixture.ts`): Implements the `FileManager` interface, stores a `Record<string, File>` mapping filenames to file objects.
-- **Configuration fixtures**: Define `FILENAMES` constants and `CONFIGURATIONS` result objects.
-- **Builder fixtures**: Instantiate the builder with mocked dependencies.
+**Types:**
+- `RuntimeConfiguration` — build-time configuration (source, target, segments, resources, build).
+- `ServiceConfiguration` — runtime service configuration with sub-types (url, http, gateway, proxy, repository, standalone, worker, remoteWorker).
+- `StandaloneConfiguration`, `ProxyConfiguration`, `WorkerConfiguration`, `GatewayConfiguration`, `RepositoryConfiguration`, `HttpConfiguration` — service sub-type definitions.
 
-### Test Patterns
-- Use `vitest` with `describe`, `it`, `expect`.
-- Environment variable tests use `vi.stubEnv()` / `vi.unstubAllEnvs()`.
-- Error cases use `await expect(promise).rejects.toEqual(new <ErrorClass>(...))`.
-- Success cases use `await expect(promise).resolves.toEqual(<expectedConfiguration>)`.
+**Classes:**
+- `ConfigurationManager` — public facade for all configuration operations.
 
-## Key Implementation Details
+The `ConfigurationManager` exposes three methods:
+- `configureEnvironment(filename?: string)` — loads `.env` files (default: `.env`).
+- `getRuntimeConfiguration(filename?: string)` — builds runtime configuration (default filename: `'./jitar.json'`).
+- `getServiceConfiguration(filename: string)` — builds service configuration.
 
-### Environment Variable Interpolation
-- Pattern: `${VAR_NAME}` (e.g., `${TARGET}`).
-- Missing env vars resolve to the string `'null'` (not `null`).
+## Testing
 
-### Default Configuration Values
-- Runtime defaults: `source: './src'`, `target: './dist'`, `segments: './segments'`, `resources: './resources'`, `build.ignore: []`.
-- Runtime default filename: `'./jitar.json'`.
+- **Framework**: `vitest` (configured via `vitest.config.ts`).
+- **Coverage**: `v8` provider.
+- **Commands**: `npm run test` (run tests), `npm run test-coverage` (run with coverage).
+- **Test files**: Named `<ComponentName>.spec.ts`, placed in `test/<module>/`.
+- **Fixtures**: Organized in `test/<module>/fixtures/` mirroring source structure.
+- **Patterns**:
+  - Use `vi.stubEnv()` / `vi.unstubAllEnvs()` for environment variable tests.
+  - Use `await expect(promise).resolves.toEqual(...)` for success cases.
+  - Use `await expect(promise).rejects.toEqual(new <ErrorClass>(...))` for error cases.
+  - Implement `TestFileManager` in fixtures to mock the `FileManager` interface.
 
-### Service Configuration
-- `ServiceConfiguration` is a discriminated union type — exactly one of `gateway`, `proxy`, `repository`, `standalone`, `worker`, or `remoteWorker` should be present.
-- Each sub-type has its own validation scheme, composed into the parent scheme via `fields`.
+## Build and Validation
 
-### ConfigurationReader
-- Returns `{}` (empty object) when the file does not exist — this allows builders to apply all defaults.
-- Throws `InvalidConfigurationFile` if the file exists but is not JSON (checked via `file.type.includes('json')`).
+- `npm run build` — compiles TypeScript (`tsc -p tsconfig.json`).
+- `npm run clean` — removes `dist/` directory (`shx rm -rf dist`).
+- `npm run lint` — runs ESLint (configured at monorepo root).
+- `npm run test` — runs all tests via `vitest`.
 
-## Workflow
+TypeScript extends the root `tsconfig.json` with `rootDir: ./src` and `outDir: ./dist`. Test files and `vite.config.ts` are excluded from compilation.
 
-When working with this package:
+## Constraints and Important Considerations
 
-1. **Read the source**: Understand the component's role within its sub-module.
-2. **Follow naming conventions**: Class names PascalCase, `#` for private, `camelCase` for methods.
-3. **Use workspace aliases**: Import from `@jitar/sourcing` and `@jitar/validation`, never relative paths.
-4. **Export through index files**: Every public type/class/error must be re-exported via its module's `index.ts`.
-5. **Write tests**: Mirror the source structure, create fixtures for dependencies, test both success and error paths.
-6. **Run `npm run lint`** after making changes.
-7. **Run `npm run test`** to verify all tests pass.
+- **Private package**: This package is not published. It is consumed only by other packages within the monorepo.
+- **Environment variable interpolation**: Missing env vars resolve to the string `'null'` (not `null`). This is a known behavior — document it when adding env var usage.
+- **ConfigurationReader returns `{}` for non-existing files**: This allows builders to apply all defaults when no configuration file is present.
+- **ConfigurationReader throws `InvalidConfigurationFile` for non-JSON files**: Only `.json` files are accepted.
+- **Do not export types/functions** unless they need to be shared across components.
+- **Never use `null`** — use `undefined` unless an external library requires it.
+- **Do not disable ESLint rules** with inline comments without explicit approval.
+- **Always run `npm run lint`** after modifying TypeScript files.
+- **Always run `npm run test`** to verify all tests pass before considering changes complete.
 
-## MCP Usage
+## Available Skills
 
-Read the root [`AGENTS.md`](../../AGENTS.md) for more information.
+The package has the following skills available in `.agents/skills/` (both currently disabled):
+
+- **`code-review`** — Use when reviewing a pull request or diff. Checks formatting, correctness, package-specific conventions, tests, and security. (See `.agents/skills/code-review/SKILL.md`)
+- **`implementation`** — Use when implementing or modifying configuration-related code. Covers architecture, conventions, testing, and key implementation details. (See `.agents/skills/implementation/SKILL.md`)
+
+Consult these skills when performing code reviews or implementing configuration changes.
