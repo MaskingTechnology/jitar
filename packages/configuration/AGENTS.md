@@ -15,30 +15,9 @@ src/
 ├── index.ts                          # Main exports (types + ConfigurationManager)
 ├── ConfigurationManager.ts          # Orchestrator — composes all sub-components
 ├── environment/                      # .env file handling
-│   ├── index.ts
-│   └── Configurator.ts
 ├── runtime/                          # Runtime configuration (source, target, segments, resources, build)
-│   ├── index.ts
-│   ├── ConfigurationBuilder.ts
-│   ├── definitions/RuntimeConfiguration.ts
-│   └── errors/RuntimeConfigurationInvalid.ts
 ├── service/                          # Service configuration (url, http, gateway, proxy, repository, standalone, worker, remoteWorker)
-│   ├── index.ts
-│   ├── ConfigurationBuilder.ts
-│   ├── definitions/                  # Each service type has its own definition file
-│   │   ├── ServiceConfiguration.ts
-│   │   ├── StandaloneConfiguration.ts
-│   │   ├── GatewayConfiguration.ts
-│   │   ├── WorkerConfiguration.ts
-│   │   ├── RepositoryConfiguration.ts
-│   │   ├── HttpConfiguration.ts
-│   │   ├── ProxyConfiguration.ts
-│   │   └── RemoteWorkerConfiguration.ts
-│   └── errors/ServiceConfigurationInvalid.ts
 └── utils/                            # Shared utility: JSON reading with env var interpolation
-    ├── index.ts
-    ├── ConfigurationReader.ts
-    └── errors/InvalidConfigurationFile.ts
 ```
 
 ### Component Responsibilities
