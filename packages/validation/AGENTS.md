@@ -196,6 +196,21 @@ Error messages follow a consistent format:
 | Invalid list item | `Field '<listKey>.<index>' is not a <type>` |
 | Invalid enum value | `Field '<key>' is not one of: <options>` |
 
+## Constraints and Important Considerations
+
+- This package is `private: true` — it is never published independently.
+- The `@jitar/errors` dependency is declared but not yet used in source code.
+- The `Validator` class is the only public class; never expose additional classes without re-exporting them.
+- Do not change error message formats — tests assert exact message strings.
+- Do not change the default `strict` mode; it is `true` by design.
+
+## Available Skills
+
+| Skill | Location | When to Consult |
+|---|---|---|
+| `implementation` | `.agents/skills/implementation/SKILL.md` | When implementing changes in this package. |
+| `code-review` | `.agents/skills/code-review/SKILL.md` | When reviewing changes, pull requests, or diffs in this package. Checks TypeScript strict mode compliance, formatting, and convention adherence. |
+
 ## Workflow
 
 When working with this package:
@@ -207,3 +222,4 @@ When working with this package:
 5. **Write tests**: Create tests that cover valid, invalid, and missing value scenarios for each type.
 6. **Run `npm run lint`** after making changes.
 7. **Run `npm run test`** to verify all tests pass.
+8. **Consult the root `AGENTS.md`** for monorepo-wide conventions (linting configuration, build commands, workspace alias rules).
