@@ -1,6 +1,8 @@
 ---
-disabled: true
+name: implementation
+description: Guides AI coding agents when implementing new features, modifying existing functionality, or refactoring code in the @jitar/configuration package. Covers architecture, conventions, testing, and validation procedures.
 ---
+
 # Configuration Package Implementation Skill
 
 ## Purpose
@@ -71,97 +73,127 @@ Also check the root `src/index.ts` — anything exported there is part of the pu
 
 #### Adding a New Service Sub-Type
 
-1. **Create a new definition file** at `src/service/definitions/<Name>Configuration.ts` with the type, `validationScheme`, and `export default` for the type, `export { validationScheme }` for the scheme.
-2. **Import and register it** in `src/service/definitions/ServiceConfiguration.ts` (import type and validation scheme).
-3. **Add the optional field** to the `ServiceConfiguration` type.
-4. **Add the validation group** to the `validationScheme` (using `type: 'group'` with `fields: <name>ValidationScheme`).
-5. **Update the index file** at `src/service/index.ts` (export `{ default as <Name> }`).
-6. **Update the root index** at `src/index.ts` if the type should be publicly exported.
+1. **Create the type and validation scheme** in a new `service/definitions/<TypeName>Configuration.ts` file following the established pattern:
+   ```ts
+   type <TypeName>Configuration =
+   {
+       field1?: string;
+       field2?: number;
+   };
 
-#### Modifying the ConfigurationReader
+   export default <TypeName>Configuration;
 
-If you need to change how configuration files are read:
+   const validationScheme: ValidationScheme =
+   {
+       field1: { type: 'string', required: false },
+       field2: { type: 'integer', required: false }
+   } as const;
 
-- The `ConfigurationReader` receives a `FileManager` via its constructor.
-- It checks file existence (returns `{}` if not found).
-- It validates file type (`file.type.includes('json')`).
-- It performs env var interpolation using the regex `\${([^}]*)}`.
-- It parses the interpolated JSON.
+   export { validationScheme };
+   ```
+2. **Import and register** the new type in `ServiceConfiguration.ts` — add it as an optional property on `ServiceConfiguration` and add a `group` entry to `validationScheme` referencing the new validation scheme.
+3. **Export** the type from `service/index.ts` using `export { default as <TypeName>Configuration } from './definitions/<TypeName>Configuration'`.
+4. **Update tests** — add fixture data and test cases.
 
-**Do not** change the return type (`Promise<Record<string, unknown>>`). All builders depend on this contract.
+#### Adding a New Runtime Configuration Field
 
-### Where New Code Should Be Placed
+Follow the same pattern as service sub-types but within the `runtime/` module. Apply defaults in `ConfigurationBuilder.build()` using nullish coalescing assignment (`??=`).
 
-Follow the established directory structure:
+### How to Modify the ConfigurationReader
 
-```
-src/
-├── <module>/
-│   ├── <ComponentName>.ts          # The implementation (export default)
-│   ├── definitions/
-│   │   └── <TypeName>.ts           # Type + DefaultValues + validationScheme
-│   └── errors/
-│       └── <ErrorName>.ts          # Error class (export default)
-└── <module>/index.ts               # Re-exports
-```
+Changes to `ConfigurationReader` affect all builders. Before modifying:
 
-- **Classes**: `src/<module>/<ComponentName>.ts` (e.g., `src/runtime/ConfigurationBuilder.ts`).
-- **Types + validation**: `src/<module>/definitions/<TypeName>.ts`.
-- **Errors**: `src/<module>/errors/<ErrorName>.ts`.
-- **Index files**: One per module, re-exporting all public members.
+1. Understand the env var interpolation regex: `/\${([^}]*)}/g`.
+2. Remember that missing env vars resolve to the string `'null'` (not `null`).
+3. The reader returns `{}` for non-existing files — do not change this behavior.
+4. Non-JSON files throw `InvalidConfigurationFile` — only `.json` files are accepted.
 
-### How to Maintain Package Boundaries
+### How to Modify the ConfigurationManager
 
-- **Within the package**: Use relative imports (e.g., `from '../utils'`, `from './definitions/RuntimeConfiguration'`).
-- **Across packages**: Use workspace aliases (e.g., `from '@jitar/sourcing'`, `from '@jitar/validation'`). Never use relative paths across `packages/`.
-- **Do not export** types, classes, or functions from a module's index unless they are consumed by another module or part of the public API.
-- **Do not introduce** new dependencies. If you need a new dependency, justify it in the implementation and get approval.
+If adding a new public method:
+
+1. Add the method to `ConfigurationManager` that delegates to the appropriate builder.
+2. Update `src/index.ts` to export any new types.
+3. Add tests for the new method via `ConfigurationManager` integration.
 
 ---
 
 ## 3. Code Conventions
 
-### How to Handle Types, Validation, and Errors
+### File Organization
 
-#### Validation Scheme Types
+- **1 file per logical component** — one class, one type, or one error per file.
+- **Group related types and their validation schemes** in the same file (e.g., `RuntimeConfiguration.ts` contains the type definition, `DefaultValues`, and `validationScheme`).
+- **Error classes** go in `errors/` subdirectories (e.g., `src/runtime/errors/RuntimeConfigurationInvalid.ts`).
+- **Index files** re-export all public members using `export { default as <Name> }` pattern.
+- **Every sub-module** (`runtime/`, `service/`, `utils/`, `environment/`) must have an `index.ts` that re-exports all public members.
 
-The package supports these validation scheme field types (from `@jitar/validation`):
-
-| Type | Description | Example |
-|---|---|---|
-| `string` | A string value | `{ type: 'string', required: false }` |
-| `url` | A URL string | `{ type: 'url', required: true }` |
-| `integer` | An integer number | `{ type: 'integer', required: false }` |
-| `boolean` | A boolean value | `{ type: 'boolean', required: false }` |
-| `list` | An array of items | `{ type: 'list', items: { type: 'string' }, required: false }` |
-| `group` | Nested object with fields | `{ type: 'group', fields: { ... }, required: false }` |
-
-**Rules:**
-- All fields are optional unless explicitly marked `required: true`.
-- Use `as const` on the entire `validationScheme` object.
-- Group fields reference the `validationScheme` from the referenced type (e.g., `StandaloneConfiguration` uses `repositoryScheme` and `workerScheme`).
-
-#### Error Classes
-
-Each module has its own error class:
-
-| Module | Error Class | Message Format |
-|---|---|---|
-| `utils/` | `InvalidConfigurationFile` | `'<filename>' is not a valid configuration file.` |
-| `runtime/` | `RuntimeConfigurationInvalid` | `Invalid runtime configuration '<filename>'\n<error messages>` |
-| `service/` | `ServiceConfigurationInvalid` | `Invalid server configuration '<filename>'\n => <error messages joined by '\n => '>` |
-
-**Rules:**
-- Error classes extend `Error`.
-- Use `export default` for error classes.
-- Error classes receive the filename and validation result from the builder.
-- Error message format must be consistent — do not change the format without approval.
-
-#### Default Values
-
-Default values are defined as a `const DefaultValues` object in the same file as the type definition:
+### Naming and Export Patterns
 
 ```ts
+// Type definition (file: definitions/RuntimeConfiguration.ts)
+type RuntimeConfiguration = { ... };
+export default RuntimeConfiguration;
+
+// Shared values (same file)
+const DefaultValues = { ... };
+const validationScheme: ValidationScheme = { ... } as const;
+export { DefaultValues, validationScheme };
+
+// Error class (file: errors/RuntimeConfigurationInvalid.ts)
+export default class RuntimeConfigurationInvalid extends Error { ... }
+
+// Index file (file: runtime/index.ts)
+export { default as RuntimeConfigurationInvalid } from './errors/RuntimeConfigurationInvalid';
+export { default as RuntimeConfiguration } from './definitions/RuntimeConfiguration';
+export { default as RuntimeConfigurationBuilder } from './ConfigurationBuilder';
+```
+
+### Class Patterns
+
+- Use `export default class` for all classes (builders, configurators).
+- Use JavaScript private fields with `#fieldName` syntax (e.g., `#reader`, `#validator`).
+- Constructor parameters are readonly: `readonly #fieldName: Type`.
+- Builder constructors take dependencies explicitly: `constructor(reader: ConfigurationReader, validator: Validator)`.
+
+### Validation Scheme Patterns
+
+- Use `as const` on all validation scheme objects.
+- Supported field types: `string`, `url`, `integer`, `boolean`, `list` (with optional `items`), `group` (with nested `fields`).
+- All fields are optional unless explicitly marked `required: true`.
+- Nested groups reference the child's `validationScheme` directly:
+
+```ts
+const validationScheme: ValidationScheme =
+{
+    http: { type: 'group', required: false, fields: httpValidationScheme },
+    gateway: { type: 'group', required: false, fields: gatewayValidationScheme },
+};
+```
+
+### Error Message Formats
+
+Each error class has a specific message format that tests verify:
+
+- **RuntimeConfigurationInvalid**: `Invalid runtime configuration '<filename>'\n<error messages joined by '\n'>`
+- **ServiceConfigurationInvalid**: `Invalid server configuration '<filename>'\n => <error messages joined by '\n => '>`
+- **InvalidConfigurationFile**: `'<filename>' is not a valid configuration file.`
+
+### Import Ordering
+
+1. External dependencies first (e.g., `@jitar/validation`, `@jitar/sourcing`, `dotenv`).
+2. Core dependencies (workspace aliases `@jitar/...`) second.
+3. Runtime dependencies (relative imports within package) third.
+4. Types last.
+
+Within each block, imports are sorted alphabetically.
+
+### Default Values Pattern
+
+Default values are defined as a const object and applied via nullish coalescing assignment in builders:
+
+```ts
+// In definitions/RuntimeConfiguration.ts
 const DefaultValues =
 {
     FILENAME: './jitar.json',
@@ -173,240 +205,121 @@ const DefaultValues =
     BUILD_IGNORE: []
 };
 
-export { DefaultValues };
-```
-
-Default values are applied in the builder using nullish coalescing:
-
-```ts
+// In ConfigurationBuilder.ts
 configuration.source ??= DefaultValues.SOURCE;
-configuration.build ??= DefaultValues.BUILD;
+configuration.target ??= DefaultValues.TARGET;
 configuration.build.ignore ??= DefaultValues.BUILD_IGNORE;
 ```
 
-### How to Preserve Compatibility
+### Meta Property Pattern
 
-- **Public API**: The `ConfigurationManager` exposes three methods: `configureEnvironment()`, `getRuntimeConfiguration()`, and `getServiceConfiguration()`. Do not change method signatures without approval.
-- **Return types**: Builders return `Promise<RuntimeConfiguration>` or `Promise<ServiceConfiguration>`. Do not change the return type.
-- **Error contracts**: Error classes are caught by consumers. Changing error message formats may break error handling in consuming packages.
-- **Private package**: This package is consumed by other packages within the monorepo. Breaking changes will affect downstream packages.
-
----
-
-## 4. Code Conventions (Examples)
-
-### Pattern 1: Class with Private Fields
+Both builders add a `meta` property with `root` and `configFile`:
 
 ```ts
-export default class ConfigurationBuilder
+configuration.meta =
 {
-    readonly #reader: ConfigurationReader;
-    readonly #validator: Validator;
-
-    constructor(reader: ConfigurationReader, validator: Validator)
-    {
-        this.#reader = reader;
-        this.#validator = validator;
-    }
-
-    async build(filename: string = DefaultValues.FILENAME): Promise<RuntimeConfiguration>
-    {
-        const configuration = await this.#reader.read(filename) as RuntimeConfiguration;
-        const validation = this.#validator.validate(configuration, validationScheme);
-
-        if (validation.valid === false)
-        {
-            throw new RuntimeConfigurationInvalid(filename, validation);
-        }
-
-        configuration.source ??= DefaultValues.SOURCE;
-        configuration.target ??= DefaultValues.TARGET;
-
-        configuration.meta =
-        {
-            root: this.#reader.getRootLocation(),
-            configFile: filename
-        };
-
-        return configuration;
-    }
-}
-```
-
-Key observations:
-- Classes use `export default`.
-- Private fields use JavaScript `#` syntax with `readonly`.
-- Constructor parameters are not typed with visibility modifiers.
-- Open curly braces go on the next line (Allman style).
-- Fields are applied with `??=` (nullish coalescing assignment).
-- `meta` is always set (not optional).
-
-### Pattern 2: Type Definition with Validation Scheme
-
-```ts
-type GatewayConfiguration =
-{
-    monitorInterval?: number;
-    trustKey?: string;
+    root: this.#reader.getRootLocation(),
+    configFile: filename
 };
-
-export default GatewayConfiguration;
-
-const validationScheme: ValidationScheme =
-{
-    monitorInterval: { type: 'integer', required: false },
-    trustKey: { type: 'string', required: false }
-} as const;
-
-export { validationScheme };
 ```
 
-Key observations:
-- Type is `export default`.
-- `validationScheme` is exported as a named export.
-- `validationScheme` is typed as `ValidationScheme` and cast with `as const`.
-- Type definition and validation scheme are in the same file.
+### Service Configuration Sub-Type Composition
 
-### Pattern 3: Index File Re-exports
+Some service sub-types are composed from other types:
 
-```ts
-export { default as ServiceConfigurationInvalid } from './errors/ServiceConfigurationInvalid';
-export { default as ServiceConfiguration } from './definitions/ServiceConfiguration';
-export { default as ServiceConfigurationBuilder } from './ConfigurationBuilder';
-```
-
-Key observations:
-- Use `export { default as <Name> }` pattern.
-- Order: errors first, then types, then builders.
-- One line per export.
-
-### Pattern 4: Fixture Builder for Tests
-
-```ts
-const fileManager = new FileManager(FILES);
-const configurationReader = new ConfigurationReader(fileManager);
-const validator = new Validator();
-
-const configurationBuilder = new RuntimeConfigurationBuilder(configurationReader, validator);
-
-export { configurationBuilder, FILENAMES, CONFIGURATIONS, RuntimeConfigurationInvalid, VALIDATION_RESULT };
-```
-
-Key observations:
-- Fixtures construct the full dependency chain.
-- `TestFileManager` replaces `LocalFileManager`.
-- `Validator` is the real implementation (no mock needed).
-- Fixtures export the builder, filenames, configurations, errors, and validation results.
-
-### Naming and Organization Conventions
-
-| Element | Convention | Example |
-|---|---|---|
-| Class name | PascalCase | `ConfigurationBuilder` |
-| Private field | `#camelCase` | `#reader`, `#validator` |
-| Method name | camelCase | `build()`, `read()` |
-| Type name | PascalCase | `RuntimeConfiguration`, `ServiceConfiguration` |
-| Constant | PascalCase | `DefaultValues`, `FILENAMES` |
-| Validation scheme | camelCase | `validationScheme` |
-| Test file | `<ComponentName>.spec.ts` | `ConfigurationBuilder.spec.ts` |
-| Fixture file | `<name>.fixture.ts` | `configuration.fixture.ts` |
-| Module index | `index.ts` | `src/runtime/index.ts` |
-
-### Preferred Approaches to Common Implementation Problems
-
-| Problem | Approach |
-|---|---|
-| Optional field with default | Define in type as `field?: Type`, apply in builder with `configuration.field ??= DefaultValues.FIELD` |
-| Nested configuration | Use `group` validation type with `fields` referencing another validation scheme |
-| Inherited type (StandaloneConfiguration) | Intersection type: `type A = TypeB & Pick<TypeC, 'field'>` |
-| Missing env var | Resolves to string `'null'` — document this behavior |
-| Non-existing config file | Returns `{}` — allows defaults to be applied |
-| Non-JSON file | Throws `InvalidConfigurationFile` |
-| Validation failure | Throws module-specific error class with filename and validation result |
-
-### Patterns to Avoid
-
-| Pattern | Why |
-|---|---|
-| Exporting types/functions not shared across components | Violates the "do not export unless shared" rule |
-| Using `null` instead of `undefined` | The package convention is to use `undefined` |
-| Using relative paths across packages | Must use workspace aliases (`@jitar/...`) |
-| Disabling ESLint rules with inline comments | Must get explicit approval before doing so |
-| Changing error message formats | Consumers may parse error messages |
-| Adding new dependencies without justification | This is a private package with fixed dependencies |
-| Modifying `ConfigurationManager` method signatures | Breaking change for all consumers |
+- `StandaloneConfiguration = RepositoryConfiguration & Pick<WorkerConfiguration, 'segments'>`
+- Its validation scheme spreads the component schemes: `...repositoryScheme, segments: workerScheme.segments`
 
 ---
 
-## 5. Testing
+## 4. Testing
 
 ### How to Identify Relevant Tests
 
-Tests mirror the source directory structure:
+Tests mirror the source structure:
 
-| Source | Test |
-|---|---|
-| `src/runtime/ConfigurationBuilder.ts` | `test/runtime/ConfigurationBuilder.spec.ts` |
-| `src/service/ConfigurationBuilder.ts` | `test/server/ConfigurationBuilder.spec.ts` |
-| `src/utils/ConfigurationReader.ts` | `test/utils/ConfigurationReader.spec.ts` |
-| `src/environment/Configurator.ts` | `test/environment/Configurator.spec.ts` |
-
-Look in `test/<module>/fixtures/` for test fixtures that support the tests.
+| Source Module | Test Module | Test File |
+|---|---|---|
+| `src/runtime/ConfigurationBuilder.ts` | `test/runtime/` | `ConfigurationBuilder.spec.ts` |
+| `src/service/ConfigurationBuilder.ts` | `test/server/` | `ConfigurationBuilder.spec.ts` |
+| `src/utils/ConfigurationReader.ts` | `test/utils/` | `ConfigurationReader.spec.ts` |
+| `src/environment/Configurator.ts` | `test/environment/` | `Configurator.spec.ts` |
 
 ### How to Add Tests for New Functionality
 
-1. **Add test cases** to the existing `.spec.ts` file (use `describe('<module>/<ComponentName>')` and `it('should <behavior>')`).
-2. **Update fixtures** in `test/<module>/fixtures/`:
-   - Add filenames to `filenames.fixture.ts`.
-   - Add file entries to `files.fixture.ts` using `new File(filename, 'text/json', JSON.stringify(data))`.
-   - Add input/output configurations to `configuration.fixture.ts`.
-   - Add validation results to `validation.fixture.ts` (if testing invalid configurations).
-   - Update the fixture index to export new fixtures and the constructed builder.
-3. **Test both success and error paths**:
-   - Success: `await expect(promise).resolves.toEqual(<expected>)`.
-   - Error: `await expect(promise).rejects.toEqual(new <ErrorClass>(filename, validationResult))`.
-4. **Test edge cases**:
-   - Missing configuration file (returns defaults).
-   - Invalid configuration file (throws validation error).
-   - Non-JSON file (throws `InvalidConfigurationFile`).
-   - Environment variable interpolation (with `vi.stubEnv()` / `vi.unstubAllEnvs()`).
-   - Partial configuration (some fields provided, rest defaulted).
+1. **Create/update fixture files** in `test/<module>/fixtures/` mirroring the source structure:
+   - `configuration.fixture.ts` — input and expected output configurations
+   - `files.fixture.ts` — mock `File` objects for the `FileManager`
+   - `filenames.fixture.ts` — filename constants
+   - `validation.fixture.ts` — mock `ValidationResult` for error cases
+   - `index.ts` — assembles fixtures into exports
 
-### Important Edge Cases
+2. **Write test cases** using these patterns:
 
-| Edge Case | Expected Behavior |
-|---|---|
-| Config file does not exist | Builder returns configuration with all defaults applied. |
-| Config file is valid JSON but missing fields | Builder applies defaults for missing fields. |
-| Config file has unknown fields | Validation fails, throws configuration error. |
-| Config file is not JSON (wrong MIME type) | `ConfigurationReader` throws `InvalidConfigurationFile`. |
-| Missing environment variable in interpolation | Resolves to the string `'null'`. |
-| Empty configuration object `{}` | All defaults are applied by the builder. |
+   **Success case:**
+   ```ts
+   it('should build a valid runtime configuration from a valid file', async () =>
+   {
+       const promise = configurationBuilder.build(FILENAMES.VALID);
+
+       await expect(promise).resolves.toEqual(CONFIGURATIONS.RESULT.RUNTIME);
+   });
+   ```
+
+   **Error case:**
+   ```ts
+   it('should reject an invalid runtime configuration', async () =>
+   {
+       const promise = configurationBuilder.build(FILENAMES.INVALID);
+
+       await expect(promise).rejects.toEqual(new RuntimeConfigurationInvalid(FILENAMES.INVALID, VALIDATION_RESULT));
+   });
+   ```
+
+   **Environment variable test:**
+   ```ts
+   it('should read json configuration with environment variables', async () =>
+   {
+       vi.stubEnv(CONFIGURATIONS.ENV_VARIABLES.TARGET_PATH_KEY, CONFIGURATIONS.ENV_VARIABLES.TARGET_PATH_VALUE);
+
+       const configuration = await reader.read(FILENAMES.ENV_VARIABLES);
+
+       expect(configuration).toEqual(CONFIGURATIONS.ENV_RESULT);
+
+       vi.unstubAllEnvs();
+   });
+   ```
+
+3. **Test edge cases**:
+   - Missing configuration files (returns defaults).
+   - Non-JSON files (throws `InvalidConfigurationFile`).
+   - Invalid configuration structure (throws appropriate error).
+   - Environment variable interpolation (including missing env vars resolving to `'null'`).
+   - Partial configurations (only some fields provided, rest get defaults).
 
 ### Existing Fixtures, Mocks, and Utilities
 
-- **TestFileManager** (`test/fixtures/fileManager.fixture.ts`): Implements `FileManager` interface. Takes a `Record<string, File>` in the constructor. `exists()` and `read()` search by `location` property.
-- **File** (`@jitar/sourcing`): `new File(location, mimeType, content)` — used in fixtures to represent configuration files.
-- **Validator** (`@jitar/validation`): Real implementation used in tests — no mock needed.
-- **ConfigurationReader** (`src/utils/ConfigurationReader`): Real implementation used in tests — receives a `TestFileManager`.
+- **`TestFileManager`** (`test/fixtures/fileManager.fixture.ts`) — implements the `FileManager` interface for tests. Construct with a `Record<string, File>` to mock file existence and content.
+- **`FILES` fixtures** — each test module has a `FILES` record mapping filenames to mock `File` objects.
+- **`CONFIGURATIONS` fixtures** — contain both `INPUT` (raw JSON-like objects) and `RESULT` (fully built configurations with defaults and meta applied).
+- **`VALIDATION_RESULT`** — a mock `ValidationResult` with `valid: false` and error messages.
 
 ### How to Verify Behavior
 
-1. Run tests: `npm run test`.
-2. Run with coverage: `npm run test-coverage`.
-3. Ensure all existing tests pass (not just the ones you touched).
-4. Verify that both success and error paths are covered.
-5. For environment variable tests, use `vi.stubEnv()` and `vi.unstubAllEnvs()` properly.
+- Run `npm run test` to verify all tests pass.
+- Run `npm run test-coverage` to check coverage.
+- Verify that both success and error paths are tested.
+- Verify that existing tests still pass after changes.
 
 ---
 
-## 6. Validation
+## 5. Validation
 
-### Relevant Commands
+### Commands
 
 | Command | Purpose |
 |---|---|
-| `npm run lint` | Run ESLint across the package. |
+| `npm run lint` | Run ESLint. Do not disable rules without approval. |
 | `npm run build` | Compile TypeScript (`tsc -p tsconfig.json`). |
 | `npm run test` | Run all tests via `vitest`. |
 | `npm run test-coverage` | Run tests with v8 coverage. |
@@ -439,7 +352,7 @@ Before considering a change complete:
 
 ---
 
-## 7. Completion Criteria
+## 6. Completion Criteria
 
 An implementation is complete when all of the following are true:
 
@@ -469,7 +382,7 @@ An implementation is complete when all of the following are true:
 
 ---
 
-## 8. Uncertainties and Missing Information
+## 7. Uncertainties and Missing Information
 
 The following areas may require clarification before implementation:
 
