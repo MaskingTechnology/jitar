@@ -52,8 +52,8 @@ export default class HttpServer
 
     #setupExpress(bodyLimit: number): void
     {
-        this.#app.use(this.#validateContentType.bind(this));
         this.#app.use(express.json({ limit: bodyLimit }));
+        this.#app.use(express.urlencoded({ extended: false }));
         this.#app.use(this.#addDefaultHeaders.bind(this));
 
         this.#app.disable(HeaderKeys.POWERED_BY);
@@ -98,25 +98,6 @@ export default class HttpServer
         }
 
         return new Promise(resolve => { this.#http!.close(() => resolve()); });
-    }
-
-    #validateContentType(request: Request, response: Response, next: NextFunction): void
-    {
-        if (request.method !== 'POST')
-        {
-            return next();
-        }
-
-        if (request.is('application/json') === false || request.is('application/json') === null)
-        {
-            response.status(415).json({
-                error: 'Content-Type must be application/json'
-            });
-
-            return;
-        }
-
-        return next();
     }
 
     #addDefaultHeaders(request: Request, response: Response, next: NextFunction): void
