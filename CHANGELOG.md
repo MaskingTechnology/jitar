@@ -1,3 +1,10 @@
+# v0.13.1
+[2026-11-25]
+
+### Other
+
+* \[[863](https://github.com/MaskingTechnology/jitar/pull/863)] fix(http-server): url encoding (#863) by Bas Meeuwissen
+
 # v0.13.0
 [2026-11-04]
 
@@ -7,6 +14,7 @@
 
 ### Chores
 
+* \[[860](https://github.com/MaskingTechnology/jitar/pull/860)] chore: release v0.13.0 (#860) by Bas Meeuwissen
 * \[[852](https://github.com/MaskingTechnology/jitar/pull/852)] chore: git hooks (#852) by Bas Meeuwissen
 * \[[849](https://github.com/MaskingTechnology/jitar/pull/849)] chore: general maintenance (#849) by Bas Meeuwissen
 
