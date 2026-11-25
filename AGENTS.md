@@ -22,12 +22,18 @@
 - `packages/validation`: Data validation library for the Jitar runtime, providing validation schemes and validators.
 
 ## Global Skills
-- Shared workflows live in `.agents/skills/<skill-name>` (planned)
+
+The repository has the following skills available:
+
+- **`code-review`** — Use when reviewing a pull request or diff. Checks formatting, correctness, package-specific conventions, tests, and security.
+- **`implementation`** — Use when implementing or modifying code. Covers architecture, conventions, and key implementation details.
+- **`write-test`** - Use when writing or updating tests.
+
+Consult these skills when performing code reviews, implementing changes, or writing tests.
 
 ## Package-Specific Context
 When working within a specific package under `packages/*`, refer to:
 1. `packages/<package>/AGENTS.md` for package-level instructions
-2. `packages/<package>/.agents/skills/` for specialized domain skills (planned)
 
 ## Coding Standards & Conventions
 

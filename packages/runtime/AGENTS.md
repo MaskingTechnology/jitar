@@ -62,6 +62,7 @@ The `Server` wraps a `LocalProxy` with a configurable runner and provider servic
 - **`#extractLocalGatewayFromProxy()`** — Validates proxy runner is a `LocalGateway`.
 
 Configuration requires: `proxy`, `sourcingManager`, `remoteWorkerBuilder`, `resourceManager`, `middlewareManager`, `logger`.
+
 ### ServerBuilder (RuntimeBuilder)
 
 Constructs a `Server` from a `ServiceConfiguration`. Supports five service types:

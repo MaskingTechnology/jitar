@@ -23,7 +23,6 @@
     },
     "scripts": {
         "lint": "eslint",
-        "validate": "tsc -p tsconfig.json --noEmit",
         "build": "npm run clean && npm run bundle && npm run copy && npm run finalize",
         "clean": "shx rm -rf dist",
         "bundle": "rollup -c",

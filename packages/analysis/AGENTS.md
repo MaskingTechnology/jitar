@@ -23,7 +23,7 @@ src/
 │   ├── ESBinding.ts            # Binding models (identifier, array, object)
 │   ├── ESExport.ts             # Export statements
 │   ├── ESImport.ts             # Import statements
-│   ├── ESExpression.ts         # Expression model (reconstructable code)
+│   ├── ESExpression.ts         # Expression model (reconstructible code)
 │   └── ... (26+ model classes)
 ├── dynamic/                    # Runtime reflection tools
 │   ├── Reflector.ts            # Reflect on runtime objects to create ES models
@@ -67,16 +67,25 @@ All model classes follow a consistent pattern:
 ESStatement (abstract)
 ├── ESDeclaration (abstract)
 │   ├── ESVariable
-│   ├── ESFunction / ESArrowFunction / ESGeneratorFunction
+│   ├── ESFunction
+|   |   ├── ESArrowFunction
+|   │   └── ESGeneratorFunction
 │   └── ESClass
 ├── ESExpression
 ├── ESImport
 ├── ESExport
-└── ESBinding (abstract)
-    ├── ESIdentifierBinding
-    ├── ESPropertyBinding
-    ├── ESArrayBinding
-    └── ESObjectBinding
+└── ESBlock
+```
+
+Bindings extend `ESBinding` (abstract)
+
+```
+ESBinding (abstract)
+├── ESIdentifierBinding
+├── ESPropertyBinding
+├── ESParameter
+├── ESArrayBinding
+└── ESObjectBinding
 ```
 
 Class members extend `ESClassMember` (abstract):
@@ -85,7 +94,8 @@ Class members extend `ESClassMember` (abstract):
 ESClassMember (abstract)
 ├── ESField
 ├── ESConstructor
-├── ESMethod / ESGeneratorMethod
+├── ESMethod
+│   └── ESGeneratorMethod
 ├── ESGetter
 └── ESSetter
 ```

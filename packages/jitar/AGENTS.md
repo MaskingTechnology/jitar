@@ -51,7 +51,6 @@ Built with **Rollup** (see `rollup.config.js`). The build pipeline:
 ```bash
 npm run build        # Full build (clean → bundle → copy → finalize)
 npm run lint         # ESLint check
-npm run validate     # TypeScript type check
 ```
 
 ### Server externals
@@ -71,14 +70,6 @@ See `rollup.definitions.js` for the full list.
 - The client entry point (`src/client.ts`) must **not** import server-side dependencies (build, configuration, health).
 - Follow the monorepo-wide [CODING_STANDARDS.md](../../CODING_STANDARDS.md) for naming, style, and formatting conventions.
 - Keep source files minimal — each entry point file should be a thin re-export layer.
-
-## Testing
-
-Tests are configured via `vitest.config.ts`. Run with:
-
-```bash
-npm run test
-```
 
 ## MCP Usage
 

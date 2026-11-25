@@ -13,7 +13,7 @@ This package provides the HTTP transport layer for the Jitar runtime. It impleme
 | `@jitar/services` | Service interfaces: `Remote`, `RemoteBuilder`, `State` |
 | `@jitar/sourcing` | File management: `File` |
 | `@jitar/validation` | Validation utilities: `Validator` |
-| `express` (5.3.0) | HTTP server framework |
+| `express` | HTTP server framework |
 
 ## Architecture
 
@@ -70,7 +70,7 @@ Wraps an Express application and a Jitar `Server`. Key responsibilities:
   - `DELETE /workers/:id` — Remove a worker
   - Fallback `GET /*` — File serving (static file provision)
 
-- **Middleware pipeline** — Validates `Content-Type` for POST requests, enforces body size limits, and adds default headers (including `X-Content-Type-Options: nosniff`). Disables Express's `X-Powered-By` header.
+- **Middleware pipeline** — Parses data for requests, enforces body size limits, and adds default headers (including `X-Content-Type-Options: nosniff`). Disables Express's `X-Powered-By` header.
 
 - **Request extraction** — Extracts FQN from the URL path, procedure version from headers, query/body arguments, and headers (filtering out connection-specific headers like `connection`, `content-length`, `accept-encoding`, `user-agent`, `keep-alive`).
 

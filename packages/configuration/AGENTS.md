@@ -45,7 +45,7 @@ src/
 
 - `@jitar/sourcing` — `FileManager` interface and `LocalFileManager` for file operations.
 - `@jitar/validation` — `Validator` class and `ValidationScheme` type for configuration validation.
-- `dotenv` (v18.0.9) — `.env` file loading.
+- `dotenv` — `.env` file loading.
 
 All intra-monorepo dependencies use workspace aliases (`@jitar/...`). Never use relative paths across `packages/`.
 
@@ -125,15 +125,6 @@ TypeScript extends the root `tsconfig.json` with `rootDir: ./src` and `outDir: .
 - **Do not disable ESLint rules** with inline comments without explicit approval.
 - **Always run `npm run lint`** after modifying TypeScript files.
 - **Always run `npm run test`** to verify all tests pass before considering changes complete.
-
-## Available Skills
-
-The package has the following skills available in `.agents/skills/` (both currently disabled):
-
-- **`code-review`** — Use when reviewing a pull request or diff. Checks formatting, correctness, package-specific conventions, tests, and security. (See `.agents/skills/code-review/SKILL.md`)
-- **`implementation`** — Use when implementing or modifying configuration-related code. Covers architecture, conventions, testing, and key implementation details. (See `.agents/skills/implementation/SKILL.md`)
-
-Consult these skills when performing code reviews or implementing configuration changes.
 
 ## MCP Usage
 

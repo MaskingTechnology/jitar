@@ -7,10 +7,10 @@ This package provides a Vite plugin for building [Jitar](https://jitar.dev/) app
 ## Dependencies
 
 - **Peer Dependencies:**
-  - `jitar` (>0.12) — provides `ConfigurationManager` and `BuildHelper`
-  - `vite` (>=7, optional) — provides Vite plugin infrastructure (`PluginOption`, `ResolvedConfig`, `normalizePath`)
+  - `jitar` — provides `ConfigurationManager` and `BuildHelper`
+  - `vite` — provides Vite plugin infrastructure (`PluginOption`, `ResolvedConfig`, `normalizePath`)
 - **Dev Dependencies:**
-  - `vite` (^8.3.5)
+  - `vite`
 
 ## Package Structure
 

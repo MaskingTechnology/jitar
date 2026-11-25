@@ -204,13 +204,6 @@ Error messages follow a consistent format:
 - Do not change error message formats — tests assert exact message strings.
 - Do not change the default `strict` mode; it is `true` by design.
 
-## Available Skills
-
-| Skill | Location | When to Consult |
-|---|---|---|
-| `implementation` | `.agents/skills/implementation/SKILL.md` | When implementing changes in this package. |
-| `code-review` | `.agents/skills/code-review/SKILL.md` | When reviewing changes, pull requests, or diffs in this package. Checks TypeScript strict mode compliance, formatting, and convention adherence. |
-
 ## Workflow
 
 When working with this package:

@@ -141,7 +141,6 @@ The package supports three parameter types:
 
 Both `ArrayParameter` and `ObjectParameter` extend `DestructuredParameter`, which holds an array of `Parameter` variables.
 
-
 ## Coding Conventions
 
 ### Class Design

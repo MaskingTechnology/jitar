@@ -7,7 +7,16 @@ This package provides the service layer for the Jitar runtime. It implements:
 - **Runner services**: `Worker` (executes procedures locally, delegates to remote gateway) and `Gateway` (routes requests to appropriate workers).
 - **Provider services**: `Repository` (stores and serves files by filename).
 - **Hybrid services**: `Proxy` (combines runner and provider capabilities).
-- **Dummy implementations**: `DummyProvider` and `DummyRunner` for testing.
+- **Fallback services**: `DummyProvider` and `DummyRunner` — lightweight no-op implementations used by the `Proxy` when a service does not need to provide files or run procedures.
+
+### The Proxy Pattern
+
+Every service is built with an internal `Proxy`. The `Proxy` holds both a `RunnerService` and a `ProviderService`, giving every service a consistent interface with both `run()` and `provide()` endpoints. These endpoints are always implemented and return appropriate status codes.
+
+- **Standalone services** (e.g., a standalone gateway): The `Proxy` contains real runner and provider services that actively handle requests and serve files.
+- **Worker services**: The `Proxy` uses `DummyProvider` since workers do not serve files. The runner delegates to a gateway for remote execution.
+
+This pattern keeps service construction simple and uniform — all services expose the same dual interface regardless of whether they actually provide or run anything.
 
 The package is **private** (`"private": true`) — it is not published and is consumed only by other monorepo packages (e.g., `@jitar/runtime`).
 
@@ -22,7 +31,7 @@ The package is **private** (`"private": true`) — it is not published and is co
 | `src/worker/` | Worker implementations: `LocalWorker` (executes procedures via `ExecutionManager`, optionally registers at a gateway), `RemoteWorker` (proxies to a remote), `RemoteWorkerBuilder`. |
 | `src/repository/` | Repository implementations: `LocalRepository` (serves files from `SourcingManager`), `RemoteRepository` (proxies to a remote). |
 | `src/proxy/` | `LocalProxy` — hybrid combining a `ProviderService` and a `RunnerService`. |
-| `src/dummy/` | Test doubles: `DummyProvider`, `DummyRunner`. |
+| `src/dummy/` | Fallback services: `DummyProvider`, `DummyRunner` — no-op implementations used by the `Proxy` when a service does not need to provide files or run procedures. |
 
 ### Top-level interfaces
 
