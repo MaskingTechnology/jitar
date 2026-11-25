@@ -96,7 +96,41 @@ const members =
 export const esClass = new ESClass('Person', undefined, members);
 ```
 
-### 5. Fixture Index (`index.ts`)
+### 5. Mock/Stubs Fixtures
+
+For testing components that depend on interfaces or other services, create mock or stub implementations in fixture files:
+
+```typescript
+class MemoryWriter implements Writer
+{
+    #messages: string[] = [];
+
+    get messages(): string[]
+    {
+        return this.#messages;
+    }
+
+    get lastMessage(): string | undefined
+    {
+        return this.#messages[this.#messages.length - 1];
+    }
+
+    log(message: string): void { this.#messages.push(message); }
+    debug(message: string): void { this.#messages.push(message); }
+    info(message: string): void { this.#messages.push(message); }
+    warn(message: string): void { this.#messages.push(message); }
+    error(message: string): void { this.#messages.push(message); }
+
+    clear(): void
+    {
+        this.#messages = [];
+    }
+}
+
+export const writer = new MemoryWriter();
+```
+
+### 6. Fixture Index (`index.ts`)
 
 Always re-export all fixtures:
 
@@ -145,6 +179,23 @@ describe('MyClass', () =>
 - Top-level `describe`: the class or module being tested.
 - Nested `describe`: the method, property, or feature under test. Use the format `.methodName(args)` for methods, `.propertyName` for getters/setters.
 - `it`: a single test case. Start with `"should "` followed by a human-readable description of the expected behavior.
+
+### Test Isolation with `beforeEach`
+
+When a fixture maintains mutable state (e.g., a message log, a builder's internal state), reset it in `beforeEach` to ensure test isolation:
+
+```typescript
+import { beforeEach, describe, expect, it } from 'vitest';
+
+import { writer } from './fixtures';
+
+beforeEach(() =>
+{
+    writer.clear();
+});
+```
+
+This pattern is especially important when the same fixture instance is shared across multiple `it` blocks within a spec file.
 
 ### Test Phases
 
@@ -204,6 +255,7 @@ it('should not add an invalid segment', async () =>
 | `.rejects.toThrowError(err)` | Async rejection (error) matching via error type/message |
 | `.resolves.toEqual(value)` | Async resolution (value) matching |
 | `.resolves.toBeDefined()` | Async resolution (non-undefined) check |
+| `.toMatch(value)` | Regex or string matching — use with `RegExp` or `string` patterns |
 
 ### Chained Assertions
 
