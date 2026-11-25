@@ -146,6 +146,16 @@ describe('MyClass', () =>
 - Nested `describe`: the method, property, or feature under test. Use the format `.methodName(args)` for methods, `.propertyName` for getters/setters.
 - `it`: a single test case. Start with `"should "` followed by a human-readable description of the expected behavior.
 
+### Test Phases
+
+Every `it` block should follow the **Arrange-Act-Assert** structure:
+
+1. **Arrange** — Set up the test environment: create instances, prepare fixtures, configure state.
+2. **Act** — Invoke the method or operation under test.
+3. **Assert** — Verify the result with expectations.
+
+The `// Arrange`, `// Act`, `// Assert` comments in the nesting convention example illustrate this three-phase structure. They are not required literal comments in every test, but the three-phase structure they represent must be respected to keep tests structured and readable. For simple tests, the phases may be implicit (a single expression covering all three), but the logical separation must still be clear.
+
 ### Async Tests
 
 When testing async methods, declare the test body as `async` and use `await` for promises:

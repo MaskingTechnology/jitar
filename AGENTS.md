@@ -51,7 +51,7 @@ When working within a specific package under `packages/*`, refer to:
     - Semicolons required (`"semi": ["error", "always"]`).
     - Allman brace style (`"brace-style": ["error", "allman"]`), with `allowSingleLine: true`.
     - Newline at end of file (`"eol-last": ["error", "always"]`).
-    - Custom rule: `jitar/empty-first-line` (errors on leading blank lines in files).
+    - Custom rule: `jitar/empty-first-line` (errors on NO leading blank lines in files).
   - Ignored paths: `dist/`, `node_modules/`, `coverage/`, `templates/`, test fixtures (`**/test/**/fixtures/**/*`), and config files (`*config*`).
   - TypeScript extends root `tsconfig.json` with `target: esnext`, `module: esnext`, `moduleResolution: bundler`.
 - **Commands:**

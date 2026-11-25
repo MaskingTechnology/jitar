@@ -9,45 +9,54 @@ const processor = new ArgumentProcessor(ARGUMENTS);
 
 describe('ArgumentProcessor', () =>
 {
-    it('should get third argument as command', () =>
+    describe('.getCommand()', () =>
     {
-        const commandName = processor.getCommand();
+        it('should get third argument as command', () =>
+        {
+            const commandName = processor.getCommand();
 
-        expect(commandName).toEqual('commandName');
+            expect(commandName).toEqual('commandName');
+        });
     });
 
-    it('should return required argument value', () =>
+    describe('.getRequiredArgument(key)', () =>
     {
-        const value = processor.getRequiredArgument('first');
+        it('should return required argument value', () =>
+        {
+            const value = processor.getRequiredArgument('first');
 
-        expect(value).toEqual('1');
+            expect(value).toEqual('1');
+        });
+
+        it('should throw error when required argument value is missing', () =>
+        {
+            const run = () => processor.getRequiredArgument('second');
+
+            expect(run).toThrow(new Error("Missing argument 'second'"));
+        });
+
+        it('should throw error when required argument key is missing', () =>
+        {
+            const run = () => processor.getRequiredArgument('third');
+
+            expect(run).toThrow(new Error("Missing argument 'third'"));
+        });
     });
 
-    it('should throw error when required argument value is missing', () =>
+    describe('.getOptionalArgument(key, defaultValue)', () =>
     {
-        const run = () => processor.getRequiredArgument('second');
+        it('should return default value if optional value is missing', () =>
+        {
+            const value = processor.getOptionalArgument('second', 'default');
 
-        expect(run).toThrow("Missing argument 'second'");
-    });
+            expect(value).toEqual('default');
+        });
 
-    it('should throw error when required argument key is missing', () =>
-    {
-        const run = () => processor.getRequiredArgument('third');
+        it('should return default value if optional key is missing', () =>
+        {
+            const value = processor.getOptionalArgument('third', 'default');
 
-        expect(run).toThrow("Missing argument 'third'");
-    });
-
-    it('should return default value if optional value is missing', () =>
-    {
-        const value = processor.getOptionalArgument('second', 'default');
-
-        expect(value).toEqual('default');
-    });
-
-    it('should return default value if optional key is missing', () =>
-    {
-        const value = processor.getOptionalArgument('third', 'default');
-
-        expect(value).toEqual('default');
+            expect(value).toEqual('default');
+        });
     });
 });
