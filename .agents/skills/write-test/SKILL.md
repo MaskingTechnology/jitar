@@ -201,6 +201,7 @@ it('should not add an invalid segment', async () =>
 | `.toThrow(err)` | Synchronous error throwing |
 | `.toThrowError(err)` | Synchronous error throwing (alias) |
 | `.rejects.toEqual(err)` | Async rejection (error) matching |
+| `.rejects.toThrowError(err)` | Async rejection (error) matching via error type/message |
 | `.resolves.toEqual(value)` | Async resolution (value) matching |
 | `.resolves.toBeDefined()` | Async resolution (non-undefined) check |
 
