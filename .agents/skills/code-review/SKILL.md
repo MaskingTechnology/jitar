@@ -72,9 +72,38 @@ When reviewing `index.ts` files or package entry points:
 When reviewing custom error classes or error-throwing code:
 
 - [ ] Error classes extend `Error` directly (not custom base classes) and use `export default class`
-- [ ] Error names are prefixed descriptively (e.g., `Expected*`, `Unexpected*`)
-- [ ] Error messages include contextual information (position, value, or identifier) to aid debugging
+- [ ] Error names are descriptive (e.g., `NoSerializerFound`, `ClassNotFound`, `InvalidClass`)
+- [ ] Error messages include contextual information (type, name, value, or identifier) to aid debugging
 - [ ] Errors are thrown with explicit custom classes rather than `throw new Error()` strings
+- [ ] Serializer-specific or component-specific errors live in a nested `errors/` directory (e.g., `src/serializers/errors/`)
+
+### Abstract base class & extension patterns
+
+When reviewing abstract base classes and their concrete implementations:
+
+- [ ] Abstract base classes define the contract via abstract methods (e.g., `canSerialize`, `serialize`, `deserialize`)
+- [ ] Concrete implementations extend the abstract base and implement all required abstract methods
+- [ ] Base classes provide helper methods (e.g., `serializeOther`, `deserializeOther`) that delegate to parent/context objects
+- [ ] Matching/dispatch logic uses `can*` methods to determine applicability before calling the main operation
+- [ ] All serialization/deserialization (or similar I/O) methods are `async` and return `Promise<unknown>`
+
+### Builder / factory patterns
+
+When reviewing builder or factory classes:
+
+- [ ] Builder classes provide static factory methods (e.g., `build()`) to construct complex objects
+- [ ] Builder methods accept optional dependencies (e.g., `ClassResolver?`) to enable conditional feature registration
+- [ ] Components are registered in priority order — most specific first, most generic last
+- [ ] Conditional registration is used for platform-dependent features (e.g., `Buffer` only when available)
+
+### Type definitions
+
+When reviewing type definitions:
+
+- [ ] Base types are defined in `src/types/` (e.g., `Serialized`, `Resolvable`)
+- [ ] Specialized types extend base types via intersection types (e.g., `type SerializedX = Base & { additional: ... }`)
+- [ ] Serialized or representation types live under `src/types/serialized/`
+- [ ] Types are exported as default exports (`export default TypeName`)
 
 ### Import conventions
 
@@ -94,3 +123,5 @@ When reviewing test files (`*.spec.ts`) or test fixtures (`*.fixture.ts`):
 - [ ] Individual tests use `it('should <behavior>')` phrasing
 - [ ] Shared instances (parsers, reflectors, etc.) are created once at the top of the `describe` block, not per-test
 - [ ] Assertions verify both the instance type (`toBeInstanceOf`) and property values (`toEqual`, `toHaveLength`)
+- [ ] Test fixtures for serializers/components live in `test/<component>/fixtures/` with an index re-exporting all fixtures
+- [ ] Tests cover: successful round-trip (serialize/deserialize), `can*` matching logic, and error handling for invalid input
