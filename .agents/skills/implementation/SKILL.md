@@ -1,6 +1,6 @@
 ---
 name: implementation
-description: Implement new features in one of the packages.
+description: Implement new features in one of the packages, or review packages on request.
 ---
 
 # Implementation
@@ -58,6 +58,13 @@ The `index.ts` file is always used to re-export public sources from a package.
 - Low-level adapters that wrap external dependencies (e.g., Node.js `fs`, `path`) should be named with the `*System` or `*Adapter` suffix (e.g., `LocalFileSystem`).
 - This naming convention distinguishes management/coordination logic from low-level system adapters.
 
+### Configuration Parameters
+
+- Classes that accept configuration options should expose them via the constructor.
+- Use default values for optional configuration parameters: `strict = true`.
+- Configuration parameters control behavior (e.g., strict vs. lenient mode).
+- Document default behavior clearly — do not change defaults without explicit approval.
+
 ### Model Classes with Read-Only Getters
 
 - Model/value classes that hold data should use private fields with read-only getter methods to expose properties.
@@ -87,6 +94,34 @@ export default class File
 - Use read-only getter methods to expose private fields: `get propertyName() { return this.#field; }`.
 - Getters provide controlled read-only access to private state without exposing the field directly.
 - Private getters (e.g., `get #internalState()`) are valid for internal class use.
+
+### Type Definitions
+
+- Define types using `type` keyword for type aliases.
+- Use `export default` for shared types, re-exported via `export { default as TypeName }` in index files.
+- Use `export type` for type unions (e.g., discriminated unions).
+
+#### Discriminated Unions
+
+- Define discriminated unions as `export type` (not default exports).
+- Each member type should have a common discriminant property (e.g., `type: 'string' | 'integer'`).
+- Example: `export type FieldValidation = PrimitiveValidation | GroupValidation | ListValidation`.
+
+#### Base Types with Intersection
+
+- Define shared optional fields in a base type (e.g., `BaseValidation` with `readonly required?: boolean`).
+- Extend the base type using intersection types (`&`) for specific variants.
+- Example: `export type PrimitiveValidation = BaseValidation & { readonly type: 'string' | 'integer' }`.
+
+#### Record Types
+
+- Use `Record<string, ...>` for key-value mapping types.
+- Example: `type ValidationScheme = Record<string, FieldValidation>`.
+
+#### Optional Fields
+
+- Use optional properties with `?` for fields that may not be present.
+- Combine with `readonly` for immutability: `readonly required?: boolean`.
 
 ### Placeholder Implementations
 

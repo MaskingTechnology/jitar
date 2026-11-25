@@ -85,3 +85,7 @@ When creating package-specific errors, extend the appropriate base error from `@
 ## MCP Usage
 
 Read the root [`AGENTS.md`](../../AGENTS.md) for more information.
+
+## Tests
+
+This package has no tests. As long as it only contains Error objects, there is no need for testing.
