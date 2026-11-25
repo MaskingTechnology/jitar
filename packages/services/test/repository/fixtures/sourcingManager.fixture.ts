@@ -3,7 +3,7 @@ import { NotImplemented } from '@jitar/errors';
 import { File, FileNotFound, LocalSourcingManager } from '@jitar/sourcing';
 
 import { FILENAMES } from './filenames.fixture';
-import { FILES } from './files.fixtures';
+import { FILES } from './files.fixture';
 
 class DummySourcingManager extends LocalSourcingManager
 {
