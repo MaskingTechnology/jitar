@@ -34,12 +34,66 @@ The `index.ts` file is always used to re-export public sources from a package.
 
 - When a class implements an interface, use `implements InterfaceName` after the class name.
 - Example: `export default class LocalRepository implements Repository`.
+- Interfaces are exported as default exports (`export default interface InterfaceName`).
+- Interfaces are typed via `export type { default as InterfaceName }` in index files.
 
 ### Composition
 
 - Classes that orchestrate multiple sub-components should receive them via the constructor (Dependency Injection).
 - The orchestrator class composes its dependencies — it does not instantiate them internally unless necessary.
 - Example: `ConfigurationManager` composes `EnvironmentConfigurator`, `RuntimeConfigurationBuilder`, and `ServiceConfigurationBuilder`.
+
+### Sub-Manager Composition (Three-Layer Architecture)
+
+- When a class coordinates multiple sub-operations, use a **facade pattern** with sub-managers.
+- The facade (e.g., `SourcingManager`) implements the public interfaces and delegates to sub-managers (e.g., `FileManager`, `ImportManager`).
+- Each sub-manager can itself compose sub-sub-managers (e.g., `LocalFileSystem`, `LocalModuleLocator`), creating a three-layer hierarchy.
+- The facade exposes sub-managers via read-only getters so consumers can access them directly if needed.
+- Concrete implementations of the facade compose concrete sub-managers in their constructors.
+- Example hierarchy: `SourcingManager` → `FileManager` + `ImportManager` → `LocalFileSystem` + `LocalModuleLocator`.
+
+### Manager Pattern
+
+- Classes that manage a set of operations should be named with the `*Manager` suffix (e.g., `FileManager`, `ImportManager`, `SourcingManager`).
+- Low-level adapters that wrap external dependencies (e.g., Node.js `fs`, `path`) should be named with the `*System` or `*Adapter` suffix (e.g., `LocalFileSystem`).
+- This naming convention distinguishes management/coordination logic from low-level system adapters.
+
+### Model Classes with Read-Only Getters
+
+- Model/value classes that hold data should use private fields with read-only getter methods to expose properties.
+- Private fields use `#camelCase` naming; getters use `get propertyName()` returning the private field.
+- Example:
+
+```ts
+export default class File
+{
+    readonly #location: string;
+    readonly #content: Buffer | string;
+
+    constructor(location: string, content: Buffer | string)
+    {
+        this.#location = location;
+        this.#content = content;
+    }
+
+    get location() { return this.#location; }
+
+    get content() { return this.#content; }
+}
+```
+
+### Get Method Pattern
+
+- Use read-only getter methods to expose private fields: `get propertyName() { return this.#field; }`.
+- Getters provide controlled read-only access to private state without exposing the field directly.
+- Private getters (e.g., `get #internalState()`) are valid for internal class use.
+
+### Placeholder Implementations
+
+- When a feature is not yet supported, provide a placeholder/stub implementation that throws a descriptive error.
+- All methods in the placeholder should throw the same error to make the unsupported state clear.
+- Example: `RemoteFileSystem` where all operations throw `RemoteFilesNotSupported()`.
+- Document clearly in the package's `AGENTS.md` that the implementation is a placeholder.
 
 ### Optional Parameters
 
@@ -52,12 +106,14 @@ The `index.ts` file is always used to re-export public sources from a package.
 - **`toString()`** — Every model class must provide a `toString()` method:
   - `toString()` returns the full string representation.
   - `toString(terminate: boolean)` optionally controls formatting (e.g., semicolon termination).
+- **`fork()`** — Abstract manager classes should provide an abstract `fork(location: string)` method that concrete implementations override to create a new instance at a (possibly derived) location. The method should resolve the location (e.g., to an absolute path) before creating the new instance.
 
 ### Abstract Base Classes
 
 - Use abstract base classes to define contracts when a hierarchy of related classes exists.
 - Abstract methods must be declared with `abstract` keyword (e.g., `abstract clone(): ClassName;`).
 - Subclasses must implement all abstract methods and return their own concrete type (covariant return types).
+- Abstract manager classes can implement multiple interfaces to serve as a unified facade for sub-managers.
 
 ## Naming Conventions
 
