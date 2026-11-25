@@ -23,6 +23,23 @@ Invoke this skill when asked to review a diff, pull request, or set of staged ch
 - [ ] Inline type imports (`import { type Foo } from 'bar'`) rather than a separate `import type` statement
 - [ ] No unused variables/imports, no stray `console.*` calls (use the shared `logger`)
 
+### File organization
+
+When reviewing package source structure:
+
+- [ ] One file per logical component (class, interface, or type) — no multiple unrelated classes in a single file
+- [ ] Interfaces live under `src/interfaces/`, error classes under `src/errors/`, shared types under `src/types/`, and definition constants under `src/definitions/`
+- [ ] Sub-modules have their own `index.ts` that re-exports their public members
+
+### Class & interface naming
+
+When reviewing class and interface names:
+
+- [ ] Class names use `PascalCase` (e.g., `FileManager`, `SourcingManager`)
+- [ ] Interface names use `PascalCase` without an `I` prefix (e.g., `FileReader`, `FileSystem`)
+- [ ] Private fields and methods use the `#` prefix with `camelCase` naming (e.g., `#validateLocation`, `#rootLocation`)
+- [ ] Private fields are declared at the top of the class body
+
 ### Model / domain class design
 
 When reviewing domain or model classes (classes that represent data or parsed structures):
