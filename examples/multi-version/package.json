@@ -13,6 +13,6 @@
         "typescript": "7.0.2"
     },
     "dependencies": {
-        "jitar": "^0.12.0"
+        "jitar": "^0.13.0"
     }
 }
