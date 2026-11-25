@@ -223,3 +223,7 @@ When working with this package:
 6. **Run `npm run lint`** after making changes.
 7. **Run `npm run test`** to verify all tests pass.
 8. **Consult the root `AGENTS.md`** for monorepo-wide conventions (linting configuration, build commands, workspace alias rules).
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

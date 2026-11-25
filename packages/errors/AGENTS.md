@@ -81,3 +81,7 @@ When creating package-specific errors, extend the appropriate base error from `@
 2. Follow the error class pattern (PascalCase, extends `Error`, default message in constructor).
 3. Add a named export in `src/index.ts` following the existing convention.
 4. Ensure the file has no trailing whitespace beyond the closing brace and a single newline.
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

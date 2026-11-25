@@ -48,3 +48,7 @@ The package exports the following core classes, interfaces, and definitions from
 
 - Unit tests are located in `test/HealthManager.spec.ts`.
 - Fixtures and mock health checks are located in `test/fixtures/`.
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

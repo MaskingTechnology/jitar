@@ -234,3 +234,7 @@ When working with this package:
 5. **Write tests**: Create tests that verify path validation, error handling, and both success and failure paths.
 6. **Run `npm run lint`** after making changes.
 7. **Run `npm run test`** to verify all tests pass.
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

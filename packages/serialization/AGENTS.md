@@ -235,3 +235,7 @@ npm run test-coverage # Run tests with coverage
 - **Import order**: External dependencies first, core dependencies second, runtime dependencies third, types last.
 - **Single quotes**: Use single quotes for all strings.
 - **Comments**: Use `//` comments sparingly; explain the *why*, not the *what*.
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

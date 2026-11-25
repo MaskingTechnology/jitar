@@ -220,3 +220,7 @@ Tests are located under `test/` and use Vitest. Fixtures are organized under `te
 1. Add the new state constant to `src/definitions/States.ts`.
 2. Update any state transition logic in `MiddlewareManager` to handle the new state.
 3. Ensure state guards in `start()` and `stop()` account for the new state.
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

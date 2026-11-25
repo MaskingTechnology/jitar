@@ -79,3 +79,7 @@ Tests are configured via `vitest.config.ts`. Run with:
 ```bash
 npm run test
 ```
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

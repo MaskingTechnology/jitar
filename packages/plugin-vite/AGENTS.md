@@ -169,3 +169,7 @@ Generates the complete Jitar client bundle source code as a string. The generate
 - **Private members** use `#` prefix (from `CODING_STANDARDS.md`).
 - **Path normalization** via Vite's `normalizePath()` for cross-platform compatibility.
 - **Vite virtual modules** use the `\0` prefix convention.
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

@@ -134,3 +134,7 @@ The package has the following skills available in `.agents/skills/` (both curren
 - **`implementation`** — Use when implementing or modifying configuration-related code. Covers architecture, conventions, testing, and key implementation details. (See `.agents/skills/implementation/SKILL.md`)
 
 Consult these skills when performing code reviews or implementing configuration changes.
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

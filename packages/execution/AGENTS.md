@@ -257,3 +257,6 @@ The reverse mapping (`fromStatus`) creates the appropriate error type from a sta
 
 When a request has `mode === RunModes.DRY`, the `ExecutionManager` returns a `Response` with `StatusCodes.OK` and `undefined` result without executing the procedure. This is used for validation/pre-check purposes.
 
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

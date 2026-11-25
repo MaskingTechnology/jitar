@@ -164,3 +164,7 @@ npm run test-coverage # Run tests with v8 coverage
 npm run lint        # Lint with ESLint
 npm run clean       # Remove dist/ directory
 ```
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

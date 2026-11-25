@@ -104,3 +104,7 @@ The CLI `InitApp` command passes three CLI arguments:
 - **Template verification**: The template name is verified by checking if a directory exists at `templates/<templateName>`. If not, `UnknownTemplate` is thrown.
 - **Copy behavior**: Uses `fsp.cp()` with `{ recursive: true, force: true }` to copy the template directory, overwriting existing files.
 - **No templating engine**: Templates are copied as-is. No variable substitution or file processing is performed.
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

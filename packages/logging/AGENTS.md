@@ -105,3 +105,7 @@ To provide a custom writer:
 
 1. Implement the `Writer` interface (define `log`, `debug`, `info`, `warn`, `error` methods).
 2. Pass the custom writer to the `Logger` constructor.
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.
