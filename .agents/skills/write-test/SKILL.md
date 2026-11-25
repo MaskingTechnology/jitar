@@ -1,6 +1,6 @@
 ---
 name: write-test
-description: for writing or updating tests for a package.
+description: for validating, writing or updating tests for a package.
 ---
 
 # Write Tests
@@ -191,6 +191,8 @@ it('should not add an invalid segment', async () =>
 | `.toThrow(err)` | Synchronous error throwing |
 | `.toThrowError(err)` | Synchronous error throwing (alias) |
 | `.rejects.toEqual(err)` | Async rejection (error) matching |
+| `.resolves.toEqual(value)` | Async resolution (value) matching |
+| `.resolves.toBeDefined()` | Async resolution (non-undefined) check |
 
 ### Chained Assertions
 

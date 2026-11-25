@@ -33,7 +33,7 @@ describe('worker/LocalWorker', () =>
 
             expect(response.result).toBe('protected');
         });
-        
+
         it('should not run a non-existing procedure', async () =>
         {
             const request = new Request('nonExisting', Version.DEFAULT, new Map(), new Map(), RunModes.NORMAL);

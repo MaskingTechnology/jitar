@@ -10,7 +10,7 @@ import { WORKER_BALANCERS, REMOTE_WORKERS } from './fixtures';
 const emptyBalancer = WORKER_BALANCERS.EMPTY;
 const filledBalancer = WORKER_BALANCERS.FILLED;
 
-describe('services/WorkerBalancer', () =>
+describe('gateway/WorkerBalancer', () =>
 {
     describe('.getNextWorker()', () =>
     {

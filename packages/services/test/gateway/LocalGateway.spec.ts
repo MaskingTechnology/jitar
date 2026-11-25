@@ -17,11 +17,11 @@ describe('gateway/LocalGateway', () =>
     describe('.addWorker(worker, trustKey?)', () =>
     {
         it('should add a worker without a trust key to a public gateway', async () =>
-            {
-                const promise = publicGateway.addWorker(emptyWorker);
-    
-                await expect(promise).resolves.toBeDefined();
-            });
+        {
+            const promise = publicGateway.addWorker(emptyWorker);
+
+            await expect(promise).resolves.toBeDefined();
+        });
 
         it('should add a worker with a valid trust key to a protected gateway', async () =>
         {
