@@ -1,6 +1,6 @@
 # Logging Package Agent Guidelines
 
-## Package Overview
+## Purpose
 
 This package provides a lightweight, extensible logging library for the [Jitar](https://jitar.dev) runtime. It offers:
 

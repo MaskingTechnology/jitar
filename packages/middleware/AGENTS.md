@@ -1,6 +1,6 @@
 # @jitar/middleware — Package Guidelines
 
-## Overview
+## Purpose
 
 This package provides middleware support for the Jitar runtime. It manages a chain of middleware components that process requests in sequence, passing them through a handler chain until a final response is produced.
 

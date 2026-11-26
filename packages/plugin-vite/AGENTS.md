@@ -2,7 +2,7 @@
 
 ## Overview
 
-This package provides a Vite plugin for building [Jitar](https://jitar.dev/) applications. It integrates Jitar's client-side runtime with Vite's build pipeline, handling segment generation, bundle creation, and RPC proxy configuration.
+This package provides a Vite plugin for building Jitar applications. It integrates Jitar's client-side runtime with Vite's build pipeline, handling segment generation, bundle creation, and RPC proxy configuration.
 
 ## Dependencies
 

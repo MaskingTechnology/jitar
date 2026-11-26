@@ -1,6 +1,6 @@
 # Jitar Package Agent Guidelines
 
-## Package Overview
+## Purpose
 
 This is the main **umbrella package** for the Jitar distributed runtime. It re-exports core types, classes, and functionality from other `@jitar/*` packages, providing a single entry point to all core runtime features.
 

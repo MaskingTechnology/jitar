@@ -1,6 +1,6 @@
 # @jitar/health — Package Guidelines
 
-## Overview
+## Purpose
 
 This package provides the service health system for the Jitar runtime. It manages the lifecycle of health monitoring, dynamically loads and executes health checks using `@jitar/sourcing`, evaluates overall and individual system health with timeout capabilities, and tracks health manager operational states.
 

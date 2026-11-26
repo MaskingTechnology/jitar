@@ -2,7 +2,7 @@
 
 ## Package Overview
 
-The `@jitar/execution` package provides the core execution model for the Jitar runtime. It handles segmentation, procedure management, versioning, argument extraction, and error conversion. The package is **private** (`"private": true`) and is not published to npm — it is consumed internally by other Jitar packages (e.g., `@jitar/http`, `@jitar/services`).
+This package provides the core execution model for the Jitar runtime. It handles segmentation, procedure management, versioning, argument extraction, and error conversion. The package is **private** (`"private": true`) and is not published to npm — it is consumed internally by other Jitar packages (e.g., `@jitar/http`, `@jitar/services`).
 
 ## Dependencies
 

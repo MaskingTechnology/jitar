@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The `@jitar/cli` package provides the command-line interface for the Jitar runtime. It parses command-line arguments, routes to the appropriate command handler, and delegates to other packages (`@jitar/build`, `@jitar/init`, `@jitar/runtime`, `@jitar/http`) for actual work.
+This package provides the command-line interface for the Jitar runtime. It parses command-line arguments, routes to the appropriate command handler, and delegates to other packages (`@jitar/build`, `@jitar/init`, `@jitar/runtime`, `@jitar/http`) for actual work.
 
 The single exported entry point is `Cli`, which reads `process.argv`, extracts the command name and arguments, and delegates to `CommandRunner`.
 

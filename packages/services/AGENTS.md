@@ -1,6 +1,6 @@
 # @jitar/services — Agent Guidelines
 
-## Package Overview
+## Purpose
 
 This package provides the service layer for the Jitar runtime. It implements:
 

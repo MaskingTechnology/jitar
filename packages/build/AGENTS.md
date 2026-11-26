@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The `@jitar/build` package provides the application building process for the Jitar runtime. It reads source code, parses module/segment structures, and generates the target application code.
+This package provides the application building process for the Jitar runtime. It reads source code, parses module/segment structures, and generates the target application code.
 
 Two main entry points are exposed:
 

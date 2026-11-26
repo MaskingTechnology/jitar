@@ -1,6 +1,6 @@
 # @jitar/init — Package Guidelines
 
-## Overview
+## Purpose
 
 This package provides the `InitManager` class for creating new Jitar applications from templates. It is consumed by the CLI package (`@jitar/cli`) via the `init` command.
 

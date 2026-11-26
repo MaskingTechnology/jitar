@@ -2,7 +2,7 @@
 
 ## Package Overview
 
-This package (`@jitar/configuration`) provides configuration loading, parsing, and validation for the Jitar runtime. It reads JSON configuration files, replaces environment variables with their values, validates configurations against schemas, and exposes configuration types for runtime and service layers.
+This package provides configuration loading, parsing, and validation for the Jitar runtime. It reads JSON configuration files, replaces environment variables with their values, validates configurations against schemas, and exposes configuration types for runtime and service layers.
 
 It is a **private** package within the Jitar monorepo and is not published independently.
 

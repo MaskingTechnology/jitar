@@ -1,6 +1,6 @@
 # Serialization Package Agent Guidelines
 
-## Package Overview
+## Purpose
 
 This package provides extensible serialization for end-to-end data transportation within the Jitar runtime. It supports serialization and deserialization of primitives, arrays, maps, sets, objects, classes, typed arrays, and buffers.
 
