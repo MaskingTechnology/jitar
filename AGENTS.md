@@ -27,7 +27,7 @@ The repository has the following skills available:
 
 - **`code-review`** — Use when reviewing a pull request or diff. Checks formatting, correctness, package-specific conventions, tests, and security.
 - **`implementation`** — Use when implementing or modifying code. Covers architecture, conventions, and key implementation details.
-- **`write-test`** - Use when writing or updating tests.
+- **`write-test`** — Use when writing, updating, or validating tests and fixtures. Covers file layout, fixture patterns, test doubles, naming, and assertions.
 
 Consult these skills when performing code reviews, implementing changes, or writing tests.
 

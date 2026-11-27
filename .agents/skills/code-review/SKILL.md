@@ -1,145 +1,136 @@
 ---
 name: code-review
-description: Review code changes for bugs, regressions, security issues, convention drift, and missing tests. Use when reviewing a pull request or diff in the Jitar codebase.
+description: Review a pull request, branch, or diff that changes packages under `packages/*` for bugs, regressions, security issues, convention drift, and missing tests. Use when asked to review changes in the Jitar codebase.
 ---
 
 # Code Review
 
 ## Overview
 
-Reviews TypeScript changes across Jitar's packages (`packages/*`) for correctness, architectural integrity, and adherence to the conventions in the repository root [`AGENTS.md`](../../../AGENTS.md).
+A review checks a change in two ways:
 
-## When to Use
+1. **Correctness**: does the change do what it intends, without breaking callers, other packages or the published `jitar` package?
+2. **Conventions**: does it follow [`CODING_STANDARDS.md`](../../../CODING_STANDARDS.md), the [`implementation`](../implementation/SKILL.md) skill for source code and the [`write-test`](../write-test/SKILL.md) skill for tests?
 
-Invoke this skill when asked to review a diff, pull request, or set of staged changes.
+Those documents are the source of truth for conventions. This skill does not repeat them in full. It lists what to check and the mistakes that are easy to miss. When this skill and those documents disagree, follow the documents and mention the conflict.
 
-## Review Checklist
+Also read the `AGENTS.md` of every changed package. It holds package-specific rules (for example, the serializer registration order in `serialization`) and the list of public exports.
 
-### TypeScript & formatting
+## Workflow
 
-- [ ] TypeScript strict mode compliance — no unjustified `any` (prefer `unknown` with narrowing); no new `as` assertions where a type guard would do
-- [ ] Single quotes, semicolons on every statement, Allman brace style (see `AGENTS.md` → Code Style)
-- [ ] One leading blank line at the top of the file, one blank line after the import block, one trailing blank line at EOF
-- [ ] Inline type imports (`import { type Foo } from 'bar'`) rather than a separate `import type` statement
-- [ ] No unused variables/imports, no stray `console.*` calls (use the shared `logger`)
+1. **Collect the change.** Get the diff against the base branch (usually `main`), e.g. `git diff main...HEAD`, or the pull request diff. List the changed packages and the kind of change: feature, fix, refactor, tests, or docs.
+2. **Read the context.** Read the changed files in full, not only the diff hunks, plus the `AGENTS.md` of each changed package. For a public API change, find the callers in other packages (`grep -rn "<Name>" packages/*/src`).
+3. **Check correctness** with the checklist below. This is the most important part of the review.
+4. **Check conventions** with the checklist below.
+5. **Check tests and docs.** Is the new or changed behavior covered? Is the package's `AGENTS.md` still accurate?
+6. **Verify** when you can: `npm run build:all`, `npm run test` and `npm run lint` from the repository root. Report failures with their output.
+7. **Report** the findings (see [Reporting](#reporting)).
 
-### File organization
+Do not report something as a problem unless you checked it in the code. When you are not sure, say so and explain what would confirm it.
 
-When reviewing package source structure:
+## Correctness Checklist
 
-- [ ] One file per logical component (class, interface, or type) — no multiple unrelated classes in a single file
-- [ ] Interfaces live under `src/interfaces/`, error classes under `src/errors/`, shared types under `src/types/`, and definition constants under `src/definitions/`
-- [ ] Sub-modules have their own `index.ts` that re-exports their public members
+### Behavior
 
-### Class & interface naming
+- [ ] The change does what the description or issue asks, including edge cases (empty collections, `undefined`, missing optional configuration)
+- [ ] Every `async` call is awaited or deliberately returned; there are no floating promises and no `forEach` with `async` callbacks
+- [ ] Independent async work runs in parallel with `Promise.all`; dependent work is not parallelized by mistake
+- [ ] Errors are not swallowed. A `catch` either handles the error meaningfully, converts it (e.g. to a `Response` via `ErrorConverter`), or rethrows it, wrapped with `{ cause }` where appropriate
+- [ ] Objects and arrays received from callers are not mutated; internal collections are not returned directly
+- [ ] Defaults are applied with `??`, not `||`, so `0`, `''` and `false` remain valid values
 
-When reviewing class and interface names:
+### Lifecycle and state
 
-- [ ] Class names use `PascalCase` (e.g., `FileManager`, `SourcingManager`)
-- [ ] Interface names use `PascalCase` without an `I` prefix (e.g., `FileReader`, `FileSystem`)
-- [ ] Private fields and methods use the `#` prefix with `camelCase` naming (e.g., `#validateLocation`, `#rootLocation`)
-- [ ] Private fields are declared at the top of the class body
+- [ ] Components with `start` / `stop` start and stop everything they own, and leave a consistent state when a step fails
+- [ ] State transitions use the `States` definitions, and `start` / `stop` are safe to call twice where the component tracks state (see `MiddlewareManager`, `StateManager`)
+- [ ] Scheduled tasks, timers and servers that are started are also stopped
 
-### Class design & initialization
+### Errors and status codes
 
-When reviewing class implementations:
+- [ ] Errors that can reach the caller of a procedure extend the right base from `@jitar/errors`. The base class decides the HTTP status code through `ErrorConverter`, so a wrong base means a wrong status code
+- [ ] Internal and lifecycle errors extend `Error`, and wrapping errors pass the original as `cause`
+- [ ] A specific error class is thrown, never `new Error('...')` or a string
 
-- [ ] All class fields use the `#` private field prefix — never the `private` keyword
-- [ ] Public field access is provided via getters (e.g., `get name() { return this.#name; }`)
-- [ ] Constructor-based initialization only — no default values in property declarations, no post-constructor property wiring
-- [ ] Builder or fluent methods that mutate state return `this` for method chaining
+### Package boundaries and public API
 
-### Model / domain class design
+- [ ] Removed or renamed exports from a package's `src/index.ts` are not used by other packages or by the `jitar` umbrella (`packages/jitar/src/lib.ts`, `client.ts`)
+- [ ] New members that Jitar users need are exported from the umbrella package; internals are not exported
+- [ ] Code reachable from `packages/jitar/src/client.ts` does not use Node.js built-ins (it is bundled for the browser)
+- [ ] A new third-party runtime dependency is also listed in the `dependencies` of `packages/jitar/package.json` and in `SERVER_EXTERNALS` (`packages/jitar/rollup.definitions.js`)
+- [ ] New `@jitar/*` dependencies are declared in `package.json` and do not create a cycle or make a low-level package depend on a high-level one
+- [ ] Package-specific rules from `AGENTS.md` are respected (e.g. serializer order in `SerializerBuilder`, conditional registration of platform features)
 
-When reviewing domain or model classes (classes that represent data or parsed structures):
+### Security
 
-- [ ] Every model class provides a `clone()` method that returns a deep copy of the instance
-- [ ] Every model class provides a `toString()` method that returns a string representation of the object
-- [ ] Read-only accessors are `public readonly` properties; computed or filtered accessors use getter properties rather than exposing raw collections
+- [ ] Data from requests, files, environment variables and configuration is validated before use (`@jitar/validation` where the package already uses it)
+- [ ] File paths built from external input cannot escape their root directory (compare the `InvalidLocation` check in `sourcing/src/files/FileManager.ts`)
+- [ ] Trust checks (such as the trust key in `LocalWorker`) and access levels (`public`, `protected`, `private`) are not bypassed or weakened
+- [ ] No secrets, tokens or credentials are logged, hard-coded or returned in errors or responses
+- [ ] Deserialization does not resolve arbitrary classes or execute code from untrusted input
 
-### API surface & method naming
+## Conventions Checklist
 
-When reviewing public APIs:
+Check these against the `implementation` skill and `CODING_STANDARDS.md`:
 
-- [ ] Public methods follow a consistent naming convention: `parse*` for parsing, `from*` for construction from runtime values, `is*` for type checks, `get*` / `has*` for member lookup
-- [ ] Factory-style methods that construct objects from runtime values use a `from*` prefix (e.g., `fromClass`, `fromObject`, `fromModule`)
-- [ ] Boolean query methods use the `is*` or `has*` prefix (e.g., `isClass`, `hasMember`, `canRead`)
+### Structure
 
-### Index files & export patterns
+- [ ] One component per file, file name equal to the default export, in the right folder (`definitions/`, `errors/`, `interfaces/`, `models/`, `types/`, `utils/`) or following the package's existing sub-module structure
+- [ ] Classes, interfaces, types and constant objects use `export default`; index files re-export with `export { default as <Name> }` and `type` for type-only exports
+- [ ] The package's `src/index.ts` exports exactly the public members, and its `AGENTS.md` lists them
 
-When reviewing `index.ts` files or package entry points:
+### Classes and types
 
-- [ ] Index files re-export using explicit named syntax (`export { default as ClassName } from './ClassName'`) rather than bare default re-exports
-- [ ] Type re-exports use `export type` with custom name aliases when the exported type name would clash with another export (e.g., `export type { Visibility as ClassVisibility }`)
-- [ ] Related exports are grouped logically in the main entry point
-- [ ] Internal implementation details (helper types, error internals, definition constants) are not re-exported through the public API
+- [ ] Private members use `#name`, never the `private` / `protected` keywords
+- [ ] Fields are declared at the top of the class and are `readonly` when not reassigned
+- [ ] Public state is exposed through single-line getters without a return type; methods always declare their return type
+- [ ] Collaborators are passed through the constructor; constructors with many parameters take a `configuration` object with a file-local `type Configuration`
+- [ ] Constants are `as const` objects with `UPPER_SNAKE_CASE` keys and a derived union type, used instead of raw string values
+- [ ] `unknown` with narrowing instead of `any`; `as` assertions only after a check (or for the `default` export of a dynamically imported module)
+- [ ] `undefined` is used, not `null` (unless a library requires it)
 
-### Error handling
+### Errors
 
-When reviewing custom error classes or error-throwing code:
+- [ ] Error classes are named after the situation without an `Error` suffix and live in an `errors/` folder near the code that throws them
+- [ ] Data the caller needs is stored in `#private` fields with getters; no other properties are added. Setting `this.name` is not required; it is fine where the package's other errors do it
+- [ ] Messages are in present tense, wrap named values in single quotes, and use singular subjects for rules
 
-- [ ] Error classes extend base error types from `@jitar/errors` (not `Error` directly) when an appropriate base exists (e.g., `NotFound`, `BadRequest`)
-- [ ] Error classes use `export default class` syntax
-- [ ] Error classes set `this.name` to the class name in the constructor
-- [ ] Error classes use `#` private field prefix for error-specific data and provide getters for access
-- [ ] Error names are descriptive (e.g., `NoSerializerFound`, `ClassNotFound`, `InvalidClass`)
-- [ ] Error messages include contextual information (type, name, value, or identifier) to aid debugging
-- [ ] Errors are thrown with explicit custom classes rather than `throw new Error()` strings
-- [ ] Component-specific errors live in a nested `errors/` directory (e.g., `src/serializers/errors/`)
+### Imports and style
 
-### Constants & enum patterns
+- [ ] Import blocks are ordered external, `@jitar/*`, relative, types, and sorted alphabetically within a block
+- [ ] Type-only imports use `import type`
+- [ ] No relative imports across `packages/`
+- [ ] File starts with one empty line and ends with a newline; Allman braces; semicolons; 4-space indent; single quotes; template strings instead of concatenation
+- [ ] Braces on every `if`, `else` and loop; explicit comparisons (`=== undefined`, `=== false`) instead of truthiness and `!`
+- [ ] No `eslint-disable` comments without approval, except `@typescript-eslint/no-unused-vars` for a parameter an interface requires
+- [ ] No leftover debug output. `console.*` is only used for intended CLI output (`packages/cli/src/commands`); other packages use `@jitar/logging`
+- [ ] Comments use `//`, are rare and explain *why*
 
-When reviewing constant definitions:
+## Tests Checklist
 
-- [ ] Constants are defined as `const` objects with `UPPER_SNAKE_CASE` keys and `as const` assertion (e.g., `AccessLevels`, `RunModes`)
-- [ ] Derived types are created via `typeof` (e.g., `type AccessLevel = typeof AccessLevels[keyof typeof AccessLevels]`)
-- [ ] Constants live under `src/definitions/`
+Check these against the `write-test` skill:
 
-### Abstract base class & extension patterns
+- [ ] New and changed public behavior has tests, including error cases, in `test/<mirrored path>/<Name>.spec.ts`
+- [ ] Spec files contain scenarios and assertions only; instances, inputs and expected outputs live in `fixtures/` and are re-exported from `fixtures/index.ts`
+- [ ] Naming: folder-prefixed component name, `.member(params)`, `should ...`
+- [ ] Errors are asserted as exact instances (`rejects.toEqual(new X(...))`, `toThrow(new X(...))`)
+- [ ] Test doubles are handwritten classes in fixtures; no `vi.fn()` or `vi.mock()`
+- [ ] Assertions were not weakened and tests were not removed to make the suite pass
 
-When reviewing abstract base classes and their concrete implementations:
+## Documentation
 
-- [ ] Abstract base classes define the contract via abstract methods
-- [ ] Concrete implementations extend the abstract base and implement all required abstract methods
-- [ ] Base classes provide helper methods that delegate to parent/context objects
-- [ ] Matching/dispatch logic uses `can*` methods to determine applicability before calling the main operation
-- [ ] All I/O or processing methods are `async` and return `Promise<unknown>`
+- [ ] The package's `AGENTS.md` matches the change: exports, dependencies, structure, errors and architecture decisions
+- [ ] A user-facing change to the `jitar` package or a plugin is reflected in its `README.md` or the documentation, when relevant
 
-### Builder / factory patterns
+## Reporting
 
-When reviewing builder or factory classes:
+Report each finding with:
 
-- [ ] Builder classes provide static factory methods (e.g., `build()`) to construct complex objects
-- [ ] Builder methods accept optional dependencies (e.g., `Resolver?`) to enable conditional feature registration
-- [ ] Components are registered in priority order — most specific first, most generic last
-- [ ] Conditional registration is used for platform-dependent features (e.g., `Buffer` only when available)
+- **Location**: `packages/<package>/src/<file>.ts:<line>`
+- **Severity**:
+  - **Blocking**: a bug, regression, security issue, broken build or failing test
+  - **Should fix**: a convention violation, missing test, or outdated `AGENTS.md`
+  - **Nit**: a minor style or naming suggestion
+- **Problem**: what is wrong and, for bugs, the concrete scenario that fails
+- **Suggestion**: how to fix it, with a short code example when it helps
 
-### Type definitions
-
-When reviewing type definitions:
-
-- [ ] Base types are defined in `src/types/`
-- [ ] Specialized types extend base types via intersection types (e.g., `type X = Base & { additional: ... }`)
-- [ ] Types live under `src/types/` (with specialized sub-types under `src/types/<category>/` when appropriate)
-- [ ] Types are exported as default exports (`export default TypeName`)
-
-### Import conventions
-
-When reviewing import statements across the monorepo:
-
-- [ ] Within a single package, sibling modules are imported via relative paths (e.g., `../model`, `../../src/static`) — not workspace aliases
-- [ ] Cross-package imports use workspace aliases (`@jitar/...`) — never relative paths crossing `packages/` boundaries
-- [ ] Type-only imports use `import type` to avoid runtime overhead
-
-### Test conventions
-
-When reviewing test files (`*.spec.ts`) or test fixtures (`*.fixture.ts`):
-
-- [ ] Test files are named `*.spec.ts`; fixture files are named `*.fixture.ts`
-- [ ] Fixtures export named constants (e.g., `export const CLASSES = { ... }`) rather than default exports
-- [ ] Tests use `describe('ClassName')` for class-level grouping and `describe('.methodName(params)')` for method-level grouping
-- [ ] Individual tests use `it('should <behavior>')` phrasing
-- [ ] Shared instances are created once at the top of the `describe` block, not per-test
-- [ ] Assertions verify both the instance type (`toBeInstanceOf`) and property values (`toEqual`, `toHaveLength`)
-- [ ] Test fixtures live in `test/<component>/fixtures/` with an index re-exporting all fixtures
-- [ ] Tests cover: successful round-trip, matching logic, and error handling for invalid input
+Order the findings by severity, blocking first. End with a short summary: the overall verdict, what was verified (build, tests, lint), and what was not. If there are no findings, say so explicitly.
