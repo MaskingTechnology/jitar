@@ -1,5 +1,5 @@
 
-const PATHS =
+export const PATHS =
 {
     ROOT: '/jitar/base',
 
@@ -9,5 +9,3 @@ const PATHS =
         'modules/shared'
     ]
 };
-
-export { PATHS };

@@ -1,21 +1,20 @@
 
 import { describe, expect, it } from 'vitest';
 
-import LocationRewriter from '../../../src/source/module/LocationRewriter';
+import { FILENAMES, LOCATION_REWRITERS, MODULES } from './fixtures';
 
-import { FILENAMES, MODULES, fileManager } from './fixtures';
-
-const rewriter = new LocationRewriter(fileManager);
+const rewriter = LOCATION_REWRITERS.GENERAL;
 
 describe('source/module/LocationRewriter', () =>
 {
-    describe('.rewrite()', () =>
+    describe('.rewrite(module, filename)', () =>
     {
         describe('imports', () =>
         {
             it('should add the .js extension to an application file import', () =>
             {
-                const module = MODULES.REMOTE_FILE_IMPORT();
+                const module = MODULES.FILE_IMPORT();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.imports).toHaveLength(1);
@@ -24,7 +23,18 @@ describe('source/module/LocationRewriter', () =>
 
             it('should keep the extension of an application file import that already has one', () =>
             {
-                const module = MODULES.REMOTE_FILE_IMPORT_WITH_EXTENSION();
+                const module = MODULES.FILE_IMPORT_WITH_EXTENSION();
+
+                rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
+
+                expect(module.imports).toHaveLength(1);
+                expect(module.imports[0].from).toBe('./greeting.js');
+            });
+
+            it('should normalize the Windows path separator of an application file import', () =>
+            {
+                const module = MODULES.WINDOWS_FILE_IMPORT();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.imports).toHaveLength(1);
@@ -33,7 +43,8 @@ describe('source/module/LocationRewriter', () =>
 
             it('should append index.js to an application directory import', () =>
             {
-                const module = MODULES.REMOTE_DIRECTORY_IMPORT();
+                const module = MODULES.DIRECTORY_IMPORT();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.imports).toHaveLength(1);
@@ -42,7 +53,8 @@ describe('source/module/LocationRewriter', () =>
 
             it('should append index.js to an application directory import that uses a parent reference', () =>
             {
-                const module = MODULES.REMOTE_PARENT_DIRECTORY_IMPORT();
+                const module = MODULES.PARENT_DIRECTORY_IMPORT();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.imports).toHaveLength(1);
@@ -51,7 +63,8 @@ describe('source/module/LocationRewriter', () =>
 
             it('should add the .js extension to an application file import that uses a parent reference', () =>
             {
-                const module = MODULES.REMOTE_PARENT_FILE_IMPORT();
+                const module = MODULES.PARENT_FILE_IMPORT();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.imports).toHaveLength(1);
@@ -60,7 +73,8 @@ describe('source/module/LocationRewriter', () =>
 
             it('should add the .js extension to a remote application import', () =>
             {
-                const module = MODULES.REMOTE_URL_IMPORT();
+                const module = MODULES.URL_IMPORT();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.imports).toHaveLength(1);
@@ -70,6 +84,7 @@ describe('source/module/LocationRewriter', () =>
             it('should not rewrite a non-application import', () =>
             {
                 const module = MODULES.RUNTIME_IMPORT();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.imports).toHaveLength(1);
@@ -78,7 +93,8 @@ describe('source/module/LocationRewriter', () =>
 
             it('should add the .js extension to a file import of a root module', () =>
             {
-                const module = MODULES.ROOT_FILE_IMPORT();
+                const module = MODULES.FILE_IMPORT();
+
                 rewriter.rewrite(module, FILENAMES.ROOT_HANDLER);
 
                 expect(module.imports).toHaveLength(1);
@@ -87,12 +103,15 @@ describe('source/module/LocationRewriter', () =>
 
             it('should append index.js to a directory import of a root module', () =>
             {
-                const module = MODULES.ROOT_DIRECTORY_IMPORT();
+                const module = MODULES.DIRECTORY_IMPORT();
+
                 rewriter.rewrite(module, FILENAMES.ROOT_HANDLER);
 
                 expect(module.imports).toHaveLength(1);
                 expect(module.imports[0].from).toBe('./config/index.js');
             });
+
+            // TODO: Add tests for absolute (/) application imports
         });
 
         describe('exports', () =>
@@ -100,6 +119,7 @@ describe('source/module/LocationRewriter', () =>
             it('should not rewrite an export without a source module', () =>
             {
                 const module = MODULES.LOCAL_EXPORT();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.exports).toHaveLength(1);
@@ -109,6 +129,7 @@ describe('source/module/LocationRewriter', () =>
             it('should add the .js extension to a re-export of an application file', () =>
             {
                 const module = MODULES.RE_EXPORT_FILE();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.exports).toHaveLength(1);
@@ -118,6 +139,7 @@ describe('source/module/LocationRewriter', () =>
             it('should append index.js to a re-export of an application directory', () =>
             {
                 const module = MODULES.RE_EXPORT_DIRECTORY();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.exports).toHaveLength(1);
@@ -127,6 +149,7 @@ describe('source/module/LocationRewriter', () =>
             it('should not rewrite a re-export of a non-application module', () =>
             {
                 const module = MODULES.RE_EXPORT_RUNTIME();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.exports).toHaveLength(1);
@@ -139,6 +162,7 @@ describe('source/module/LocationRewriter', () =>
             it('should rewrite all application imports and re-exports at once', () =>
             {
                 const module = MODULES.HANDLER();
+
                 rewriter.rewrite(module, FILENAMES.REMOTE_HANDLER);
 
                 expect(module.imports).toHaveLength(4);
