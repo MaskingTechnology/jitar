@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@jitar/errors": "*",
-    "@jitar/execution": "*"
+    "@jitar/execution": "*",
+    "@jitar/sourcing": "*"
   }
 }

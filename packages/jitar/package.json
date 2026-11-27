@@ -37,7 +37,9 @@
         "mime-types": "3.0.2"
     },
     "devDependencies": {
+        "@jitar/build": "*",
         "@jitar/cli": "*",
+        "@jitar/configuration": "*",
         "@jitar/errors": "*",
         "@jitar/execution": "*",
         "@jitar/health": "*",
