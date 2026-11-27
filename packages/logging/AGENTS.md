@@ -1,4 +1,6 @@
-# Logging Package Agent Guidelines
+# @jitar/logging
+
+This file extends the root [`AGENTS.md`](../../AGENTS.md) with information specific to the logging package.
 
 ## Purpose
 
@@ -8,22 +10,38 @@ This package provides a lightweight, extensible logging library for the [Jitar](
 - **Message formatting**: Automatic timestamp injection (`[ISO-8601][LEVEL]`) and intelligent value interpretation (strings, numbers, booleans, objects, arrays, functions, `undefined`, `null`, `Error` objects).
 - **Writer abstraction**: A `Writer` interface that decouples log output from the logger, enabling testability and custom sinks (e.g., console, file, network).
 
-## Source Structure
+## Exports
+
+| Exported Symbol | Type | Description |
+| --- | --- | --- |
+| `LogLevels` | const object | Log level constants (`DEBUG: 0` through `FATAL: 4`) |
+| `LogLevel` | type | Numeric log level type derived from `LogLevels` |
+| `Logger` | class | Main logging class with level filtering and message formatting |
+| `LogLevelParser` | class | Parses a string (case-insensitive) into a `LogLevel` |
+| `Writer` | interface | Output abstraction defining `log`, `debug`, `info`, `warn`, `error` methods |
+
+## Dependencies
+
+This package has no dependencies.
+
+## Package structure
 
 ```
 src/
-├── index.ts                     # Public API exports
-├── Logger.ts                    # Core logging class
-├── Writer.ts                    # Writer interface
+├── index.ts                     ← Public API exports
+├── Logger.ts                    ← Core logging class
+├── Writer.ts                    ← Writer interface
 ├── definitions/
-│   └── LogLevel.ts              # LogLevels const + LogLevel type
+│   └── LogLevel.ts              ← LogLevels const + LogLevel type
 ├── errors/
-│   └── InvalidLogLevel.ts       # Custom error for invalid log level strings
+│   └── InvalidLogLevel.ts       ← Custom error for invalid log level strings
 └── utils/
-    └── LogLevelParser.ts        # String-to-LogLevel parser
+    └── LogLevelParser.ts        ← String-to-LogLevel parser
 ```
 
-### Key Files
+## Architecture
+
+### Overview
 
 | File | Responsibility |
 |---|---|
@@ -34,7 +52,7 @@ src/
 | `src/errors/InvalidLogLevel.ts` | Custom `Error` subclass thrown when `LogLevelParser.parse` receives an unrecognized level string. |
 | `src/utils/LogLevelParser.ts` | Parses a string (case-insensitive) into a `LogLevel`. Throws `InvalidLogLevel` for unrecognized values. |
 
-## Design Decisions
+### Decisions
 
 - **Numeric log levels**: Levels are numbers (`0`–`4`) rather than strings, enabling simple `>` comparison for filtering.
 - **`fatal` maps to `error` writer**: The `Logger.fatal()` method calls `writer.error()` because there is no `writer.fatal()`. This ensures fatal messages are always visible.
@@ -59,14 +77,14 @@ Tests live under `test/` mirroring the `src/` structure:
 
 ```
 test/
-├── Logger.spec.ts               # Comprehensive Logger tests (level filtering, message formatting)
+├── Logger.spec.ts               ← Comprehensive Logger tests (level filtering, message formatting)
 ├── utils/
-│   └── LogLevelParser.spec.ts   # LogLevelParser unit tests
+│   └── LogLevelParser.spec.ts   ← LogLevelParser unit tests
 └── fixtures/
-    ├── index.ts                 # Barrel export for fixtures
-    ├── loggers.fixture.ts       # Pre-configured Logger instances per level
-    ├── values.fixture.ts        # Input/expected output fixtures for message formatting
-    └── writer.fixture.ts        # MemoryWriter mock implementing Writer
+    ├── index.ts                 ← Barrel export for fixtures
+    ├── loggers.fixture.ts       ← Pre-configured Logger instances per level
+    ├── values.fixture.ts        ← Input/expected output fixtures for message formatting
+    └── writer.fixture.ts        ← MemoryWriter mock implementing Writer
 ```
 
 ### Fixture Patterns
@@ -75,20 +93,7 @@ test/
 - **`LOGGERS`** (`test/fixtures/loggers.fixture.ts`): Pre-configured `Logger` instances, one per log level, all wired to the `MemoryWriter`.
 - **`INPUT` / `OUTPUT`** (`test/fixtures/values.fixture.ts`): Input values and their expected regex-matched output strings for message formatting tests.
 
-### Running Tests
-
-```bash
-npm run test           # Run all tests
-npm run test-coverage  # Run with v8 coverage
-```
-
 ## Build & Development
-
-```bash
-npm run build    # Compile to dist/
-npm run clean    # Remove dist/
-npm run lint     # ESLint check
-```
 
 Always run `npm run lint` after making changes. A full `npm run build:all` must pass before merging.
 
@@ -105,6 +110,16 @@ To provide a custom writer:
 
 1. Implement the `Writer` interface (define `log`, `debug`, `info`, `warn`, `error` methods).
 2. Pass the custom writer to the `Logger` constructor.
+
+## Commands
+
+| Command | Description |
+| --- | --- |
+| `npm run build` | Compile to `dist/` (`tsc -p tsconfig.json`) |
+| `npm run clean` | Remove `dist/` (`shx rm -rf dist`) |
+| `npm run lint` | ESLint check |
+| `npm run test` | Run all tests (`vitest run`) |
+| `npm run test-coverage` | Run with v8 coverage (`vitest run --coverage`) |
 
 ## MCP Usage
 

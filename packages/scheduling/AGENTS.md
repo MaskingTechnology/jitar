@@ -1,27 +1,46 @@
-# @jitar/scheduling — Package Guidelines
+# @jitar/scheduling
+
+This file extends the root [`AGENTS.md`](../../AGENTS.md) with package-specific information.
 
 ## Purpose
 
 This package provides task scheduling functionality for the Jitar runtime. It allows developers to create, manage, and execute recurring tasks at configurable intervals.
 
+## Exports
+
+Two items are exported from `src/index.ts` (the only entry point, `./dist/index.js`):
+
+| Exported Symbol   | Type  | Description                                                   |
+|-------------------|-------|---------------------------------------------------------------|
+| `ScheduledTask`   | class | Individual scheduled task with start/stop lifecycle           |
+| `ScheduleManager` | class | Central manager for creating, removing, and controlling tasks |
+
+The `Task` type is internal and not exported.
+
 ## Dependencies
 
-- `@jitar/logging` — `Logger` interface for logging task execution errors
+| Package | Usage |
+| --- | --- |
+| `@jitar/logging` | `Logger` interface for logging task execution errors |
 
-## Architecture
+## Package structure
 
 The package is organized into three source files plus a types module:
 
 ```
 src/
-├── index.ts                    # Main entry point — re-exports ScheduledTask and ScheduleManager
-├── ScheduleManager.ts          # Central manager — creates, removes, and controls task lifecycle
-├── ScheduledTask.ts            # Individual task — handles scheduling, execution, and interval management
+├── index.ts               ← Main entry point — re-exports ScheduledTask and ScheduleManager
+├── ScheduleManager.ts     ← Central manager — creates, removes, and controls task lifecycle
+├── ScheduledTask.ts       ← Individual task — handles scheduling, execution, and interval management
 └── types/
-    └── Task.ts                 # Task type alias: () => Promise<void>
+    └── Task.ts            ← Task type alias: () => Promise<void>
 ```
 
-### Component Responsibilities
+## Architecture
+
+### Overview
+
+#### Component Responsibilities
 
 | Component | Responsibility |
 |---|---|
@@ -29,7 +48,7 @@ src/
 | `ScheduledTask` | Individual task — manages the setTimeout lifecycle, executes the task, and reschedules |
 | `Task` | Type alias for an async function with no arguments and no return value |
 
-### ScheduleManager Class
+#### ScheduleManager Class
 
 The `ScheduleManager` is the central orchestrator. It accepts a `Logger` in its constructor and provides:
 
@@ -42,7 +61,7 @@ The `ScheduleManager` is the central orchestrator. It accepts a `Logger` in its 
 
 The manager holds a private array `#scheduledTasks: ScheduledTask[]` and tracks tasks by reference.
 
-### ScheduledTask Class
+#### ScheduledTask Class
 
 Each `ScheduledTask` manages a single recurring task:
 
@@ -59,7 +78,7 @@ Internal behavior:
 - Task errors are caught and logged via `#logger.warn` — they do not stop the scheduling loop.
 - A null guard (`#timeout === null`) prevents execution after `stop()` has been called.
 
-### Task Type
+#### Task Type
 
 ```typescript
 type Task = () => Promise<void>;
@@ -67,14 +86,12 @@ type Task = () => Promise<void>;
 
 A simple type alias for an async function that takes no arguments and returns nothing.
 
-## Exports
+### Decisions
 
-Two items are exported from `src/index.ts`:
-
-| Exported Symbol | Type | Description |
-|---|---|---|
-| `ScheduledTask` | class | Individual scheduled task with start/stop lifecycle |
-| `ScheduleManager` | class | Central manager for creating, removing, and controlling tasks |
+- **`setTimeout` over `setInterval`**: The next execution is only scheduled after the previous one completes, so executions never overlap.
+- **Unref'd timeouts**: `.unref()` prevents scheduled tasks from keeping the Node.js process alive.
+- **Errors don't stop the loop**: Failures are logged as warnings and the task keeps running at its interval.
+- **Tracking by reference**: The manager identifies tasks by object reference (`indexOf`), not by id.
 
 ## Coding Conventions
 
@@ -117,16 +134,6 @@ The package currently has a placeholder test (`test/dummy.spec.ts`) with a TODO 
 - Create fixtures for `Logger` mocks if needed.
 - Test both success and error paths (e.g., task execution success, task execution failure, start/stop lifecycle).
 
-## Build Commands
-
-| Script | Command | Description |
-|---|---|---|
-| test | `vitest run` | Run tests |
-| test-coverage | `vitest run --coverage` | Run tests with coverage |
-| lint | `eslint` | Lint source files |
-| build | `tsc -p tsconfig.json` | Compile to `./dist` |
-| clean | `shx rm -rf dist` | Remove build artifacts |
-
 ## Configuration
 
 - Extends root `tsconfig.json` with `rootDir: ./src` and `outDir: ./dist`.
@@ -162,6 +169,16 @@ When working with this package:
 5. **Write tests**: Create tests that verify the full task lifecycle (create, start, stop, error handling).
 6. **Run `npm run lint`** after making changes.
 7. **Run `npm run test`** to verify all tests pass.
+
+## Commands
+
+| Command                 | Script                  | Description             |
+|-------------------------|-------------------------|-------------------------|
+| `npm run test`          | `vitest run`            | Run tests               |
+| `npm run test-coverage` | `vitest run --coverage` | Run tests with coverage |
+| `npm run lint`          | `eslint`                | Lint source files       |
+| `npm run build`         | `tsc -p tsconfig.json`  | Compile to `./dist`     |
+| `npm run clean`         | `shx rm -rf dist`       | Remove build artifacts  |
 
 ## MCP Usage
 

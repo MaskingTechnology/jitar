@@ -1,10 +1,18 @@
-# CLI Package Agent Guidelines
+# @jitar/cli
+
+This file extends the root [`AGENTS.md`](../../AGENTS.md) with information specific to the CLI package.
 
 ## Purpose
 
 This package provides the command-line interface for the Jitar runtime. It parses command-line arguments, routes to the appropriate command handler, and delegates to other packages (`@jitar/build`, `@jitar/init`, `@jitar/runtime`, `@jitar/http`) for actual work.
 
 The single exported entry point is `Cli`, which reads `process.argv`, extracts the command name and arguments, and delegates to `CommandRunner`.
+
+## Exports
+
+| Exported Symbol | Type | Description |
+| --- | --- | --- |
+| `Cli` | class | Main entry point; `start()` reads `process.argv` via `ArgumentProcessor` and runs the requested command through `CommandRunner` |
 
 ## Dependencies
 
@@ -18,8 +26,11 @@ The single exported entry point is `Cli`, which reads `process.argv`, extracts t
 | `@jitar/runtime` | `ServerBuilder` — used by the `start` command |
 | `@jitar/sourcing` | `LocalSourcingManager` — used by the `start` command |
 
-## Architecture
+Node built-in `node:module` (`createRequire`) is used by `ShowVersion`.
 
+## Package structure
+
+```
 src/
 ├── Cli.ts                    ← Main entry point; reads process.argv, delegates to CommandRunner
 ├── Command.ts                ← Interface defining name, description, options, execute()
@@ -36,9 +47,14 @@ src/
 │   └── StartServer.ts        ← Starts the HTTP server (delegates to ServerBuilder)
 └── errors/
     ├── CommandNotFound.ts    ← Thrown when an unknown command is requested
-    └── MissingArgument.ts   ← Thrown when a required argument is missing
+    └── MissingArgument.ts    ← Thrown when a required argument is missing
+```
 
-### Core Infrastructure
+## Architecture
+
+### Overview
+
+#### Core Infrastructure
 
 | Component | Responsibility |
 | --- | --- |
@@ -48,7 +64,7 @@ src/
 | `ArgumentProcessor` | Extracts the command name from `process.argv[2]` (index 0 = node, 1 = script). Parses remaining args as `key=value` pairs into a `Map<string, string>`. Provides `getRequiredArgument(name)` (throws `MissingArgument` if absent) and `getOptionalArgument(name, defaultValue)` |
 | `Option` | Type: `{ key, required, defaultValue?, description }` — describes a command's expected options |
 
-### Commands
+#### Commands
 
 | Command | Name | Options | Delegates To |
 | --- | --- | --- | --- |
@@ -59,12 +75,14 @@ src/
 | `BuildApp` | `build` | `--env-file` (optional), `--config` (optional, default `'jitar.json'`), `--log-level` (optional: `info`, `debug`, `warn`, `error`, `fatal`; default `'info'`) | `BuildManager` from `@jitar/build` |
 | `StartServer` | `start` | `--service` (required), `--env-file` (optional), `--config` (optional, default `'jitar.json'`), `--log-level` (optional; default `'info'`) | `ServerBuilder` from `@jitar/runtime`, `HttpServer` from `@jitar/http` |
 
-### Error Classes
+### Decisions
 
-| Class | Trigger | Message Pattern |
-| --- | --- | --- |
-| `CommandNotFound` | Unknown command name passed to `CommandRunner.run()` | ``Command ${name} not found`` |
-| `MissingArgument` | `ArgumentProcessor.getRequiredArgument()` called with absent key | ``Missing argument '${name}'`` |
+- **Command routing**: `CommandRunner` registers all commands in its constructor. No dynamic imports or reflection — commands are explicitly instantiated and added.
+- **Default command**: If no command is provided, `Cli.start()` defaults to `'help'`.
+- **Argument format**: CLI arguments use `key=value` syntax (e.g., `--name=myapp`). The `=` separator is required; whitespace around key/value is trimmed.
+- **Version resolution**: `ShowVersion` reads the package's own `package.json` via Node's `createRequire` to resolve the version at runtime. Falls back to `'0.0.0'` on failure.
+- **Server shutdown**: `StartServer` registers a `SIGINT` handler that calls `httpServer.stop()`. A guard flag (`isShuttingDown`) prevents double-stops.
+- **Banner**: `StartServer` prints an ASCII art banner before starting the server.
 
 ## Coding Conventions
 
@@ -103,7 +121,14 @@ Follow the repository-wide [CODING_STANDARDS.md](../../CODING_STANDARDS.md). Add
 - Use `//` comments only for explaining the *why*, not the *what*.
 - Use single quotes for strings. Use backticks with template expressions for concatenation.
 - One trailing blank line at EOF.
-- Unused parameters should be suppressed with `// eslint-disable-next-line @typescript-eslint/no-unused-vars` when the interface requires them but the implementation does not use them (e.g., `ShowAbout.execute`).
+- Unused parameters should be suppressed with `// eslint-disable-next-line @typescript-eslint/no-unused-vars` when the interface requires them but the implementation does not use them (e.g., `ShowAbout.execute`, `ShowVersion.execute`).
+
+## Error Classes
+
+| Class | Trigger | Message Pattern |
+| --- | --- | --- |
+| `CommandNotFound` | Unknown command name passed to `CommandRunner.run()` | ``Command ${name} not found`` |
+| `MissingArgument` | `ArgumentProcessor.getRequiredArgument()` called with absent key | ``Missing argument '${name}'`` |
 
 ## Testing
 
@@ -125,14 +150,15 @@ Follow the repository-wide [CODING_STANDARDS.md](../../CODING_STANDARDS.md). Add
 - Note: `--fix` is not supported; fix issues manually.
 - Always run `npm run lint` after modifying TypeScript files.
 
-## Key Implementation Notes
+## Commands
 
-- **Command routing**: `CommandRunner` registers all commands in its constructor. No dynamic imports or reflection — commands are explicitly instantiated and added.
-- **Default command**: If no command is provided, `Cli.start()` defaults to `'help'`.
-- **Argument format**: CLI arguments use `key=value` syntax (e.g., `--name=myapp`). The `=` separator is required; whitespace around key/value is trimmed.
-- **Version resolution**: `ShowVersion` reads the package's own `package.json` via Node's `createRequire` to resolve the version at runtime. Falls back to `'0.0.0'` on failure.
-- **Server shutdown**: `StartServer` registers a `SIGINT` handler that calls `httpServer.stop()`. A guard flag (`isShuttingDown`) prevents double-stops.
-- **Banner**: `StartServer` prints an ASCII art banner before starting the server.
+| Command | Description |
+| --- | --- |
+| `npm run build` | Build the package (`tsc -p tsconfig.json`) |
+| `npm run clean` | Remove `dist/` directory (`shx rm -rf dist`) |
+| `npm run lint` | Lint the package (`eslint`, must pass before merging) |
+| `npm run test` | Run all tests (`vitest run`) |
+| `npm run test-coverage` | Run tests with coverage report (`vitest run --coverage`) |
 
 ## MCP Usage
 

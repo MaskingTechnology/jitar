@@ -1,6 +1,8 @@
-# @jitar/errors — Package Guidelines
+# @jitar/errors
 
-## Overview
+This file extends the root [`AGENTS.md`](../../AGENTS.md) with information specific to the errors package.
+
+## Purpose
 
 This package provides the base HTTP-status-code-inspired error classes for the Jitar runtime. All errors extend JavaScript's native `Error` directly.
 
@@ -8,18 +10,54 @@ This package provides the base HTTP-status-code-inspired error classes for the J
 
 Eight error classes are exported from `src/index.ts`:
 
-| Error Class       | Default Message       |
-|-------------------|-----------------------|
-| `BadRequest`      | "Invalid request"     |
-| `Forbidden`       | "Forbidden"           |
-| `NotFound`        | "Not found"           |
-| `NotImplemented`  | "Not implemented"     |
-| `PaymentRequired` | "Payment required"    |
-| `ServerError`     | "Server error"        |
-| `Teapot`          | "I'm a teapot"        |
-| `Unauthorized`    | "Unauthorized"        |
+| Exported Symbol   | Type  | Description (default message) |
+|-------------------|-------|-------------------------------|
+| `BadRequest`      | class | "Invalid request"             |
+| `Forbidden`       | class | "Forbidden"                   |
+| `NotFound`        | class | "Not found"                   |
+| `NotImplemented`  | class | "Not implemented"             |
+| `PaymentRequired` | class | "Payment required"            |
+| `ServerError`     | class | "Server error"                |
+| `Teapot`          | class | "I'm a teapot"                |
+| `Unauthorized`    | class | "Unauthorized"                |
 
-## Error Class Pattern
+## Dependencies
+
+This package has no dependencies.
+
+## Package structure
+
+```
+src/
+├── BadRequest.ts         ← One error class per file
+├── Forbidden.ts
+├── NotFound.ts
+├── NotImplemented.ts
+├── PaymentRequired.ts
+├── ServerError.ts
+├── Teapot.ts
+├── Unauthorized.ts
+└── index.ts              ← Re-exports all errors as named exports
+```
+
+## Architecture
+
+### Overview
+
+Each error is a plain class extending `Error` with a default message. Other packages import and extend these base errors. Common patterns:
+
+- **Extend a base error**: `class MyError extends NotFound` (e.g., `ImplementationNotFound extends NotFound`)
+- **Import directly**: `import { NotFound } from '@jitar/errors'`
+- **Re-exported by `jitar`**: Both `lib.ts` and `client.ts` re-export all eight errors.
+
+### Decisions
+
+- **Extend `Error` directly**: No intermediate base class; no extra properties.
+- **Base errors for the whole runtime**: When creating package-specific errors, extend the appropriate base error from `@jitar/errors` rather than creating a new `Error` subclass.
+
+## Coding Conventions
+
+### Error Class Pattern
 
 Each error class follows this exact structure:
 
@@ -33,7 +71,7 @@ export default class <Name> extends Error
 }
 ```
 
-### Rules
+#### Rules
 - **Class name**: PascalCase, matching the file name exactly.
 - **Export**: `export default class`, never named exports.
 - **Base class**: Always extends `Error` directly.
@@ -41,7 +79,7 @@ export default class <Name> extends Error
 - **`super(message)`**: Always call `super(message)` — do not add extra properties.
 - **File structure**: One class per file, no trailing whitespace beyond the closing brace and newline.
 
-## Index Exports
+### Index Exports
 
 `src/index.ts` re-exports all errors as named exports using the `default as <Name>` pattern:
 
@@ -50,24 +88,6 @@ export { default as BadRequest } from './BadRequest';
 ```
 
 Do not change the export order or naming convention in `index.ts`.
-
-## Consumption by Other Packages
-
-Other packages import and extend these base errors. Common patterns:
-
-- **Extend a base error**: `class MyError extends NotFound` (e.g., `ImplementationNotFound extends NotFound`)
-- **Import directly**: `import { NotFound } from '@jitar/errors'`
-- **Re-exported by `jitar`**: Both `lib.ts` and `client.ts` re-export all eight errors.
-
-When creating package-specific errors, extend the appropriate base error from `@jitar/errors` rather than creating a new `Error` subclass.
-
-## Build Commands
-
-| Script   | Command                    | Description              |
-|----------|----------------------------|--------------------------|
-| build    | `tsc -p tsconfig.json`     | Compile to `./dist`      |
-| lint     | `eslint`                   | Lint source files        |
-| clean    | `shx rm -rf dist`          | Remove build artifacts   |
 
 ## Configuration
 
@@ -82,10 +102,19 @@ When creating package-specific errors, extend the appropriate base error from `@
 3. Add a named export in `src/index.ts` following the existing convention.
 4. Ensure the file has no trailing whitespace beyond the closing brace and a single newline.
 
-## MCP Usage
-
-Read the root [`AGENTS.md`](../../AGENTS.md) for more information.
-
 ## Tests
 
 This package has no tests. As long as it only contains Error objects, there is no need for testing.
+
+## Commands
+
+| Command | Script | Description |
+|---------|--------|-------------|
+| `npm run build` | `tsc -p tsconfig.json` | Compile to `./dist` |
+| `npm run lint` | `eslint` | Lint source files |
+| `npm run clean` | `shx rm -rf dist` | Remove build artifacts |
+| `npm run test` | (empty) | No-op; the package has no tests |
+
+## MCP Usage
+
+Read the root [`AGENTS.md`](../../AGENTS.md) for more information.

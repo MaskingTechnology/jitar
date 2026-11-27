@@ -1,4 +1,6 @@
-# Analysis Package Agent Guidelines
+# @jitar/analysis
+
+This file extends the root [`AGENTS.md`](../../AGENTS.md) with information specific to the analysis package.
 
 ## Purpose
 
@@ -9,38 +11,84 @@ This package provides application analysis tools for the Jitar runtime. It offer
 
 Both tools return models based on the ECMAScript specification, tailored to the Jitar runtime.
 
-## Package Structure
+## Exports
+
+All exports come from `src/index.ts` (single entry point `./dist/index.js`).
+
+| Exported Symbol | Type | Description |
+|-----------------|------|-------------|
+| `ESStatement` | abstract class | Base class for all statements |
+| `ESDeclaration` | abstract class | Base class for variable, function, and class declarations |
+| `ESVariable` | class | Variable declarations (`const`, `let`, `var`) |
+| `ESFunction` | class | Regular function model |
+| `ESArrowFunction` | class | Arrow function model |
+| `ESGeneratorFunction` | class | Generator function model |
+| `ESParameter` | class | Function parameter (binding element) |
+| `ESClass` | class | Class model with members (fields, methods, getters, setters) |
+| `ESClassMember` | abstract class | Base class for class members |
+| `ESField` | class | Class field |
+| `ESConstructor` | class | Class constructor |
+| `ESMethod` | class | Class method |
+| `ESGeneratorMethod` | class | Class generator method |
+| `ESGetter` | class | Class getter |
+| `ESSetter` | class | Class setter |
+| `ESBinding` | abstract class | Base class for bindings |
+| `ESIdentifierBinding` | class | Identifier binding |
+| `ESArrayBinding` | class | Array destructuring binding |
+| `ESObjectBinding` | class | Object destructuring binding |
+| `ESPropertyBinding` | class | Property binding within an object binding |
+| `ESBindingElement` | class | Binding with optional initializer (base of `ESParameter`) |
+| `ESBlock` | class | Block statement |
+| `ESExpression` | class | Expression model (reconstructible code) |
+| `ESImport` | class | Import statement |
+| `ESExport` | class | Export statement |
+| `ESModule` | class | Module-level container with statements |
+| `ESModuleMember` | class | Imported / exported member with identifier and optional alias |
+| `Reflector` | class | Reflects on runtime objects to create ES models |
+| `Parser` | class | Parses JavaScript/TypeScript code into ES models |
+
+`Lexer`, `Coder`, `ClassMerger`, the token definitions, the token models, the error classes, and the type aliases `ClassVisibility`, `ClassLocation` and `VariableType` are exported from the sub-folder index files only and are **not** part of the public package API.
+
+## Dependencies
+
+This package has no dependencies (neither monorepo nor external).
+
+## Package structure
 
 ```
 src/
-├── index.ts                    # Main entry point — re-exports from model, dynamic, static
-├── model/                      # ECMAScript-based model classes (30+ classes)
-│   ├── ESModule.ts             # Module-level container with statements
-│   ├── ESClass.ts              # Class model with members (fields, methods, getters, setters)
-│   ├── ESClassMember.ts        # Abstract base for class members
-│   ├── ESVariable.ts           # Variable declarations (const, let, var)
-│   ├── ESFunction.ts           # Function models (regular, arrow, generator)
-│   ├── ESBinding.ts            # Binding models (identifier, array, object)
-│   ├── ESExport.ts             # Export statements
-│   ├── ESImport.ts             # Import statements
-│   ├── ESExpression.ts         # Expression model (reconstructible code)
-│   └── ... (26+ model classes)
-├── dynamic/                    # Runtime reflection tools
-│   ├── Reflector.ts            # Reflect on runtime objects to create ES models
-│   ├── ClassMerger.ts          # Merge class hierarchies for inheritance
+├── index.ts                    ← Main entry point — re-exports from model, dynamic, static
+├── model/                      ← ECMAScript-based model classes (27 classes)
+│   ├── ESModule.ts             ← Module-level container with statements
+│   ├── ESClass.ts              ← Class model with members (fields, methods, getters, setters)
+│   ├── ESClassMember.ts        ← Abstract base for class members
+│   ├── ESVariable.ts           ← Variable declarations (const, let, var)
+│   ├── ESFunction.ts           ← Function models (regular, arrow, generator)
+│   ├── ESBinding.ts            ← Binding models (identifier, array, object)
+│   ├── ESExport.ts             ← Export statements
+│   ├── ESImport.ts             ← Import statements
+│   ├── ESExpression.ts         ← Expression model (reconstructible code)
+│   ├── ...                     ← Remaining model classes
 │   └── index.ts
-└── static/                     # Static code analysis tools
-    ├── Parser.ts               # Parse JavaScript/TypeScript code into ES models
-    ├── Lexer.ts                # Tokenize code into tokens
-    ├── Coder.ts                # Reconstruct code from models
-    ├── definitions/            # Token definitions (keywords, dividers, operators, etc.)
-    ├── errors/                 # Custom error classes (ExpectedToken, etc.)
-    └── models/                 # Token, TokenList, CharList, ItemList
+├── dynamic/                    ← Runtime reflection tools
+│   ├── Reflector.ts            ← Reflect on runtime objects to create ES models
+│   ├── ClassMerger.ts          ← Merge class hierarchies for inheritance
+│   └── index.ts
+└── static/                     ← Static code analysis tools
+    ├── Parser.ts               ← Parse JavaScript/TypeScript code into ES models
+    ├── Lexer.ts                ← Tokenize code into tokens
+    ├── Coder.ts                ← Reconstruct code from models
+    ├── definitions/            ← Token definitions (keywords, dividers, operators, etc.)
+    ├── errors/                 ← Custom error classes (ExpectedToken, etc.)
+    ├── models/                 ← Token, TokenList, CharList, ItemList
+    └── index.ts
 ```
 
-## Core Concepts
+## Architecture
 
-### Three Layers of Analysis
+### Overview
+
+#### Three Layers of Analysis
 
 1. **Lexer (Tokenization)** — Breaks source code into tokens (keywords, literals, operators, etc.)
    - `Lexer.tokenize(code: string): TokenList`
@@ -59,7 +107,7 @@ src/
    - `Reflector.fromObject(object: object): ESClass`
    - `Reflector.fromFunction(function: Function): ESFunction`
 
-### Model Hierarchy
+#### Model Hierarchy
 
 All model classes follow a consistent pattern:
 
@@ -68,8 +116,8 @@ ESStatement (abstract)
 ├── ESDeclaration (abstract)
 │   ├── ESVariable
 │   ├── ESFunction
-|   |   ├── ESArrowFunction
-|   │   └── ESGeneratorFunction
+│   │   ├── ESArrowFunction
+│   │   └── ESGeneratorFunction
 │   └── ESClass
 ├── ESExpression
 ├── ESImport
@@ -77,16 +125,17 @@ ESStatement (abstract)
 └── ESBlock
 ```
 
-Bindings extend `ESBinding` (abstract)
+Bindings extend `ESBinding` (abstract):
 
 ```
 ESBinding (abstract)
 ├── ESIdentifierBinding
 ├── ESPropertyBinding
-├── ESParameter
 ├── ESArrayBinding
 └── ESObjectBinding
 ```
+
+`ESParameter` extends `ESBindingElement`. `ESModule`, `ESModuleMember` and `ESBindingElement` are standalone classes without a base class.
 
 Class members extend `ESClassMember` (abstract):
 
@@ -100,37 +149,46 @@ ESClassMember (abstract)
 └── ESSetter
 ```
 
-## Naming Conventions
+### Decisions
 
-### Model Classes
+- **ECMAScript-based models**: Both static parsing and runtime reflection produce the same `ES*` model classes, so consumers can treat both results uniformly.
+- **Two complementary approaches**: Static parsing (`Parser`) works on source code; runtime reflection (`Reflector`) works on loaded objects.
+- **Minimal public API**: Only the model classes, `Reflector` and `Parser` are exported from the package entry point; lexing, code reconstruction and token internals stay internal.
+- **No dependencies**: The package is self-contained.
+
+## Coding Conventions
+
+### Naming Conventions
+
+#### Model Classes
 - All model classes start with the `ES` prefix (e.g., `ESModule`, `ESClass`, `ESVariable`)
 - Abstract base classes also use the `ES` prefix (e.g., `ESStatement`, `ESClassMember`)
 - Use `export default class` for the class definition
 
-### Static Analysis Classes
+#### Static Analysis Classes
 - `Lexer`, `Parser`, `Coder` — core analysis tools
 - `Token`, `TokenList`, `CharList`, `ItemList` — data structures
 - Definition types: `Keyword`, `Divider`, `Operator`, `List`, `Group`, `Scope`, `Punctuation`, `Literal`, `Boolean`, `Number`, `Whitespace`, `Comment`, `Empty`, `Indicator`, `TokenType`
 
-### Dynamic Analysis Classes
+#### Dynamic Analysis Classes
 - `Reflector` — runtime reflection tool
 - `ClassMerger` — merges class hierarchies
 
-### Error Classes
+#### Error Classes
 - Use `export default class` extending `Error`
 - Prefix error names with `Expected` or `Unexpected` (e.g., `ExpectedToken`, `UnexpectedKeyword`)
 
-### Type Exports
+#### Type Exports
 - Use `export type` for type-only exports in index files
 - Re-export types with custom names when needed (e.g., `export type { Visibility as ClassVisibility }`)
 
-### Test Fixtures
+#### Test Fixtures
 - Name fixture files as `*.fixture.ts`
 - Export fixtures as named constants (e.g., `export const CLASSES = { ... }`)
 
-## Export Patterns
+### Export Patterns
 
-### Index Files
+#### Index Files
 Re-export all public types and classes using `export { default as ClassName } from './ClassName'`:
 
 ```ts
@@ -139,7 +197,7 @@ export { default as Parser } from './Parser';
 export type { Visibility as ClassVisibility } from './ESClassMember';
 ```
 
-### Main Entry Point (`src/index.ts`)
+#### Main Entry Point (`src/index.ts`)
 Group related exports together:
 
 ```ts
@@ -147,6 +205,12 @@ export { ESBinding, ESVariable, ESFunction, ESClass, ... } from './model';
 export { Reflector } from './dynamic';
 export { Parser } from './static';
 ```
+
+### Import Conventions
+
+- Import from within the monorepo using workspace aliases (`@jitar/...`)
+- Import sibling package modules using relative paths (e.g., `../model`, `../../src/static`)
+- Use `import type` for type-only imports to avoid runtime overhead
 
 ## Writing Model Classes
 
@@ -195,11 +259,31 @@ export default class ESField extends ESClassMember
 }
 ```
 
+## Error Handling
+
+The static analysis tools throw custom error classes:
+
+- `ExpectedToken(value, position)` — Expected a specific token at a position
+- `UnexpectedToken(value, position)` — Unexpected token found at a position
+- `ExpectedKeyword(keyword, position)` — Expected a specific keyword at a position
+- `UnexpectedKeyword(keyword, position)` — Unexpected keyword found at a position
+- `UnexpectedParseResult(expected)` — Parser returned an unexpected type
+
+All errors include descriptive messages with position information.
+
+## Known Limitations (Parser)
+
+The parser has the following known limitations:
+
+1. **Generator methods as object properties** — Dynamic property generators (e.g., `*[Symbol.iterator]()`) are not supported. Named generator methods (static, async, instance) are supported.
+
+2. **Dynamic property destructuring** — Dynamic property destructuring (e.g., `const { [key]: value } = obj`) is not yet supported.
+
 ## Writing Tests
 
 ### Test File Structure
 - Name test files as `*.spec.ts`
-- Place tests in `test/<category>/` directories matching source structure
+- Place tests in `test/<category>/` directories matching source structure (`test/dynamic`, `test/model`, `test/static`)
 - Use vitest: `import { describe, expect, it } from 'vitest'`
 
 ### Test Organization
@@ -237,43 +321,17 @@ describe('Parser', () =>
 });
 ```
 
-## Known Limitations (Parser)
-
-The parser has the following known limitations:
-
-1. **Generator methods as object properties** — Dynamic property generators (e.g., `*[Symbol.iterator]()`) are not supported. Named generator methods (static, async, instance) are supported.
-
-2. **Dynamic property destructuring** — Dynamic property destructuring (e.g., `const { [key]: value } = obj`) is not yet supported.
-
-## Development Commands
+## Commands
 
 | Command | Description |
 |---------|-------------|
-| `npm run build` | Build the package |
+| `npm run build` | Build the package (`tsc -p tsconfig.json`) |
 | `npm run lint` | Lint the package (must pass before merging) |
-| `npm run test` | Run all tests |
+| `npm run test` | Run all tests (`vitest run`) |
 | `npm run test-coverage` | Run tests with coverage report |
 | `npm run clean` | Remove `dist/` directory |
 
 Always run `npm run lint` after modifying TypeScript files. A full monorepo build (`npm run build:all`) must pass before merging or publishing.
-
-## Import Conventions
-
-- Import from within the monorepo using workspace aliases (`@jitar/...`)
-- Import sibling package modules using relative paths (e.g., `../model`, `../../src/static`)
-- Use `import type` for type-only imports to avoid runtime overhead
-
-## Error Handling
-
-The static analysis tools throw custom error classes:
-
-- `ExpectedToken(value, position)` — Expected a specific token at a position
-- `UnexpectedToken(value, position)` — Unexpected token found at a position
-- `ExpectedKeyword(keyword, position)` — Expected a specific keyword at a position
-- `UnexpectedKeyword(keyword, position)` — Unexpected keyword found at a position
-- `UnexpectedParseResult(expected)` — Parser returned an unexpected type
-
-All errors include descriptive messages with position information.
 
 ## MCP Usage
 

@@ -1,10 +1,52 @@
-# @jitar/middleware — Package Guidelines
+# @jitar/middleware
+
+This file extends the root [`AGENTS.md`](../../AGENTS.md) with package-specific information.
 
 ## Purpose
 
 This package provides middleware support for the Jitar runtime. It manages a chain of middleware components that process requests in sequence, passing them through a handler chain until a final response is produced.
 
+## Exports
+
+Five items are exported from `src/index.ts` (the only entry point, `./dist/index.js`):
+
+| Exported Symbol       | Type      | Description                                             |
+|-----------------------|-----------|---------------------------------------------------------|
+| `States`              | const     | Object defining the four lifecycle state constants      |
+| `State`               | type      | Type alias for a valid state string                     |
+| `Middleware`          | interface | Interface that all middleware must implement            |
+| `NextHandler`         | type      | Type alias for the next handler function                |
+| `MiddlewareManager`   | class     | Manages loading, lifecycle, and execution of middleware |
+
+## Dependencies
+
+| Package | Usage |
+| --- | --- |
+| `@jitar/errors` | Base error classes (`ServerError`, etc.) |
+| `@jitar/execution` | Core execution types (`Request`, `Response`, `StatusCodes`; tests also use `RunModes`, `Version`) |
+| `@jitar/sourcing` | `ModuleImporter` interface for dynamically loading middleware modules (type-only import) |
+
+## Package structure
+
+```
+src/
+├── index.ts                                ← Public API exports
+├── MiddlewareManager.ts                    ← Core manager class
+├── definitions/
+│   └── States.ts                           ← Lifecycle state constants
+├── errors/
+│   ├── InvalidMiddleware.ts                ← Validation error
+│   ├── StartingMiddlewareManagerFailed.ts  ← Lifecycle error
+│   └── StoppingMiddlewareManagerFailed.ts  ← Lifecycle error
+├── interfaces/
+│   └── Middleware.ts                       ← Middleware interface
+└── types/
+    └── NextHandler.ts                      ← NextHandler type alias
+```
+
 ## Architecture
+
+### Overview
 
 The middleware system follows the classic middleware chain pattern:
 
@@ -14,21 +56,7 @@ Request -> [Middleware1] -> [Middleware2] -> [Middleware3] -> Default Response
 
 Each middleware can inspect or modify the request before calling `next()`, and inspect or modify the response after `next()` returns.
 
-## Exports
-
-Six items are exported from `src/index.ts`:
-
-| Exported Symbol       | Type      | Description                                        |
-|-----------------------|-----------|----------------------------------------------------|
-| `States`              | class     | Object defining the four lifecycle state constants |
-| `State`               | type      | Type alias for a valid state string                |
-| `Middleware`          | interface | Interface that all middleware must implement       |
-| `NextHandler`         | type      | Type alias for the next handler function           |
-| `MiddlewareManager`   | class     | Manages loading, lifecycle, and execution of middleware |
-
-## Core Components
-
-### Middleware Interface
+#### Middleware Interface
 
 Every middleware must implement this interface:
 
@@ -41,7 +69,7 @@ interface Middleware
 
 The `handle` method receives the current `Request` and a `NextHandler` function. Calling `next()` passes control to the next middleware in the chain. If there is no next middleware, the chain falls through to a default `Response(StatusCodes.OK)`.
 
-### NextHandler Type
+#### NextHandler Type
 
 ```typescript
 type NextHandler = () => Promise<Response>;
@@ -49,7 +77,7 @@ type NextHandler = () => Promise<Response>;
 
 A function that, when called, executes the next middleware in the chain (or returns a default response if none exists).
 
-### States Definition
+#### States Definition
 
 The middleware manager tracks four lifecycle states:
 
@@ -63,32 +91,54 @@ const States =
 } as const;
 ```
 
-### MiddlewareManager Class
+#### MiddlewareManager Class
 
 The `MiddlewareManager` is the central orchestrator. It provides:
 
-| Method                  | Description                                                        |
-|-------------------------|--------------------------------------------------------------------|
-| `start()`               | Loads all middleware files and transitions to `STARTED` state      |
-| `stop()`                | Clears all middleware and transitions to `STOPPED` state           |
-| `loadMiddleware(filename)` | Loads and adds a single middleware from a file path               |
-| `addMiddleware(middleware)` | Adds a middleware instance directly (validates `handle` exists)  |
-| `getMiddleware(type)`   | Retrieves a middleware by its class type                           |
-| `clearMiddlewares()`    | Removes all middleware from the chain                              |
-| `handle(request)`       | Executes the middleware chain and returns a `Promise<Response>`    |
-| `state` (getter)        | Returns the current lifecycle state                                |
+| Method                      | Description                                                       |
+|-----------------------------|-------------------------------------------------------------------|
+| `start()`                   | Loads all middleware files and transitions to `STARTED` state     |
+| `stop()`                    | Clears all middleware and transitions to `STOPPED` state          |
+| `loadMiddleware(filename)`  | Loads and adds a single middleware from a file path               |
+| `addMiddleware(middleware)` | Adds a middleware instance directly (validates `handle` exists)   |
+| `getMiddleware(type)`       | Retrieves a middleware by its class type                          |
+| `clearMiddlewares()`        | Removes all middleware from the chain                             |
+| `handle(request)`           | Executes the middleware chain and returns a `Promise<Response>`   |
+| `state` (getter)            | Returns the current lifecycle state                               |
 
 The manager accepts a `ModuleImporter` and optional list of middleware file paths in its constructor. Middleware are executed in the order they are added.
+
+### Decisions
+
+- **Ordered chain**: Middleware are executed in the order they are added; the chain ends in a default `Response(StatusCodes.OK)`.
+- **State guards**: `start()` only runs from `STOPPED` and `stop()` only from `STARTED`; otherwise they return without doing anything. On failure the state is rolled back and the error is wrapped in `StartingMiddlewareManagerFailed` / `StoppingMiddlewareManagerFailed`.
+- **Duck-typed validation**: `addMiddleware()` throws `InvalidMiddleware` when the instance has no `handle` method.
+- **Module loading via importer**: Middleware files are loaded through the injected `ModuleImporter`, using the module's default export as the middleware instance.
+
+## Coding Conventions
+
+### Index Exports
+
+`src/index.ts` re-exports all symbols using the `default as <Name>` pattern:
+
+```typescript
+export { default as States, type State } from './definitions/States';
+export { default as Middleware } from './interfaces/Middleware';
+export { default as NextHandler } from './types/NextHandler';
+export { default as MiddlewareManager } from './MiddlewareManager';
+```
+
+Do not change the export order or naming convention in `index.ts`.
 
 ## Error Classes
 
 Three error classes are defined in `src/errors/`:
 
-| Error Class                    | Base Class  | Default Message                       |
-|--------------------------------|-------------|---------------------------------------|
-| `InvalidMiddleware`            | `ServerError` | "Invalid middleware"                |
-| `StartingMiddlewareManagerFailed` | `Error`   | "Starting middleware manager failed"  |
-| `StoppingMiddlewareManagerFailed` | `Error`   | "Stopping middleware manager failed"  |
+| Error Class                       | Base Class    | Default Message                      |
+|-----------------------------------|---------------|--------------------------------------|
+| `InvalidMiddleware`               | `ServerError` | "Invalid middleware"                 |
+| `StartingMiddlewareManagerFailed` | `Error`       | "Starting middleware manager failed" |
+| `StoppingMiddlewareManagerFailed` | `Error`       | "Stopping middleware manager failed" |
 
 ### Error Class Pattern
 
@@ -125,48 +175,16 @@ export default class InvalidMiddleware extends ServerError
 - **File structure**: One class per file, no trailing whitespace beyond the closing brace and newline.
 - **Package-specific errors** (lifecycle failures): Extend `Error` directly, accept a `cause: unknown` parameter.
 - **Validation errors** (input/usage issues): Extend the appropriate base error from `@jitar/errors` (e.g., `ServerError`).
-- **Validation errors** (input/usage issues): Extend the appropriate base error from `@jitar/errors` (e.g., `ServerError`).
-
-## Index Exports
-
-`src/index.ts` re-exports all symbols using the `default as <Name>` pattern:
-
-```typescript
-export { default as States, type State } from './definitions/States';
-export { default as Middleware } from './interfaces/Middleware';
-export { default as NextHandler } from './types/NextHandler';
-export { default as MiddlewareManager } from './MiddlewareManager';
-```
-
-Do not change the export order or naming convention in `index.ts`.
-
-## File Structure
-
-```
-src/
-├── index.ts                          # Public API exports
-├── MiddlewareManager.ts              # Core manager class
-├── definitions/
-│   └── States.ts                     # Lifecycle state constants
-├── errors/
-│   ├── InvalidMiddleware.ts          # Validation error
-│   ├── StartingMiddlewareManagerFailed.ts  # Lifecycle error
-│   └── StoppingMiddlewareManagerFailed.ts  # Lifecycle error
-├── interfaces/
-│   └── Middleware.ts                 # Middleware interface
-└── types/
-    └── NextHandler.ts                # NextHandler type alias
-```
 
 ## Testing
 
 Tests are located under `test/` and use Vitest. Fixtures are organized under `test/fixtures/`:
 
-| Fixture File                    | Description                                         |
-|---------------------------------|-----------------------------------------------------|
+| Fixture File                    | Description                                               |
+|---------------------------------|-----------------------------------------------------------|
 | `middlewares.fixture.ts`        | Defines example middleware classes (First, Second, Third) |
-| `middlewareManagers.fixture.ts` | Creates pre-configured `MiddlewareManager` instances  |
-| `index.ts`                      | Re-exports all fixtures                              |
+| `middlewareManagers.fixture.ts` | Creates pre-configured `MiddlewareManager` instances      |
+| `index.ts`                      | Re-exports all fixtures                                   |
 
 ### Test Patterns
 
@@ -176,28 +194,12 @@ Tests are located under `test/` and use Vitest. Fixtures are organized under `te
 - The final middleware in a chain returns a new `Response(StatusCodes.OK, result)`.
 - Assertions verify that all middleware executed in order (check headers and response result).
 
-## Build Commands
-
-| Script             | Command                    | Description              |
-|--------------------|----------------------------|--------------------------|
-| test               | `vitest run`               | Run tests                |
-| test-coverage      | `vitest run --coverage`    | Run tests with coverage  |
-| lint               | `eslint`                   | Lint source files        |
-| build              | `tsc -p tsconfig.json`     | Compile to `./dist`      |
-| clean              | `shx rm -rf dist`          | Remove build artifacts   |
-
 ## Configuration
 
 - Extends root `tsconfig.json` with `rootDir: ./src` and `outDir: ./dist`.
 - Package is `private: true` — it is not published independently.
 - TypeScript target: `esnext`, module: `esnext`, moduleResolution: `bundler`.
 - Test coverage uses the `v8` provider via `vitest.config.ts`.
-
-## Dependencies
-
-- `@jitar/errors` — Base error classes (`ServerError`, etc.).
-- `@jitar/execution` — Core execution types (`Request`, `Response`, `StatusCodes`, `RunModes`, `Version`).
-- `@jitar/sourcing` — `ModuleImporter` interface for dynamically loading middleware modules.
 
 ## Adding a New Middleware
 
@@ -220,6 +222,16 @@ Tests are located under `test/` and use Vitest. Fixtures are organized under `te
 1. Add the new state constant to `src/definitions/States.ts`.
 2. Update any state transition logic in `MiddlewareManager` to handle the new state.
 3. Ensure state guards in `start()` and `stop()` account for the new state.
+
+## Commands
+
+| Command                 | Script                  | Description             |
+|-------------------------|-------------------------|-------------------------|
+| `npm run test`          | `vitest run`            | Run tests               |
+| `npm run test-coverage` | `vitest run --coverage` | Run tests with coverage |
+| `npm run lint`          | `eslint`                | Lint source files       |
+| `npm run build`         | `tsc -p tsconfig.json`  | Compile to `./dist`     |
+| `npm run clean`         | `shx rm -rf dist`       | Remove build artifacts  |
 
 ## MCP Usage
 

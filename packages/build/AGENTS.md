@@ -1,4 +1,6 @@
-# Build Package Agent Guidelines
+# @jitar/build
+
+This file extends the root [`AGENTS.md`](../../AGENTS.md) with information specific to the build package.
 
 ## Purpose
 
@@ -8,6 +10,13 @@ Two main entry points are exposed:
 
 - **BuildHelper** — Generates and returns module and segment code on request (on-demand, lazy generation).
 - **BuildManager** — Rewrites the whole application to the target folder (full build).
+
+## Exports
+
+| Exported Symbol | Type | Description |
+| --- | --- | --- |
+| `BuildHelper` | class | On-demand code generation. Constructed with a `RuntimeConfiguration`; exposes `readApplication()`, `includesModule(filename)`, `generateModuleCode(filename, segmentNames?)` and `generateSegmentCode(segmentName)` |
+| `BuildManager` | class | Full application build. Constructed with a `RuntimeConfiguration` and optional `LogLevel`; exposes `build()` |
 
 ## Dependencies
 
@@ -19,7 +28,7 @@ Two main entry points are exposed:
 | `@jitar/logging` | `Logger`, `LogLevel` |
 | `@jitar/sourcing` | `FileManager`, `LocalFileManager`, file patterns (`Files.MODULE_PATTERN`, `Files.SEGMENT_PATTERN`, `Files.RESOURCE_PATTERN`) |
 
-## Architecture
+## Package structure
 
 ```
 src/
@@ -28,7 +37,7 @@ src/
 ├── ProjectFileManager.ts       ← Aggregates 4 FileManagers + ignore patterns
 ├── index.ts                    ← Re-exports BuildHelper, BuildManager
 ├── definitions/                ← Shared constants (Defaults, Files, Keywords, Values)
-├── errors/                     ← Package-level error classes
+├── errors/                     ← Package-level error classes (ApplicationModuleNotFound, ApplicationNotRead, ApplicationSegmentNotFound, BuildFailed)
 ├── source/                     ← Source reading / parsing layer
 │   ├── application/            ← ApplicationReader, Application model
 │   ├── module/                 ← ModuleReader, LocationRewriter, Module, Repository
@@ -41,7 +50,11 @@ src/
 └── utils/                      ← FileHelper, IdGenerator
 ```
 
-### Source Layer (`src/source/`)
+## Architecture
+
+### Overview
+
+#### Source Layer (`src/source/`)
 
 Reads and parses the application's source files into intermediate models.
 
@@ -64,7 +77,7 @@ Reads and parses the application's source files into intermediate models.
 | `ResourceReader` | Reads resource file definitions (JSON lists of resource module filenames) |
 | `ResourcesList` | Collection of resource module filenames; checks whether a filename is a resource module |
 
-### Target Layer (`src/target/`)
+#### Target Layer (`src/target/`)
 
 Generates rewritten JavaScript code for the target folder.
 
@@ -77,7 +90,7 @@ Generates rewritten JavaScript code for the target folder.
 | `SegmentBuilder` | Builds `.segment.js` files for each segment |
 | `Generator` | Generates the segment definition file with runtime imports (`Segment`, `Class`, `Procedure`, `Implementation`, `Version`, etc.) |
 
-### Supporting Components
+#### Supporting Components
 
 | Component | Responsibility |
 | --- | --- |
@@ -85,7 +98,7 @@ Generates rewritten JavaScript code for the target folder.
 | `FileHelper` | Path manipulation utilities: `translatePath`, `makePathRelative`, `makePathAbsolute`, `extractPath`, `extractFilename`, `assureExtension`, `addSubExtension`, `isApplicationModule` |
 | `IdGenerator` | Simple incrementing ID generator (produces `$1`, `$2`, …) |
 
-### Definitions (Constants)
+#### Definitions (Constants)
 
 | File | Contents |
 | --- | --- |
@@ -94,6 +107,16 @@ Generates rewritten JavaScript code for the target folder.
 | `Keywords.ts` | `DEFAULT: 'default'` |
 | `Values.ts` | `ASTERISK: '*'` |
 
+### Decisions
+
+- **Two-layer design**: Reading/parsing (`source/`) is separated from code generation (`target/`); the source layer produces intermediate models that the target layer consumes.
+- **Two entry points**: `BuildHelper` serves on-demand (lazy) generation, `BuildManager` performs a full rewrite to the target folder.
+- **Segment files are JSON**: The `SegmentReader` reads JSON definition files that describe which modules export which classes/functions. It uses `MemberLocator` to trace re-exports back to their original declarations.
+- **Functions must be async**: Implementation functions declared in segment files must be `async`. A `FunctionNotAsync` error is thrown otherwise.
+- **Access levels**: Default access is `'private'`. Private procedures throw a `ProcedureNotAccessible` error when called from the remote module.
+- **Versioning**: Default version is `'0.0.0'`. Each implementation carries a semantic version parsed by `VersionParser`.
+- **Id generation**: Each member (class or implementation) receives a unique `$N` identifier used by the runtime to match remote calls to local implementations.
+- **The `__run` global**: Remote module generators emit calls to a global `__run(fqn, version, params, this)` function. This function is provided by the Jitar runtime at execution time.
 
 ## Coding Conventions
 
@@ -152,7 +175,6 @@ Use inline type imports (`import { type ESModule } from '...'`) rather than sepa
 - Note: `--fix` is not supported; fix issues manually.
 - Always run `npm run lint` after modifying TypeScript files.
 
-
 ## File and Module Patterns
 
 The package uses file patterns from `@jitar/sourcing` to discover files:
@@ -174,14 +196,15 @@ The `FileHelper.addSubExtension()` method replaces `.js` with `.<subExtension>.j
 - `<module>.<segmentName>.js` — Segment-specific module output.
 - `<module>.remote.js` — Remote module output.
 
-## Key Implementation Notes
+## Commands
 
-- **Segment files are JSON**: The `SegmentReader` reads JSON definition files that describe which modules export which classes/functions. It uses `MemberLocator` to trace re-exports back to their original declarations.
-- **Functions must be async**: Implementation functions declared in segment files must be `async`. A `FunctionNotAsync` error is thrown otherwise.
-- **Access levels**: Default access is `'private'`. Private procedures throw a `ProcedureNotAccessible` error when called from the remote module.
-- **Versioning**: Default version is `'0.0.0'`. Each implementation carries a semantic version parsed by `VersionParser`.
-- **Id generation**: Each member (class or implementation) receives a unique `$N` identifier used by the runtime to match remote calls to local implementations.
-- **The `__run` global**: Remote module generators emit calls to a global `__run(fqn, version, params, this)` function. This function is provided by the Jitar runtime at execution time.
+| Command | Description |
+| --- | --- |
+| `npm run build` | Build the package (`tsc -p tsconfig.json`) |
+| `npm run clean` | Remove `dist/` directory (`shx rm -rf dist`) |
+| `npm run lint` | Lint the package (`eslint`, must pass before merging) |
+| `npm run test` | Run all tests (`vitest run`) |
+| `npm run test-coverage` | Run tests with coverage report (`vitest run --coverage`) |
 
 ## MCP Usage
 

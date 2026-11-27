@@ -1,33 +1,53 @@
-# @jitar/validation — Package Guidelines
+# @jitar/validation
+
+This file extends the root [`AGENTS.md`](../../AGENTS.md) with information specific to the validation package.
 
 ## Purpose
 
 This package provides data validation for the Jitar runtime. It allows developers to define a **validation scheme** that describes the expected structure and types of data, then validate arbitrary data objects against that scheme.
 
+## Exports
+
+Three items are exported from `src/index.ts`:
+
+| Exported Symbol | Type | Description |
+|---|---|---|
+| `ValidationScheme` | type | Schema definition for validation rules |
+| `ValidationResult` | type | Result of a validation operation |
+| `Validator` | class | Core validation engine |
+
+The field types `FieldValidation`, `PrimitiveValidation`, `GroupValidation`, `ListValidation`, and `EnumValidation` are exported from `src/types/ValidationScheme.ts` but not from the package root.
+
 ## Dependencies
 
-- `@jitar/errors` — Error types and utilities (declared dependency, though not currently used in source code)
+| Package | Usage |
+|---|---|
+| `@jitar/errors` | Error types and utilities (declared dependency, though not currently used in source code) |
 
-## Architecture
-
-The package is organized into four source files plus a test directory:
+## Package structure
 
 ```
 src/
-├── index.ts                    # Main entry point — re-exports ValidationScheme, ValidationResult, Validator
-├── Validator.ts                # Core validator — validates data against a scheme
+├── index.ts                    ← Main entry point — re-exports ValidationScheme, ValidationResult, Validator
+├── Validator.ts                ← Core validator — validates data against a scheme
 └── types/
-    ├── ValidationScheme.ts     # Scheme type definitions (primitives, groups, lists, enums)
-    └── ValidationResult.ts     # Result type (valid: boolean, errors: string[])
+    ├── ValidationScheme.ts     ← Scheme type definitions (primitives, groups, lists, enums)
+    └── ValidationResult.ts     ← Result type (valid: boolean, errors: string[])
 test/
-├── Validator.spec.ts           # Validator tests
-└── fixtures/                   # Test fixtures (schemes, values, messages)
+├── Validator.spec.ts           ← Validator tests
+└── fixtures/                   ← Test fixtures (schemes, values, messages)
     ├── index.ts
     ├── validationSchemes.fixture.ts
     └── values.fixture.ts
 ```
 
-### Component Responsibilities
+## Architecture
+
+### Overview
+
+The package is organized into four source files plus a test directory.
+
+#### Component Responsibilities
 
 | Component | Responsibility |
 |---|---|
@@ -35,7 +55,7 @@ test/
 | `ValidationScheme` | Type definition for validation schemes — describes expected fields, types, and constraints |
 | `ValidationResult` | Type definition for validation results — contains `valid` boolean and `errors` array |
 
-### Validator Class
+#### Validator Class
 
 The `Validator` class is the central component. It accepts a `strict` boolean in its constructor (default `true`):
 
@@ -49,8 +69,9 @@ Internal behavior:
 - **Lenient mode**: Ignores extra fields not defined in the scheme.
 - Supports nested validation for `group` and `list` types via recursive validation.
 - Composes dot-notation keys for nested error messages (e.g., `group.integer`).
+- All errors are collected (validation does not stop at the first error); `valid` is `true` when the error list is empty.
 
-### Supported Validation Types
+#### Supported Validation Types
 
 | Type | Description | Validation |
 |---|---|---|
@@ -63,9 +84,9 @@ Internal behavior:
 | `'list'` | Array of items | `Array.isArray(value)`, then validates each item against `items` scheme |
 | `'enum'` | Enumerated values | Value must be one of the `options` array |
 
-Each field can optionally have `required: true` to enforce presence.
+Each field can optionally have `required: true` to enforce presence. Missing (`undefined`) optional fields are skipped.
 
-### ValidationScheme Type
+#### ValidationScheme Type
 
 ```typescript
 type ValidationScheme = Record<string, FieldValidation>;
@@ -77,7 +98,9 @@ Where `FieldValidation` is a union of:
 - `ListValidation` — `{ type: 'list', required?: boolean, items: PrimitiveValidation }`
 - `EnumValidation` — `{ type: 'enum', required?: boolean, options: unknown[] }`
 
-### ValidationResult Type
+All properties are `readonly`; `required` comes from a shared `BaseValidation` type.
+
+#### ValidationResult Type
 
 ```typescript
 type ValidationResult =
@@ -87,15 +110,12 @@ type ValidationResult =
 };
 ```
 
-## Exports
+### Decisions
 
-Three items are exported from `src/index.ts`:
-
-| Exported Symbol | Type | Description |
-|---|---|---|
-| `ValidationScheme` | type | Schema definition for validation rules |
-| `ValidationResult` | type | Result of a validation operation |
-| `Validator` | class | Core validation engine |
+- **Strict by default**: The `strict` constructor parameter defaults to `true` by design; extra fields are rejected unless lenient mode is chosen explicitly.
+- **Errors as strings**: Validation returns a result with human-readable messages instead of throwing.
+- **Stable message formats**: Error message formats are fixed; tests assert exact message strings.
+- **Primitive list items only**: `ListValidation.items` is a `PrimitiveValidation`, so lists of groups/enums are not supported.
 
 ## Coding Conventions
 
@@ -119,8 +139,8 @@ Three items are exported from `src/index.ts`:
 ### Naming
 
 - Class names: `PascalCase` (e.g., `Validator`).
-- Private fields: `#camelCase` (e.g., `#strict`, `#validateData`).
-- Private methods: `#camelCase` (e.g., `#validateKeys`, `#composeKey`).
+- Private fields: `#camelCase` (e.g., `#strict`).
+- Private methods: `#camelCase` (e.g., `#validateData`, `#validateKeys`, `#composeKey`).
 - Type names: `PascalCase` (e.g., `ValidationScheme`, `ValidationResult`).
 
 ## Testing Conventions
@@ -130,14 +150,14 @@ Three items are exported from `src/index.ts`:
 - Tests live in `test/` directory.
 - Test file is named `Validator.spec.ts`.
 - Use `vitest` with `describe`, `it`, `expect`.
-- Fixtures live in `test/fixtures/` (schemes and message constants).
+- Fixtures live in `test/fixtures/`: `validationSchemes.fixture.ts` (`VALIDATION_SCHEMES`) and `values.fixture.ts` (`VALUES.MESSAGES`, expected error message constants).
 
 ### Test Organization
 
 - Use `describe('Validator')` for class-level tests.
-- Use `describe('Type values')` for type-grouped sub-describes (e.g., 'String values', 'Integer values', 'Real values', 'Boolean values', 'URL values', 'Group values', 'List values', 'Enum values', 'Complex values', 'Strict mode', 'Lenient mode').
+- Use `describe('Type values')` for type-grouped sub-describes (e.g., 'String values', 'Integer values', 'Real values', 'Boolean values', 'URL values', 'Optional values', 'Group values', 'List values', 'Enum values', 'Complex values', 'Strict mode', 'Lenient mode').
 - Use `it('should <behavior>')` for individual test cases.
-- Create validator instances at the top of the describe block (e.g., `const strictValidator = new Validator(true)`).
+- Create validator instances once at the top of the spec file (e.g., `const strictValidator = new Validator(true)`, `const lenientValidator = new Validator(false)`).
 - Use fixtures imported from `./fixtures` for scheme definitions and expected error messages.
 
 ### Test Coverage
@@ -148,19 +168,10 @@ Each validation type should be tested for:
 - Rejecting a missing required value
 
 Additional tests:
+- Optional values (missing values are accepted)
 - Nested/complex group validation
 - Strict mode (rejecting extra fields)
 - Lenient mode (accepting extra fields)
-
-## Build Commands
-
-| Script | Command | Description |
-|---|---|---|
-| test | `vitest run` | Run tests |
-| test-coverage | `vitest run --coverage` | Run tests with coverage |
-| lint | `eslint` | Lint source files |
-| build | `tsc -p tsconfig.json` | Compile to `./dist` |
-| clean | `shx rm -rf dist` | Remove build artifacts |
 
 ## Configuration
 
@@ -175,7 +186,7 @@ Additional tests:
 
 The `Validator` constructor accepts a `strict` parameter (default `true`):
 
-- **Strict mode**: Checks for extra fields in the data that are not defined in the scheme. These are reported as `Unknown field '<key>'` errors.
+- **Strict mode**: Checks for extra fields in the data that are not defined in the scheme. These are reported as `Unknown field '<key>'` errors. This also applies to nested groups.
 - **Lenient mode**: Skips extra field checking, only validating fields defined in the scheme.
 
 ### Nested Validation
@@ -190,11 +201,16 @@ Error messages follow a consistent format:
 | Scenario | Message Format |
 |---|---|
 | Missing required field | `Field '<key>' is required` |
-| Wrong primitive type | `Field '<key>' is not a <type>` |
+| Wrong type — string | `Field '<key>' is not a string` |
+| Wrong type — integer | `Field '<key>' is not an integer` |
+| Wrong type — real | `Field '<key>' is not a real number` |
+| Wrong type — boolean | `Field '<key>' is not a boolean` |
 | Invalid URL | `Field '<key>' is not a valid URL` |
+| Wrong type — group | `Field '<key>' is not an object` |
+| Wrong type — list | `Field '<key>' is not a list` |
 | Extra field (strict mode) | `Unknown field '<key>'` |
-| Invalid list item | `Field '<listKey>.<index>' is not a <type>` |
-| Invalid enum value | `Field '<key>' is not one of: <options>` |
+| Invalid list item | `Field '<listKey>.<index>' is not a <type>` (using the item type's message) |
+| Invalid enum value | `Field '<key>' is not one of: <options>` (options joined with `, `) |
 
 ## Constraints and Important Considerations
 
@@ -216,6 +232,16 @@ When working with this package:
 6. **Run `npm run lint`** after making changes.
 7. **Run `npm run test`** to verify all tests pass.
 8. **Consult the root `AGENTS.md`** for monorepo-wide conventions (linting configuration, build commands, workspace alias rules).
+
+## Commands
+
+| Command | Script | Description |
+|---|---|---|
+| `npm run test` | `vitest run` | Run tests |
+| `npm run test-coverage` | `vitest run --coverage` | Run tests with coverage |
+| `npm run lint` | `eslint` | Lint source files |
+| `npm run build` | `tsc -p tsconfig.json` | Compile to `./dist` |
+| `npm run clean` | `shx rm -rf dist` | Remove build artifacts |
 
 ## MCP Usage
 
