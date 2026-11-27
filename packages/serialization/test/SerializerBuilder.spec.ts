@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import SerializerBuilder from '../src/SerializerBuilder';
 
-import { ARRAYS, OBJECTS, CLASSES, DATES, MAPS, SETS, TYPED_ARRAYS, PRIMITIVES, classResolver } from './serializers/fixtures';
+import { ARRAYS, OBJECTS, CLASSES, DATES, MAPS, SETS, TEMPORALS, TYPED_ARRAYS, PRIMITIVES, classResolver } from './serializers/fixtures';
 
 const serializer = SerializerBuilder.build(classResolver);
 
@@ -49,5 +49,15 @@ describe('SerializerBuilder', () =>
         expect(resultSet).toStrictEqual(SETS.MIXED);
         expect(resultView).toStrictEqual(TYPED_ARRAYS.INT8);
         expect(resultString).toStrictEqual(PRIMITIVES.STRING);
+    });
+
+    it.skipIf(TEMPORALS.SUPPORTED === false)('should serialize and deserialize temporals with the build serializer', async () =>
+    {
+        const serialized = await serializer.serialize(TEMPORALS.PLAIN_DATE);
+        const deserialized = await serializer.deserialize(TEMPORALS.PLAIN_DATE_SERIALIZED);
+
+        expect(serialized).toStrictEqual(TEMPORALS.PLAIN_DATE_SERIALIZED);
+        expect(deserialized).toBeInstanceOf(Temporal.PlainDate);
+        expect(TEMPORALS.PLAIN_DATE.equals(deserialized as Temporal.PlainDate)).toBe(true);
     });
 });

@@ -12,6 +12,7 @@ import ObjectSerializer from './serializers/ObjectSerializer';
 import PrimitiveSerializer from './serializers/PrimitiveSerializer';
 import RegExpSerializer from './serializers/RegExpSerializer';
 import SetSerializer from './serializers/SetSerializer';
+import TemporalSerializer from './serializers/TemporalSerializer';
 import TypedArraySerializer from './serializers/TypedArraySerializer';
 import UrlSerializer from './serializers/UrlSerializer';
 
@@ -34,6 +35,12 @@ export default class SerializerBuilder
         serializer.addSerializer(new BigIntSerializer());
         serializer.addSerializer(new UrlSerializer());
         serializer.addSerializer(new DateSerializer());
+
+        if (typeof Temporal !== 'undefined')
+        {
+            serializer.addSerializer(new TemporalSerializer());
+        }
+
         serializer.addSerializer(new SetSerializer());
         serializer.addSerializer(new MapSerializer());
         serializer.addSerializer(new ArraySerializer());

@@ -11,5 +11,6 @@ export * from './objects.fixture';
 export * from './primitives.fixture';
 export * from './regularExpressions.fixture';
 export * from './sets.fixture';
+export * from './temporals.fixture';
 export * from './typedArrays.fixture';
 export * from './urls.fixture';

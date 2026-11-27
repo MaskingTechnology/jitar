@@ -4,7 +4,7 @@ This file extends the root [`AGENTS.md`](../../AGENTS.md) with package-specific 
 
 ## Purpose
 
-This package provides extensible serialization for end-to-end data transportation within the Jitar runtime. It supports serialization and deserialization of primitives, arrays, maps, sets, objects, classes, typed arrays, and buffers.
+This package provides extensible serialization for end-to-end data transportation within the Jitar runtime. It supports serialization and deserialization of primitives, arrays, maps, sets, objects, classes, dates, Temporal values, typed arrays, and buffers.
 
 ## Exports
 
@@ -65,6 +65,7 @@ ValueSerializer (abstract)
 ├── BigIntSerializer
 ├── UrlSerializer
 ├── DateSerializer
+├── TemporalSerializer (conditional)
 ├── SetSerializer
 ├── MapSerializer
 ├── ArraySerializer
@@ -94,18 +95,20 @@ Serializers are matched in the order they are added (most recently added = highe
 6. `BigIntSerializer` — BigInt values
 7. `UrlSerializer` — URL objects
 8. `DateSerializer` — Date objects
-9. `SetSerializer` — Set objects
-10. `MapSerializer` — Map objects
-11. `ArraySerializer` — Array objects
-12. `TypedArraySerializer` — TypedArray (Int8Array, Uint8Array, etc.)
-13. `BufferSerializer` — Buffer (conditionally, when `Buffer` is defined)
+9. `TemporalSerializer` — Temporal objects (`Instant`, `ZonedDateTime`, `PlainDateTime`, `PlainDate`, `PlainTime`, `PlainYearMonth`, `PlainMonthDay`, `Duration`); conditionally, when `Temporal` is defined
+10. `SetSerializer` — Set objects
+11. `MapSerializer` — Map objects
+12. `ArraySerializer` — Array objects
+13. `TypedArraySerializer` — TypedArray (Int8Array, Uint8Array, etc.)
+14. `BufferSerializer` — Buffer (conditionally, when `Buffer` is defined)
 
 ### Decisions
 
 - **Prepend on add**: `Serializer.addSerializer` uses `unshift`, so the most recently added (most specific) serializer is matched first.
 - **Recursive delegation through the parent**: Nested values are (de)serialized via `serializeOther`/`deserializeOther`, which go back through the parent `Serializer`; calling them without a parent throws `ParentSerializerNotSet`.
 - **Async all the way**: All `serialize` and `deserialize` methods are `async` and return `Promise<unknown>`.
-- **Conditional serializers**: `BufferSerializer` is only registered when `typeof Buffer !== 'undefined'` (Node.js environments). `ClassSerializer` is only registered when a `ClassResolver` is provided.
+- **Conditional serializers**: `BufferSerializer` is only registered when `typeof Buffer !== 'undefined'` (Node.js environments). `TemporalSerializer` is only registered when `typeof Temporal !== 'undefined'`. `ClassSerializer` is only registered when a `ClassResolver` is provided.
+- **One serializer for all Temporal types**: `TemporalSerializer` stores the Temporal type name in `type` and the ISO string from `toString()` in `value`, and rebuilds the value with `Temporal[type].from(value)`. Unknown types throw `InvalidTemporalType`; unparsable strings throw `InvalidTemporalString`.
 - **Common serialized shape**: Every serialized representation extends the `Serialized` type (`serialized` flag + `name`) so deserializers can recognize their own output.
 
 ## Coding Conventions
@@ -263,6 +266,7 @@ npm run test-coverage # Run tests with coverage
 - Serializer tests live in `test/serializers/<Name>Serializer.spec.ts`.
 - Test fixtures live in `test/serializers/fixtures/<name>Fixtures.ts`.
 - Use `vitest` with `describe`/`it`/`expect`.
+- `vitest.config.ts` passes `--harmony-temporal` to the test workers so Temporal is available on Node.js 24. Temporal tests use `skipIf(TEMPORALS.SUPPORTED === false)` for runtimes without it (e.g. Node.js 22).
 - Each serializer test should cover:
   - Successful serialization round-trip
   - Successful deserialization round-trip
